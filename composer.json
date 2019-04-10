@@ -2,7 +2,7 @@
     "name": "artweb/trickster",
     "version": "0.1.0",
     "dist": {
-        "url": "http://github.com/underfrenzy/trickster/",
+        "url": "https://github.com/trickster-cms/trickster",
         "type": "package"
     }
 }
