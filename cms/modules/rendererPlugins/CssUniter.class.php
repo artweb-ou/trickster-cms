@@ -191,4 +191,36 @@ class cssUniterRendererPlugin extends rendererPlugin
     {
         $this->variables = $variables;
     }
+
+    protected function getSVGContent($svgFile, $color = false, $stroke = false)
+    {
+        $svgFileContent = '';
+        /**
+         * @var designThemesManager $designThemesManager
+         */
+        $designThemesManager = $this->getService('designThemesManager');
+        if ($svgFileURL = $designThemesManager->getCurrentTheme()->getImageUrl($svgFile . '.svg', false, false)) {
+            $baseURL = controller::getInstance()->baseURL;
+
+            $filePath = stripos($svgFileURL, $baseURL) !== false
+                ? str_ireplace($baseURL, ROOT_PATH, $svgFileURL)
+                : ROOT_PATH . $svgFileURL;
+            if (!is_file($filePath)) {
+                $this->logError('CSS image missing:' . $filePath);
+            }
+
+            if ($svgContent = file_get_contents($filePath)) {
+                var_dump(($svgContent));
+                if ($color) {
+                    $svgContent = str_replace('<svg', '<svg fill="' . $color . '"', $svgContent);
+                }
+                if ($stroke) {
+                    $svgContent = str_replace('<svg', '<svg stroke="' . $stroke . '"', $svgContent);
+                }
+
+                $svgFileContent = 'data:image/svg+xml,' . self::encodeSvg($svgContent);
+            }
+        }
+        return $svgFileContent;
+    }
 }
