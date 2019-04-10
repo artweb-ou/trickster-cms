@@ -11,7 +11,7 @@ class ecommercePublicDesignTheme extends designTheme
         $this->templatesFolder = $tricksterPath . 'ecommerce/templates/public/';
         $this->imagesFolder = 'trickster/ecommerce/images/public/';
         $this->imagesPath = ROOT_PATH . $this->imagesFolder;
-        $this->javascriptUrl = $controller->baseURL . 'trickster/ecommerce/js/public/';
+        $this->javascriptUrl = $tricksterPath . 'ecommerce/js/public/';
         $this->javascriptPath = $tricksterPath . 'ecommerce/js/public/';
         $this->javascriptFiles = [
             'logics.dpd.js',

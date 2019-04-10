@@ -11,7 +11,7 @@ class homepagePublicDesignTheme extends designTheme
         $this->templatesFolder = $tricksterPath . 'homepage/templates/public/';
         $this->imagesFolder = $tricksterPath .'homepage/images/public/';
         $this->imagesPath = $this->imagesFolder;
-        $this->javascriptUrl = $controller->baseURL . 'trickster/homepage/js/public/';
+        $this->javascriptUrl = $tricksterPath . 'homepage/js/public/';
         $this->javascriptPath = $tricksterPath . 'homepage/js/public/';
         $this->javascriptFiles = [
             'logics.ajaxSearch.js',
