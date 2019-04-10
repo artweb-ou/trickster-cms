@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<account>
+		<bankURL>https://www.moneybookers.com/app/payment.pl</bankURL>
+		<encoding>UTF-8</encoding>
+		<bankCode>moneybookers</bankCode>
+		<currencyName>EUR</currencyName>
+		<logoURL></logoURL>
+	</account>
+</configuration>

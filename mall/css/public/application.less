@@ -1,0 +1,154 @@
+body {
+	background-color: @background_color;
+}
+
+.language_pattern_background {
+	background-repeat: repeat;
+	background-size: auto auto;
+}
+
+.layout_aside() {
+	float: left;
+	padding-left: 2em;
+	width: 21.35%;
+}
+
+.wrap {
+	position: relative;
+	max-width: 1550px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.header {
+	position: relative;
+	display: none;
+	min-height: 5.86em;
+	background-color: @header_background_color;
+}
+
+.header_links {
+	display: none;
+	padding: 0;
+	background-color: @primary_color;
+}
+
+.header_links_inner {
+	display: flex;
+	justify-content: space-between;
+}
+
+.header_sociallinks {
+	line-height: 3em;
+	width: 20%;
+	display: inline-block;
+	text-align: center;
+	white-space: nowrap;
+	margin-top: @22px;
+}
+
+.header_sociallinks_item {
+	margin-left: 0.45em;
+	vertical-align: middle;
+	display: inline-block;
+	max-width: 36px;
+	max-height: 36px;
+	width: 2.12em;
+	height: 2.12em;
+	background-size: 100% 100%;
+}
+
+.header_sociallinks_item_fb {
+	width: @18px;
+	svg {
+		fill: @primary_color;
+		width: @32px;
+		height: @32px;
+	}
+}
+
+.header_sociallinks_item_instagram {
+	svg {
+		fill: @primary_color;
+		width: @32px;
+		height: @32px;
+	}
+}
+
+.header_sociallinks_item_twitter {
+}
+
+.header_sociallinks_item_rss {
+	width: @23px;
+	svg {
+		fill: @primary_color;
+		width: @32px;
+		height: @32px;
+	}
+}
+
+.header_sociallinks_label {
+	color: #a9a9a9;
+	font-size: @14px;
+	vertical-align: middle;
+	line-height: 1;
+	padding-top: 0.569em;
+	padding-right: 0.286em;
+}
+
+.header_linehack {
+	height: 5.86em;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.header_right {
+	white-space: nowrap;
+	float: right;
+	height: 100%;
+}
+
+.header_graphics {
+	position: relative;
+	//padding-top: 23%;
+}
+
+.header_graphics_inner {
+	//position: absolute;
+	//left: 0;
+	//right: 0;
+	//bottom: 0;
+	//top: 0;
+	overflow: hidden;
+}
+
+.content {
+}
+
+.columns_table .left_column {
+	padding: @37px 0 1.95em 2.05em;
+	width: 21.3%;
+	background-color: @sidebar_background_color;
+}
+
+.columns_table .center_column {
+	background: @content_background_color;
+	padding: 1em @mobile_page_margin;
+}
+
+@media (min-width: @screen_breakpoint_lg) {
+	body {
+		min-width: 980px;
+	}
+	.wrap {
+		min-width: 980px;
+		width: 95%;
+	}
+	.header,
+	.header_links {
+		display: block;
+	}
+	.columns_table .center_column {
+		padding: @24px 1.9em 1.95em;
+	}
+}

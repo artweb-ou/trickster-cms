@@ -1,0 +1,143 @@
+/* eventslist - short
+ *--------------------------------*/
+.eventslist_detailed .eventlist_list,
+.eventslist_short .eventlist_list {
+	.grid_container();
+}
+
+.eventslist_short_month {
+	margin-bottom: 1em;
+}
+
+/* varia
+ *--------------------------------*/
+.eventslist_filter {
+	margin-bottom: 1em;
+	text-align: right;
+}
+
+.eventslist_month:not(:last-child) {
+	margin-bottom: 1em;
+}
+
+/* eventslist - table
+ *--------------------------------*/
+.eventslist_table {
+	width: 100%;
+	td {
+		vertical-align: top;
+	}
+}
+
+.eventslist_table_aggregated {
+	.eventslist_table_item_month {
+		vertical-align: top;
+	}
+}
+
+.eventslist_table_item_date {
+	font-size: 0.9em;
+	font-weight: bold;
+	width: 40%;
+}
+
+.eventslist_table_item_city {
+	width: 20%;
+}
+
+.eventslist_table_item_title{
+	width: 40%;
+}
+
+/* eventslist - calendar
+ *--------------------------------*/
+.eventslist_calendar {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.eventslist_calendar_week {
+
+}
+
+.eventslist_calendar_day {
+	.clearfixin();
+	height: 6em;
+	width: 14%;
+}
+
+.eventslist_calendar .eventslist_calendar_day {
+	padding: 0.7em;
+}
+
+.eventslist_calendar .eventslist_calendar_day_foreign {
+	background-color: #f4f4f4;
+}
+
+.eventslist_calendar_day_past .eventslist_calendar_day_number {
+	color: #808080;
+}
+
+.eventslist_calendar .eventslist_calendar_day_holiday {
+	background-color: #fff2f2;
+}
+
+.eventslist_calendar_day_current .eventslist_calendar_day_number {
+	font-weight: bold;
+}
+
+.eventslist_calendar_day_number {
+	margin-bottom: 0.25em;
+	width: 2.5em;
+}
+
+.eventslist_calendar_day_number_featured {
+
+}
+
+.eventslist_calendar_day_events {
+	overflow: hidden;
+}
+
+.eventslist_calendar_day_event {
+	font-size: 0.9em;
+}
+
+.eventslist_calendar_day_event_link {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.eventslist_calendar_day_event_address {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+@media (max-width: @screen_breakpoint_sm_max) {
+	.eventslist_calendar thead {
+		display: none;
+	}
+
+	.eventslist_calendar {
+		tbody,
+		tr {
+			display: block;
+		}
+
+		td {
+			display: none;
+		}
+
+		td.eventslist_calendar_day_featured {
+			display: block;
+			width: auto;
+		}
+	}
+}
+
+@media (min-width: @screen_breakpoint_lg) {
+	.eventslist_calendar_day_number {
+		float: left;
+		margin-bottom: 0;
+	}
+}

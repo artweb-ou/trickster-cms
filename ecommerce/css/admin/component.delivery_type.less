@@ -1,0 +1,56 @@
+.deliverytype_form_prices_component {
+	.deliverytype_form_separator {
+		border-spacing: 0;
+	}
+	.seperator {
+		&:after {
+			display: inline-block;
+			content: '';
+			border-bottom: 1px solid @border-color;
+			width: 105%;
+		}
+	}
+	.icon_delete {
+		font-size: @8pt;
+		color: @red-color;
+		text-decoration: none;
+	}
+}
+
+.deliverytype_form_fields_component {
+	.seperator {
+		&:after {
+			display: inline-block;
+			content: '';
+			border-bottom: 1px solid @border-color;
+			width: 126%;
+		}
+	}
+	.checkbox_container  {
+		vertical-align: bottom;
+	}
+	.icon_delete {
+		font-size: @8pt;
+		color: @red-color;
+		text-decoration: none;
+	}
+}
+.deliverytype_form {
+	.deliverytype_form_fields_table {
+		.form_items {
+			.form_field {
+				width: @152pt;
+			}
+		}
+	}
+}
+
+
+@media (max-width: @screen_breakpoint_md) {
+	.deliverytype_form_prices_component,
+	.deliverytype_form_fields_component {
+		.form_items {
+			display: table-row;
+		}
+	}
+}

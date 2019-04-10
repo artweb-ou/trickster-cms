@@ -1,0 +1,25 @@
+.controls_block {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	.button {
+		margin-right: @8pt;
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+}
+
+@media (max-width: @screen_breakpoint_sm) {
+	.controls_block {
+		display: flex;
+		flex-direction: column;
+		padding: @21pt;
+		.button {
+			margin-bottom: @8pt;
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}

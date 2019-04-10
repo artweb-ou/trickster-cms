@@ -1,0 +1,28 @@
+{if isset($item.method)}
+	{assign var='options' value=$form->callElementMethod($item.method)}
+{elseif isset($item.property)}
+	{assign var='options' value=$form->getElementProperty($item.property)}
+{elseif isset($item.options)}
+	{assign var='options' value=$item.options}
+{/if}
+
+{foreach from=$formData.$fieldName key=languageId item=image}
+	<div class="form_items">
+	<span class="form_label">
+		{translations name="{$structureType}.{$fieldName}"} ({$languageNames.$languageId}):
+	</span>
+		<div class="form_field">
+			<select class="{if !empty($item.class)}{$item.class} {/if}dropdown_placeholder" name="{$formNames.$fieldName.$languageId}" autocomplete='off'>
+				{if !empty($item.defaultRequired)}
+					<option value=""></option>
+				{/if}
+				{if is_array($options)}
+					{foreach $options.$languageId  as $option}
+						<option value="{$option.id}"{if !empty($option.select)} selected="selected"{/if}>{$option.title}</option>
+					{/foreach}
+				{/if}
+			</select>
+		</div>
+		{include file=$theme->template('component.form_help.tpl')}
+	</div>
+{/foreach}

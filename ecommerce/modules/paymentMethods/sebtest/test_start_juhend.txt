@@ -1,0 +1,75 @@
+<sellerName>testvpos</sellerName>
+<sellerCode>testvpos</sellerCode>
+<sellerAccount>10002050618003</sellerAccount>
+
+
+Sisenemise URL on https://www.seb.ee/cgi-bin/dv.sh/un3min.r ,
+selle taga jookseb testbaas, seega ükski tehing reaalset
+rahaseisu ei mõjuta.
+vk_snd_id = "testvpos"
+vk_acc = 10002050618003
+
+Võtmed on kaasas attachemndiga, failis "kaupmees_priv.pem" on
+testkaupmehe salajane
+võti, failis "eyp_pub.pem" on panga sertifikaat.
+Allkirjastamiseks kasutage versiooni 008.
+
+Panga URL i poole pöördudes peaks kasutama HTTPS POST meetodit, lingilt
+(GET meetodiga) pöördudes võivad kaduma minna allkirja lõpusümbolid.
+
+Kuna süsteem jookseb arendusbaasi peal, võib juhutuda, et kõik
+ei tööta korrektselt. Sel juhul andke teada ja viga saab kiirelt
+kõrvaldatud. Peale testimise lõppemist saadan Teile URL'i, mille
+taga jookseb reaalne baas. Development baas kajastab testkaupmehe kontot,
+juhul kui testi-rahast puudu tuleb,
+andke samuti teada.
+
+Allkirjade moodustamiseks ning kontrollimiseks meil tehtud kaks
+näidismoodulit, mille lähtetekstid leiate lisatud failist sign.tar.gz.
+
+TESTSÜSTEEMI SISENEMISE KOODID:
+U-Neti kasutaja: kauptest
+salasõna: testime
+Koodid
+1 102837    11 976783    21 581593
+2 298024    12 163683    22 539318
+3 514571    13 944465    23 933270
+4 682336    14 785522    24 247735
+5 543370    15 259823    25 927994
+6 976413    16 767183    26 723836
+7 713736    17 108445    27 190851
+8 110516    18 055863    28 373195
+9 545687    19 211460    39 891437
+10 846359    20 128816    30 896282
+
+Kui mõni kood vale või kontol pole raha siis helista 6655490 
+
+
+Lõpliku tööserdi (ideaalne) genereerimine võiks käia nii:
+
+Läbi proovitud on OpenSSL 0.9.4 -ga
+
+Salajase võtme genereerimine:
+> openssl genrsa -des3 1024 > key.pem
+
+Kui ära jätta parameeter -des3 siis privaatvõtit ei krüpteerita.
+
+Self-signed sertifikaadi genereerimine:
+1. Konfiguratsioonifailis openssl.cnf tuleb sektsioonis [ req ] välja
+x509_extensions = ..... ette panna kommentaarimärk #:
+# x509_extensions = .....
+2.
+> openssl req -x509 -new -key key.pem -days 365 -sha1 > sert.pem
+Tuleb sisestada küsitavad parameetrid, välja tühjaks jätmiseks punkt .
+Maa on EE, osariiki pole (punkt) jne.
+
+Serdi parameetrite vaatamine:
+> openssl x509 -fingerprint -noout < sert.pem
+> openssl x509 -text -noout < sert.pem
+
+
+Võti key.pem koos sisestatud pääsufraasiga tuleb hoolikalt seifi
+kullakangide vahele hoiule panna. Sertifikaat sert.pem sisaldab avalikku
+infot nig tuleb muutmata kujul (kontrolliks on aktis fingerpint) teisele
+osapoolele edastada.
+

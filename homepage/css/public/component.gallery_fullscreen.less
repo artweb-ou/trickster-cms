@@ -1,0 +1,102 @@
+/********************************************************
+/*  FULL SCREEN GALLERY
+/********************************************************/
+
+/* Generic layout
+*******************************************/
+.fullscreen_gallery_block {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	box-sizing: border-box;
+}
+
+.fullscreen_gallery_center {
+	background-color: #fff;
+	position: absolute;
+	padding: 1em;
+	left: 50%;
+	top: 50%;
+	box-sizing: border-box;
+}
+
+.fullscreen_gallery_images {
+	position: relative;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.fullscreen_gallery_image {
+	display: block;
+	position: absolute;
+}
+
+/* Gallery closing
+*******************************************/
+.fullscreen_gallery_close {
+	background: url(getImageUrl('gallery/fsgallery_button_close.png')) no-repeat scroll 50% 50% transparent;
+	cursor: pointer;
+	display: block;
+	height: 30px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 33px;
+}
+
+.fullscreen_gallery_close:hover {
+}
+
+/* Gallery scrolling related
+*******************************************/
+.fullscreen_gallery_next {
+	display: block;
+	position: absolute;
+	top: 40px;
+	left: 50%;
+	width: 50%;
+	height: 39px;
+	cursor: pointer;
+	z-index: 2;
+}
+
+.fullscreen_gallery_prev {
+	display: block;
+	position: absolute;
+	top: 40px;
+	left: 0;
+	width: 50%;
+	height: 39px;
+	cursor: pointer;
+	z-index: 2;
+}
+
+.fullscreen_gallery_button_next {
+	height: 38px;
+	width: 33px;
+	position: absolute;
+	top: 50%;
+	right: 0;
+	margin-top: -15px;
+	background: url(getImageUrl('gallery/fsgallery_button_next.png')) no-repeat scroll 50% 100% transparent;
+}
+
+.fullscreen_gallery_next:hover .fullscreen_gallery_button_next {
+}
+
+.fullscreen_gallery_button_prev {
+	height: 38px;
+	width: 33px;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	margin-top: -15px;
+	background: url(getImageUrl('gallery/fsgallery_button_prev.png')) no-repeat scroll 50% 100% transparent;
+}
+
+.fullscreen_gallery_prev:hover .fullscreen_gallery_button_prev {
+}

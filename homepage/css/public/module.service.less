@@ -1,0 +1,29 @@
+.service_short_block {
+	.grid_item(2);
+}
+
+.service_details_image {
+	margin-bottom: 1em;
+	max-width: 100%;
+}
+
+@media (min-width: @screen_breakpoint_sm) {
+	.service_details_image {
+		float: right;
+		margin: 0 0 1em 1em;
+		width: 40%;
+	}
+}
+
+.service_details_contentlist {
+	.grid_container();
+}
+
+.service_details_galleries {
+	.grid_container();
+}
+
+.service_details_controls,
+.service_details_galleries {
+	margin-top: 1em;
+}

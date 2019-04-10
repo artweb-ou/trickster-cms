@@ -1,0 +1,53 @@
+/********************************************************
+/*  BANNER
+/********************************************************/
+.header_banners_container {
+}
+
+.banner_cover {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ffff0f;
+	opacity: 0;
+}
+
+.banner {
+	margin: 0 auto @default_grid_spacing;
+	position: relative;
+	display: block;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	img {
+		display: block;
+		margin: 0 auto;
+	}
+}
+
+/********************************************************
+/*  BANNERCATEGORY
+/********************************************************/
+.bannercategory_column {
+	text-align: center;
+	.banner_image_container img {
+		width: auto;
+	}
+}
+
+.right_column,
+.left_column {
+	.banner {
+		width: auto;
+		height: auto;
+		img {
+			max-width: 100%;
+			width: auto;
+			height: auto;
+		}
+	}
+}

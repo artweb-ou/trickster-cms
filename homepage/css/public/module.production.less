@@ -1,0 +1,43 @@
+/********************************************************
+/* PRODUCTION COMPONENT
+/********************************************************/
+.production_details_content_block {
+	position: relative;
+}
+
+.production_details_head {
+	.clearfixin();
+}
+
+.production_details_image {
+	display: block;
+	margin-bottom: 1em;
+}
+
+.production_details_content {
+}
+
+.production_details_galleries {
+	margin-top: 1.5em;
+}
+
+.production_details_controls {
+	margin-top: 1.5em;
+	position: relative;
+	text-align: right;
+}
+
+@media (min-width: @screen_breakpoint_sm) {
+	.production_details_image {
+		width: 40%;
+		display: block;
+		float: left;
+		margin: 0 1.5em 1em 0;
+	}
+}
+
+@media (min-width: @screen_breakpoint_lg) {
+	.production_details_image {
+		width: 30%;
+	}
+}

@@ -1,0 +1,158 @@
+<?php
+
+/**
+ * Class eventElement
+ *
+ * @property string $startDate
+ * @property string $startTime
+ * @property string $endDate
+ * @property string $endTime
+ */
+class eventElement extends structureElement implements MetadataProviderInterface, ImageUrlProviderInterface
+{
+    use MetadataProviderTrait;
+    use ImageUrlProviderTrait;
+
+    public $dataResourceName = 'module_event';
+    protected $allowedTypes = [];
+    public $defaultActionName = 'show';
+    public $role = 'content';
+    protected $startDayStamp;
+    protected $startDayNumber;
+    protected $endDayStamp;
+    protected $period;
+
+    protected function setModuleStructure(&$moduleStructure)
+    {
+        $moduleStructure['title'] = 'text';
+        $moduleStructure['description'] = 'html';
+        $moduleStructure['introduction'] = 'html';
+        $moduleStructure['startDate'] = 'date';
+        $moduleStructure['endDate'] = 'date';
+        $moduleStructure['startTime'] = 'time';
+        $moduleStructure['endTime'] = 'time';
+        $moduleStructure['location'] = 'text';
+        $moduleStructure['country'] = 'text';
+        $moduleStructure['city'] = 'text';
+        $moduleStructure['address'] = 'text';
+        $moduleStructure['image'] = 'image';
+        $moduleStructure['originalName'] = 'text';
+        $moduleStructure['mapCode'] = 'code';
+        $moduleStructure['link'] = 'url';
+        $moduleStructure['metaTitle'] = 'text';
+        $moduleStructure['h1'] = 'text';
+        $moduleStructure['metaDescription'] = 'text';
+        $moduleStructure['canonicalUrl'] = 'url';
+        $moduleStructure['metaDenyIndex'] = 'checkbox';
+        // tmp
+        $moduleStructure['elements'] = 'numbersArray';
+        $moduleStructure['connectedEventsLists'] = 'numbersArray';
+    }
+
+    protected function setMultiLanguageFields(&$multiLanguageFields)
+    {
+        $multiLanguageFields[] = 'title';
+        $multiLanguageFields[] = 'description';
+        $multiLanguageFields[] = 'introduction';
+        $multiLanguageFields[] = 'location';
+        $multiLanguageFields[] = 'country';
+        $multiLanguageFields[] = 'city';
+        $multiLanguageFields[] = 'address';
+        $multiLanguageFields[] = 'metaTitle';
+        $multiLanguageFields[] = 'h1';
+        $multiLanguageFields[] = 'metaDescription';
+    }
+
+    protected function getTabsList()
+    {
+        return [
+            'showForm',
+            'showSeoForm',
+            'showLayoutForm',
+            'showPositions',
+            'showPrivileges',
+        ];
+    }
+
+    public function getStartDayStamp()
+    {
+        if (is_null($this->startDayStamp)) {
+            $this->startDayStamp = strtotime($this->startDate);
+        }
+        return $this->startDayStamp;
+    }
+
+    public function getEndDayStamp()
+    {
+        if (is_null($this->endDayStamp)) {
+            $this->endDayStamp = strtotime($this->endDate);
+        }
+        return $this->endDayStamp;
+    }
+
+    public function getStartDayNumber()
+    {
+        if (is_null($this->startDayNumber)) {
+            $this->startDayNumber = date('j', $this->getStartDayStamp());
+        }
+        return $this->startDayNumber;
+    }
+
+    public function getStartDate($format = false)
+    {
+        if ($format) {
+            return date($format, $this->getStartDayStamp());
+        }
+        return $this->startDate;
+    }
+
+    public function getEndDate($format = false)
+    {
+        if ($format) {
+            return date($format, $this->getEndDayStamp());
+        }
+        return $this->endDate;
+    }
+
+    public function getPeriod()
+    {
+        if ($this->period === null) {
+            $period = $this->startDate;
+            if ($this->startTime) {
+                $period .= " " . $this->startTime;
+            }
+            if (($this->endDate && $this->startDate != $this->endDate) || $this->endTime) {
+                $period .= " -";
+                if ($this->endDate && $this->startDate != $this->endDate) {
+                    $period .= " " . $this->endDate;
+                }
+                if ($this->endTime) {
+                    $period .= " " . $this->endTime;
+                }
+            }
+            $this->period = $period;
+        }
+        return $this->period;
+    }
+
+    public function getMachineReadableDateTime($date, $time)
+    {
+        return gmdate('Y-m-d\TH:i\Z', strtotime($date . " " . $time));
+    }
+
+    public function getConnectedEventsLists()
+    {
+        $connectedEventsLists = [];
+        $structureManager = $this->getService('structureManager');
+        if ($eventElements = $structureManager->getElementsParents($this->id, 'eventsListEvent', false)) {
+            foreach ($eventElements as $eventElement) {
+                $elem = $structureManager->getElementById($eventElement->id);
+                $item['id'] = $elem->id;
+                $item['title'] = $elem->getTitle();
+                $item['select'] = true;
+                $connectedEventsLists[] = $item;
+            }
+        }
+        return $connectedEventsLists;
+    }
+}

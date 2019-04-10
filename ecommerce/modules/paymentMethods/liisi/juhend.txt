@@ -1,0 +1,33 @@
+Pangalingi võtmete genereerimise juhend
+
+
+
+Pangalingi rakenduse tarvis on soovitatav kasutada eraldi võtmepaari, millel ei tohiks WWW serveri sertifikaadiga midagi ühist olla.
+
+Soovitame OPENSSL'iga (http://www.openssl.org) genereerida pangalingi jaoks eraldi salajase võtme, ning siis teha sellele võtmele sertifikaadipäring (certificate request). Viimast ootamegi pangas e-maili aadressile pangalink@swedbank.ee. Kliendi poolt genereeritud salajase võtme pikkusena toetame 2048 bitti.
+
+
+
+Salajase võtme saab genereerida järgmise käsureaga:
+openssl genrsa -out privkey.pem 2048 
+
+
+Olemasolevale salajasele võtmele saab sertifikaati pärida järgnevalt:
+openssl req -new -key privkey.pem -out request.pem
+
+
+DN (distinguished name) kuju peaks olema järgmine: 
+ 
+E  (e-maili aadress) = partneri sertifikaadi haldaja kontakt emaili aadress (aa.bb@ISP.ee)
+
+CN (Common Name) = FQDN kus pangalinki kasutama hakatakse (www.kaupmees.ee)
+
+OU (Organizational Unit  Name) = banklink
+
+O (Organization Name) = asutuse registreeritud nimi (näiteks: AS Kaupmees)
+
+C (Country Name )= EE
+
+
+Käsu tulemusena tekib 2 faili: "privkey.pem", mis sisaldab salajast võtit ja "request.pem", mis sisaldab sertifikaadi päringut (see päring tuleb panka saata e-maili teel).
+

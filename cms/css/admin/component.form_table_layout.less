@@ -1,0 +1,22 @@
+.form_table_layout {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: @30pt;
+	.layout_header {
+		margin-bottom: @20pt;
+	}
+	.layout_content {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		.form_table_layout_item {
+			margin-top: @30pt;
+			margin-right: @30pt;
+			text-align: center;
+			.form_table_layout_item_image {
+				height: @109pt;
+				width: auto;
+			}
+		}
+	}
+}

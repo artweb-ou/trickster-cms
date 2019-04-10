@@ -1,0 +1,8 @@
+{
+    "name": "artweb/trickster",
+    "version": "0.1.0",
+    "dist": {
+        "url": "http://github.com/underfrenzy/trickster/",
+        "type": "package"
+    }
+}

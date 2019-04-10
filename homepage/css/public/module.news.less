@@ -1,0 +1,132 @@
+/********************************************************
+/*  NEWS LATEST
+/********************************************************/
+.latestnews_news {
+	.grid_container();
+}
+
+/********************************************************
+/*  NEWS WIDE
+/********************************************************/
+.news_wide {
+	position: relative;
+	.grid_item(2);
+}
+
+.news_wide_image {
+	width: 100%;
+}
+
+.news_wide_date {
+	margin-top: 1em;
+}
+
+.news_wide_readmore {
+}
+
+.news_wide_readmore .button_text {
+}
+/********************************************************
+/*  NEWS DETAILS
+/********************************************************/
+.news_details_block {
+	.clearfixin();
+	position: relative;
+	overflow: hidden;
+}
+
+.news_details_content {
+}
+
+.news_details_image_block {
+	display: block;
+	margin-bottom: 1em;
+}
+
+.news_details_image {
+	display: block;
+	width: 100%;
+}
+
+.news_details_date {
+}
+
+
+@media (min-width: @screen_breakpoint_sm) {
+	.news_details_image_block {
+		width: 40%;
+		display: block;
+		float: left;
+		margin: 0 1.5em 1em 0;
+	}
+}
+
+@media (min-width: @screen_breakpoint_lg) {
+	.news_details_image_block {
+		width: 30%;
+	}
+}
+
+/********************************************************
+/*  NEWS SHORT
+/********************************************************/
+.news_short {
+
+}
+
+.news_short_content {
+}
+
+.news_short_image_wrap {
+}
+
+.news_short_image {
+	display: block;
+	width: 100%;
+}
+
+/******************************************/
+/*  Newslist
+/******************************************/
+.newslist_news_grid {
+	.grid_container();
+}
+.newslist_controls {
+	margin-top: 1em;
+}
+
+.newslist_newstable {
+	width: 100%;
+}
+
+/********************************************************
+/*  NEWS TABLEROW
+/********************************************************/
+
+.news_tablerow {
+}
+
+.news_tablerow_number {
+
+}
+
+.news_tablerow_title {
+	width: 20%
+}
+
+.news_tablerow_introduction {
+	width: 60%
+}
+
+.news_tablerow_date {
+	white-space: nowrap;
+}
+
+@media (max-width: @screen_breakpoint_sm - 1) {
+	.news_tablerow_introduction {
+		display: none;
+	}
+	.news_tablerow_title {
+		width: auto;
+	}
+}

@@ -1,0 +1,152 @@
+.slide_gallery_images {
+	z-index: 0;
+}
+
+.button_np_button() {
+	display: block;
+	width: 52px;
+	height: 97px;
+	position: absolute;
+	top: 50%;
+	margin-top: -57px;
+	font-size: 0;
+	text-indent: 256px;
+}
+
+.button_prev_slide {
+	background-image: url(getImageUrl('slideshow_previous.png'));
+	.button_np_button;
+	left: 0;
+}
+
+.button_next_slide {
+	background-image: url(getImageUrl('slideshow_next.png'));
+	right: 0;
+	.button_np_button;
+}
+
+.slide_gallery_buttons {
+	position: absolute;
+	bottom: 0.6em;
+	right: 0.7em;
+	z-index: 5;
+}
+
+.slide_gallery_button {
+	vertical-align: bottom;
+	cursor: pointer;
+	margin-right: 0.36em;
+	display: inline-block;
+	background: @content_background_color;
+	height: 0.85em;
+	width: 0.85em;
+	border-radius: 256px;
+	border: 0.45em solid @content_background_color;
+}
+
+.slide_gallery_button_active {
+	background: @primary_color;
+}
+
+.slide_gallery_button_number {
+	display: none;
+}
+
+.header_gallery {
+	overflow: hidden;
+	height: 100%;
+	min-height: 0;
+
+	.slide_gallery_images {
+		height: 100%;
+	}
+}
+
+.header_gallery_banners {
+	float: right;
+	margin-left: 0.7em;
+	height: 100%;
+	width: 24.1%;
+}
+
+.header_gallery_banner {
+	height: 50%;
+	position: relative;
+
+	.banner {
+		position: absolute;
+		top: 0.35em;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		overflow: hidden;
+
+		img {
+			min-height: 100%;
+			width: 100%;
+		}
+	}
+
+	&:first-child .banner {
+		top: 0;
+		bottom: 0.35em;
+	}
+}
+
+.header_gallery .gallery_buttons {
+	padding-right: @12px;
+	padding-top: @6px;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	box-sizing: border-box;
+	text-align: right;
+
+	.gallery_button {
+		background: #fff;
+		display: inline-block;
+		height: @12px;
+		width: @12px;
+		-webkit-border-radius: @6px;
+		-moz-border-radius: @6px;
+		border-radius: @6px;
+		overflow: hidden;
+		text-indent: 1000px;
+		cursor: pointer;
+		margin-right: @7px;
+
+		&.gallery_button_active {
+			background: @primary_color;
+		}
+	}
+
+	.gallery_button_previous {
+		position: absolute;
+		top: 50%;
+		left: @16px;
+		background: url(getImageUrl('arrow_left.png')) no-repeat left top;
+		background-size: @15px @42px;
+		margin-top: -@21px;
+		width: @15px;
+		height: @42px;
+		cursor: pointer;
+		text-indent: 1000px;
+		overflow: hidden;
+	}
+
+	.gallery_button_next {
+		background: url(getImageUrl('arrow_right.png')) no-repeat left top;
+		background-size: @15px @42px;
+		right: @16px;
+		position: absolute;
+		top: 50%;
+		margin-top: -@21px;
+		width: @15px;
+		height: @42px;
+		cursor: pointer;
+		text-indent: 1000px;
+		overflow: hidden;
+	}
+}

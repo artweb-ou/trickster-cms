@@ -1,0 +1,108 @@
+/* event - short view
+ *--------------------------------*/
+.event_short {
+	.grid_item(3);
+	display: inline-flex;
+}
+
+.event_short_image_wrap {
+	display: flex;
+	align-items: center;
+}
+
+.column_selectedevents_item .event_short {
+	width: 100%;
+}
+
+.event_short_image {
+	width: 100%;
+}
+
+.event_short_description {
+	overflow: hidden;
+}
+
+.event_short_title {
+}
+
+.event_short_dates {
+}
+
+.event_short_location {
+
+}
+
+.event_short_link {
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 1em;
+}
+
+/* event - detailed
+ *--------------------------------*/
+
+.event_detailed {
+	.grid_item(2);
+}
+
+/* event - details view
+ *--------------------------------*/
+.event_details {
+	position: relative;
+}
+
+.event_details_title {
+
+}
+
+.event_details_spec:not(:last-child) {
+	margin-bottom: 1em;
+}
+
+.event_details_address {
+}
+
+.event_details_main_block {
+	.clearfixin();
+}
+
+.event_details_image_wrap {
+	margin-bottom: 1em;
+}
+
+.event_details_image_wrap {
+	float: left;
+	margin-right: 1em;
+	max-width: 35%;
+}
+
+.event_details_image {
+	max-width: 100%;
+}
+
+.event_details_specs {
+	overflow: hidden;
+}
+
+.event_details_content {
+	margin-top: 1.5em;
+}
+
+.event_details_map {
+
+	margin: 2em auto 0 auto;
+}
+
+.event_details_map iframe {
+	width: 100%;
+	height: 17em;
+}
+
+@media (min-width: @screen_breakpoint_sm) {
+	.event_details_image_wrap {
+		float: left;
+		margin-right: 1em;
+		max-width: 35%;
+		margin-bottom: 0;
+	}
+}

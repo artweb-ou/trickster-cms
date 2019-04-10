@@ -1,0 +1,49 @@
+.ajaxsearch_block {
+
+}
+
+.ajaxsearch_input {
+
+}
+
+.ajaxsearch_results_block {
+	background-color: #fff;
+	display: none;
+	margin-top: 0.25em;
+	padding: 0.25em 0;
+	position: absolute;
+	z-index: 50;
+	box-shadow: 0 0 4px -2px #000;
+}
+
+.ajaxsearch_results_list {
+	max-width: 20em;
+	min-width: 10em;
+	padding: 1em;
+}
+
+.ajaxsearch_results_item {
+	display: block;
+	cursor: pointer;
+	overflow: hidden;
+	padding: 0.25em 0.5em;
+	color: inherit;
+	text-decoration: none;
+
+	&:hover,
+	&.ajaxsearch_results_active {
+		background-color: #bababa;
+		border-radius: 4px 4px 4px 4px;
+		color: #fff;
+	}
+
+	.icon {
+		margin-right: 0.5em;
+	}
+}
+
+.ajaxsearch_results_item_text {
+	vertical-align: middle;
+	font-size: 0.9em;
+	color: #333;
+}

@@ -1,0 +1,31 @@
+.cookie_policy_component {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 0.5em 1em;
+	background: #eee;
+	z-index: 10;
+	box-shadow: 0 0 5px rgba(0,0,0,0.3);
+	text-align: right;
+}
+
+.cookie_policy_link {
+	display: block;
+}
+
+.cookie_policy_button {
+	float: right;
+	margin: 0 0 0 1em;
+}
+
+@media (min-width: @screen_breakpoint_sm) {
+	.cookie_policy_button {
+		float: none;
+		margin: 0 1em;
+		vertical-align: middle;
+	}
+	.cookie_policy_link {
+		display: inline-block;
+	}
+}

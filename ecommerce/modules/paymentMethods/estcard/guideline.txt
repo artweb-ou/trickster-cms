@@ -1,0 +1,20 @@
+Test privaatvõtme saab genereerida näiteks nii:
+openssl genrsa -out priv.pem 1024
+
+ja sertifikaadipäeringu:
+openssl req -key priv.pem -new -out request.req
+
+Sertifikaadipäringu "subjekt" (distinguished name) peab olema õigesti ja 
+korralikult vormistatud
+Kohustuslikud väljad on:
+Parameeter / Väärtus
+country=EE
+State or province - Eesti
+City=Linn
+Organization=Firma nimi
+Organizational unit - Müügikoha nimi või aadress
+Common name - Serdi tellija nimi
+E-mail - Serdi tellija e-maili aadress
+
+Peale seda avame Teile ligipääsu testkeskkonnale
+

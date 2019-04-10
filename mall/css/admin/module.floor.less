@@ -1,0 +1,101 @@
+.floor_mapeditor {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	margin: 0 auto 0 auto;
+}
+
+.floor_mapeditor_center_block {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 20%;
+}
+
+.floor_mapeditor_map {
+	margin: 0 auto;
+	overflow: hidden;
+	background: #fff;
+	box-sizing: border-box;
+}
+
+.mixin_panel_bevel {
+	border: 1px solid #dedede;
+	box-shadow: 1px 1px 0 0 #fcfcfc inset;
+}
+
+.floor_mapeditor_panel {
+	padding-right: @20pt;
+	padding-top: @20pt;
+	overflow: auto;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.floor_mapeditor_panel select {
+	width: 150px;
+}
+
+.floor_mapeditor_panel table {
+	margin-top: 0.5em;
+}
+
+.floor_mapeditor_panel table td {
+	vertical-align: middle;
+}
+
+.floor_mapeditor_panel_button {
+	font-size: 0.8em;
+}
+
+.floor_mapeditor_panel_button.button_disabled {
+	opacity: 0.5;
+}
+
+.floor_mapeditor_panel_tabs {
+	overflow: hidden;
+	white-space: nowrap;
+	height: auto;
+	background-color: #fff;
+}
+
+.floor_mapeditor_panel_content {
+	border: 1px solid @border-color;
+	border-radius: 3px;
+}
+
+.floor_mapeditor_panel_tabs_buttons {
+	margin-bottom: @34pt;
+}
+
+.floor_mapeditor_panel_tabs_content {
+	background: none;
+	padding: 1em;
+	min-height: 0;
+	margin: @8pt;
+	background-color: #fff;
+	.form_fields {
+		padding: 0;
+		.form_items {
+			.form_field {
+				width: auto;
+				.input_component {
+					max-width: none;
+				}
+			}
+		}
+	}
+}
+
+.floor_mapeditor_panel_editcontrols {
+	padding: 1em;
+	background-color: @background-color;
+}
+
+.floor_mapeditor_panel_undocontrols {
+	padding: 1em;
+	background-color: @background-color;
+}

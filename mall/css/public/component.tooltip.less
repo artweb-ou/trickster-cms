@@ -1,0 +1,25 @@
+.tip_popup {
+	margin-left: -0.9em;
+	margin-top: -0.3em;
+}
+
+.tip_popup:before {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-left: 1em solid transparent;
+	border-top: 0.6em solid @content_background_color;
+}
+
+.tip_popup_content {
+	position: relative;
+	font-size: 1.05em;
+	color: @primary_color;
+	padding: 0.45em 1.8em 0.5em;
+	background: @content_background_color;
+	border: 0;
+	box-shadow: 0 0.11em 0.2em rgba(0, 0, 0, 0.35);
+}

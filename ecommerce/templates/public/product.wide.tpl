@@ -1,0 +1,99 @@
+{assign moduleTitle $element->title}
+{capture assign="moduleSideContent"}
+	{if $element->originalName != ""}
+		{include file=$theme->template('component.elementimage.tpl') type='productWide' class='product_wide_image' lazy=true}
+	{/if}
+
+	{$icons=$element->getIconsCompleteList()}
+	{$connectedDiscounts=$element->getCampaignDiscounts()}
+	{if $icons || $connectedDiscounts}
+		<div class="product_wide_icons">
+			{if $element->getOldPrice()}
+				{if $discount = $element->getDiscountPercent()}
+					<div class="product_discount_container">
+							<span class="product_discount">
+								-{$discount}%
+							</span>
+					</div>
+				{/if}
+			{/if}
+			{foreach $icons as $icon}
+				<img class='product_wide_icons_image lazy_image' src="{$theme->getImageUrl('lazy.png')}" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$icon->image}/filename:{$icon->originalName}' alt='{$icon->title}'{if $icon->iconWidth > 0} style="max-width: {$icon->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
+			{/foreach}
+
+			{foreach from=$connectedDiscounts item=discount}
+				{if $discount->icon}
+					<img class='product_wide_icons_image lazy_image' src="{$theme->getImageUrl('lazy.png')}" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$discount->icon}/filename:{$discount->iconOriginalName}' alt='{$discount->title}'{if $discount->iconWidth > 0} style="max-width: {$discount->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
+				{/if}
+			{/foreach}
+		</div>
+	{/if}
+{/capture}
+{capture assign="moduleContent"}
+	<div class="product_wide_price">{if !$element->isEmptyPrice()}{translations name='product.price'}: {$element->getPrice()}&#xa0;{$selectedCurrencyItem->symbol}{/if}</div>
+	<div class="product_wide_code">{translations name='product.code'}: {$element->code}</div>
+	<div class="product_wide_content">
+		{if $element->introduction}
+			<div class="product_wide_description">
+				{$element->introduction}
+			</div>
+		{/if}
+
+		{assign "primaryParametersInfo" $element->getPrimaryParametersInfo()}
+		{if $primaryParametersInfo}
+			<table class='product_wide_parameters'>
+				<tr>
+					{assign "iteration" 1}
+
+					{foreach from=$primaryParametersInfo item=parameterInfo}
+						<td class="product_wide_parameter">
+							<span class="product_wide_parameter_title">{$parameterInfo.title}:</span>
+							<span class="product_wide_parameter_value">
+								{if $parameterInfo.structureType == 'productParameter'}
+									{$parameterInfo.value}
+								{elseif $parameterInfo.structureType == 'productSelection'}
+									{foreach from=$parameterInfo.productOptions item=option name=options}
+										{if $option.originalName}
+											<img class="product_parameter_icons_item fancytitle lazy_image" src="{$theme->getImageUrl('lazy.png')}" data-lazysrc="{$controller->baseURL}image/type:productOption/id:{$option.image}/filename:{$option.originalName}" alt="{$option.title}" title="{$option.title}" />
+										{else}
+											{$option.title}{if !$smarty.foreach.options.last},&#32;{/if}
+										{/if}
+									{/foreach}
+								{/if}
+							</span>
+						</td>
+
+						{if $iteration is div by 3}
+							</tr><tr>
+						{/if}
+
+						{assign var=iteration value=$iteration+1}
+					{/foreach}
+				</tr>
+			</table>
+		{/if}
+	</div>
+{/capture}
+
+{capture assign="moduleControls"}
+	<a href="{$element->URL}" class="product_wide_button product_short_button button">
+		<span class='button_text'>{translations name='product.short_select'}</span>
+	</a>
+
+	{if $shoppingBasket && $element->isPurchasable() && !$element->isBasketSelectionRequired()}
+		<div class="product_short_controls" data-minimum-order="{$product->minimumOrder}">
+			<div class="product_short_amount_block">
+				<span class="button product_short_amount_button_minus product_short_amount_button">-</span>
+				<input class='input_component product_short_amount_input' type="text" value="{if $element->minimumOrder>0}{$element->minimumOrder}{else}1{/if}" />
+				<span class="button product_short_amount_button_plus product_short_amount_button">+</span>
+			</div>
+			<span class="product_wide_button product_short_basket product_short_button button"><span class='button_text'>{translations name='product.short_addtobasket'}</span></span>
+		</div>
+	{/if}
+{/capture}
+{assign moduleClass "product_wide productid_{$element->id}"}
+{assign moduleTitleClass "product_wide_title"}
+{assign moduleAttributes ''}
+{assign moduleSideContentClass "product_wide_image_container"}
+{assign moduleControlsClass "product_wide_controls"}
+{include file=$theme->template("component.subcontentmodule_wide.tpl")}

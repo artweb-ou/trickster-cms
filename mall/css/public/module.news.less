@@ -1,0 +1,16 @@
+.news_short {
+	background: @lighter_background_color;
+	.grid_item(2);
+}
+
+@media (max-width: @screen_breakpoint_md) {
+	.news_short {
+		flex-direction: column;
+
+		.news_short_image_block {
+			width: 100%;
+			margin-right: 0;
+			margin-bottom: 1em;
+		}
+	}
+}

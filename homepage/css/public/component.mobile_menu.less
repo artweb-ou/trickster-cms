@@ -1,0 +1,60 @@
+@mobilemenu_background: @primary_color;
+@mobilemenu_text_color: #fff;
+
+.mobilemenu {
+	position: fixed;
+	top: 0;
+	right: 100%;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	padding-right: 2.5em;
+	box-sizing: border-box;
+}
+
+.mobilemenu_visible {
+	display: block;
+}
+
+.mobilemenu_main {
+	position: relative;
+	height: 100%;
+	overflow: auto;
+	background: @mobilemenu_background;
+	border-left: 1px solid rgba(0, 0, 0, 0.4);
+	color: @mobilemenu_text_color;
+	max-width: 32em;
+	margin-right: auto;
+	box-shadow: 0 0 0.5em rgba(9,0,0,0.25);
+}
+
+.mobilemenu_closeicon {
+	position: absolute;
+	right: 0.5em;
+	top: 0.5em;
+	width: 1.8em;
+	height: 1.8em;
+	background: url(getImageUrl('mobileheader_close.svg')) no-repeat;
+	background-size: contain;
+}
+
+.mobilemenu_module {
+	margin-bottom: 3em;
+}
+
+.mobilemenu_module_title {
+	padding: 0.9em 0 1em 0.8em;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	padding: .9em 0 1em .8em;
+	border-bottom: @mobileheader_line_width;
+}
+
+.mobilemenu_module_content {
+	color: #fbfbfb;
+	padding: .9em 0 1em .8em;
+}
+
+.mobilemenu_module_submenulist .mobilemenu_module_content {
+	padding: 0;
+}

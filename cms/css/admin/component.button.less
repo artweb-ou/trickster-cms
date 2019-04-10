@@ -1,0 +1,127 @@
+@grey-color: #f8f8f8;
+@hover-grey-color: #f0f0f1;
+@green-color: #47c650;
+@hover-green-color: #3eab2c;
+@red-color: #ee4f7c;
+@hover-red-color: #cf2051;
+@blue-color: #5eadf0;
+@hover-blue-color: #539cda;
+@yellow-color: #f7be23;
+@hover-yellow-color: #f79623;
+@border-grey-button-color: #d4d4d7;
+@text-grey-button-color: #3d4a68;
+@color: @white;
+@border-color: #e5e5e8;
+
+.button {
+	display: inline-flex;
+	position: relative;
+	align-items: center;
+	padding: @5pt @30pt @7pt;
+	box-sizing: border-box;
+	cursor: pointer;
+	border-radius: 3px;
+	background-color: @grey-color;
+	color: @text-grey-button-color;
+	text-decoration: none;
+	border: 1px solid @border-grey-button-color;
+	transition: @text-background-transition;
+	&:hover, &:focus {
+		outline: none;
+		background-color: @hover-grey-color;
+	}
+	.icon {
+		font-size: @9pt;
+		position: absolute;
+		left: @11pt;
+	}
+	.icon_delete {
+		left: @15pt;
+	}
+}
+
+.button::-moz-focus-inner {
+	border: 0;
+}
+
+.button_disabled,
+.button.button_disabled:focus,
+.button.button_disabled:hover {
+	outline: none;
+	opacity: 0.5;
+	cursor: default;
+}
+
+.success_button {
+	background-color: @green-color;
+	color: @color;
+	border: none;
+	&:hover, &:focus {
+		outline: none;
+		background-color: @hover-green-color;
+	}
+	.icon {
+		color: inherit;
+	}
+}
+
+.primary_button {
+	background-color: @blue-color;
+	color: @color;
+	border: 1px solid @blue-color;
+	&:hover, &:focus {
+		outline: none;
+		background-color: @hover-blue-color;
+	}
+	.icon {
+		color: inherit;
+	}
+}
+
+.warning_button {
+	background-color: @red-color;
+	color: @color;
+	border: none;
+	&:hover, &:focus {
+		outline: none;
+		background-color: @hover-red-color;
+	}
+	.icon {
+		color: inherit;
+	}
+}
+
+.info_button {
+	background-color: @yellow-color;
+	color: @color;
+	border: none;
+	&:hover, &:focus {
+		outline: none;
+		background-color: @hover-yellow-color;
+	}
+	.icon {
+		color: inherit;
+	}
+}
+
+.addnew_container {
+	padding-left: @12pt;
+	.icon {
+		top: @5pt;
+		left: 0;
+	}
+}
+
+@media (max-width: @screen_breakpoint_lg) {
+	.button:not(.file_input_button, . login_button) {
+		margin: @8pt;
+	}
+}
+
+@media (max-width: @screen_breakpoint_sm) {
+	.catalogue_masseditor {
+		.section_container {
+			flex-wrap: wrap;
+		}
+	}
+}

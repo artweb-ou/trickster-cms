@@ -1,0 +1,31 @@
+<?php
+$moduleActions = [];
+$moduleActions[] = 'delete';
+$moduleActions[] = 'receive';
+$moduleActions[] = 'show';
+$moduleActions[] = 'showForm';
+$moduleActions[] = 'deleteFile';
+$moduleActions[] = 'deleteElements';
+$moduleActions[] = 'clone';
+$moduleActions[] = 'showPositions';
+$moduleActions[] = 'receivePositions';
+$moduleActions[] = 'showIconForm';
+$moduleActions[] = 'comment';
+$moduleActions[] = 'showImportForm';
+$moduleActions[] = 'receiveImportForm';
+$moduleActions[] = 'showFiles';
+$moduleActions[] = 'receiveFiles';
+$moduleActions[] = 'showOptionsPricingForm';
+$moduleActions[] = 'receiveOptionsPricingForm';
+$moduleActions[] = 'showOptionsImagesForm';
+$moduleActions[] = 'receiveOptionsImagesForm';
+
+$moduleActions[] = 'showTexts';
+$moduleActions[] = 'receiveTexts';
+$moduleActions[] = 'showParameters';
+$moduleActions[] = 'receiveParameters';
+$moduleActions[] = 'showDelivery';
+$moduleActions[] = 'receiveDelivery';
+$moduleActions[] = 'showImages';
+$moduleActions[] = 'receiveImages';
+$moduleActions[] = 'showSeoForm';

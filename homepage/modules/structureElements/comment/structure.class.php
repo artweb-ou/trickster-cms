@@ -1,0 +1,196 @@
+<?php
+
+/**
+ * Class commentElement
+ *
+ * @property string author
+ * @property string email
+ * @property string website
+ * @property string content
+ * @property string ipAddress
+ * @property string targetType
+ * @property int dateTime
+ * @property int userId
+ * @property int votes
+ * @property int approved
+ */
+class commentElement extends structureElement implements MetadataProviderInterface, VotesHolderInterface, CommentsHolderInterface
+{
+    use UserElementProviderTrait;
+    use MetadataProviderTrait;
+    use CommentsTrait;
+    use SearchTypesProviderTrait;
+    public $dataResourceName = 'module_comment';
+    protected $allowedTypes = ['comment'];
+    public $defaultActionName = 'show';
+    public $role = 'content';
+    protected $userVote;
+    protected $replies;
+
+    protected function setModuleStructure(&$moduleStructure)
+    {
+        $moduleStructure['author'] = 'text';
+        $moduleStructure['email'] = 'text';
+        $moduleStructure['website'] = 'url';
+        $moduleStructure['content'] = 'textarea';
+        $moduleStructure['userId'] = 'text';
+        $moduleStructure['votes'] = 'naturalNumber';
+
+        $moduleStructure['dateTime'] = 'dateTime';
+        $moduleStructure['ipAddress'] = 'text';
+        $moduleStructure['targetType'] = 'text';
+        $moduleStructure['approved'] = 'checkbox';
+    }
+
+    /**
+     * @return structureElement|null
+     */
+    public function getTarget()
+    {
+        $result = null;
+        if ($targetId = $this->getTargetId()) {
+            $result = $this->getService('structureManager')->getElementById($targetId);
+        }
+        return $result;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTargetId()
+    {
+        $result = 0;
+        $connectedIds = $this->getService('linksManager')->getConnectedIdList($this->id, "commentTarget", "child");
+        if ($connectedIds) {
+            $result = $connectedIds[0];
+        }
+        return $result;
+    }
+
+    /**
+     * return commentElement[]
+     */
+    public function getReplies()
+    {
+        return $this->getChildrenList();
+    }
+
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    public function getParentElement()
+    {
+        $structureManager = $this->getService('structureManager');
+        return $structureManager->getElementsFirstParent($this->id, false, 'commentTarget');
+    }
+
+    public function logCreation()
+    {
+        $this->getService('eventsLog')->logEvent($this->id, 'comment');
+    }
+
+    public function recalculateVotes()
+    {
+        $votesValue = 0;
+        $votesManager = $this->getService('votesManager');
+        $user = $this->getService('user');
+        if ($votesList = $votesManager->getElementVotesList($this->id)) {
+            foreach ($votesList as &$vote) {
+                if ($vote['userId'] !== $user->id) {
+                    if ($vote['value'] > 0) {
+                        $votesValue++;
+                    } else {
+                        $votesValue--;
+                    }
+                }
+            }
+        }
+        $this->votes = $votesValue;
+        $this->getService('db')
+            ->table($this->dataResourceName)
+            ->where('id', '=', $this->getId())
+            ->update(['votes' => $this->votes]);
+    }
+
+    /**
+     * @param mixed $userVote
+     */
+    public function setUserVote($userVote)
+    {
+        $this->userVote = $userVote;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserVote()
+    {
+        if ($this->userVote === null) {
+            $votesManager = $this->getService('votesManager');
+            $this->setUserVote($votesManager->getElementUserVote($this->id, $this->structureType));
+        }
+        return $this->userVote;
+    }
+
+    public function getJsonInfo()
+    {
+        return json_encode($this->getElementData());
+    }
+
+    public function getElementData()
+    {
+        return [
+            'id' => $this->id,
+            "votes" => $this->votes,
+            "userVote" => $this->getUserVote(),
+        ];
+    }
+
+    public function getAuthorName()
+    {
+        if ($userElement = $this->getUserElement()) {
+            return $userElement->getTitle();
+        }
+        return $this->author;
+    }
+
+    public function isVotingDenied()
+    {
+        return !controller::getInstance()->getConfigManager()->get('voting.allowed.comment');
+    }
+
+    public function getInitialTarget()
+    {
+        $targetElement = $this->getTarget();
+        if ($targetElement->structureType == 'comment') {
+            /**
+             * @var commentElement $targetElement
+             */
+            return $targetElement->getInitialTarget();
+        }
+        return $targetElement;
+    }
+
+    public function areCommentsAllowed()
+    {
+        if ($this->getCommentsConfig()->get($this->structureType . '.allowed')) {
+            if ($target = $this->getInitialTarget()) {
+                if ($target instanceof CommentsHolderInterface) {
+                    return $target->areCommentsAllowed();
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function getUserName()
+    {
+        if ($userElement = $this->getUserElement()) {
+            return $userElement;
+        }
+        return null;
+    }
+}

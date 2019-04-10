@@ -1,0 +1,162 @@
+// --------------------------------
+// COMMENTS
+// --------------------------------
+
+.comments_component {
+	.clearfixin();
+}
+
+// --------------------------------
+// COMMENT FORM
+// --------------------------------
+.comments_form {
+	display: block;
+	float: right;
+	width: 47.2%;
+	margin-left: 2.2em;
+}
+
+.comments_form_main {
+	padding: 0.7em 1.6em 1em;
+}
+
+.comments_form_title {
+	margin-bottom: 0.6em;
+}
+
+.comments_form_success {
+	margin-bottom: 0.6em;
+}
+
+.comments_form_table {
+	width: 100%;
+
+	.input_component {
+		display: block;
+		height: 2.4em;
+	}
+
+	textarea {
+		min-height: 0;
+		height: 12.95em;
+	}
+
+	td {
+		padding: 0;
+
+		&.comments_form_table_label {
+			width: 26%;
+			text-align: right;
+			padding-right: 1em;
+			padding-top: 0.35em;
+		}
+
+		&.comments_form_table_field {
+			padding-bottom: 0.6em;
+		}
+	}
+}
+
+.comments_form_captcha {
+	.input_component {
+		overflow: hidden;
+	}
+}
+
+.comments_form_captcha_image {
+	float: left;
+	margin-right: 0.5em;
+}
+
+.comments_form_controls {
+	text-align: right;
+	margin-top: 0.3em;
+}
+
+.comments_form_button {
+	padding: 0.15em 1em 0.05em;
+}
+
+.comments_form_conditions {
+	line-height: 1.3em;
+	border-top: 1px solid #e5e5e5;
+	padding: 1.2em 1.4em 1.1em;
+}
+
+// --------------------------------
+// COMMENT
+// --------------------------------
+
+.comment {
+	margin-bottom: 1.4em;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+	.comment_form {
+		display: none;
+	}
+}
+
+.comment_info {
+	margin-bottom: 0.5em;
+	font-size: 0.8em;
+}
+
+.comment_author {
+	color: inherit;
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+a.comment_author {
+	text-decoration: underline;
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+.comment_date {
+	color: #606060;
+	margin-right: 10px;
+}
+
+.comment_head {
+	margin-bottom: 0.2em;
+}
+
+.comment_datetime {
+	float: right;
+	margin-left: 1em;
+}
+
+.comment_author {
+	overflow: hidden;
+}
+
+.comment_response_button {
+	margin-top: 0.5em;
+	font-size: 0.8em;
+	cursor: pointer;
+}
+
+// --------------------------------
+// COMMENT FORM
+// --------------------------------
+.comment_form {
+	.form_controls {
+		text-align: left;
+	}
+	.textarea_component {
+		width: 100%;
+		min-height: 10em;
+	}
+}
+
+.comment_form_author {
+	margin-bottom: 0.5em;
+}
+
+.comment_form_email {
+	margin-bottom: 0.5em;
+}

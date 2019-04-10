@@ -1,0 +1,219 @@
+/********************************************************
+/*  CAMPAIGN DETAILS
+/********************************************************/
+.campaign_details_image_wrap {
+  float: left;
+  margin-right: 1em;
+}
+
+.campaign_details_main {
+  overflow: hidden;
+  margin-bottom: 3em;
+}
+
+.campaign_details_social {
+  text-align: right;
+  margin-bottom: 1em;
+}
+
+.campaign_details_controls {
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  text-align: right;
+}
+
+/********************************************************
+/*  CAMPAIGN THUMBNAIL
+/********************************************************/
+.campaign_thumbnail {
+  .grid_item(4);
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  min-width: 0;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.campaign_thumbnail_link {
+  text-decoration: none;
+}
+
+.campaign_thumbnail_inner {
+  display: block;
+  margin: 0 2.15em 2.15em;
+  cursor: pointer;
+}
+
+.campaign_thumbnail_image_container {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin-bottom: 0.4em;
+}
+
+.campaign_thumbnail_image {
+  display: inline-block;
+  vertical-align: bottom;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+}
+
+.campaign_thumbnail_title {
+  display: block;
+  color: @primary_color;
+  margin-bottom: 0.1em;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.campaign_thumbnail_introduction {
+  display: block;
+  color: #939393;
+  white-space: normal;
+}
+
+.campaign_thumbnail_controls {
+  margin-top: 1em;
+  text-align: center;
+}
+
+/********************************************************
+/*  CAMPAIGN SHORT
+/********************************************************/
+.campaign_short {
+  cursor: pointer;
+  padding: 0.45em 0.5em;
+  margin: 0.45em 0.25em;
+  border: 1px solid @darker_background_color;
+
+  &:hover {
+    border-color: @primary_color_darker;
+  }
+}
+
+.campaign_short_image {
+  width: 100%;
+}
+
+.campaign_short_controls {
+  margin-top: 1em;
+  text-align: right;
+}
+
+.campaign_short_inner {
+  position: relative;
+}
+
+.campaign_short_location {
+  text-decoration: none;
+  display: inline-block;
+  font-size: @14px;
+  color: #a9a9a9;
+  background: url(getImageUrl('location_icon.png')) no-repeat left top;
+  padding-left: 1em;
+  height: 1.429em;
+  margin-top: @6px;
+  line-height: 1.9;
+}
+
+.campaign_short_image_wrap {
+  margin-bottom: 0.45em;
+}
+
+.campaign_short_content {
+  font-size: 0.88em;
+  padding: 0 0.1em;
+}
+
+.campaign_short_image {
+  width: 100%;
+}
+
+.campaign_short_title {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.campaign_short_shop {
+  background: @primary_color;
+  color: @font_light_color;
+  padding: 0.4em 0.7em 0.55em 0.9em;
+  text-decoration: none;
+  display: block;
+  vertical-align: top;
+  margin-right: 0.55em;
+  float: left;
+}
+
+.campaign_short_link {
+  padding-top: 0.45em;
+  white-space: normal;
+  color: @primary_color;
+  text-decoration: none;
+  display: block;
+  vertical-align: top;
+  clear: both;
+  word-wrap: break-word;
+}
+
+/********************************************************
+/*  CAMPAIGN BAR
+/********************************************************/
+.campaign_bar {
+  margin-bottom: 0.8em;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.campaign_bar_inner {
+  padding: 0.6em 0.65em;
+  border: 1px solid @darker_background_color;
+  background: @lighter_background_color;
+}
+
+.campaign_bar_description {
+  color: @font_dark_color;
+  font-size: 0.94em;
+  line-height: 1.5em;
+}
+
+.campaign_bar_title {
+  font-size: 1.29em;
+  line-height: 1em;
+}
+
+.campaign_bar_image_wrap {
+  float: left;
+  margin-right: 1.2em;
+  max-width: 18%;
+}
+
+.campaign_bar_image {
+  max-width: 100%;
+}
+
+.campaign_bar_image {
+  overflow: hidden;
+}
+
+/********************************************************
+/*  CAMPAIGN SEARCH
+/********************************************************/
+.campaign_search {
+  &.clickable_component {
+    cursor: pointer;
+
+    &:hover {
+      border-color: @primary_color_darker;
+    }
+  }
+}
+
+.campaign_search_image {
+  max-width: 100%;
+}

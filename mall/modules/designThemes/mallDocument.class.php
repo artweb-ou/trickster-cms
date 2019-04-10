@@ -1,0 +1,12 @@
+<?php
+
+class mallDocumentDesignTheme extends designTheme
+{
+    public function initialize()
+    {
+        $pathsManager = controller::getInstance()->getPathsManager();
+        $tricksterPath = $pathsManager->getPath('trickster');
+        $this->cssPath = $tricksterPath . 'mall/css/document/';
+        $this->templatesFolder = $tricksterPath . 'mall/templates/document/';
+    }
+}

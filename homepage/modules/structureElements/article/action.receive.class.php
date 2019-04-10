@@ -1,0 +1,40 @@
+<?php
+
+class receiveArticle extends structureElementAction
+{
+    protected $loggable = true;
+
+    public function execute(&$structureManager, &$controller, &$structureElement)
+    {
+        if ($this->validated) {
+            $structureElement->prepareActualData();
+            if ($structureElement->getDataChunk('image')->originalName !== null) {
+                $structureElement->image = $structureElement->id;
+                $structureElement->originalName = $structureElement->getDataChunk('image')->originalName;
+            }
+            $structureElement->structureName = $structureElement->title;
+            $structureElement->persistElementData();
+
+            $structureElement->persistDisplayMenusLinks();
+
+            $controller->redirect($structureElement->URL);
+        }
+        $structureElement->setViewName('form');
+    }
+
+    public function setExpectedFields(&$expectedFields)
+    {
+        $expectedFields = [
+            'structureName',
+            'title',
+            'content',
+            'displayMenus',
+            'allowComments',
+            'image',
+        ];
+    }
+
+    public function setValidators(&$validators)
+    {
+    }
+}

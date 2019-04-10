@@ -1,0 +1,175 @@
+/********************************************************
+/*  ORDER INVOICE PDF
+/********************************************************/
+
+/********************************************************
+/*  ORDER INVOICE HEADER
+/********************************************************/
+.invoice_header_block {
+	margin-bottom: 3em;
+}
+
+.invoice_header_table {
+	width: 100%;
+	border-collapse: collapse;
+	border: none;
+}
+
+.invoice_header_table td {
+	border-collapse: collapse;
+	border: none;
+	vertical-align: top;
+}
+
+.invoice_header_logo {
+	display: block;
+	height: 6em;
+}
+
+.logo_image {
+	/*TODO height: 100%; */
+}
+
+.invoice_header_invoice_info {
+	text-align: right;
+	color: #808080;
+}
+
+.invoice_header_order_title {
+	margin-bottom: 0.6em;
+}
+
+.invoice_header_order_number {
+
+}
+
+.invoice_header_order_date {
+	margin-bottom: 0.6em;
+}
+
+.invoice_header_order_duedate {
+
+}
+
+/********************************************************
+/*  ORDER INVOICE TOP
+/********************************************************/
+.invoice_top_block {
+	margin-bottom: 2em;
+}
+
+.invoice_top_table {
+	width: 100%;
+	border-collapse: collapse;
+	border: none;
+	margin: 0;
+
+	td {
+		border-collapse: collapse;
+		border: none;
+		vertical-align: top;
+	}
+}
+
+.invoice_top_payer_info {
+	width: 30%;
+	padding: 0 2em 0 0;
+	font-size: 0.9em;
+}
+
+.invoice_top_receiver_info {
+	width: 30%;
+	padding: 0 2em 0 0;
+	font-size: 0.9em;
+}
+
+.invoice_top_delimiter {
+	width: 10%;
+}
+
+.invoice_top_to {
+	font-weight: bold;
+	color: #808080;
+}
+
+.invoice_top_company_info {
+	width: 30%;
+	padding: 0 0 0 2em;
+	text-align: right;
+	font-size: 0.9em;
+}
+
+.invoice_top_from {
+	font-weight: bold;
+	color: #808080;
+}
+
+/********************************************************
+/*  ORDER INVOICE PRODUCTS
+/********************************************************/
+.order_heading {
+	text-align: center;
+	margin: 0;
+}
+
+.order_productstable {
+	width: 100%;
+	border-collapse: collapse;
+	border-bottom: 1px solid #e0e0e0;
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}
+
+.order_pricesIncludeVat {
+	text-align: right;
+	margin-bottom: 1.5em;
+}
+
+.order_productstable_head td {
+	padding: 0.7em 1.5em;
+	text-align: left;
+	border-collapse: collapse;
+	background: #f0f0f0;
+	font-weight: bold;
+}
+
+.order_productstable_data td {
+	padding: 0.5em 1.5em;
+	text-align: left;
+	border-collapse: collapse;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.order_productstable_summary {
+	td {
+		padding: 0.2em 1.5em;
+		border-collapse: collapse;
+	}
+
+	.order_productstable_label {
+		text-align: right;
+	}
+
+	.order_productstable_value {
+		white-space: nowrap;
+	}
+
+	.order_productstable_summary_total td {
+		font-weight: bold;
+	}
+}
+
+.order_productstable_bigempty td {
+	height: 1em;
+}
+
+.order_productstable_empty {
+	height: 0.2em;
+}
+
+.order_comment {
+	border-bottom: 1px solid #e0e0e0;
+	margin-top: 1em;
+	padding-bottom: 1em;
+	margin-bottom: 1em;
+}
