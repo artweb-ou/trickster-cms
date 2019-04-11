@@ -6,7 +6,9 @@ window.ButtonComponent = function(componentElement) {
 		currentElementId = window.currentElementId;
 		actionName = componentElement.getAttribute('control-action');
 		componentElement.removeAttribute('control-action');
-		eventsManager.addHandler(componentElement, 'click', sendRequest);
+		if(actionName != null) {
+			eventsManager.addHandler(componentElement, 'click', sendRequest);
+		}
 	};
 	var sendRequest = function() {
 		var requestURL = window.location.href  + 'id:' + currentElementId + '/action:' + actionName;
