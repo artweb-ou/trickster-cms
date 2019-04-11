@@ -192,7 +192,7 @@ class cssUniterRendererPlugin extends rendererPlugin
         $this->variables = $variables;
     }
 
-    protected function getSVGContent($svgFile, $color = false, $stroke = false)
+    protected function getSVGContent($svgFile, $fill = false, $stroke = false)
     {
         $svgFileContent = '';
         /**
@@ -211,10 +211,10 @@ class cssUniterRendererPlugin extends rendererPlugin
 
             if ($svgContent = file_get_contents($filePath)) {
                 var_dump(($svgContent));
-                if ($color) {
-                    $svgContent = str_replace('<svg', '<svg fill="' . $color . '"', $svgContent);
+                if ($fill != "false") {
+                    $svgContent = str_replace('<svg', '<svg fill="' . $fill . '"', $svgContent);
                 }
-                if ($stroke) {
+                if ($stroke != "false") {
                     $svgContent = str_replace('<svg', '<svg stroke="' . $stroke . '"', $svgContent);
                 }
 
