@@ -34,7 +34,8 @@ class receiveProductGallery extends structureElementAction
             'displayMenus',
             'popup',
             'showConnectedProducts',
-            'layout'
+            'layout',
+            'markerLogic'
         ];
     }
 

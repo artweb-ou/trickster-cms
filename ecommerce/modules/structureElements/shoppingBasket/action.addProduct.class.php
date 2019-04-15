@@ -61,11 +61,6 @@ class addProductShoppingBasket extends structureElementAction
                 }
             }
             $productPrice = $parametersPrice ?: $productElement->price;
-            $variations = '';
-            if ($controller->getParameter('productVariation')) {
-                // deprecated since 18.10.16
-                $variations = $controller->getParameter('productVariation');
-            }
             if (is_numeric($productAmount) && is_numeric($productId) && ($everythingSelected || $controller->getParameter('productVariation'))) {
                 $finalAmount = $shoppingBasket->getProductOverallQuantity($productId) + $productAmount;
                 if ($productElement->isPurchasable($finalAmount)) {
@@ -140,7 +135,7 @@ class addProductShoppingBasket extends structureElementAction
                     $event->setVisitorId($visitor->id);
                     $eventLogger->saveEvent($event);
                     $event = new Event();
-                    $visitorManager = $this->getService('visitorManager');
+                    $visitorManager = $this->getService('VisitorsManager');
                     $visitor = $visitorManager->getCurrentVisitor();
                     $event->setType('shoppingbasket_addition');
                     $event->setElementId($productElement->id);

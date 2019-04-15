@@ -120,7 +120,6 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
 
                 $breadcrumbsManager = $this->getService('breadcrumbsManager',
                     ['config' => $this->configManager->getConfig('breadcrumbs')]);
-                $currentLocation = $breadcrumbsManager->getBreadcrumbs();
                 $this->renderer->assign('breadcrumbsManager', $breadcrumbsManager);
 
                 if ($currentElement instanceof MetadataProviderInterface) {

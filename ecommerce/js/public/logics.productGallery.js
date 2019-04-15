@@ -49,6 +49,7 @@ window.ProductGalleryInfo = function(galleryData) {
 		popupPositioning = galleryData.popupPositioning;
 		staticDescriptionEnabled = galleryData.staticDescriptionEnabled;
 		imageDescriptionEnabled = galleryData.imageDescriptionEnabled;
+		self.markerLogic = galleryData.markerLogic;
 		if (typeof galleryData.heightLogics != 'undefined'){
 			heightLogics = galleryData.heightLogics;
 		}
@@ -101,11 +102,12 @@ window.HeaderGalleryImage = function() {
 		image = data.image;
 		labelText = data.labelText;
 		link = data.link;
-
 		for (var i = 0; i < data.placeMarks.length; i++) {
-			var product = new HeaderGalleryImagePlacemark();
-			product.updateData(data.placeMarks[i]);
-			placeMarks.push(product);
+			if(data.placeMarks[i].markerLogic != 0) {
+				var product = new HeaderGalleryImagePlacemark();
+				product.updateData(data.placeMarks[i]);
+				placeMarks.push(product);
+			}
 		}
 	};
 
@@ -137,12 +139,13 @@ window.HeaderGalleryImagePlacemark = function() {
 	var positionY;
 	var products = [];
 	var productsIndex = {};
-
+	var markerLogic;
 	this.updateData = function(data) {
+		markerLogic = data.markerLogic;
 		positionX = parseFloat(data.positionX, 10);
 		positionY = parseFloat(data.positionY, 10);
-
 		for (var i = 0; i < data.products.length; i++) {
+			data.products[i].markerLogic =  data.markerLogic;
 			var product = new HeaderGalleryImageProduct();
 			product.updateData(data.products[i]);
 			products.push(product);
@@ -157,6 +160,9 @@ window.HeaderGalleryImagePlacemark = function() {
 	};
 	this.getProducts = function() {
 		return products;
+	};
+	this.getMarkerLogic = function() {
+		return markerLogic;
 	};
 	this.getProductInfoById = function(productId) {
 		var result = false;
@@ -178,6 +184,7 @@ window.HeaderGalleryImageProduct = function() {
 	var image;
 	var url;
 	var primaryParametersInfo;
+	var markerLogic;
 
 	this.updateData = function(data) {
 		id = parseInt(data.id, 10);

@@ -14,6 +14,16 @@ class ProductGalleryFormStructure extends ElementForm
             'options' => ['hybrid', 'content', 'container'],
             'translationGroup' => 'menulogic',
         ],
+        'markerLogic' => [
+            'type' => 'select.index',
+            'options' => [
+                0=>'hide',
+                1=>'marker',
+                2=>'marker_title_mouseover',
+                3=>'show_both'
+            ],
+            'translationGroup' => 'menulogic',
+        ],
         'popup'                 => [
             'type' => 'input.checkbox',
         ],

@@ -31,8 +31,9 @@ class productGalleryProductElement extends structureElement
     {
         $result = [];
         $structureManager = $this->getService('structureManager');
+        $languagesManager = $this->getService('languagesManager');
         foreach ($this->getConnectedProductsIds() as $id) {
-            $result[] = $structureManager->getElementById($id);
+            $result[] = $structureManager->getElementById($id, $languagesManager->getCurrentLanguageId());
         }
         return $result;
     }

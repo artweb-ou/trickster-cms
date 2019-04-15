@@ -22,6 +22,7 @@ class productGalleryElement extends menuDependantStructureElement
         $moduleStructure['popup'] = 'checkbox';
         $moduleStructure['showConnectedProducts'] = 'checkbox';
         $moduleStructure['productsLayout'] = 'text';
+        $moduleStructure['markerLogic'] = 'text';
     }
 
     protected function getTabsList()
@@ -46,7 +47,6 @@ class productGalleryElement extends menuDependantStructureElement
         $this->galleryData['description'] = $this->description;
         $this->galleryData['images'] = [];
         $this->galleryData['popup'] = $this->popup;
-
         if (isset($options['popupPositioning'])) {
             $this->galleryData['popupPositioning'] = $options['popupPositioning'];
         } else {
@@ -94,6 +94,7 @@ class productGalleryElement extends menuDependantStructureElement
                 $placeMarkInfo['positionX'] = $placeMark->positionX;
                 $placeMarkInfo['positionY'] = $placeMark->positionY;
                 $placeMarkInfo['products'] = [];
+                $placeMarkInfo['markerLogic'] = $this->markerLogic;
                 if (!empty($placeMark->title)) {
                     $productInfo = [];
                     $productInfo['title'] = $placeMark->title;

@@ -225,7 +225,6 @@ window.HeaderGalleryImageComponent = function(image, galleryInfo, gallery) {
 		// image itself
 		imageElement = document.createElement('img');
 		self.componentElement.appendChild(imageElement);
-
 		if (galleryInfo.isImageDescriptionEnabled() && (image.getDescription() || image.getTitle())) {
 			// description
 			imageDescription = document.createElement('div');
@@ -312,14 +311,20 @@ window.HeaderGalleryProductPlacemarkComponent = function(info, gallery) {
 		eventsManager.addHandler(self.componentElement, 'click', clickHandler);
 	};
 	var createDomStructure = function() {
+		var markerLogic = info.getMarkerLogic();
 		self.componentElement = document.createElement('div');
 		self.componentElement.className = 'productgallery_productplacemark';
-		placemarkDescriptionElement = document.createElement('div');
-		placemarkDescriptionElement.className = 'productgallery_productplacemark_description';
-		self.componentElement.appendChild(placemarkDescriptionElement);
-		var products = info.getProducts();
-		for (var i = 0; i < products.length; ++i) {
-			addProductDetails(products[i]);
+		if(markerLogic != 1) {
+			placemarkDescriptionElement = document.createElement('div');
+			placemarkDescriptionElement.className = 'productgallery_productplacemark_description';
+			self.componentElement.appendChild(placemarkDescriptionElement);
+			var products = info.getProducts();
+			for (var i = 0; i < products.length; ++i) {
+				addProductDetails(products[i]);
+			}
+		}
+		if(markerLogic == 2){
+			self.componentElement.classList.add('productgallery_productplacemark_hoverable');
 		}
 		self.componentElement.style.left = info.getPositionX() + '%';
 		self.componentElement.style.top = info.getPositionY() + '%';
