@@ -1,10 +1,10 @@
 <?php
 
-class autoLoadManager
+class AutoLoadManager
 {
     public function __construct()
     {
-        spl_autoload_register('autoLoadManager::handler', true, true);
+        spl_autoload_register('AutoLoadManager::handler', true, true);
     }
 
     public static function handler($className)
