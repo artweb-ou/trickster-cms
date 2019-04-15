@@ -19,31 +19,31 @@ class breadcrumbsManager implements DependencyInjectionContextInterface
 
     public function getBreadcrumbs($useMinAmount = true, $useAllowedElementTypes = true)
     {
-        if ($this->breadcrumbs === null) {
-            /**
-             * @var structureManager $structureManager
-             */
-            $structureManager = $this->getService('structureManager');
-            if ($useAllowedElementTypes && ($currentElement = $structureManager->getCurrentElement())) {
-                if (!in_array($currentElement->structureType, $this->getAllowedElementTypes())) {
-                    return [];
-                }
-            }
-            $controller = controller::getInstance();
-            $minLevel = $this->getMinLevel();
-            $minAmount = $this->getMinAmount();
-            foreach ($structureManager->getElementsChain($controller->requestedPath) as $crumb) {
-                if ($crumb->level >= $minLevel) {
-                    $this->breadcrumbs[] = [
-                        'URL' => $crumb->URL,
-                        'title' => $crumb->getTitle(),
-                    ];
-                }
-            }
-            if ($useMinAmount && (count($this->breadcrumbs) < $minAmount)) {
-                $this->breadcrumbs = [];
+        $this->breadcrumbs = [];
+        /**
+         * @var structureManager $structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        if ($useAllowedElementTypes && ($currentElement = $structureManager->getCurrentElement())) {
+            if (!in_array($currentElement->structureType, $this->getAllowedElementTypes())) {
+                return [];
             }
         }
+        $controller = controller::getInstance();
+        $minLevel = $this->getMinLevel();
+        $minAmount = $this->getMinAmount();
+        foreach ($structureManager->getElementsChain($controller->requestedPath) as $crumb) {
+            if ($crumb->level >= $minLevel) {
+                $this->breadcrumbs[] = [
+                    'URL' => $crumb->URL,
+                    'title' => $crumb->getTitle(),
+                ];
+            }
+        }
+        if ($useMinAmount && (count($this->breadcrumbs) < $minAmount)) {
+            $this->breadcrumbs = [];
+        }
+
         return $this->breadcrumbs;
     }
 

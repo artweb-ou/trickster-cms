@@ -25,7 +25,7 @@ class positionsElement extends structureElement
         if ($parentLinks = $linksManager->getElementsLinks($currentElement->id, '', 'parent')) {
             foreach ($parentLinks as $link) {
                 //todo: change hardcode to config
-                if ($link->type != 'displayinmenu' && $link->type != 'displayinmenumobile' && $link->type != 'categoryParameter') {
+                if ($link->type != 'displayinmenu' && $link->type != 'displayinmenumobile') {
                     $childElement = $structureManager->getElementById($link->childStructureId);
                     if ($childElement && $childElement->structureType !== 'positions') {
                         $childElement->position = $link->position;

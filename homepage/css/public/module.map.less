@@ -10,7 +10,26 @@
 		height: 100%;
 	}
 }
+.map_details {
+	.contentmodule_content:after {
+		display: block;
+		content: '';
+		clear: left;
+	}
+}
+.gmap_iframe {
+	height: 100%;
+	position: relative;
+	width: 100%;
+	min-height: 20rem;
 
+	iframe{
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+	}
+}
 /********************************************************
 /*  MAP DETAILS
 /********************************************************/
@@ -27,7 +46,8 @@
 	}
 }
 
-@media (min-width: @screen_breakpoint_lg) {
+//@media (min-width: @screen_breakpoint_lg) {
+@media (min-width: 768px) {
 	.map_details {
 		.clearfixin();
 

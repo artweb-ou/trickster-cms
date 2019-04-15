@@ -6,6 +6,7 @@
 		</div>
 	{elseif $element->coordinates}
 	<div class="map_map googlemap_id_{$element->id}">
+		{if !empty($element->styles|trim)}
 			<script>
 				/*<![CDATA[*/
 				window.mapsInfo = window.mapsInfo || {ldelim}{rdelim};
@@ -22,6 +23,11 @@
 				{rdelim};
 				/*]]>*/
 			</script>
+		{else}
+		<div class="gmap_iframe">
+				<iframe src = "https://maps.google.com/maps?q={$element->coordinates}&z=14&amp;output=embed"></iframe>
+		</div>
+		{/if}
 		</div>
 	{/if}
 </div>

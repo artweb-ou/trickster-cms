@@ -26,32 +26,30 @@ abstract class categoryStructureElement extends productsListStructureElement
         $this->parametersGroups = [];
         $structureManager = $this->getService('structureManager');
 
+        //load list of all product parameter groups according to product parameters connected to this category.
+        //this list should be sorted the same way as in admin page/shopping basket settings/parameter groups
         if ($idList = $this->getParametersIdList()) {
-            $collection = persistableCollection::getInstance('structure_links');
-            $conditions = [
-                [
-                    'column' => 'type',
-                    'action' => '=',
-                    'argument' => 'structure',
-                ],
-                [
-                    'column' => 'childStructureId',
-                    'action' => 'in',
-                    'argument' => $idList,
-                ],
-            ];
-            $groupsIdList = [];
-            if ($records = $collection->conditionalLoad('parentStructureId', $conditions)) {
-                foreach ($records as &$record) {
-                    $groupsIdList[$record['parentStructureId']] = true;
-                }
-            }
-            if ($groupsIdList) {
-                if ($elementsList = $structureManager->getElementsByIdList(array_keys($groupsIdList), $this->id, 'idlist')
-                ) {
-                    foreach ($elementsList as &$element) {
-                        if ($element->structureType == 'productParametersGroup' && !$element->hidden) {
-                            $this->parametersGroups[] = $element;
+            /**
+             * @var \Illuminate\Database\Connection $db
+             */
+            $db = $this->getService('db');
+            $query = $db->table('structure_links as links1')
+                ->select(['links1.parentStructureId'])
+                ->distinct()
+                ->where('links1.type', '=', 'structure')
+                ->whereIn('links1.childStructureId', $idList)
+                ->leftJoin('structure_links as links2', 'links2.childStructureId', '=', 'links1.parentStructureId')
+                ->where('links2.type', '=', 'structure')
+                ->orderBy('links2.position', 'asc');
+
+            if ($records = $query->get()) {
+                if ($groupsIdList = array_column($records, 'parentStructureId')) {
+                    if ($elementsList = $structureManager->getElementsByIdList($groupsIdList, $this->id, 'idlist')
+                    ) {
+                        foreach ($elementsList as &$element) {
+                            if ($element->structureType == 'productParametersGroup' && !$element->hidden) {
+                                $this->parametersGroups[] = $element;
+                            }
                         }
                     }
                 }
