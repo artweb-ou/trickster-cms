@@ -12,74 +12,6 @@ class languageElement extends structureElement implements MetadataProviderInterf
 {
     use MetadataProviderTrait;
     public $dataResourceName = 'module_language';
-    protected $allowedTypesContent = [
-        'folder',
-        'shoppingBasket',
-        'productCatalogue',
-        'brandsList',
-        'discountsList',
-        'campaignsList',
-        'bannerCategory',
-        'newsList',
-        'eventsList',
-        'service',
-        'production',
-        'shopCatalogue',
-    ];
-    protected $allowedTypesColumns = [
-        'article',
-        'newsMailForm',
-        'subMenuList',
-        'search',
-        'selectedProducts',
-        'currencySelector',
-        'pollPlaceholder',
-        'widget',
-        'login',
-        'latestNews',
-        'shoppingBasketStatus',
-        'bannerCategory',
-        'personnel',
-        'selectedEvents',
-        'productSearch',
-        'selectedDiscounts',
-        'floorPlanControls',
-        'shopCatalogueControls',
-    ];
-    protected $allowedTypesHeader = [
-        'currencySelector',
-        'article',
-        'search',
-        'gallery',
-        'brandsWidget',
-        'shoppingBasketStatus',
-        'bannerCategory',
-        'login',
-        'subMenuList',
-        'selectedProducts',
-        'selectedEvents',
-        'selectedDiscounts',
-        'linkList',
-        'openingHoursInfo',
-        'productGallery',
-        'productSearch',
-    ];
-    protected $allowedTypesFooter = [
-        'folder',
-        'latestNews',
-        'newsMailForm',
-        'article',
-        'subMenuList',
-        'brandsWidget',
-        'bannerCategory',
-        'selectedEvents',
-        'widget',
-        'map',
-    ];
-    protected $allowedTypesMobile = [
-        'article',
-        'subMenuList',
-    ];
     public $defaultActionName = 'show';
     public $role = 'container';
     protected $leftColumnElementsList;
@@ -218,7 +150,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         return $this->getElementsTypesIndexFromContext('mobileMenu');
     }
 
-    public function getElementFromMobileHeader($structureType, $number = 0)
+    public function getElementFromMobileHeader()
     {
         $this->logError('Deprecated method used ' . __CLASS__ . ' ' . __METHOD__);
     }
@@ -470,16 +402,20 @@ class languageElement extends structureElement implements MetadataProviderInterf
                     $contentType = $controller->getParameter('view');
                 }
             }
+            /**
+             * @var ConfigManager $configManager
+             */
+            $configManager = $this->getService('ConfigManager');
             if ($contentType == 'headerContent') {
-                $allowedTypes = $this->allowedTypesHeader;
+                $allowedTypes = $configManager->getMerged('language-allowedTypes.header');
             } elseif ($contentType == 'bottomMenu') {
-                $allowedTypes = $this->allowedTypesFooter;
+                $allowedTypes = $configManager->getMerged('language-allowedTypes.footer');
             } elseif ($contentType == 'mobileMenu') {
-                $allowedTypes = $this->allowedTypesMobile;
+                $allowedTypes = $configManager->getMerged('language-allowedTypes.mobile');
             } elseif ($contentType != 'structure') {
-                $allowedTypes = $this->allowedTypesColumns;
+                $allowedTypes = $configManager->getMerged('language-allowedTypes.columns');
             } else {
-                $allowedTypes = $this->allowedTypesContent;
+                $allowedTypes = $configManager->getMerged('language-allowedTypes.content');
             }
 
             $this->allowedTypes = [];
