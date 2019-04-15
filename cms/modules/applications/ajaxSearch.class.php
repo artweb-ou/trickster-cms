@@ -36,6 +36,8 @@ class ajaxSearchApplication extends controllerApplication
         $cache->enable();
 
         $response = new ajaxResponse();
+        $languagesManager = $this->getService('languagesManager');
+
         $response->setPreset('search');
 
         if ($this->mode == 'admin') {
@@ -50,7 +52,6 @@ class ajaxSearchApplication extends controllerApplication
                 'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
                 'configActions' => false,
             ], true);
-            $languagesManager = $this->getService('languagesManager');
             $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
             $structureManager->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
         }
@@ -95,6 +96,9 @@ class ajaxSearchApplication extends controllerApplication
             $page = (int)$controller->getParameter('page');
             $offset = max(0, $page - 1) * $resultsLimit;
             $search = new Search();
+            if ($this->mode == 'public'){
+                $search->setLanguageId($languagesManager->getCurrentLanguageId());
+            }
             $search->setInput($query);
             $search->setOffset($offset);
             $search->setLimit($resultsLimit);

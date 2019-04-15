@@ -11,6 +11,15 @@ class Search implements DependencyInjectionContextInterface
     protected $contentMatching = false;
     protected $singlePageCombining = false;
     protected $input = '';
+    protected $languageId;
+
+    /**
+     * @param mixed $languageId
+     */
+    public function setLanguageId($languageId)
+    {
+        $this->languageId = $languageId;
+    }
 
     public function setInput($input)
     {
@@ -125,7 +134,7 @@ class Search implements DependencyInjectionContextInterface
 
                         $idList = array_slice($idList, 0, $sliceAmount);
                         foreach ($idList as $elementId) {
-                            if ($element = $structureManager->getElementById($elementId)) {
+                            if ($element = $structureManager->getElementById($elementId, $this->languageId)) {
                                 $set->elements[] = $element;
                                 $searchResult->elements[] = $element;
                             }
