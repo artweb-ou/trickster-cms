@@ -11,7 +11,7 @@ class mallAdminDesignTheme extends designTheme
         $this->templatesFolder = $tricksterPath . 'mall/templates/admin/';
         $this->imagesFolder = 'trickster/mall/images/admin/';
         $this->imagesPath = ROOT_PATH . $this->imagesFolder;
-        $this->javascriptUrl = $controller->baseURL . 'trickster/mall/js/admin/';
+        $this->javascriptUrl = $controller->baseURL . 'vendor/artweb/trickster/mall/js/admin/';
         $this->javascriptPath = $tricksterPath . 'mall/js/admin/';
         $this->javascriptFiles = [
             'logics.floorMap.js',

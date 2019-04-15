@@ -11,7 +11,7 @@ class publicDesignTheme extends designTheme
         $this->inheritedThemes = ['default'];
         $this->cssPath = $tricksterPath . 'cms/css/public/';
         $this->javascriptPath = $tricksterPath . 'cms/js/public/';
-        $this->javascriptUrl =  $tricksterPath . 'cms/js/public/';
+        $this->javascriptUrl =  $controller->baseURL . 'vendor/artweb/trickster/cms/js/public/';
         $this->javascriptFiles = [];
     }
 }

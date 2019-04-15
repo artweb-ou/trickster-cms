@@ -12,7 +12,7 @@ class ecommerceAdminDesignTheme extends designTheme
         $this->imagesFolder = $tricksterPath . 'ecommerce/images/admin/';
         $this->imagesPath = $this->imagesFolder;
         $this->javascriptPath = $tricksterPath . 'ecommerce/js/admin/';
-        $this->javascriptUrl = $tricksterPath . 'ecommerce/js/admin/';
+        $this->javascriptUrl = $controller->baseURL . 'vendor/artweb/trickster/ecommerce/js/admin/';
 
         $this->javascriptFiles = [
             'logics.brandsListForm.js',

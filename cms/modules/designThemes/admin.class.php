@@ -7,12 +7,14 @@ class adminDesignTheme extends designTheme
         $this->inheritedThemes = ['default'];
         $controller = controller::getInstance();
         $pathsManager = $controller->getPathsManager();
-        $this->cssPath = $pathsManager->getPath('trickster') . 'cms/css/admin/';
-        $this->templatesFolder = $pathsManager->getPath('trickster') . 'cms/templates/admin/';
-        $this->imagesFolder = $pathsManager->getPath('trickster') .'cms/images/admin/';
+        $tricksterPath = $pathsManager->getPath('trickster');
+
+        $this->cssPath = $tricksterPath . 'cms/css/admin/';
+        $this->templatesFolder = $tricksterPath . 'cms/templates/admin/';
+        $this->imagesFolder = $tricksterPath .'cms/images/admin/';
         $this->imagesPath = $this->imagesFolder;
-        $this->javascriptUrl = $pathsManager->getPath('trickster') . 'cms/js/admin/';
-        $this->javascriptPath = $pathsManager->getPath('trickster') . 'cms/js/admin/';
+        $this->javascriptUrl = $controller->baseURL . 'vendor/artweb/trickster/cms/js/admin/';
+        $this->javascriptPath = $tricksterPath . 'cms/js/admin/';
 
         $this->javascriptFiles = [
             'logics.addNewElement.js',

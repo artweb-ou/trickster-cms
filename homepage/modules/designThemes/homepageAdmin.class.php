@@ -11,7 +11,7 @@ class homepageAdminDesignTheme extends designTheme
         $this->templatesFolder = $tricksterPath . 'homepage/templates/admin/';
         $this->imagesFolder =  $tricksterPath .'homepage/images/admin/';
         $this->imagesPath = $this->imagesFolder;
-        $this->javascriptUrl = $controller->baseURL . 'trickster/homepage/js/admin/';
+        $this->javascriptUrl = $controller->baseURL . 'vendor/artweb/trickster/homepage/js/admin/';
         $this->javascriptPath = $tricksterPath . 'homepage/js/admin/';
         $this->javascriptFiles = [
             'logics.eventsListForm.js',

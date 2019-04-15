@@ -4,9 +4,9 @@ class ckeditorDesignTheme extends designTheme
 {
     public function initialize()
     {
-        $controller = controller::getInstance();
-        $pathsManager = $controller->getPathsManager();
-        $this->cssPath = $pathsManager->getPath('trickster') . 'cms/css/';
+        $pathsManager = controller::getInstance()->getPathsManager();
+        $tricksterPath = $pathsManager->getPath('trickster');
+        $this->cssPath = $tricksterPath . 'cms/css/';
         $this->cssFiles = [];
         $this->imagesFolder = 'images/';
         $this->imagesPath = ROOT_PATH . 'trickster/cms/' . $this->imagesFolder;
