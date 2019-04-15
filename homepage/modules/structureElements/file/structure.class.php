@@ -9,6 +9,7 @@
  */
 class fileElement extends structureElement implements StructureElementUploadedFilesPathInterface, ImageUrlProviderInterface
 {
+    use ImageUrlProviderTrait;
     public $dataResourceName = 'module_file';
     public $defaultActionName = 'show';
     public $role = 'content';
@@ -40,13 +41,7 @@ class fileElement extends structureElement implements StructureElementUploadedFi
         return $this->fileName;
     }
 
-    public function getImageUrl($preset = 'adminImage')
-    {
-        $controller = $this->getService('controller');
-        $url = $controller->baseURL . 'image/type:' . $preset . '/id:' . $this->getImageId() . '/filename:' . $this->getImageName();
 
-        return $url;
-    }
     public function getFileName($encoded = false){
         if ($encoded){
             return $this->fileName;

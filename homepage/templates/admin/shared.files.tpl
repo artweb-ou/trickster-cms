@@ -14,7 +14,7 @@
 		<div class="form_items">
 			<div class="form_label">{translations name=$element->structureType|cat:'.files_upload'}</div>
 			<div class="form_field">
-				<input class="fileinput_placeholder" type="file" name="{$formNames.filesSelector}[]" multiple="multiple" />
+				<input class="fileinput_placeholder" type="file" name="{$formNames.connectedFile}[]" multiple="multiple" />
 			</div>
 		</div>
 	</div>

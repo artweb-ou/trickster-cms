@@ -1,10 +1,10 @@
 <?php
 
-class apiQueriesManagerServiceContainer extends DependencyInjectionServiceContainer
+class ApiQueriesManagerServiceContainer extends DependencyInjectionServiceContainer
 {
     public function makeInstance()
     {
-        return new apiQueriesManager();
+        return new ApiQueriesManager();
     }
 
     public function makeInjections($instance)

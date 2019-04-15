@@ -3,18 +3,20 @@ window.imagePreviewComponent = function(imgContainer) {
 	var imgPreviewContainer = '';
 	var imgPreviewImg = '';
 	var init = function() {
-		imgPreviewContainer = document.createElement('div');
-		imgPreviewContainer.className = 'image_preview_container';
+		if (img) {
+			imgPreviewContainer = document.createElement('div');
+			imgPreviewContainer.className = 'image_preview_container';
 
-		imgPreviewImg = document.createElement('img');
-		imgPreviewImg.src = img.src;
-		imgPreviewImg.alt = ' ';
-		if (imgPreviewImg.src != '') {
-			imgPreviewContainer.appendChild(imgPreviewImg);
-			imgContainer.appendChild(imgPreviewContainer);
+			imgPreviewImg = document.createElement('img');
+			imgPreviewImg.src = img.src;
+			imgPreviewImg.alt = ' ';
+			if (imgPreviewImg.src != '') {
+				imgPreviewContainer.appendChild(imgPreviewImg);
+				imgContainer.appendChild(imgPreviewContainer);
 
-			eventsManager.addHandler(img, 'mouseenter', mouseEnterEvent);
-			eventsManager.addHandler(img, 'mouseleave', mouseLeaveEvent);
+				eventsManager.addHandler(img, 'mouseenter', mouseEnterEvent);
+				eventsManager.addHandler(img, 'mouseleave', mouseLeaveEvent);
+			}
 		}
 	};
 	var mouseEnterEvent = function() {

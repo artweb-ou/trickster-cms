@@ -882,7 +882,9 @@ class productElement extends structureElement implements
         if (empty($this->firstImage)) {
             $this->getFirstImageElement();
         }
-        return $this->firstImage->getImageUrl();
+        if (!empty($this->firstImage)) {
+            return $this->firstImage->getImageUrl();
+        }
     }
 
     public function getIconsList()
