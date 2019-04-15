@@ -48,12 +48,12 @@ class rootElement extends structureElement
         $multiLanguageFields[] = 'title';
     }
 
-    public function getAllowedChildStructureTypes($childCreationAction = 'showForm')
+    public function getAllowedTypes($childCreationAction = 'showForm')
     {
         if ($this->isAdminRoot() === false) {
             $this->allowedTypes = ['language'];
         }
-        return parent::getAllowedChildStructureTypes($childCreationAction);
+        return parent::getAllowedTypes($childCreationAction);
     }
 
     public function isAdminRoot()

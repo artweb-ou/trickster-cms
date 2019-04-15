@@ -37,7 +37,7 @@
 	<div class="orders_list_heading controls_block content_list_controls">
 
 
-		{include file=$theme->template('block.newelement.tpl') allowedTypes=$currentElement->getAllowedChildStructureTypes()}
+		{include file=$theme->template('block.newelement.tpl') allowedTypes=$currentElement->getAllowedTypes()}
 		<a class="orders_list_heading_exportxlsx button primary_button" href="">{translations name='orderslist.exportxlsx'}</a>
 		<a class="orders_list_heading_displaypdf button" href="">{translations name='orderslist.viewpdf'}</a>
 		<a class="orders_list_heading_downloadpdf button" href="">{translations name='orderslist.downloadpdf'}</a>

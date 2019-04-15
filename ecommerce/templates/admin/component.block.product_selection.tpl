@@ -2,7 +2,7 @@
     {assign var='formNames' value=$rootElement->getFormNames()}
     <form action="{$element->getFormActionURL()}" class="content_list_form" method="post" enctype="multipart/form-data">
         <div class='controls_block form_controls'>
-            {include file=$theme->template("block.newelement.tpl") allowedTypes=$element->getAllowedChildStructureTypes()}
+            {include file=$theme->template("block.newelement.tpl") allowedTypes=$element->getAllowedTypes()}
             {if $element->getChildrenList()}
 
             <input type="hidden" class="content_list_form_id" value="{$rootElement->id}" name="id" />

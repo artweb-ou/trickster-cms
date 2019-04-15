@@ -91,22 +91,22 @@
 				<svg class="newsmails_funnel_svg" viewBox="0 0 {$totalWidth} {$totalHeight}">
 					<g>
 						<polygon points="{$funnelLeft},0 {$funnelRight},0 {$pos1Right},{$polygonHeight} {$pos1Left},{$polygonHeight}" style="fill:#438ac8;stroke:#ffffff;stroke-width:1" />
-						<text x="{$funnelCenter}" y="{$textTop-$textHeight*1.2}" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="{$textHeight}px" fill="#000">{translations name="newsmail.total"}</text>
-						<text x="{$funnelCenter}" text-anchor="middle" y="{$textTop}" dominant-baseline="middle" font-weight="bold" font-size="{$textHeight}px" fill="#000">{$element->dispatchmentsInfo['total']} - 100%</text>
+						<text x="{$funnelCenter}" y="{$textTop-$textHeight*1.2}" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="{$textHeight}px" fill="#485573">{translations name="newsmail.total"}</text>
+						<text x="{$funnelCenter}" text-anchor="middle" y="{$textTop}" dominant-baseline="middle" font-weight="bold" font-size="{$textHeight}px" fill="#485573">{$element->dispatchmentsInfo['total']} - 100%</text>
 					</g>
 					<g transform="translate(0, {$polygonHeight + 10})">
 						{if $emailsOpenedPercentage}
 							<polygon points="{$pos1Left},0 {$pos1Right},0 {$pos2Right},{$polygonHeight} {$pos2Left},{$polygonHeight}" style="fill:#5aca55;stroke:#ffffff;stroke-width:1" />
 						{/if}
-						<text x="{$funnelCenter}" y="{$textTop-$textHeight*1.2}" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="{$textHeight}px" fill="#000">{translations name="newsmail.newsMail_emailOpened"}</text>
-						<text x="{$funnelCenter}" text-anchor="middle" y="{$textTop}" dominant-baseline="middle" font-weight="bold" font-size="{$textHeight}px" fill="#000">{count($element->dispatchmentEventsInfo['newsMail_emailOpened']['users'])} - {$emailsOpenedPercentage}%</text>
+						<text x="{$funnelCenter}" y="{$textTop-$textHeight*1.2}" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="{$textHeight}px" fill="#485573">{translations name="newsmail.newsMail_emailOpened"}</text>
+						<text x="{$funnelCenter}" text-anchor="middle" y="{$textTop}" dominant-baseline="middle" font-weight="bold" font-size="{$textHeight}px" fill="#485573">{count($element->dispatchmentEventsInfo['newsMail_emailOpened']['users'])} - {$emailsOpenedPercentage}%</text>
 					</g>
 					<g transform="translate(0, {($polygonHeight + 10) * 2})">
-						<text x="{$funnelLeft + $pos2 - $textPadding}" y="{$textTop}" dominant-baseline="middle" text-anchor="end" font-weight="bold" font-size="{$textHeight}px" fill="#000">{translations name="newsmail.newsMail_linkClicked"}</text>
 						{if $linkClickedPercentage}
 							<polygon points="{$pos2Left},0 {$pos2Right},0 {$funnelCenter},{$linksHeight} {$funnelCenter},{$linksHeight}" style="fill:#e765d3;stroke:#ffffff;stroke-width:1" />
 						{/if}
-						<text x="{$funnelCenter}" text-anchor="middle" y="{$textTop}" dominant-baseline="middle" font-weight="bold" font-size="{$textHeight}px" fill="#000">{count($element->userClickedLinksCombined)} - {$linkClickedPercentage}%</text>
+						<text x="{$funnelCenter}" y="{$textTop-$textHeight*1.2}" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="{$textHeight}px" fill="#485573">{translations name="newsmail.newsMail_linkClicked"}</text>
+						<text x="{$funnelCenter}" text-anchor="middle" y="{$textTop}" dominant-baseline="middle" font-weight="bold" font-size="{$textHeight}px" fill="#485573">{count($element->userClickedLinksCombined)} - {$linkClickedPercentage}%</text>
 					</g>
 				</svg>
 			</div>

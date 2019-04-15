@@ -9,7 +9,7 @@
 			<input type="hidden" class="content_list_form_id" value="{$rootElement->id}" name="id" />
 			<input type="hidden" class="content_list_form_action" value="deleteElements" name="action" />
 
-			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedChildStructureTypes()}
+			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedTypes()}
 		</div>
 		{assign var='formNames' value=$rootElement->getFormNames()}
 		{if $currentElement->getChildrenList()}
@@ -53,6 +53,7 @@
 					</td>
 					<td class='name_column'>
 						<a href="{$contentItem->URL}">
+							<span class='icon icon_{$contentItem->structureType}'></span>{$contentItem->getHumanReadableName()}
 							<span class='icon icon_{$contentItem->structureType}'></span>{$contentItem->getTitle()}
 						</a>
 					</td>

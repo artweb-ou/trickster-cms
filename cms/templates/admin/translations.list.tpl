@@ -6,7 +6,7 @@
 			<input type="hidden" class="content_list_form_elementid" value="{$currentElement->id}" />
 			<input type="hidden" class="content_list_form_action" value="deleteElements" name="action" />
 
-			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedChildStructureTypes()}
+			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedTypes()}
 
 			{if isset($currentElementPrivileges.export)}
 				<a class='button export' href="{$currentElement->URL}id:{$currentElement->id}/action:export/">{translations name='label.export'}</a>

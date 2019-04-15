@@ -83,7 +83,7 @@ class moveElementsRoot extends structureElementAction
     protected function checkAllowedTypes(structureElement $destinationElement, array $typesList)
     {
         $result = true;
-        $allowedTypes = $destinationElement->getAllowedChildStructureTypes();
+        $allowedTypes = $destinationElement->getAllowedTypes();
         foreach ($typesList as &$type) {
             if (!in_array($type, $allowedTypes)) {
                 $result = false;

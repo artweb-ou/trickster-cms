@@ -16,9 +16,9 @@
 		<input type="hidden" class="content_list_form_action" value="" name="action" />
 
 		{if $currentElement->structureType == 'category'}
-			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->catalogueElement->getAllowedChildStructureTypes() newElementUrl=$currentElement->catalogueElementURL}
+			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->catalogueElement->getAllowedTypes() newElementUrl=$currentElement->catalogueElementURL}
 		{else}
-			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedChildStructureTypes()}
+			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedTypes()}
 		{/if}
 	</div>
 {stripdomspaces}

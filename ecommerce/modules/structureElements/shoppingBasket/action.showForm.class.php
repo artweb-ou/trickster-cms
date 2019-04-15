@@ -7,7 +7,7 @@ class showFormShoppingBasket extends structureElementAction
         if ($structureElement->final) {
             $contentList = $structureElement->getChildrenList();
             foreach ($contentList as $key => $contentItem) {
-                if (!in_array($contentItem->structureType, $structureElement->getAllowedChildStructureTypes())) {
+                if (!in_array($contentItem->structureType, $structureElement->getAllowedTypes())) {
                     unset($contentList[$key]);
                 }
             }

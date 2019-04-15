@@ -20,8 +20,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     protected $actionPerformed = false;
     protected $childrenLoadStatus;
     protected $newElementUrl;
-    protected $allowedChildStructureTypes;
-    protected $allowedTypes = [];
+    protected $allowedTypes;
     protected $multilanguageChunks = [];
     protected $singlelanguageChunks = [];
     protected $structureFields = [];
@@ -1220,13 +1219,13 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
      * @param string $childCreationAction - name of action for adding the child element. Default controlled action is 'showForm'
      * @return string[]
      */
-    public function getAllowedChildStructureTypes($childCreationAction = 'showForm')
+    public function getAllowedTypes($childCreationAction = 'showForm')
     {
-        if ($this->allowedChildStructureTypes === null) {
-            $this->allowedChildStructureTypes = [];
+        if ($this->allowedTypes === null) {
+            $this->allowedTypes = [];
         }
-        if (!isset($this->allowedChildStructureTypes[$childCreationAction])) {
-            $this->allowedChildStructureTypes[$childCreationAction] = [];
+        if (!isset($this->allowedTypes[$childCreationAction])) {
+            $this->allowedTypes[$childCreationAction] = [];
             /**
              * @var structureManager $structureManager
              */
@@ -1236,11 +1235,11 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
 
             foreach ($this->allowedTypes as &$type) {
                 if (!$structureManager->getPrivilegeChecking() || (isset($privileges[$type]) && isset($privileges[$type][$childCreationAction]) && $privileges[$type][$childCreationAction] === true)) {
-                    $this->allowedChildStructureTypes[$childCreationAction][] = $type;
+                    $this->allowedTypes[$childCreationAction][] = $type;
                 }
             }
         }
-        return $this->allowedChildStructureTypes[$childCreationAction];
+        return $this->allowedTypes[$childCreationAction];
     }
 
     /**
@@ -1486,4 +1485,5 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         }
         return $form;
     }
+
 }

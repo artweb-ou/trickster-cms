@@ -133,7 +133,7 @@ abstract class TranslationsStructureElement extends structureElement
         }
         if (!$resultElement) {
             $structureManager = $this->getService('structureManager');
-            if ($types = $this->getAllowedChildStructureTypes()) {
+            if ($types = $this->getAllowedTypes()) {
                 $resultElement = $structureManager->createElement(reset($types), 'showForm', $this->id);
                 $resultElement->prepareActualData();
                 $resultElement->title = $code;
@@ -148,7 +148,7 @@ abstract class TranslationsStructureElement extends structureElement
         $translationCode = strtolower($translationCode);
         $structureManager = $this->getService('structureManager');
         if ($groupElement = $structureManager->getElementById($groupElementId)) {
-            $resultElement = $structureManager->createElement(reset($groupElement->getAllowedChildStructureTypes()), 'showForm', $groupElement->id);
+            $resultElement = $structureManager->createElement(reset($groupElement->getAllowedTypes()), 'showForm', $groupElement->id);
             $resultElement->prepareActualData();
             $resultElement->structureName = $translationCode;
             $resultElement->persistElementData();

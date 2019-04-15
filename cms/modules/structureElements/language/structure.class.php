@@ -12,7 +12,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
 {
     use MetadataProviderTrait;
     public $dataResourceName = 'module_language';
-    protected $allowedTypes = [
+    protected $allowedTypesContent = [
         'folder',
         'shoppingBasket',
         'productCatalogue',
@@ -460,9 +460,9 @@ class languageElement extends structureElement implements MetadataProviderInterf
      * @param string $childCreationAction - name of action for adding the child element. Default controlled action is 'showForm'
      * @return string[]
      */
-    public function getAllowedChildStructureTypes($childCreationAction = 'showForm')
+    public function getAllowedTypes($childCreationAction = 'showForm')
     {
-        if (is_null($this->allowedChildStructureTypes)) {
+        if (is_null($this->allowedTypes)) {
             $contentType = 'structure';
             $controller = controller::getInstance();
             if ($controller->getApplicationName() != 'adminAjax') {
@@ -479,20 +479,20 @@ class languageElement extends structureElement implements MetadataProviderInterf
             } elseif ($contentType != 'structure') {
                 $allowedTypes = $this->allowedTypesColumns;
             } else {
-                $allowedTypes = $this->allowedTypes;
+                $allowedTypes = $this->allowedTypesContent;
             }
 
-            $this->allowedChildStructureTypes = [];
+            $this->allowedTypes = [];
             $privilegesManager = $this->getService('privilegesManager');
             $privileges = $privilegesManager->getElementPrivileges($this->id);
 
             foreach ($allowedTypes as &$type) {
                 if (isset($privileges[$type]) && isset($privileges[$type][$childCreationAction]) && $privileges[$type][$childCreationAction] === true) {
-                    $this->allowedChildStructureTypes[] = $type;
+                    $this->allowedTypes[] = $type;
                 }
             }
         }
-        return $this->allowedChildStructureTypes;
+        return $this->allowedTypes;
     }
 
     public function getMostSuitableHeaderGallery()

@@ -5,7 +5,7 @@
 			<input type="hidden" class="content_list_form_elementid" value="{$currentElement->id}" />
 			<input type="hidden" class="content_list_form_action" value="deleteElements" name="action" />
 
-			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedChildStructureTypes()}
+			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedTypes()}
 		</div>
 		{include file=$theme->template('shared.contentTable.tpl') contentList=$element->getRedundantTranslations()}
 	</form>

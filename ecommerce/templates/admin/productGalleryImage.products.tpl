@@ -6,7 +6,7 @@
 			<input type="hidden" value="{$rootElement->id}" name="id" />
 			<input type="hidden" value="deleteElements" name="action" />
 
-			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedChildStructureTypes()}
+			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedTypes()}
 		</div>
 		{assign var='formNames' value=$rootElement->getFormNames()}
 		{if count($currentElement->contentList)}
