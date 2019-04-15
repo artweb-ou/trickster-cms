@@ -22,11 +22,11 @@
 					<th class="name_column">
 						{translations name='label.name'}
 					</th>
+					<th class='image_column'>
 						{if method_exists ($contentList[0], 'getImageUrl')}
-							<th class='image_column'>
 								{translations name='label.image'}
-							</th>
 						{/if}
+					</th>
 					<th class="name_column">
 						{translations name='label.categoryid'}
 					</th>
@@ -66,7 +66,7 @@
 					</td>
 								{if method_exists ($contentItem, 'getImageUrl')}
 									<td class='image_column'>
-										{if $contentItem->image_exists($contentItem->getImageUrl())}
+										{if $contentItem->image}
 											<img src='{$contentItem->getImageUrl()}' alt=" " />
 										{/if}
 									</td>

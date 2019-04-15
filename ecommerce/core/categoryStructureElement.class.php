@@ -2,14 +2,6 @@
 
 abstract class categoryStructureElement extends productsListStructureElement
 {
-    /**
-     * @deprecated
-     */
-    protected $usedParametersIds;
-    /**
-     * @deprecated
-     */
-    protected $selectedUsedParameters;
     protected $parametersGroups;
     protected $sortingOptions;
 
@@ -155,58 +147,6 @@ abstract class categoryStructureElement extends productsListStructureElement
         return $this->id;
     }
 
-    /**
-     * @deprecated
-     */
-    public function getSelectedUsedParameters()
-    {
-        if (!is_null($this->selectedUsedParameters)) {
-            return $this->selectedUsedParameters;
-        }
-
-        $this->selectedUsedParameters = [];
-
-        if ($usedParametersIds = $this->getUsedParametersIds()) {
-            $linksManager = $this->getService('linksManager');
-            $structureManager = $this->getService('structureManager');
-            $connectedParameterIds = $linksManager->getConnectedIdList($this->id, "categoryParameter", "parent");
-
-            foreach ($connectedParameterIds as &$parameterId) {
-                if ($parameterElement = $structureManager->getElementById($parameterId)) {
-                    if ($parameterElement->structureType == "productParameter") {
-                        if (in_array($parameterElement->id, $usedParametersIds)) {
-                            $this->selectedUsedParameters[] = $parameterElement;
-                        }
-                    }
-                }
-            }
-        }
-
-        return $this->selectedUsedParameters;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getUsedParametersIds()
-    {
-        if (!is_null($this->usedParametersIds)) {
-            return $this->usedParametersIds;
-        }
-        $this->usedParametersIds = [];
-        $products = $this->getProductsList();
-        foreach ($products as &$product) {
-            foreach ($product->getParametersGroupsInfo() as $parameterGroupInfo) {
-                foreach ($parameterGroupInfo['parametersList'] as $parameterInfo) {
-                    if (!in_array($parameterInfo['id'], $this->usedParametersIds)) {
-                        $this->usedParametersIds[] = $parameterInfo['id'];
-                    }
-                }
-            }
-        }
-        return $this->usedParametersIds;
-    }
-
     protected function getSelectionIdsForFiltering()
     {
         if ($this->selectionsIdsForFiltering === null) {
@@ -233,5 +173,25 @@ abstract class categoryStructureElement extends productsListStructureElement
     {
         $linksManager = $this->getService('linksManager');
         return $linksManager->getConnectedIdList($this->id, 'productSelectionFilterableCategory', 'parent');
+    }
+
+    /**
+     * @param $settingName
+     * @return bool
+     */
+    public function isSettingEnabled($settingName)
+    {
+        $enabled = false;
+        switch ($this->$settingName) {
+            case 0:
+                $enabled = false;
+                break;
+            case 1:
+                $enabled = true;
+                break;
+            case 2:
+                $enabled = false;
+        }
+        return $enabled;
     }
 }

@@ -3,6 +3,17 @@
 /********************************************************/
 .breadcrumbs_block {
 	display: block;
+
+	.delimiter {
+		display: inline-block;
+		vertical-align: middle;
+
+		&:after{
+			content: "/";
+			line-height: inherit;
+			display: block;
+		}
+	}
 }
 
 .breadcrumbs_item {

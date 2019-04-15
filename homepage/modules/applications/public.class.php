@@ -118,8 +118,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                 $this->renderer->assign('privileges', $privileges);
                 $this->renderer->assign('currentElementPrivileges', $privileges[$currentElement->structureType]);
 
-                $breadcrumbsManager = $this->getService('breadcrumbsManager',
-                    ['config' => $this->configManager->getConfig('breadcrumbs')]);
+                $breadcrumbsManager = $this->getService('breadcrumbsManager', ['config' => $this->configManager->getConfig('breadcrumbs')]);
                 $this->renderer->assign('breadcrumbsManager', $breadcrumbsManager);
 
                 if ($currentElement instanceof MetadataProviderInterface) {

@@ -2,7 +2,6 @@
 
 trait ImageUrlProviderTrait
 {
-
     public function getImageId()
     {
         return $this->image;
@@ -18,11 +17,5 @@ trait ImageUrlProviderTrait
         $controller = $this->getService('controller');
         $url = $controller->baseURL . 'image/type:' . $preset . '/id:' . $this->getImageId() . '/filename:' . $this->getImageName();
         return $url;
-    }
-
-    public function image_exists($url)
-    {
-        $headers = get_headers($url);
-        return stripos($headers[0], "200 OK") ? true : false;
     }
 }

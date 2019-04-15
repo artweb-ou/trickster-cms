@@ -1,14 +1,31 @@
-html {
-	color: #000;
-	background: #fff;
+html,
+body {
+	min-height: 100%;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 100%;
 	padding: 0;
 	margin: 0;
+	border: 0;
+}
+html {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	height: 100%;
+	font-family: sans-serif;
+	color: #000;
+	font-size: 14px;
 }
 
 body {
-	padding: 0;
-	margin: 0;
+	font-weight: 300;
+	font-style: normal;
+	line-height: 1.75em;
 }
+
 
 a {
 	text-decoration: underline;
@@ -69,7 +86,8 @@ p {
 input, textarea, select {
 	font-family: inherit;
 	font-size: inherit;
-	font-weight: inherit
+	font-weight: inherit;
+	outline: 0 none!important;
 }
 
 legend {
@@ -110,4 +128,7 @@ td, th {
 button {
 	font-size: inherit;
 	border: none;
+}
+.clearfix{
+	.clearfixin();
 }

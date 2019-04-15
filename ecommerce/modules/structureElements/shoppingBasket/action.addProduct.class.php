@@ -125,7 +125,6 @@ class addProductShoppingBasket extends structureElementAction
 
                     $shoppingBasket->addProduct($data);
                     $responseStatus = "success";
-//                    $productElement->logVisitorEvent('shoppingbasket_addition', ['amount' => $productAmount]);
                     $eventLogger = $this->getService('eventsLog');
                     $event = new Event();
                     $visitorManager = $this->getService('VisitorsManager');
@@ -134,12 +133,6 @@ class addProductShoppingBasket extends structureElementAction
                     $event->setElementId($productElement->id);
                     $event->setVisitorId($visitor->id);
                     $eventLogger->saveEvent($event);
-                    $event = new Event();
-                    $visitorManager = $this->getService('VisitorsManager');
-                    $visitor = $visitorManager->getCurrentVisitor();
-                    $event->setType('shoppingbasket_addition');
-                    $event->setElementId($productElement->id);
-                    $event->setVisitorId($visitor->id);
                 }
             }
         }

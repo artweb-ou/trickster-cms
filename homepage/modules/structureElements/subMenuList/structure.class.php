@@ -61,7 +61,7 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
                     //gather manually selected submenus
                     if ($connectedIds = $linksManager->getConnectedIdList($this->id, 'submenulist', 'parent')) {
                         foreach ($connectedIds as &$elementId) {
-                            if ($element = $structureManager->getElementById($elementId)) {
+                            if ($element = $structureManager->getElementById($elementId, $languagesManager->getCurrentLanguageId())) {
                                 $directSubMenuList[] = $element;
                             }
                         }

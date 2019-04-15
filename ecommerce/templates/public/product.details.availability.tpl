@@ -1,5 +1,6 @@
 <div class="product_details_availability">
-	<div class="product_details_stock_status">{translations name='product.availability'}:&#160;</div>
+	<span class="product_details_stock_status">{translations name='product.availability'}: </span>
+	<span class="product_details_stock_value">
 	{if $element->availability == "quantity_dependent"}
 		{translations name='product.instock' q=$element->quantity}
 	{elseif $element->availability == "inquirable"}
@@ -11,4 +12,5 @@
 	{else}
 		{translations name='product.available'}
 	{/if}
+	</span>
 </div>

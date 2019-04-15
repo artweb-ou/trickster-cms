@@ -20,13 +20,17 @@
 		<meta name="robots" content="noindex">
 	{/if}
 </head>
-<body class="{if $currentLanguage->patternBackground} language_pattern_background{/if}{if $firstPageElement->requested}homepage{/if}" {if $currentLanguage->backgroundImage} style="background-image:url('{$controller->baseURL}image/type:background/id:{$currentLanguage->backgroundImage}/filename:{$currentLanguage->backgroundImageOriginalName}');{if $currentLanguage->patternBackground}background-repeat: repeat; background-size: auto{/if}"{/if}>
+<body data-page="{if $currentElement->structureType}{$currentElement->structureType|lower}{/if}" class="{if $currentLanguage->patternBackground} language_pattern_background{/if}{if $firstPageElement->requested}homepage{/if}" {if $currentLanguage->backgroundImage} style="background-image:url('{$controller->baseURL}image/type:background/id:{$currentLanguage->backgroundImage}/filename:{$currentLanguage->backgroundImageOriginalName}');{if $currentLanguage->patternBackground}background-repeat: repeat; background-size: auto{/if}"{/if}>
 
 {include file=$theme->template("component.mainblock.tpl")}
 {include file=$theme->template("javascript.data.tpl")}
 {$googleAD = $configManager->get('google.ad')}
 {if !empty($googleAD.ad_enabled) && $googleAD.ad_enabled}
 	{include file=$theme->template("javascript.googlead.tpl")}
+{/if}
+{assign var="customJS" value=$theme->template("custom.JS.tpl")}
+{if $customJS}
+{include file=$theme->template("custom.JS.tpl")}
 {/if}
 </body>
 </html>

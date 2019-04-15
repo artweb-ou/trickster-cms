@@ -36,44 +36,6 @@ class cssUniterRendererPlugin extends rendererPlugin
         return $this->contentText;
     }
 
-    protected function generateCacheFileName()
-    {
-        $fileString = '';
-        if (count($this->resources)) {
-            foreach ($this->resources as &$resource) {
-                $file = $resource['filePath'] . $resource['fileName'];
-                $fileString .= $file;
-                $fileString .= filesize($file);
-                $fileString .= filemtime($file);
-            }
-        }
-        if ($this->useDataUri) {
-            $fileString .= '_datauri';
-        }
-        $this->cacheFileName = md5($fileString);
-    }
-
-    protected function cacheNeedsUpdating()
-    {
-        if ($this->cacheNeedsUpdating !== null) {
-            return $this->cacheNeedsUpdating;
-        }
-        $path = $this->getCacheFilePath();
-        if (!is_file($path) || !$this->resources) {
-            $this->cacheNeedsUpdating = true;
-            return true;
-        }
-        foreach ($this->resources as &$resource) {
-            $resourcePath = $resource['filePath'] . $resource['fileName'];
-            if (is_file($resourcePath) && $this->getCacheFileLastModTime() < filemtime($resourcePath)) {
-                $this->cacheNeedsUpdating = true;
-                return true;
-            }
-        }
-        $this->cacheNeedsUpdating = false;
-        return false;
-    }
-
     protected function renderContent()
     {
         if ($this->cacheNeedsUpdating()) {
@@ -98,6 +60,14 @@ class cssUniterRendererPlugin extends rendererPlugin
                     return "";
                 }
             });
+
+            // SVG parameters
+            $this->lessCompiler->registerFunction('encodeSvgContent', function ($arg) {
+                list($type, $delimiter, $values) = $arg;
+                list($arg1, $arg2, $arg3) = $values;
+                return self::getSVGContent(end($arg1), end($arg2), end($arg3));
+            });
+
             // min max are Less features not supported by this compiler
             $this->lessCompiler->registerFunction('min', function ($arg) {
                 list($type, $delimiter, $values) = $arg;
@@ -168,6 +138,59 @@ class cssUniterRendererPlugin extends rendererPlugin
         }
     }
 
+    protected function cacheNeedsUpdating()
+    {
+        if ($this->cacheNeedsUpdating !== null) {
+            return $this->cacheNeedsUpdating;
+        }
+        $path = $this->getCacheFilePath();
+        if (!is_file($path) || !$this->resources) {
+            $this->cacheNeedsUpdating = true;
+            return true;
+        }
+        foreach ($this->resources as &$resource) {
+            $resourcePath = $resource['filePath'] . $resource['fileName'];
+            if (is_file($resourcePath) && $this->getCacheFileLastModTime() < filemtime($resourcePath)) {
+                $this->cacheNeedsUpdating = true;
+                return true;
+            }
+        }
+        $this->cacheNeedsUpdating = false;
+        return false;
+    }
+
+    protected function getSVGContent($svgFile, $fill = false, $stroke = false)
+    {
+        $svgFileContent = '';
+        /**
+         * @var designThemesManager $designThemesManager
+         */
+        $designThemesManager = $this->getService('designThemesManager');
+        if ($svgFileURL = $designThemesManager->getCurrentTheme()->getImageUrl($svgFile . '.svg', false, false)) {
+            $baseURL = controller::getInstance()->baseURL;
+
+            $filePath = stripos($svgFileURL, $baseURL) !== false
+                ? str_ireplace($baseURL, ROOT_PATH, $svgFileURL)
+                : ROOT_PATH . $svgFileURL;
+            if (!is_file($filePath)) {
+                $this->logError('CSS image missing:' . $filePath);
+            }
+
+            if ($svgContent = file_get_contents($filePath)) {
+                var_dump(($svgContent));
+                if ($fill != "false") {
+                    $svgContent = str_replace('<svg', '<svg fill="' . $fill . '"', $svgContent);
+                }
+                if ($stroke != "false") {
+                    $svgContent = str_replace('<svg', '<svg stroke="' . $stroke . '"', $svgContent);
+                }
+
+                $svgFileContent = 'data:image/svg+xml,' . self::encodeSvg($svgContent);
+            }
+        }
+        return $svgFileContent;
+    }
+
     protected static function encodeSvg($input)
     {
         // https://codepen.io/tigt/post/optimizing-svgs-in-data-uris
@@ -190,6 +213,23 @@ class cssUniterRendererPlugin extends rendererPlugin
     public function setVariables(array $variables)
     {
         $this->variables = $variables;
+    }
+
+    protected function generateCacheFileName()
+    {
+        $fileString = '';
+        if (count($this->resources)) {
+            foreach ($this->resources as &$resource) {
+                $file = $resource['filePath'] . $resource['fileName'];
+                $fileString .= $file;
+                $fileString .= filesize($file);
+                $fileString .= filemtime($file);
+            }
+        }
+        if ($this->useDataUri) {
+            $fileString .= '_datauri';
+        }
+        $this->cacheFileName = md5($fileString);
     }
 
     protected function getSVGContent($svgFile, $fill = false, $stroke = false)

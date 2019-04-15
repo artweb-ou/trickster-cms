@@ -57,7 +57,7 @@
 							<input class='singlebox checkbox_placeholder' type="checkbox" name="{$formNames.elements}[{$contentItem->id}]" value="1" />
 						</td>
 						<td class='image_column'>
-							{if $contentItem->image_exists($contentItem->getImageUrl())}
+							{if $contentItem->image}
 								<img src='{$contentItem->getImageUrl()}' alt=" " />
 							{/if}
 						</td>
