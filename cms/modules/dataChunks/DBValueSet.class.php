@@ -17,14 +17,6 @@ class DBValueSetDataChunk extends DataChunk implements ElementHolderInterface, E
         return $this->storageValue;
     }
 
-    public function getDisplayValue()
-    {
-        if ($this->displayValue === null) {
-            $this->convertStorageToDisplay();
-        }
-        return $this->displayValue;
-    }
-
     public function setExternalValue($value)
     {
         $this->formValue = null;

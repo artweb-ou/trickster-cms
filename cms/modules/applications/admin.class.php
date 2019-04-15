@@ -25,7 +25,8 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
          * @var $redirectionManager redirectionManager
          */
         $redirectionManager = $this->getService('redirectionManager');
-        $redirectionManager->checkRedirection();
+        $redirectionManager->checkProtocolRedirection();
+        $redirectionManager->checkDomainRedirection();
 
         $designThemesManager = $this->getService('designThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();

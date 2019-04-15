@@ -26,16 +26,6 @@ class redirectionManager implements DependencyInjectionContextInterface
         return self::$instance;
     }
 
-    public function checkRedirection()
-    {
-        if ($uri = $this->checkProtocolRedirection()) {
-            $this->redirect($uri, 301);
-        }
-        if ($uri = $this->checkDomainRedirection()) {
-            $this->redirect($uri, 301);
-        }
-    }
-
     public function forceRedirect($type)
     {
         $_SESSION['redirectForced'] = $type;
@@ -180,7 +170,7 @@ class redirectionManager implements DependencyInjectionContextInterface
             $controller = $this->getService('controller');
             $currentProtocol = $controller->getProtocol();
             if ($currentProtocol != $configProtocol) {
-                return $controller->fullURL;
+                $this->redirect($controller->fullURL, 301);
             }
         }
 
@@ -189,25 +179,15 @@ class redirectionManager implements DependencyInjectionContextInterface
 
     public function checkDomainRedirection()
     {
-        if ($domainRedirections = $this->getDomainRedirections()) {
+        if ($domainRedirections = $this->getService('ConfigManager')->get('domains.redirections')) {
             $controller = $this->getService('controller');
             foreach ($domainRedirections as $domain => $url) {
                 if (stripos($controller->domainName, $domain) !== false) {
-                    return $url;
+                    $this->redirect($url, 301);
                 }
             }
         }
         return false;
-    }
-
-    public function getDomainRedirections()
-    {
-        $result = $this->getService('ConfigManager')->get('domains.redirections');
-        if (!$result && isset($GLOBALS['config_domains']['redirections'])) {
-            // deprecated since 2016.03
-            $result = $GLOBALS['config_domains']['redirections'];
-        }
-        return $result;
     }
 
     protected function getBestGuessRedirectionUrl($errorUrl)

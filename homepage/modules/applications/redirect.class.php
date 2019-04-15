@@ -15,15 +15,10 @@ class redirectApplication extends controllerApplication
     {
         if ($type = $controller->getParameter('type')) {
             $redirectionManager = $this->getService('redirectionManager');
-            if ($type == 'mobile') {
-                $redirectionManager->forceRedirect("");
-                $controller->redirect($controller->baseURL . 'mobile/');
-            } elseif ($type == 'desktop') {
-                $destination = str_replace(' ', '/', $controller->getParameter('destination'));
-                $redirectionManager->forceRedirect($type);
-                $controller->redirect($controller->baseURL . $destination);
-            } elseif ($type == 'language' || $type == 'mobileLanguage') {
-                $application = $type == 'language' ? 'public' : 'mobile';
+            if ($type == 'language') {
+                if (!($application = $controller->getParameter('application'))){
+                    $application = 'public';
+                }
                 $sourceElementId = $controller->getParameter('element');
                 $newLanguageCode = $controller->getParameter('code');
 

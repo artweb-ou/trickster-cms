@@ -92,10 +92,10 @@ class controller
         new autoLoadManager();
 
         $this->checkPlugins();
-
+        ini_set("log_errors_max_len", 0);
         ini_set("pcre.backtrack_limit", 10000000);
         ini_set("memory_limit", "2048M");
-        ini_set("max_execution_time", "2400");
+        ini_set("max_execution_time", "30");
 
         //log all errors, but never display them
         set_error_handler([$this, 'catchError']);
@@ -157,6 +157,12 @@ class controller
         $this->detectApplication();
     }
 
+    public function setProtocol($protocol)
+    {
+        $this->protocol = $protocol;
+        $this->domainURL = $this->protocol . $this->domainName;
+    }
+
     protected function isSsl()
     {
         if (isset($_SERVER['HTTPS'])) {
@@ -180,19 +186,15 @@ class controller
             $this->detectFileName();
 
             $className = $this->applicationName . 'Application';
-            $fileDirectory = $this->pathsManager->getRelativePath('applications');
-            $fileName = $this->pathsManager->getIncludeFilePath($fileDirectory . $this->applicationName . '.class.php');
-            if ($fileName) {
-                include_once($fileName);
-                $this->application = new $className($this, $this->applicationName);
-                $this->requestParameters = $this->findRequestParameters($this->requestedPath);
-                $result = $this->application->initialize();
-                if ($result === false) {
-                    $this->application = false;
-                } else {
-                    $this->urlApplicationName = $this->application->getUrlName();
-                }
+            $this->application = new $className($this, $this->applicationName);
+            $this->requestParameters = $this->findRequestParameters($this->requestedPath);
+            $result = $this->application->initialize();
+            if ($result === false) {
+                $this->application = false;
+            } else {
+                $this->urlApplicationName = $this->application->getUrlName();
             }
+
             if ($this->application) {
                 if ($this->directoryName != '' && $this->directoryName != '/') {
                     $this->baseURL = $this->domainURL . '/' . $this->directoryName . '/';

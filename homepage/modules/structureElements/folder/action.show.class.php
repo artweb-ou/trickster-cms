@@ -18,8 +18,8 @@ class showFolder extends structureElementAction
             $structureElement->setViewName('content');
 
             if ($structureElement->final) {
-                $application = $controller->getApplicationName();
-                if ($application == 'public' || $application == 'mobile') {
+                $application = $controller->getApplication();
+                if ($application instanceof publicApplication) {
                     $subMenu = $structureElement->getSubMenuList();
                     if (!($structureElement->getContentElements()) && $subMenu) {
                         $firstMenu = reset($subMenu);

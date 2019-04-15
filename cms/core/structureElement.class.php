@@ -1379,7 +1379,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     }
 
     /**
-     * @return bool||structureElement
+     * @return bool|structureElement
      */
     public function getRequestedParentElement()
     {

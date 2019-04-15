@@ -52,7 +52,16 @@ class autoLoadManager
                         include_once($filePath);
                     }
                 }
+            } elseif (substr($className, -11) === 'Application') {
+                if (!class_exists($className, false)) {
+                    $type = substr($className, 0, -11);
+                    $fileDirectory = $pathsManager->getRelativePath('applications');
+                    if ($filePath = $pathsManager->getIncludeFilePath($fileDirectory . $type . '.class.php')) {
+                        include_once($filePath);
+                    }
+                }
             }
         }
     }
 }
+

@@ -10,6 +10,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
     protected $currentTheme;
     protected $themeCode = '';
     protected $requestsLogging = false;
+    protected $protocolRedirection = false;
     public $rendererName = 'smarty';
     /**
      * @var ConfigManager
@@ -88,8 +89,10 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                  * @var $redirectionManager redirectionManager
                  */
                 $redirectionManager = $this->getService('redirectionManager');
-
-                $redirectionManager->checkRedirection();
+                if ($this->protocolRedirection){
+                    $redirectionManager->checkProtocolRedirection();
+                }
+                $redirectionManager->checkDomainRedirection();
 
                 //check if we need to redirect user to display firstpage
                 if ($currentElement->structureType == 'root' || $currentElement->structureType == 'language') {
@@ -326,9 +329,11 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             'ubermetrics',
             'Cliqzbot',
         ];
-        foreach ($bots as $bot) {
-            if (stripos($_SERVER['HTTP_USER_AGENT'], $bot) !== false) {
-                exit;
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+            foreach ($bots as $bot) {
+                if (stripos($_SERVER['HTTP_USER_AGENT'], $bot) !== false) {
+                    exit;
+                }
             }
         }
     }

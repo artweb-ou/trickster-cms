@@ -12,7 +12,7 @@ class showLanguage extends structureElementAction
     {
         $languagesManager = $this->getService('languagesManager');
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
-        if (($structureElement->requested || $structureElement->id == $currentLanguageId) && ($controller->getApplicationName() == 'public' || $controller->getApplicationName() == 'mobile')) {
+        if (($structureElement->requested || $structureElement->id == $currentLanguageId) && ($controller->getApplication() instanceof publicApplication)) {
             $user = $this->getService('user');
 
             $renderer = $this->getService('renderer');
@@ -49,4 +49,3 @@ class showLanguage extends structureElementAction
         $structureElement->setViewName('show');
     }
 }
-
