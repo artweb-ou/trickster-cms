@@ -159,38 +159,6 @@ class cssUniterRendererPlugin extends rendererPlugin
         return false;
     }
 
-    protected function getSVGContent($svgFile, $fill = false, $stroke = false)
-    {
-        $svgFileContent = '';
-        /**
-         * @var designThemesManager $designThemesManager
-         */
-        $designThemesManager = $this->getService('designThemesManager');
-        if ($svgFileURL = $designThemesManager->getCurrentTheme()->getImageUrl($svgFile . '.svg', false, false)) {
-            $baseURL = controller::getInstance()->baseURL;
-
-            $filePath = stripos($svgFileURL, $baseURL) !== false
-                ? str_ireplace($baseURL, ROOT_PATH, $svgFileURL)
-                : ROOT_PATH . $svgFileURL;
-            if (!is_file($filePath)) {
-                $this->logError('CSS image missing:' . $filePath);
-            }
-
-            if ($svgContent = file_get_contents($filePath)) {
-                var_dump(($svgContent));
-                if ($fill != "false") {
-                    $svgContent = str_replace('<svg', '<svg fill="' . $fill . '"', $svgContent);
-                }
-                if ($stroke != "false") {
-                    $svgContent = str_replace('<svg', '<svg stroke="' . $stroke . '"', $svgContent);
-                }
-
-                $svgFileContent = 'data:image/svg+xml,' . self::encodeSvg($svgContent);
-            }
-        }
-        return $svgFileContent;
-    }
-
     protected static function encodeSvg($input)
     {
         // https://codepen.io/tigt/post/optimizing-svgs-in-data-uris
