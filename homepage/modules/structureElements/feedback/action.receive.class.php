@@ -12,6 +12,7 @@ class receiveFeedback extends structureElementAction
             $structureElement->structureName = $structureElement->title;
 
             $structureElement->persistElementData();
+            $structureElement->persistDisplayMenusLinks();
             $controller->redirect($structureElement->URL);
             $structureElement->setViewName('result');
         }
@@ -26,6 +27,7 @@ class receiveFeedback extends structureElementAction
             'content',
             'buttonTitle',
             'role',
+            'displayMenus'
         ];
     }
 

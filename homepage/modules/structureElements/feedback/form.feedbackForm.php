@@ -15,6 +15,11 @@ class FeedbackFormStructure extends ElementForm
         'content' => [
             'type' => 'input.html',
         ],
+        'displayMenus' => [
+            'type' => 'select.universal_options_multiple',
+            'method' => 'getDisplayMenusInfo',
+            'condition' => 'checkDisplayMenus',
+        ],
     ];
 
     protected $additionalContent = 'shared.contentlist';
