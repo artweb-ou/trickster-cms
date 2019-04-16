@@ -12,7 +12,7 @@ class mallPublicDesignTheme extends designTheme
         $this->imagesFolder = $tricksterPath .'mall/images/public/';
         $this->imagesPath = $this->imagesFolder;
         $this->javascriptPath = $tricksterPath . 'mall/js/public/';
-        $this->javascriptUrl = $controller->baseURL . 'vendor/artweb/trickster/mall/js/public/';
+        $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'mall/js/public/';
 
         $this->javascriptFiles = [
             'basic.raphael.js',

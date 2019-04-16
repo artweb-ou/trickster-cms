@@ -12,7 +12,7 @@ class defaultDesignTheme extends designTheme
         $this->cssPath = $tricksterPath . 'cms/css/default/';
         $this->imagesFolder = 'trickster/cms/images/default/';
         $this->imagesPath = ROOT_PATH . $this->imagesFolder;
-        $this->javascriptUrl = $controller->baseURL . 'vendor/artweb/trickster/cms/js/default/';
+        $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'cms/js/default/';
         $this->javascriptPath = $tricksterPath . 'cms/js/default/';
         $this->javascriptFiles = [
             'basic.ajaxManager.js',

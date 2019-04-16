@@ -75,9 +75,9 @@ class designThemesManager
     protected function manufactureTheme($code)
     {
         $result = false;
-        if (!is_null($code)) {
+        if (!$code !== null) {
+            $className = $code . 'DesignTheme';
             foreach ($this->themesDirectoryPathList as $themesDirectoryPath) {
-                $className = $code . 'DesignTheme';
                 if (!class_exists($className, false)) {
                     $filePath = $themesDirectoryPath . $code . '.class.php';
                     if (is_file($filePath)) {

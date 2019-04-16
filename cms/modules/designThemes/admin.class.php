@@ -13,7 +13,7 @@ class adminDesignTheme extends designTheme
         $this->templatesFolder = $tricksterPath . 'cms/templates/admin/';
         $this->imagesFolder = $tricksterPath .'cms/images/admin/';
         $this->imagesPath = $this->imagesFolder;
-        $this->javascriptUrl = $controller->baseURL . 'vendor/artweb/trickster/cms/js/admin/';
+        $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'cms/js/admin/';
         $this->javascriptPath = $tricksterPath . 'cms/js/admin/';
 
         $this->javascriptFiles = [

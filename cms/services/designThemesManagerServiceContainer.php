@@ -7,19 +7,22 @@ class designThemesManagerServiceContainer extends DependencyInjectionServiceCont
         return new designThemesManager();
     }
 
+    /**
+     * @param designThemesManager $instance
+     * @return mixed
+     */
     public function makeInjections($instance)
     {
         $configManager = $this->registry->getService('ConfigManager');
-        $designThemesManager = $instance;
         if ($themesDirectoryPaths = $this->getOption('themesDirectoryPaths')) {
             foreach ($themesDirectoryPaths as &$path) {
-                $designThemesManager->setThemesDirectoryPath($path);
+                $instance->setThemesDirectoryPath($path);
             }
         } else {
             $controller = $this->registry->getService('controller');
             $themes = $configManager->get('paths.themes');
             foreach ($controller->getIncludePaths() as $path) {
-                $designThemesManager->setThemesDirectoryPath($path . $themes);
+                $instance->setThemesDirectoryPath($path . $themes);
             }
         }
         if (!($currentThemeCode = $this->getOption('currentThemeCode'))) {
@@ -32,7 +35,7 @@ class designThemesManagerServiceContainer extends DependencyInjectionServiceCont
                 $currentThemeCode = $configManager->get('main.publicTheme');
             }
         }
-        $designThemesManager->setCurrentThemeCode($currentThemeCode);
-        return $designThemesManager;
+        $instance->setCurrentThemeCode($currentThemeCode);
+        return $instance;
     }
 }

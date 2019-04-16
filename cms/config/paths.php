@@ -1,6 +1,5 @@
 <?php return [
     'libs' => 'libs/',
-    'trickster' => 'vendor/artweb/trickster/',
     'fonts' => 'fonts/',
     'core' => 'core/',
     'modules' => 'modules/',
@@ -36,6 +35,6 @@
     'editorUploads' => 'userfiles/',
     'uploads' => 'uploads/',
     'csvImportImages' => 'importimages/',
-    'templates' => 'vendor/artweb/trickster/cms/templates/',
+    'templates' => 'trickster/cms/templates/',
     'tabs' => 'modules/tabs/',
 ];

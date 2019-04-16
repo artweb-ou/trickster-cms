@@ -3,6 +3,9 @@
 class PathsManager
 {
     protected $rootPath;
+    /**
+     * @var Config
+     */
     protected $config;
     protected $includePaths = [];
     protected $reversedIncludePaths = [];
@@ -25,8 +28,8 @@ class PathsManager
     public function getPath($pathKey)
     {
         $result = '';
-        if ($path = $this->config->get($pathKey)) {
-            $result = ROOT_PATH . $path;
+        if ($dir = $this->getRelativePath($pathKey)) {
+            $result = ROOT_PATH . $dir;
         }
         return $result;
     }

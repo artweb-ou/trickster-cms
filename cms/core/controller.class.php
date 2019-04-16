@@ -62,27 +62,33 @@ class controller
     protected function __construct($projectConfigPath)
     {
         ob_start();
-        $corePath = dirname(__FILE__);
-        include_once("$corePath/PathsManager.class.php");
-        include_once("$corePath/ConfigManager.class.php");
-        include_once("$corePath/Config.class.php");
-        include_once("$corePath/AutoLoadManager.php");
-        $configManager = $this->configManager = new ConfigManager();
-        $pathsManager = $this->pathsManager = new PathsManager();
-        if ($projectConfig = $configManager->getConfigFromPath($projectConfigPath . 'main.php')) {
-            if ($plugins = $projectConfig->get('enabledPlugins')) {
-                foreach (array_reverse($plugins) as $key => $path) {
-                    if ($key === 'project') {
-                        $configManager->addSource(ROOT_PATH . $path . 'config/', true);
-                    } else {
-                        $configManager->addSource(ROOT_PATH . $path . 'config/');
+        $corePath = dirname(__FILE__) . '/';
+        include_once($corePath . "PathsManager.class.php");
+        include_once($corePath . "ConfigManager.class.php");
+        include_once($corePath . "Config.class.php");
+        include_once($corePath . "AutoLoadManager.php");
+        $this->configManager = new ConfigManager();
+        $this->pathsManager = new PathsManager();
+        if ($projectPathsConfig = $this->configManager->getConfigFromPath($projectConfigPath . 'paths.php')) {
+            if ($tricksterPath = $projectPathsConfig->get('trickster')) {
+                if ($projectMainConfig = $this->configManager->getConfigFromPath($projectConfigPath . 'main.php')) {
+                    if ($plugins = $projectMainConfig->get('enabledPlugins')) {
+                        foreach (array_reverse($plugins) as $key => $dir) {
+                            if ($key === 'project') {
+                                $this->configManager->addSource(ROOT_PATH . $dir . 'config/', true);
+                            } else {
+                                $this->configManager->addSource(ROOT_PATH . $tricksterPath . $dir . 'config/');
+                            }
+                        }
                     }
                 }
             }
         }
-        $mainConfig = $configManager->getConfig('main');
-        $pathsConfig = $configManager->getConfig('paths');
-        $pathsManager->setConfig($pathsConfig);
+
+
+        $mainConfig = $this->configManager->getConfig('main');
+        $pathsConfig = $this->configManager->getConfig('paths');
+        $this->pathsManager->setConfig($pathsConfig);
 
         $composerClassLoaderPath = ROOT_PATH . $pathsConfig->get('psr0Classes') . 'autoload.php';
         if (is_file($composerClassLoaderPath)) {
@@ -118,8 +124,12 @@ class controller
     {
         if ($enabledPluginsInfo = $this->configManager->get('main.enabledPlugins')) {
             $this->enabledPlugins = array_keys($enabledPluginsInfo);
-            foreach ($enabledPluginsInfo as &$pluginPath) {
-                $this->addIncludePath(ROOT_PATH . $pluginPath);
+            foreach ($enabledPluginsInfo as $pluginName => $pluginPath) {
+                if ($pluginName == 'project') {
+                    $this->addIncludePath(ROOT_PATH . $pluginPath);
+                } else {
+                    $this->addIncludePath(ROOT_PATH . $this->pathsManager->getRelativePath('trickster') . $pluginPath);
+                }
             }
         }
     }
@@ -134,7 +144,7 @@ class controller
 
     protected function parseRequestParameters()
     {
-        if(!empty($_SERVER['HTTP_HOST'])) {
+        if (!empty($_SERVER['HTTP_HOST'])) {
             $this->domainName = $_SERVER['HTTP_HOST'];
         }
         if ($this->isSsl()) {
@@ -145,12 +155,12 @@ class controller
         $this->domainURL = $this->configManager->get('main.protocol') . $this->domainName;
         $this->directoryName = trim(trim(dirname($_SERVER['SCRIPT_NAME']), '/'), '\\');
         $this->scriptName = basename($_SERVER['SCRIPT_NAME']);
-        if(!empty($_SERVER['REMOTE_ADDR'])) {
+        if (!empty($_SERVER['REMOTE_ADDR'])) {
             $this->visitorIP = $_SERVER['REMOTE_ADDR'];
         }
 
         //get the request array
-        if(!empty($_SERVER["REQUEST_URI"])) {
+        if (!empty($_SERVER["REQUEST_URI"])) {
             $this->requestURI = $this->parseRequestURI($_SERVER["REQUEST_URI"]);
         }
 
@@ -515,8 +525,8 @@ class controller
     }
 
     /**
-     * @deprecated
      * @param $projectPath
+     * @deprecated
      */
     public function setProjectPath($projectPath)
     {
@@ -533,8 +543,8 @@ class controller
     }
 
     /**
-     * @deprecated since 04 2016
      * @return mixed
+     * @deprecated since 04 2016
      */
     public function getIncludePaths()
     {
@@ -542,9 +552,9 @@ class controller
     }
 
     /**
-     * @deprecated since 04 2016, use PathsManager
      * @param $filePath
      * @return bool|string
+     * @deprecated since 04 2016, use PathsManager
      */
     public function getIncludeFilePath($filePath)
     {
