@@ -1,7 +1,7 @@
 {assign var='formData' value=$element->getFormData()}
 {assign var='formErrors' value=$element->getFormErrors()}
 {assign var='formNames' value=$element->getFormNames()}
-<form action="{$element->URL}" method="post" class="zxitem_form" enctype="multipart/form-data">
+<form action="{$element->URL}" method="post" class="" enctype="multipart/form-data">
 	<div class="form_fields">
 		<div class="form_items">
 			<div class="from_label">

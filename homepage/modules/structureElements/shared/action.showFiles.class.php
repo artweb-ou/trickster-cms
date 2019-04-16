@@ -8,8 +8,6 @@ class showFilesShared extends structureElementAction
             $structureElement->setTemplate('shared.content.tpl');
             $renderer = $this->getService('renderer');
             $renderer->assign('contentSubTemplate', 'shared.files.tpl');
-            //todo: investigate what is getAllConnectedDiscounts doing in shared template?
-            //            $renderer->assign('connectedDiscounts', $structureElement->getAllConnectedDiscounts());
         }
     }
 }

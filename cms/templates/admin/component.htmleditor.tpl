@@ -6,7 +6,7 @@
 
 	var editor = CKEDITOR.replace('{$name}',
 	{
-		customConfig: '{$controller->baseURL}/trickster/cms/js/ckeditor/config.js'
+		customConfig: '{$controller->baseURL}/vendor/artweb/trickster/cms/js/ckeditor/config.js'
 	});
 	CKFinder.setupCKEditor(editor, '{$controller->baseURL}libs/ckfinder/');
 </script>
