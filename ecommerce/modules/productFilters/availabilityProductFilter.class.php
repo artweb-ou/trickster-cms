@@ -9,16 +9,16 @@ class availabilityProductFilter extends productFilter
     public $titleEnabled = false;
     protected $relevant = false;
 
-    public function __construct($arguments = [], $initialOptions = [])
+    public function __construct(ProductsListStructureElement $element)
     {
-        parent::__construct($arguments, $initialOptions);
+        parent::__construct($element);
         $this->options = [
             'all' => true,
             'available' => true,
         ];
-        if (count($arguments) === 1) {
-            $this->availableOnly = $arguments[0];
-        }
+//        if (count($arguments) === 1) {
+//            $this->availableOnly = $arguments[0];
+//        }
     }
 
     public function getOptionsInfo()

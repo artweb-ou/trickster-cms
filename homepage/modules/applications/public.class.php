@@ -38,6 +38,11 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $designThemesManager = $this->getService('designThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
 
+        $structureManager = $this->getService('structureManager', [
+            'rootUrl' => $controller->rootURL,
+            'rootMarker' => $this->configManager->get('main.rootMarkerPublic'),
+        ], true);
+
         $this->renderer->assign('js_translations', $this->loadJsTranslations());
 
         $resourcesUniterHelper = $this->getService('ResourcesUniterHelper', ['currentThemeCode' => $currentTheme->getCode()], true);
@@ -79,10 +84,6 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             if ($controller->getParameter('qid')) {
                 $this->getService('searchQueriesManager')->markLogAsClicked($controller->getParameter('qid'));
             }
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl' => $controller->rootURL,
-                'rootMarker' => $this->configManager->get('main.rootMarkerPublic'),
-            ], true);
             $this->processRequestParameters();
             if ($currentElement = $structureManager->getCurrentElement()) {
                 /**

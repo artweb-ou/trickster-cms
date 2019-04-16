@@ -12,9 +12,9 @@ class priceProductFilter extends productFilter
     protected $range;
     protected $allIdsOfDiscountedProducts;
 
-    public function __construct($arguments = [], $initialOptions = [])
+    public function __construct(ProductsListStructureElement $element)
     {
-        parent::__construct($arguments, $initialOptions);
+        parent::__construct($element);
         if (count($arguments) === 2) {
             $this->selectedMin = $arguments[0];
             $this->selectedMax = $arguments[1];

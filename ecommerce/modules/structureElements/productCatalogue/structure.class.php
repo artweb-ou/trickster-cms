@@ -7,7 +7,7 @@ class productCatalogueElement extends categoryStructureElement implements Config
     public $defaultActionName = 'show';
     public $role = 'hybrid';
     protected $replacementElements = [];
-    protected $categories;
+    protected $categoriesList;
     protected $productsListParentElementsIds;
 
     protected function setModuleStructure(&$moduleStructure)
@@ -49,7 +49,7 @@ class productCatalogueElement extends categoryStructureElement implements Config
         ];
     }
 
-    protected function getParentRestrictionId()
+    protected function getProductsListParentRestrictionId()
     {
         if (!$this->categorized) {
             return $this->id;
@@ -79,26 +79,41 @@ class productCatalogueElement extends categoryStructureElement implements Config
         return $replacementElements;
     }
 
-    public function getProductsListParentElementsIds()
+
+    protected function getProductsListBaseQuery()
     {
-        if ($this->productsListParentElementsIds === null) {
-            $this->productsListParentElementsIds = [];
-            if (!$this->categorized) {
-                $this->productsListParentElementsIds = (array)$this->id;
-            } elseif ($container = $this->getContainerElement()) {
-                $categoriesIds = $this->getService('linksManager')
-                    ->getConnectedIdList($container->id, 'catalogue', 'parent');
+        if ($this->productsListBaseQuery !== null) {
+            return $this->productsListBaseQuery;
+        }
+        $this->productsListBaseQuery = [];
+
+        $query = $this->getProductsQuery();
+
+        $query->leftJoin('structure_links', 'module_product.id', '=', 'childStructureId');
+
+        //include only the products connected to this category or include all subcategories as well
+        if ($this->categorized) {
+            if ($container = $this->getContainerElement()) {
+                $categoriesIds = $this->getService('linksManager')->getConnectedIdList($container->id, 'catalogue', 'parent');
                 $structureManager = $this->getService('structureManager');
+                $categoriesIdIndex = [];
+
                 foreach ($categoriesIds as &$categoryId) {
-                    $category = $structureManager->getElementById($categoryId);
-                    if ($categoryProductsParentsIds = $category->getProductsListParentElementsIds()) {
-                        $this->productsListParentElementsIds = array_merge($this->productsListParentElementsIds, $categoryProductsParentsIds);
+                    /**
+                     * @var categoryElement $category
+                     */
+                    if ($category = $structureManager->getElementById($categoryId)) {
+                        $category->gatherSubCategoriesIdIndex($this->id, $categoriesIdIndex);
                     }
                 }
-                $this->productsListParentElementsIds = array_unique($this->productsListParentElementsIds);
+                $query->whereIn('parentStructureId', array_keys($categoriesIdIndex));
             }
+        } else {
+            $query->where('parentStructureId', '=', $this->id);
         }
-        return $this->productsListParentElementsIds;
+        $query->where('type', '=', 'catalogue');
+        $this->productsListBaseQuery = $query;
+        return $this->productsListBaseQuery;
     }
 
     public function getConnectedProductsIds()
@@ -106,9 +121,9 @@ class productCatalogueElement extends categoryStructureElement implements Config
         return $this->getService('linksManager')->getConnectedIdList($this->id, 'productCatalogueProduct', 'parent');
     }
 
-    protected function generatePagerUrl(array $searchArguments)
+    protected function generatePagerUrl()
     {
-        $url = parent::generatePagerUrl($searchArguments);
+        $url = parent::generatePagerUrl();
         if (!$this->final && $parentElement = $this->getService('structureManager')
                 ->getElementsFirstParent($this->id)
         ) {
@@ -171,5 +186,19 @@ class productCatalogueElement extends categoryStructureElement implements Config
             $productsLayout = $this->getService('ConfigManager')->get('main.templateTypeCategoryProduct');
         }
         return $productsLayout;
+    }
+
+    public function getCategoriesList()
+    {
+        if ($this->categoriesList === null) {
+
+            $this->categoriesList = [];
+            $structureManager = $this->getService('structureManager');
+            if ($firstParent = $structureManager->getElementsFirstParent($this->id)) {
+
+                $this->categoriesList = $structureManager->getElementsChildren($firstParent->id, 'container', 'catalogue');
+            }
+        }
+        return $this->categoriesList;
     }
 }

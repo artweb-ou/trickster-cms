@@ -128,7 +128,7 @@ class productSelectionElement extends structureElement
         return $this->usedOptions;
     }
 
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
         return $this->getSelectionOptions();
     }

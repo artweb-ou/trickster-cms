@@ -1,5 +1,22 @@
 <?php
 
+/**
+ * Class discountsListElement
+ *
+ * @property int $priceSortingEnabled;
+ * @property int $nameSortingEnabled;
+ * @property int $dateSortingEnabled;
+ * @property int $brandSortingEnabled;
+ * @property int $brandFilterEnabled;
+ * @property int $parameterFilterEnabled;
+ * @property int $availabilityFilterEnabled;
+ * @property int $manualSortingEnabled;
+ * @property int $defaultOrder;
+ * @property int $parameters;
+ * @property int $amountOnPageEnabled;
+ *
+ */
+
 class discountsListElement extends menuStructureElement implements ConfigurableLayoutsProviderInterface
 {
     use ConfigurableLayoutsProviderTrait;

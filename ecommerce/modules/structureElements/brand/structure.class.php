@@ -1,6 +1,16 @@
 <?php
 
-class brandElement extends productsListStructureElement implements ImageUrlProviderInterface
+/**
+ * Class brandElement
+ *
+ * @property int $amountOnPageEnabled
+ * @property int $brandFilterEnabled
+ * @property int $discountFilterEnabled
+ * @property int $parameterFilterEnabled
+ * @property int $availabilityFilterEnabled
+ */
+
+class brandElement extends ProductsListStructureElement implements ImageUrlProviderInterface
 {
     use ImageUrlProviderTrait;
     use ConfigurableLayoutsProviderTrait;
@@ -112,11 +122,6 @@ class brandElement extends productsListStructureElement implements ImageUrlProvi
         return $this->connectedProductsIds;
     }
 
-    public function getDefaultOrder()
-    {
-        return 'manual';
-    }
-
     public function getConnectedBrandsListsIds()
     {
         return $this->getService('linksManager')->getConnectedIdList($this->id, 'brands', 'child');
@@ -146,20 +151,36 @@ class brandElement extends productsListStructureElement implements ImageUrlProvi
         parent::deleteElementData();
     }
 
-    public function isFilterableByAvailability()
+    protected function isFilterableByType($filterType)
     {
-        return $this->availabilityFilterEnabled;
+        switch ($filterType) {
+            case 'category':
+                $result = false;
+//                    $result = $this->categoryFilterEnabled;
+                break;
+            case 'brand':
+                $result = $this->brandFilterEnabled;
+                break;
+            case 'discount':
+                $result = $this->discountFilterEnabled;
+                break;
+            case 'parameter':
+                $result = $this->parameterFilterEnabled;
+                break;
+            case 'price':
+                $result = false;
+//                    $result = $this->isSettingEnabled('priceFilterEnabled');
+                break;
+            case 'availability':
+                $result = $this->availabilityFilterEnabled;
+                break;
+            default:
+                $result = true;
+        }
+
+        return $result;
     }
 
-    public function isFilterableByParameter()
-    {
-        return $this->parameterFilterEnabled;
-    }
-
-    public function isFilterableByDiscount()
-    {
-        return $this->discountFilterEnabled;
-    }
 
     public function getProductsLayout()
     {
@@ -178,5 +199,9 @@ class brandElement extends productsListStructureElement implements ImageUrlProvi
         $brandInfo["URL"] = $this->URL;
         $brandInfo["image"] = controller::getInstance()->baseURL . "image/type:brandWidgetItem/id:" . $this->image . "/filename:" . $this->originalName;
         return $brandInfo;
+    }
+
+    public function isAmountSelectionEnabled(){
+        return $this->amountOnPageEnabled;
     }
 }

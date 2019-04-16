@@ -30,6 +30,12 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
             $structureManager->setLinksManager($this->registry->getService('linksManager'));
         }
 
+        if ($languagesManager = $this->getOption('languagesManager')) {
+            $structureManager->setLanguagesManager($languagesManager);
+        } else {
+            $structureManager->setLanguagesManager($this->registry->getService('languagesManager'));
+        }
+
         if ($privilegesManager = $this->getOption('privilegesManager')) {
             $structureManager->setPrivilegesManager($privilegesManager);
         } else {
@@ -43,11 +49,18 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
             $structureManager->setRootUrl($controller->rootURL);
         }
 
-        if ($rootMarker = $this->getOption('rootMarker')) {
-            $structureManager->setRootElementMarker($rootMarker);
-        } else {
-            $structureManager->setRootElementMarker($configManager->get('main.rootMarkerAdmin'));
+        $adminRootMarker = $configManager->get('main.rootMarkerAdmin');
+        if (!($rootMarker = $this->getOption('rootMarker'))) {
+            $rootMarker = $adminRootMarker;
         }
+        $structureManager->setRootElementMarker($rootMarker);
+
+        if ($rootMarker == $adminRootMarker){
+            $structureManager->setPathSearchAllowedLinks($configManager->get('structurelinks.adminAllowed'));
+        } else {
+            $structureManager->setPathSearchAllowedLinks($configManager->get('structurelinks.publicAllowed'));
+        }
+
 
         if ($rootId = $this->getOption('rootId')) {
             $structureManager->setRootElementId($rootId);

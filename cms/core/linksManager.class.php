@@ -18,23 +18,6 @@ class linksManager extends errorLogger
     protected $linksDataCollection;
     protected $db;
     protected $newElementLinkType;
-    /** @var linksManager */
-    private static $instance;
-
-    /**
-     * @param bool $reset - if provided, resets all loaded data
-     * @return linksManager
-     *
-     * @deprecated
-     */
-    public static function getInstance($reset = false)
-    {
-        if (is_null(self::$instance) || $reset) {
-            self::$instance = new linksManager();
-            errorLog::getInstance()->logMessage('linksManager', 'singleton call is deprecated');
-        }
-        return self::$instance;
-    }
 
     /**
      *
@@ -46,8 +29,6 @@ class linksManager extends errorLogger
         $this->elementsLinks['child'] = [];
         $this->elementsConnectedId['parent'] = [];
         $this->elementsConnectedId['child'] = [];
-
-        self::$instance = $this;
     }
 
     /**
@@ -66,16 +47,10 @@ class linksManager extends errorLogger
      * @param string[]|string $types - structure link type, optional
      * @param string[]|string|null $elementRoles - role of element ("parent" or "child" or null if both opposite roles are required)
      * @param bool $forceUpdate - if provided, forces data loading from database regardless of cache
-     * @param null $excludeTypes
      * @return persistableObject[]
      */
-    public function getElementsLinks(
-        $elementId,
-        $types = 'structure',
-        $elementRoles = null,
-        $forceUpdate = false,
-        $excludeTypes = null
-    ) {
+    public function getElementsLinks($elementId, $types = 'structure', $elementRoles = null, $forceUpdate = false)
+    {
         if (is_null($elementRoles) || $elementRoles == '') {
             $elementRoles = [
                 'child',
@@ -89,11 +64,11 @@ class linksManager extends errorLogger
             $types = [$types];
         }
         if ($forceUpdate || $this->linksLoadRequired($elementId, $types, $elementRoles)) {
-            if (($elementsLinks = $this->loadLinks($elementId, $types, $elementRoles, $excludeTypes)) !== false) {
-                $this->cacheLinks($elementsLinks, $elementId, $types, $elementRoles, $excludeTypes);
+            if (($elementsLinks = $this->loadLinks($elementId, $types, $elementRoles)) !== false) {
+                $this->cacheLinks($elementsLinks, $elementId, $types, $elementRoles);
             }
         }
-        return $this->compileElementLinksList($elementId, $types, $elementRoles, $excludeTypes);
+        return $this->compileElementLinksList($elementId, $types, $elementRoles);
     }
 
     protected function linksLoadRequired($elementId, $types, $elementRoles)
@@ -122,18 +97,12 @@ class linksManager extends errorLogger
         return false;
     }
 
-    protected function compileElementLinksList($elementId, $types, $elementRoles, $excludeTypes = [])
+    protected function compileElementLinksList($elementId, $types, $elementRoles)
     {
         $result = [];
         foreach ($elementRoles as &$elementRole) {
-            if (!$types && !$excludeTypes) {
+            if (!$types) {
                 $result = array_merge($result, $this->elementsLinks[$elementRole][$elementId]['*']);
-            } elseif (!$types && $excludeTypes) {
-                foreach ($this->elementsLinks[$elementRole][$elementId] as $type => $links) {
-                    if (!in_array($type, $excludeTypes) && $type !== '*') {
-                        $result = array_merge($result, $links);
-                    }
-                }
             } else {
                 foreach ($types as &$type) {
                     $result = array_merge($result, $this->elementsLinks[$elementRole][$elementId][$type]);
@@ -143,19 +112,19 @@ class linksManager extends errorLogger
         return $result;
     }
 
-    protected function cacheLinks($elementsLinks, $elementId, $type, $elementRoles, $excludeTypes = [])
+    protected function cacheLinks($elementsLinks, $elementId, $type, $elementRoles)
     {
         foreach ($elementRoles as &$elementRole) {
-            $this->cacheLinksByRole($elementsLinks, $elementId, $type, $elementRole, $excludeTypes);
+            $this->cacheLinksByRole($elementsLinks, $elementId, $type, $elementRole);
         }
     }
 
-    protected function cacheLinksByRole($elementsLinks, $elementId, $types, $elementRole, $excludeTypes = [])
+    protected function cacheLinksByRole($elementsLinks, $elementId, $types, $elementRole)
     {
         if (!isset($this->elementsLinks[$elementRole][$elementId])) {
             $this->elementsLinks[$elementRole][$elementId] = [];
         }
-        if (!$types && !$excludeTypes) {
+        if (!$types) {
             if (!isset($this->elementsLinks[$elementRole][$elementId]['*'])) {
                 $this->elementsLinks[$elementRole][$elementId]['*'] = [];
             }
@@ -174,16 +143,6 @@ class linksManager extends errorLogger
             foreach ($this->elementsLinks[$elementRole][$elementId] as $type => &$links) {
                 if ($type != '*') {
                     $this->elementsLinks[$elementRole][$elementId]['*'] = array_merge($this->elementsLinks[$elementRole][$elementId]['*'], $links);
-                }
-            }
-        } elseif (!$types && $excludeTypes) {
-            //we don't want to sort links which has already been loaded
-            $loadedLinksIndex = $this->elementsLinks[$elementRole][$elementId];
-
-            //now we sort all loaded links according to types, ignoring the links with previously loaded types
-            foreach ($elementsLinks as &$link) {
-                if (!isset($loadedLinksIndex[$link->type]) && ($elementRole == 'child' && $link->childStructureId == $elementId || $elementRole == 'parent' && $link->parentStructureId == $elementId)) {
-                    $this->elementsLinks[$elementRole][$elementId][$link->type][] = $link;
                 }
             }
         } else {
@@ -208,7 +167,7 @@ class linksManager extends errorLogger
         }
     }
 
-    protected function loadLinks($elementId, $types, $elementRoles, $excludeTypes)
+    protected function loadLinks($elementId, $types, $elementRoles)
     {
         $result = [];
         foreach ($elementRoles as &$elementRole) {
@@ -221,10 +180,6 @@ class linksManager extends errorLogger
             if ($types) {
                 $searchFields[] = ['type', 'in', $types];
             }
-            if ($excludeTypes) {
-                $searchFields[] = ['type', 'not in', $excludeTypes];
-            }
-
             $orderFields = ['position' => 'asc'];
             if (($elementsLinks = $this->linksDataCollection->loadNew($searchFields, $orderFields)) !== false) {
                 $result = array_merge($result, $elementsLinks);
@@ -261,16 +216,14 @@ class linksManager extends errorLogger
      * @param $elementId
      * @param string $types
      * @param string[]|string|null $elementRoles - : are we looking for child or parent elements?
-     * @param @bool $biDirectional - @deprecated
      * @return mixed
      */
     public function getConnectedIdList(
         $elementId,
         $types = 'structure',
-        $elementRoles = null,
-        $deprecated = null,
-        $excludeTypes = null
-    ) {
+        $elementRoles = null
+    )
+    {
         if (!is_array($types)) {
             $types = (array)$types;
         }
@@ -290,7 +243,7 @@ class linksManager extends errorLogger
                 }
                 if (!isset($this->elementsConnectedId[$elementRole][$elementId][$type])) {
                     $foundIdList = [];
-                    if ($elementLinks = $this->getElementsLinks($elementId, $type, $elementRole, false, $excludeTypes)) {
+                    if ($elementLinks = $this->getElementsLinks($elementId, $type, $elementRole, false)) {
                         if ($elementRole == 'child') {
                             foreach ($elementLinks as &$link) {
                                 if ($link->childStructureId == $elementId) {
@@ -335,10 +288,9 @@ class linksManager extends errorLogger
      * @param $parentId
      * @param $childId
      * @param string $linkType
-     * @param bool $bidirectional
      * @return bool|persistableObject
      */
-    public function linkElements($parentId, $childId, $linkType = 'structure', $bidirectional = false)
+    public function linkElements($parentId, $childId, $linkType = 'structure')
     {
         $result = false;
 
@@ -352,16 +304,8 @@ class linksManager extends errorLogger
         }
 
         if (!$result) {
-            if (!$bidirectional) {
-                $linksObject = $this->createLinkObject($parentId, $childId, $linkType);
-                $linksObject->persist();
-            } else {
-                $linksObject = $this->createLinkObject($childId, $parentId, $linkType);
-                $linksObject->persist();
-
-                $linksObject = $this->createLinkObject($parentId, $childId, $linkType);
-                $linksObject->persist();
-            }
+            $linksObject = $this->createLinkObject($parentId, $childId, $linkType);
+            $linksObject->persist();
             $result = $linksObject;
 
             if (isset($this->elementsConnectedId['child']) && isset($this->elementsConnectedId['child'][$childId]) && isset($this->elementsConnectedId['child'][$childId][$linkType])

@@ -326,13 +326,13 @@ class languageElement extends structureElement implements MetadataProviderInterf
         return $result;
     }
 
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
         $controller = controller::getInstance();
         $applicationName = $controller->getApplicationName();
         // TODO: perhaps check for admin app instead
         if ($applicationName == 'public') {
-            return parent::getChildrenList($roles, $linkType, $allowedTypes, $useBlackList);
+            return parent::getChildrenList($roles, $linkType, $allowedTypes, $restrictLinkTypes);
         } else {
             //todo: review this code and remove $urlString
             $structureManager = $this->getService('structureManager');

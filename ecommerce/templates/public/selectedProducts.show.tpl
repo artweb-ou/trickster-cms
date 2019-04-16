@@ -1,4 +1,3 @@
-{assign 'searchArguments' $element->parseSearchArguments()}
 {assign 'products' $element->getProductsList()}
 {assign 'pager' $element->getProductsPager()}
 {if $products}
@@ -17,9 +16,7 @@
 			</div>
 		{/if}
 
-		{if $element->isFilterable()}
-			{include file=$theme->template('component.productsfilter.tpl')}
-		{/if}
+		{include file=$theme->template('component.productsfilter.tpl')}
 		{if $element->isSortable() || ($element->getCurrentLayout() != 'scrolling' && $pager && count($pager->pagesList) > 1)}
 			<div class="products_top_pager">
 				{if $element->isSortable()}
