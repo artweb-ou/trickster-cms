@@ -1,6 +1,7 @@
 {
     "name": "artweb/trickster",
     "description": "Trickster CMS packages",
+    "license": "proprietary",
     "require": {    
 	    "illuminate/database": "5.2.*",
 	    "mk-j/php_xlsxwriter": "^0.36",
