@@ -2,6 +2,6 @@
     "name": "artweb/trickster",
     "dist": {
         "url": "https://github.com/trickster-cms/trickster",
-        "type": "vcs"
+        "type": "git"
     }
 }
