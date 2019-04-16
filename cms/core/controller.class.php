@@ -66,7 +66,7 @@ class controller
         include_once("$corePath/PathsManager.class.php");
         include_once("$corePath/ConfigManager.class.php");
         include_once("$corePath/Config.class.php");
-        include_once("$corePath/autoLoadManager.class.php");
+        include_once("$corePath/AutoLoadManager.php");
         $configManager = $this->configManager = new ConfigManager();
         $pathsManager = $this->pathsManager = new PathsManager();
         if ($projectConfig = $configManager->getConfigFromPath($projectConfigPath . 'main.php')) {
@@ -89,7 +89,7 @@ class controller
             include_once($composerClassLoaderPath);
         }
         //autoloadmanager should be loaded after composer's autoload to be included into beginning of autoloaders stack
-        new autoLoadManager();
+        new AutoLoadManager();
 
         $this->checkPlugins();
         ini_set("log_errors_max_len", 0);

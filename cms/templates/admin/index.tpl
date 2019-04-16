@@ -11,7 +11,7 @@
 
 	<script src="{$controller->baseURL}vendor/ckeditor/ckeditor/ckeditor.js"></script>
 	<script src="{$controller->baseURL}libs/ckfinder/ckfinder.js"></script>
-	<script src="{$controller->baseURL}trickster/cms/js/jscolor/jscolor.js"></script>
+	<script src="{$controller->baseURL}vendor/trickster/cms/js/jscolor/jscolor.js"></script>
 	<script src="{$controller->baseURL}vendor/nnnick/chartjs/dist/Chart.js"></script>
 </head>
 <body>
