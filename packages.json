@@ -1,7 +1,7 @@
 {   
     "packages": {
         "vendor/package-name": {
-            "dev-master": { @composer.json }
+            "1.0.0": { @composer.json }
         }
     }
 }
