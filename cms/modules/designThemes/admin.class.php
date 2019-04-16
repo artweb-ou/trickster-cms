@@ -11,8 +11,11 @@ class adminDesignTheme extends designTheme
 
         $this->cssPath = $tricksterPath . 'cms/css/admin/';
         $this->templatesFolder = $tricksterPath . 'cms/templates/admin/';
-        $this->imagesFolder = $tricksterPath .'cms/images/admin/';
-        $this->imagesPath = $this->imagesFolder;
+        $this->imagesFolder = 'cms/images/admin/';
+        $this->imagesPath = $tricksterPath . $this->imagesFolder;
+        $this->fontsFolder = 'cms/fonts/';
+        $this->fontsPath = $tricksterPath . $this->fontsFolder;
+        $this->fontsUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . $this->fontsFolder;
         $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'cms/js/admin/';
         $this->javascriptPath = $tricksterPath . 'cms/js/admin/';
 

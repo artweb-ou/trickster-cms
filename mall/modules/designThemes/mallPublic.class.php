@@ -9,8 +9,8 @@ class mallPublicDesignTheme extends designTheme
         $tricksterPath = $pathsManager->getPath('trickster');
         $this->cssPath = $tricksterPath . 'mall/css/public/';
         $this->templatesFolder = $tricksterPath . 'mall/templates/public/';
-        $this->imagesFolder = $tricksterPath .'mall/images/public/';
-        $this->imagesPath = $this->imagesFolder;
+        $this->imagesFolder = 'mall/images/public/';
+        $this->imagesPath = $tricksterPath . $this->imagesFolder;
         $this->javascriptPath = $tricksterPath . 'mall/js/public/';
         $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'mall/js/public/';
 

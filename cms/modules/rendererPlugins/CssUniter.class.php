@@ -53,9 +53,24 @@ class cssUniterRendererPlugin extends rendererPlugin
             // todo: move functionality to application, outside of CssUniter class
             $this->lessCompiler->registerFunction("getImageUrl", function ($arg) {
                 list($type, $delimiter, $values) = $arg;
+                /**
+                 * @var designThemesManager $designThemesManager
+                 */
                 $designThemesManager = $this->getService('designThemesManager');
                 if ($theme = $designThemesManager->getCurrentTheme()) {
                     return [$type, $delimiter, [$theme->getImageUrl(reset($values))]];
+                } else {
+                    return "";
+                }
+            });
+            $this->lessCompiler->registerFunction("getFontUrl", function ($arg) {
+                list($type, $delimiter, $values) = $arg;
+                /**
+                 * @var designThemesManager $designThemesManager
+                 */
+                $designThemesManager = $this->getService('designThemesManager');
+                if ($theme = $designThemesManager->getCurrentTheme()) {
+                    return [$type, $delimiter, [$theme->getFontUrl(reset($values))]];
                 } else {
                     return "";
                 }

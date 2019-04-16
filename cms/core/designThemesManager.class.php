@@ -109,12 +109,16 @@ abstract class designTheme extends errorLogger
     protected $javascriptPaths;
     protected $javascriptUrl;
     protected $imagesUrl;
+    protected $fontsUrl;
     protected $imagesFolder;
+    protected $fontsFolder;
     protected $imagesPath;
+    protected $fontsPath;
     protected $templatesFolder;
     protected $code;
     protected $extraFolder;
     protected $imagesPaths;
+    protected $fontsPaths;
     /**
      * @var designThemesManager
      */
@@ -177,14 +181,18 @@ abstract class designTheme extends errorLogger
         $filesList = $this->getOwnCSSFilesList();
         $imagesPath = $this->getImagesPath();
         $imagesUrl = $this->getImagesUrl();
+        $fontsUrl = $this->getFontsUrl();
         $imagesFolder = $this->getImagesFolder();
+        $fontsFolder = $this->getFontsFolder();
         foreach ($filesList as &$file) {
             $info = [
                 'filePath' => $this->cssPath,
                 'fileName' => $file,
                 'imagesPath' => $imagesPath,
                 'imagesUrl' => $imagesUrl,
+                'fontsUrl' => $fontsUrl,
                 'imagesFolder' => $imagesFolder,
+                'fontFolder' => $fontsFolder,
                 'id' => md5($this->cssPath . $file . $imagesFolder),
             ];
             if (!isset($this->cssResourcesIdIndex[$info['id']])) {
@@ -290,6 +298,26 @@ abstract class designTheme extends errorLogger
         }
         return $this->imagesFolder;
     }
+    /**
+     * Returns fonts folder of current theme. If it's undefined, then it's taken form inherited themes
+     *
+     * @return string|null
+     */
+    public function getFontsFolder()
+    {
+        if ($this->fontsFolder === null) {
+            $this->fontsFolder = false;
+            foreach ($this->inheritedThemes as &$themeCode) {
+                if ($theme = $this->designThemesManager->getTheme($themeCode)) {
+                    if ($folder = $theme->getFontsFolder()) {
+                        $this->fontsFolder = $folder;
+                        break;
+                    }
+                }
+            }
+        }
+        return $this->fontsFolder;
+    }
 
     public function getImageDataUri($imageFileName)
     {
@@ -330,6 +358,24 @@ abstract class designTheme extends errorLogger
             }
         }
         return $this->imagesUrl;
+    }
+
+    /**
+     * Returns absolute URL to fonts folder.
+     * If own path is null, then the inherited fonts path is used
+     *
+     * @return string|boolean
+     */
+    public function getFontsUrl()
+    {
+        if ($this->fontsUrl === null) {
+            $this->fontsUrl = false;
+            if ($folder = $this->getFontsFolder()) {
+                $controller = controller::getInstance();
+                $this->fontsUrl = $controller->baseURL . $folder;
+            }
+        }
+        return $this->fontsUrl;
     }
 
     /**
@@ -509,6 +555,25 @@ abstract class designTheme extends errorLogger
         }
         return $this->imagesPaths;
     }
+    /**
+     * Returns list of font folders paths including the inherited folders from parent objects in themes' chain
+     * @return array
+     */
+    public function getFontsPaths()
+    {
+        if (is_null($this->fontsPaths)) {
+            $this->fontsPaths = [];
+            if (!is_null($this->fontsPath)) {
+                $this->fontsPaths[] = $this->fontsPath;
+            }
+            foreach ($this->inheritedThemes as &$themeCode) {
+                if ($theme = $this->designThemesManager->getTheme($themeCode)) {
+                    $this->fontsPaths = array_merge($this->fontsPaths, $theme->getFontsPaths());
+                }
+            }
+        }
+        return $this->fontsPaths;
+    }
 
     /**
      * Searches for the file URL in inherited template resoures chain and returns a full URL
@@ -539,6 +604,39 @@ abstract class designTheme extends errorLogger
         }
         if (!$recursion && $required) {
             $this->logError("Image file is missing: " . $fileName);
+        }
+        return "";
+    }
+
+    /**
+     * Searches for the file URL in inherited template resoures chain and returns a full URL
+     *
+     * @param string $fileName
+     * @param bool $recursion
+     * @param bool $required
+     * @return string
+     */
+    public function getFontUrl($fileName, $recursion = false, $required = true)
+    {
+        if (is_file($this->fontsPath . $fileName)) {
+            return $this->getFontsUrl() . $fileName;
+        }
+        foreach ($this->getFontsPaths() as $item) {
+            if (is_file($item . $fileName)) {
+                $controller = controller::getInstance();
+                $fontUrl = str_replace(ROOT_PATH, $controller->baseURL, $item . $fileName);
+                return $fontUrl;
+            }
+        }
+        foreach ($this->inheritedThemes as &$themeCode) {
+            if ($theme = $this->designThemesManager->getTheme($themeCode)) {
+                if ($fontUrl = $theme->getFontUrl($fileName, true, $required)) {
+                    return $fontUrl;
+                }
+            }
+        }
+        if (!$recursion && $required) {
+            $this->logError("Font file is missing: " . $fileName);
         }
         return "";
     }

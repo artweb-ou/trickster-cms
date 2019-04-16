@@ -9,8 +9,8 @@ class homepagePublicDesignTheme extends designTheme
         $tricksterPath = $pathsManager->getPath('trickster');
         $this->cssPath = $tricksterPath . 'homepage/css/public/';
         $this->templatesFolder = $tricksterPath . 'homepage/templates/public/';
-        $this->imagesFolder = $tricksterPath .'homepage/images/public/';
-        $this->imagesPath = $this->imagesFolder;
+        $this->imagesFolder = 'homepage/images/public/';
+        $this->imagesPath = $tricksterPath . $this->imagesFolder;
         $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'homepage/js/public/';
         $this->javascriptPath = $tricksterPath . 'homepage/js/public/';
         $this->javascriptFiles = [

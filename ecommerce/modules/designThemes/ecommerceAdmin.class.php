@@ -9,8 +9,8 @@ class ecommerceAdminDesignTheme extends designTheme
         $tricksterPath = $pathsManager->getPath('trickster');
         $this->cssPath = $tricksterPath . 'ecommerce/css/admin/';
         $this->templatesFolder = $tricksterPath . 'ecommerce/templates/admin/';
-        $this->imagesFolder = $tricksterPath . 'ecommerce/images/admin/';
-        $this->imagesPath = $this->imagesFolder;
+        $this->imagesFolder = 'ecommerce/images/admin/';
+        $this->imagesPath = $tricksterPath . $this->imagesFolder;
         $this->javascriptPath = $tricksterPath . 'ecommerce/js/admin/';
         $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'ecommerce/js/admin/';
 

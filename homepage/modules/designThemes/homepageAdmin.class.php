@@ -9,8 +9,8 @@ class homepageAdminDesignTheme extends designTheme
         $tricksterPath = $pathsManager->getPath('trickster');
         $this->cssPath = $tricksterPath . 'homepage/css/admin/';
         $this->templatesFolder = $tricksterPath . 'homepage/templates/admin/';
-        $this->imagesFolder =  $tricksterPath .'homepage/images/admin/';
-        $this->imagesPath = $this->imagesFolder;
+        $this->imagesFolder = 'homepage/images/admin/';
+        $this->imagesPath = $tricksterPath . $this->imagesFolder;
         $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'homepage/js/admin/';
         $this->javascriptPath = $tricksterPath . 'homepage/js/admin/';
         $this->javascriptFiles = [
