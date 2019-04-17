@@ -43,67 +43,71 @@ class availabilityProductFilter extends productFilter
         return $info;
     }
 
-    protected function limitOptions(array $productsIds)
+    protected function getArguments()
     {
-        if (!$productsIds || !array_intersect($productsIds, $this->getAvailableIds())) {
-            unset($this->options['available']);
-        }
+        return true;
     }
-
-    public function filter(array &$ids = [])
-    {
-        if ($this->availableOnly) {
-            $ids = array_intersect($ids, $this->getAvailableIds());
-        }
-    }
-
-    protected function loadRelatedIds()
-    {
-    }
-
-    protected function getAvailableIds()
-    {
-        if ($this->availableIds === null) {
-            $this->availableIds = [];
-            $collection = persistableCollection::getInstance('module_product');
-            $orConditions = [
-                [
-                    [
-                        'availability',
-                        '=',
-                        'available',
-                    ],
-                    [
-                        'inactive',
-                        '!=',
-                        '1',
-                    ],
-                ],
-                [
-                    [
-                        'availability',
-                        '=',
-                        'quantity_dependent',
-                    ],
-                    [
-                        'quantity',
-                        '!=',
-                        '0',
-                    ],
-                    [
-                        'inactive',
-                        '!=',
-                        '1',
-                    ],
-                ],
-            ];
-            if ($records = $collection->conditionalOrLoad('distinct(id)', $orConditions, [], [], [], true)
-            ) {
-                foreach ($records as &$record) {
-                    $this->availableIds[] = $record['id'];
-                }
-            }
-        }
-        return $this->availableIds;
-    }
+//    protected function limitOptions(array $productsIds)
+//    {
+//        if (!$productsIds || !array_intersect($productsIds, $this->getAvailableIds())) {
+//            unset($this->options['available']);
+//        }
+//    }
+//
+//    public function filter(array &$ids = [])
+//    {
+//        if ($this->availableOnly) {
+//            $ids = array_intersect($ids, $this->getAvailableIds());
+//        }
+//    }
+//
+//    protected function loadRelatedIds()
+//    {
+//    }
+//
+//    protected function getAvailableIds()
+//    {
+//        if ($this->availableIds === null) {
+//            $this->availableIds = [];
+//            $collection = persistableCollection::getInstance('module_product');
+//            $orConditions = [
+//                [
+//                    [
+//                        'availability',
+//                        '=',
+//                        'available',
+//                    ],
+//                    [
+//                        'inactive',
+//                        '!=',
+//                        '1',
+//                    ],
+//                ],
+//                [
+//                    [
+//                        'availability',
+//                        '=',
+//                        'quantity_dependent',
+//                    ],
+//                    [
+//                        'quantity',
+//                        '!=',
+//                        '0',
+//                    ],
+//                    [
+//                        'inactive',
+//                        '!=',
+//                        '1',
+//                    ],
+//                ],
+//            ];
+//            if ($records = $collection->conditionalOrLoad('distinct(id)', $orConditions, [], [], [], true)
+//            ) {
+//                foreach ($records as &$record) {
+//                    $this->availableIds[] = $record['id'];
+//                }
+//            }
+//        }
+//        return $this->availableIds;
+//    }
 }

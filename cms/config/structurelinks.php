@@ -42,5 +42,6 @@
         'registrationUserGroup',
         'rightColumn',
         'structure',
+        'brands',
     ],
 ];

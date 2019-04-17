@@ -192,7 +192,9 @@ abstract class ProductsListStructureElement extends menuStructureElement
                     }
 
                 }
-
+                if ($brandsIds = $this->getFilterBrandIds()) {
+                    $this->filteredProductsQuery->whereIn('module_product.brandId', $brandsIds);
+                }
             }
         }
 
@@ -1147,6 +1149,24 @@ abstract class ProductsListStructureElement extends menuStructureElement
     abstract public function isAmountSelectionEnabled();
 
     abstract public function getProductsListCategories();
+
+    public function getProductsListBrands()
+    {
+        $result = [];
+        $productIdsQuery = clone $this->getFilteredProductsQuery();
+        if ($records = $productIdsQuery
+            ->select('brandId')->distinct()
+            ->where('brandId', '!=', 0)
+            ->get()) {
+            $structureManager = $this->getService('structureManager');
+            foreach ($records as $record) {
+                if ($brandElement = $structureManager->getElementById($record['brandId'])) {
+                    $result[] = $brandElement;
+                }
+            }
+        }
+        return $result;
+    }
 
 //    public function getProductsListCategories()
 //    {

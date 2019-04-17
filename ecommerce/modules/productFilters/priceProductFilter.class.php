@@ -259,4 +259,9 @@ class priceProductFilter extends productFilter
         }
         return false;
     }
+
+    protected function getArguments()
+    {
+        return true;
+    }
 }

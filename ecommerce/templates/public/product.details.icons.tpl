@@ -8,7 +8,7 @@
 
 		{foreach from=$connectedDiscounts item=discount}
 			{if $discount->icon}
-				<img class='product_thumbnailsmall_icons_image discount_icon lazy_image' src='{$controller->baseURL}image/type:productIconBig/id:{$discount->icon}/filename:{$discount->iconOriginalName}' alt='{$discount->title}' />
+				<img class='product_thumbnailsmall_icons_image discount_icon lazy_image' data-lazysrc='{$controller->baseURL}image/type:productIconBig/id:{$discount->icon}/filename:{$discount->iconOriginalName}' alt='{$discount->title}' />
 			{/if}
 		{/foreach}
 	</div>

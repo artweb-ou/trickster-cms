@@ -10,7 +10,7 @@ class categoryProductFilter extends productFilter
         if ($this->options === null) {
             $this->options = [];
             if ($categories = $this->productsListElement->getProductsListCategories()) {
-                $argumentMap = array_flip($this->productsListElement->getFilterCategoryIds());
+                $argumentMap = $this->getArguments();
 
                 foreach ($categories as &$category) {
                     if (!$category->hidden) {
@@ -27,6 +27,10 @@ class categoryProductFilter extends productFilter
         return $this->options;
     }
 
+    protected function getArguments()
+    {
+        return array_flip($this->productsListElement->getFilterCategoryIds());
+    }
 //    protected function limitOptions(array $productsIds)
 //    {
 //        if ($productsIds) {

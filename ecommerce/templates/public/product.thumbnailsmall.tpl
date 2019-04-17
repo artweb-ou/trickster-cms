@@ -11,11 +11,11 @@
 				{if $icons || $connectedDiscounts}
 					<div class="product_thumbnailsmall_icons">
 						{foreach $icons as $icon}
-							<img class='product_thumbnailsmall_icons_image lazy_image' src="{$theme->getImageUrl('lazy.png')}" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$icon->image}/filename:{$icon->originalName}' alt='{$icon->title}'{if $icon->iconWidth > 0} style="max-width: {$icon->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
+							<img class='product_thumbnailsmall_icons_image lazy_image' src="" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$icon->image}/filename:{$icon->originalName}' alt='{$icon->title}'{if $icon->iconWidth > 0} style="max-width: {$icon->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
 						{/foreach}
 						{foreach from=$connectedDiscounts item=discount}
 							{if $discount->icon}
-								<img class='product_thumbnailsmall_icons_image product_discount lazy_image' src="{$theme->getImageUrl('lazy.png')}" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$discount->icon}/filename:{$discount->iconOriginalName}' alt='{$discount->title}'{if $discount->iconWidth > 0} style="max-width: {$discount->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
+								<img class='product_thumbnailsmall_icons_image product_discount lazy_image' src="" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$discount->icon}/filename:{$discount->iconOriginalName}' alt='{$discount->title}'{if $discount->iconWidth > 0} style="max-width: {$discount->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
 							{/if}
 						{/foreach}
 					</div>

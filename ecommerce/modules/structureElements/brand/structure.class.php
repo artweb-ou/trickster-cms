@@ -201,7 +201,18 @@ class brandElement extends ProductsListStructureElement implements ImageUrlProvi
         return $brandInfo;
     }
 
-    public function isAmountSelectionEnabled(){
+    public function isAmountSelectionEnabled()
+    {
         return $this->amountOnPageEnabled;
+    }
+
+    public function getProductsListBaseQuery()
+    {
+
+    }
+
+    public function getProductsListCategories()
+    {
+
     }
 }

@@ -56,9 +56,9 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
         $structureManager->setRootElementMarker($rootMarker);
 
         if ($rootMarker == $adminRootMarker){
-            $structureManager->setPathSearchAllowedLinks($configManager->get('structurelinks.adminAllowed'));
+            $structureManager->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.adminAllowed'));
         } else {
-            $structureManager->setPathSearchAllowedLinks($configManager->get('structurelinks.publicAllowed'));
+            $structureManager->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.publicAllowed'));
         }
 
 

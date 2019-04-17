@@ -114,4 +114,9 @@ class parameterProductFilter extends productFilter
             }
         }
     }
+
+    protected function getArguments()
+    {
+        return true;
+    }
 }

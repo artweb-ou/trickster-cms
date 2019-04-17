@@ -26,7 +26,7 @@ class DiscountFormStructure extends ElementForm
             'type' => 'input.multi_language_image',
         ],
         'iconWidth' => [
-            'type' => 'input.multi_language_image',
+            'type' => 'input.multi_language_text',
         ],
         'showInBasket' => [
             'type' => 'input.checkbox',

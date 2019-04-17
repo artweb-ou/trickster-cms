@@ -98,9 +98,11 @@ abstract class productFilter implements DependencyInjectionContextInterface
     {
         return $this->type;
     }
-//
-//    public function isRelevant()
-//    {
-//        return (count($this->options) > 1) || $this->arguments;
-//    }
+
+    public function isRelevant()
+    {
+        return $this->getOptionsInfo() || $this->getArguments();
+    }
+
+    abstract protected function getArguments();
 }

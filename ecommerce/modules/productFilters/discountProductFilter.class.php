@@ -23,32 +23,35 @@ class discountProductFilter extends productFilter
         }
         return $info;
     }
-
-    protected function limitOptions(array $productsIds)
+    protected function getArguments()
     {
-        if ($productsIds) {
-            $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
-            $discountsList = $shoppingBasketDiscounts->getApplicableDiscountsList();
-            if ($discountsList) {
-                foreach ($discountsList as &$discount) {
-                    if ($discount->checkProductsListIfApplicable($productsIds)) {
-                        $this->options[] = $discount->id;
-                    }
-                }
-            }
-        }
+        return true;
     }
-
-    protected function loadRelatedIds()
-    {
-        $this->relatedIds = [];
-        if ($this->arguments) {
-            $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
-            foreach ($this->arguments as $discountId) {
-                if ($discount = $shoppingBasketDiscounts->getDiscount($discountId)) {
-                    $this->relatedIds = array_merge($this->relatedIds, $discount->getApplicableProductsIds());
-                }
-            }
-        }
-    }
+//    protected function limitOptions(array $productsIds)
+//    {
+//        if ($productsIds) {
+//            $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
+//            $discountsList = $shoppingBasketDiscounts->getApplicableDiscountsList();
+//            if ($discountsList) {
+//                foreach ($discountsList as &$discount) {
+//                    if ($discount->checkProductsListIfApplicable($productsIds)) {
+//                        $this->options[] = $discount->id;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    protected function loadRelatedIds()
+//    {
+//        $this->relatedIds = [];
+//        if ($this->arguments) {
+//            $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
+//            foreach ($this->arguments as $discountId) {
+//                if ($discount = $shoppingBasketDiscounts->getDiscount($discountId)) {
+//                    $this->relatedIds = array_merge($this->relatedIds, $discount->getApplicableProductsIds());
+//                }
+//            }
+//        }
+//    }
 }

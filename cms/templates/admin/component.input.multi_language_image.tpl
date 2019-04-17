@@ -9,7 +9,7 @@
                 <br />
                 <a href="{$element->URL}id:{$element->id}/action:deleteImage/language:{$languageId}/">{translations name="{$structureType}.deleteimage"}</a>
             {else}
-                <input class="fileinput_placeholder" type="file" name="{$formNames.image.$languageId}" />
+                <input class="fileinput_placeholder" type="file" name="{$formNames.$fieldName.$languageId}" />
             {/if}
         </div>
     </div>
