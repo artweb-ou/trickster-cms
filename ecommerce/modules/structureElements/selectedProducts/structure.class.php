@@ -688,7 +688,7 @@ class selectedProductsElement extends ProductsListStructureElement implements Co
                 $result = ($this->filterDiscount && $this->getDiscountsList());
                 break;
             case 'parameter':
-                $result = (bool)$this->getFilterSelections();
+                $result = (bool)$this->getParameterSelectionsForFiltering();
                 break;
             case 'price':
                 $result = $this->filterPrice;

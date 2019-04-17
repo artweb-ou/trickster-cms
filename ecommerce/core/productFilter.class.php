@@ -5,17 +5,13 @@ abstract class productFilter implements DependencyInjectionContextInterface
     use DependencyInjectionContextTrait;
     protected $productsListElement;
     protected $type = '';
-    protected $arguments = [];
     protected $options;
-    protected $passive = false;
-    public $titleEnabled = true;
-    /** @var productFilter */
-    protected $nextFilter;
-    protected $relatedIds;
+    protected $initalOptions;
 
-    public function __construct(ProductsListStructureElement $element)
+    public function __construct(ProductsListStructureElement $element, $initalOptions = [])
     {
         $this->productsListElement = $element;
+        $this->initalOptions = $initalOptions;
     }
 
     public abstract function getOptionsInfo();

@@ -69,7 +69,7 @@ abstract class categoryStructureElement extends ProductsListStructureElement
                     $result = $this->isSettingEnabled('discountFilterEnabled');
                     break;
                 case 'parameter':
-                    $result = ($this->isSettingEnabled('parameterFilterEnabled') && $this->getFilterSelections());
+                    $result = $this->isSettingEnabled('parameterFilterEnabled');
                     break;
                 case 'price':
                     $result = true;

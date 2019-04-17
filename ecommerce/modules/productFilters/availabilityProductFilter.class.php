@@ -8,7 +8,7 @@ class availabilityProductFilter extends productFilter
     {
         if ($this->options === null) {
             $this->options = [];
-            if ($availabilityTypes = $this->productsListElement->getProductsListAvailability()) {
+            if ($availabilityTypes = $this->productsListElement->getProductsListAvailabilityTypes()) {
                 $availabilityTypes = array_flip($availabilityTypes);
                 $translationsManager = $this->getService('translationsManager');
 

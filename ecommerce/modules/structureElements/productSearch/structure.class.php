@@ -626,13 +626,6 @@
 //        $url .= 'sort:' . $searchArguments['order'] . '/';
 //        return $url;
 //    }
-//
-//    public function getSearchArgumentParameterValue($parameterId)
-//    {
-//        $arguments = $this->getSearchBaseElement()->getFilterArguments();
-//        return isset($arguments['parametersValues'][$parameterId]) ? $arguments['parametersValues'][$parameterId] : '';
-//    }
-//
 //    public function getPager()
 //    {
 //        return $this->pager;
