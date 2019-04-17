@@ -982,37 +982,36 @@ abstract class ProductsListStructureElement extends menuStructureElement
         return $canonicalUrl;
     }
 
-//    public function getResidingProducts($productId)
-//    {
-//        $result = ['previous' => false, 'next' => false];
-//        if ($productsIds = $this->getProductsListBaseIds()) {
-//            $structureManager = $this->getService('structureManager');
-//            $database = $this->getService('db');
-//            $query = $database->table('module_product')
-//                ->select(('id'))
-//                ->whereIn('id', $productsIds)
-//                ->groupBy('id');
-//
-//            $this->applyManualSorting($query, $productsIds);
-//            if ($records = $query->get('id')) {
-//                $productsIds = array_column($records, 'id');
-//            }
-//
-//            if (($key = array_search($productId, $productsIds)) !== false) {
-//                if ($key > 0) {
-//                    if ($previousId = $productsIds[$key - 1]) {
-//                        $result['previous'] = $structureManager->getElementById($previousId);
-//                    }
-//                }
-//                if ($key < count($productsIds) - 1) {
-//                    if ($nextId = $productsIds[$key + 1]) {
-//                        $result['next'] = $structureManager->getElementById($nextId);
-//                    }
-//                }
-//            }
-//        }
-//        return $result;
-//    }
+    /**
+     * returns "next" and "previous" products for buttons in selected product
+     *
+     * @param $productId
+     * @return productElement[]
+     */
+    public function getResidingProducts($productId)
+    {
+        $result = ['previous' => false, 'next' => false];
+        $structureManager = $this->getService('structureManager');
+        $query = $this->getProductsListBaseQuery();
+        if ($records = $query->get('id')) {
+            $productsIds = array_column($records, 'id');
+        }
+
+        if (($key = array_search($productId, $productsIds)) !== false) {
+            if ($key > 0) {
+                if ($previousId = $productsIds[$key - 1]) {
+                    $result['previous'] = $structureManager->getElementById($previousId);
+                }
+            }
+            if ($key < count($productsIds) - 1) {
+                if ($nextId = $productsIds[$key + 1]) {
+                    $result['next'] = $structureManager->getElementById($nextId);
+                }
+            }
+        }
+
+        return $result;
+    }
 
     public function getDefaultLimit()
     {

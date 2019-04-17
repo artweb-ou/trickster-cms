@@ -9,6 +9,7 @@
         'discountProduct',
         'discountsList',
         'feedbackAnswer',
+        'headerContent',
         'leftColumn',
         'newsmailGroup',
         'productIcon',
