@@ -3,7 +3,7 @@
         {translations name="{$translationGroup}.{strtolower($fieldName)}"}:
     </span>
     <div class="form_field">
-        <input class="fileinput_placeholder" type="file" name="{$formNames.$fieldName}"/>
+        <input class="fileinput_placeholder" type="file" name="{$formNames.$fieldName}{if $item.multiple}[]{/if}"/>
         {if $element->$fieldName}
             <div class="file_container">
                 <span>{$formData.originalName2}</span>
