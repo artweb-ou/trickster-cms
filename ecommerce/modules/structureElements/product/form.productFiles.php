@@ -6,8 +6,9 @@ class ProductFilesStructure extends ElementForm
     protected $structure = [
         'connectedFile' => [
             'type' => 'input.file',
-            'multiple' => true
+            'multiple' => 'true'
         ],
     ];
     protected $additionalContent = 'shared.contentlist';
+    protected $additionalControls = false;
 }

@@ -11,6 +11,7 @@ abstract class ElementForm
     protected $preset = '';
     protected $customComponent = '';
     protected $additionalContent;
+    protected $additionalControls = true;
     protected $controls = [];
     /**
      * @var structureElement $element
@@ -140,5 +141,13 @@ abstract class ElementForm
             ];
         }
         return $this->controls;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAdditionalControls()
+    {
+        return $this->additionalControls;
     }
 }
