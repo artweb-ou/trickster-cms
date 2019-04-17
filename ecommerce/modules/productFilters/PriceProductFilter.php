@@ -2,15 +2,7 @@
 
 class PriceProductFilter extends productFilter
 {
-    const MIN_PRICE_DIFF = 10;
     protected $type = 'price';
-    protected $priceRangeOptions;
-    protected $relevantIds = [];
-    protected $rangeInterval = 10;
-    protected $selectedMin = 0;
-    protected $selectedMax = 0;
-    protected $range;
-    protected $allIdsOfDiscountedProducts;
 
     public function __construct(ProductsListStructureElement $element)
     {

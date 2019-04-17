@@ -17,9 +17,6 @@ abstract class ProductsListStructureElement extends menuStructureElement
     use ProductFilterFactoryTrait;
     use CacheOperatingElement;
 
-//    protected $brandFiltered = true;
-//    protected $discountFiltered = true;
-//    protected $parameterFiltered = true;
     protected $productsList;
 
     protected $productsListBaseQuery;
@@ -31,38 +28,16 @@ abstract class ProductsListStructureElement extends menuStructureElement
      * @var pager
      */
     protected $productsPager;
-//    protected $brandsList;
-//    protected $discountsList;
-//    protected $connectedProductsIds;
-//    protected $selectedBrandsIdList;
-//    protected $selectedFilterValues;
-//    protected $selectedSortParameter;
-//    protected $selectedDiscountId;
-//    protected $productSelectionFilters;
-//    protected $sortParameters;
     protected $amountSelectionOptions;
     protected $filterArguments;
     protected $priceRangeSets;
-//    /**@var productFilter */
-//    protected $baseFilter;
     protected $filters;
     protected $filtersIndex = [];
-//    protected $productSearchFilterTypes;
     protected $selectionsIdsForFiltering;
     protected $selectionsValuesIndex;
     protected $sortingOptions;
     protected $usedParametersInfo;
     protected $usedParametersInfoIndex;
-
-//    public function getFiltersByType($type)
-//    {
-//        return isset($this->filtersIndex[$type]) ? $this->filtersIndex[$type] : [];
-//    }
-//
-//    public function getFiltersIndex()
-//    {
-//        return $this->filtersIndex;
-//    }
 
     protected $filterCategoryIds;
     protected $filterBrandIds;
@@ -377,27 +352,6 @@ abstract class ProductsListStructureElement extends menuStructureElement
         return $this->filterParameterValueIds;
     }
 
-//    /**
-//     * @return int[]
-//     */
-//    public function getFilterParameterValues()
-//    {
-//        if ($this->filterParameterValues === null) {
-//            $this->filterParameterValues = [];
-//            $controller = controller::getInstance();
-//            if ($filtersString = $controller->getParameter('filters')) {
-//                $keyValuePairs = explode(';', $filtersString);
-//                foreach ($keyValuePairs as $keyValuePair) {
-//                    $parameter = explode(',', $keyValuePair);
-//                    if (count($parameter) === 2) {
-//                        $this->filterParameterValues[$parameter[0]] = $parameter[1];
-//                    }
-//                }
-//            }
-//        }
-//        return $this->filterParameterValues;
-//    }
-
     /**
      * @return mixed
      */
@@ -512,7 +466,7 @@ abstract class ProductsListStructureElement extends menuStructureElement
                 // we cannot use price range according to filtered list, because we would always get different ranges
                 $query = clone $this->getProductsListBaseQuery();
                 $query->select(['price'])->distinct()
-                ->orderBy('price', 'asc');
+                    ->orderBy('price', 'asc');
                 if ($records = $query->get()) {
                     $distinctPrices = [];
                     foreach ($records as &$record) {
@@ -577,58 +531,7 @@ abstract class ProductsListStructureElement extends menuStructureElement
         }
         return false;
     }
-//
-//    /**
-//     * @return array
-//     * @deprecated
-//     */
-//    public function getSortParameters()
-//    {
-//        $this->logError('Deprecated method getSortParameters used, use getSortingOptions');
-//        if (is_null($this->sortParameters)) {
-//            $arguments = $this->getFilterArguments();
-//            $filteredUrl = $this->getFilteredUrl();
-//            $this->sortParameters = [];
-//
-//            $this->sortParameters['manual'] = [
-//                'url' => $filteredUrl,
-//                'active' => false,
-//                'reversable' => false,
-//            ];
-//
-//            if ($this->priceSortingEnabled) {
-//                $this->sortParameters['price'] = [
-//                    'url' => $filteredUrl . 'sort:price/',
-//                    'active' => false,
-//                    'reversable' => true,
-//                ];
-//            }
-//            if ($this->nameSortingEnabled) {
-//                $this->sortParameters['title'] = [
-//                    'url' => $filteredUrl . 'sort:title/',
-//                    'active' => false,
-//                    'reversable' => true,
-//                ];
-//            }
-//            if ($this->dateSortingEnabled) {
-//                $this->sortParameters['date'] = [
-//                    'url' => $filteredUrl . 'sort:date/',
-//                    'active' => false,
-//                    'reversable' => true,
-//                ];
-//            }
-//            $activeSortArgument = $arguments['sort'];
-//            $activeOrderArgument = $arguments['order'];
-//            if (isset($this->sortParameters[$arguments['sort']])) {
-//                $this->sortParameters[$activeSortArgument]['active'] = true;
-//                if ($activeSortArgument !== 'manual' && $activeOrderArgument !== 'desc') {
-//                    $this->sortParameters[$activeSortArgument]['url'] = $filteredUrl . 'sort:' . $arguments['sort'] . ';' . 'desc/';
-//                }
-//            }
-//        }
-//        return $this->sortParameters;
-//    }
-//
+
     public function getSortingOptions()
     {
         if ($this->sortingOptions === null) {
@@ -724,16 +627,18 @@ abstract class ProductsListStructureElement extends menuStructureElement
 
     protected function getSelectionIdsForFiltering()
     {
-        echo 'implement';
-        exit;
         if ($this->selectionsIdsForFiltering === null) {
             $this->selectionsIdsForFiltering = [];
-            $conditions = [];
-            $collection = persistableCollection::getInstance('module_product_selection');
-            if ($records = $collection->conditionalLoad('distinct(id)', $conditions, [], [], [], true)) {
-                foreach ($records as &$record) {
-                    $this->selectionsIdsForFiltering[] = $record['id'];
-                }
+            /**
+             * @var Connection $db
+             */
+            $db = $this->getService('db');
+            $query = $db->table('module_product_selection')
+                ->select('id')->distinct()
+                ->where('filter', '=', 1);
+
+            if ($records = $query->get()) {
+                $this->selectionsIdsForFiltering = array_column($records, 'id');
             }
         }
         return $this->selectionsIdsForFiltering;
@@ -765,11 +670,14 @@ abstract class ProductsListStructureElement extends menuStructureElement
                  * @var structureManager $structureManager
                  */
                 $structureManager = $this->getService('structureManager');
+                $sort = [];
                 foreach ($selectionsValuesIndex[$selectionId] as $selectionValuesId) {
                     if ($valueElement = $structureManager->getElementById($selectionValuesId)) {
                         $valueElements[] = $valueElement;
+                        $sort[] = $valueElement->getTitle();
                     }
                 }
+                array_multisort($sort, SORT_ASC, $valueElements);
             }
         }
 
@@ -1007,11 +915,14 @@ abstract class ProductsListStructureElement extends menuStructureElement
             ->where('brandId', '!=', 0)
             ->get()) {
             $structureManager = $this->getService('structureManager');
+            $sort = [];
             foreach ($records as $record) {
                 if ($brandElement = $structureManager->getElementById($record['brandId'])) {
                     $result[] = $brandElement;
+                    $sort[] = $brandElement->title;
                 }
             }
+            array_multisort($sort, SORT_ASC, $result);
         }
         return $result;
     }
@@ -1030,38 +941,4 @@ abstract class ProductsListStructureElement extends menuStructureElement
 
         return $result;
     }
-
-//    public function getProductsListCategories()
-//    {
-//        $productsListCategories = [];
-//        $productIdsQuery = $this->getProductsListBaseQuery();
-//        /**
-//         * @var \Illuminate\Database\Connection $db
-//         */
-//        $db = $this->getService('db');
-//        $query = $db->table('structure_links')
-//            ->where('type', '=', 'catalogue');
-//        $query->whereIn('childStructureId', $productIdsQuery);
-//        $query->select(['parentStructureId',])->distinct();
-//        if ($records = $query->get()) {
-//            $ids = array_column($records, 'childStructureId');
-//        }
-//        return $ids;
-
-
-//        $topLevelCategoriesIds = [];
-//        $structureManager = $this->getService('structureManager');
-//        $categoriesElementId = $structureManager->getElementIdByMarker('categories');
-//        $categoriesIds = $this->getService('linksManager')
-//            ->getConnectedIdList($categoriesElementId, 'structure', 'parent');
-//        if ($categoriesIds) {
-//            $currentLanguageId = $this->getService('languagesManager')->getCurrentLanguageId();
-//            foreach ($categoriesIds as &$categoryId) {
-//                if ($structureManager->getElementById($categoryId, $currentLanguageId)) {
-//                    $topLevelCategoriesIds[] = $categoryId;
-//                }
-//            }
-//        }
-//        return $topLevelCategoriesIds;
-//    }
 }
