@@ -42,7 +42,7 @@ abstract class ProductsListStructureElement extends menuStructureElement
 //    protected $sortParameters;
     protected $amountSelectionOptions;
     protected $filterArguments;
-//    protected $priceRangeOptions;
+    protected $priceRangeSets;
 //    /**@var productFilter */
 //    protected $baseFilter;
     protected $filters;
@@ -51,8 +51,8 @@ abstract class ProductsListStructureElement extends menuStructureElement
     protected $selectionsIdsForFiltering;
     protected $selectionsValuesIndex;
     protected $sortingOptions;
-//    protected $usedParametersInfo;
-//    protected $usedParametersInfoIndex;
+    protected $usedParametersInfo;
+    protected $usedParametersInfoIndex;
 
 //    public function getFiltersByType($type)
 //    {
@@ -73,7 +73,9 @@ abstract class ProductsListStructureElement extends menuStructureElement
     protected $filterSort;
     protected $filterOrder;
     protected $filterPrice;
+    protected $filterPriceString;
     protected $filterLimit;
+    protected $priceInterval = 5;
 
     public function getFilters()
     {
@@ -92,8 +94,6 @@ abstract class ProductsListStructureElement extends menuStructureElement
                         $this->addFilter($this->createProductFilter('parameter', ['selectionElement' => $parameter]));
                     }
                 }
-
-
                 if ($this->isFilterableByType('price')) {
                     $this->addFilter($filter = $this->createProductFilter('price'));
                 }
@@ -208,6 +208,11 @@ abstract class ProductsListStructureElement extends menuStructureElement
                                 ->where('value', '=', $parameterValue);
                         });
                     }
+                }
+
+                if ($price = $this->getFilterPrice()) {
+                    $this->filteredProductsQuery->where('module_product.price', '>=', $price[0]);
+                    $this->filteredProductsQuery->where('module_product.price', '<=', $price[1]);
                 }
             }
         }
@@ -455,14 +460,23 @@ abstract class ProductsListStructureElement extends menuStructureElement
     public function getFilterPrice()
     {
         if ($this->filterPrice === null) {
-            $controller = controller::getInstance();
-            $priceArgument = $controller->getParameter('price');
-            if ($priceArgument && strpos($priceArgument, '-') !== false) {
-                $this->filterPrice = explode('-', $priceArgument);
+            if (($priceString = $this->getFilterPriceString()) && strpos($priceString, '-') !== false) {
+                $this->filterPrice = explode('-', $priceString);
             }
-
         }
         return $this->filterPrice;
+    }
+
+    /**
+     * @return float[]
+     */
+    public function getFilterPriceString()
+    {
+        if ($this->filterPriceString === null) {
+            $controller = controller::getInstance();
+            $this->filterPriceString = $controller->getParameter('price');
+        }
+        return $this->filterPriceString;
     }
 
     /**
@@ -490,48 +504,33 @@ abstract class ProductsListStructureElement extends menuStructureElement
         return $this->filterArguments;
     }
 
-//    public function getPriceRangeOptions()
-//    {
-//        if (null === $this->priceRangeOptions) {
-//            $this->priceRangeOptions = [];
-//            $productsIds = $this->getConnectedProductsIds();
-//            if ($this->priceInterval && $productsIds) {
-//                $collection = persistableCollection::getInstance('module_product');
-//                $conditions = [
-//                    [
-//                        'id',
-//                        'IN',
-//                        $productsIds,
-//                    ],
-//                ];
-//
-//                if ($records = $collection->conditionalLoad('distinct(price)', $conditions, ['price' => 'asc'], [], [], true)
-//                ) {
-//                    $prices = [];
-//                    foreach ($records as &$record) {
-//                        $prices[] = $record['price'];
-//                    }
-//                    $priceCount = count($prices);
-//
-//                    $priceChunks = array_chunk($prices, max(ceil($priceCount / $this->priceInterval), 2));
-//
-//                    foreach ($priceChunks as $priceChunk) {
-//                        $this->priceRangeOptions[] = [
-//                            $priceChunk[0],
-//                            array_pop($priceChunk),
-//                        ];
-//                    }
-//                }
-//            }
-//        }
-//        return $this->priceRangeOptions;
-//    }
-
-//    public function getCurrencyPriceLabel($price)
-//    {
-//        $currencySelector = $this->getService('CurrencySelector');
-//        return sprintf('%01.2f', $currencySelector->convertPrice($price)) . ' ' . $currencySelector->getSelectedCurrencyItem()->symbol;
-//    }
+    public function getProductsListPriceRangeSets()
+    {
+        if ($this->priceRangeSets === null) {
+            $this->priceRangeSets = [];
+            if ($this->priceInterval) {
+                // we cannot use price range according to filtered list, because we would always get different ranges
+                $query = clone $this->getProductsListBaseQuery();
+                $query->select(['price'])->distinct()
+                ->orderBy('price', 'asc');
+                if ($records = $query->get()) {
+                    $distinctPrices = [];
+                    foreach ($records as &$record) {
+                        $distinctPrices[] = $record['price'];
+                    }
+                    $priceCount = count($distinctPrices);
+                    $priceChunks = array_chunk($distinctPrices, max(ceil($priceCount / $this->priceInterval), 2));
+                    foreach ($priceChunks as $priceChunk) {
+                        $this->priceRangeSets[] = [
+                            $priceChunk[0],
+                            array_pop($priceChunk),
+                        ];
+                    }
+                }
+            }
+        }
+        return $this->priceRangeSets;
+    }
 
     protected function isFilterable()
     {
@@ -567,18 +566,6 @@ abstract class ProductsListStructureElement extends menuStructureElement
         return $url;
     }
 
-//    public function getSelectedSortParameter()
-//    {
-//        if (is_null($this->selectedSortParameter)) {
-//            $this->selectedSortParameter = "";
-//            $controller = controller::getInstance();
-//            if ($parameterFromUrl = $controller->getParameter('sort')) {
-//                $this->selectedSortParameter = $parameterFromUrl;
-//            }
-//        }
-//        return $this->selectedSortParameter;
-//    }
-//
     /**
      * @return bool
      */
@@ -896,48 +883,48 @@ abstract class ProductsListStructureElement extends menuStructureElement
         return $this->amountSelectionOptions;
     }
 
-//    public function getUsedParametersInfo()
-//    {
-//        if ($this->usedParametersInfo !== null) {
-//            return $this->usedParametersInfo;
-//        }
-//        $this->usedParametersInfo = [];
-//        if ($usedParametersIndex = $this->getUsedParametersInfoIndex()) {
-//            if ($connectedParameterIds = $this->getParametersIdList()) {
-//                $connectedParameterIndex = array_flip($connectedParameterIds);
-//                foreach ($usedParametersIndex as $parameterId => $parameterInfo) {
-//                    if (isset($connectedParameterIndex[$parameterId])) {
-//                        $this->usedParametersInfo[] = $parameterInfo;
-//                    }
-//                }
-//            }
-//        }
-//        return $this->usedParametersInfo;
-//    }
-
     public function getParametersIdList()
     {
         $linksManager = $this->getService('linksManager');
         return $linksManager->getConnectedIdList($this->id, $this->structureType . 'Parameter', 'parent');
     }
 
-//    protected function getUsedParametersInfoIndex()
-//    {
-//        if (!is_null($this->usedParametersInfoIndex)) {
-//            return $this->usedParametersInfoIndex;
-//        }
-//        $this->usedParametersInfoIndex = [];
-//        if ($products = $this->getProductsList()) {
-//            foreach ($products as &$product) {
-//                foreach ($product->getPrimaryParametersInfo() as $parameterInfo) {
-//                    if (!isset($this->usedParametersInfoIndex[$parameterInfo['id']])) {
-//                        $this->usedParametersInfoIndex[$parameterInfo['id']] = $parameterInfo;
-//                    }
-//                }
-//            }
-//        }
-//        return $this->usedParametersInfoIndex;
-//    }
+    public function getUsedParametersInfo()
+    {
+        if ($this->usedParametersInfo !== null) {
+            return $this->usedParametersInfo;
+        }
+        $this->usedParametersInfo = [];
+        if ($usedParametersIndex = $this->getUsedParametersInfoIndex()) {
+            if ($connectedParameterIds = $this->getParametersIdList()) {
+                $connectedParameterIndex = array_flip($connectedParameterIds);
+                foreach ($usedParametersIndex as $parameterId => $parameterInfo) {
+                    if (isset($connectedParameterIndex[$parameterId])) {
+                        $this->usedParametersInfo[] = $parameterInfo;
+                    }
+                }
+            }
+        }
+        return $this->usedParametersInfo;
+    }
+
+    protected function getUsedParametersInfoIndex()
+    {
+        if (!is_null($this->usedParametersInfoIndex)) {
+            return $this->usedParametersInfoIndex;
+        }
+        $this->usedParametersInfoIndex = [];
+        if ($products = $this->getProductsList()) {
+            foreach ($products as &$product) {
+                foreach ($product->getPrimaryParametersInfo() as $parameterInfo) {
+                    if (!isset($this->usedParametersInfoIndex[$parameterInfo['id']])) {
+                        $this->usedParametersInfoIndex[$parameterInfo['id']] = $parameterInfo;
+                    }
+                }
+            }
+        }
+        return $this->usedParametersInfoIndex;
+    }
 
     public function getActiveTableColumns()
     {

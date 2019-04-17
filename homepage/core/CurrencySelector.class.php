@@ -5,7 +5,13 @@ class CurrencySelector implements DependencyInjectionContextInterface
     use DependencyInjectionContextTrait;
     protected $currenciesInformationList;
     protected $currenciesInformationIndex;
+    /**
+     * @var CurrencySelectorItem[]
+     */
     protected $currencyObjectsList;
+    /**
+     * @var CurrencySelectorItem[]
+     */
     protected $currencyObjectsIndex;
     protected $selectedCurrencyCode;
 

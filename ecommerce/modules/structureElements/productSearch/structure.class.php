@@ -387,12 +387,6 @@
 //        return $this->priceRangeOptions;
 //    }
 //
-//    public function getCurrencyPriceLabel($price)
-//    {
-//        $currencySelector = $this->getService('CurrencySelector');
-//        return sprintf('%01.2f', $currencySelector->convertPrice($price)) . ' ' . $currencySelector->getSelectedCurrencyItem()->symbol;
-//    }
-//
 //    public function getDiscounts()
 //    {
 //        if ($this->discounts === null) {
