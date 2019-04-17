@@ -177,6 +177,9 @@ abstract class ProductsListStructureElement extends menuStructureElement
                     $deepCategoryIds = [];
 
                     foreach ($categoryIds as $categoryId) {
+                        /**
+                         * @var categoryElement $category
+                         */
                         if ($category = $structureManager->getElementById($categoryId)) {
                             $category->gatherSubCategoriesIdIndex($categoryId, $deepCategoryIds);
                         }
@@ -194,6 +197,19 @@ abstract class ProductsListStructureElement extends menuStructureElement
                 }
                 if ($brandsIds = $this->getFilterBrandIds()) {
                     $this->filteredProductsQuery->whereIn('module_product.brandId', $brandsIds);
+                }
+                if ($discountIds = $this->getFilterDiscountIds()) {
+                    /**
+                     * @var shoppingBasketDiscounts $shoppingBasketDiscounts
+                     */
+                    $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
+                    $discountedProductIds = [];
+                    foreach ($discountIds as $discountId) {
+                        if ($discount = $shoppingBasketDiscounts->getDiscount($discountId)) {
+                            $discountedProductIds = array_merge($discountedProductIds, $discount->getApplicableProductsIds());
+                        }
+                    }
+                    $this->filteredProductsQuery->whereIn('module_product.id', $discountedProductIds);
                 }
             }
         }
@@ -1165,6 +1181,20 @@ abstract class ProductsListStructureElement extends menuStructureElement
                 }
             }
         }
+        return $result;
+    }
+
+    public function getProductsListDiscounts()
+    {
+        $result = [];
+        /**
+         * @var shoppingBasketDiscounts $shoppingBasketDiscounts
+         */
+        $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
+        if ($discountsList = $shoppingBasketDiscounts->getApplicableDiscountsList()) {
+            $result = $discountsList;
+        }
+
         return $result;
     }
 
