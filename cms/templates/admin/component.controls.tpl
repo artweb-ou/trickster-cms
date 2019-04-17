@@ -1,6 +1,21 @@
 {if !isset($action)}
 	{assign 'action' 'receive'}
 {/if}
+{if !empty($form)}
+	{$buttons = $form->getControls()}
+{else}
+	{$buttons = [
+			'save' => [
+			'class' => 'success_button',
+			'type' => 'submit'
+		],
+			'delete' => [
+			'class' => 'warning_button',
+			'action' => 'delete',
+			'icon' => 'delete'
+		]
+	]}
+{/if}
 <div class="controls_block form_controls">
 	<input type="hidden" value="{$element->id}" name="id" />
 	<input type="hidden" value="{$action}" name="action" />

@@ -6,7 +6,6 @@ class showOptionsImagesFormProduct extends structureElementAction
     {
         $structureElement->setTemplate('shared.content.tpl');
         $renderer = $this->getService('renderer');
-        $renderer->assign('form', $structureElement->getForm('optionsImages'));
         $renderer->assign('contentSubTemplate', 'product.options_images_form.tpl');
     }
 }
