@@ -1,6 +1,6 @@
 <?php
 
-class brandProductFilter extends productFilter
+class BrandProductFilter extends productFilter
 {
     protected $type = 'brand';
 

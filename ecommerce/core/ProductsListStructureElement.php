@@ -3,6 +3,15 @@
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 
+/**
+ * Class ProductsListStructureElement
+ *
+ * @property int $priceSortingEnabled
+ * @property int $nameSortingEnabled
+ * @property int $dateSortingEnabled
+ * @property int $brandSortingEnabled
+ *
+ */
 abstract class ProductsListStructureElement extends menuStructureElement
 {
     use ProductFilterFactoryTrait;
@@ -85,18 +94,9 @@ abstract class ProductsListStructureElement extends menuStructureElement
                 }
 
 
-//                if ($this->isFilterableByType('price')) {
-//                    $this->addFilter($this->createProductFilter('price'));
-////                $filter = $this->createProductFilter('price', $arguments['price']);
-////                $structureManager = $this->getService('structureManager');
-////                $languageId = $this->getService('languagesManager')->getCurrentLanguageId();
-////                $elements = $structureManager->getElementsByType('productSearch', $languageId);
-////                if ($elements) {
-////                    $productSearchElement = $elements[0];
-////                    $filter->setRangeInterval($productSearchElement->priceInterval);
-////                }
-////                $this->addFilter($filter);
-//                }
+                if ($this->isFilterableByType('price')) {
+                    $this->addFilter($filter = $this->createProductFilter('price'));
+                }
             }
         }
         return $this->filters;
@@ -840,19 +840,21 @@ abstract class ProductsListStructureElement extends menuStructureElement
         $result = ['previous' => false, 'next' => false];
         $structureManager = $this->getService('structureManager');
         $query = $this->getProductsListBaseQuery();
+        $productsIds = [];
         if ($records = $query->get('id')) {
             $productsIds = array_column($records, 'id');
         }
-
-        if (($key = array_search($productId, $productsIds)) !== false) {
-            if ($key > 0) {
-                if ($previousId = $productsIds[$key - 1]) {
-                    $result['previous'] = $structureManager->getElementById($previousId);
+        if ($productsIds) {
+            if (($key = array_search($productId, $productsIds)) !== false) {
+                if ($key > 0) {
+                    if ($previousId = $productsIds[$key - 1]) {
+                        $result['previous'] = $structureManager->getElementById($previousId);
+                    }
                 }
-            }
-            if ($key < count($productsIds) - 1) {
-                if ($nextId = $productsIds[$key + 1]) {
-                    $result['next'] = $structureManager->getElementById($nextId);
+                if ($key < count($productsIds) - 1) {
+                    if ($nextId = $productsIds[$key + 1]) {
+                        $result['next'] = $structureManager->getElementById($nextId);
+                    }
                 }
             }
         }

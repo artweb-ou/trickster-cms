@@ -1,6 +1,6 @@
 <?php
 
-class parameterProductFilter extends productFilter
+class ParameterProductFilter extends productFilter
 {
     protected $type = 'parameter';
     protected $selectionElement;

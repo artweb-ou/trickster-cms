@@ -1,6 +1,6 @@
 <?php
 
-class priceProductFilter extends productFilter
+class PriceProductFilter extends productFilter
 {
     const MIN_PRICE_DIFF = 10;
     protected $type = 'price';
