@@ -78,7 +78,7 @@ class brandElement extends ProductsListStructureElement implements ImageUrlProvi
         ];
     }
 
-    public function getConnectedProductsIds()
+    protected function getConnectedProductsIds()
     {
         if (is_null($this->connectedProductsIds)) {
             $this->connectedProductsIds = [];
@@ -156,7 +156,7 @@ class brandElement extends ProductsListStructureElement implements ImageUrlProvi
         switch ($filterType) {
             case 'category':
                 $result = false;
-//                    $result = $this->categoryFilterEnabled;
+                    $result = $this->categoryFilterEnabled;
                 break;
             case 'brand':
                 $result = $this->brandFilterEnabled;
@@ -206,10 +206,20 @@ class brandElement extends ProductsListStructureElement implements ImageUrlProvi
         return $this->amountOnPageEnabled;
     }
 
-    public function getProductsListBaseQuery()
+    protected function getProductsListBaseQuery()
     {
+        if ($this->productsListBaseQuery !== null) {
+            return $this->productsListBaseQuery;
+        }
+        $this->productsListBaseQuery = false;
 
+        $query = $this->getProductsQuery();
+        $query->where('brandId', '=', $this->id);
+
+        $this->productsListBaseQuery = $query;
+        return $this->productsListBaseQuery;
     }
+
 
     public function getProductsListCategories()
     {

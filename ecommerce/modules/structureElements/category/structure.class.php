@@ -126,8 +126,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
 
     /**
      * @return array|mixed|null
-     *
-     * @deprecated
      */
     public function getConnectedProductsIds()
     {

@@ -119,7 +119,7 @@ abstract class ProductsListStructureElement extends menuStructureElement
     protected function getFilteredProductsQuery()
     {
         if ($this->filteredProductsQuery === null) {
-            $this->filteredProductsQuery = [];
+            $this->filteredProductsQuery = false;
             if ($productsListBaseQuery = $this->getProductsListBaseQuery()) {
                 $this->filteredProductsQuery = clone $productsListBaseQuery;
                 /**
@@ -885,8 +885,6 @@ abstract class ProductsListStructureElement extends menuStructureElement
     abstract protected function getProductsListBaseQuery();
 
     abstract protected function isFilterableByType($filterType);
-
-    abstract public function getConnectedProductsIds();
 
     abstract public function isAmountSelectionEnabled();
 
