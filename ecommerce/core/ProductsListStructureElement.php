@@ -6,6 +6,7 @@ use Illuminate\Database\Query\Builder;
 abstract class ProductsListStructureElement extends menuStructureElement
 {
     use ProductFilterFactoryTrait;
+    use CacheOperatingElement;
 
 //    protected $brandFiltered = true;
 //    protected $discountFiltered = true;
@@ -211,8 +212,21 @@ abstract class ProductsListStructureElement extends menuStructureElement
                     }
                     $this->filteredProductsQuery->whereIn('module_product.id', $discountedProductIds);
                 }
+                if ($availability = $this->getFilterAvailability()) {
+                    $statuses = [];
+                    if (in_array('available', $availability)) {
+                        $statuses[] = 'available';
+                        $statuses[] = 'quantity_dependent';
+                        $statuses[] = 'available_inquirable';
+                    }
+                    if (in_array('inquirable', $availability)) {
+                        $statuses[] = 'inquirable';
+                    }
+                    $this->filteredProductsQuery->whereIn('module_product.availability', $statuses);
+                }
             }
         }
+//        'options' => ['available', 'quantity_dependent', 'inquirable', 'unavailable', 'available_inquirable'],
 
         return $this->filteredProductsQuery;
     }
@@ -226,11 +240,13 @@ abstract class ProductsListStructureElement extends menuStructureElement
         if ($this->productsList !== null) {
             return $this->productsList;
         }
+        $cache = $this->getElementsListCache('prList', 3600);
+        if ($this->productsList = $cache->load()) {
+            return $this->productsList;
+        }
+
         $this->productsList = [];
-
         if ($filteredProductsQuery = $this->getFilteredProductsQuery()) {
-            $elementsOnPage = $this->getFilterLimit();
-
             $sort = $this->getFilterSort();
             $order = $this->getFilterOrder();
             if ($sort && $sort == 'manual') {
@@ -245,11 +261,9 @@ abstract class ProductsListStructureElement extends menuStructureElement
                 $filteredProductsQuery->orderBy($sort, $order);
             }
 
-            $pager = new pager($this->generatePagerUrl(), $this->getFilteredProductsAmount(), $elementsOnPage, (int)controller::getInstance()
-                ->getParameter('page'), "page");
-            $this->productsPager = $pager;
+            $pager = $this->getProductsPager();
 
-            $filteredProductsQuery->skip($pager->startElement)->take($elementsOnPage)->groupBy('module_product.id');
+            $filteredProductsQuery->skip($pager->startElement)->take($this->getFilterLimit())->groupBy('module_product.id');
             if ($records = $filteredProductsQuery->get()) {
                 $productIds = array_column($records, 'id');
                 $parentRestrictionId = $this->getProductsListParentRestrictionId();
@@ -265,6 +279,8 @@ abstract class ProductsListStructureElement extends menuStructureElement
                 }
             }
         }
+        $cache->save($this->productsList);
+
         return $this->productsList;
     }
 
@@ -897,7 +913,8 @@ abstract class ProductsListStructureElement extends menuStructureElement
     public function getProductsPager()
     {
         if (!$this->productsPager) {
-            $this->getProductsList();
+            $this->productsPager = new pager($this->generatePagerUrl(), $this->getFilteredProductsAmount(), $this->getFilterLimit(), (int)controller::getInstance()
+                ->getParameter('page'), "page");
         }
         return $this->productsPager;
     }
@@ -1165,6 +1182,20 @@ abstract class ProductsListStructureElement extends menuStructureElement
     abstract public function isAmountSelectionEnabled();
 
     abstract public function getProductsListCategories();
+
+    public function getProductsListAvailability()
+    {
+        $result = [];
+        $productIdsQuery = clone $this->getFilteredProductsQuery();
+        if ($records = $productIdsQuery
+            ->select('availability')->distinct()
+            ->get()) {
+            foreach ($records as $record) {
+                $result[] = $record['availability'];
+            }
+        }
+        return $result;
+    }
 
     public function getProductsListBrands()
     {
