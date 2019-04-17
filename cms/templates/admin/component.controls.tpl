@@ -8,7 +8,7 @@
 		<button class="button {$control.class}"
 			{if !empty($control.type)} type="{$control.type}" {else} type="button"{/if}
 			{if !empty($control.action)} control-action="{$control.action}"{/if}>
-			{translations name="label.{$key}"}
+			{translations name="button.{$key}"}
 			{if !empty($control.icon)}<span class="icon icon_{$control.icon}"></span>{/if}
 		</button>
 	{/foreach}
