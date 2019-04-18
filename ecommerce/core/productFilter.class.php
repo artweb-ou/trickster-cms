@@ -8,7 +8,7 @@ abstract class productFilter implements DependencyInjectionContextInterface
     protected $options;
     protected $initalOptions;
 
-    public function __construct(ProductsListStructureElement $element, $initalOptions = [])
+    public function __construct(ProductsListElement $element, $initalOptions = [])
     {
         $this->productsListElement = $element;
         $this->initalOptions = $initalOptions;

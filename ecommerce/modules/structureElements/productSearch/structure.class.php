@@ -1,17 +1,22 @@
 <?php
-//
-//class productSearchElement extends menuDependantStructureElement
-//{
-//    use ProductFilterFactoryTrait;
-//    public $dataResourceName = 'module_productsearch';
-//    public $defaultActionName = 'show';
-//    protected $allowedTypes = [];
-//    public $role = 'content';
+
+/**
+ * Class productSearchElement
+ *
+ * @property int pageDependent
+ */
+class productSearchElement extends menuDependantStructureElement
+{
+    use ProductFilterFactoryTrait;
+    public $dataResourceName = 'module_productsearch';
+    public $defaultActionName = 'show';
+    protected $allowedTypes = [];
+    public $role = 'content';
 //    protected $connectedParameters;
-//    protected $searchCutLength = 200;
 //    protected $pager;
 //    protected $priceRangeOptions;
-//    protected $catalogue;
+    protected $productCatalogue;
+    protected $productsListElement;
 //    protected $brands;
 //    protected $discounts;
 //    protected $brandFilter;
@@ -19,29 +24,86 @@
 //    protected $filtersIndex;
 //    protected $baseFilter;
 //    protected $filtersPrepared = false;
-//
-//    protected function setModuleStructure(&$moduleStructure)
-//    {
-//        $moduleStructure['title'] = 'text';
-//        $moduleStructure['filterCategory'] = 'checkbox';
-//        $moduleStructure['filterBrand'] = 'checkbox';
-//        $moduleStructure['filterPrice'] = 'checkbox';
-//        $moduleStructure['filterDiscount'] = 'checkbox';
-//        $moduleStructure['availabilityFilterEnabled'] = 'checkbox';
-//        $moduleStructure['sortingEnabled'] = 'checkbox';
-//        $moduleStructure['priceInterval'] = 'naturalNumber';
-//
-//        $moduleStructure['pageDependent'] = 'checkbox';
-//        $moduleStructure['checkboxesForParameters'] = 'checkbox';
-//        $moduleStructure['pricePresets'] = 'checkbox';
-//        // temporary
-//        $moduleStructure['parametersIds'] = 'numbersArray';
-//        $moduleStructure['categoryId'] = 'text';
-//        $moduleStructure['brandId'] = 'text';
-//        $moduleStructure['selectionValues'] = 'array';
-//        $moduleStructure['parameterValues'] = 'array';
-//        $moduleStructure['catalogueFilterId'] = 'text';
-//    }
+
+    protected function setModuleStructure(&$moduleStructure)
+    {
+        $moduleStructure['title'] = 'text';
+        $moduleStructure['filterCategory'] = 'checkbox';
+        $moduleStructure['filterBrand'] = 'checkbox';
+        $moduleStructure['filterPrice'] = 'checkbox';
+        $moduleStructure['filterDiscount'] = 'checkbox';
+        $moduleStructure['availabilityFilterEnabled'] = 'checkbox';
+        $moduleStructure['sortingEnabled'] = 'checkbox';
+        $moduleStructure['priceInterval'] = 'naturalNumber';
+
+        $moduleStructure['pageDependent'] = 'checkbox';
+        $moduleStructure['checkboxesForParameters'] = 'checkbox';
+        $moduleStructure['pricePresets'] = 'checkbox';
+        // temporary
+        $moduleStructure['parametersIds'] = 'numbersArray';
+        $moduleStructure['categoryId'] = 'text';
+        $moduleStructure['brandId'] = 'text';
+        $moduleStructure['selectionValues'] = 'array';
+        $moduleStructure['parameterValues'] = 'array';
+        $moduleStructure['catalogueFilterId'] = 'text';
+    }
+
+    public function isFilterableByType($filterType)
+    {
+        if ($productsListElement = $this->getProductsListElement()) {
+            return $productsListElement->isFilterableByType($filterType);
+        }
+        return false;
+    }
+
+    public function isFilterable()
+    {
+        if ($productsListElement = $this->getProductsListElement()) {
+            return $productsListElement->isFilterable();
+        }
+        return false;
+    }
+
+    public function isFieldSortable($field)
+    {
+        if ($productsListElement = $this->getProductsListElement()) {
+            return $productsListElement->isFieldSortable($field);
+        }
+        return false;
+    }
+
+    public function getFilterSort()
+    {
+        if ($productsListElement = $this->getProductsListElement()) {
+            return $productsListElement->getFilterSort();
+        }
+        return false;
+    }
+
+    public function getFilterOrder()
+    {
+        if ($productsListElement = $this->getProductsListElement()) {
+            return $productsListElement->getFilterOrder();
+        }
+        return false;
+    }
+
+    public function getFilteredUrl()
+    {
+        if ($productsListElement = $this->getProductsListElement()) {
+            return $productsListElement->getFilteredUrl();
+        }
+        return false;
+    }
+    public function getParameterSelectionsForFiltering()
+    {
+        if ($productsListElement = $this->getProductsListElement()) {
+            return $productsListElement->getParameterSelectionsForFiltering();
+        }
+        return false;
+    }
+
+
 //
 //    public function isApplied()
 //    {
@@ -81,56 +143,57 @@
 //        $this->filtersIndex[$type][] = $filter;
 //    }
 //
-//    public function getCurrentElement()
-//    {
-//        return $this->getService('structureManager')->getCurrentElement(controller::getInstance()->requestedPath);
-//    }
-//
-//    public function getSearchBaseElement()
-//    {
-//        $searchBaseElement = false;
-//        if ($this->pageDependent) {
-//            $currentElement = $this->getCurrentElement();
-//            if ($currentElement) {
-//                if ($currentElement instanceof productElement) {
-//                    $searchBaseElement = $this->getLastVisitedCategory();
-//                } elseif ($currentElement instanceof productsListStructureElement && $currentElement->structureType != 'productCatalogue'
-//                ) {
-//                    $searchBaseElement = $currentElement;
-//                }
-//            }
-//        }
-//        if (!$searchBaseElement) {
-//            $searchBaseElement = $this->getCatalogue();
-//        }
-//        return $searchBaseElement;
-//    }
+    public function getCurrentElement()
+    {
+        return $this->getService('structureManager')->getCurrentElement(controller::getInstance()->requestedPath);
+    }
+
+    public function getProductsListElement()
+    {
+        if ($this->productsListElement === null) {
+            $this->productsListElement = false;
+            if ($this->pageDependent) {
+                if ($currentElement = $this->getCurrentElement()) {
+                    if ($currentElement instanceof productElement) {
+                        $this->productsListElement = $this->getLastVisitedCategory();
+                    } elseif ($currentElement instanceof productsListElement && $currentElement->structureType != 'productCatalogue'
+                    ) {
+                        $this->productsListElement = $currentElement;
+                    }
+                }
+            }
+            if (!$this->productsListElement) {
+                $this->productsListElement = $this->getProductCatalogue();
+            }
+        }
+        return $this->productsListElement;
+    }
 //
 //    public function getArguments()
 //    {
 //        $arguments = [];
-//        if ($sourceElement = $this->getSearchBaseElement()) {
+//        if ($sourceElement = $this->getProductsListElement()) {
 //            $arguments = $sourceElement->getFilterArguments();
 //        }
 //        return $arguments;
 //    }
-//
-//    public function canActLikeFilter()
-//    {
-//        $currentElement = $this->getCurrentElement();
-//        return ($this->pageDependent && (($currentElement && $currentElement instanceof productsListStructureElement && $currentElement->structureType != 'productCatalogue') || ($currentElement instanceof productElement && $this->getLastVisitedCategory())));
-//    }
-//
-//    public function getLastVisitedCategory()
-//    {
-//        $result = null;
-//        $categoryId = $this->getService('user')->getStorageAttribute('lastCategoryId');
-//        if ($categoryId) {
-//            $result = $this->getService('structureManager')->getElementById($categoryId);
-//        }
-//        return $result;
-//    }
-//
+
+    public function canActLikeFilter()
+    {
+        $currentElement = $this->getCurrentElement();
+        return ($this->pageDependent && (($currentElement && $currentElement instanceof productsListElement && $currentElement->structureType != 'productCatalogue') || ($currentElement instanceof productElement && $this->getLastVisitedCategory())));
+    }
+
+    public function getLastVisitedCategory()
+    {
+        $result = null;
+        $categoryId = $this->getService('user')->getStorageAttribute('lastCategoryId');
+        if ($categoryId) {
+            $result = $this->getService('structureManager')->getElementById($categoryId);
+        }
+        return $result;
+    }
+
 //    public function getCachedArguments()
 //    {
 //        $result = [];
@@ -146,7 +209,7 @@
 //            $this->filtersPrepared = true;
 //            if ($this->pageDependent) {
 //                $currentElement = $this->getCurrentElement();
-//                $sourceElement = $this->getSearchBaseElement();
+//                $sourceElement = $this->getProductsListElement();
 //
 //                if ($sourceElement) {
 //                    $gotFilters = false;
@@ -193,10 +256,10 @@
 //                    $user->setStorageAttribute('lastCategoryId', '');
 //                    $user->setStorageAttribute('lastSearchArguments', '');
 //                }
-//                if (!($currentElement instanceof productsListStructureElement || $currentElement instanceof productElement)) {
+//                if (!($currentElement instanceof productsListElement || $currentElement instanceof productElement)) {
 //                    unset($this->filtersIndex['parameter']);
 //                }
-//            } elseif ($sourceElement = $this->getCatalogue()) {
+//            } elseif ($sourceElement = $this->getProductCatalogue()) {
 //                $arguments = $sourceElement->parseSearchArguments();
 //                $availableProductsIds = $sourceElement->getProductsListBaseIds();
 //                if ($this->filterCategory && $sourceElement->categorized) {
@@ -245,56 +308,25 @@
 //        }
 //    }
 //
-//    public function getSortParameters()
-//    {
-//        $translationsManager = $this->getService('translationsManager');
-//        return [
-//            [
-//                'title' => $translationsManager->getTranslationByName('productsearch.order_unspecified'),
-//                'value' => '',
-//            ],
-//            [
-//                'title' => $translationsManager->getTranslationByName('productsearch.order_price'),
-//                'value' => 'price;asc',
-//            ],
-//            [
-//                'title' => $translationsManager->getTranslationByName('productsearch.order_price_desc'),
-//                'value' => 'price;desc',
-//            ],
-//            [
-//                'title' => $translationsManager->getTranslationByName('productsearch.order_title'),
-//                'value' => 'title;asc',
-//            ],
-//            [
-//                'title' => $translationsManager->getTranslationByName('productsearch.order_title_desc'),
-//                'value' => 'title;desc',
-//            ],
-//        ];
-//    }
-//
-//    public function getFiltersByType($type)
-//    {
-//        $this->getFilters();
-//        return isset($this->filtersIndex[$type]) ? $this->filtersIndex[$type] : [];
-//    }
-//
-//    public function getCatalogue()
-//    {
-//        if ($this->catalogue === null) {
-//            $this->catalogue = false;
-//            if ($connectedCataloguesIds = $this->getService('linksManager')
-//                ->getConnectedIdList($this->id, 'productSearchCatalogue', 'parent')
-//            ) {
-//                $this->catalogue = $this->getService('structureManager')->getElementById($connectedCataloguesIds[0]);
-//            }
-//        }
-//        return $this->catalogue;
-//    }
-//
-//    public function getConnectedParametersIds()
-//    {
-//        return $this->getService('linksManager')->getConnectedIdList($this->id, "productSearchParameter", 'parent');
-//    }
+
+
+    public function getProductCatalogue()
+    {
+        if ($this->productCatalogue === null) {
+            $this->productCatalogue = false;
+            if ($connectedCataloguesIds = $this->getService('linksManager')
+                ->getConnectedIdList($this->id, 'productSearchCatalogue', 'parent')
+            ) {
+                $this->productCatalogue = $this->getService('structureManager')->getElementById($connectedCataloguesIds[0]);
+            }
+        }
+        return $this->productCatalogue;
+    }
+
+    public function getConnectedParametersIds()
+    {
+        return $this->getService('linksManager')->getConnectedIdList($this->id, "productSearchParameter", 'parent');
+    }
 //
 //    public function getConnectedParameters()
 //    {
@@ -625,36 +657,35 @@
 //        return $this->pager;
 //    }
 //
-//    public function canBeDisplayed()
-//    {
-//        $this->getFilters();
-//        if (!$this->getSearchBaseElement()) {
-//            return false;
-//        }
-//        if (controller::getInstance()->getParameter('productSearch')) {
-//            return true;
-//        }
-//        if (($this->canActLikeFilter() || !$this->pageDependent) && $this->sortingEnabled) {
-//            return true;
-//        }
-//        $filterTypes = [
-//            'category',
-//            'parameter',
-//            'discount',
-//            'brand',
-//        ];
-//        if ($this->canActLikeFilter() || !$this->pageDependent) {
-//            $filterTypes[] = 'price';
-//        }
-//        foreach ($filterTypes as $type) {
-//            foreach ($this->getFiltersByType($type) as $filter) {
-//                if ($filter->isRelevant()) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
-//}
-//
-//
+    public function canBeDisplayed()
+    {
+        if (!$this->getProductsListElement()) {
+            return false;
+        }
+        if (controller::getInstance()->getParameter('productSearch')) {
+            return true;
+        }
+        if (($this->canActLikeFilter() || !$this->pageDependent) && $this->sortingEnabled) {
+            return true;
+        }
+        $filterTypes = [
+            'category',
+            'parameter',
+            'discount',
+            'brand',
+        ];
+        if ($this->canActLikeFilter() || !$this->pageDependent) {
+            $filterTypes[] = 'price';
+        }
+        foreach ($filterTypes as $type) {
+            foreach ($this->getFiltersByType($type) as $filter) {
+                if ($filter->isRelevant()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+
+

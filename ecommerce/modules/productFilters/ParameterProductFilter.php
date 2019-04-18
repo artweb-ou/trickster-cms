@@ -5,7 +5,7 @@ class ParameterProductFilter extends productFilter
     protected $type = 'parameter';
     protected $selectionElement;
 
-    public function __construct(ProductsListStructureElement $element, $initalOptions = [])
+    public function __construct(ProductsListElement $element, $initalOptions = [])
     {
         parent::__construct($element, $initalOptions);
         $this->selectionElement = $initalOptions['selectionElement'];

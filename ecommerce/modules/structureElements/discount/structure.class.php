@@ -7,7 +7,7 @@
  * @property int $startDate
  * @property int $endDate
  */
-class discountElement extends ProductsListStructureElement
+class discountElement extends ProductsListElement
 {
     use ConfigurableLayoutsProviderTrait;
 
@@ -257,7 +257,7 @@ class discountElement extends ProductsListStructureElement
         return $this->productsListBaseQuery;
     }
 
-    protected function isFilterableByType($filterType)
+    public function isFilterableByType($filterType)
     {
         switch ($filterType) {
             case 'category':

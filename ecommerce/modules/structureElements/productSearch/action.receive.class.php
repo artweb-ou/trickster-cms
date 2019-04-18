@@ -4,11 +4,16 @@ class receiveProductSearch extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param productSearchElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
             // save info
-            $structureElement->prepareActualData();
             if ($structureElement->priceInterval !== null) {
                 $structureElement->priceInterval = (int)$structureElement->priceInterval;
             }
@@ -33,13 +38,13 @@ class receiveProductSearch extends structureElementAction
 
             $connnectedCataloguesIds = $linksManager->getConnectedIdList($structureElement->id, 'productSearchCatalogue');
 
-            if (!in_array($structureElement->catalogueFilterId, $connnectedCataloguesIds)) {
-                foreach ($connnectedCataloguesIds as $connnectedCatalogueId) {
-                    $linksManager->unLinkElements($structureElement->id, $connnectedCatalogueId, "productSearchCatalogue");
+            foreach ($connnectedCataloguesIds as $connectedCatalogueId) {
+                if ($structureElement->catalogueFilterId != $connectedCatalogueId) {
+                    $linksManager->unLinkElements($structureElement->id, $connectedCatalogueId, "productSearchCatalogue");
                 }
-                if ($structureElement->catalogueFilterId) {
-                    $linksManager->linkElements($structureElement->id, $structureElement->catalogueFilterId, "productSearchCatalogue");
-                }
+            }
+            if ($structureElement->catalogueFilterId) {
+                $linksManager->linkElements($structureElement->id, $structureElement->catalogueFilterId, "productSearchCatalogue");
             }
 
             $controller->redirect($structureElement->URL);

@@ -4,7 +4,7 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 
 /**
- * Class ProductsListStructureElement
+ * Class productsListElement
  *
  * @property int $priceSortingEnabled
  * @property int $nameSortingEnabled
@@ -12,7 +12,7 @@ use Illuminate\Database\Query\Builder;
  * @property int $brandSortingEnabled
  *
  */
-abstract class ProductsListStructureElement extends menuStructureElement
+abstract class ProductsListElement extends menuStructureElement
 {
     use ProductFilterFactoryTrait;
     use CacheOperatingElement;
@@ -31,8 +31,6 @@ abstract class ProductsListStructureElement extends menuStructureElement
     protected $amountSelectionOptions;
     protected $filterArguments;
     protected $priceRangeSets;
-    protected $filters;
-    protected $filtersIndex = [];
     protected $selectionsIdsForFiltering;
     protected $selectionsValuesIndex;
     protected $sortingOptions;
@@ -52,40 +50,9 @@ abstract class ProductsListStructureElement extends menuStructureElement
     protected $filterLimit;
     protected $priceInterval = 5;
 
-    public function getFilters()
+    public function getProductsListElement()
     {
-        if ($this->filters === null) {
-            $this->filters = [];
-            if ($this->isFilterable()) {
-                $filterTypes = ['category', 'brand', 'discount', 'availability'];
-                foreach ($filterTypes as $filterType) {
-                    if ($this->isFilterableByType($filterType)) {
-                        $this->addFilter($this->createProductFilter($filterType));
-                    }
-                }
-                if ($this->isFilterableByType('parameter')) {
-                    $parameters = $this->getParameterSelectionsForFiltering();
-                    foreach ($parameters as $parameter) {
-                        $this->addFilter($this->createProductFilter('parameter', ['selectionElement' => $parameter]));
-                    }
-                }
-                if ($this->isFilterableByType('price')) {
-                    $this->addFilter($filter = $this->createProductFilter('price'));
-                }
-            }
-        }
-        return $this->filters;
-    }
-
-    public function addFilter(productFilter $filter)
-    {
-        $this->filters[] = $filter;
-        $type = $filter->getType();
-        if (!isset($this->filtersIndex[$type])) {
-            $this->filtersIndex[$type] = [];
-        }
-        $this->filtersIndex[$type][] = $filter;
-
+        return $this;
     }
 
     public function getDefaultOrder()
@@ -486,7 +453,7 @@ abstract class ProductsListStructureElement extends menuStructureElement
         return $this->priceRangeSets;
     }
 
-    protected function isFilterable()
+    public function isFilterable()
     {
         if (!$this->getProductsListBaseAmount()) {
             return false;
@@ -532,74 +499,7 @@ abstract class ProductsListStructureElement extends menuStructureElement
         return false;
     }
 
-    public function getSortingOptions()
-    {
-        if ($this->sortingOptions === null) {
-            $this->sortingOptions = [];
-            $activeSortArgument = $this->getFilterSort();
-            $activeOrderArgument = $this->getFilterOrder();
-            $translationsManager = $this->getService('translationsManager');
-            $filteredUrl = $this->getFilteredUrl();
-            if ($this->isFieldSortable('manual')) {
-                $this->sortingOptions[] = [
-                    'url' => $filteredUrl,
-                    'active' => $activeSortArgument == 'manual',
-                    'label' => $translationsManager->getTranslationByName('products.sort_by_manual'),
-                ];
-            }
-            if ($this->isFieldSortable('price')) {
-                $this->sortingOptions[] = [
-                    'url' => $filteredUrl . 'sort:price/',
-                    'active' => $activeSortArgument == 'price' && $activeOrderArgument == 'asc',
-                    'label' => $translationsManager->getTranslationByName('products.sort_by_price'),
-                ];
-                $this->sortingOptions[] = [
-                    'url' => $filteredUrl . 'sort:price;desc/',
-                    'active' => $activeSortArgument == 'price' && $activeOrderArgument == 'desc',
-                    'label' => $translationsManager->getTranslationByName('products.sort_by_price_desc'),
-                ];
-            }
-            if ($this->isFieldSortable('title')) {
-                $this->sortingOptions[] = [
-                    'url' => $filteredUrl . 'sort:title/',
-                    'active' => $activeSortArgument == 'title' && $activeOrderArgument == 'asc',
-                    'label' => $translationsManager->getTranslationByName('products.sort_by_title'),
-                ];
-                $this->sortingOptions[] = [
-                    'url' => $filteredUrl . 'sort:title;desc/',
-                    'active' => $activeSortArgument == 'title' && $activeOrderArgument == 'desc',
-                    'label' => $translationsManager->getTranslationByName('products.sort_by_title_desc'),
-                ];
-            }
-            if ($this->isFieldSortable('date')) {
-                $this->sortingOptions[] = [
-                    'url' => $filteredUrl . 'sort:date/',
-                    'active' => $activeSortArgument == 'date' && $activeOrderArgument == 'asc',
-                    'label' => $translationsManager->getTranslationByName('products.sort_by_date'),
-                ];
-                $this->sortingOptions[] = [
-                    'url' => $filteredUrl . 'sort:date;desc/',
-                    'active' => $activeSortArgument == 'date' && $activeOrderArgument == 'desc',
-                    'label' => $translationsManager->getTranslationByName('products.sort_by_date_desc'),
-                ];
-            }
-            if ($this->isFieldSortable('brand')) {
-                $this->sortingOptions[] = [
-                    'url' => $filteredUrl . 'sort:brand/',
-                    'active' => $activeSortArgument == 'brand' && $activeOrderArgument == 'asc',
-                    'label' => $translationsManager->getTranslationByName('products.sort_by_brand'),
-                ];
-                $this->sortingOptions[] = [
-                    'url' => $filteredUrl . 'sort:brand;desc/',
-                    'active' => $activeSortArgument == 'brand' && $activeOrderArgument == 'desc',
-                    'label' => $translationsManager->getTranslationByName('products.sort_by_brand_desc'),
-                ];
-            }
-        }
-        return $this->sortingOptions;
-    }
-
-    protected function isFieldSortable($field)
+    public function isFieldSortable($field)
     {
         switch ($field) {
             case 'manual':
@@ -644,7 +544,7 @@ abstract class ProductsListStructureElement extends menuStructureElement
         return $this->selectionsIdsForFiltering;
     }
 
-    protected function getParameterSelectionsForFiltering()
+    public function getParameterSelectionsForFiltering()
     {
         $parameters = [];
         if ($selectionsIds = $this->getSelectionIdsForFiltering()) {
@@ -883,8 +783,6 @@ abstract class ProductsListStructureElement extends menuStructureElement
      * @return Builder
      */
     abstract protected function getProductsListBaseQuery();
-
-    abstract protected function isFilterableByType($filterType);
 
     abstract public function isAmountSelectionEnabled();
 

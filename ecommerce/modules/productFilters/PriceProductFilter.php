@@ -4,7 +4,7 @@ class PriceProductFilter extends productFilter
 {
     protected $type = 'price';
 
-    public function __construct(ProductsListStructureElement $element)
+    public function __construct(ProductsListElement $element)
     {
         parent::__construct($element);
     }

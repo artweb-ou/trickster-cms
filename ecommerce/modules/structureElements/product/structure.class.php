@@ -545,7 +545,7 @@ class productElement extends structureElement implements
         $parentsList = $structureManager->getElementsParents($this->id, $forceUpdate, 'productCatalogueProduct');
         if ($parentsList) {
             foreach ($parentsList as &$parentElement) {
-                if ($parentElement instanceof categoryStructureElement) {
+                if ($parentElement instanceof categoryElement) {
                     $catalogues[] = $parentElement;
                 }
             }

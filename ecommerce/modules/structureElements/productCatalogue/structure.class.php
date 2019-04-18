@@ -201,4 +201,16 @@ class productCatalogueElement extends categoryStructureElement implements Config
         }
         return $this->categoriesList;
     }
+
+    public function getTitle()
+    {
+        $title = '';
+
+        $structureManager = $this->getService('structureManager');
+        if ($firstParent = $structureManager->getElementsFirstParent($this->id)) {
+            $title .= $firstParent->getTitle() . ' / ';
+        }
+        $title .= parent::getTitle();
+        return $title;
+    }
 }

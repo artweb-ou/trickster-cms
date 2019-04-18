@@ -10,7 +10,7 @@
  * @property int $availabilityFilterEnabled
  */
 
-class brandElement extends ProductsListStructureElement implements ImageUrlProviderInterface
+class brandElement extends ProductsListElement implements ImageUrlProviderInterface
 {
     use ImageUrlProviderTrait;
     use ConfigurableLayoutsProviderTrait;
@@ -151,7 +151,7 @@ class brandElement extends ProductsListStructureElement implements ImageUrlProvi
         parent::deleteElementData();
     }
 
-    protected function isFilterableByType($filterType)
+    public function isFilterableByType($filterType)
     {
         switch ($filterType) {
             case 'category':

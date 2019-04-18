@@ -1,6 +1,6 @@
 <?php
 
-abstract class categoryStructureElement extends ProductsListStructureElement
+abstract class categoryStructureElement extends ProductsListElement
 {
     protected $parametersGroups;
     protected $sortingOptions;
@@ -49,12 +49,7 @@ abstract class categoryStructureElement extends ProductsListStructureElement
         }
     }
 
-    protected function isFilterable()
-    {
-        return $this->productsLayout !== 'hide' && parent::isFilterable();
-    }
-
-    protected function isFilterableByType($filterType)
+    public function isFilterableByType($filterType)
     {
         if ($this->role == 'content' || $this->requested) {
             switch ($filterType) {
@@ -85,7 +80,7 @@ abstract class categoryStructureElement extends ProductsListStructureElement
         return $result;
     }
 
-    protected function isFieldSortable($field)
+    public function isFieldSortable($field)
     {
         switch ($field) {
             case 'manual':

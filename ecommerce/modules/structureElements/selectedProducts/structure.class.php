@@ -5,7 +5,7 @@
  *
  * @property int $amountOnPageEnabled
  */
-class selectedProductsElement extends ProductsListStructureElement implements ConfigurableLayoutsProviderInterface
+class selectedProductsElement extends ProductsListElement implements ConfigurableLayoutsProviderInterface
 {
     use ConfigurableLayoutsProviderTrait;
     use ConnectedIconsProviderTrait;
@@ -675,7 +675,7 @@ class selectedProductsElement extends ProductsListStructureElement implements Co
             ->getCurrentLanguageId());
     }
 
-    protected function isFilterableByType($filterType)
+    public function isFilterableByType($filterType)
     {
         switch ($filterType) {
             case 'category':
