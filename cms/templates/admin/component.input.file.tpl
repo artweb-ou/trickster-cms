@@ -1,9 +1,9 @@
 <div class="form_field_{$fieldName} {if $formErrors.$fieldName} form_error {/if}form_items">
     <span class="form_label">
-        {translations name="{$translationGroup}.{strtolower($fieldName)}"}:
+         {translations name="{$translationGroup}.{if !empty($item.translationName)}{$item.translationName}{else}{strtolower($fieldName)}{/if}"}:
     </span>
     <div class="form_field">
-        <input class="fileinput_placeholder" type="file" name="{$formNames.$fieldName}"/>
+        <input class="fileinput_placeholder" type="file" name="{$formNames.$fieldName}{if $item.multiple}[]{/if}"/>
         {if $element->$fieldName}
             <div class="file_container">
                 <span>{$formData.originalName2}</span>
