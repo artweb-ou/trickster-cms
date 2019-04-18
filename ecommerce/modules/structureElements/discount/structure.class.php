@@ -226,17 +226,35 @@ class discountElement extends ProductsListStructureElement
 
     protected function getProductsListBaseQuery()
     {
-//        $result = [$this->id];
-//        $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
-//        if ($logicObject = $shoppingBasketDiscounts->getDiscount($this->id)) {
-//            if ($categories = $logicObject->discountedCategoriesIds) {
-//                $result = array_merge($result, $logicObject->discountedCategoriesIds);
-//            }
-//            if ($brands = $logicObject->discountedBrandIds) {
-//                $result = array_merge($result, $brands);
-//            }
-//        }
-//        return $result;
+        if ($this->productsListBaseQuery !== null) {
+            return $this->productsListBaseQuery;
+        }
+        $this->productsListBaseQuery = false;
+
+        $this->productsListBaseQuery = $this->getProductsQuery();
+        $id = $this->id;
+        $this->productsListBaseQuery->whereIn('module_product.id', function ($query) use ($id) {
+            $query->from('structure_links')
+                ->select('childStructureId')
+                ->where('parentStructureId', '=', $id)
+                ->where('type', '=', 'discountProduct');
+        });
+
+        $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
+        if ($logicObject = $shoppingBasketDiscounts->getDiscount($this->id)) {
+            if ($categoryIds = $logicObject->discountedCategoriesIds) {
+                $this->productsListBaseQuery->orWhereIn('module_product.id', function ($query) use ($categoryIds) {
+                    $query->from('structure_links')
+                        ->select('childStructureId')
+                        ->whereIn('parentStructureId', $categoryIds)
+                        ->where('type', '=', 'catalogue');
+                });
+            }
+            if ($brands = $logicObject->discountedBrandIds) {
+                $this->productsListBaseQuery->orWhereIn('brandId', $brands);
+            }
+        }
+        return $this->productsListBaseQuery;
     }
 
     protected function isFilterableByType($filterType)

@@ -1,33 +1,33 @@
-{assign moduleTitle $discount->title}
-{if $discount->originalName != ''}
+{assign moduleTitle $element->title}
+{if $element->originalName != ''}
 	{capture assign="moduleSideContent"}
-		{include file=$theme->template('component.elementimage.tpl') element=$discount type='discountShort' lazy=true}
+		{include file=$theme->template('component.elementimage.tpl') element=$element type='discountShort' lazy=true}
 	{/capture}
 {/if}
 {capture assign="moduleContent"}
 	<div class='discount_short_right'>
-		{if $discount->endDate || $discount->conditionPrice}
+		{if $element->endDate || $element->conditionPrice}
 			<div class='discount_short_info html_content'>
-				{if $discount->endDate}
+				{if $element->endDate}
 					<div class='discount_short_dates'>
-						{if $discount->startDate}{translations name="discount.startdate"}: {$discount->startDate} - {/if}{translations name="discount.enddate"}: {$discount->endDate}
+						{if $element->startDate}{translations name="discount.startdate"}: {$element->startDate} - {/if}{translations name="discount.enddate"}: {$element->endDate}
 					</div>
 				{/if}
-				{if $discount->conditionPrice}
+				{if $element->conditionPrice}
 					<div class='discount_short_condition'>
-						{translations name="discount.condition"}: {$discount->conditionPrice} {$selectedCurrencyItem->symbol}
+						{translations name="discount.condition"}: {$element->conditionPrice} {$selectedCurrencyItem->symbol}
 					</div>
 				{/if}
 			</div>
 		{/if}
 		<div class='discount_short_content html_content'>
-			{$discount->content}
+			{$element->content}
 		</div>
 	</div>
 {/capture}
 
 {capture assign="moduleControls"}
-	<a class="discount_short_button button" href="{$discount->URL}">
+	<a class="discount_short_button button" href="{$element->URL}">
 		<span class='button_text'>{translations name='discount.viewproducts'}</span>
 	</a>
 {/capture}

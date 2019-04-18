@@ -71,23 +71,6 @@ class discountsListElement extends menuStructureElement implements ConfigurableL
         ];
     }
 
-    public function getTextContent()
-    {
-        if (is_null($this->textContent)) {
-            $this->textContent = $this->title . ".";
-
-            if ($contentElements = $this->getContentList()) {
-                foreach ($contentElements as &$contentElement) {
-                    $this->textContent .= " " . $contentElement->title . ".";
-                    if ($contentElement->content) {
-                        $this->textContent .= " " . $contentElement->content;
-                    }
-                }
-            }
-        }
-        return $this->textContent;
-    }
-
     public function getDiscounts()
     {
         if ($this->listedDiscounts === null) {
