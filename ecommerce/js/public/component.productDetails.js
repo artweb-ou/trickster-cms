@@ -316,7 +316,7 @@ window.ProductDetailsParameterComponent = function(componentElement) {
 		if (window.productParametersHintsInfo[id] && hintElement) {
 			hints = window.productParametersHintsInfo[id];
 			var hintContent = hints.join('<hr/>');
-			new TipPopupComponent(hintElement, hintContent, false, 'product_details_parameter_tooltip');
+			new ToolTipComponent(hintElement, hintContent, false, 'product_details_parameter_tooltip');
 		}
 	};
 	this.getComponentElement = function() {

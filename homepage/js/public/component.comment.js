@@ -35,7 +35,7 @@ window.CommentComponent = function(componentElement, elementInfo) {
 				}
 			}
 		} else {
-			var popup = new TipPopupComponent(componentElement, window.translationsLogics.get('label.registration_required'));
+			var popup = new ToolTipComponent(componentElement, window.translationsLogics.get('label.registration_required'));
 			popup.setDisplayDelay(100);
 		}
 	};
