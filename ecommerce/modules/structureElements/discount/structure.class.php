@@ -318,11 +318,6 @@ class discountElement extends ProductsListStructureElement
         return parent::getDefaultLimit();
     }
 
-    public function getProductsListCategories()
-    {
-
-    }
-
     public function isAmountSelectionEnabled()
     {
         return $this->amountOnPageEnabled;

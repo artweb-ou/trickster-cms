@@ -43,5 +43,6 @@
         'rightColumn',
         'structure',
         'brands',
+        'categoryParameter',
     ],
 ];

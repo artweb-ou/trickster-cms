@@ -1,6 +1,8 @@
 <?php return [
     'search' => [
         'product',
+        'productParameter',
+        'productSelection',
         'category',
         'discount',
         'brand',

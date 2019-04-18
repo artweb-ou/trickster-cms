@@ -210,7 +210,7 @@ abstract class ProductsListStructureElement extends menuStructureElement
         }
 
         $this->productsList = [];
-        if ($filteredProductsQuery = $this->getFilteredProductsQuery()) {
+        if ($filteredProductsQuery = clone $this->getFilteredProductsQuery()) {
             $sort = $this->getFilterSort();
             $order = $this->getFilterOrder();
             if ($sort && $sort == 'manual') {
@@ -653,7 +653,7 @@ abstract class ProductsListStructureElement extends menuStructureElement
              */
             $structureManager = $this->getService('structureManager');
             foreach ($selectionsIds as $selectionId) {
-                if ($selectionElement = $structureManager->getElementById($selectionId, $this->id)) {
+                if ($selectionElement = $structureManager->getElementById($selectionId)) {
                     $parameters[] = $selectionElement;
                 }
             }
@@ -888,8 +888,6 @@ abstract class ProductsListStructureElement extends menuStructureElement
 
     abstract public function isAmountSelectionEnabled();
 
-    abstract public function getProductsListCategories();
-
     public function getProductsListAvailabilityTypes()
     {
         $result = [];
@@ -939,4 +937,28 @@ abstract class ProductsListStructureElement extends menuStructureElement
 
         return $result;
     }
+
+    public function getProductsListCategories()
+    {
+        $result = [];
+        $productIdsQuery = clone $this->getFilteredProductsQuery();
+        $db = $this->getService('db');
+        if ($records = $db->table('structure_links')
+            ->select('parentStructureId')->distinct()
+            ->whereIn('childStructureId', $productIdsQuery)
+            ->where('type', '=', 'catalogue')
+            ->get()) {
+            $structureManager = $this->getService('structureManager');
+            $sort = [];
+            foreach ($records as $record) {
+                if ($categoryElement = $structureManager->getElementById($record['parentStructureId'])) {
+                    $result[] = $categoryElement;
+                    $sort[] = $categoryElement->title;
+                }
+            }
+            array_multisort($sort, SORT_ASC, $result);
+        }
+        return $result;
+    }
+
 }

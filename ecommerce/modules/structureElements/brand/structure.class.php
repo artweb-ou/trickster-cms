@@ -155,8 +155,8 @@ class brandElement extends ProductsListStructureElement implements ImageUrlProvi
     {
         switch ($filterType) {
             case 'category':
+                //todo: implement checkbox in admin form
                 $result = false;
-                    $result = $this->categoryFilterEnabled;
                 break;
             case 'brand':
                 $result = $this->brandFilterEnabled;
@@ -168,8 +168,8 @@ class brandElement extends ProductsListStructureElement implements ImageUrlProvi
                 $result = $this->parameterFilterEnabled;
                 break;
             case 'price':
+                //todo: implement checkbox in admin form
                 $result = false;
-//                    $result = $this->isSettingEnabled('priceFilterEnabled');
                 break;
             case 'availability':
                 $result = $this->availabilityFilterEnabled;
@@ -218,11 +218,5 @@ class brandElement extends ProductsListStructureElement implements ImageUrlProvi
 
         $this->productsListBaseQuery = $query;
         return $this->productsListBaseQuery;
-    }
-
-
-    public function getProductsListCategories()
-    {
-
     }
 }
