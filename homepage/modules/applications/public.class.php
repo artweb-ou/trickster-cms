@@ -271,8 +271,9 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
     protected function deleteOld404()
     {
         $db = $this->getService('db');
-        $db->table('404_log')->
-            where('redirectionId', '=', 0)
+        $db->table('404_log')
+            ->where('date', '<', time() - 3600 * 24 * 7)
+            ->where('redirectionId', '=', 0)
             ->delete();
     }
 
