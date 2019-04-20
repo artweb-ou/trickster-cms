@@ -35,7 +35,7 @@ class searchQueriesManager implements DependencyInjectionContextInterface
      */
     public function logSearch($phrase, $resultsCount)
     {
-        $visitorManager = $this->getService('visitorsManager');
+        $visitorManager = $this->getService('VisitorsManager');
         $currentVisitor = $visitorManager->getCurrentVisitor();
         $record = $this->dataCollection->getEmptyObject();
 
@@ -76,7 +76,7 @@ class searchQueriesManager implements DependencyInjectionContextInterface
      */
     public function updateSearchLog($id, $phrase, $resultsCount)
     {
-        $visitorManager = $this->getService('visitorsManager');
+        $visitorManager = $this->getService('VisitorsManager');
         $currentVisitor = $visitorManager->getCurrentVisitor();
         $queryDataObjects = $this->dataCollection->load(["id" => $id]);
         if ($queryDataObjects) {
