@@ -28,6 +28,8 @@
 {if !empty($googleAD.ad_enabled) && $googleAD.ad_enabled}
 	{include file=$theme->template("javascript.googlead.tpl")}
 {/if}
-{include file=$theme->template("custom.JS.tpl", true)}
+{if $theme->templateExists("custom.JS.tpl")}
+	{include file=$theme->template("custom.JS.tpl")}
+{/if}
 </body>
 </html>
