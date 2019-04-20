@@ -89,7 +89,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                  * @var $redirectionManager redirectionManager
                  */
                 $redirectionManager = $this->getService('redirectionManager');
-                if ($this->protocolRedirection){
+                if ($this->protocolRedirection) {
                     $redirectionManager->checkProtocolRedirection();
                 }
                 $redirectionManager->checkDomainRedirection();
@@ -197,6 +197,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
 
         if (!$redirectionManager->checkRedirectionUrl($errorUrl)) {
             $this->log404Error($errorUrl);
+            $this->deleteOld404();
             $this->renderer->fileNotFound();
             $structureManager = $this->getService('structureManager', [
                 'rootUrl' => $controller->rootURL,
@@ -265,6 +266,14 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             $record['date'] = time();
             $db->table('404_log')->insert($record);
         }
+    }
+
+    protected function deleteOld404()
+    {
+        $db = $this->getService('db');
+        $db->table('404_log')->
+            where('redirectionId', '=', 0)
+            ->delete();
     }
 
     public function getErrorPageElement()
