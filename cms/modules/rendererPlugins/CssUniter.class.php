@@ -54,9 +54,9 @@ class cssUniterRendererPlugin extends rendererPlugin
             $this->lessCompiler->registerFunction("getImageUrl", function ($arg) {
                 list($type, $delimiter, $values) = $arg;
                 /**
-                 * @var designThemesManager $designThemesManager
+                 * @var DesignThemesManager $designThemesManager
                  */
-                $designThemesManager = $this->getService('designThemesManager');
+                $designThemesManager = $this->getService('DesignThemesManager');
                 if ($theme = $designThemesManager->getCurrentTheme()) {
                     return [$type, $delimiter, [$theme->getImageUrl(reset($values))]];
                 } else {
@@ -66,9 +66,9 @@ class cssUniterRendererPlugin extends rendererPlugin
             $this->lessCompiler->registerFunction("getFontUrl", function ($arg) {
                 list($type, $delimiter, $values) = $arg;
                 /**
-                 * @var designThemesManager $designThemesManager
+                 * @var DesignThemesManager $designThemesManager
                  */
-                $designThemesManager = $this->getService('designThemesManager');
+                $designThemesManager = $this->getService('DesignThemesManager');
                 if ($theme = $designThemesManager->getCurrentTheme()) {
                     return [$type, $delimiter, [$theme->getFontUrl(reset($values))]];
                 } else {
@@ -219,9 +219,9 @@ class cssUniterRendererPlugin extends rendererPlugin
     {
         $svgFileContent = '';
         /**
-         * @var designThemesManager $designThemesManager
+         * @var DesignThemesManager $designThemesManager
          */
-        $designThemesManager = $this->getService('designThemesManager');
+        $designThemesManager = $this->getService('DesignThemesManager');
         if ($svgFileURL = $designThemesManager->getCurrentTheme()->getImageUrl($svgFile . '.svg', false, false)) {
             $baseURL = controller::getInstance()->baseURL;
 

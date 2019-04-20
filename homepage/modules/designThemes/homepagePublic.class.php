@@ -1,6 +1,6 @@
 <?php
 
-class homepagePublicDesignTheme extends designTheme
+class homepagePublicDesignTheme extends DesignTheme
 {
     public function initialize()
     {

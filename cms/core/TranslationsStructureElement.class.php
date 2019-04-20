@@ -7,7 +7,7 @@ abstract class TranslationsStructureElement extends structureElement
 
     protected function makeComparer()
     {
-        $designThemesManager = $this->getService('designThemesManager');
+        $designThemesManager = $this->getService('DesignThemesManager');
         $translationsCodesComparer = new TranslationsCodesComparer();
         foreach ($this->getThemeCodes() as $themeCode) {
             $theme = $designThemesManager->getTheme($themeCode);

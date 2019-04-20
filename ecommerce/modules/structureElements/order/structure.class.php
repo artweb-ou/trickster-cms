@@ -511,7 +511,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
     {
         $controller = controller::getInstance();
 
-        $designThemesManager = $this->getService('designThemesManager');
+        $designThemesManager = $this->getService('DesignThemesManager');
         $theme = $designThemesManager->getTheme('projectPdf');
         $pdfCss = false;
         if ($cssResources = $theme->getCssResources()) {

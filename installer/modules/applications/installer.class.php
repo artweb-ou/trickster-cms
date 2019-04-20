@@ -9,7 +9,7 @@ class installerApplication extends controllerApplication
     const PROGRESS_DOWNLOADED = 1;
     const PROGRESS_INSTALLED = 2;
     /**
-     * @var designTheme
+     * @var DesignTheme
      */
     protected $theme;
     /**
@@ -298,7 +298,7 @@ class installerApplication extends controllerApplication
 
     protected function setupTheme()
     {
-        $designThemesManager = $this->getService('designThemesManager', ['currentThemeCode' => $this->applicationName]);
+        $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->applicationName]);
         $this->theme = $designThemesManager->getCurrentTheme();
     }
 }

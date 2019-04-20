@@ -1,6 +1,6 @@
 <?php
 
-class ecommerceRssDesignTheme extends designTheme
+class ecommerceRssDesignTheme extends DesignTheme
 {
     public function initialize()
     {

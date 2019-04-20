@@ -32,7 +32,7 @@ class marketingFeedApplication extends controllerApplication
         $requestedTheme = 'marketingFeed';
         $type =  'product';
         $productElements = $structureManager->getElementsByType($type, $languageId);
-        $designThemesManager = $this->getService('designThemesManager');
+        $designThemesManager = $this->getService('DesignThemesManager');
         $currentTheme = $designThemesManager->getTheme($requestedTheme);
         $this->renderer->setContentType('application/xml');
         $this->renderer->setCacheControl('no-cache');

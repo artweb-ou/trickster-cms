@@ -1,6 +1,6 @@
 <?php
 
-class pdfDesignTheme extends designTheme
+class pdfDesignTheme extends DesignTheme
 {
     public function initialize()
     {

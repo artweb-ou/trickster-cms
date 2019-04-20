@@ -14,7 +14,7 @@ class ResourcesUniterHelperServiceContainer extends DependencyInjectionServiceCo
             $resourcesUniterHelper->setCurrentThemeCode($currentThemeCode);
         }
 
-        $designThemesManager = $this->registry->getService('designThemesManager');
+        $designThemesManager = $this->registry->getService('DesignThemesManager');
         $resourcesUniterHelper->setDesignThemesManager($designThemesManager);
 
         $requestHeadersManager = $this->registry->getService('requestHeadersManager');

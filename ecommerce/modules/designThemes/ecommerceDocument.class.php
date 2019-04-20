@@ -1,6 +1,6 @@
 <?php
 
-class ecommerceDocumentDesignTheme extends designTheme
+class ecommerceDocumentDesignTheme extends DesignTheme
 {
     public function initialize()
     {

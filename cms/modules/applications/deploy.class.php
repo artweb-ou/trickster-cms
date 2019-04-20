@@ -5,7 +5,7 @@ class deployApplication extends controllerApplication
     protected $applicationName = 'deploy';
     public $rendererName = 'smarty';
     /**
-     * @var designTheme
+     * @var DesignTheme
      */
     protected $theme;
     /**
@@ -323,7 +323,7 @@ class deployApplication extends controllerApplication
 
     protected function setupTheme()
     {
-        $designThemesManager = $this->getService('designThemesManager', ['currentThemeCode' => $this->applicationName]);
+        $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->applicationName]);
         $this->theme = $designThemesManager->getCurrentTheme();
     }
 }

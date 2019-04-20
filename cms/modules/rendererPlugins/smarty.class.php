@@ -102,7 +102,7 @@ class smartyRendererPlugin extends rendererPlugin
         if (isset($params['id'])) {
             if (isset($smarty->smarty->tpl_vars['theme'])) {
                 /**
-                 * @var designTheme $currentTheme
+                 * @var DesignTheme $currentTheme
                  */
                 if ($currentTheme = $smarty->smarty->tpl_vars['theme']->value) {
                     $this->structureManager = $this->getService('structureManager');

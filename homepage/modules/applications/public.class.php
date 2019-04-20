@@ -5,7 +5,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
     use JsTranslationsTrait;
     protected $applicationName = 'public';
     /**
-     * @var designTheme
+     * @var DesignTheme
      */
     protected $currentTheme;
     protected $themeCode = '';
@@ -35,7 +35,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $cache = $this->getService('Cache');
         $cache->enable();
 
-        $designThemesManager = $this->getService('designThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
+        $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
 
         $this->renderer->assign('js_translations', $this->loadJsTranslations());
@@ -309,7 +309,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
     }
 
     /**
-     * @return designTheme
+     * @return DesignTheme
      */
     public function getCurrentTheme()
     {

@@ -10,7 +10,7 @@ class EmailDispatcherServiceContainer extends DependencyInjectionServiceContaine
     public function makeInjections($instance)
     {
         $emailDispatcher = $instance;
-        $designThemesManager = $this->registry->getService('designThemesManager');
+        $designThemesManager = $this->registry->getService('DesignThemesManager');
         $emailDispatcher->setDesignThemesManager($designThemesManager);
 
         if (($timeLimit = $this->getOption('timeLimit')) === false) {

@@ -21,7 +21,7 @@ class EmailDispatcher extends errorLogger
     }
 
     /**
-     * @return designThemesManager
+     * @return DesignThemesManager
      */
     public function getDesignThemesManager()
     {
@@ -30,7 +30,7 @@ class EmailDispatcher extends errorLogger
             //only for possible backwards compatibility, use DI instead!
             $configManager = $controller->getConfigManager();
             $pathsManager = $controller->getPathsManager();
-            $this->designThemesManager = new designThemesManager();
+            $this->designThemesManager = new DesignThemesManager();
             $themesPath = $pathsManager->getRelativePath('themes');
             foreach ($pathsManager->getIncludePaths() as $path) {
                 $this->designThemesManager->setThemesDirectoryPath($path . $themesPath);
@@ -698,7 +698,7 @@ class EmailDispatchmentRenderer extends errorLogger
     protected $designThemesManager;
 
     /**
-     * @return designThemesManager
+     * @return DesignThemesManager
      */
     public function getDesignThemesManager()
     {
@@ -706,7 +706,7 @@ class EmailDispatchmentRenderer extends errorLogger
     }
 
     /**
-     * @param designThemesManager $designThemesManager
+     * @param DesignThemesManager $designThemesManager
      */
     public function setDesignThemesManager($designThemesManager)
     {

@@ -1,6 +1,6 @@
 <?php
 
-class ckeditorDesignTheme extends designTheme
+class ckeditorDesignTheme extends DesignTheme
 {
     public function initialize()
     {

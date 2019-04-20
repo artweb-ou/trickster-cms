@@ -1,6 +1,6 @@
 <?php
 
-class emailDesignTheme extends designTheme
+class emailDesignTheme extends DesignTheme
 {
     public function initialize()
     {

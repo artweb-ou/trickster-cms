@@ -1,6 +1,6 @@
 <?php
 
-class marketingFeedDesignTheme extends designTheme
+class marketingFeedDesignTheme extends DesignTheme
 {
     public function initialize()
     {

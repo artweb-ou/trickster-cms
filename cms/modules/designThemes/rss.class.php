@@ -1,6 +1,6 @@
 <?php
 
-class rssDesignTheme extends designTheme
+class rssDesignTheme extends DesignTheme
 {
     public function initialize()
     {

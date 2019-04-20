@@ -1,6 +1,6 @@
 <?php
 
-class mallAdminDesignTheme extends designTheme
+class mallAdminDesignTheme extends DesignTheme
 {
     public function initialize()
     {

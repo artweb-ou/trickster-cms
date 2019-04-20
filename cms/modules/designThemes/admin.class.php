@@ -1,6 +1,6 @@
 <?php
 
-class adminDesignTheme extends designTheme
+class adminDesignTheme extends DesignTheme
 {
     public function initialize()
     {

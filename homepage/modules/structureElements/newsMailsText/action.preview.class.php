@@ -8,7 +8,7 @@ class previewNewsMailsText extends structureElementAction
     {
         $structureElement->setViewName('form');
         if ($structureElement->hasActualStructureInfo()) {
-            $designThemesManager = $this->getService('designThemesManager', [], true);
+            $designThemesManager = $this->getService('DesignThemesManager', [], true);
             $configManager = $this->getService('ConfigManager');
             $designThemesManager->setCurrentThemeCode($configManager->get('main.publicTheme'));
             $structureManager = $this->getService('structureManager');
