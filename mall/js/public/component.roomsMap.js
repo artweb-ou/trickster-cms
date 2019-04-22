@@ -627,8 +627,8 @@ window.RoomsMapFloorLabelComponent = function(parentElement, viewBoxWidth, viewB
 	var currentRoomTimeout;
 
 	var init = function() {
-		popupComponent = new TipPopupComponent({
-			'beforeDisplay': tipPopupDisplayCheck,
+		popupComponent = new ToolTipComponent({
+			'beforeDisplay': toolTipDisplayCheck,
 			'referralElement': document.body,
 			'hideOnClick': false,
 			'hideOnLeave': false
@@ -638,7 +638,7 @@ window.RoomsMapFloorLabelComponent = function(parentElement, viewBoxWidth, viewB
 		controller.addListener('roomComponentMouseOut', roomComponentMouseOut);
 		controller.addListener('roomComponentSelected', roomComponentSelected);
 	};
-	var tipPopupDisplayCheck = function() {
+	var toolTipDisplayCheck = function() {
 		return floorNumber == window.roomsMapLogics.getCurrentFloorNumber();
 	};
 	var roomChangeHandler = function(id) {
