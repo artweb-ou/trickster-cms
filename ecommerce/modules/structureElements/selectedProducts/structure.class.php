@@ -5,11 +5,13 @@
  *
  * @property int $amountOnPageEnabled
  * @property int $selectionType
+ * @property int $autoSelectionType
  * @property int $filterCategory
  * @property int $filterBrand
  * @property int $filterDiscount
  * @property int $filterPriceEnabled
  * @property int $availabilityFilterEnabled
+ * @property int $amount
  */
 class selectedProductsElement extends ProductsListElement implements ConfigurableLayoutsProviderInterface
 {
@@ -76,7 +78,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         if ($this->productsListBaseQuery !== null) {
             return $this->productsListBaseQuery;
         }
-        $this->productsListBaseQuery = $this->getProductsQuery();
+        $productsListBaseQuery = $this->getProductsQuery();
 
         if ($this->selectionType) { // manual selection - prepare the connected products
             /**
@@ -84,9 +86,95 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
              */
             $linksManager = $this->getService('linksManager');
             $connectedProductIds = $linksManager->getConnectedIdList($this->id, 'selectedProducts', 'parent');
-            $this->productsListBaseQuery->whereIn('module_product.id', $connectedProductIds);
-        }
+            $productsListBaseQuery->whereIn('module_product.id', $connectedProductIds);
+        } else {
+            switch ($this->autoSelectionType) {
+                // date
+                case 0:
+                    if ($this->amount) {
+                        $amount = $this->amount;
+                        $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
+                            /**
+                             * @var \Illuminate\Database\Query\Builder $query
+                             */
+                            $query->from('structure_elements')
+                                ->where('structureType', '=', 'product')
+                                ->orderBy('dateCreated', 'desc')
+                                ->limit($amount);
+                        }
+                        );
+                    }
+                    break;
 
+                // popularity (purchases)
+                case 1:
+                    $amount = $this->amount;
+                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
+                        /**
+                         * @var \Illuminate\Database\Query\Builder $query
+                         */
+                        $query->from('module_product')
+                            ->select('id')->distinct()
+                            ->orderBy('purchaseCount', 'desc');
+                        if ($amount) {
+                            $query->limit($amount);
+                        }
+                    });
+                    break;
+
+                // purchased latest
+                case 2:
+                    $amount = $this->amount;
+                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
+                        /**
+                         * @var \Illuminate\Database\Query\Builder $query
+                         */
+                        $query->from('module_product')
+                            ->select('id')->distinct()
+                            ->orderBy('lastPurchaseDate', 'desc');
+                        if ($amount) {
+                            $query->limit($amount);
+                        }
+                    });
+                    break;
+                // random discounted products
+                case 3:
+                    $amount = $this->amount;
+                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
+                        /**
+                         * @var \Illuminate\Database\Query\Builder $query
+                         */
+                        $query->from('module_product')
+                            ->select('id')->distinct()
+                            ->where('oldPrice', '<>', 0)
+                            ->inRandomOrder();
+                        if ($amount) {
+                            $query->limit($amount);
+                        }
+                    });
+                    break;
+                // all available products
+                case 4:
+                    if ($this->amount) {
+                        $amount = $this->amount;
+                        $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
+                            /**
+                             * @var \Illuminate\Database\Query\Builder $query
+                             */
+                            $query->from('structure_elements')
+                                ->select('id')
+                                ->where('structureType', '=', 'product')
+                                ->limit($amount);
+                        }
+                        );
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        $this->productsListBaseQuery = $productsListBaseQuery;
         return $this->productsListBaseQuery;
 
 
@@ -291,194 +379,6 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         return $result;
     }
 
-//    public function getProductsList()
-//    {
-//        if ($this->productsList !== null) {
-//            return $this->productsList;
-//        }
-//        $this->productsList = [];
-//        $arguments = $this->getFilterArguments();
-//        $structureManager = $this->getService('structureManager');
-//        $languagesManager = $this->getService('languagesManager');
-//        $currentLanguageId = $languagesManager->getCurrentLanguageId();
-//
-//        if ($this->selectionType) { // manual selection - prepare the connected products
-//            $linksManager = $this->getService('linksManager');
-//            if ($connectedProductLinks = $linksManager->getElementsLinks($this->id, 'selectedProducts', 'parent')) {
-//                $productValues = [];
-//                $sortingRequired = ($arguments['sort'] !== 'manual');
-//
-//                foreach ($connectedProductLinks as &$link) {
-//                    if ($productElement = $structureManager->getElementById($link->childStructureId, $currentLanguageId)
-//                    ) {
-//                        if ($productElement->inactive == '0' && ($productElement->isPurchasable() || $productElement->availability == 'inquirable')) {
-//                            $this->productsList[] = $productElement;
-//                            if ($sortingRequired) {
-//                                $productValues[] = $productElement->$arguments['sort'];
-//                            }
-//                        }
-//                    }
-//                }
-//                if ($sortingRequired) {
-//                    array_multisort($productValues, constant('SORT_' . strtoupper($arguments['order'])), $this->productsList);
-//                }
-//            }
-//        } else { // automatic sorting, prepare products list depending on the autoSelectionType
-//            $availableProductIds = $this->getProductsListBaseQuery();
-//            if ($availableProductIds) {
-////                if ($this->isFilterable()) {
-////                    $arguments = $this->getFilterArguments();
-////                    $this->getFilters($arguments);
-////                    if ($this->baseFilter !== null) {
-////                        $this->baseFilter->apply($availableProductIds);
-////                    }
-////                }
-//                $db = $this->getService('db');
-//                if ($availableProductIds) {
-//                    switch ($this->autoSelectionType) {
-//                        // date
-//                        case 0:
-//                            $collection = persistableCollection::getInstance('structure_elements');
-//                            $conditions = [
-//                                [
-//                                    'structureType',
-//                                    '=',
-//                                    'product',
-//                                ],
-//                                [
-//                                    'id',
-//                                    'in',
-//                                    $availableProductIds,
-//                                ],
-//                            ];
-//                            $this->productsList = [];
-//                            $limitFields = [];
-//                            if ($this->amount != '') {
-//                                $limitFields = [
-//                                    0,
-//                                    $this->amount,
-//                                ];
-//                            }
-//
-//                            $orderFields = ['dateCreated' => 'desc'];
-//                            $availableProductIds = [];
-//                            if ($records = $collection->conditionalLoad('distinct(id)', $conditions, $orderFields, $limitFields, [], true)
-//                            ) {
-//                                foreach ($records as &$record) {
-//                                    $availableProductIds[] = $record['id'];
-//                                }
-//                            }
-//                            break;
-//
-//                        // popularity (purchases)
-//                        case 1:
-//                            $sql = $db->table('module_product')
-//                                ->distinct()
-//                                ->select('id')
-//                                ->whereIn('id', $availableProductIds)
-//                                ->orderBy('purchaseCount', 'desc');
-//
-//                            $this->productsList = [];
-//                            if ($this->amount) {
-//                                $sql->limit($this->amount);
-//                            }
-//
-//                            $availableProductIds = $sql->pluck('id');
-//
-//                            break;
-//
-//                        // purchased latest
-//                        case 2:
-//                            $sql = $db->table('module_product')
-//                                ->distinct()
-//                                ->select('id')
-//                                ->whereIn('id', $availableProductIds)
-//                                ->orderBy('lastPurchaseDate', 'desc');
-//
-//                            $this->productsList = [];
-//                            if ($this->amount) {
-//                                $sql->limit($this->amount);
-//                            }
-//
-//                            $availableProductIds = $sql->pluck('id');
-//
-//                            break;
-//
-//                        // random discounted products
-//                        case 3:
-//                            $sql = $db->table('module_product')
-//                                ->distinct()
-//                                ->select('id')
-//                                ->where('oldPrice', '<>', 0)
-//                                ->whereIn('id', $availableProductIds)
-//                                ->inRandomOrder();
-//
-//                            $this->productsList = [];
-//                            if ($this->amount) {
-//                                $sql->limit($this->amount);
-//                            }
-//
-//                            $availableProductIds = $sql->pluck('id');
-//                            break;
-//                        // all available products
-//                        case 4:
-//                            shuffle($availableProductIds);
-//                            if (is_numeric($this->amount)) {
-//                                $availableProductIds = array_slice($availableProductIds, 0, (int)$this->amount);
-//                            }
-//                            break;
-//                        default:
-//                            break;
-//                    }
-//                }
-//            }
-//
-//            if ($availableProductIds) {
-//                $elementsOnPage = $arguments['limit'];
-//                if ($arguments['sort'] === 'manual') {
-//                    $pageNumber = max(1, (int)controller::getInstance()->getParameter('page'));
-//                    $pager = new pager($this->generatePagerUrl(), count($availableProductIds), $elementsOnPage, $pageNumber, 'page');
-//                    $this->productsPager = $pager;
-//                    $availableProductIds = array_slice($availableProductIds, ($pageNumber - 1) * $elementsOnPage, $elementsOnPage);
-//                    $this->getService('ParametersManager')->preloadPrimaryParametersForProducts($availableProductIds);
-//                    foreach ($availableProductIds as &$productId) {
-//                        if ($product = $structureManager->getElementById($productId, $currentLanguageId)) {
-//                            $this->productsList[] = $product;
-//                        }
-//                    }
-//                } else {
-//                    $pager = new pager($this->generatePagerUrl(), count($availableProductIds), $elementsOnPage, (int)controller::getInstance()
-//                        ->getParameter('page'), 'page');
-//                    $this->productsPager = $pager;
-//
-//                    $this->getService('ParametersManager')->preloadPrimaryParametersForProducts($availableProductIds);
-//
-//                    $query = $this->getService('db')->table('module_product')->select('module_product.id')->distinct();
-//                    $query->whereIn('module_product.id', $availableProductIds);
-//                    $query->skip($pager->startElement);
-//                    $query->limit($elementsOnPage);
-//
-//                    if ($arguments['sort'] == 'date') {
-//                        $query->join('structure_elements', 'module_product.id', '=', 'structure_elements.id', 'left');
-//                        $query->orderBy('structure_elements.dateCreated', $arguments['order']);
-//                    } else {
-//                        $query->orderBy($arguments['sort'], $arguments['order']);
-//                    }
-//
-//                    if ($records = $query->get()) {
-//                        foreach ($records as &$record) {
-//                            if ($product = $structureManager->getElementById($record['id'], $currentLanguageId)) {
-//                                $this->productsList[] = $product;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//        return $this->productsList;
-//    }
-
     public function getConnectedParametersIds()
     {
         return $this->getService('linksManager')->getConnectedIdList($this->id, 'selectedProductsParameter', 'parent');
@@ -494,160 +394,6 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
             }
         }
         return $this->connectedParameters;
-    }
-
-    public function getConnectedProductsIds()
-    {
-        if ($this->connectedProductsIds === null) {
-            $this->connectedProductsIds = [];
-            $collection = persistableCollection::getInstance('structure_links');
-            $catalogueConditions = [];
-            $categoryConditions = [
-                [
-                    'type',
-                    '=',
-                    'catalogue',
-                ],
-            ];
-            // check category (& subcategories)
-            if ($limitingCategoryIds = $this->getConnectedCategoriesIds()) {
-                $structureManager = $this->getService('structureManager');
-                $subCategoriesIdIndex = [];
-                foreach ($limitingCategoryIds as &$categoryId) {
-                    /**
-                     * @var categoryElement $category
-                     */
-                    if ($category = $structureManager->getElementById($categoryId)) {
-                        $category->gatherSubCategoriesIdIndex($category->id, $subCategoriesIdIndex);
-                    }
-                }
-                $limitingCategoryIds = array_keys($subCategoriesIdIndex);
-
-                if ($limitingCategoryIds) {
-                    $categoryConditions[] = [
-                        'parentStructureId',
-                        'in',
-                        $limitingCategoryIds,
-                    ];
-                }
-            } else {
-                $catalogueConditions = [
-                    [
-                        'type',
-                        '=',
-                        'productCatalogueProduct',
-                    ],
-                ];
-            }
-            $conditions = [$categoryConditions, $catalogueConditions];
-
-            if ($records = $collection->conditionalOrLoad('childStructureId', $conditions)) {
-                foreach ($records as &$record) {
-                    $this->connectedProductsIds[] = $record['childStructureId'];
-                }
-                $this->connectedProductsIds = array_unique($this->connectedProductsIds);
-
-                // check discounts
-                if ($limitingDiscountIds = $this->getConnectedDiscountsIds()) {
-                    $conditions = [
-                        [
-                            'type',
-                            '=',
-                            'discountProduct',
-                        ],
-                        [
-                            'childStructureId',
-                            'in',
-                            $this->connectedProductsIds,
-                        ],
-                        [
-                            'parentStructureId',
-                            'in',
-                            $limitingDiscountIds,
-                        ],
-                    ];
-                    if ($records = $collection->conditionalLoad('childStructureId', $conditions)) {
-                        $this->connectedProductsIds = [];
-                        foreach ($records as &$record) {
-                            $this->connectedProductsIds[] = $record['childStructureId'];
-                        }
-                    }
-                }
-
-                // check parameters
-                if ($limitingSelectionsIds = $this->getConnectedProductSelectionIds()) {
-                    $collection = persistableCollection::getInstance('module_product_parameter_value');
-                    $conditions = [
-                        [
-                            'value',
-                            'in',
-                            $limitingSelectionsIds,
-                        ],
-                        [
-                            'productId',
-                            'in',
-                            $this->connectedProductsIds,
-                        ],
-                    ];
-                    $this->connectedProductsIds = [];
-                    if ($records = $collection->conditionalLoad('productId', $conditions)) {
-                        foreach ($records as &$record) {
-                            $this->connectedProductsIds[] = $record['productId'];
-                        }
-                    }
-                }
-
-                if ($this->connectedProductsIds) {
-                    // now, check stock conditions...
-
-                    $collection = persistableCollection::getInstance('module_product');
-                    // filter out products that are out of stock/unavailable
-                    $conditions = [
-                        [
-                            'availability',
-                            '=',
-                            'quantity_dependent',
-                        ],
-                        [
-                            'quantity',
-                            '=',
-                            '0',
-                        ],
-                    ];
-
-                    if ($records = $collection->conditionalLoad('id', $conditions)) {
-                        $unavailableProductsIds = [];
-                        foreach ($records as &$record) {
-                            $unavailableProductsIds[] = $record['id'];
-                        }
-                        $this->connectedProductsIds = array_diff($this->connectedProductsIds, $unavailableProductsIds);
-                    }
-
-                    if ($this->connectedProductsIds) {
-                        $conditions = [
-                            [
-                                'availability',
-                                '!=',
-                                'unavailable',
-                            ],
-                            [
-                                'id',
-                                'in',
-                                $this->connectedProductsIds,
-                            ],
-                        ];
-                        $this->connectedProductsIds = [];
-                        if ($records = $collection->conditionalLoad('id', $conditions)) {
-                            foreach ($records as &$record) {
-                                $this->connectedProductsIds[] = $record['id'];
-                            }
-                        }
-                    }
-                    $this->connectedProductsIds = array_unique($this->connectedProductsIds);
-                }
-            }
-        }
-        return $this->connectedProductsIds;
     }
 
     public function getDiscounts()

@@ -4,14 +4,16 @@ class receiveFiltersSelectedProducts extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param selectedProductsElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
-            $linksManager = $this->getService('linksManager');
-
             //persist product data
-            $structureElement->prepareActualData();
-            $structureElement->structureName = $structureElement->title;
             $structureElement->persistElementData();
             $structureElement->persistDisplayMenusLinks();
 

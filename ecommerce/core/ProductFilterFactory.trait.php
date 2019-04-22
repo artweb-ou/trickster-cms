@@ -2,7 +2,13 @@
 
 trait ProductFilterFactoryTrait
 {
+    /**
+     * @var productFilter[]
+     */
     protected $filters;
+    /**
+     * @var productFilter[][]
+     */
     protected $filtersIndex = [];
 
     public function createProductFilter($type, $initialOptions = null)
@@ -54,6 +60,10 @@ trait ProductFilterFactoryTrait
 
     }
 
+    /**
+     * @param $type
+     * @return productFilter[]
+     */
     public function getFiltersByType($type)
     {
         $this->getFilters();

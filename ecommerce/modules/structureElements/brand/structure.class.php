@@ -34,6 +34,7 @@ class brandElement extends ProductsListElement implements ImageUrlProviderInterf
     protected $parentCategory;
     protected $topProductsList;
     protected $sortParameters;
+    protected $connectedProductsIds;
     protected $brandFiltered = false;
     public $selectedFilter;
 
