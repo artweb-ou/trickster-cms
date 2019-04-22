@@ -8,7 +8,7 @@
  * @property int $filterCategory
  * @property int $filterBrand
  * @property int $filterDiscount
- * @property int $filterPrice
+ * @property int $filterPriceEnabled
  * @property int $availabilityFilterEnabled
  */
 class selectedProductsElement extends ProductsListElement implements ConfigurableLayoutsProviderInterface
@@ -19,7 +19,6 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
     public $dataResourceName = 'module_selected_products';
     public $defaultActionName = 'show';
     public $role = 'content';
-    public $productsList;
     protected $connectedBrands;
     protected $connectedBrandsIds;
     protected $connectedDiscounts;
@@ -41,7 +40,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         // filters related:
         $moduleStructure['filterCategory'] = 'checkbox';
         $moduleStructure['filterBrand'] = 'checkbox';
-        $moduleStructure['filterPrice'] = 'checkbox';
+        $moduleStructure['filterPriceEnabled'] = 'checkbox';
         $moduleStructure['filterDiscount'] = 'checkbox';
         $moduleStructure['availabilityFilterEnabled'] = 'checkbox';
         $moduleStructure['priceInterval'] = 'naturalNumber';
@@ -668,19 +667,19 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
     {
         switch ($filterType) {
             case 'category':
-                $result = ($this->filterCategory && $this->getConnectedCategoriesIds());
+                $result = ($this->filterCategory);
                 break;
             case 'brand':
-                $result = ($this->filterBrand && $this->getConnectedBrandsIds());
+                $result = ($this->filterBrand);
                 break;
             case 'discount':
-                $result = ($this->filterDiscount && $this->getConnectedDiscountsIds());
+                $result = ($this->filterDiscount);
                 break;
             case 'parameter':
                 $result = (bool)$this->getParameterSelectionsForFiltering();
                 break;
             case 'price':
-                $result = $this->filterPrice;
+                $result = $this->filterPriceEnabled;
                 break;
             case 'availability':
                 $result = $this->availabilityFilterEnabled;

@@ -191,8 +191,9 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
     public function getPersistableObject($fields)
     {
         if (!is_array($fields)) {
-            if (count($this->primaryFields) == 1) {
-                $fields = [reset($this->primaryFields) => $fields];
+            $primaryFields = $this->getPrimaryFields();
+            if (count($primaryFields) == 1) {
+                $fields = [reset($primaryFields) => $fields];
             } else {
                 $this->logError('Trying to get persistable object without index values');
             }
@@ -224,7 +225,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $objectData = $object->getData();
 
         $data = [];
-        foreach ($this->primaryFields as $field) {
+        foreach ($this->getPrimaryFields() as $field) {
             $data[$field] = $objectData[$field];
         }
 
@@ -250,14 +251,14 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         }
 
         $this->transportObject->setResourceName($this->resourceName);
-
-        foreach ($this->primaryFields as $field) {
+        $primaryFields = $this->getPrimaryFields();
+        foreach ($primaryFields as $field) {
             if (!isset($persistedData[$field])) {
                 $idField = $field;
             }
         }
-        if (is_null($idField)) {
-            $idField = reset($this->primaryFields);
+        if ($idField === null) {
+            $idField = reset($primaryFields);
         }
 
         if (!$object->loaded) {
@@ -271,7 +272,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         } else {
             $this->transportObject->setDataLines($persistedData);
 
-            foreach ($this->primaryFields as $field) {
+            foreach ($primaryFields as $field) {
                 $searchData[$field] = $data[$field];
             }
 

@@ -1,1 +1,2 @@
 ALTER TABLE `engine_module_selected_products` ADD `amountOnPageEnabled` TINYINT NOT NULL AFTER `dateSortingEnabled`;
+ALTER TABLE `engine_module_selected_products` CHANGE `filterPrice` `filterPriceEnabled` TINYINT(1) NOT NULL;

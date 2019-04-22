@@ -50,7 +50,7 @@ class receiveFiltersSelectedProducts extends structureElementAction
         $expectedFields = [
             'filterCategory',
             'filterBrand',
-            'filterPrice',
+            'filterPriceEnabled',
             'filterDiscount',
             'availabilityFilterEnabled',
             'priceInterval',

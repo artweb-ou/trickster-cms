@@ -22,8 +22,8 @@ class PriceProductFilter extends productFilter
                 $argument = $this->getArguments();
 
                 foreach ($rangeSets as $rangeSet) {
-                    $min = (int)$currencySelector->convertPrice($rangeSet[0]);
-                    $max = (int)$currencySelector->convertPrice($rangeSet[1]);
+                    $min = floor($currencySelector->convertPrice($rangeSet[0]));
+                    $max = ceil($currencySelector->convertPrice($rangeSet[1]));
                     $id = $min . '-' . $max;
                     $this->options[] = [
                         'title' => $min . ' - ' . $max . ' ' . $currencyItem->symbol,

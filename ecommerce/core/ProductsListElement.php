@@ -171,10 +171,11 @@ abstract class ProductsListElement extends menuStructureElement
         if ($this->productsList !== null) {
             return $this->productsList;
         }
+        //todo: cache key should use search arguments
         $cache = $this->getElementsListCache('prList', 3600);
-        if ($this->productsList = $cache->load()) {
-            return $this->productsList;
-        }
+//        if ($this->productsList = $cache->load()) {
+//            return $this->productsList;
+//        }
 
         $this->productsList = [];
         if ($filteredProductsQuery = clone $this->getFilteredProductsQuery()) {
