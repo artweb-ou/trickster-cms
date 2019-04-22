@@ -3,9 +3,6 @@
 /**
  * Class persistableCollection
  *
- * magic properties:
- * @property string[] $primaryField
- * @property string[] $columnNames
  */
 class persistableCollection extends errorLogger implements DependencyInjectionContextInterface
 {
@@ -14,6 +11,8 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
      * @var transportObject
      */
     protected $transportObject;
+    protected $primaryFields;
+    protected $columnNames;
 
     protected $resourceName;
     /**
@@ -30,37 +29,67 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         return self::$instancesList[$resourceName];
     }
 
-    public function __get($property)
+    public function getPrimaryFields()
     {
-        if ($property == 'primaryField') {
+        if ($this->primaryFields === null) {
+
             $resourceName = $this->resourceName;
             $this->transportObject->setResourceName($this->resourceName);
 
-            if (isset($_SESSION['primaryFields_' . $resourceName]) && $_SESSION['primaryFields_' . $resourceName]) {
-                $this->primaryField = $_SESSION['primaryFields_' . $resourceName];
+            $keyName = 'primaryFields_' . $resourceName;
+            /**
+             * @var Cache $cache
+             */
+            $cache = $this->getService('Cache');
+            if ($cache->isEnabled()) {
+                if (($this->primaryFields = $cache->get($keyName)) === false) {
+                    $this->primaryFields = $this->transportObject->loadPrimaryFields();
+                    $cache->set($keyName, $this->primaryFields);
+                }
             } else {
-                $this->primaryField = $this->transportObject->loadPrimaryFields();
-                $_SESSION['primaryFields_' . $resourceName] = $this->primaryField;
+                if (!empty($_SESSION[$keyName])) {
+                    $this->primaryFields = $_SESSION[$keyName];
+                } else {
+                    $this->primaryFields = $this->transportObject->loadPrimaryFields();
+                    $_SESSION[$keyName] = $this->primaryFields;
+                }
             }
 
-            if (!is_array($this->primaryField)) {
+            if (!is_array($this->primaryFields)) {
                 $this->logError('Primary field detection problem');
             }
+        }
 
-            return $this->primaryField;
-        } elseif ($property == 'columnNames') {
+        return $this->primaryFields;
+    }
+
+    public function getColumnNames()
+    {
+        if ($this->columnNames === null) {
             $resourceName = $this->resourceName;
             $this->transportObject->setResourceName($this->resourceName);
 
-            if (isset($_SESSION['columnNames_' . $resourceName]) && $_SESSION['columnNames_' . $resourceName]) {
-                $this->columnNames = $_SESSION['columnNames_' . $resourceName];
+            $keyName = 'columnNames_' . $resourceName;
+            /**
+             * @var Cache $cache
+             */
+            $cache = $this->getService('Cache');
+            if ($cache->isEnabled()) {
+                if (($this->columnNames = $cache->get($keyName)) === false) {
+                    $this->columnNames = $this->transportObject->loadColumnNames();
+                    $cache->set($keyName, $this->columnNames);
+                }
             } else {
-                $this->columnNames = $this->transportObject->loadColumnNames();
-                $_SESSION['columnNames_' . $resourceName] = $this->columnNames;
+                if (isset($_SESSION[$keyName]) && $_SESSION[$keyName]) {
+                    $this->columnNames = $_SESSION[$keyName];
+                } else {
+                    $this->columnNames = $this->transportObject->loadColumnNames();
+                    $_SESSION[$keyName] = $this->columnNames;
+                }
             }
-            return $this->columnNames;
         }
-        return null;
+
+        return $this->columnNames;
     }
 
     private function __construct($resourceName)
@@ -162,8 +191,8 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
     public function getPersistableObject($fields)
     {
         if (!is_array($fields)) {
-            if (count($this->primaryField) == 1) {
-                $fields = [reset($this->primaryField) => $fields];
+            if (count($this->primaryFields) == 1) {
+                $fields = [reset($this->primaryFields) => $fields];
             } else {
                 $this->logError('Trying to get persistable object without index values');
             }
@@ -195,7 +224,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $objectData = $object->getData();
 
         $data = [];
-        foreach ($this->primaryField as $field) {
+        foreach ($this->primaryFields as $field) {
             $data[$field] = $objectData[$field];
         }
 
@@ -214,7 +243,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $idField = null;
 
         $persistedData = [];
-        foreach ($this->columnNames as $column) {
+        foreach ($this->getColumnNames() as $column) {
             if (isset($data[$column])) {
                 $persistedData[$column] = $data[$column];
             }
@@ -222,13 +251,13 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
 
         $this->transportObject->setResourceName($this->resourceName);
 
-        foreach ($this->primaryField as $field) {
+        foreach ($this->primaryFields as $field) {
             if (!isset($persistedData[$field])) {
                 $idField = $field;
             }
         }
         if (is_null($idField)) {
-            $idField = reset($this->primaryField);
+            $idField = reset($this->primaryFields);
         }
 
         if (!$object->loaded) {
@@ -242,7 +271,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         } else {
             $this->transportObject->setDataLines($persistedData);
 
-            foreach ($this->primaryField as $field) {
+            foreach ($this->primaryFields as $field) {
                 $searchData[$field] = $data[$field];
             }
 
@@ -257,7 +286,8 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $limitFields = [],
         $groupFields = [],
         $literal = false
-    ) {
+    )
+    {
         $this->transportObject->setResourceName($this->resourceName);
         $this->transportObject->setReturnColumns(null, $literal);
         $this->transportObject->setConditions($conditions);
@@ -287,7 +317,8 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $limitFields = [],
         $groupFields = [],
         $literal = false
-    ) {
+    )
+    {
         $this->transportObject->setResourceName($this->resourceName);
         $this->transportObject->setReturnColumns($returnColumns, $literal);
         $this->transportObject->setConditions($conditions);
@@ -305,7 +336,8 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $limitFields = [],
         $groupFields = [],
         $literal = false
-    ) {
+    )
+    {
         $this->transportObject->setResourceName($this->resourceName);
         $this->transportObject->setReturnColumns($returnColumns, $literal);
         $this->transportObject->setOrConditions($conditions);

@@ -114,7 +114,7 @@ class persistableObject
     {
         if (!$this->loaded) {
             $searchData = [];
-            foreach (persistableCollection::getInstance($this->resourceName)->primaryField as &$fieldName) {
+            foreach (persistableCollection::getInstance($this->resourceName)->getPrimaryFields() as $fieldName) {
                 $searchData[$fieldName] = $this->$fieldName;
             }
             $result = persistableCollection::getInstance($this->resourceName)->loadObject($searchData);

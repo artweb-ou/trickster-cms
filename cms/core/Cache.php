@@ -44,6 +44,11 @@ class Cache extends errorLogger
         }
     }
 
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
     protected function prepareCache($driver)
     {
         try {

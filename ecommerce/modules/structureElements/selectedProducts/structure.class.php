@@ -4,6 +4,12 @@
  * Class selectedProductsElement
  *
  * @property int $amountOnPageEnabled
+ * @property int $selectionType
+ * @property int $filterCategory
+ * @property int $filterBrand
+ * @property int $filterDiscount
+ * @property int $filterPrice
+ * @property int $availabilityFilterEnabled
  */
 class selectedProductsElement extends ProductsListElement implements ConfigurableLayoutsProviderInterface
 {
@@ -14,13 +20,12 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
     public $defaultActionName = 'show';
     public $role = 'content';
     public $productsList;
-    protected $connectedCategories;
-    protected $connectedCategoriesIds;
     protected $connectedBrands;
     protected $connectedBrandsIds;
     protected $connectedDiscounts;
     protected $connectedDiscountsIds;
     protected $connectedProductsIds;
+    protected $connectedParameters;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -44,6 +49,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         $moduleStructure['nameSortingEnabled'] = 'text';
         $moduleStructure['dateSortingEnabled'] = 'text';
         $moduleStructure['amountOnPageEnabled'] = 'checkbox';
+
         // not stored in db ---------------------------------------------------
         $moduleStructure['discountsIds'] = 'numbersArray';
         $moduleStructure['categoriesIds'] = 'numbersArray';
@@ -68,6 +74,23 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
 
     protected function getProductsListBaseQuery()
     {
+        if ($this->productsListBaseQuery !== null) {
+            return $this->productsListBaseQuery;
+        }
+        $this->productsListBaseQuery = $this->getProductsQuery();
+
+        if ($this->selectionType) { // manual selection - prepare the connected products
+            /**
+             * @var linksManager $linksManager
+             */
+            $linksManager = $this->getService('linksManager');
+            $connectedProductIds = $linksManager->getConnectedIdList($this->id, 'selectedProducts', 'parent');
+            $this->productsListBaseQuery->whereIn('module_product.id', $connectedProductIds);
+        }
+
+        return $this->productsListBaseQuery;
+
+
 //        $result = $this->getActiveProductsIds();
 //
 //        if ($result && $limitingCategoryIds = $this->getConnectedCategoriesIds()) {
@@ -199,6 +222,9 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
             if ($brandIds = $this->getConnectedBrandsIds()) {
                 $structureManager = $this->getService('structureManager');
                 foreach ($brandIds as &$brandId) {
+                    /**
+                     * @var brandElement $brandElement
+                     */
                     if ($brandId && $brandElement = $structureManager->getElementById($brandId)) {
                         $item = [];
                         $item['id'] = $brandElement->id;
@@ -228,6 +254,9 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
             if ($discountIds = $this->getConnectedDiscountsIds()) {
                 $structureManager = $this->getService('structureManager');
                 foreach ($discountIds as &$discountId) {
+                    /**
+                     * @var discountElement $discountElement
+                     */
                     if ($discountId && $discountElement = $structureManager->getElementById($discountId)) {
                         $item = [];
                         $item['id'] = $discountElement->id;
@@ -263,208 +292,193 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         return $result;
     }
 
-    public function getProductsList()
-    {
-        if ($this->productsList !== null) {
-            return $this->productsList;
-        }
-        $this->productsList = [];
-        $arguments = $this->getFilterArguments();
-        $structureManager = $this->getService('structureManager');
-        $languagesManager = $this->getService('languagesManager');
-        $currentLanguageId = $languagesManager->getCurrentLanguageId();
-
-        if ($this->selectionType) { // manual selection - prepare the connected products
-            $linksManager = $this->getService('linksManager');
-            if ($connectedProductLinks = $linksManager->getElementsLinks($this->id, 'selectedProducts', 'parent')) {
-                $productValues = [];
-                $sortingRequired = ($arguments['sort'] !== 'manual');
-
-                foreach ($connectedProductLinks as &$link) {
-                    if ($productElement = $structureManager->getElementById($link->childStructureId, $currentLanguageId)
-                    ) {
-                        if ($productElement->inactive == '0' && ($productElement->isPurchasable() || $productElement->availability == 'inquirable')) {
-                            $this->productsList[] = $productElement;
-                            if ($sortingRequired) {
-                                $productValues[] = $productElement->$arguments['sort'];
-                            }
-                        }
-                    }
-                }
-                if ($sortingRequired) {
-                    array_multisort($productValues, constant('SORT_' . strtoupper($arguments['order'])), $this->productsList);
-                }
-            }
-        } else { // automatic sorting, prepare products list depending on the autoSelectionType
-            $availableProductIds = $this->getProductsListBaseQuery();
-            if ($availableProductIds) {
-//                if ($this->isFilterable()) {
-//                    $arguments = $this->getFilterArguments();
-//                    $this->getFilters($arguments);
-//                    if ($this->baseFilter !== null) {
-//                        $this->baseFilter->apply($availableProductIds);
+//    public function getProductsList()
+//    {
+//        if ($this->productsList !== null) {
+//            return $this->productsList;
+//        }
+//        $this->productsList = [];
+//        $arguments = $this->getFilterArguments();
+//        $structureManager = $this->getService('structureManager');
+//        $languagesManager = $this->getService('languagesManager');
+//        $currentLanguageId = $languagesManager->getCurrentLanguageId();
+//
+//        if ($this->selectionType) { // manual selection - prepare the connected products
+//            $linksManager = $this->getService('linksManager');
+//            if ($connectedProductLinks = $linksManager->getElementsLinks($this->id, 'selectedProducts', 'parent')) {
+//                $productValues = [];
+//                $sortingRequired = ($arguments['sort'] !== 'manual');
+//
+//                foreach ($connectedProductLinks as &$link) {
+//                    if ($productElement = $structureManager->getElementById($link->childStructureId, $currentLanguageId)
+//                    ) {
+//                        if ($productElement->inactive == '0' && ($productElement->isPurchasable() || $productElement->availability == 'inquirable')) {
+//                            $this->productsList[] = $productElement;
+//                            if ($sortingRequired) {
+//                                $productValues[] = $productElement->$arguments['sort'];
+//                            }
+//                        }
 //                    }
 //                }
-                $db = $this->getService('db');
-                if ($availableProductIds) {
-                    switch ($this->autoSelectionType) {
-                        // date
-                        case 0:
-                            $collection = persistableCollection::getInstance('structure_elements');
-                            $conditions = [
-                                [
-                                    'structureType',
-                                    '=',
-                                    'product',
-                                ],
-                                [
-                                    'id',
-                                    'in',
-                                    $availableProductIds,
-                                ],
-                            ];
-                            $this->productsList = [];
-                            $limitFields = [];
-                            if ($this->amount != '') {
-                                $limitFields = [
-                                    0,
-                                    $this->amount,
-                                ];
-                            }
-
-                            $orderFields = ['dateCreated' => 'desc'];
-                            $availableProductIds = [];
-                            if ($records = $collection->conditionalLoad('distinct(id)', $conditions, $orderFields, $limitFields, [], true)
-                            ) {
-                                foreach ($records as &$record) {
-                                    $availableProductIds[] = $record['id'];
-                                }
-                            }
-                            break;
-
-                        // popularity (purchases)
-                        case 1:
-                            $sql = $db->table('module_product')
-                                ->distinct()
-                                ->select('id')
-                                ->whereIn('id', $availableProductIds)
-                                ->orderBy('purchaseCount', 'desc');
-
-                            $this->productsList = [];
-                            if ($this->amount) {
-                                $sql->limit($this->amount);
-                            }
-
-                            $availableProductIds = $sql->pluck('id');
-
-                            break;
-
-                        // purchased latest
-                        case 2:
-                            $sql = $db->table('module_product')
-                                ->distinct()
-                                ->select('id')
-                                ->whereIn('id', $availableProductIds)
-                                ->orderBy('lastPurchaseDate', 'desc');
-
-                            $this->productsList = [];
-                            if ($this->amount) {
-                                $sql->limit($this->amount);
-                            }
-
-                            $availableProductIds = $sql->pluck('id');
-
-                            break;
-
-                        // random discounted products
-                        case 3:
-                            $sql = $db->table('module_product')
-                                ->distinct()
-                                ->select('id')
-                                ->where('oldPrice', '<>', 0)
-                                ->whereIn('id', $availableProductIds)
-                                ->inRandomOrder();
-
-                            $this->productsList = [];
-                            if ($this->amount) {
-                                $sql->limit($this->amount);
-                            }
-
-                            $availableProductIds = $sql->pluck('id');
-                            break;
-                        // all available products
-                        case 4:
-                            shuffle($availableProductIds);
-                            if (is_numeric($this->amount)) {
-                                $availableProductIds = array_slice($availableProductIds, 0, (int)$this->amount);
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            if ($availableProductIds) {
-                $elementsOnPage = $arguments['limit'];
-                if ($arguments['sort'] === 'manual') {
-                    $pageNumber = max(1, (int)controller::getInstance()->getParameter('page'));
-                    $pager = new pager($this->generatePagerUrl(), count($availableProductIds), $elementsOnPage, $pageNumber, 'page');
-                    $this->productsPager = $pager;
-                    $availableProductIds = array_slice($availableProductIds, ($pageNumber - 1) * $elementsOnPage, $elementsOnPage);
-                    $this->getService('ParametersManager')->preloadPrimaryParametersForProducts($availableProductIds);
-                    foreach ($availableProductIds as &$productId) {
-                        if ($product = $structureManager->getElementById($productId, $currentLanguageId)) {
-                            $this->productsList[] = $product;
-                        }
-                    }
-                } else {
-                    $pager = new pager($this->generatePagerUrl(), count($availableProductIds), $elementsOnPage, (int)controller::getInstance()
-                        ->getParameter('page'), 'page');
-                    $this->productsPager = $pager;
-
-                    $this->getService('ParametersManager')->preloadPrimaryParametersForProducts($availableProductIds);
-
-                    $query = $this->getService('db')->table('module_product')->select('module_product.id')->distinct();
-                    $query->whereIn('module_product.id', $availableProductIds);
-                    $query->skip($pager->startElement);
-                    $query->limit($elementsOnPage);
-
-                    if ($arguments['sort'] == 'date') {
-                        $query->join('structure_elements', 'module_product.id', '=', 'structure_elements.id', 'left');
-                        $query->orderBy('structure_elements.dateCreated', $arguments['order']);
-                    } else {
-                        $query->orderBy($arguments['sort'], $arguments['order']);
-                    }
-
-                    if ($records = $query->get()) {
-                        foreach ($records as &$record) {
-                            if ($product = $structureManager->getElementById($record['id'], $currentLanguageId)) {
-                                $this->productsList[] = $product;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $this->productsList;
-    }
-
-    // productsearch functions
-
-    public function getCatalogue()
-    {
-        if ($this->catalogue === null) {
-            $this->catalogue = false;
-            if ($connectedCataloguesIds = $this->getService('linksManager')
-                ->getConnectedIdList($this->id, 'selectedProductsCatalogue', 'parent')
-            ) {
-                $this->catalogue = $this->getService('structureManager')->getElementById($connectedCataloguesIds[0]);
-            }
-        }
-        return $this->catalogue;
-    }
+//                if ($sortingRequired) {
+//                    array_multisort($productValues, constant('SORT_' . strtoupper($arguments['order'])), $this->productsList);
+//                }
+//            }
+//        } else { // automatic sorting, prepare products list depending on the autoSelectionType
+//            $availableProductIds = $this->getProductsListBaseQuery();
+//            if ($availableProductIds) {
+////                if ($this->isFilterable()) {
+////                    $arguments = $this->getFilterArguments();
+////                    $this->getFilters($arguments);
+////                    if ($this->baseFilter !== null) {
+////                        $this->baseFilter->apply($availableProductIds);
+////                    }
+////                }
+//                $db = $this->getService('db');
+//                if ($availableProductIds) {
+//                    switch ($this->autoSelectionType) {
+//                        // date
+//                        case 0:
+//                            $collection = persistableCollection::getInstance('structure_elements');
+//                            $conditions = [
+//                                [
+//                                    'structureType',
+//                                    '=',
+//                                    'product',
+//                                ],
+//                                [
+//                                    'id',
+//                                    'in',
+//                                    $availableProductIds,
+//                                ],
+//                            ];
+//                            $this->productsList = [];
+//                            $limitFields = [];
+//                            if ($this->amount != '') {
+//                                $limitFields = [
+//                                    0,
+//                                    $this->amount,
+//                                ];
+//                            }
+//
+//                            $orderFields = ['dateCreated' => 'desc'];
+//                            $availableProductIds = [];
+//                            if ($records = $collection->conditionalLoad('distinct(id)', $conditions, $orderFields, $limitFields, [], true)
+//                            ) {
+//                                foreach ($records as &$record) {
+//                                    $availableProductIds[] = $record['id'];
+//                                }
+//                            }
+//                            break;
+//
+//                        // popularity (purchases)
+//                        case 1:
+//                            $sql = $db->table('module_product')
+//                                ->distinct()
+//                                ->select('id')
+//                                ->whereIn('id', $availableProductIds)
+//                                ->orderBy('purchaseCount', 'desc');
+//
+//                            $this->productsList = [];
+//                            if ($this->amount) {
+//                                $sql->limit($this->amount);
+//                            }
+//
+//                            $availableProductIds = $sql->pluck('id');
+//
+//                            break;
+//
+//                        // purchased latest
+//                        case 2:
+//                            $sql = $db->table('module_product')
+//                                ->distinct()
+//                                ->select('id')
+//                                ->whereIn('id', $availableProductIds)
+//                                ->orderBy('lastPurchaseDate', 'desc');
+//
+//                            $this->productsList = [];
+//                            if ($this->amount) {
+//                                $sql->limit($this->amount);
+//                            }
+//
+//                            $availableProductIds = $sql->pluck('id');
+//
+//                            break;
+//
+//                        // random discounted products
+//                        case 3:
+//                            $sql = $db->table('module_product')
+//                                ->distinct()
+//                                ->select('id')
+//                                ->where('oldPrice', '<>', 0)
+//                                ->whereIn('id', $availableProductIds)
+//                                ->inRandomOrder();
+//
+//                            $this->productsList = [];
+//                            if ($this->amount) {
+//                                $sql->limit($this->amount);
+//                            }
+//
+//                            $availableProductIds = $sql->pluck('id');
+//                            break;
+//                        // all available products
+//                        case 4:
+//                            shuffle($availableProductIds);
+//                            if (is_numeric($this->amount)) {
+//                                $availableProductIds = array_slice($availableProductIds, 0, (int)$this->amount);
+//                            }
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                }
+//            }
+//
+//            if ($availableProductIds) {
+//                $elementsOnPage = $arguments['limit'];
+//                if ($arguments['sort'] === 'manual') {
+//                    $pageNumber = max(1, (int)controller::getInstance()->getParameter('page'));
+//                    $pager = new pager($this->generatePagerUrl(), count($availableProductIds), $elementsOnPage, $pageNumber, 'page');
+//                    $this->productsPager = $pager;
+//                    $availableProductIds = array_slice($availableProductIds, ($pageNumber - 1) * $elementsOnPage, $elementsOnPage);
+//                    $this->getService('ParametersManager')->preloadPrimaryParametersForProducts($availableProductIds);
+//                    foreach ($availableProductIds as &$productId) {
+//                        if ($product = $structureManager->getElementById($productId, $currentLanguageId)) {
+//                            $this->productsList[] = $product;
+//                        }
+//                    }
+//                } else {
+//                    $pager = new pager($this->generatePagerUrl(), count($availableProductIds), $elementsOnPage, (int)controller::getInstance()
+//                        ->getParameter('page'), 'page');
+//                    $this->productsPager = $pager;
+//
+//                    $this->getService('ParametersManager')->preloadPrimaryParametersForProducts($availableProductIds);
+//
+//                    $query = $this->getService('db')->table('module_product')->select('module_product.id')->distinct();
+//                    $query->whereIn('module_product.id', $availableProductIds);
+//                    $query->skip($pager->startElement);
+//                    $query->limit($elementsOnPage);
+//
+//                    if ($arguments['sort'] == 'date') {
+//                        $query->join('structure_elements', 'module_product.id', '=', 'structure_elements.id', 'left');
+//                        $query->orderBy('structure_elements.dateCreated', $arguments['order']);
+//                    } else {
+//                        $query->orderBy($arguments['sort'], $arguments['order']);
+//                    }
+//
+//                    if ($records = $query->get()) {
+//                        foreach ($records as &$record) {
+//                            if ($product = $structureManager->getElementById($record['id'], $currentLanguageId)) {
+//                                $this->productsList[] = $product;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        return $this->productsList;
+//    }
 
     public function getConnectedParametersIds()
     {
@@ -501,6 +515,9 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                 $structureManager = $this->getService('structureManager');
                 $subCategoriesIdIndex = [];
                 foreach ($limitingCategoryIds as &$categoryId) {
+                    /**
+                     * @var categoryElement $category
+                     */
                     if ($category = $structureManager->getElementById($categoryId)) {
                         $category->gatherSubCategoriesIdIndex($category->id, $subCategoriesIdIndex);
                     }
@@ -651,13 +668,13 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
     {
         switch ($filterType) {
             case 'category':
-                $result = ($this->filterCategory && $this->getCategoriesInfo());
+                $result = ($this->filterCategory && $this->getConnectedCategoriesIds());
                 break;
             case 'brand':
-                $result = ($this->filterBrand && $this->getBrandsList());
+                $result = ($this->filterBrand && $this->getConnectedBrandsIds());
                 break;
             case 'discount':
-                $result = ($this->filterDiscount && $this->getDiscountsList());
+                $result = ($this->filterDiscount && $this->getConnectedDiscountsIds());
                 break;
             case 'parameter':
                 $result = (bool)$this->getParameterSelectionsForFiltering();

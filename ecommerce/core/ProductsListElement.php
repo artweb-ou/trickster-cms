@@ -237,7 +237,7 @@ abstract class ProductsListElement extends menuStructureElement
 
     /**
      * @param Builder $query
-     * @param int[] $productsIds
+     * @param Builder $productsIds
      */
     protected function applyManualSorting($query, $productsIds)
     {
