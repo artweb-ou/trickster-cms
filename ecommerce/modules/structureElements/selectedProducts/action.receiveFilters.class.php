@@ -39,9 +39,9 @@ class receiveFiltersSelectedProducts extends structureElementAction
                 $linksManager->linkElements($structureElement->id, $structureElement->catalogueFilterId, "selectedProductsCatalogue");
             }
 
-            $controller->redirect($structureElement->URL);
+            $controller->redirect($structureElement->getUrl('showFilters'));
         } else {
-            $structureElement->executeAction("showForm");
+            $structureElement->executeAction("showFilters");
         }
     }
 
