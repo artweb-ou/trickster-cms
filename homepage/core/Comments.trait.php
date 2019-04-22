@@ -55,6 +55,7 @@ trait CommentsTrait
             'showForm',
             $this->id
         );
+        $commentForm->setViewName('form');
         return $commentForm;
     }
 

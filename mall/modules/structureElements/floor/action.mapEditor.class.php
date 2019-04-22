@@ -6,7 +6,7 @@ class mapEditorFloor extends structureElementAction
     {
         $renderer = renderer::getInstance();
 
-        $designThemesManager = $this->getService('designThemesManager', ['currentThemeCode' => 'admin']);
+        $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => 'admin']);
         $currentTheme = $designThemesManager->getCurrentTheme();
 
         $renderer->assign('nodesInfo', '');

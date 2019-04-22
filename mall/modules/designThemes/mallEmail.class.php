@@ -1,6 +1,6 @@
 <?php
 
-class mallEmailDesignTheme extends designTheme
+class mallEmailDesignTheme extends DesignTheme
 {
     public function initialize()
     {

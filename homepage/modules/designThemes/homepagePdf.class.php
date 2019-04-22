@@ -1,6 +1,6 @@
 <?php
 
-class homepagePdfDesignTheme extends designTheme
+class homepagePdfDesignTheme extends DesignTheme
 {
     public function initialize()
     {

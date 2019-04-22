@@ -26,7 +26,7 @@ class ResourcesUniterHelper
     }
 
     /**
-     * @return designThemesManager|null
+     * @return DesignThemesManager|null
      */
     public function getDesignThemesManager()
     {

@@ -28,7 +28,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $redirectionManager->checkProtocolRedirection();
         $redirectionManager->checkDomainRedirection();
 
-        $designThemesManager = $this->getService('designThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
+        $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
 
         $languagesManager = $this->getService('languagesManager');
@@ -134,7 +134,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
     }
 
     /**
-     * @return designTheme
+     * @return DesignTheme
      */
     public function getCurrentTheme()
     {

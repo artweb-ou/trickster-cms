@@ -1,6 +1,6 @@
 <?php
 
-class installerDesignTheme extends designTheme
+class installerDesignTheme extends DesignTheme
 {
     public function initialize()
     {

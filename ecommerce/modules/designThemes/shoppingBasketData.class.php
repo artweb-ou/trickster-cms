@@ -1,6 +1,6 @@
 <?php
 
-class shoppingBasketDataDesignTheme extends designTheme
+class shoppingBasketDataDesignTheme extends DesignTheme
 {
     public function initialize()
     {

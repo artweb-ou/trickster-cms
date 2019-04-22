@@ -135,7 +135,7 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
 
     public function getDesignThemesManager()
     {
-        return $this->getService('designThemesManager');
+        return $this->getService('DesignThemesManager');
     }
 
     public function getLanguagesManager()

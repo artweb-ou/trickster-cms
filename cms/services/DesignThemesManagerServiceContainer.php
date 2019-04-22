@@ -1,14 +1,14 @@
 <?php
 
-class designThemesManagerServiceContainer extends DependencyInjectionServiceContainer
+class DesignThemesManagerServiceContainer extends DependencyInjectionServiceContainer
 {
     public function makeInstance()
     {
-        return new designThemesManager();
+        return new DesignThemesManager();
     }
 
     /**
-     * @param designThemesManager $instance
+     * @param DesignThemesManager $instance
      * @return mixed
      */
     public function makeInjections($instance)

@@ -1,6 +1,6 @@
 <?php
 
-class mallDocumentDesignTheme extends designTheme
+class mallDocumentDesignTheme extends DesignTheme
 {
     public function initialize()
     {

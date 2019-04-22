@@ -66,7 +66,7 @@ class rssApplication extends controllerApplication
         }
 
         array_multisort($dates, SORT_DESC, $rssItems);
-        $designThemesManager = $this->getService('designThemesManager', ['currentThemeCode' => $this->getThemeCode()], true);
+        $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()], true);
         $currentTheme = $designThemesManager->getCurrentTheme();
 
         $settingsManager = $this->getService('settingsManager');

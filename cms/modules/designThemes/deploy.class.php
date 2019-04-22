@@ -1,6 +1,6 @@
 <?php
 
-class deployDesignTheme extends designTheme
+class deployDesignTheme extends DesignTheme
 {
     public function initialize()
     {

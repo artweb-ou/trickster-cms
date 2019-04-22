@@ -34,7 +34,7 @@ trait FilesElementTrait
     {
         if (!isset($this->filesList[$propertyName])) {
             $cache = $this->getElementsListCache($propertyName, 1200);
-            if (!($this->filesList[$propertyName] = $cache->load())) {
+            if (($this->filesList[$propertyName] = $cache->load()) === false) {
                 $this->filesList[$propertyName] = [];
                 /**
                  * @var structureManager $structureManager

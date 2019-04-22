@@ -141,7 +141,7 @@ class Cache extends errorLogger
     public function __destruct()
     {
         if ($this->cachePath) {
-            new cachePurge($this->cachePath, 60, 10 * 60);
+            new cachePurge($this->cachePath, 60, 24 * 60 * 60 * 7);
         }
     }
 }

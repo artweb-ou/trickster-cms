@@ -30,7 +30,7 @@ class emailsApplication extends controllerApplication
                 $requestedTheme = 'project';
             }
 
-            $designThemesManager = $this->getService('designThemesManager');
+            $designThemesManager = $this->getService('DesignThemesManager');
             $currentTheme = $designThemesManager->getTheme($requestedTheme);
             /**
              * @var settingsManager $settingsManager

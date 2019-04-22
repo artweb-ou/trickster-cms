@@ -5,7 +5,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
     use JsTranslationsTrait;
     protected $applicationName = 'public';
     /**
-     * @var designTheme
+     * @var DesignTheme
      */
     protected $currentTheme;
     protected $themeCode = '';
@@ -35,7 +35,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $cache = $this->getService('Cache');
         $cache->enable();
 
-        $designThemesManager = $this->getService('designThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
+        $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
 
         $structureManager = $this->getService('structureManager', [
@@ -90,7 +90,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                  * @var $redirectionManager redirectionManager
                  */
                 $redirectionManager = $this->getService('redirectionManager');
-                if ($this->protocolRedirection){
+                if ($this->protocolRedirection) {
                     $redirectionManager->checkProtocolRedirection();
                 }
                 $redirectionManager->checkDomainRedirection();
@@ -198,6 +198,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
 
         if (!$redirectionManager->checkRedirectionUrl($errorUrl)) {
             $this->log404Error($errorUrl);
+            $this->deleteOld404();
             $this->renderer->fileNotFound();
             $structureManager = $this->getService('structureManager', [
                 'rootUrl' => $controller->rootURL,
@@ -268,6 +269,15 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         }
     }
 
+    protected function deleteOld404()
+    {
+        $db = $this->getService('db');
+        $db->table('404_log')
+            ->where('date', '<', time() - 3600 * 24 * 7)
+            ->where('redirectionId', '=', 0)
+            ->delete();
+    }
+
     public function getErrorPageElement()
     {
         $errorPageElement = false;
@@ -310,7 +320,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
     }
 
     /**
-     * @return designTheme
+     * @return DesignTheme
      */
     public function getCurrentTheme()
     {

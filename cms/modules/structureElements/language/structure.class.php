@@ -464,7 +464,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         }
 
         if (!$result) {
-            $designThemesManager = $this->getService('designThemesManager');
+            $designThemesManager = $this->getService('DesignThemesManager');
             $result = $designThemesManager->getCurrentTheme()->getImageUrl('logo.png', false, false);
         }
 

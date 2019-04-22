@@ -77,7 +77,7 @@ class searchElement extends menuDependantStructureElement
         if ($result->count) {
             // log this search and append the search ID to result urls for tracking
             $searchId = $this->getService('searchQueriesManager')->logSearch($phrase, $result->count);
-            $designThemesManager = $this->getService('designThemesManager');
+            $designThemesManager = $this->getService('DesignThemesManager');
             $currentTheme = $designThemesManager->getCurrentTheme();
             foreach ($result->sets as $set) {
                 if ($currentTheme->templateExists('search.set.' . $set->type . '.tpl')) {

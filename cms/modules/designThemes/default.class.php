@@ -1,6 +1,6 @@
 <?php
 
-class defaultDesignTheme extends designTheme
+class defaultDesignTheme extends DesignTheme
 {
     public function initialize()
     {

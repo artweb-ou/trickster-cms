@@ -66,7 +66,7 @@ class sendPayment extends structureElementAction
                 } elseif ($requestType == 'post') {
                     $renderer = $this->getService('renderer');
 
-                    $designThemesManager = $this->getService('designThemesManager');
+                    $designThemesManager = $this->getService('DesignThemesManager');
                     $theme = $designThemesManager->getCurrentTheme();
 
                     $renderer->assign('formData', $transactionData);

@@ -44,10 +44,10 @@ trait CacheOperatingElement
 
     protected function registerCacheKey($key)
     {
-        if (!($keys = $this->getCache()->get($this->id . ':k'))) {
+        if ($keys = $this->getCache()->get($this->id . ':k') === false) {
             $keys = [];
         }
         $keys[$key] = 1;
-        $this->getCache()->set($this->id . ':k', $keys, 3600 * 24);
+        $this->getCache()->set($this->id . ':k', $keys, 3600 * 24 * 7);
     }
 }

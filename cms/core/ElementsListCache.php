@@ -72,16 +72,16 @@ class ElementsListCache
     public function load()
     {
         if ($this->elements === null) {
-            $this->elements = [];
-            if ($value = $this->cache->get($this->cacheId . ':' . $this->cacheKey)) {
-                $this->idList = $value;
-            } else {
-                $this->idList = [];
-            }
-            foreach ($this->idList as $id) {
-                if ($element = $this->structureManager->getElementById($id)) {
-                    $this->elements[] = $element;
+            $this->idList = $this->cache->get($this->cacheId . ':' . $this->cacheKey);
+            if ($this->idList !== false) {
+                $this->elements = [];
+                foreach ($this->idList as $id) {
+                    if ($element = $this->structureManager->getElementById($id)) {
+                        $this->elements[] = $element;
+                    }
                 }
+            } else {
+                $this->elements = false;
             }
         }
 
