@@ -8,6 +8,7 @@
 class selectedProductsElement extends ProductsListElement implements ConfigurableLayoutsProviderInterface
 {
     use ConfigurableLayoutsProviderTrait;
+    use ConnectedCategoriesProviderTrait;
     use ConnectedIconsProviderTrait;
     public $dataResourceName = 'module_selected_products';
     public $defaultActionName = 'show';
@@ -189,35 +190,6 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
     {
-    }
-
-    public function getConnectedCategories()
-    {
-        if (is_null($this->connectedCategories)) {
-            $this->connectedCategories = [];
-            if ($categoryIds = $this->getConnectedCategoriesIds()) {
-                $structureManager = $this->getService('structureManager');
-                foreach ($categoryIds as &$categoryId) {
-                    if ($categoryId && $categoryElement = $structureManager->getElementById($categoryId)) {
-                        $item = [];
-                        $item['id'] = $categoryElement->id;
-                        $item['title'] = $categoryElement->getTitle();
-                        $item['select'] = true;
-                        $this->connectedCategories[] = $item;
-                    }
-                }
-            }
-        }
-        return $this->connectedCategories;
-    }
-
-    function getConnectedCategoriesIds()
-    {
-        if (is_null($this->connectedCategoriesIds)) {
-            $this->connectedCategoriesIds = $this->getService('linksManager')
-                ->getConnectedIdList($this->id, 'selectedProductsCategory', 'parent');
-        }
-        return $this->connectedCategoriesIds;
     }
 
     public function getConnectedBrands()
