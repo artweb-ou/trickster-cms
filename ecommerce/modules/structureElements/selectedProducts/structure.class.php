@@ -126,78 +126,86 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                 // date
                 case 0:
                     if ($this->amount) {
-                        $idList = [];
-                        if ($records = $db->table('structure_elements')
-                            ->where('structureType', '=', 'product')
-                            ->orderBy('dateCreated', 'desc')
-                            ->limit($this->amount)
-                            ->select('id')
-                            ->get()) {
-                            $idList = array_column($records, 'id');
+                        $amount = $this->amount;
+                        $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
+                            /**
+                             * @var \Illuminate\Database\Query\Builder $query
+                             */
+                            $query->from('structure_elements')
+                                ->where('structureType', '=', 'product')
+                                ->orderBy('dateCreated', 'desc')
+                                ->limit($amount);
                         }
-
-                        $productsListBaseQuery->whereIn('module_product.id', $idList);
+                        );
                     }
                     break;
 
                 // popularity (purchases)
                 case 1:
-                    $query = $this->getProductsQuery();
-                    if ($this->amount) {
-                        $query->limit($this->amount);
-                    }
-                    $idList = [];
-                    if ($records = $query
-                        ->orderBy('purchaseCount', 'desc')
-                        ->get()) {
-                        $idList = array_column($records, 'id');
-                    }
-
-                    $productsListBaseQuery->whereIn('module_product.id', $idList);
+                    $amount = $this->amount;
+                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
+                        /**
+                         * @var \Illuminate\Database\Query\Builder $query
+                         */
+                        $query->from('module_product')
+                            ->select('id')->distinct()
+                            ->orderBy('purchaseCount', 'desc');
+                        if ($amount) {
+                            $query->limit($amount);
+                        }
+                    });
                     break;
 
                 // purchased latest
                 case 2:
-                    $query = $this->getProductsQuery();
-                    if ($this->amount) {
-                        $query->limit($this->amount);
-                    }
-                    $idList = [];
-                    if ($records = $query
-                        ->orderBy('lastPurchaseDate', 'desc')
-                        ->get()) {
-                        $idList = array_column($records, 'id');
-                    }
-
-                    $productsListBaseQuery->whereIn('module_product.id', $idList);
+                    $amount = $this->amount;
+                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
+                        /**
+                         * @var \Illuminate\Database\Query\Builder $query
+                         */
+                        $query->from('module_product')
+                            ->select('id')->distinct()
+                            ->orderBy('lastPurchaseDate', 'desc');
+                        if ($amount) {
+                            $query->limit($amount);
+                        }
+                    });
                     break;
                 // random discounted products
                 case 3:
-
-                    $query = $this->getProductsQuery();
-                    if ($this->amount) {
-                        $query->limit($this->amount);
-                    }
-                    $idList = [];
-                    if ($records = $query
-                        ->where('oldPrice', '<>', 0)
-                        ->inRandomOrder()
-                        ->get()) {
-                        $idList = array_column($records, 'id');
-                    }
-
-                    $productsListBaseQuery->whereIn('module_product.id', $idList);
+                    $amount = $this->amount;
+                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
+                        /**
+                         * @var \Illuminate\Database\Query\Builder $query
+                         */
+                        $query->from('module_product')
+                            ->select('id')->distinct()
+                            ->where('oldPrice', '<>', 0)
+                            ->inRandomOrder();
+                        if ($amount) {
+                            $query->limit($amount);
+                        }
+                    });
                     break;
                 // all available products
                 case 4:
-//                    if ($this->amount){
-//                        $productsListBaseQuery->limit($this->amount);
-//                    }
+                    if ($this->amount) {
+                        $amount = $this->amount;
+                        $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
+                            /**
+                             * @var \Illuminate\Database\Query\Builder $query
+                             */
+                            $query->from('structure_elements')
+                                ->select('id')
+                                ->where('structureType', '=', 'product')
+                                ->limit($amount);
+                        }
+                        );
+                    }
                     break;
                 default:
                     break;
             }
-
         }
         $this->productsListBaseQuery = $productsListBaseQuery;
         return $this->productsListBaseQuery;
