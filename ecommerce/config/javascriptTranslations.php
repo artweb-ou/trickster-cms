@@ -20,6 +20,8 @@
     'productgallery.price' => true,
     'productgallery.readmore' => true,
     'shoppingbasket.pricesincludevat' => true,
-    'shoppingbasket.checkvat'                    => true,
+    'shoppingbasket.checkvat' => true,
+    'shoppingbasket.see_basket' => true,
+    'shoppingbasket.continue_shopping' => true,
     'product.details_must_select_options' => true,
 ];
