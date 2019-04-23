@@ -68,7 +68,7 @@ class SelectedProductsFormStructure extends ElementForm
         ],
         'iconIds' => [
             'type' => 'select.universal_options_multiple',
-            'method' => 'getConnectedIcons',
+            'method' => 'getConnectedIconsInfo',
             'class' => 'selectedproducts_iconselect',
             'trClass' => 'auto_selection_related',
 

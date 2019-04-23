@@ -407,15 +407,26 @@ abstract class ProductsListElement extends menuStructureElement
     public function getFilterLimit()
     {
         if ($this->filterLimit === null) {
-            $controller = controller::getInstance();
-            $limitArgument = $controller->getParameter('limit');
-            if ((int)$limitArgument) {
-                $this->filterLimit = (int)$limitArgument;
+            if ($limit = $this->getProductsListFixedLimit()) {
+                $this->filterLimit = $limit;
             } else {
-                $this->filterLimit = $this->getDefaultLimit();
+                $controller = controller::getInstance();
+                $limitArgument = $controller->getParameter('limit');
+
+                if ((int)$limitArgument) {
+                    $this->filterLimit = (int)$limitArgument;
+                } else {
+                    $this->filterLimit = $this->getDefaultLimit();
+                }
             }
         }
         return $this->filterLimit;
+    }
+
+    //some modules dont use pages or dynamic amount, they use strict limit of displayed products instead
+    protected function getProductsListFixedLimit()
+    {
+        return false;
     }
 
     /**
@@ -520,7 +531,12 @@ abstract class ProductsListElement extends menuStructureElement
     public function getProductsPager()
     {
         if (!$this->productsPager) {
-            $this->productsPager = new pager($this->generatePagerUrl(), $this->getFilteredProductsAmount(), $this->getFilterLimit(), (int)controller::getInstance()
+            $filteredProductsAmount = $this->getFilteredProductsAmount();
+            //sometimes we dont need all the products, but only amount set by admin
+            if (($fixedLimit = $this->getProductsListFixedLimit()) && $fixedLimit < $filteredProductsAmount) {
+                $filteredProductsAmount = $fixedLimit;
+            }
+            $this->productsPager = new pager($this->generatePagerUrl(), $filteredProductsAmount, $this->getFilterLimit(), (int)controller::getInstance()
                 ->getParameter('page'), "page");
         }
         return $this->productsPager;

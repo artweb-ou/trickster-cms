@@ -109,6 +109,37 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                     ->where('type', '=', 'catalogue');
             });
         }
+        if ($brandIds = $this->getConnectedBrandsIds()) {
+            $productsListBaseQuery->whereIn('module_product.brandId', $brandIds);
+        }
+
+        if ($discountIds = $this->getConnectedDiscountsIds()) {
+            /**
+             * @var shoppingBasketDiscounts $shoppingBasketDiscounts
+             */
+            $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
+            $discountedProductIds = [];
+            foreach ($discountIds as $discountId) {
+                if ($discount = $shoppingBasketDiscounts->getDiscount($discountId)) {
+                    $discountedProductIds = array_merge($discountedProductIds, $discount->getApplicableProductsIds());
+                }
+            }
+            $productsListBaseQuery->whereIn('module_product.id', $discountedProductIds);
+        }
+        if ($limitingIconIds = $this->getConnectedIconsIds()) {
+            /**
+             * @var ProductIconsManager $productIconsManager
+             */
+            $productIconsManager = $this->getService('ProductIconsManager');
+            $connectedIconsProducts = [];
+            foreach ($limitingIconIds as $iconId) {
+                if ($iconProducts = $productIconsManager->getIconProductIds($iconId)) {
+                    $connectedIconsProducts = array_merge($iconProducts, $connectedIconsProducts);
+                }
+            }
+            $productsListBaseQuery->whereIn('module_product.id', $connectedIconsProducts);
+        }
+
 
         if ($this->selectionType) { // manual selection - prepare the connected products
             /**
@@ -126,114 +157,79 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                 // date
                 case 0:
                     if ($this->amount) {
-                        $amount = $this->amount;
-                        $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
-                            /**
-                             * @var \Illuminate\Database\Query\Builder $query
-                             */
-                            $query->from('structure_elements')
-                                ->where('structureType', '=', 'product')
-                                ->orderBy('dateCreated', 'desc')
-                                ->limit($amount);
+                        $idList = [];
+                        if ($records = $db->table('structure_elements')
+                            ->where('structureType', '=', 'product')
+                            ->orderBy('dateCreated', 'desc')
+                            ->limit($this->amount)
+                            ->select('id')
+                            ->get()) {
+                            $idList = array_column($records, 'id');
                         }
-                        );
+
+                        $productsListBaseQuery->whereIn('module_product.id', $idList);
                     }
                     break;
 
                 // popularity (purchases)
                 case 1:
-                    $amount = $this->amount;
-                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
-                        /**
-                         * @var \Illuminate\Database\Query\Builder $query
-                         */
-                        $query->from('module_product')
-                            ->select('id')->distinct()
-                            ->orderBy('purchaseCount', 'desc');
-                        if ($amount) {
-                            $query->limit($amount);
-                        }
-                    });
+                    $query = $this->getProductsQuery();
+                    if ($this->amount) {
+                        $query->limit($this->amount);
+                    }
+                    $idList = [];
+                    if ($records = $query
+                        ->orderBy('purchaseCount', 'desc')
+                        ->get()) {
+                        $idList = array_column($records, 'id');
+                    }
+
+                    $productsListBaseQuery->whereIn('module_product.id', $idList);
                     break;
 
                 // purchased latest
                 case 2:
-                    $amount = $this->amount;
-                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
-                        /**
-                         * @var \Illuminate\Database\Query\Builder $query
-                         */
-                        $query->from('module_product')
-                            ->select('id')->distinct()
-                            ->orderBy('lastPurchaseDate', 'desc');
-                        if ($amount) {
-                            $query->limit($amount);
-                        }
-                    });
+                    $query = $this->getProductsQuery();
+                    if ($this->amount) {
+                        $query->limit($this->amount);
+                    }
+                    $idList = [];
+                    if ($records = $query
+                        ->orderBy('lastPurchaseDate', 'desc')
+                        ->get()) {
+                        $idList = array_column($records, 'id');
+                    }
+
+                    $productsListBaseQuery->whereIn('module_product.id', $idList);
                     break;
                 // random discounted products
                 case 3:
-                    $amount = $this->amount;
-                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
-                        /**
-                         * @var \Illuminate\Database\Query\Builder $query
-                         */
-                        $query->from('module_product')
-                            ->select('id')->distinct()
-                            ->where('oldPrice', '<>', 0)
-                            ->inRandomOrder();
-                        if ($amount) {
-                            $query->limit($amount);
-                        }
-                    });
+
+                    $query = $this->getProductsQuery();
+                    if ($this->amount) {
+                        $query->limit($this->amount);
+                    }
+                    $idList = [];
+                    if ($records = $query
+                        ->where('oldPrice', '<>', 0)
+                        ->inRandomOrder()
+                        ->get()) {
+                        $idList = array_column($records, 'id');
+                    }
+
+                    $productsListBaseQuery->whereIn('module_product.id', $idList);
                     break;
                 // all available products
                 case 4:
-                    if ($this->amount) {
-                        $amount = $this->amount;
-                        $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
-                            /**
-                             * @var \Illuminate\Database\Query\Builder $query
-                             */
-                            $query->from('structure_elements')
-                                ->select('id')
-                                ->where('structureType', '=', 'product')
-                                ->limit($amount);
-                        }
-                        );
-                    }
                     break;
                 default:
                     break;
             }
+
         }
         $this->productsListBaseQuery = $productsListBaseQuery;
         return $this->productsListBaseQuery;
 
-//        if ($result && $limitingDiscountIds = $this->getConnectedDiscountsIds()) {
-//            $basketDiscounts = $this->getService('shoppingBasketDiscounts');
-//            $discountsProductsIds = [];
-//            foreach ($limitingDiscountIds as &$discountId) {
-//                if ($discount = $basketDiscounts->getDiscount($discountId)) {
-//                    $discountsProductsIds = array_merge($discount->getApplicableProductsIds(), $discountsProductsIds);
-//                }
-//            }
-//            $result = array_intersect($result, $discountsProductsIds);
-//        }
-//
-//        if ($result && $limitingIconIds = $this->getConnectedIconsIds()) {
-//            /**
-//             * @var ProductIconsManager $productIconsManager
-//             */
-//            $productIconsManager = $this->getService('ProductIconsManager');
-//            $connectedIconsProducts = [];
-//            foreach ($limitingIconIds as $iconId) {
-//                if ($iconProducts = $productIconsManager->getIconProductIds($iconId)) {
-//                    $connectedIconsProducts = array_merge($iconProducts, $connectedIconsProducts);
-//                }
-//            }
-//            $result = array_intersect($result, $connectedIconsProducts);
-//        }
 //        if ($result && $limitingSelectionsIds = $this->getConnectedProductSelectionIds()) {
 //            $collection = persistableCollection::getInstance('module_product_parameter_value');
 //            $conditions = [
@@ -298,7 +294,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
 
     public function getConnectedBrands()
     {
-        if (is_null($this->connectedBrands)) {
+        if ($this->connectedBrands === null) {
             $this->connectedBrands = [];
             if ($brandIds = $this->getConnectedBrandsIds()) {
                 $structureManager = $this->getService('structureManager');
@@ -319,7 +315,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         return $this->connectedBrands;
     }
 
-    function getConnectedBrandsIds()
+    public function getConnectedBrandsIds()
     {
         if (is_null($this->connectedBrandsIds)) {
             $this->connectedBrandsIds = $this->getService('linksManager')
@@ -434,6 +430,11 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
     public function isAmountSelectionEnabled()
     {
         return $this->amountOnPageEnabled;
+    }
+
+    protected function getProductsListFixedLimit()
+    {
+        return $this->amount;
     }
 }
 
