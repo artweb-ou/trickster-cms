@@ -1,16 +1,16 @@
 .popup_component {
 	display: none;
 	text-align: left;
-	background: #fff;
+	background-color: @bg_color_01;
 	position: absolute;
 	top: 100%;
-	border: 0.5em solid #eee;
+	border: 0.5em solid @brd_color_12;
 	padding: 0.3em 1em 0.6em 0.79em;
 	width: 27em;
 	max-width: 100%;
 	z-index: 2;
 	box-sizing: border-box;
-	box-shadow: 0 4px 9px rgba(0, 0, 0, 0.26);
+	box-shadow: 0 4px 9px fade(@black, 26);
 }
 
 .popup_component_close {
@@ -29,10 +29,10 @@
 .popup_component_notice {
 	margin-top: 0.95em;
 	padding-top: 0.5em;
-	border-top: 1px solid #e5e5e5;
+	border-top: 1px solid @brd_color_10;
 	font-size: 0.93em;
 	font-style: italic;
-	color: #000;
+	color: @text_color_02;
 	text-align: center;
 	line-height: 1.7;
 }

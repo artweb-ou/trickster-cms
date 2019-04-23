@@ -3,7 +3,7 @@
 }
 
 .productgallery_scrollbutton {
-	background: #fff;
+	background-color: @bg_color_01;
 	cursor: pointer;
 	display: block;
 	position: absolute;
@@ -47,20 +47,20 @@
 	bottom: 0;
 	left: 0;
 	right: 0;
-	background: rgba(0, 0, 0, 0.7);
+	background-color: fade(@black, 70);
 	padding: 1em;
 }
 
 .productgallery_image_description_title {
 	display: block;
-	color: #fff;
+	color: @text_color_01;
 	font-size: 1.3em;
 	margin-bottom: 1em;
 }
 
 .productgallery_image_description_content {
 	display: block;
-	color: #fff;
+	color: @text_color_01;
 }
 
 .productgallery_image_label {
@@ -74,7 +74,7 @@
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
-	color: #000615;
+color: @text_color_04;
 }
 
 /********************************************************
@@ -82,7 +82,7 @@
 /********************************************************/
 .productgallery_productplacemark {
 	border-radius: 100%;
-	background: #000615;
+	background-color: @bg_color_03;
 	width: 2em;
 	height: 2em;
 	text-align: left;
@@ -91,7 +91,7 @@
 	&:after {
 		font-size: 2em;
 		content: "+";
-		color: #fff;
+		color: @text_color_01;
 	}
 }
 
@@ -109,13 +109,13 @@
 	position: absolute;
 	bottom: 2.5em;
 	left: 2.5em;
-	background: #fff;
+	background-color: @bg_color_01;
 	opacity: 0.9;
 	padding: 0.75em 1em;
 	min-width: 8em;
 	font-size: 0.8em;
 	border-radius: 0.5em 0.5em 0.5em 0;
-	box-shadow: 0.3em 0.3em 0.5em rgba(0, 0, 0, 0.5);
+	box-shadow: 0.3em 0.3em 0.5em fade(@black, 50);
 }
 
 .productgallery_productplacemark_description_title {
@@ -136,10 +136,10 @@
 	position: absolute;
 	z-index: 20;
 	padding: 2em;
-	background-color: #fff;
+	background-color: @bg_color_01;
 	width: auto;
 	border-radius: 0.5em;
-	box-shadow: 0 0.1em 0.2em rgba(0, 0, 0, 0.5);
+	box-shadow: 0 0.1em 0.2em fade(@black, 50);
 	box-sizing: border-box;
 }
 

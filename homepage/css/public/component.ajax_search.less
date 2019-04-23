@@ -7,13 +7,13 @@
 }
 
 .ajaxsearch_results_block {
-	background-color: #fff;
+	background-color: @bg_color_01;
 	display: none;
 	margin-top: 0.25em;
 	padding: 0.25em 0;
 	position: absolute;
 	z-index: 50;
-	box-shadow: 0 0 4px -2px #000;
+	box-shadow: 0 0 4px -2px @shadow_01;
 }
 
 .ajaxsearch_results_list {
@@ -32,9 +32,9 @@
 
 	&:hover,
 	&.ajaxsearch_results_active {
-		background-color: #bababa;
+		background-color: @bg_color_06;
 		border-radius: 4px 4px 4px 4px;
-		color: #fff;
+		color: @text_color_01;
 	}
 
 	.icon {
@@ -45,5 +45,5 @@
 .ajaxsearch_results_item_text {
 	vertical-align: middle;
 	font-size: 0.9em;
-	color: #333;
+	color: @text_color_03;
 }
