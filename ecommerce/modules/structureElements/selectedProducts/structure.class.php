@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder;
+
 /**
  * Class selectedProductsElement
  *
@@ -80,6 +83,33 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         }
         $productsListBaseQuery = $this->getProductsQuery();
 
+        if ($connectedCategories = $this->getConnectedCategories()) {
+            $subCategoriesIdIndex = [];
+            foreach ($connectedCategories as $category) {
+                $category->gatherSubCategoriesIdIndex($category->id, $subCategoriesIdIndex);
+            }
+            $deepCategoryIds = array_keys($subCategoriesIdIndex);
+            $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($deepCategoryIds) {
+                /**
+                 * @var Builder $query
+                 */
+                $query->from('structure_links')
+                    ->select('childStructureId')
+                    ->whereIn('parentStructureId', $deepCategoryIds)
+                    ->where('type', '=', 'catalogue');
+            });
+        } else {
+            //if no categories are selected then at least ensure that only products connected to any categories at all are used
+            $productsListBaseQuery->whereIn('module_product.id', function ($query) {
+                /**
+                 * @var Builder $query
+                 */
+                $query->from('structure_links')
+                    ->select('childStructureId')
+                    ->where('type', '=', 'catalogue');
+            });
+        }
+
         if ($this->selectionType) { // manual selection - prepare the connected products
             /**
              * @var linksManager $linksManager
@@ -88,86 +118,81 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
             $connectedProductIds = $linksManager->getConnectedIdList($this->id, 'selectedProducts', 'parent');
             $productsListBaseQuery->whereIn('module_product.id', $connectedProductIds);
         } else {
+            /**
+             * @var Connection $db
+             */
+            $db = $this->getService('db');
             switch ($this->autoSelectionType) {
                 // date
                 case 0:
                     if ($this->amount) {
-                        $amount = $this->amount;
-                        $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
-                            /**
-                             * @var \Illuminate\Database\Query\Builder $query
-                             */
-                            $query->from('structure_elements')
-                                ->where('structureType', '=', 'product')
-                                ->orderBy('dateCreated', 'desc')
-                                ->limit($amount);
+                        $idList = [];
+                        if ($records = $db->table('structure_elements')
+                            ->where('structureType', '=', 'product')
+                            ->orderBy('dateCreated', 'desc')
+                            ->limit($this->amount)
+                            ->select('id')
+                            ->get()) {
+                            $idList = array_column($records, 'id');
                         }
-                        );
+
+                        $productsListBaseQuery->whereIn('module_product.id', $idList);
                     }
                     break;
 
                 // popularity (purchases)
                 case 1:
-                    $amount = $this->amount;
-                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
-                        /**
-                         * @var \Illuminate\Database\Query\Builder $query
-                         */
-                        $query->from('module_product')
-                            ->select('id')->distinct()
-                            ->orderBy('purchaseCount', 'desc');
-                        if ($amount) {
-                            $query->limit($amount);
-                        }
-                    });
+                    $query = $this->getProductsQuery();
+                    if ($this->amount) {
+                        $query->limit($this->amount);
+                    }
+                    $idList = [];
+                    if ($records = $query
+                        ->orderBy('purchaseCount', 'desc')
+                        ->get()) {
+                        $idList = array_column($records, 'id');
+                    }
+
+                    $productsListBaseQuery->whereIn('module_product.id', $idList);
                     break;
 
                 // purchased latest
                 case 2:
-                    $amount = $this->amount;
-                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
-                        /**
-                         * @var \Illuminate\Database\Query\Builder $query
-                         */
-                        $query->from('module_product')
-                            ->select('id')->distinct()
-                            ->orderBy('lastPurchaseDate', 'desc');
-                        if ($amount) {
-                            $query->limit($amount);
-                        }
-                    });
+                    $query = $this->getProductsQuery();
+                    if ($this->amount) {
+                        $query->limit($this->amount);
+                    }
+                    $idList = [];
+                    if ($records = $query
+                        ->orderBy('lastPurchaseDate', 'desc')
+                        ->get()) {
+                        $idList = array_column($records, 'id');
+                    }
+
+                    $productsListBaseQuery->whereIn('module_product.id', $idList);
                     break;
                 // random discounted products
                 case 3:
-                    $amount = $this->amount;
-                    $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
-                        /**
-                         * @var \Illuminate\Database\Query\Builder $query
-                         */
-                        $query->from('module_product')
-                            ->select('id')->distinct()
-                            ->where('oldPrice', '<>', 0)
-                            ->inRandomOrder();
-                        if ($amount) {
-                            $query->limit($amount);
-                        }
-                    });
+
+                    $query = $this->getProductsQuery();
+                    if ($this->amount) {
+                        $query->limit($this->amount);
+                    }
+                    $idList = [];
+                    if ($records = $query
+                        ->where('oldPrice', '<>', 0)
+                        ->inRandomOrder()
+                        ->get()) {
+                        $idList = array_column($records, 'id');
+                    }
+
+                    $productsListBaseQuery->whereIn('module_product.id', $idList);
                     break;
                 // all available products
                 case 4:
-                    if ($this->amount) {
-                        $amount = $this->amount;
-                        $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($amount) {
-                            /**
-                             * @var \Illuminate\Database\Query\Builder $query
-                             */
-                            $query->from('structure_elements')
-                                ->select('id')
-                                ->where('structureType', '=', 'product')
-                                ->limit($amount);
-                        }
-                        );
-                    }
+//                    if ($this->amount){
+//                        $productsListBaseQuery->limit($this->amount);
+//                    }
                     break;
                 default:
                     break;
@@ -177,45 +202,6 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         $this->productsListBaseQuery = $productsListBaseQuery;
         return $this->productsListBaseQuery;
 
-
-//        $result = $this->getActiveProductsIds();
-//
-//        if ($result && $limitingCategoryIds = $this->getConnectedCategoriesIds()) {
-//            $structureManager = $this->getService('structureManager');
-//            $subCategoriesIdIndex = [];
-//            foreach ($limitingCategoryIds as &$categoryId) {
-//                if ($category = $structureManager->getElementById($categoryId)) {
-//                    $category->gatherSubCategoriesIdIndex($category->id, $subCategoriesIdIndex);
-//                }
-//            }
-//            $limitingCategoryIds = array_keys($subCategoriesIdIndex);
-//            $conditions = [];
-//            $conditions[] = [
-//                'type',
-//                '=',
-//                'catalogue',
-//            ];
-//            if ($limitingCategoryIds) {
-//                $conditions[] = [
-//                    'parentStructureId',
-//                    'in',
-//                    $limitingCategoryIds,
-//                ];
-//            }
-//            $conditions[] = [
-//                'childStructureId',
-//                'in',
-//                $result,
-//            ];
-//            $result = [];
-//            if ($records = persistableCollection::getInstance('structure_links')
-//                ->conditionalLoad('childStructureId', $conditions)
-//            ) {
-//                foreach ($records as &$record) {
-//                    $result[] = $record['childStructureId'];
-//                }
-//            }
-//        }
 //        if ($result && $limitingDiscountIds = $this->getConnectedDiscountsIds()) {
 //            $basketDiscounts = $this->getService('shoppingBasketDiscounts');
 //            $discountsProductsIds = [];

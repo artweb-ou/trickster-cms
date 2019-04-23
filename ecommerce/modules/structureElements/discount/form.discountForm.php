@@ -82,7 +82,7 @@ class DiscountFormStructure extends ElementForm
         ],
         'categories' => [
             'type' => 'select.universal_options_multiple',
-            'method' => 'getConnectedCategories',
+            'method' => 'getConnectedCategoriesInfo',
             'class' => 'discount_form_categoryselect',
         ],
         'brands' => [

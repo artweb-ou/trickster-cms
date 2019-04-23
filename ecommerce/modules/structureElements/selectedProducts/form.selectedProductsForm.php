@@ -49,7 +49,7 @@ class SelectedProductsFormStructure extends ElementForm
         ],
         'categoriesIds' => [
             'type' => 'select.universal_options_multiple',
-            'method' => 'getConnectedCategories',
+            'method' => 'getConnectedCategoriesInfo',
             'class' => 'selectedproducts_categoryselect',
             'trClass' => 'auto_selection_related',
         ],

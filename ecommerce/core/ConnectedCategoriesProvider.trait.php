@@ -2,9 +2,35 @@
 
 trait ConnectedCategoriesProviderTrait
 {
+    /**
+     * @var categoryElement[]
+     */
     protected $connectedCategories;
+    /**
+     * @var int[]
+     */
     protected $connectedCategoriesIds;
 
+    /**
+     * @return array
+     */
+    public function getConnectedCategoriesInfo()
+    {
+        $info = [];
+        foreach ($this->getConnectedCategories() as $categoryElement) {
+            $item = [];
+            $item['id'] = $categoryElement->id;
+            $item['title'] = $categoryElement->getTitle();
+            $item['select'] = true;
+            $info[] = $item;
+        }
+
+        return $info;
+    }
+
+    /**
+     * @return categoryElement[]
+     */
     public function getConnectedCategories()
     {
         if ($this->connectedCategories === null) {
@@ -16,11 +42,7 @@ trait ConnectedCategoriesProviderTrait
                 $structureManager = $this->getService('structureManager');
                 foreach ($categoryIds as $categoryId) {
                     if ($categoryId && $categoryElement = $structureManager->getElementById($categoryId)) {
-                        $item = [];
-                        $item['id'] = $categoryElement->id;
-                        $item['title'] = $categoryElement->getTitle();
-                        $item['select'] = true;
-                        $this->connectedCategories[] = $item;
+                        $this->connectedCategories[] = $categoryElement;
                     }
                 }
             }
@@ -28,6 +50,10 @@ trait ConnectedCategoriesProviderTrait
         return $this->connectedCategories;
     }
 
+    /**
+     * @param null $linkType
+     * @return int[]
+     */
     public function getConnectedCategoriesIds($linkType = null)
     {
         if (!$linkType) {
@@ -65,5 +91,6 @@ trait ConnectedCategoriesProviderTrait
             $linksManager->linkElements($this->id, $selectedCategoryId, $linkType);
         }
         $this->connectedCategoriesIds = null;
+        $this->connectedCategories = null;
     }
 }
