@@ -23,5 +23,8 @@
     'shoppingbasket.checkvat' => true,
     'shoppingbasket.see_basket' => true,
     'shoppingbasket.continue_shopping' => true,
+    'shoppingbasket.conditions' => true,
+    'shoppingbasket.agreewithconditions' => true,
+    'shoppingbasket.conditions_error' => true,
     'product.details_must_select_options' => true,
 ];
