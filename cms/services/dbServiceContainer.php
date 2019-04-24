@@ -39,9 +39,11 @@ class dbServiceContainer extends DependencyInjectionServiceContainer
         if ($config == 'transport') {
             $capsule->setAsGlobal();
         }
-        if ($pdo = $capsule->getConnection()->getPdo()) {
+        $connection = $capsule->getConnection();
+        if ($pdo = $connection->getPdo()) {
             $pdo->query('SET sql_mode = ""');
         }
-        return $capsule->getConnection();
+
+        return $connection;
     }
 }
