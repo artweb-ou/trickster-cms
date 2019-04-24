@@ -17,7 +17,6 @@ use Illuminate\Database\Query\Builder;
  */
 class catalogueElement extends structureElement
 {
-//    use ProductFilterFactoryTrait;
     public $languagesParentElementMarker = 'adminLanguages';
     public $dataResourceName = 'module_generic';
     protected $allowedTypes = ['product'];

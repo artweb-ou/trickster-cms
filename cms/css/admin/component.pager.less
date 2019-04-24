@@ -38,11 +38,12 @@
 		}
 	}
 	.pager_page {
-		width: @37pt;
+		min-width: @37pt;
 		color: @page-text-color;
-		padding: @6pt 0 0 0;
+		padding: @6pt @3pt 0;
 		text-decoration: none;
 		border: 1px solid @page-border-color;
+		box-sizing: border-box;
 		&:hover, &:focus {
 			outline: none;
 			background-color: @page-border-color;

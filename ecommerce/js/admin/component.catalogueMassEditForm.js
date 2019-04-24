@@ -3,19 +3,19 @@ window.CatalogueMassEditFormComponent = function(componentElement) {
 	var init = function() {
 		eventsManager.addHandler(componentElement, 'submit', submit);
 		var element;
-		if (element = _('select.catalogue_masseditor_categoryselect', componentElement)[0]) {
+		if (element = componentElement.querySelector('select.catalogue_masseditor_categoryselect')) {
 			new AjaxSelectComponent(element, 'category', 'admin');
 		}
-		if (element = _('select.catalogue_masseditor_brandselect', componentElement)[0]) {
+		if (element = componentElement.querySelector('select.catalogue_masseditor_brandselect')) {
 			new AjaxSelectComponent(element, 'brand', 'admin');
 		}
-		if (element = _('select.catalogue_masseditor_discountselect', componentElement)[0]) {
+		if (element = componentElement.querySelector('select.catalogue_masseditor_discountselect')) {
 			new AjaxSelectComponent(element, 'discount', 'admin');
 		}
-		if (element = _('.catalogue_masseditor_targetall_checkbox', componentElement)[0]) {
+		if (element = componentElement.querySelector('input.catalogue_masseditor_targetall_checkbox')) {
 			targetAllCheckboxElement = element;
 		}
-		if (element = _('.catalogue_masseditor_targets_input', componentElement)[0]) {
+		if (element = componentElement.querySelector('input.catalogue_masseditor_targets_input')) {
 			targetsInputElement = element;
 		}
 	};
@@ -23,7 +23,7 @@ window.CatalogueMassEditFormComponent = function(componentElement) {
 		targetsInputElement.value = '';
 		if (!targetAllCheckboxElement.checked) {
 			var targetsIds = [];
-			var checkboxElements = _('input[type=checkbox]');
+			var checkboxElements = componentElement.querySelector('input[type=checkbox]');
 			for (var i = checkboxElements.length; i--;) {
 				if (!checkboxElements[i].checked) {
 					continue;
