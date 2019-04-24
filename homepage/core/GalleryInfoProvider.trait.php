@@ -45,6 +45,8 @@ trait GalleryInfoProviderTrait
                 'link' => $imageElement->link,
                 'externalLink' => $imageElement->externalLink,
                 'id' => $imageElement->id,
+                'filename'    => $imageElement->originalName,
+                'fileUrl'    => $controller->baseURL . 'file/id:' . $imageElement->id . '/filename:' . $imageElement->originalName,
             ];
         }
         return json_encode($galleryData);

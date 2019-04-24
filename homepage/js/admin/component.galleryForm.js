@@ -106,7 +106,7 @@ window.GalleryFormComponent = function(componentElement) {
 
 		uploadFileComponents = [];
 		for (i = 0; i < files.length; i++) {
-			if (files[i].size <= 1024 * 1024 * 30 && files[i].type.search(/image\/.*/) != -1) {
+			if (files[i].size <= 1024 * 1024 * 200 && (files[i].type.search(/image\/.*/) != -1 || files[i].type.search(/video\/mp4/) != -1)) {
 				var fileComponent = new GalleryFormImageComponent(files[i]);
 				imagesListElement.appendChild(fileComponent.componentElement);
 
