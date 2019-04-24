@@ -1,5 +1,20 @@
 <?php
 
+use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder;
+
+/**
+ * Class catalogueElement
+ *
+ * @property string $massEditMethod
+ * @property float $productPriceAddition
+ * @property float $productPriceMultiplier
+ * @property int[] $newCategories
+ * @property int[] $newDiscounts
+ * @property int[] $newBrand
+ * @property int $targetAll
+ * @property string $targets
+ */
 class catalogueElement extends structureElement
 {
 //    use ProductFilterFactoryTrait;
@@ -8,6 +23,9 @@ class catalogueElement extends structureElement
     protected $allowedTypes = ['product'];
     public $defaultActionName = 'showFullList';
     public $role = 'container';
+    /**
+     * @var productElement[]
+     */
     protected $productsPageList;
     public $pager;
     public $productsList;
@@ -46,8 +64,8 @@ class catalogueElement extends structureElement
         $addition = (float)$this->productPriceAddition;
 
         $db = $this->getService('db');
-        $structureManager = $this->getService('structureManager');
         $linksManager = $this->getService('linksManager');
+        $targets = [];
         if ($this->targetAll) {
             $targets = $this->getAdminProductsPageFilteredIds();
         } elseif ($this->targets) {
@@ -85,6 +103,9 @@ class catalogueElement extends structureElement
                 $linksManager->linkElements($this->newBrand, $productId, 'productbrand');
             }
         }
+        /**
+         * @var Builder $query
+         */
         if ($multiplier || $addition) {
             if (is_numeric($multiplier) && $multiplier > 0 && $multiplier != 0) {
                 $query = $db->table('module_product')
@@ -111,26 +132,57 @@ class catalogueElement extends structureElement
     {
         if ($this->filteredIds === null) {
             $this->filteredIds = [];
+            $structureManager = $this->getService('structureManager');
             $controller = $this->getService('controller');
+            /**
+             * @var Connection $db
+             */
             $db = $this->getService('db');
-            $records = $db->table('module_product')->select('id')->distinct()->get('id');
-            foreach ($records as $record) {
-                $this->filteredIds[] = $record['id'];
+            $query = $db->table('module_product')->select('id')->distinct();
+
+            if ($controller->getParameter('filter')) {
+                if ($categoryIds = $controller->getParameter('category')) {
+                    $deepCategoryIds = [];
+
+                    foreach ($categoryIds as $categoryId) {
+                        /**
+                         * @var categoryElement $category
+                         */
+                        if ($category = $structureManager->getElementById($categoryId)) {
+                            $category->gatherSubCategoriesIdIndex($categoryId, $deepCategoryIds);
+                        }
+                    }
+                    if ($deepCategoryIds) {
+                        $deepCategoryIds = array_keys($deepCategoryIds);
+                        $query->whereIn('module_product.id', function ($query) use ($deepCategoryIds) {
+                            $query->from('structure_links')
+                                ->select('childStructureId')
+                                ->whereIn('parentStructureId', $deepCategoryIds)
+                                ->where('type', '=', 'catalogue');
+                        });
+                    }
+                }
+                if ($brandsIds = $controller->getParameter('brand')) {
+                    $query->whereIn('module_product.brandId', $brandsIds);
+                }
+                if ($discountIds = $controller->getParameter('discount')) {
+                    /**
+                     * @var shoppingBasketDiscounts $shoppingBasketDiscounts
+                     */
+                    $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
+                    $discountedProductIds = [];
+                    foreach ($discountIds as $discountId) {
+                        if ($discount = $shoppingBasketDiscounts->getDiscount($discountId)) {
+                            $discountedProductIds = array_merge($discountedProductIds, $discount->getApplicableProductsIds());
+                        }
+                    }
+                    $query->whereIn('module_product.id', $discountedProductIds);
+                }
+
+
             }
-            $filtering = !!$controller->getParameter('filter');
-            if ($filtering) {
-                if ($filterArguments = $controller->getParameter('category')) {
-                    $filter = $this->createProductFilter('category', $filterArguments);
-                    $filter->filter($this->filteredIds);
-                }
-                if ($filterArguments = $controller->getParameter('brand')) {
-                    $filter = $this->createProductFilter('brand', $filterArguments);
-                    $filter->filter($this->filteredIds);
-                }
-                if ($filterArguments = $controller->getParameter('discount')) {
-                    $filter = $this->createProductFilter('discount', $filterArguments);
-                    $filter->filter($this->filteredIds);
-                }
+            if ($records = $query->get()) {
+                $this->filteredIds = array_column($records, 'id');
             }
         }
         return $this->filteredIds;
@@ -163,6 +215,9 @@ class catalogueElement extends structureElement
                 if ($orderField == 'dateModified') {
                     $table = 'structure_elements';
                 }
+                /**
+                 * @var Builder $query
+                 */
                 $query = $db->table($table)->select('id');
                 $query->orderBy($orderField, $arguments['order']['argument']);
 
@@ -182,12 +237,21 @@ class catalogueElement extends structureElement
                         }
                     }
                     $query->where(function ($query) use ($translatedIDs, $publicLanguageId) {
+                        /**
+                         * @var Builder $query
+                         */
                         return $query->where(
                             function ($query) use ($translatedIDs, $publicLanguageId) {
+                                /**
+                                 * @var Builder $query
+                                 */
                                 return $query->whereIn('id', $translatedIDs)
                                     ->where('languageId', $publicLanguageId);
                             }
                         )->orWhere(function ($query) use ($translatedIDs, $publicLanguageId) {
+                            /**
+                             * @var Builder $query
+                             */
                             return $query->whereNotIn('id', $translatedIDs);
                         });
                     });

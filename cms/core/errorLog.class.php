@@ -58,10 +58,10 @@ class errorLog
             }
 
             foreach ($this->messageLogArray as &$item) {
-                $contents .= $item['date'] . "\n"
-                    . "- " . $item['locationName'] . ': ' . $item['errorText'] . "\n"
-                    . "- REQUEST_URI: " . $myUrl . "\n"
-                    . "- HTTP_REFERER: " . $referer . "\n\n";
+                $contents .= $item['date'] . "\n\r"
+                    . "- " . $item['locationName'] . ': ' . $item['errorText'] . "\n\r"
+                    . "- REQUEST_URI: " . $myUrl . "\n\r"
+                    . "- HTTP_REFERER: " . $referer . "\n\r\n\r";
             }
             $pathsManager = controller::getInstance()->getPathsManager();
             $pathsManager->ensureDirectory($pathsManager->getPath('logs'));
