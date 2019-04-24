@@ -74,11 +74,6 @@ class productSearchElement extends menuDependantStructureElement
             default:
                 $result = false;
         }
-//        if ($result) {
-//            if ($productsListElement = $this->getProductsListElement()) {
-//                $result = $productsListElement->isFilterableByType($filterType);
-//            }
-//        }
 
         return $result;
     }
