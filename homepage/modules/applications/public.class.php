@@ -25,6 +25,11 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $this->createRenderer();
     }
 
+    /**
+     * @param controller $controller
+     * @return mixed|void
+     * @throws Exception
+     */
     public function execute($controller)
     {
         $this->checkBotUAs();
