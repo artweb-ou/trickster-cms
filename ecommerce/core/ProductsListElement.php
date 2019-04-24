@@ -49,6 +49,8 @@ abstract class ProductsListElement extends menuStructureElement
     protected $filterPriceString;
     protected $filterLimit;
     protected $priceInterval = 5;
+    protected $productsListMinPrice;
+    protected $productsListMaxPrice;
 
     public function getProductsListElement()
     {
@@ -203,7 +205,6 @@ abstract class ProductsListElement extends menuStructureElement
                  * @var structureManager $structureManager
                  */
                 $structureManager = $this->getService('structureManager');
-                $this->getService('ParametersManager')->preloadPrimaryParametersForProducts($productIds);
                 foreach ($productIds as &$productId) {
                     if ($product = $structureManager->getElementById($productId, $parentRestrictionId)) {
                         $this->productsList[] = $product;
@@ -451,6 +452,10 @@ abstract class ProductsListElement extends menuStructureElement
                     foreach ($records as &$record) {
                         $distinctPrices[] = $record['price'];
                     }
+
+                    $this->productsListMinPrice = reset($distinctPrices);
+                    $this->productsListMaxPrice = end($distinctPrices);
+
                     $priceCount = count($distinctPrices);
                     $priceChunks = array_chunk($distinctPrices, max(ceil($priceCount / $this->priceInterval), 2));
                     foreach ($priceChunks as $priceChunk) {
@@ -463,6 +468,18 @@ abstract class ProductsListElement extends menuStructureElement
             }
         }
         return $this->priceRangeSets;
+    }
+
+    public function getProductsListMinPrice()
+    {
+        $this->getProductsListPriceRangeSets();
+        return $this->productsListMinPrice;
+    }
+
+    public function getProductsListMaxPrice()
+    {
+        $this->getProductsListPriceRangeSets();
+        return $this->productsListMaxPrice;
     }
 
     public function isFilterable()

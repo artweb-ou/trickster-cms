@@ -3,6 +3,11 @@
 /**
  * Class productSearchElement
  *
+ * @property int $filterCategory
+ * @property int $filterBrand
+ * @property int $filterPrice
+ * @property int $filterDiscount
+ * @property int $availabilityFilterEnabled
  * @property int $pageDependent
  * @property int $sortingEnabled
  */
@@ -41,10 +46,41 @@ class productSearchElement extends menuDependantStructureElement
 
     public function isFilterableByType($filterType)
     {
-        if ($productsListElement = $this->getProductsListElement()) {
-            return $productsListElement->isFilterableByType($filterType);
+        switch ($filterType) {
+            case 'category':
+                $result = $this->filterCategory;
+                break;
+            case 'brand':
+                $result = $this->filterBrand;
+                break;
+            case 'discount':
+                $result = $this->filterDiscount;
+                break;
+            case 'parameter':
+                if (!$this->pageDependent) {
+                    $result = $this->getConnectedParametersIds();
+                } else {
+                    if ($productsListElement = $this->getProductsListElement()) {
+                        $result = $productsListElement->getParameterSelectionsForFiltering();
+                    }
+                }
+                break;
+            case 'price':
+                $result = $this->filterPrice;
+                break;
+            case 'availability':
+                $result = $this->availabilityFilterEnabled;
+                break;
+            default:
+                $result = false;
         }
-        return false;
+//        if ($result) {
+//            if ($productsListElement = $this->getProductsListElement()) {
+//                $result = $productsListElement->isFilterableByType($filterType);
+//            }
+//        }
+
+        return $result;
     }
 
     public function isFilterable()
@@ -86,6 +122,7 @@ class productSearchElement extends menuDependantStructureElement
         }
         return false;
     }
+
     public function getParameterSelectionsForFiltering()
     {
         if ($productsListElement = $this->getProductsListElement()) {
@@ -94,46 +131,6 @@ class productSearchElement extends menuDependantStructureElement
         return false;
     }
 
-
-//
-//    public function isApplied()
-//    {
-//        $filterParameters = [
-//            'productsearch',
-//            'category',
-//            'brand',
-//            'discount',
-//            'parameter',
-//            'price',
-//        ];
-//        $controller = controller::getInstance();
-//        foreach ($filterParameters as &$filterParameter) {
-//            if ($controller->getParameter($filterParameter)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//
-//    public function addFilter(productFilter $filter)
-//    {
-//        if ($this->baseFilter !== null) {
-//            $this->baseFilter->addFilter($filter);
-//        } else {
-//            $this->baseFilter = $filter;
-//        }
-//        $this->registerFilter($filter);
-//    }
-//
-//    protected function registerFilter(productFilter $filter)
-//    {
-//        $type = $filter->getType();
-//        if (!isset($this->filtersIndex[$type])) {
-//            $this->filtersIndex[$type] = [];
-//        }
-//        $this->filtersIndex[$type][] = $filter;
-//    }
-//
     public function getCurrentElement()
     {
         return $this->getService('structureManager')->getCurrentElement(controller::getInstance()->requestedPath);

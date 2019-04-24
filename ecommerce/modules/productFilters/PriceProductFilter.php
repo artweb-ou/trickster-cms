@@ -40,4 +40,18 @@ class PriceProductFilter extends productFilter
     {
         return $this->productsListElement->getFilterPriceString();
     }
+
+    public function getRange()
+    {
+        return [$this->productsListElement->getProductsListMinPrice(), $this->productsListElement->getProductsListMaxPrice()];
+    }
+
+    public function getSelectedRange()
+    {
+        if ($string = $this->productsListElement->getFilterPriceString()) {
+            $parts = explode('-', $string);
+            return $parts;
+        }
+        return $this->getRange();
+    }
 }

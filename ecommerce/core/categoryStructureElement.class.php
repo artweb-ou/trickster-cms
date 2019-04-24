@@ -54,8 +54,7 @@ abstract class categoryStructureElement extends ProductsListElement
         if ($this->role == 'content' || $this->requested) {
             switch ($filterType) {
                 case 'category':
-                    $result = true;
-//                    $result = $this->isSettingEnabled('categoryFilterEnabled');
+                    $result = $this->isSettingEnabled('categoryFilterEnabled');
                     break;
                 case 'brand':
                     $result = $this->isSettingEnabled('brandFilterEnabled');
@@ -67,8 +66,7 @@ abstract class categoryStructureElement extends ProductsListElement
                     $result = $this->isSettingEnabled('parameterFilterEnabled');
                     break;
                 case 'price':
-                    $result = true;
-//                    $result = $this->isSettingEnabled('priceFilterEnabled');
+                    $result = $this->isSettingEnabled('priceFilterEnabled');
                     break;
                 case 'availability':
                     $result = $this->isSettingEnabled('availabilityFilterEnabled');
