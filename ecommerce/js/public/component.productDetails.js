@@ -271,6 +271,7 @@ window.ProductDetailsSelectionComponent = function(detailsComponent, componentEl
 					'referralElement' : hintElement,
 					'popupText' : hintContent
 				});
+				hintElement.classList.add('product_details_option_hint_show');
 			}
 		}
 	};
