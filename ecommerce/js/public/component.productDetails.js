@@ -262,6 +262,18 @@ window.ProductDetailsSelectionComponent = function(detailsComponent, componentEl
 			radioElements = _('.product_details_option_radio_item_control', componentElement);
 			eventsManager.addHandler(componentElement, 'click', change);
 		}
+		if (window.productParametersHintsInfo[id]) {
+			var hintElement = _('.product_details_option_hint', componentElement.parentElement)[0];
+			if(hintElement) {
+				var hints = window.productParametersHintsInfo[id];
+				var hintContent = hints.join('<hr/>');
+				new TipPopupComponent({
+					'referralElement' : hintElement,
+					'popupText' : hintContent
+				});
+				hintElement.classList.add('product_details_option_hint_show');
+			}
+		}
 	};
 	var change = function(event) {
 		detailsComponent.selectionChanged(self);
