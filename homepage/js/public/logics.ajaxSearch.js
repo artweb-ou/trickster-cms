@@ -13,8 +13,13 @@ window.ajaxSearchLogics = new function() {
 			controller.fireEvent('ajaxSearchResultsFailure', responseData);
 		}
 	};
-	this.sendQuery = function(callBack, query, types, apiMode) {
-		var url = '/ajaxSearch/mode:' + apiMode + '/types:' + types + '/?query=' + query;
+	this.sendQuery = function(callBack, query, types, apiMode, totals) {
+		if(typeof totals == "undefined" || !totals) {
+			totals = 0;
+		}else {
+			totals = 1;
+		}
+		var url = '/ajaxSearch/mode:' + apiMode + '/types:' + types + '/totals:' + totals + '/?query=' + query;
 		var request = new JsonRequest(url, function(responseStatus, requestName, responseData) {
 			return receiveData(responseStatus, requestName, responseData, callBack);
 		}, 'ajaxSearch');
