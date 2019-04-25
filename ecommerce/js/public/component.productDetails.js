@@ -262,7 +262,7 @@ window.ProductDetailsSelectionComponent = function(detailsComponent, componentEl
 			radioElements = _('.product_details_option_radio_item_control', componentElement);
 			eventsManager.addHandler(componentElement, 'click', change);
 		}
-		if (window.productParametersHintsInfo[id]) {
+		if (window.productParametersHintsInfo && window.productParametersHintsInfo[id]) {
 			var hintElement = _('.product_details_option_hint', componentElement.parentElement)[0];
 			if(hintElement) {
 				var hints = window.productParametersHintsInfo[id];
