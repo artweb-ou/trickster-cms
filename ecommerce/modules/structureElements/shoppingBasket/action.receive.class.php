@@ -31,6 +31,7 @@ class receiveShoppingBasket extends structureElementAction
             'columns',
             'hidden',
             'conditionsLink',
+            'addToBasketButtonAction',
         ];
     }
 }

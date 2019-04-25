@@ -59,12 +59,14 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $moduleStructure['payerCountry'] = 'text';
         $moduleStructure['conditionsLink'] = 'url';
 
-        $moduleStructure['receiverIsPayer'] = 'checkbox';
+        $moduleStructure['receiverIsPayer'] = 'text';
 
         $moduleStructure['conditions'] = 'checkbox';
         $moduleStructure['subscribe'] = 'checkbox';
         $moduleStructure['hidden'] = 'checkbox';
         $moduleStructure['paymentMethodId'] = 'naturalNumber';
+
+        $moduleStructure['addToBasketButtonAction'] = 'text';
     }
 
     public function prepareFormInformation()

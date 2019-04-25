@@ -37,6 +37,8 @@ class ShoppingBasketFormStructure extends ElementForm
         'conditionsLink' => [
             'type' => 'input.text',
         ],
+
+// ALTER TABLE `engine_module_shoppingbasket` ADD `addToBasketButtonAction` INT(2) NOT NULL DEFAULT '1' AFTER `conditionsLink`;
 /*
  * one of parts DB data for translations ...
  *
@@ -90,9 +92,9 @@ VALUES
         'addToBasketButtonAction' => [ // ALTER TABLE `engine_module_shoppingbasket` ADD `addToBasketButtonAction` INT(2) NOT NULL DEFAULT '0' AFTER `conditionsLink`;
             'type' => 'select.index',
             'options' => [
-                '0' => 'none',
-                '1' => 'tooltip',
-                '2' => 'modal',
+                '0' => 'action_none',
+                '1' => 'action_tooltip',
+                '2' => 'action_modal',
             ],
         ],
     ];
