@@ -37,6 +37,17 @@ class ShoppingBasketFormStructure extends ElementForm
         'conditionsLink' => [
             'type' => 'input.text',
         ],
+        // "Add To Basket" button action
+        // "Lisa ostukorvi" nuppu toiming
+        // Действие кнопки «Добавить в корзину»
+        'addToBasketButtonAction' => [ // ALTER TABLE `engine_module_shoppingbasket` ADD `addToBasketButtonAction` INT(2) NOT NULL DEFAULT '0' AFTER `conditionsLink`;
+            'type' => 'select.index',
+            'options' => [
+                '0' => 'none',
+                '1' => 'tooltip',
+                '2' => 'modal',
+            ],
+        ],
     ];
 
     protected $additionalContent = 'shared.contentlist_singlepage';
