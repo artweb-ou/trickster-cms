@@ -65,6 +65,8 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $moduleStructure['subscribe'] = 'checkbox';
         $moduleStructure['hidden'] = 'checkbox';
         $moduleStructure['paymentMethodId'] = 'naturalNumber';
+
+        $moduleStructure['addToBasketButtonAction'] = 'text';
     }
 
     public function prepareFormInformation()

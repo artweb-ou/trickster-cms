@@ -18,8 +18,22 @@
 		};
 	{/if}
 	window.galleriesInfo = window.galleriesInfo || {ldelim}{rdelim};
-	/*]]>*/
+	{if isset($shoppingBasket)}
+		window.shoppingBasketURL = '{$shoppingBasket->URL}';
+		window.conditionsLink = '{$shoppingBasket->conditionsLink}';
+		{$location = $breadcrumbsManager->getBreadcrumbs()}
+			{if $location}
+				window.shopLink = '{$location[0]['URL']}';
+			{/if}
+		window.addToBasketButtonAction = '{$shoppingBasket->addToBasketButtonAction}';
+	{/if}	/*]]>*/
 </script>
+{*
+addToBasketButtonAction
+'0' => 'action_none',
+'1' => 'action_tooltip',
+'2' => 'action_modal',
+*}
 {if isset($shoppingBasket)}
 	{include file=$theme->template('javascript.shoppingBasket.tpl') element=$shoppingBasket}
 {/if}
