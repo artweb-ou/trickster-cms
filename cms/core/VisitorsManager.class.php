@@ -98,12 +98,12 @@ class VisitorsManager extends errorLogger
         if (!empty($data['user'])) {
             unset($data['user']);
         }
-        foreach ($data as $key=>$value) {
-            if(empty($value)) {
+        foreach ($data as $key => $value) {
+            if (empty($value)) {
                 unset($data[$key]);
             }
         }
-        if ($data['id'] > 0) {
+        if (!empty($data['id']) && $data['id'] > 0) {
             $this->createVisitorQuery()
                 ->where('id', '=', $data['id'])
                 ->update($data);
@@ -118,7 +118,7 @@ class VisitorsManager extends errorLogger
         $result = null;
         $dummy = $this->currentVisitor;
         $query = $this->createVisitorQuery();
-        if(!empty($dummy)) {
+        if (!empty($dummy)) {
             $query->select(array_keys($dummy->getDataArray()));
         }
         $conditions($query);
@@ -224,21 +224,22 @@ class VisitorsManager extends errorLogger
         }
     }
 
-    protected function recordVisitor($data) {
+    protected function recordVisitor($data)
+    {
         if (!$data) {
             return;
         }
-        if($visitors = $this->findSimilarVisitors($data)){
+        if ($visitors = $this->findSimilarVisitors($data)) {
             $visitor = $visitors[0];
         } else {
             $visitor = new Visitor();
             $visitor->email = $data['email'];
         }
-        if(empty($visitor->trackingCode)) {
+        if (empty($visitor->trackingCode)) {
             $data['trackingCode'] = uniqid();
         }
         $result = $this->getUserIdByEmail($visitor->email);
-        if(!empty($result)) {
+        if (!empty($result)) {
             $data['userId'] = $result['id'];
         }
         $this->setCurrentVisitor($visitor);
@@ -329,8 +330,9 @@ class VisitorsManager extends errorLogger
         $this->setTrackingCode($visitor->trackingCode);
     }
 
-    public function getVisitorIdFromEmail($email) {
-        $data = array();
+    public function getVisitorIdFromEmail($email)
+    {
+        $data = [];
         $data['email'] = $email;
 
         $this->recordVisitor($data);
@@ -344,9 +346,10 @@ class VisitorsManager extends errorLogger
         return $result['id'];
     }
 
-    protected function getUserIdByEmail($userEmail = null) {
-        if(!empty($userEmail)) {
-            $result = $this->statsDb->table('module_user')->where('email', '=' , $userEmail)->select('id')->limit(1)->get();
+    protected function getUserIdByEmail($userEmail = null)
+    {
+        if (!empty($userEmail)) {
+            $result = $this->statsDb->table('module_user')->where('email', '=', $userEmail)->select('id')->limit(1)->get();
         }
         return $result[0];
     }
