@@ -89,7 +89,7 @@ VALUES
 ;
 
 */
-        'addToBasketButtonAction' => [ // ALTER TABLE `engine_module_shoppingbasket` ADD `addToBasketButtonAction` INT(2) NOT NULL DEFAULT '0' AFTER `conditionsLink`;
+        'addToBasketButtonAction' => [ // ALTER TABLE `engine_module_shoppingbasket` ADD `addToBasketButtonAction` INT(2) NOT NULL DEFAULT '1' AFTER `conditionsLink`;
             'type' => 'select.index',
             'options' => [
                 '0' => 'action_none',
