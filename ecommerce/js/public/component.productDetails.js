@@ -267,7 +267,7 @@ window.ProductDetailsSelectionComponent = function(detailsComponent, componentEl
 			if(hintElement) {
 				var hints = window.productParametersHintsInfo[id];
 				var hintContent = hints.join('<hr/>');
-				new TipPopupComponent({
+				new ToolTipComponent({
 					'referralElement' : hintElement,
 					'popupText' : hintContent
 				});
