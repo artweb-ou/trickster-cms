@@ -49,8 +49,7 @@ abstract class ProductsListElement extends menuStructureElement
     protected $filterPriceString;
     protected $filterLimit;
     protected $priceInterval = 5;
-    protected $productsListMinPrice;
-    protected $productsListMaxPrice;
+    protected $cacheKey;
 
     public function getProductsListElement()
     {
@@ -245,8 +244,16 @@ abstract class ProductsListElement extends menuStructureElement
     public function getFilteredProductsAmount()
     {
         if ($this->filteredProductsAmount === null) {
-            if ($query = $this->getFilteredProductsQuery()) {
-                $this->filteredProductsAmount = $query->count('id');
+            /**
+             * @var Cache $cache
+             */
+            $cache = $this->getService('Cache');
+            $key = $this->getProductsListElement()->getCacheKey();
+            if (($this->filteredProductsAmount = $cache->get($this->id . ':famount:' . $key)) === false) {
+                if ($query = $this->getFilteredProductsQuery()) {
+                    $this->filteredProductsAmount = $query->count('id');
+                    $cache->set($this->id . ':famount:' . $key, $this->filteredProductsAmount);
+                }
             }
         }
         return $this->filteredProductsAmount;
@@ -255,8 +262,16 @@ abstract class ProductsListElement extends menuStructureElement
     public function getProductsListBaseAmount()
     {
         if ($this->productsListBaseAmount === null) {
-            if ($query = $this->getProductsListBaseOptimizedQuery()) {
-                $this->productsListBaseAmount = $query->count('id');
+            /**
+             * @var Cache $cache
+             */
+            $cache = $this->getService('Cache');
+            $key = $this->getProductsListElement()->getCacheKey();
+            if (($this->productsListBaseAmount = $cache->get($this->id . ':bamount:' . $key)) === false) {
+                if ($query = $this->getProductsListBaseOptimizedQuery()) {
+                    $this->productsListBaseAmount = $query->count('id');
+                    $cache->set($this->id . ':bamount:' . $key, $this->productsListBaseAmount);
+                }
             }
         }
         return $this->productsListBaseAmount;
@@ -493,18 +508,6 @@ abstract class ProductsListElement extends menuStructureElement
             }
         }
         return $this->priceRangeSets;
-    }
-
-    public function getProductsListMinPrice()
-    {
-        $this->getProductsListPriceRangeSets();
-        return $this->productsListMinPrice;
-    }
-
-    public function getProductsListMaxPrice()
-    {
-        $this->getProductsListPriceRangeSets();
-        return $this->productsListMaxPrice;
     }
 
     public function isFilterable()
@@ -920,16 +923,17 @@ abstract class ProductsListElement extends menuStructureElement
 
     public function getCacheKey()
     {
-        $key = $this->getFilterPriceString();
-        $key .= implode(',', $this->getFilterDiscountIds());
-        $key .= implode(',', $this->getFilterBrandIds());
-        $key .= implode(',', $this->getFilterCategoryIds());
-        $key .= implode(',', $this->getFilterParameterValueIds());
-        $key .= implode(',', $this->getFilterAvailability());
-        $key .= $this->getFilterOrder();
-        $key .= $this->getFilterSort();
-        $key .= $this->getFilterLimit();
-        return $key;
+        if ($this->cacheKey === null) {
+            $this->cacheKey = $this->getFilterPriceString();
+            $this->cacheKey .= implode(',', $this->getFilterDiscountIds());
+            $this->cacheKey .= implode(',', $this->getFilterBrandIds());
+            $this->cacheKey .= implode(',', $this->getFilterCategoryIds());
+            $this->cacheKey .= implode(',', $this->getFilterParameterValueIds());
+            $this->cacheKey .= implode(',', $this->getFilterAvailability());
+            $this->cacheKey .= $this->getFilterOrder();
+            $this->cacheKey .= $this->getFilterSort();
+            $this->cacheKey .= $this->getFilterLimit();
+        }
+        return $this->cacheKey;
     }
-
 }

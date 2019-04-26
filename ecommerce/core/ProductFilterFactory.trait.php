@@ -46,7 +46,7 @@ trait ProductFilterFactoryTrait
                     }
                 }
                 if ($this->isFilterableByType('price')) {
-                    $this->addFilter($filter = $this->createProductFilter('price'));
+                    $this->addFilter($filter = $this->createProductFilter('price', ['usePresets' => $this->pricePresets]));
                 }
                 /**
                  * @var Cache $cache
