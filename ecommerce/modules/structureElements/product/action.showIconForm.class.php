@@ -10,6 +10,8 @@ class showIconFormProduct extends structureElementAction
 
         $structureElement->setTemplate('shared.content.tpl');
         $renderer = $this->getService('renderer');
-        $renderer->assign('contentSubTemplate', 'component.show.icon_form.tpl');
+        $renderer->assign('contentSubTemplate', 'component.form.tpl');
+        $renderer->assign('linkType', 'productIcon');
+        $renderer->assign('form', $structureElement->getForm('icon'));
     }
 }

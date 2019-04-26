@@ -3,6 +3,7 @@
 {assign var='formNames' value=$element->getFormNames()}
 {assign var='structureType' value=$element->structureType}
 
+
 <form class="gallery_form_upload form_component" action="{$element->URL}" actionname="{$element->URL}" method="post" enctype="multipart/form-data">
 	<div>
 		<div class="form_fields">
@@ -23,7 +24,7 @@
 				</div>
 			</div>
 		</div>
-		<input class='gallery_form_upload_elementid_input' type="hidden" value="{$element->id}" name="id" />
+		<input class='gallery_form_upload_elementid_input' type="hidden" value="{$currentElement->id}" name="id" />
 		{if isset($linkType)}
 			<input class='gallery_form_upload_linktype' type="hidden" value="{$linkType}" name="id" />
 		{/if}

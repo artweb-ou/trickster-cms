@@ -11,5 +11,6 @@ class showIconFormCategory extends structureElementAction
         $renderer = $this->getService('renderer');
         $renderer->assign('contentSubTemplate', 'component.form.tpl');
         $renderer->assign('form', $structureElement->getForm('icon'));
+        $renderer->assign('linkType', 'categoryIcon');
     }
 }

@@ -2,7 +2,7 @@
 <div class="gallery_form">
 	<div style="margin-top: 30px;">
 		{if $element->newIconForm}
-		{include file=$theme->template('galleryImage.form.tpl') element=$element->newIconForm linkType='categoryIcon'}
+			{include file=$theme->template('galleryImage.form.tpl') element=$element->newIconForm linkType=$linkType}
 		{/if}
 		<div class="content_list_block">
 			<form class="content_list_form" action="{$currentElement->getFormActionURL()}" method="post" enctype="multipart/form-data">
