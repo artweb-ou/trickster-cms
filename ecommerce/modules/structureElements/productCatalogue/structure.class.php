@@ -89,7 +89,7 @@ class productCatalogueElement extends categoryStructureElement implements Config
 
         $query = $this->getProductsQuery();
 
-        $query->leftJoin('structure_links', 'module_product.id', '=', 'childStructureId');
+        $query->leftJoin('structure_links', 'id', '=', 'childStructureId');
 
         //include only the products connected to this category or include all subcategories as well
         if ($this->categorized) {

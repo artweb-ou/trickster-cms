@@ -233,7 +233,7 @@ class discountElement extends ProductsListElement
 
         $this->productsListBaseQuery = $this->getProductsQuery();
         $id = $this->id;
-        $this->productsListBaseQuery->whereIn('module_product.id', function ($query) use ($id) {
+        $this->productsListBaseQuery->whereIn('id', function ($query) use ($id) {
             $query->from('structure_links')
                 ->select('childStructureId')
                 ->where('parentStructureId', '=', $id)
@@ -243,7 +243,7 @@ class discountElement extends ProductsListElement
         $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
         if ($logicObject = $shoppingBasketDiscounts->getDiscount($this->id)) {
             if ($categoryIds = $logicObject->discountedCategoriesIds) {
-                $this->productsListBaseQuery->orWhereIn('module_product.id', function ($query) use ($categoryIds) {
+                $this->productsListBaseQuery->orWhereIn('id', function ($query) use ($categoryIds) {
                     $query->from('structure_links')
                         ->select('childStructureId')
                         ->whereIn('parentStructureId', $categoryIds)
