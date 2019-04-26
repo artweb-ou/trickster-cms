@@ -930,7 +930,7 @@ class productElement extends structureElement implements
     {
         if ($this->iconsInfo == null) {
             $cache = $this->getService('Cache');
-            if (($this->iconsInfo = $cache->get($this->id . '/icons') === false)) {
+            if (($this->iconsInfo = $cache->get($this->id . ':icons') === false)) {
                 $this->iconsInfo = [];
                 $productIconsManager = $this->getService('ProductIconsManager');
                 if ($icons = $productIconsManager->getProductIcons($this)) {
@@ -953,7 +953,7 @@ class productElement extends structureElement implements
                         ];
                     }
                 }
-                $cache->set($this->id . '/icons', $this->iconsInfo, 3600);
+                $cache->set($this->id . ':icons', $this->iconsInfo, 3600);
             }
         }
         return $this->iconsInfo;
