@@ -28,8 +28,8 @@ class Cache extends errorLogger
     public function enable($reading = true, $writing = true, $deleting = true)
     {
         if ($this->enabled = $this->configManager->get('cache.enabled')) {
-            if ($prefix = $this->configManager->get('cache.prefix')){
-                $this->cachePrefix = $prefix;
+            if ($prefix = $this->configManager->get('cache.prefix')) {
+                $this->cachePrefix = $prefix . ':';
             }
             $this->prepareCache($this->configManager->get('cache.driver'));
             if (!$this->cache) {
