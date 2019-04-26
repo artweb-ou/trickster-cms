@@ -929,27 +929,31 @@ class productElement extends structureElement implements
     public function getIconsInfo()
     {
         if ($this->iconsInfo == null) {
-            $this->iconsInfo = [];
-            $productIconsManager = $this->getService('ProductIconsManager');
-            if ($icons = $productIconsManager->getProductIcons($this)) {
-                foreach ($icons as $icon) {
-                    $this->iconsInfo[] = [
-                        'title' => $icon->title,
-                        'image' => $icon->image,
-                        'width' => $icon->iconWidth,
-                        'fileName' => $icon->originalName,
-                    ];
+            $cache = $this->getService('Cache');
+            if (($this->iconsInfo = $cache->get($this->id . '/icons') === false)) {
+                $this->iconsInfo = [];
+                $productIconsManager = $this->getService('ProductIconsManager');
+                if ($icons = $productIconsManager->getProductIcons($this)) {
+                    foreach ($icons as $icon) {
+                        $this->iconsInfo[] = [
+                            'title' => $icon->title,
+                            'image' => $icon->image,
+                            'width' => $icon->iconWidth,
+                            'fileName' => $icon->originalName,
+                        ];
+                    }
                 }
-            }
-            if ($discounts = $this->getCampaignDiscounts()) {
-                foreach ($discounts as $discount) {
-                    $this->iconsInfo[] = [
-                        'title' => $discount->title,
-                        'image' => $discount->icon,
-                        'width' => $discount->iconWidth,
-                        'fileName' => $discount->iconOriginalName,
-                    ];
+                if ($discounts = $this->getCampaignDiscounts()) {
+                    foreach ($discounts as $discount) {
+                        $this->iconsInfo[] = [
+                            'title' => $discount->title,
+                            'image' => $discount->icon,
+                            'width' => $discount->iconWidth,
+                            'fileName' => $discount->iconOriginalName,
+                        ];
+                    }
                 }
+                $cache->set($this->id . '/icons', $this->iconsInfo, 3600);
             }
         }
         return $this->iconsInfo;
@@ -1690,7 +1694,7 @@ class productElement extends structureElement implements
     {
         $controller = controller::getInstance();
         $configManager = $controller->getConfigManager();
-        return $configManager->get('productDetails.showFeedbackForm');
+        return $configManager->get('product.showFeedbackForm');
     }
 
     public function getImagesLinkType()
@@ -1787,5 +1791,13 @@ class productElement extends structureElement implements
             $data['image'] = $this->getImageUrl();
         }
         return $data;
+    }
+
+    public function persistElementData()
+    {
+        if ($this->getService('ConfigManager')->get('product.useCodeForUrlName')){
+            $this->structureName = $this->code;
+        }
+        parent::persistElementData();
     }
 }
