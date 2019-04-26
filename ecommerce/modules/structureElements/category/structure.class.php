@@ -635,7 +635,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $this->currentProductCatalogue = $element;
     }
 
-    public function getIconsList()
+    public function getAdminIconsList()
     {
         if ($this->iconsList === null) {
             /**
@@ -650,8 +650,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     public function getIconsCompleteList()
     {
         if ($this->iconsCompleteList === null) {
-            $this->iconsCompleteList = $this->getIconsList();
-
             /**
              * @var ProductIconsManager $productIconsManager
              */

@@ -868,9 +868,9 @@ class structureManager implements DependencyInjectionContextInterface
             return $loadedElements;
         }
 
-        if ($allowedElements) {
-            $searchFields['structureType'] = $allowedElements;
-        }
+//        if ($allowedElements) {
+//            $searchFields['structureType'] = $allowedElements;
+//        }
         //We have only 3 roles: content, container and hybrid.
         //If there are all roles required, then we don't need to restrict this column,
         //so we can save some sql resources by not sending this info

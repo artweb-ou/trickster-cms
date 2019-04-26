@@ -41,7 +41,7 @@
 					</thead>
 
 					<tbody class="gallery_form_images_list">
-					{foreach from=$element->getIconsList() item=image name=imagesList}
+					{foreach from=$element->getAdminIconsList() item=image name=imagesList}
 					<tr>
 						<td class="checkbox_cell">
 							<input class='singlebox checkbox_placeholder' type="checkbox" name="{$formNames.elements}[{$image->id}]" value="1" />

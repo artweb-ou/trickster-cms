@@ -87,6 +87,9 @@ class productElement extends structureElement implements
     protected $imageIds;
     protected $iconsList;
     protected $iconsCompleteList;
+    /**
+     * @var galleryImageElement
+     */
     protected $firstImage;
     protected $calculatedPrice;
     protected $calculatedOldPrice;
@@ -885,9 +888,13 @@ class productElement extends structureElement implements
         if (!empty($this->firstImage)) {
             return $this->firstImage->getImageUrl();
         }
+        return false;
     }
 
-    public function getIconsList()
+    /**
+     * @return galleryImageElement method for admin panel's icons list
+     */
+    public function getAdminIconsList()
     {
         if ($this->iconsList === null) {
             /**
@@ -902,8 +909,6 @@ class productElement extends structureElement implements
     public function getIconsCompleteList()
     {
         if ($this->iconsCompleteList === null) {
-            $this->iconsCompleteList = $this->getIconsList();
-
             /**
              * @var ProductIconsManager $productIconsManager
              */
@@ -1547,9 +1552,9 @@ class productElement extends structureElement implements
             'selectionsPricings' => $selectionsPricings ?: new stdClass(),
             'selectionsOldPricings' => $selectionsOldPricings ?: new stdClass(),
             'selectionsImages' => $this->getOptionsImagesInfo() ?: new stdClass(),
-            'name_ga'               => $this->getValue('title', $defaultLanguage->id),
-            'category_ga'           => $categoryElement->getValue('title', $defaultLanguage->id),
-            'brand_ga'              => $brandElement ? $brandElement->getValue('title', $defaultLanguage->id) : ''
+            'name_ga' => $this->getValue('title', $defaultLanguage->id),
+            'category_ga' => $categoryElement->getValue('title', $defaultLanguage->id),
+            'brand_ga' => $brandElement ? $brandElement->getValue('title', $defaultLanguage->id) : '',
         ];
     }
 
@@ -1604,7 +1609,7 @@ class productElement extends structureElement implements
             "@type" => "Product",
             "name" => $this->title,
             "sku" => $this->code,
-            "url" => $this->URL
+            "url" => $this->URL,
         ];
         $data["description"] = $this->getTextContent();
         if ($brand = $this->getBrandElement()) {
@@ -1635,7 +1640,8 @@ class productElement extends structureElement implements
         return $data;
     }
 
-    public function getImageUrl() {
+    public function getImageUrl()
+    {
         if ($image = $this->getFirstImageElement()) {
             $controller = controller::getInstance();
             return $controller->baseURL . 'image/type:galleryFullImage/id:' . $image->id . '/filename:' . $image->originalName;
@@ -1715,13 +1721,14 @@ class productElement extends structureElement implements
         }
         return $countriesList;
     }
+
     public function getOpenGraphData()
     {
         $data = [
             'title' => $this->title,
-            'url'   => $this->URL,
+            'url' => $this->URL,
             'description' => $this->getMetaDescription(),
-            'type'  => 'product',
+            'type' => 'product',
             'image' => '',
         ];
         if ($this->image) {
@@ -1733,11 +1740,11 @@ class productElement extends structureElement implements
     public function getTwitterData()
     {
         $data = [
-            'card'        => 'summary_large_image',
+            'card' => 'summary_large_image',
             'description' => $this->getMetaDescription(),
-            'title'       => $this->title,
-            'url'         => $this->URL,
-            'image'       => '',
+            'title' => $this->title,
+            'url' => $this->URL,
+            'image' => '',
         ];
         if ($this->image) {
             $data['image'] = $this->getImageUrl();
