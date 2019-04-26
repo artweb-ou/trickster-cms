@@ -57,8 +57,8 @@ class exportTranslationsExport extends structureElementAction
 
         $renderer->assign('languagesList', $languageCodes);
 
-        $path = $this->getService('PathsManager')->getPath('templates');
-        $renderer->setTemplatesFolder($path . 'xml');
+        $path = $this->getService('PathsManager')->getPath('trickster');
+        $renderer->setTemplatesFolder($path . 'cms/templates/xml');
         $renderer->setTemplate('xml.translations.tpl');
 
         $renderer->setCacheControl('no-cache');

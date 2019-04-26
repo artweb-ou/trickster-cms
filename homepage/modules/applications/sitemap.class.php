@@ -69,8 +69,8 @@ class sitemapApplication extends controllerApplication
 
         $this->renderer->assign('controller', $controller);
         $this->renderer->assign('mapItems', $mapItems);
-        $path = $this->getService('PathsManager')->getPath('templates');
-        $this->renderer->setTemplatesFolder($path . 'xml');
+        $path = $this->getService('PathsManager')->getPath('trickster');
+        $this->renderer->setTemplatesFolder($path . 'cms/templates/xml');
         $this->renderer->setContentType('text/xml');
         $this->renderer->template = 'sitemap.index.tpl';
         $this->renderer->display();
