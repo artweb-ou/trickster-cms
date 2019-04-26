@@ -89,7 +89,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                 $category->gatherSubCategoriesIdIndex($category->id, $subCategoriesIdIndex);
             }
             $deepCategoryIds = array_keys($subCategoriesIdIndex);
-            $productsListBaseQuery->whereIn('id', function ($query) use ($deepCategoryIds) {
+            $productsListBaseQuery->whereIn('module_product.id', function ($query) use ($deepCategoryIds) {
                 /**
                  * @var Builder $query
                  */
@@ -100,7 +100,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
             });
         } else {
             //if no categories are selected then at least ensure that only products connected to any categories at all are used
-            $productsListBaseQuery->whereIn('id', function ($query) {
+            $productsListBaseQuery->whereIn('module_product.id', function ($query) {
                 /**
                  * @var Builder $query
                  */
@@ -110,7 +110,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
             });
         }
         if ($brandIds = $this->getConnectedBrandsIds()) {
-            $productsListBaseQuery->whereIn('brandId', $brandIds);
+            $productsListBaseQuery->whereIn('module_product.brandId', $brandIds);
         }
 
         if ($discountIds = $this->getConnectedDiscountsIds()) {
@@ -124,7 +124,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                     $discountedProductIds = array_merge($discountedProductIds, $discount->getApplicableProductsIds());
                 }
             }
-            $productsListBaseQuery->whereIn('id', $discountedProductIds);
+            $productsListBaseQuery->whereIn('module_product.id', $discountedProductIds);
         }
         if ($limitingIconIds = $this->getConnectedIconsIds()) {
             /**
@@ -137,7 +137,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                     $connectedIconsProducts = array_merge($iconProducts, $connectedIconsProducts);
                 }
             }
-            $productsListBaseQuery->whereIn('id', $connectedIconsProducts);
+            $productsListBaseQuery->whereIn('module_product.id', $connectedIconsProducts);
         }
 
 
@@ -147,7 +147,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
              */
             $linksManager = $this->getService('linksManager');
             $connectedProductIds = $linksManager->getConnectedIdList($this->id, 'selectedProducts', 'parent');
-            $productsListBaseQuery->whereIn('id', $connectedProductIds);
+            $productsListBaseQuery->whereIn('module_product.id', $connectedProductIds);
         } else {
             /**
              * @var Connection $db
@@ -167,7 +167,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                             $idList = array_column($records, 'id');
                         }
 
-                        $productsListBaseQuery->whereIn('id', $idList);
+                        $productsListBaseQuery->whereIn('module_product.id', $idList);
                     }
                     break;
 
@@ -184,7 +184,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                         $idList = array_column($records, 'id');
                     }
 
-                    $productsListBaseQuery->whereIn('id', $idList);
+                    $productsListBaseQuery->whereIn('module_product.id', $idList);
                     break;
 
                 // purchased latest
@@ -200,7 +200,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                         $idList = array_column($records, 'id');
                     }
 
-                    $productsListBaseQuery->whereIn('id', $idList);
+                    $productsListBaseQuery->whereIn('module_product.id', $idList);
                     break;
                 // random discounted products
                 case 3:
@@ -217,7 +217,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
                         $idList = array_column($records, 'id');
                     }
 
-                    $productsListBaseQuery->whereIn('id', $idList);
+                    $productsListBaseQuery->whereIn('module_product.id', $idList);
                     break;
                 // all available products
                 case 4:
