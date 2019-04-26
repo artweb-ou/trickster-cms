@@ -1,5 +1,6 @@
 .popup_component {
 	display: none;
+	line-height: 24px;
 	text-align: left;
 	background-color: @trick_bg_color_01;
 	position: absolute;
@@ -14,16 +15,24 @@
 }
 
 .popup_component_close {
-	background: url(getImageUrl('popup_close.png')) no-repeat scroll 50% 50% transparent;
+	//background: url(getImageUrl('popup_close.png')) no-repeat scroll 50% 50% transparent;
+	//noinspection LessResolvedByNameOnly
+	.svg-bg(@trick_basket_close, false, @trick_brd_color_06);// svg name without ext, 'fill', stroke color
 	cursor: pointer;
 	display: block;
-	min-height: 30px;
-	min-width: 33px;
-	width: 2.1em;
-	height: 2.1em;
+	min-height: 20px;
+	min-width: 20px;
+	width: 1.5em;
+	height: 1.5em;
 	position: absolute;
-	right: 0;
-	top: 0;
+	right: 11px;
+	top: 5px;
+	background-size: 100%;
+	transition: all .2s ease-in-out;
+
+	&:hover, &:focus{
+		.svg-bg(@trick_basket_close, false, @trick_brd_color_08);// svg name without ext, 'fill', stroke color
+	}
 }
 
 .popup_component_notice {
@@ -34,11 +43,15 @@
 	font-style: italic;
 	color: @trick_text_color_02;
 	text-align: center;
-	line-height: 1.7;
+	line-height: inherit;
 }
 
 .popup_component_controls {
 	margin-top: 2.15em;
 	text-align: center;
+	line-height: 2.5;
+	.popup_component_button {
+		width: 100%;
+	}
 }
 
