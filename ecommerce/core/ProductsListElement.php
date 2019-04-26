@@ -198,11 +198,11 @@ abstract class ProductsListElement extends menuStructureElement
         if ($this->productsList !== null) {
             return $this->productsList;
         }
-        //todo: cache key should use search arguments
-        $cache = $this->getElementsListCache('prList', 3600);
-//        if ($this->productsList = $cache->load()) {
-//            return $this->productsList;
-//        }
+        $cacheKey = $this->compileCacheKey();
+        $cache = $this->getElementsListCache('prList:' . $cacheKey, 3600);
+        if ($this->productsList = $cache->load()) {
+            return $this->productsList;
+        }
 
         $this->productsList = [];
         if ($filteredProductsQuery = clone $this->getFilteredProductsQuery()) {
@@ -416,7 +416,7 @@ abstract class ProductsListElement extends menuStructureElement
     }
 
     /**
-     * @return float[]
+     * @return string
      */
     public function getFilterPriceString()
     {
@@ -916,6 +916,20 @@ abstract class ProductsListElement extends menuStructureElement
             array_multisort($sort, SORT_ASC, $result);
         }
         return $result;
+    }
+
+    protected function compileCacheKey()
+    {
+        $key = $this->getFilterPriceString();
+        $key .= implode(',', $this->getFilterDiscountIds());
+        $key .= implode(',', $this->getFilterBrandIds());
+        $key .= implode(',', $this->getFilterCategoryIds());
+        $key .= implode(',', $this->getFilterParameterValueIds());
+        $key .= implode(',', $this->getFilterAvailability());
+        $key .= $this->getFilterOrder();
+        $key .= $this->getFilterSort();
+        $key .= $this->getFilterLimit();
+        return $key;
     }
 
 }
