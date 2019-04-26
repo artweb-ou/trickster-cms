@@ -33,7 +33,8 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
         if ($languagesManager = $this->getOption('languagesManager')) {
             $structureManager->setLanguagesManager($languagesManager);
         } else {
-            $structureManager->setLanguagesManager($this->registry->getService('languagesManager'));
+            $languagesManager = $this->registry->getService('languagesManager');
+            $structureManager->setLanguagesManager($languagesManager);
         }
 
         if ($privilegesManager = $this->getOption('privilegesManager')) {
@@ -55,10 +56,11 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
         }
         $structureManager->setRootElementMarker($rootMarker);
 
-        if ($rootMarker == $adminRootMarker){
+        if ($rootMarker == $adminRootMarker) {
             $structureManager->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.adminAllowed'));
         } else {
             $structureManager->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.publicAllowed'));
+            $structureManager->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
         }
 
 
