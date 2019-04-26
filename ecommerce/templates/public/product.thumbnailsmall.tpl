@@ -6,28 +6,8 @@
 		{if $element->originalName != ""}
 			<div class="product_thumbnailsmall_image_container">
 				{include file=$theme->template('component.elementimage.tpl') type='productSmallThumb' class='product_thumbnailsmall_image' lazy=true}
-				{$icons=$element->getIconsCompleteList()}
-				{$connectedDiscounts=$element->getCampaignDiscounts()}
-				{if $icons || $connectedDiscounts}
-					<div class="product_thumbnailsmall_icons">
-						{foreach $icons as $icon}
-							<img class='product_thumbnailsmall_icons_image lazy_image' src="" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$icon->image}/filename:{$icon->originalName}' alt='{$icon->title}'{if $icon->iconWidth > 0} style="max-width: {$icon->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
-						{/foreach}
-						{foreach from=$connectedDiscounts item=discount}
-							{if $discount->icon}
-								<img class='product_thumbnailsmall_icons_image product_discount lazy_image' src="" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$discount->icon}/filename:{$discount->iconOriginalName}' alt='{$discount->title}'{if $discount->iconWidth > 0} style="max-width: {$discount->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
-							{/if}
-						{/foreach}
-					</div>
-				{/if}
-				{if $element->getOldPrice()}
-					{if $discount = $element->getDiscountPercent()}
-						<div class="product_discount_container">
-							<span class="product_discount">
-								-{$discount}%
-							</span>
-						</div>
-					{/if}
+				{if $iconsInfo = $element->getIconsInfo()}
+					{include file=$theme->template('product.icons.tpl') class='product_thumbnailsmall_icons' displayOldPrice=true}
 				{/if}
 			</div>
 		{/if}

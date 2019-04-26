@@ -647,19 +647,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return $this->iconsList;
     }
 
-    public function getIconsCompleteList()
-    {
-        if ($this->iconsCompleteList === null) {
-            /**
-             * @var ProductIconsManager $productIconsManager
-             */
-            $productIconsManager = $this->getService('ProductIconsManager');
-            $this->iconsCompleteList = $productIconsManager->getCategoryIcons($this);
-        }
-
-        return $this->iconsCompleteList;
-    }
-
     /**
      * Returns the layout to be used for subcategories
      * @return string

@@ -85,8 +85,7 @@ class productElement extends structureElement implements
     protected $connectedDiscounts;
     protected $inquryForm;
     protected $imageIds;
-    protected $iconsList;
-    protected $iconsCompleteList;
+    protected $adminIconsList;
     /**
      * @var galleryImageElement
      */
@@ -108,6 +107,8 @@ class productElement extends structureElement implements
     protected $productUnit;
     protected $influentialSelections;
     protected $selectionsPricingMap;
+
+    protected $iconsInfo;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -896,18 +897,24 @@ class productElement extends structureElement implements
      */
     public function getAdminIconsList()
     {
-        if ($this->iconsList === null) {
+        if ($this->adminIconsList === null) {
             /**
              * @var ProductIconsManager $productIconsManager
              */
             $productIconsManager = $this->getService('ProductIconsManager');
-            $this->iconsList = $productIconsManager->getOwnIcons($this->id, $this->structureType);
+            $this->adminIconsList = $productIconsManager->getOwnIcons($this->id, $this->structureType);
         }
-        return $this->iconsList;
+        return $this->adminIconsList;
     }
 
+    /**
+     * @return genericIconElement[]
+     *
+     * @deprecated
+     */
     public function getIconsCompleteList()
     {
+        $this->logError('deprecated method getIconsCompleteList used');
         if ($this->iconsCompleteList === null) {
             /**
              * @var ProductIconsManager $productIconsManager
@@ -918,6 +925,36 @@ class productElement extends structureElement implements
 
         return $this->iconsCompleteList;
     }
+
+    public function getIconsInfo()
+    {
+        if ($this->iconsInfo == null) {
+            $this->iconsInfo = [];
+            $productIconsManager = $this->getService('ProductIconsManager');
+            if ($icons = $productIconsManager->getProductIcons($this)) {
+                foreach ($icons as $icon) {
+                    $this->iconsInfo[] = [
+                        'title' => $icon->title,
+                        'image' => $icon->image,
+                        'width' => $icon->iconWidth,
+                        'fileName' => $icon->originalName,
+                    ];
+                }
+            }
+            if ($discounts = $this->getCampaignDiscounts()) {
+                foreach ($discounts as $discount) {
+                    $this->iconsInfo[] = [
+                        'title' => $discount->title,
+                        'image' => $discount->icon,
+                        'width' => $discount->iconWidth,
+                        'fileName' => $discount->iconOriginalName,
+                    ];
+                }
+            }
+        }
+        return $this->iconsInfo;
+    }
+
 
     public function deleteElementData()
     {
