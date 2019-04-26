@@ -49,4 +49,6 @@ CKEDITOR.editorConfig = function(config) {
 	config.templates_replaceContent = false;
 	config.allowedContent = true;
 	config.resize_dir = "both";
+	config.toolbarCanCollapse = true;
+	config.toolbarStartupExpanded = true;
 };

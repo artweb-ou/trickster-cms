@@ -233,7 +233,6 @@ class cssUniterRendererPlugin extends rendererPlugin
             }
 
             if ($svgContent = file_get_contents($filePath)) {
-                var_dump(($svgContent));
                 if ($fill != "false") {
                     $svgContent = str_replace('<svg', '<svg fill="' . $fill . '"', $svgContent);
                 }

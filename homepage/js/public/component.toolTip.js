@@ -1,4 +1,4 @@
-window.TipPopupComponent = function(parameters, popupText_deprecated, excludedElements_deprecated, classNameExtra_deprecated) {
+window.ToolTipComponent = function(parameters, popupText_deprecated, excludedElements_deprecated, classNameExtra_deprecated) {
 	var self = this;
 	var referralElement;
 	var componentElement;

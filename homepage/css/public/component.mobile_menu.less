@@ -1,5 +1,5 @@
 @mobilemenu_background: @primary_color;
-@mobilemenu_text_color: #fff;
+@mobilemenu_text_color: @trick_text_color_01;
 
 .mobilemenu {
 	position: fixed;
@@ -21,11 +21,11 @@
 	height: 100%;
 	overflow: auto;
 	background: @mobilemenu_background;
-	border-left: 1px solid rgba(0, 0, 0, 0.4);
+	border-left: 1px solid fade(@black, 40);
 	color: @mobilemenu_text_color;
 	max-width: 32em;
 	margin-right: auto;
-	box-shadow: 0 0 0.5em rgba(9,0,0,0.25);
+	box-shadow: 0 0 0.5em fade(@trick_shadow_02, 25);
 }
 
 .mobilemenu_closeicon {
@@ -51,7 +51,7 @@
 }
 
 .mobilemenu_module_content {
-	color: #fbfbfb;
+	color: @trick_text_color_08;
 	padding: .9em 0 1em .8em;
 }
 
