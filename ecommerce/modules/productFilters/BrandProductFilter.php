@@ -1,19 +1,19 @@
 <?php
 
-class BrandProductFilter extends productFilter
+class BrandProductFilter extends ProductFilter
 {
     protected $type = 'brand';
 
     public function getOptionsInfo()
     {
-        if ($this->options === null) {
-            $this->options = [];
+        if ($this->optionsInfo === null) {
+            $this->optionsInfo = [];
             if ($brands = $this->productsListElement->getProductsListBrands()) {
                 $argumentMap = $this->getArguments();
 
                 foreach ($brands as &$brand) {
                     if (!$brand->hidden) {
-                        $this->options[] = [
+                        $this->optionsInfo[] = [
                             'title' => $brand->title,
                             'selected' => isset($argumentMap[$brand->id]) || $brand->requested,
                             'id' => $brand->id,
@@ -23,7 +23,7 @@ class BrandProductFilter extends productFilter
                 }
             }
         }
-        return $this->options;
+        return $this->optionsInfo;
     }
 
     protected function getArguments()

@@ -198,7 +198,7 @@ abstract class ProductsListElement extends menuStructureElement
         if ($this->productsList !== null) {
             return $this->productsList;
         }
-        $cacheKey = $this->compileCacheKey();
+        $cacheKey = $this->getCacheKey();
         $cache = $this->getElementsListCache('prList:' . $cacheKey, 3600);
         if ($this->productsList = $cache->load()) {
             return $this->productsList;
@@ -918,7 +918,7 @@ abstract class ProductsListElement extends menuStructureElement
         return $result;
     }
 
-    protected function compileCacheKey()
+    public function getCacheKey()
     {
         $key = $this->getFilterPriceString();
         $key .= implode(',', $this->getFilterDiscountIds());

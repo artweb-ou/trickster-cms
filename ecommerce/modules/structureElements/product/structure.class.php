@@ -406,7 +406,7 @@ class productElement extends structureElement implements
 
     public function isPurchasable($purchaseQuantity = 1)
     {
-        //cache magic availability in variable to get extra speed on this method.
+        //put magic property "availability" to variable to get extra speed on this method when repeated for 1000 products.
         $availability = $this->availability;
         return !($availability == "inquirable" || $availability == "unavailable" || ($availability == "quantity_dependent" && $purchaseQuantity > (int)$this->quantity));
     }

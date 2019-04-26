@@ -1,19 +1,19 @@
 <?php
 
-class DiscountProductFilter extends productFilter
+class DiscountProductFilter extends ProductFilter
 {
     protected $type = 'discount';
 
     public function getOptionsInfo()
     {
-        if ($this->options === null) {
-            $this->options = [];
+        if ($this->optionsInfo === null) {
+            $this->optionsInfo = [];
             if ($discounts = $this->productsListElement->getProductsListDiscounts()) {
                 $argumentMap = $this->getArguments();
 
                 foreach ($discounts as &$discount) {
                     if (!$discount->hidden) {
-                        $this->options[] = [
+                        $this->optionsInfo[] = [
                             'title' => $discount->title,
                             'selected' => isset($argumentMap[$discount->id]) || $discount->requested,
                             'id' => $discount->id,
@@ -22,7 +22,7 @@ class DiscountProductFilter extends productFilter
                 }
             }
         }
-        return $this->options;
+        return $this->optionsInfo;
     }
 
     protected function getArguments()

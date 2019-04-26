@@ -19,6 +19,9 @@ class productSearchElement extends menuDependantStructureElement
     protected $allowedTypes = [];
     public $role = 'content';
     protected $productCatalogue;
+    /**
+     * @var ProductsListElement
+     */
     protected $productsListElement;
 
     protected function setModuleStructure(&$moduleStructure)

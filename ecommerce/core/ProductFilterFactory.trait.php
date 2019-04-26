@@ -3,19 +3,23 @@
 trait ProductFilterFactoryTrait
 {
     /**
-     * @var productFilter[]
+     * @var ProductFilter[]
      */
     protected $filters;
     /**
-     * @var productFilter[][]
+     * @var ProductFilter[][]
      */
     protected $filtersIndex = [];
+    /**
+     * @var ProductFilter[]
+     */
+    protected $filtersIdIndex = [];
 
     public function createProductFilter($type, $initialOptions = null)
     {
         $className = ucfirst($type) . 'ProductFilter';
         /**
-         * @var productFilter $filter
+         * @var ProductFilter $filter
          */
         $filter = new $className($this->getProductsListElement(), $initialOptions);
         if ($filter instanceof DependencyInjectionContextInterface) {
@@ -44,12 +48,31 @@ trait ProductFilterFactoryTrait
                 if ($this->isFilterableByType('price')) {
                     $this->addFilter($filter = $this->createProductFilter('price'));
                 }
+                /**
+                 * @var Cache $cache
+                 */
+                $cache = $this->getService('Cache');
+                $key = $this->getProductsListElement()->getCacheKey();
+                if (($optionsInfoIndex = $cache->get($this->id . ':options:' . $key)) !== false) {
+                    foreach ($optionsInfoIndex as $id => $optionsInfo) {
+                        if (isset($this->filtersIdIndex[$id])) {
+                            $this->filtersIdIndex[$id]->setOptionsInfo($optionsInfo);
+                        }
+                    }
+                } else {
+                    $optionsInfoList = [];
+                    foreach ($this->filters as $filter) {
+                        $optionsInfoList[$filter->getId()] = $filter->getOptionsInfo();
+                    }
+                    $cache->set($this->id . ':options:' . $key, $optionsInfoList);
+                }
+
             }
         }
         return $this->filters;
     }
 
-    public function addFilter(productFilter $filter)
+    public function addFilter(ProductFilter $filter)
     {
         $this->filters[] = $filter;
         $type = $filter->getType();
@@ -57,12 +80,13 @@ trait ProductFilterFactoryTrait
             $this->filtersIndex[$type] = [];
         }
         $this->filtersIndex[$type][] = $filter;
+        $this->filtersIdIndex[$filter->getId()] = $filter;
 
     }
 
     /**
      * @param $type
-     * @return productFilter[]
+     * @return ProductFilter[]
      */
     public function getFiltersByType($type)
     {
@@ -159,6 +183,9 @@ trait ProductFilterFactoryTrait
 
     abstract public function isFieldSortable($fieldType);
 
+    /**
+     * @return ProductsListElement
+     */
     abstract public function getProductsListElement();
 
     abstract public function getParameterSelectionsForFiltering();

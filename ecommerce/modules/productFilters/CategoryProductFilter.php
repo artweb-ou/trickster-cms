@@ -1,19 +1,19 @@
 <?php
 
-class CategoryProductFilter extends productFilter
+class CategoryProductFilter extends ProductFilter
 {
     protected $type = 'category';
 
     public function getOptionsInfo()
     {
-        if ($this->options === null) {
-            $this->options = [];
+        if ($this->optionsInfo === null) {
+            $this->optionsInfo = [];
             if ($categories = $this->productsListElement->getProductsListCategories()) {
                 $argumentMap = $this->getArguments();
 
                 foreach ($categories as &$category) {
                     if (!$category->hidden) {
-                        $this->options[] = [
+                        $this->optionsInfo[] = [
                             'title' => $category->title,
                             'selected' => isset($argumentMap[$category->id]) || $category->requested,
                             'id' => $category->id,
@@ -23,7 +23,7 @@ class CategoryProductFilter extends productFilter
                 }
             }
         }
-        return $this->options;
+        return $this->optionsInfo;
     }
 
     protected function getArguments()

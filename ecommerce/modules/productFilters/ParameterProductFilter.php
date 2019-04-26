@@ -1,6 +1,6 @@
 <?php
 
-class ParameterProductFilter extends productFilter
+class ParameterProductFilter extends ProductFilter
 {
     protected $type = 'parameter';
     protected $selectionElement;
@@ -20,6 +20,11 @@ class ParameterProductFilter extends productFilter
         return $id;
     }
 
+    public function getId()
+    {
+        return $this->getSelectionId();
+    }
+
     public function getTitle()
     {
         $title = '';
@@ -36,14 +41,14 @@ class ParameterProductFilter extends productFilter
 
     public function getOptionsInfo()
     {
-        if ($this->options === null) {
-            $this->options = [];
+        if ($this->optionsInfo === null) {
+            $this->optionsInfo = [];
             if ($valueElements = $this->productsListElement->getProductsListSelectionValues($this->getSelectionId())) {
                 $argumentMap = $this->getArguments();
 
                 foreach ($valueElements as $valueElement) {
                     if (!$valueElement->hidden) {
-                        $this->options[] = [
+                        $this->optionsInfo[] = [
                             'title' => $valueElement->title,
                             'selected' => isset($argumentMap[$valueElement->id]),
                             'id' => $valueElement->id,
@@ -52,7 +57,7 @@ class ParameterProductFilter extends productFilter
                 }
             }
         }
-        return $this->options;
+        return $this->optionsInfo;
     }
 
     protected function getArguments()
