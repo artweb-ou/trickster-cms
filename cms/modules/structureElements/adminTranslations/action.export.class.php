@@ -21,8 +21,8 @@ class exportAdminTranslations extends structureElementAction
             $languageCodes[$languagesItem->id] = $languagesItem->iso6393;
         }
         $renderer->assign('languagesList', $languageCodes);
-        $path = $this->getService('PathsManager')->getPath('templates');
-        $renderer->setTemplatesFolder($path . 'xml');
+        $path = $this->getService('PathsManager')->getPath('trickster');
+        $renderer->setTemplatesFolder($path . 'cms/templates/xml');
         $renderer->setTemplate('xml.export.tpl');
         $renderer->setCacheControl('no-cache');
         $renderer->setContentDisposition('attachment');

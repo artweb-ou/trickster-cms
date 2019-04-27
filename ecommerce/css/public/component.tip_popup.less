@@ -1,30 +1,15 @@
-/********************************************************
-/*  TIP POPUP
-/********************************************************/
-.tip_popup {
-	text-align: center;
-	z-index: 120;
-	position: absolute;
-	box-sizing: border-box;
-}
-
 .tip_popup_content {
-	font-size: 0.9em;
-	padding: 0.5em 1em;
-	display: block;
-	border: 1px solid @trick_brd_color_12;
-	background-color: @trick_bg_color_01;
-
 	box-sizing: border-box;
 	position: relative;
-	box-shadow: 0 0 0 1px @trick_brd_color_12;
+	background-color: @trick_bg_color_01;
+	box-shadow: 0 0 0 1px @trick_brd_color_08;
 	padding: 0;
+//	line-height: 1.5;
 	color: @trick_text_color_01;
 	line-height: 1.25;
 
 	&.notice_basket {
-		border: 5px solid @trick_text_color_01;
-		transition: height 1s linear;
+		border: 5px solid @trick_brd_color_12;
 	}
 
 	.notice_header,
@@ -36,6 +21,7 @@
 	.notice_product_name,
 	.notice_bubble_text {
 		display: block;
+	//	padding: 0 1.5em .45em;
 	}
 	.notice_continue_shopping {
 		background-color: @trick_bg_color_02;
@@ -46,6 +32,8 @@
 		color:@trick_text_color_01;
 	}
 	.notice_bubble_text {
+	//	background-color:@theme_color01;
+	//	color:@trick_text_color_01;
 	}
 	.notice_product_amount{
 		font-style: normal;
@@ -75,6 +63,7 @@
 		overflow: auto;
 		padding: .5em;
 		position: relative;
+		color: @trick_text_color_02;
 	}
 	.notice_link {
 		color: inherit;
@@ -83,7 +72,7 @@
 		text-decoration: none;
 
 		&:hover, &:focus{
-			color: @trick_brd_color_06;
+			color: @trick_text_color_08;
 			text-decoration: none;
 		}
 	}
@@ -105,7 +94,7 @@
 			letter-spacing: 1px;
 			text-transform: uppercase;
 			box-sizing: border-box;
-			box-shadow: 0 0 0 1px @trick_brd_color_12;
+			box-shadow: 0 0 0 1px @trick_brd_color_08;
 
 			&.submit.button * {
 				color: inherit;

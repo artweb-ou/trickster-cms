@@ -40,9 +40,9 @@ function ProductShortComponent(componentElement) {
 		}
 		if (linkElement = componentElement.querySelector('.product_short_link')) {
 			if (basketButton) {
-				new TipPopupComponent(componentElement, window.translationsLogics.get('product.viewproduct'), [basketButton]);
+				new ToolTipComponent(componentElement, window.translationsLogics.get('product.viewproduct'), [basketButton]);
 			} else {
-				new TipPopupComponent(componentElement, window.translationsLogics.get('product.viewproduct'));
+				new ToolTipComponent(componentElement, window.translationsLogics.get('product.viewproduct'));
 			}
 
 			eventsManager.addHandler(componentElement, 'click', clickHandler);
@@ -110,7 +110,7 @@ function ProductShortComponent(componentElement) {
 
 function ProductGalleryComponent(componentElement) {
 	var init = function() {
-		new TipPopupComponent(componentElement, window.translationsLogics.get('product.viewproduct'));
+		new ToolTipComponent(componentElement, window.translationsLogics.get('product.viewproduct'));
 	};
 
 	init();

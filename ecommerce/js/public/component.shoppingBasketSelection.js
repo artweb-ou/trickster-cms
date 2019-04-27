@@ -205,8 +205,19 @@ window.ShoppingBasketSelectionComponent = function (componentElement) {
   }
   var submitForm = function (event) {
     eventsManager.preventDefaultAction(event)
+		var conditionsCheckboxInput = componentElement.querySelector('#shoppingbasket_form_conditions_checkbox')
+		if(conditionsCheckboxInput.checked){
     formElement.submit()
   }
+		else {
+			var message = []
+			message['title'] = translationsLogics.get('shoppingbasket.conditions')
+			message['content'] = '<a target="ART" class="modal_link" href="'+window.conditionsLink+'">'+translationsLogics.get('shoppingbasket.conditions_error')+'</a>'
+			message['footer'] = translationsLogics.get('shoppingbasket.agreewithconditions')
+
+			new ModalActionComponent(conditionsCheckboxInput, false, submitButtonElement, message); // checkbox-input, footer advanced, element for position, messages
+		}
+	}
   init()
 }
 
