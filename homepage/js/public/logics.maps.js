@@ -1,6 +1,7 @@
 window.mapsLogics = new function() {
 	var self = this;
 	this.mapsIndex = {};
+	this.mapsIframeIndex = {};
 
 	var initLogics = function() {
 		if (typeof window.mapsInfo !== 'undefined') {
@@ -9,11 +10,25 @@ window.mapsLogics = new function() {
 				self.mapsIndex[id] = map;
 			}
 		}
+		if (typeof window.mapsIframe !== 'undefined') {
+			for (var id in mapsIframe) {
+				var map = new MapInfo(mapsIframe[id]);
+				self.mapsIframeIndex[id] = map;
+			}
+		}
 	};
 
 	var initDom = function() {
 		if (typeof window.mapsInfo !== 'undefined') {
 			injectGoogleMapsApi();
+		}
+		if (typeof window.mapsIframe !== 'undefined') { //todo now check styles, if without Api key
+			for (var id in window.mapsIframe) {
+				var elements = _('.googlemap_id_' + id);
+				for (var i = elements.length; i--;) {
+					new iframeMapComponent(elements[i], id, getShortLanguageCode());
+				}
+			}
 		}
 		var embeddedMapElements = _(".map_embedded");
 		for (var i = embeddedMapElements.length; i--;) {

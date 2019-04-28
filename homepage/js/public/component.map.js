@@ -96,3 +96,28 @@ window.EmbeddedMapComponent = function (componentElement) {
   }
   init()
 }
+
+window.iframeMapComponent = function (componentElement, id, lang) {
+  var init = function () {
+    adjustHeight();
+    eventsManager.addHandler(window, 'resize', adjustHeight);
+  }
+
+  var adjustHeight = function () {
+    info = window.mapsLogics.mapsIframeIndex[id];
+    var coordinates = info.getCoordinates();
+    var title = info.getTitle() ? "&q=+(" + info.getTitle() + ")" : "";
+
+    var iframe = document.createElement("iframe");
+    componentElement.classList.add('googlemap_iframe');
+    var src = "https://maps.google.com/?q=" + coordinates + title + "&hl=" + lang + "&z=" + 14 + "&output=embed";
+    iframe.setAttribute('src', src);
+    iframe.setAttribute('allowfullscreen', true);
+    componentElement.appendChild(iframe);
+
+    componentElement.style.minHeight = componentElement.offsetWidth / 2 + 'px'
+    componentElement.style.height = ''
+    componentElement.style.height = componentElement.parentNode.offsetHeight + 'px'
+  }
+  init();
+}
