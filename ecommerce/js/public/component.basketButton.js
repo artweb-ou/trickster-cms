@@ -82,7 +82,9 @@ addToBasketButtonAction
 			message['title'] = window.productDetailsData.name || window.productDetailsData.name_ga;
 			message['content'] = window.translationsLogics.get('product.quantityunavailable');
 			message['footer'] = '';
-
+// only modal on error
+			new ModalActionComponent(false, false, componentElement, message); // checkbox-input, footer buttons, element for position, messages
+/*
 			switch(addToBasketButtonAction) {
 				case '1': // BubbleComponent
 					var bubbleComponent = new BubbleComponent(componentElement, message, additionalClassName, '', 3500);
@@ -90,9 +92,9 @@ addToBasketButtonAction
 					break;
 
 				case '2': // ModalActionComponent
-					new ModalActionComponent(false, false, componentElement, message); // checkbox-input, footer buttons, element for position, messages
 					break;
 			}
+*/
 		}
 	};
 	init();
