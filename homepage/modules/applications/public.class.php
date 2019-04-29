@@ -158,7 +158,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                     $this->renderer->assign('twitterData', $currentElement->getTwitterData());
                 }
 
-                $this->renderer->assign('jsScripts', $this->getJsScripts($resourcesUniterHelper));
+                $this->renderer->assign('jsScripts', $this->getJsScripts($currentElement));
                 $this->renderer->assign('layoutsManager', $this->getService('LayoutsManager'));
                 $this->renderer->assign('application', $this);
                 $this->renderer->assign('currentMetaDescription', $currentMetaDescription);
