@@ -125,7 +125,7 @@ abstract class ProductsListElement extends menuStructureElement
                 }
                 if ($deepCategoryIds) {
                     $deepCategoryIds = array_keys($deepCategoryIds);
-                    $filteredProductsQuery->whereIn('id', function ($query) use ($deepCategoryIds) {
+                    $filteredProductsQuery->whereIn('filteredproducts.id', function ($query) use ($deepCategoryIds) {
                         $query->from('structure_links')
                             ->select('childStructureId')
                             ->whereIn('parentStructureId', $deepCategoryIds)
@@ -147,7 +147,7 @@ abstract class ProductsListElement extends menuStructureElement
                         $discountedProductIds = array_merge($discountedProductIds, $discount->getApplicableProductsIds());
                     }
                 }
-                $filteredProductsQuery->whereIn('id', $discountedProductIds);
+                $filteredProductsQuery->whereIn('filteredproducts.id', $discountedProductIds);
             }
             if ($availability = $this->getFilterAvailability()) {
                 $statuses = [];
@@ -163,7 +163,7 @@ abstract class ProductsListElement extends menuStructureElement
             }
             if ($parameterValues = $this->getFilterParameterValueIds()) {
                 foreach ($parameterValues as $parameterValue) {
-                    $filteredProductsQuery->whereIn('id', function ($query) use ($parameterValue) {
+                    $filteredProductsQuery->whereIn('filteredproducts.id', function ($query) use ($parameterValue) {
                         $query->from('module_product_parameter_value')
                             ->select('productId')->distinct()
                             ->where('value', '=', $parameterValue);
@@ -172,8 +172,8 @@ abstract class ProductsListElement extends menuStructureElement
             }
 
             if ($price = $this->getFilterPrice()) {
-                $filteredProductsQuery->where('price', '>=', $price[0]);
-                $filteredProductsQuery->where('price', '<=', $price[1]);
+                $filteredProductsQuery->where('filteredproducts.price', '>=', $price[0]);
+                $filteredProductsQuery->where('filteredproducts.price', '<=', $price[1]);
             }
             $filteredProductsQuery->select('*');
             /**
@@ -182,7 +182,7 @@ abstract class ProductsListElement extends menuStructureElement
             $db = $this->getService('db');
             $db->insert($db->raw("DROP TABLE IF EXISTS engine_filteredproducts"));
             $db->insert($db->raw("CREATE TEMPORARY TABLE engine_filteredproducts " . $filteredProductsQuery->toSql()), $filteredProductsQuery->getBindings());
-            $this->filteredProductsQuery = $db->table('filteredproducts')->select('id');
+            $this->filteredProductsQuery = $db->table('filteredproducts')->select('filteredproducts.id');
         }
 
         return $this->filteredProductsQuery;
@@ -210,10 +210,10 @@ abstract class ProductsListElement extends menuStructureElement
             if ($sort && $sort == 'manual') {
                 $this->applyManualSorting($filteredProductsQuery, $filteredProductsQuery);
             } elseif ($sort == 'date') {
-                $filteredProductsQuery->join('structure_elements', 'id', '=', 'structure_elements.id', 'left');
+                $filteredProductsQuery->join('structure_elements', 'filteredproducts.id', '=', 'structure_elements.id', 'left');
                 $filteredProductsQuery->orderBy('structure_elements.dateCreated', $order);
             } elseif ($sort == 'brand') {
-                $filteredProductsQuery->join('module_brand', 'brandId', '=', 'module_brand.id', 'left');
+                $filteredProductsQuery->join('module_brand', 'filteredproducts.brandId', '=', 'module_brand.id', 'left');
                 $filteredProductsQuery->orderBy('module_brand.title', $order);
             } else {
                 $filteredProductsQuery->orderBy($sort, $order);
@@ -251,7 +251,7 @@ abstract class ProductsListElement extends menuStructureElement
             $key = $this->getProductsListElement()->getCacheKey();
             if (($this->filteredProductsAmount = $cache->get($this->id . ':famount:' . $key)) === false) {
                 if ($query = $this->getFilteredProductsQuery()) {
-                    $this->filteredProductsAmount = $query->count('id');
+                    $this->filteredProductsAmount = $query->count('filteredproducts.id');
                     $cache->set($this->id . ':famount:' . $key, $this->filteredProductsAmount);
                 }
             }
@@ -660,7 +660,7 @@ abstract class ProductsListElement extends menuStructureElement
                 $query = $db->table('module_product_parameter_value')
                     ->whereIn('parameterId', $selectionsIds);
                 $query->whereIn('productId', $productIdsQuery);
-                $query->select(['parameterId', 'value',])->distinct();
+                $query->select(['parameterId', 'value'])->distinct();
                 if ($records = $query->get()) {
                     foreach ($records as &$record) {
                         if (!isset($this->selectionsValuesIndex[$record['parameterId']])) {
@@ -853,7 +853,7 @@ abstract class ProductsListElement extends menuStructureElement
         $result = [];
         $productIdsQuery = clone $this->getFilteredProductsQuery();
         if ($records = $productIdsQuery
-            ->select('availability')->distinct()
+            ->select('filteredproducts.availability')->distinct()
             ->get()) {
             foreach ($records as $record) {
                 $result[] = $record['availability'];
@@ -867,8 +867,8 @@ abstract class ProductsListElement extends menuStructureElement
         $result = [];
         $productIdsQuery = clone $this->getFilteredProductsQuery();
         if ($records = $productIdsQuery
-            ->select('brandId')->distinct()
-            ->where('brandId', '!=', 0)
+            ->select('filteredproducts.brandId')->distinct()
+            ->where('filteredproducts.brandId', '!=', 0)
             ->get()) {
             $structureManager = $this->getService('structureManager');
             $sort = [];

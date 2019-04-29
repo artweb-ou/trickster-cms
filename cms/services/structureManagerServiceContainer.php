@@ -60,6 +60,11 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
             $structureManager->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.adminAllowed'));
         } else {
             $structureManager->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.publicAllowed'));
+            if ($cache = $this->registry->getService('Cache')){
+                if ($cache->isEnabled()){
+                    $structureManager->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
+                }
+            }
             $structureManager->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
         }
 
