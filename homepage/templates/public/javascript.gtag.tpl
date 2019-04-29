@@ -3,7 +3,7 @@
 	{$googleAdId = $googleAD['main_id']}
 	{$googleId = $googleAdId}
 {/if}
-{if  $analyticsId = $configManager->get('google.analytics.id')}
+{if $analyticsId = $configManager->get('google.analytics.id')}
 	{$googleId = $analyticsId}
 {else}
 	{$analyticsId = $configManager->get('main.googleAnalyticsId')}
@@ -25,8 +25,11 @@
 				emailId : '{$googleAD["event_email_id"]}'
 			};
 		{/if}
-		{if $configManager->get('google.ecommerce.enabled') && !empty($analyticsId)}
+		{if !empty($analyticsId)}
+			gtag('js', new Date());
 			gtag('config', '{$analyticsId}');
+		{/if}
+		{if $configManager->get('google.ecommerce.enabled')}
 			window.google.ecommerce = {
 				'enabled': true
 			};
