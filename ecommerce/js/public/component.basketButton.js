@@ -92,6 +92,7 @@ addToBasketButtonAction
 					break;
 
 				case '2': // ModalActionComponent
+					new ModalActionComponent(false, false, componentElement, message); // checkbox-input, footer buttons, element for position, messages
 					break;
 			}
 */
