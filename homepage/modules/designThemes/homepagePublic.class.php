@@ -104,6 +104,8 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.mobileMenu.js',
             'component.mobileHeader.js',
             'component.tracking.js',
+            'component.modalAction.js',
+            'component.modal.js',
         ];
     }
 }
