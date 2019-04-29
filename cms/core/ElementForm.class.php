@@ -2,6 +2,7 @@
 
 abstract class ElementForm
 {
+    protected $containerClass;
     protected $formClass = "";
     protected $formEnctype = 'multipart/form-data';
     protected $formMethod = 'post';
@@ -149,5 +150,13 @@ abstract class ElementForm
     public function getAdditionalControls()
     {
         return $this->additionalControls;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContainerClass()
+    {
+        return $this->containerClass;
     }
 }

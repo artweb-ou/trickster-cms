@@ -5,7 +5,7 @@ class showIconFormProduct extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->final) {
-            $structureElement->newIconForm = $structureManager->createElement('galleryImage', 'showForm', $structureElement->id);
+            $structureElement->newForm = $structureManager->createElement('galleryImage', 'showForm', $structureElement->id);
         }
 
         $structureElement->setTemplate('shared.content.tpl');

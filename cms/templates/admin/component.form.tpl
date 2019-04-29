@@ -3,6 +3,9 @@
 {assign var='formNames' value=$element->getFormNames()}
 {assign var='structureType' value=$element->structureType}
 
+{if $form->getContainerClass()}
+	<div class="{$form->getContainerClass()}">
+{/if}
 {if $form->getFormComponents()}
 	{$translationGroup = $form->getTranslationGroup()}
 	<form action="{$form->getFormAction()}" class="form_component {$form->getFormClass()}" method="{$form->getFormMethod()}" enctype="{$form->getFormEnctype()}">
@@ -21,4 +24,7 @@
 {/if}
 {if $form->getAdditionalContent()}
 	{include file=$theme->template("{$form->getAdditionalContent()}.tpl")}
+{/if}
+{if $form->getContainerClass()}
+	</div>
 {/if}
