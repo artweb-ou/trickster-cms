@@ -25,6 +25,6 @@
 </div>
 <input class='gallery_form_upload_elementid_input' type="hidden" value="{$element->URL}" name="id" />
 {if isset($linkType)}
-	<input class='gallery_form_upload_linktype' type="hidden" value="{$linkType}" name="id" />
+	<input class='gallery_form_upload_linktype' type="hidden" value="{$linkType}" name="linkType" />
 {/if}
 <input class='gallery_form_upload_action_input' type="hidden" value="receive" name="action" />
