@@ -1328,17 +1328,22 @@ class structureManager implements DependencyInjectionContextInterface
 
     protected function findShortestParentsChain(
         $id,
-        $restrictByParentChain = null,
+        $restrictByParentId = null,
         $nonLoadedOnly = true,
         &$points = 0,
         $chainElements = []
     )
     {
-        $key = 'ch:' . $this->languagesManager->getCurrentLanguageId() . ':p' . $restrictByParentChain;
+        //if we are searching parent within itself then we will get nothing. we should not restrict parent within itself
+        if ($restrictByParentId == $id) {
+            $restrictByParentId = null;
+        }
+
+        $key = 'ch:' . $this->languagesManager->getCurrentLanguageId() . ':p' . $restrictByParentId;
         if ($cachedChain = $this->cache->get($id . ":" . $key)) {
             return $cachedChain;
         }
-        if ($nonLoadedOnly && !$restrictByParentChain && isset($this->shortestChains[$id])) {
+        if ($nonLoadedOnly && !$restrictByParentId && isset($this->shortestChains[$id])) {
             return $this->shortestChains[$id];
         }
         $this->shortestChains[$id] = false;
@@ -1348,7 +1353,7 @@ class structureManager implements DependencyInjectionContextInterface
         if ($parentLinks = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child')) {
             foreach ($parentLinks as &$parentLink) {
                 $parentId = $parentLink->parentStructureId;
-                if (!$restrictByParentChain) {
+                if (!$restrictByParentId) {
                     if (!empty($this->elementsList[$parentId])) {
                         $foundLoaded = $parentId;
                         if ($this->elementsList[$parentId]->requested) {
@@ -1358,7 +1363,7 @@ class structureManager implements DependencyInjectionContextInterface
                     } elseif ($parentId == $this->getRootElementId()) {
                         $foundRequested = $parentId;
                     }
-                } elseif ($parentId == $restrictByParentChain) {
+                } elseif ($parentId == $restrictByParentId) {
                     $foundRestricted = $parentId;
                 }
             }
@@ -1382,14 +1387,14 @@ class structureManager implements DependencyInjectionContextInterface
                         $newPoints = $points + 2;
                         if ($chain = $this->findShortestParentsChain(
                             $parentId,
-                            $restrictByParentChain,
+                            $restrictByParentId,
                             $nonLoadedOnly,
                             $newPoints,
                             $chainElements
                         )
                         ) {
-                            if ((is_array($chain) && !$restrictByParentChain) ||
-                                ($restrictByParentChain !== null && in_array($restrictByParentChain, $chain))
+                            if ((is_array($chain) && !$restrictByParentId) ||
+                                ($restrictByParentId !== null && in_array($restrictByParentId, $chain))
                             ) {
                                 if ($newPoints < $bestPoints || !$bestPoints) {
                                     $bestPoints = $newPoints;
