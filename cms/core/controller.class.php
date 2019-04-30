@@ -32,7 +32,7 @@ class controller
     public $configManager;
 
     protected $formData = [];
-    protected $forceDebug = false;
+    protected $forceDebug = true;
     protected $debugMode = null;
     /** @var controller */
     private static $instance;

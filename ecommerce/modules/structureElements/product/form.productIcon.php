@@ -7,7 +7,9 @@ class ProductIconStructure extends ElementForm
     protected $preset = '';
     protected $controlsLayout = null;
     protected $structure = [
-        'image' => ['type' => 'input.dragAndDropImage']
+        'image' => [
+            'type' => 'input.dragAndDropImage'
+        ]
     ];
     protected $controls = false;
     protected $additionalContent = 'shared.contentImagesTable';

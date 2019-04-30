@@ -7,7 +7,9 @@ class ProductImagesStructure extends ElementForm
     protected $preset = '';
     protected $controlsLayout = null;
     protected $structure = [
-        'image' => ['type' => 'input.dragAndDropImage']
+        'image' => [
+            'type' => 'input.dragAndDropImage'
+        ]
     ];
     protected $additionalContent = 'shared.contentImagesTable';
     public function getTranslationGroup()
