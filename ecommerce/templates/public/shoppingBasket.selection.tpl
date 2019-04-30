@@ -16,14 +16,16 @@
             {assign var='formErrors' value=$element->getFormErrors()}
             {assign var='formNames' value=$element->getFormNames()}
 
-			{include file=$theme->template('shoppingBasket.products.tpl') element=$element}
-			{include file=$theme->template('shoppingBasket.discounts.tpl') element=$element}
-			{include file=$theme->template('shoppingBasket.selection_form.tpl') element=$element}
-			{include file=$theme->template('shoppingBasket.totals.tpl')}
+			{foreach $element->getCurrentStepElements() as $contentItem}{include file=$theme->template($contentItem->getTemplate()) element=$contentItem shoppingBasketElement=$element}{/foreach}
 
-			{if !$element->isCheckoutStepEnabled()}
-				{include file=$theme->template('shoppingBasket.paymentmethods.tpl')}
-			{/if}
+			{*{include file=$theme->template('shoppingBasket.products.tpl') element=$element}*}
+			{*{include file=$theme->template('shoppingBasket.discounts.tpl') element=$element}*}
+			{*{include file=$theme->template('shoppingBasket.delivery.tpl') element=$element}*}
+			{*{include file=$theme->template('shoppingBasket.totals.tpl')}*}
+
+			{*{if !$element->isCheckoutStepEnabled()}*}
+				{*{include file=$theme->template('shoppingBasket.paymentmethods.tpl')}*}
+			{*{/if}*}
 			{include file=$theme->template('shoppingBasket.controls.tpl') element=$element}
 		</form>
 	</div>

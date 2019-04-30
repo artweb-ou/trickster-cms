@@ -19,14 +19,13 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
     public $dataResourceName = 'module_shoppingbasket';
     public $defaultActionName = 'show';
     protected $allowedTypes = [
-        'login',
-        'registration',
+        'shoppingBasketStep'
     ];
     public $role = 'container';
     protected $deliveryTypesList = false;
     protected $displayedProducts = false;
-    protected $currentStep = 'selection';
     public $errorMessage = '';
+    protected $currentStep;
     //todo: make $shoppingBasket protected, provide getter
     /**
      * @var shoppingBasket
@@ -65,6 +64,70 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $moduleStructure['subscribe'] = 'checkbox';
         $moduleStructure['hidden'] = 'checkbox';
         $moduleStructure['paymentMethodId'] = 'naturalNumber';
+    }
+
+    public function getNextStep() {
+        $steps = $this->getSteps();
+        foreach($steps as $key => $step) {
+            if($this->getCurrentStepElement() == $step) {
+                $nextKey = $key + 1;
+                if(isset($steps[$nextKey])) {
+                    return $steps[$nextKey];
+                }
+            }
+        }
+        return false;
+    }
+
+    public function isLastStep() {
+        return !$this->getNextStep();
+    }
+
+    public function getCurrentStepElements() {
+        if($stepElement = $this->getCurrentStepElement()) {
+            return $stepElement->getChildrenList();
+        }
+
+        return [];
+    }
+
+    public function getCurrentStepElement() {
+        if(is_null($this->currentStep)) {
+            $controller = $this->getService('controller');
+            $steps = $this->getSteps();
+            foreach($steps as $step) {
+                if($controller->getParameter('step')) {
+                    if($step->structureName == $controller->getParameter('step')) {
+                        $this->currentStep = $step;
+                        break;
+                    }
+                }else {
+                    $this->currentStep = $step;
+                    break;
+                }
+            }
+
+            if(!$this->currentStep) {
+                $this->currentStep = false;
+            }
+        }
+
+        return $this->currentStep;
+    }
+
+    public function getSteps() {
+        $structureManager = $this->getService('structureManager');
+        return $structureManager->getElementsChildren($this->id, null, 'structure', ['shoppingBasketStep']);
+    }
+
+    public function getFormActionURL($type = null)
+    {
+        $controller = controller::getInstance();
+        if ($contentType = $controller->getParameter('step')) {
+            return $this->URL . 'step:' . $contentType . '/';
+        }
+
+        return $this->URL;
     }
 
     public function prepareFormInformation()
@@ -461,25 +524,12 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         return $result;
     }
 
-    public function getCurrentStep()
-    {
-        return $this->currentStep;
-    }
-
-    public function setCurrentStep($step)
-    {
-        $this->currentStep = $step;
-    }
-
     public function isAccountStepSkippable()
     {
+        //???
         return !!$this->getService('ConfigManager')->get('main.shoppingasketAccountStepSkippable');
     }
 
-    public function isCheckoutStepEnabled()
-    {
-        return !!$this->getService('ConfigManager')->get('main.shoppingasketCheckoutStepEnabled');
-    }
 
     public function getClientScripts()
     {

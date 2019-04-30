@@ -33,7 +33,7 @@ class submitShoppingBasket extends structureElementAction
 
         if (!$this->validated) {
             $structureElement->errorMessage = $translationsManager->getTranslationByName('shoppingbasket.form_error');
-        } elseif ($formData['conditions'] != '1') {
+        } elseif ($structureElement->isLastStep() && $formData['conditions'] != '1') {
             $structureElement->setFormError('conditions');
             $structureElement->errorMessage = $translationsManager->getTranslationByName('shoppingbasket.conditions_error');
             $this->validated = false;
@@ -88,12 +88,16 @@ class submitShoppingBasket extends structureElementAction
 
             $structureElement->saveShoppingBasketForm();
 
-            if ($structureElement->isCheckoutStepEnabled() || !$structureElement->paymentMethodId) {
-                $structureElement->logVisitorEvent('shoppingbasket_checkout');
-                $structureElement->setViewName('checkout');
-            } else {
-                $controller->redirect($structureElement->URL . 'id:' . $structureElement->id
-                    . '/action:pay/bank:' . $structureElement->paymentMethodId . '/');
+            if($structureElement->isLastStep()) {
+                if($structureElement->paymentMethodId) {
+                    $controller->redirect($structureElement->URL . 'id:' . $structureElement->id
+                        . '/action:pay/bank:' . $structureElement->paymentMethodId . '/');
+                }else {
+                    $structureElement->setViewName('selection');
+                }
+            }else {
+                $nextStep = $structureElement->getNextStep();
+                $controller->redirect($structureElement->URL . 'step:' . $nextStep->structureName . '/');
             }
         } else {
             $structureElement->executeAction('show');
@@ -122,20 +126,26 @@ class submitShoppingBasket extends structureElementAction
 
     public function setValidators(&$validators)
     {
-        $receiverIsPayer = true;
-        if (!isset($this->elementFormData['receiverIsPayer']) || $this->elementFormData['receiverIsPayer'] != '1') {
-            $receiverIsPayer = false;
+        foreach($this->structureElement->getCurrentStepElements() as $stepContentElement) {
+            if($stepContentElement instanceof shoppingBasketStepPaymentsElement) {
+                $validators['paymentMethodId'][] = 'notEmpty';
+            }
+
+            if($stepContentElement instanceof shoppingBasketStepDeliveryElement) {
+                $receiverIsPayer = true;
+                if (!isset($this->elementFormData['receiverIsPayer']) || $this->elementFormData['receiverIsPayer'] != '1') {
+                    $receiverIsPayer = false;
+                }
+                if (!$receiverIsPayer) {
+                    $validators['payerFirstName'][] = 'notEmpty';
+                    $validators['payerLastName'][] = 'notEmpty';
+                    $validators['payerPhone'][] = 'notEmpty';
+                    $validators['payerEmail'][] = 'email';
+                }
+
+                $validators = $validators + $this->structureElement->getCustomValidators();
+            }
         }
-        if (!$receiverIsPayer) {
-            $validators['payerFirstName'][] = 'notEmpty';
-            $validators['payerLastName'][] = 'notEmpty';
-            $validators['payerPhone'][] = 'notEmpty';
-            $validators['payerEmail'][] = 'email';
-        }
-        if (!$this->structureElement->isCheckoutStepEnabled()) {
-            $validators['paymentMethodId'][] = 'notEmpty';
-        }
-        $validators = $validators + $this->structureElement->getCustomValidators();
     }
 
     public function getExtraModuleFields()

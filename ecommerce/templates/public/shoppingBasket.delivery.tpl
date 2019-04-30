@@ -42,7 +42,7 @@
 				</tr>
 				</tbody>
 			</table>
-			<input type="hidden" class="shoppingbasket_delivery_form_fieldsname" value="{$element->getFormNamesBase()}"/>
+			<input type="hidden" class="shoppingbasket_delivery_form_fieldsname" value="{$shoppingBasketElement->getFormNamesBase()}"/>
 		</div>
 		<div class='shoppingbasket_payer_data'>
 			<h1 class='shoppingbasket_form_heading'>{translations name='shoppingbasket.payerdata'}:</h1>

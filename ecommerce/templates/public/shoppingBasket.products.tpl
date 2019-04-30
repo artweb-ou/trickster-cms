@@ -26,7 +26,7 @@
 			{translations name='shoppingbasket.productstable_productsprice'}:
 		</th>
 		<td class="shoppingbasket_total_value">
-			{$element->shoppingBasket->getProductsPrice()} {$selectedCurrencyItem->symbol}
+			{$shoppingBasketElement->shoppingBasket->getProductsPrice()} {$selectedCurrencyItem->symbol}
 		</td>
 		<td class="shoppingbasket_total_value_spacer"></td>
 	</tr>
