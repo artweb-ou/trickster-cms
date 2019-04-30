@@ -12,6 +12,7 @@ abstract class ElementForm
     protected $preset = '';
     protected $customComponent = '';
     protected $additionalContent;
+    protected $additionalContentTable;
     protected $additionalControls = true;
     protected $controls = [];
     /**
@@ -158,5 +159,13 @@ abstract class ElementForm
     public function getContainerClass()
     {
         return $this->containerClass;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalContentTable()
+    {
+        return $this->additionalContentTable;
     }
 }

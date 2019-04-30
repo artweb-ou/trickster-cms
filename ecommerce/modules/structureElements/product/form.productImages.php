@@ -11,7 +11,8 @@ class ProductImagesStructure extends ElementForm
             'type' => 'input.dragAndDropImage'
         ]
     ];
-    protected $additionalContent = 'shared.contentImagesTable';
+    protected $additionalContent = 'shared.contentlist';
+    protected $additionalContentTable = 'shared.contenlistGalleryImage.tpl';
     public function getTranslationGroup()
     {
         return 'gallery';
