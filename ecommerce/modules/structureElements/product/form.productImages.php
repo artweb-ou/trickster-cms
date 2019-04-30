@@ -1,6 +1,6 @@
 <?php
 
-class CategoryIconStructure extends ElementForm
+class ProductImagesStructure extends ElementForm
 {
     protected $containerClass = 'gallery_form';
     protected $formClass = 'gallery_form_upload';
@@ -11,7 +11,6 @@ class CategoryIconStructure extends ElementForm
             'type' => 'input.dragAndDropImage'
         ]
     ];
-    protected $controls = false;
     protected $additionalContent = 'shared.contentlist';
     protected $additionalContentTable = 'shared.contenlistGalleryImage.tpl';
     public function getTranslationGroup()
