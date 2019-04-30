@@ -115,6 +115,20 @@ class ajaxSearchApplication extends controllerApplication
                         $element->URL .= "qid:" . $searchId . "/";
                     }
                 }
+
+                if($controller->getParameter('totals')) {
+                    $allTotal = 0;
+                    foreach ($result->sets as $set) {
+                        $allTotal += $set->totalCount;
+                    }
+                    $response->setResponseData('searchTotal', $allTotal);
+                    foreach($result->elements as &$element) {
+                        if($element instanceof categoryElement) {
+                            $element->productsCount = count($element->getConnectedProductsIds());
+                        }
+                    }
+                }
+
                 foreach ($result->sets as $set) {
                     $response->setResponseData($set->type, $set->elements);
                 }
