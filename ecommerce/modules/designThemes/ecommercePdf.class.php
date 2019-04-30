@@ -14,7 +14,6 @@ class ecommercePdfDesignTheme extends DesignTheme
     public function getCssResources()
     {
         if (is_null($this->cssResources)) {
-            $this->appendCssResourceFromTheme('reset.less', 'public');
             $this->appendCssResourceFromTheme('module.order.less', 'ecommercePublic');
             $this->loadCssResources();
         }

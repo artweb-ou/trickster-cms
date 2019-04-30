@@ -17,8 +17,8 @@
 					</div>
 				{/if}
 			{/if}
-			{if !empty($form->getadditionalContentTable())}
-				{include file=$theme->template($form->getadditionalContentTable())}
+			{if !empty($form) && !empty($form->getAdditionalContentTable())}
+				{include file=$theme->template($form->getAdditionalContentTable())}
 			{else}
 				{include file=$theme->template('shared.contentTable.tpl')}
 			{/if}
