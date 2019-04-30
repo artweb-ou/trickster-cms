@@ -10,7 +10,8 @@ class orderEmailDispatchmentType extends designThemeEmailDispatchmentType
         $this->cssThemeFilesStructure = [
             'default' => ['reset.less', 'all_variables.less'],
             'ecommercePublic' => ['module.order.less'],
-            'project' => ['shared.less', 'module.order.less'],
+            'homepage' => ['colors_variables.less'],
+            'project' => ['colors_variables.less', 'shared.less', 'module.order.less'],
             'email' => ['main.less', 'order.less'],
             'projectEmail' => ['main.less', 'order.less'],
             'projectDocument' => ['order.less'],
