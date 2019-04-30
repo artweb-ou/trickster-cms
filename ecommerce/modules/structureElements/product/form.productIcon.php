@@ -1,6 +1,6 @@
 <?php
 
-class CategoryIconStructure extends ElementForm
+class ProductIconStructure extends ElementForm
 {
     protected $containerClass = 'gallery_form';
     protected $formClass = 'gallery_form_upload';
