@@ -1,4 +1,5 @@
 window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
+	var lastActiveThumbnailElement;
 	var self = this;
 	var componentElement;
 	var centerElement;
@@ -17,7 +18,11 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 		for (var i = 0; i < imagesInfoList.length; i++) {
 			var item = new GallerySelectorImageComponent(imagesInfoList[i], self);
 			centerElement.appendChild(item.getComponentElement());
-
+			if(i == 0) {
+				var element = item.getComponentElement();
+				element.classList.add('gallery_thumbnailsselector_active');
+				lastActiveThumbnailElement = element;
+			}
 			thumbnailsList.push(item);
 		}
 
@@ -28,7 +33,17 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 			var rightButton = new GallerySelectorRightComponent(self);
 			componentElement.appendChild(rightButton.getComponentElement());
 		}
+		controller.addListener('galleryImageDisplay', updateEvent);
 
+	};
+	var updateEvent = function(image) {
+		console.log(image);
+		var element = centerElement.querySelector('.gallery_thumbnailsselector_image_' + image.getId());
+		if (lastActiveThumbnailElement) {
+			lastActiveThumbnailElement.classList.remove('gallery_thumbnailsselector_active');
+		}
+		element.classList.add('gallery_thumbnailsselector_active');
+		lastActiveThumbnailElement = element;
 	};
 	this.getComponentElement = function() {
 		return componentElement;
@@ -79,13 +94,14 @@ window.GallerySelectorImageComponent = function(imageInfo, parentComponent) {
 	var componentElement;
 
 	var init = function() {
+		console.log(imageInfo);
 		componentElement = document.createElement('div');
-		componentElement.className = 'gallery_thumbnailsselector_image';
-		componentElement.style.backgroundImage = 'url('+imageInfo.getThumbnailImageUrl()+')';
+		componentElement.className = 'gallery_thumbnailsselector_image gallery_thumbnailsselector_image_' + imageInfo.getId();
+		componentElement.style.backgroundImage = 'url(' + imageInfo.getThumbnailImageUrl() + ')';
 
 		window.eventsManager.addHandler(componentElement, 'click', clickHandler)
 	};
-	var clickHandler = function() {
+	var clickHandler = function(e) {
 		parentComponent.stopSlideShow();
 		imageInfo.display();
 	};
