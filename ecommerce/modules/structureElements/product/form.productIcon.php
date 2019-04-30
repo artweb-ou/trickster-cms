@@ -14,6 +14,7 @@ class ProductIconStructure extends ElementForm
     protected $controls = false;
     protected $additionalContent = 'shared.contentlist';
     protected $additionalContentTable = 'shared.contenlistGalleryImage.tpl';
+
     public function getTranslationGroup()
     {
         return 'gallery';
