@@ -3,6 +3,7 @@
 /**
  * Class discountsListElement
  *
+ * @property string $columns
  * @property int $priceSortingEnabled;
  * @property int $nameSortingEnabled;
  * @property int $dateSortingEnabled;
@@ -102,5 +103,10 @@ class discountsListElement extends menuStructureElement implements ConfigurableL
             }
         }
         return $this->listedDiscountsIds;
+    }
+
+    public function getColumnsType()
+    {
+        return $this->columns;
     }
 }

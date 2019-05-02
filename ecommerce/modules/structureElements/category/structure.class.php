@@ -5,7 +5,7 @@
  *
  * @property string $deliveryPriceType
  */
-class categoryElement extends categoryStructureElement implements ConfigurableLayoutsProviderInterface, ImageUrlProviderInterface
+class categoryElement extends categoryStructureElement implements ConfigurableLayoutsProviderInterface, ImageUrlProviderInterface, ColumnsTypeProvider
 {
     use ImageUrlProviderTrait;
     use ConfigurableLayoutsProviderTrait;
@@ -18,6 +18,9 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     public $role = 'container';
     protected $parentCategoriesList;
     protected $categoriesList;
+    /**
+     * @var productCatalogueElement
+     */
     protected $currentProductCatalogue;
     public $feedbackFormsList = [];
     public $columns;
@@ -540,9 +543,9 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     public function getParentCategory()
     {
         if ($this->parentCategory === null) {
+            $this->parentCategory = false;
             $structureManager = $this->getService('structureManager');
             if ($parentElements = $structureManager->getElementsParents($this->id)) {
-                $this->parentCategory = false;
                 foreach ($parentElements as &$parent) {
                     if ($parent->structureType == "category") {
                         if (!$this->parentCategory) {
@@ -569,7 +572,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $enabled = false;
         switch ($this->$settingName) {
             case 0:
-                if ($parent = $this->getParentCategory($settingName)) {
+                if ($parent = $this->getParentCategory()) {
                     $enabled = $parent->isSettingEnabled($settingName);
                 } elseif ($this->currentProductCatalogue) {
                     $enabled = $this->currentProductCatalogue->isSettingEnabled($settingName);
@@ -899,5 +902,15 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         }
         $result = array_merge($result, parent::getSelectionsIdsConnectedForFiltering());
         return $result;
+    }
+
+    public function getColumnsType()
+    {
+        if ($parent = $this->getParentCategory()) {
+            return $parent->getColumnsType();
+        } elseif ($this->currentProductCatalogue) {
+            return $this->currentProductCatalogue->getColumnsType();
+        }
+        return false;
     }
 }

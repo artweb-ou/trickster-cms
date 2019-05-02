@@ -18,6 +18,8 @@ class CategorySettingsStructure extends ElementForm
                 'price;desc' => 'pricesorting_descending',
                 'title' => 'titlesorting',
                 'title;desc' => 'titlesorting_descending',
+                'brand' => 'brandsorting',
+                'brand;desc' => 'brandsorting_descending',
                 'date' => 'datesorting',
                 'date;desc' => 'datesorting_descending',
             ],

@@ -1,6 +1,11 @@
 <?php
 
-class newsListElement extends menuDependantStructureElement
+/**
+ * Class newsListElement
+ *
+ * @property string $columns
+ */
+class newsListElement extends menuDependantStructureElement implements ColumnsTypeProvider
 {
     use ConfigurableLayoutsProviderTrait;
     public $dataResourceName = 'module_newslist';
@@ -188,5 +193,10 @@ class newsListElement extends menuDependantStructureElement
             return $parent->getTitle();
         }
         return false;
+    }
+
+    public function getColumnsType()
+    {
+        return $this->columns;
     }
 }
