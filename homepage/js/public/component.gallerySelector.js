@@ -37,13 +37,17 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 
 	};
 	var updateEvent = function(image) {
-		console.log(image);
 		var element = centerElement.querySelector('.gallery_thumbnailsselector_image_' + image.getId());
 		if (lastActiveThumbnailElement) {
 			lastActiveThumbnailElement.classList.remove('gallery_thumbnailsselector_active');
 		}
 		element.classList.add('gallery_thumbnailsselector_active');
 		lastActiveThumbnailElement = element;
+		element.scrollIntoView({
+			behavior: "smooth",
+			inline : "center",
+			block : "nearest"
+		});
 	};
 	this.getComponentElement = function() {
 		return componentElement;
@@ -94,7 +98,6 @@ window.GallerySelectorImageComponent = function(imageInfo, parentComponent) {
 	var componentElement;
 
 	var init = function() {
-		console.log(imageInfo);
 		componentElement = document.createElement('div');
 		componentElement.className = 'gallery_thumbnailsselector_image gallery_thumbnailsselector_image_' + imageInfo.getId();
 		componentElement.style.backgroundImage = 'url(' + imageInfo.getThumbnailImageUrl() + ')';
