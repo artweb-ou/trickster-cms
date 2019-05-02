@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Connection;
+
 class structureManager implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -1490,32 +1492,38 @@ class structureManager implements DependencyInjectionContextInterface
             $currentName = $element->structureType . $element->id;
         }
         $allowedTypes = $this->getPathSearchAllowedLinks();
+        /**
+         * @var Connection $db
+         */
         $db = $this->getService('db');
-        $query = $db->table('structure_elements')
-            ->select('structureName')
-            ->where('structureName', 'like', $currentName . '%')
-            ->whereIn('id', function ($subQuery) use ($elementId, $allowedTypes) {
-                $subQuery->from('structure_links')
-                    ->select('childStructureId')
-                    ->where('childStructureId', '!=', $elementId)
-                    ->whereIn('type', $allowedTypes)
-                    ->whereIn('parentStructureId', function (
-                        $subSubQuery
-                    ) use ($elementId, $allowedTypes) {
-                        $subSubQuery->from('structure_links')
-                            ->select('parentStructureId')
-                            ->where('childStructureId', '=', $elementId)
-                            ->whereIn('type', $allowedTypes);
-                    });
-            });
+        $parentIds = false;
+        if ($records = $db->table('structure_links')
+            ->select('parentStructureId')
+            ->where('childStructureId', '=', $elementId)
+            ->whereIn('type', $allowedTypes)->get()) {
+            $parentIds = array_column($records, 'parentStructureId');
+        }
         $newName = $currentName;
+        if ($parentIds) {
 
-        if ($rows = $query->get()) {
-            $usedNames = array_column($rows, 'structureName');
-            $currentNumber = 1;
-            while (in_array(mb_strtolower($newName), $usedNames)) {
-                $newName = $currentName . $currentNumber;
-                $currentNumber++;
+            $query = $db->table('structure_elements')
+                ->select('structureName')
+                ->where('structureName', 'like', $currentName . '%')
+                ->whereIn('id', function ($subQuery) use ($elementId, $allowedTypes, $parentIds) {
+                    $subQuery->from('structure_links')
+                        ->select('childStructureId')
+                        ->where('childStructureId', '!=', $elementId)
+                        ->whereIn('type', $allowedTypes)
+                        ->whereIn('parentStructureId', $parentIds);
+                });
+
+            if ($rows = $query->get()) {
+                $usedNames = array_column($rows, 'structureName');
+                $currentNumber = 1;
+                while (in_array(mb_strtolower($newName), $usedNames)) {
+                    $newName = $currentName . $currentNumber;
+                    $currentNumber++;
+                }
             }
         }
         return $newName;
