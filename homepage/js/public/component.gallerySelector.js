@@ -109,19 +109,14 @@ window.GallerySelectorLeftComponent = function(selectorObject) {
 		componentElement = document.createElement('span');
 		componentElement.className = 'gallery_thumbnailsselector_left';
 
-		eventsManager.addHandler(componentElement, 'mouseover', overHandler);
-		eventsManager.addHandler(componentElement, 'mouseout', outHandler);
 		eventsManager.addHandler(componentElement, 'click', clickHandler);
 	};
+
 	var clickHandler = function(event) {
-		eventsManager.preventDefaultAction(event);
-	};
-	var overHandler = function() {
+		selectorObject.scrollStop();
 		selectorObject.scrollLeft();
 	};
-	var outHandler = function() {
-		selectorObject.scrollStop();
-	};
+
 	this.getComponentElement = function() {
 		return componentElement;
 	};
@@ -134,19 +129,14 @@ window.GallerySelectorRightComponent = function(selectorObject) {
 		componentElement = document.createElement('span');
 		componentElement.className = 'gallery_thumbnailsselector_right';
 
-		eventsManager.addHandler(componentElement, 'mouseover', overHandler);
-		eventsManager.addHandler(componentElement, 'mouseout', outHandler);
 		eventsManager.addHandler(componentElement, 'click', clickHandler);
 	};
+
 	var clickHandler = function(event) {
-		eventsManager.preventDefaultAction(event);
-	};
-	var overHandler = function() {
+		selectorObject.scrollStop();
 		selectorObject.scrollRight();
 	};
-	var outHandler = function() {
-		selectorObject.scrollStop();
-	};
+	
 	this.getComponentElement = function() {
 		return componentElement;
 	};
