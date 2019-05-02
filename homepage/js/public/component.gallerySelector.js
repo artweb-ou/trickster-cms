@@ -42,12 +42,12 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 			lastActiveThumbnailElement.classList.remove('gallery_thumbnailsselector_active');
 		}
 		element.classList.add('gallery_thumbnailsselector_active');
+		var center = (centerElement.clientWidth - element.clientWidth) / 2;
 		lastActiveThumbnailElement = element;
-		element.scrollIntoView({
-			behavior: "smooth",
-			inline : "center",
-			block : "nearest"
-		});
+		TweenLite.to(centerElement, 2, {
+			scrollTo : {x:element, offsetX: center},
+			ease : Power2.easeOut
+		})
 	};
 	this.getComponentElement = function() {
 		return componentElement;
@@ -136,7 +136,7 @@ window.GallerySelectorRightComponent = function(selectorObject) {
 		selectorObject.scrollStop();
 		selectorObject.scrollRight();
 	};
-	
+
 	this.getComponentElement = function() {
 		return componentElement;
 	};
