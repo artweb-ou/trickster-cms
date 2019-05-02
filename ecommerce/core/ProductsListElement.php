@@ -125,7 +125,7 @@ abstract class ProductsListElement extends menuStructureElement
                 }
                 if ($deepCategoryIds) {
                     $deepCategoryIds = array_keys($deepCategoryIds);
-                    $filteredProductsQuery->whereIn('filteredproducts.id', function ($query) use ($deepCategoryIds) {
+                    $filteredProductsQuery->whereIn('baseproducts.id', function ($query) use ($deepCategoryIds) {
                         $query->from('structure_links')
                             ->select('childStructureId')
                             ->whereIn('parentStructureId', $deepCategoryIds)
@@ -147,7 +147,7 @@ abstract class ProductsListElement extends menuStructureElement
                         $discountedProductIds = array_merge($discountedProductIds, $discount->getApplicableProductsIds());
                     }
                 }
-                $filteredProductsQuery->whereIn('filteredproducts.id', $discountedProductIds);
+                $filteredProductsQuery->whereIn('baseproducts.id', $discountedProductIds);
             }
             if ($availability = $this->getFilterAvailability()) {
                 $statuses = [];
@@ -163,7 +163,7 @@ abstract class ProductsListElement extends menuStructureElement
             }
             if ($parameterValues = $this->getFilterParameterValueIds()) {
                 foreach ($parameterValues as $parameterValue) {
-                    $filteredProductsQuery->whereIn('filteredproducts.id', function ($query) use ($parameterValue) {
+                    $filteredProductsQuery->whereIn('baseproducts.id', function ($query) use ($parameterValue) {
                         $query->from('module_product_parameter_value')
                             ->select('productId')->distinct()
                             ->where('value', '=', $parameterValue);
@@ -172,8 +172,8 @@ abstract class ProductsListElement extends menuStructureElement
             }
 
             if ($price = $this->getFilterPrice()) {
-                $filteredProductsQuery->where('filteredproducts.price', '>=', $price[0]);
-                $filteredProductsQuery->where('filteredproducts.price', '<=', $price[1]);
+                $filteredProductsQuery->where('baseproducts.price', '>=', $price[0]);
+                $filteredProductsQuery->where('baseproducts.price', '<=', $price[1]);
             }
             $filteredProductsQuery->select('*');
             /**
