@@ -53,25 +53,12 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 		return componentElement;
 	};
 	this.scrollLeft = function() {
-		if (centerElement) {
-			centerElement.scrollLeft = centerElement.scrollLeft - 3;
-			if (requestAnimationFrame) {
-				lastTimeout = requestAnimationFrame(self.scrollLeft)
-			} else {
-				lastTimeout = setTimeout(self.scrollLeft, 1000 / 60);
-			}
-		}
+		galleryInfo.displayPreviousImage();
+		galleryInfo.stopSlideShow();
 	};
 	this.scrollRight = function() {
-		if (centerElement) {
-			centerElement.scrollLeft = centerElement.scrollLeft + 3;
-
-			if (requestAnimationFrame) {
-				lastTimeout = requestAnimationFrame(self.scrollRight)
-			} else {
-				lastTimeout = setTimeout(self.scrollRight, 1000 / 60);
-			}
-		}
+		galleryInfo.displayNextImage();
+		galleryInfo.stopSlideShow();
 	};
 	this.scrollStop = function() {
 		if (lastTimeout) {
