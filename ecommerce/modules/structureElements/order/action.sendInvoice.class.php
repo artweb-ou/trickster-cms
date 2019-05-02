@@ -26,6 +26,11 @@ class sendInvoiceOrder extends structureElementAction
                     $structureElement->sendOrderEmail('invoice', true);
                 }
                 break;
+            case 'deliveryNotification':
+                {
+                    $structureElement->sendOrderEmail('deliveryNotification', true);
+                }
+                break;
         }
         $structureElement->executeAction("showForm");
     }
