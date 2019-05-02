@@ -204,8 +204,18 @@ class languageElement extends structureElement implements MetadataProviderInterf
     {
         $result = [];
         if ($currentMainMenu = $this->getCurrentMainMenu()) {
-            if ($currentMainMenu->columns == 'both' || $currentMainMenu->columns == 'left') {
-                $result = $this->getElementsFromContext('leftColumn');
+            if ($currentMainMenu instanceof ColumnsTypeProvider){
+                $columnsType = $currentMainMenu->getColumnsType();
+                if ($columnsType == 'both' || $columnsType == 'left') {
+                    $result = $this->getElementsFromContext('leftColumn');
+                }
+            }
+            elseif (!empty($currentMainMenu->columns)){
+                //todo: remove after 04.2021
+                $this->logError('Deprecated direct property "columns" access. Implement ColumnsTypeProvider instead');
+                if ($currentMainMenu->columns == 'both' || $currentMainMenu->columns == 'left') {
+                    $result = $this->getElementsFromContext('leftColumn');
+                }
             }
         }
         return $result;
@@ -241,8 +251,18 @@ class languageElement extends structureElement implements MetadataProviderInterf
     {
         $result = [];
         if ($currentMainMenu = $this->getCurrentMainMenu()) {
-            if ($currentMainMenu->columns == 'both' || $currentMainMenu->columns == 'right') {
-                $result = $this->getElementsFromContext('rightColumn');
+            if ($currentMainMenu instanceof ColumnsTypeProvider){
+                $columnsType = $currentMainMenu->getColumnsType();
+                if ($columnsType == 'both' || $columnsType == 'left') {
+                    $result = $this->getElementsFromContext('rightColumn');
+                }
+            }
+            elseif (!empty($currentMainMenu->columns)){
+                //todo: remove after 04.2021
+                $this->logError('Deprecated direct property "columns" access. Implement ColumnsTypeProvider instead');
+                if ($currentMainMenu->columns == 'both' || $currentMainMenu->columns == 'right') {
+                    $result = $this->getElementsFromContext('rightColumn');
+                }
             }
         }
         return $result;

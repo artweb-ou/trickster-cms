@@ -1,6 +1,11 @@
 <?php
 
-class brandsListElement extends structureElement implements ConfigurableLayoutsProviderInterface, MetadataProviderInterface
+/**
+ * Class brandsListElement
+ *
+ * @property string $columns
+ */
+class brandsListElement extends structureElement implements ConfigurableLayoutsProviderInterface, MetadataProviderInterface, ColumnsTypeProvider
 {
     use ConfigurableLayoutsProviderTrait, MetadataProviderTrait;
     public $dataResourceName = 'module_brands_list';
@@ -96,5 +101,10 @@ class brandsListElement extends structureElement implements ConfigurableLayoutsP
             }
         }
         return $this->brandsInfo;
+    }
+
+    public function getColumnsType()
+    {
+        return $this->columns;
     }
 }

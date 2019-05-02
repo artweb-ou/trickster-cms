@@ -19,7 +19,6 @@ class showShopCatalogue extends structureElementAction
                 if ($category->requested) {
                     $structureElement->requestedCategory = $category;
                 }
-                $category->columns = $structureElement->columns;
                 $shopsCount += count($category->getShopsList());
             }
 
