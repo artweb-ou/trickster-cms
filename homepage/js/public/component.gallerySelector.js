@@ -42,24 +42,34 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 			lastActiveThumbnailElement.classList.remove('gallery_thumbnailsselector_active');
 		}
 		element.classList.add('gallery_thumbnailsselector_active');
-		var center = (centerElement.clientWidth - element.clientWidth) / 2;
+		var center = (centerElement.offsetWidth - element.offsetWidth) / 2;
+		if( centerElement.scrollLeftMax <= (centerElement.scrollLeft + element.offsetWidth + center) || centerElement.scrollLeft == 0) {
+			center = 0;
+		}
 		lastActiveThumbnailElement = element;
 		TweenLite.to(centerElement, 2, {
-			scrollTo : {x:element, offsetX: center},
+			scrollTo : {
+				x : element,
+				offsetX : center
+			},
 			ease : Power2.easeOut
-		})
+		});
 	};
+
 	this.getComponentElement = function() {
 		return componentElement;
 	};
+
 	this.scrollLeft = function() {
 		galleryInfo.displayPreviousImage();
 		galleryInfo.stopSlideShow();
 	};
+
 	this.scrollRight = function() {
 		galleryInfo.displayNextImage();
 		galleryInfo.stopSlideShow();
 	};
+
 	this.scrollStop = function() {
 		if (lastTimeout) {
 			if (window.cancelAnimationFrame) {
@@ -70,17 +80,22 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 			lastTimeout = false;
 		}
 	};
+
 	this.setSizes = function(width, height) {
 		componentElement.style.height = height + 'px';
 	};
+
 	this.getGalleryHeight = function() {
 		return componentElement.offsetHeight;
 	};
+
 	this.stopSlideShow = function() {
 		galleryInfo.stopSlideShow();
 	};
+
 	init();
 };
+
 window.GallerySelectorImageComponent = function(imageInfo, parentComponent) {
 	var componentElement;
 
