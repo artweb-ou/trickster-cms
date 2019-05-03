@@ -46,12 +46,12 @@
 	{if !empty($additionalCell)}
 		{assign var='additionalFieldName' value=''}
 		{if !empty($additionalCell['additionalFieldName'])}
-			{$additionalFieldName = $additionalCell['additionalFieldName']|cat:"."|cat:$currentStatus}
+			{$additionalFieldName = $additionalCell['additionalFieldName']}
 		{/if}
 		{if !empty($additionalCell['template'])}
 			{$additionalTemplate=$additionalCell['template']}
 		<div class="form_field">
-			{include file=$theme->template($additionalTemplate) additionalFieldName = $additionalFieldName}
+			{include file=$theme->template($additionalTemplate) additionalFieldName = $additionalFieldName orderStatus = $currentStatus}
 		</div>
 		{/if}
 	{/if}
