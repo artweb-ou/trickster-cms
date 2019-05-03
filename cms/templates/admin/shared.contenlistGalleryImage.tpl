@@ -24,8 +24,8 @@
 	</tr>
 	</thead>
 	<tbody class="gallery_form_images_list">
-	{if !empty($contentlist)}
-		{foreach $contentlist as $contentItem}
+	{if !empty($contentList)}
+		{foreach $contentList as $contentItem}
 			{assign var='typeName' value=$contentItem->structureType}
 			{assign var='typeLowered' value=$contentItem->structureType|strtolower}
 			{assign var='type' value="element."|cat:$typeLowered}

@@ -10,14 +10,7 @@ class showFilesProduct extends structureElementAction
             $renderer->assign('form', $structureElement->getForm('files'));
             $renderer->assign('action', 'receiveFiles');
             $renderer->assign('connectedDiscounts', $structureElement->getAllConnectedDiscounts());
-            if ($linksManager = $structureElement->getService('linksManager')) {
-                $connectedFileLinks = $linksManager->getElementsLinks($structureElement->id, 'connectedFile', 'parent');
-                foreach ($connectedFileLinks as &$link) {
-                    if ($fileElement = $structureManager->getElementById($link->childStructureId)) {
-                        $contentList[] = $fileElement;
-                    }
-                }
-            }
+            $contentList = $structureElement->getFilesList();
             $renderer->assign('contentList', $contentList);
             $renderer->assign('contentSubTemplate', 'component.form.tpl');
         }
