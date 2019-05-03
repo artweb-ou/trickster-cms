@@ -33,9 +33,9 @@ class OrderFormStructure extends ElementForm
                 'paid_partial' => 'status_paid_partial',
             ],
             'translationGroup' => 'order',
-            'rightCell' => [
-                'fieldName' => 'deliveryNotification',
-                'tpl' => 'component.block.delivery.notification.tpl'
+            'additionalCell' => [
+                'additionalFieldName' => 'Notification',
+                'template' => 'component.block.status.notification.tpl'
             ],
         ],
         'currency' => [
