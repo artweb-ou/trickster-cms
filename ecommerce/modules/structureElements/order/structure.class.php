@@ -465,6 +465,58 @@ class orderElement extends structureElement implements PaymentOrderInterface
         }
     }
 
+    public function sendOrderStatusNotificationEmail($emailType, $statusType, $forceSending = false)
+    {
+/*
+        payed
+        failed
+        deleted
+        paid_partial
+        sent
+*/
+/*
+status_deleted
+status_failed
+status_new
+status_paid_partial
+status_payed
+status_sent
+status_undefined
+ */
+        if (!$statusType || $forceSending) {
+            $administratorEmail = $this->getAdministratorEmail();
+            $data = $this->getOrderData();
+            $data['documentType'] = $emailType;
+
+            $translationsManager = $this->getService('translationsManager');
+
+            $settings = $this->getService('settingsManager')->getSettingsList();
+            $emailDispatcher = $this->getService('EmailDispatcher');
+            $newDispatchment = $emailDispatcher->getEmptyDispatchment();
+            $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
+            if ($administratorEmail) {
+                $newDispatchment->setFromEmail($administratorEmail);
+                $newDispatchment->registerReceiver($administratorEmail, null);
+            }
+            $newDispatchment->registerReceiver($this->payerEmail, null);
+
+            $subjects = [];
+            // getTranslationByName($name, $section = null, $required = true, $loggable = true, $languageId = null)
+            $subjects[] = $translationsManager->getTranslationByName('company.shop_title', 'public_translations');
+            $subjects[] = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification', 'public_translations');
+            $subjects[] = $translationsManager->getTranslationByName('labels.order_nr', 'public_translations');
+            $subjects[] = $this->orderNumber;
+            $subjects[] = $this->getOrderStatusText();
+            $subject = $subjects[0] .  '. ' . $subjects[1] . ' (' . $subjects[2] . ' ' .  $subjects[3] . ': ' . $subjects[4] . ')';
+            $newDispatchment->setSubject($subject);
+            $newDispatchment->setData($data);
+            $newDispatchment->setReferenceId($this->id);
+            $newDispatchment->setType('orderStatus');
+
+            $emailDispatcher->startDispatchment($newDispatchment);
+        }
+    }
+
     protected function getAdministratorEmail()
     {
         $structureManager = $this->getService('structureManager');

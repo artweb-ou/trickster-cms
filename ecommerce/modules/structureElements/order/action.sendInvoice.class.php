@@ -26,12 +26,13 @@ class sendInvoiceOrder extends structureElementAction
                     $structureElement->sendOrderEmail('invoice', true);
                 }
                 break;
-            case 'orderStatus.Notification.sent':
+            case 'Notification':
                 {
-                    $structureElement->sendOrderEmail('orderStatus.Notification.sent', true);
+                    $statusTypeNotification = $controller->getParameter('statusType');
+                    $structureElement->sendOrderStatusNotificationEmail('Notification', $statusTypeNotification, true);
                 }
                 break;
         }
-        $structureElement->executeAction("showForm");
+        $controller->redirect($structureElement->getUrl('showForm'));
     }
 }

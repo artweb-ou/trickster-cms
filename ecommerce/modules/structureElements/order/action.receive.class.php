@@ -56,7 +56,7 @@ class receiveOrder extends structureElementAction
                     $linksManager->linkElements($structureElement->userId, $structureElement->id, 'userOrder');
                 }
             }
-            $controller->redirect($structureElement->URL);
+            $controller->redirect($structureElement->getUrl('showForm'));
         }
         $structureElement->executeAction("showForm");
     }
