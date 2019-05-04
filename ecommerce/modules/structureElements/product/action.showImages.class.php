@@ -10,20 +10,15 @@ class showImagesProduct extends structureElementAction
             }
             $form = $structureElement->getForm('images');
             $form->setFormAction($structureElement->newForm->URL);
-
-            $contentlist = [];
+            
             $linksManager = $this->getService('linksManager');
-            $connectedFieldsIds = $linksManager->getConnectedIdList($structureElement->id, 'productImage');
-            foreach ($connectedFieldsIds as $id) {
-                $element = $structureManager->getElementById($id);
-                $contentlist[] = $element;
-            }
+            $contentList = $structureElement->getImagesList();
 
             $structureElement->setTemplate('shared.content.tpl');
             $renderer = $this->getService('renderer');
             $renderer->assign('contentSubTemplate', 'component.form.tpl');
-            $renderer->assign('linkType', 'productImage');
-            $renderer->assign('contentlist', $contentlist);
+            $renderer->assign('linkType', 'structure');
+            $renderer->assign('contentList', $contentList);
             $renderer->assign('form', $form);
         }
     }
