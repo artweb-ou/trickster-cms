@@ -29,27 +29,28 @@ trait DbLoggableApplication
 
     protected function saveDbLog()
     {
-        $text = '';
-        if ($this->transportObject) {
-            if ($log = $this->transportObject->getQueriesHistory()) {
-                foreach ($log as $item) {
-                    $text .= $item . "\r\n";
-                }
-            }
-        }
-        if ($this->connection) {
-            if ($log = $this->connection->getQueryLog()) {
-                foreach ($log as $item) {
-                    $query = $item['query'];
-                    while (($position = stripos($query, '?')) !== false) {
-                        $binding = "'" . array_shift($item['bindings']) . "'";
-                        $query = substr_replace($query, $binding, stripos($query, '?'), 1);
+        if ($this->logFilePath) {
+            $text = '';
+            if ($this->transportObject) {
+                if ($log = $this->transportObject->getQueriesHistory()) {
+                    foreach ($log as $item) {
+                        $text .= $item . "\r\n";
                     }
-                    $text .= $item['time'] . "\t" . $query . "\r\n";
                 }
             }
+            if ($this->connection) {
+                if ($log = $this->connection->getQueryLog()) {
+                    foreach ($log as $item) {
+                        $query = $item['query'];
+                        while (($position = stripos($query, '?')) !== false) {
+                            $binding = "'" . array_shift($item['bindings']) . "'";
+                            $query = substr_replace($query, $binding, stripos($query, '?'), 1);
+                        }
+                        $text .= $item['time'] . "\t" . $query . "\r\n";
+                    }
+                }
+            }
+            file_put_contents($this->logFilePath, $text);
         }
-        file_put_contents($this->logFilePath, $text);
-
     }
 }
