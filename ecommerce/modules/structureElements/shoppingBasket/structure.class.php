@@ -9,9 +9,10 @@
  * @property string paymentInvoiceText
  * @property string paymentQueryText
  * @property string paymentFailedText
+ * @property string columns
  * @property mixed|null structureElement
  */
-class shoppingBasketElement extends dynamicFieldsStructureElement implements clientScriptsProviderInterface
+class shoppingBasketElement extends dynamicFieldsStructureElement implements clientScriptsProviderInterface, ColumnsTypeProvider
 {
     use EventLoggingElementTrait;
     protected $loggable = true;
@@ -64,6 +65,8 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $moduleStructure['subscribe'] = 'checkbox';
         $moduleStructure['hidden'] = 'checkbox';
         $moduleStructure['paymentMethodId'] = 'naturalNumber';
+
+        $moduleStructure['addToBasketButtonAction'] = 'text';
     }
 
     public function getNextStep() {
@@ -224,7 +227,8 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         return $this->customFieldsList;
     }
 
-    protected function getBrands($id) {
+    protected function getBrands($id)
+    {
         $brandIds = $this->getService('linksManager')
             ->getConnectedIdList($id, 'product', 'parent');
         $connectedBrands = "";
@@ -234,7 +238,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             $structureManager = $this->getService('structureManager');
             foreach ($brandIds as &$brandId) {
                 if ($brandId && $brandElement = $structureManager->getElementById($brandId)) {
-                    $connectedBrands .= $brandElement->getValue('title', $defaultLanguage->id). " ";
+                    $connectedBrands .= $brandElement->getValue('title', $defaultLanguage->id) . " ";
                 }
             }
         }
@@ -263,7 +267,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $data["vatLessTotalPrice"] = $this->shoppingBasket->getVatLessTotalPrice(false);
         $data["deliveryPrice"] = $this->shoppingBasket->getDeliveryPrice();
         $data["selectedDeliveryTypeId"] = $deliveryTypeid;
-        $data["selectedDeliveryTypeTitleDl"] = $deliveryTypeElement?  $deliveryTypeElement->getValue('title', $defaultLanguage->id): '';
+        $data["selectedDeliveryTypeTitleDl"] = $deliveryTypeElement ? $deliveryTypeElement->getValue('title', $defaultLanguage->id) : '';
         $data["selectedCountryId"] = $this->shoppingBasket->getSelectedCountryId();
         $data["selectedCityId"] = $this->shoppingBasket->getSelectedCityId();
         $data["promoCodeDiscountId"] = $this->shoppingBasket->getPromoCodeDiscountId();
@@ -606,5 +610,10 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
     public function hasPromoDiscounts()
     {
         return $this->getService('shoppingBasketDiscounts')->hasPromoDiscounts();
+    }
+
+    public function getColumnsType()
+    {
+        return $this->columns;
     }
 }

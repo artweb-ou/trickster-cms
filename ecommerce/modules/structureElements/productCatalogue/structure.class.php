@@ -1,6 +1,11 @@
 <?php
 
-class productCatalogueElement extends categoryStructureElement implements ConfigurableLayoutsProviderInterface
+/**
+ * Class productCatalogueElement
+ *
+ * @property string $columns
+ */
+class productCatalogueElement extends categoryStructureElement implements ConfigurableLayoutsProviderInterface, ColumnsTypeProvider
 {
     use ConfigurableLayoutsProviderTrait;
     public $dataResourceName = 'module_catalogue_filter';
@@ -171,5 +176,10 @@ class productCatalogueElement extends categoryStructureElement implements Config
             $productsLayout = $this->getService('ConfigManager')->get('main.templateTypeCategoryProduct');
         }
         return $productsLayout;
+    }
+
+    public function getColumnsType()
+    {
+        return $this->columns;
     }
 }

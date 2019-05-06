@@ -46,18 +46,11 @@ class languageElement extends structureElement implements MetadataProviderInterf
     public function getMainMenuElements($ignoreHidden = false)
     {
         if ($ignoreHidden) {
-            $structureManager = $this->getService('structureManager');
-            //TODO: remove hack required for catalogue filters
-            $structureManager->getElementsChildren($this->id, 'container');
-            if ($childElements = $this->getChildrenList()) {
+            if ($childElements = $this->getChildrenList(null, ['structure', 'catalogue'])) {
                 return $childElements;
             }
-            //hack end
         } elseif ($this->mainMenuElements === null) {
             $this->mainMenuElements = [];
-            $structureManager = $this->getService('structureManager');
-            //TODO: remove hack required for catalogue filters
-            $structureManager->getElementsChildren($this->id, 'container');
             if ($childElements = $this->getChildrenList()) {
                 foreach ($childElements as &$childElement) {
                     if (!$childElement->hidden) {
@@ -65,7 +58,6 @@ class languageElement extends structureElement implements MetadataProviderInterf
                     }
                 }
             }
-            //hack end
         }
         return $this->mainMenuElements;
     }
@@ -204,8 +196,18 @@ class languageElement extends structureElement implements MetadataProviderInterf
     {
         $result = [];
         if ($currentMainMenu = $this->getCurrentMainMenu()) {
-            if ($currentMainMenu->columns == 'both' || $currentMainMenu->columns == 'left') {
-                $result = $this->getElementsFromContext('leftColumn');
+            if ($currentMainMenu instanceof ColumnsTypeProvider){
+                $columnsType = $currentMainMenu->getColumnsType();
+                if ($columnsType == 'both' || $columnsType == 'left') {
+                    $result = $this->getElementsFromContext('leftColumn');
+                }
+            }
+            elseif (!empty($currentMainMenu->columns)){
+                //todo: remove after 04.2021
+                $this->logError('Deprecated direct property "columns" access. Implement ColumnsTypeProvider instead');
+                if ($currentMainMenu->columns == 'both' || $currentMainMenu->columns == 'left') {
+                    $result = $this->getElementsFromContext('leftColumn');
+                }
             }
         }
         return $result;
@@ -241,8 +243,18 @@ class languageElement extends structureElement implements MetadataProviderInterf
     {
         $result = [];
         if ($currentMainMenu = $this->getCurrentMainMenu()) {
-            if ($currentMainMenu->columns == 'both' || $currentMainMenu->columns == 'right') {
-                $result = $this->getElementsFromContext('rightColumn');
+            if ($currentMainMenu instanceof ColumnsTypeProvider){
+                $columnsType = $currentMainMenu->getColumnsType();
+                if ($columnsType == 'both' || $columnsType == 'left') {
+                    $result = $this->getElementsFromContext('rightColumn');
+                }
+            }
+            elseif (!empty($currentMainMenu->columns)){
+                //todo: remove after 04.2021
+                $this->logError('Deprecated direct property "columns" access. Implement ColumnsTypeProvider instead');
+                if ($currentMainMenu->columns == 'both' || $currentMainMenu->columns == 'right') {
+                    $result = $this->getElementsFromContext('rightColumn');
+                }
             }
         }
         return $result;

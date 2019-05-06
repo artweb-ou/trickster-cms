@@ -54,8 +54,8 @@ class smartyRendererPlugin extends rendererPlugin
             $this,
             'filterTemplateSpaces',
         ]);
-
-        $this->setTemplatesFolder($pathsManager->getPath('templates'));
+        $path = $pathsManager->getPath('trickster');
+        $this->setTemplatesFolder($path . 'cms/templates/');
         $this->setCompileFolder($pathsManager->getPath('templatesCache'));
 
         $this->preferredEncodings = [

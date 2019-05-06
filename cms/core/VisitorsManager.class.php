@@ -1,11 +1,16 @@
 <?php
 
+use Illuminate\Database\Connection;
+
 class VisitorsManager extends errorLogger
 {
     const TABLE_VISIT = 'visit';
     const TABLE_VISITOR = 'visitor';
     const TABLE_ORDER = 'visitor_order';
     protected $trackingCode = '';
+    /**
+     * @var Connection
+     */
     protected $statsDb;
     protected $user;
     protected $currentVisitorLoaded = false;
@@ -270,36 +275,39 @@ class VisitorsManager extends errorLogger
     {
         $visitors = [$from, $to];
         $data = [];
+        //merge data of two visitors into common array
         foreach ($visitors as $visitor) {
             foreach ($visitor as $key => $value) {
-                if ($key != 'id' && $key != 'userId') {
+                if ($key != 'id') {
                     if (!empty($value) && empty($data[$key])) {
-                        $data[$key] = $value;
-                    }
-                } elseif ($key == 'userId') {
-                    if ($value > 0) {
                         $data[$key] = $value;
                     }
                 }
             }
         }
+        //delete visitor data we merge info from
         $this->createVisitorQuery()
             ->where('id', $from->id)
             ->delete();
-
+        //update tracking code in remaining visitor object
         $to->trackingCode = $from->trackingCode;
+
+        //now save all data to remaining visiotr object
         $this->createVisitorQuery()
             ->where('id', $to->id)
             ->update($data);
 
+        //move all visits from older visitor to newer one
         $this->createVisitQuery()
             ->where('visitorId', $from->id)
             ->update(['visitorId' => $to->id]);
 
+        //move all orders from older visitor to newer one
         $this->createOrderQuery()
             ->where('visitorId', $from->id)
             ->update(['visitorId' => $to->id]);
 
+        //move all events from older visitor to newer one
         $this->eventsLog->updateVisitor($from->id, $to->id);
     }
 

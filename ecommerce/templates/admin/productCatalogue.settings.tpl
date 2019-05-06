@@ -40,6 +40,18 @@
 					<option value='title;desc' {if $formData.defaultOrder=='title;desc'}selected='selected'{/if}>
 						{translations name='category.titlesorting_descending'}
 					</option>
+					<option value='brand;asc' {if $formData.defaultOrder=='brand;asc'}selected='selected'{/if}>
+						{translations name='category.brandsorting'}
+					</option>
+					<option value='brand;desc' {if $formData.defaultOrder=='brand;desc'}selected='selected'{/if}>
+						{translations name='category.brandsorting_descending'}
+					</option>
+					<option value='date;asc' {if $formData.defaultOrder=='date;asc'}selected='selected'{/if}>
+						{translations name='category.datesorting'}
+					</option>
+					<option value='date;desc' {if $formData.defaultOrder=='date;desc'}selected='selected'{/if}>
+						{translations name='category.datesorting_descending'}
+					</option>
 				</select>
 				{include file=$theme->template('component.form_help.tpl') structureType=$element->structureType name="defaultOrder"}
 			</td>

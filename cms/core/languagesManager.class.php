@@ -116,8 +116,7 @@ class languagesManager extends errorLogger implements DependencyInjectionContext
     }
 
     /**
-     * returns language that is used when a new client enters the site and
-     * there is no language in the URL nor is it guessable in any way
+     * returns default language: either it's set in config or the first one available
      * @param $groupName
      * @return object
      */
@@ -129,7 +128,7 @@ class languagesManager extends errorLogger implements DependencyInjectionContext
             $result = isset($map[$languageCode]) ? $map[$languageCode] : null;
         }
         if (!$result) {
-            $result = $this->findFirstAvailableLanguage($groupName);
+            $result = $this->getFirstAvailableLanguage($groupName);
         }
         return $result;
     }
@@ -166,6 +165,7 @@ class languagesManager extends errorLogger implements DependencyInjectionContext
                 goto finish;
             }
         }
+        $languageCode = $this->getFirstAvailableCode($groupName);
         finish:
         if ($languageCode) {
             $this->setCurrentLanguageCode($languageCode, $groupName);
@@ -247,7 +247,17 @@ class languagesManager extends errorLogger implements DependencyInjectionContext
         return $code;
     }
 
-    protected function findFirstAvailableLanguage($groupName)
+    public function getFirstAvailableCode($groupName = null)
+    {
+        $groupName = $groupName ?: $this->getService('ConfigManager')
+            ->get('main.rootMarkerPublic');
+        if ($language = $this->getFirstAvailableLanguage($groupName)) {
+            return $language->iso6393;
+        }
+        return false;
+    }
+
+    protected function getFirstAvailableLanguage($groupName)
     {
         $result = null;
         $languagesList = $this->getLanguagesList($groupName) ?: [];

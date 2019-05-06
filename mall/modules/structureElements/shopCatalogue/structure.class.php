@@ -1,6 +1,11 @@
 <?php
 
-class shopCatalogueElement extends structureElement
+/**
+ * Class shopCatalogueElement
+ *
+ * @property string $columns
+ */
+class shopCatalogueElement extends structureElement implements ColumnsTypeProvider
 {
     public $dataResourceName = 'module_shop_catalogue';
     public $defaultActionName = 'show';
@@ -203,5 +208,10 @@ class shopCatalogueElement extends structureElement
             $this->filterShops();
         }
         return $this->filteredCategories;
+    }
+
+    public function getColumnsType()
+    {
+        return $this->columns;
     }
 }

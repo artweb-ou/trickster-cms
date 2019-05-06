@@ -4,10 +4,11 @@
  * Class folderElement
  *
  * @property string $title
+ * @property string $columns
  * @property string $image
  * @property string $originalName
  */
-class folderElement extends menuDependantStructureElement implements ConfigurableLayoutsProviderInterface
+class folderElement extends menuDependantStructureElement implements ConfigurableLayoutsProviderInterface, ColumnsTypeProvider
 {
     use ConfigurableLayoutsProviderTrait;
     public $dataResourceName = 'module_folder';
@@ -131,5 +132,10 @@ class folderElement extends menuDependantStructureElement implements Configurabl
             }
         }
         return $subMenus;
+    }
+
+    public function getColumnsType()
+    {
+        return $this->columns;
     }
 }

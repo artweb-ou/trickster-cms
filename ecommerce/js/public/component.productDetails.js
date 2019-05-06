@@ -262,12 +262,12 @@ window.ProductDetailsSelectionComponent = function(detailsComponent, componentEl
 			radioElements = _('.product_details_option_radio_item_control', componentElement);
 			eventsManager.addHandler(componentElement, 'click', change);
 		}
-		if (window.productParametersHintsInfo[id]) {
+		if (window.productParametersHintsInfo && window.productParametersHintsInfo[id]) {
 			var hintElement = _('.product_details_option_hint', componentElement.parentElement)[0];
 			if(hintElement) {
 				var hints = window.productParametersHintsInfo[id];
 				var hintContent = hints.join('<hr/>');
-				new TipPopupComponent({
+				new ToolTipComponent({
 					'referralElement' : hintElement,
 					'popupText' : hintContent
 				});
@@ -328,7 +328,7 @@ window.ProductDetailsParameterComponent = function(componentElement) {
 		if (window.productParametersHintsInfo[id] && hintElement) {
 			hints = window.productParametersHintsInfo[id];
 			var hintContent = hints.join('<hr/>');
-			new TipPopupComponent(hintElement, hintContent, false, 'product_details_parameter_tooltip');
+			new ToolTipComponent(hintElement, hintContent, false, 'product_details_parameter_tooltip');
 		}
 	};
 	this.getComponentElement = function() {

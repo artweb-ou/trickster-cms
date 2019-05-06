@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class discountsListElement
+ *
+ * @property string $columns
+ */
 class discountsListElement extends menuStructureElement implements ConfigurableLayoutsProviderInterface
 {
     use ConfigurableLayoutsProviderTrait;
@@ -102,5 +107,10 @@ class discountsListElement extends menuStructureElement implements ConfigurableL
             }
         }
         return $this->listedDiscountsIds;
+    }
+
+    public function getColumnsType()
+    {
+        return $this->columns;
     }
 }
