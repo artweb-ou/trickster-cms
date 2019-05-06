@@ -504,12 +504,26 @@ status_undefined
 
             $subjects = [];
             // getTranslationByName($name, $section = null, $required = true, $loggable = true, $languageId = null)
-            $subjects[] = $translationsManager->getTranslationByName('company.shop_title', 'public_translations');
-            $subjects[] = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification', 'public_translations');
-            $subjects[] = $translationsManager->getTranslationByName('labels.order_nr', 'public_translations');
-            $subjects[] = $this->orderNumber;
-            $subjects[] = $this->getOrderStatusText();
-            $subject = $subjects[0] .  '. ' . $subjects[1] . ' (' . $subjects[2] . ' ' .  $subjects[3] . ': ' . $subjects[4] . ')';
+
+            // if !shop_title in translation, try check default_sender_name in settings, else display shop_title field name
+            $subjects['label.ShopTitle'] =
+                $translationsManager->getTranslationByName('company.shop_title', 'public_translations') ?:
+                !empty($settings['default_sender_name']) ?$settings['default_sender_name']:$translationsManager->getTranslationByName('company.shop_title', 'public_translations');
+
+            $subjects['label.emailSubjectOrderStatusNotification'] =
+                $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification', 'public_translations');
+            $subjects['label.orderNumber'] =
+                $translationsManager->getTranslationByName('labels.order_nr', 'public_translations');
+            $subjects['value.orderNumber'] =
+                $this->orderNumber;
+            $subjects['value.orderStatusText'] =
+                $this->getOrderStatusText();
+            $subject =
+                $subjects['label.ShopTitle'] .  '. ' .
+                $subjects['label.emailSubjectOrderStatusNotification'] . ' (' .
+                $subjects['label.orderNumber'] . ' ' .
+                $subjects['value.orderNumber'] . ': ' .
+                $subjects['value.orderStatusText'] . ')';
             $newDispatchment->setSubject($subject);
             $newDispatchment->setData($data);
             $newDispatchment->setReferenceId($this->id);
