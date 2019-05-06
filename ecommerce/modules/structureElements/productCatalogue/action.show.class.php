@@ -12,13 +12,6 @@ class showProductCatalogue extends structureElementAction
     {
         if ($firstParent = $structureManager->getElementsFirstParent($structureElement->id)) {
             $categories = $structureManager->getElementsChildren($firstParent->id, 'container', 'catalogue');
-            if ($structureElement->categorized) {
-                $categoriesIndex = [];
-                foreach ($categories as &$category) {
-                    $category->columns = $structureElement->columns;
-                    $categoriesIndex[$category->id] = $category;
-                }
-            }
             /**
              * @var categoryElement[] $categories
              */

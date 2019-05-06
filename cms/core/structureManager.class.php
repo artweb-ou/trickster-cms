@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Connection;
+
 class structureManager implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -96,7 +98,8 @@ class structureManager implements DependencyInjectionContextInterface
         $useBlackList = false,
         &$flatTree = [],
         &$usedIds = []
-    ) {
+    )
+    {
         $treeLevel = $this->getElementsChildren($elementId, $roles, $linkType, null, $useBlackList);
         foreach ($treeLevel as &$element) {
             if (!in_array($element->id, $usedIds)) {
@@ -274,8 +277,8 @@ class structureManager implements DependencyInjectionContextInterface
      *
      * @param string[] $controllerRequestedPath
      *
-     * @deprecated
      * @return bool|structureElement
+     * @deprecated
      */
     public function buildRequestedPath($controllerRequestedPath = [])
     {
@@ -737,7 +740,8 @@ class structureManager implements DependencyInjectionContextInterface
         $linkTypes = 'structure',
         $allowedTypes = null,
         $useBlackList = false
-    ) {
+    )
+    {
         $returnList = [];
         if ($parentElement = $this->getElementById($parentElementId)) {
             $requestedRoles = $this->getRequestedRoles($allowedRoles);
@@ -1315,7 +1319,8 @@ class structureManager implements DependencyInjectionContextInterface
         $nonLoadedOnly = true,
         &$points = 0,
         $chainElements = []
-    ) {
+    )
+    {
         $key = 'ch:' . $this->getService('languagesManager')->getCurrentLanguageId() . ':p' . $restrictByParentChain;
         if ($cachedChain = $this->cache->get($id . ":" . $key)) {
             return $cachedChain;
@@ -1473,32 +1478,42 @@ class structureManager implements DependencyInjectionContextInterface
             $currentName = $element->structureType . $element->id;
         }
         $blackList = $this->getPathSearchLinksBlackList();
+        /**
+         * @var Connection $db
+         */
         $db = $this->getService('db');
-        $query = $db->table('structure_elements')
-            ->select('structureName')
-            ->where('structureName', 'like', $currentName . '%')
-            ->whereIn('id', function ($subQuery) use ($elementId, $blackList) {
-                $subQuery->from('structure_links')
-                    ->select('childStructureId')
-                    ->where('childStructureId', '!=', $elementId)
-                    ->whereNotIn('type', $blackList)
-                    ->whereIn('parentStructureId', function (
-                        $subSubQuery
-                    ) use ($elementId, $blackList) {
-                        $subSubQuery->from('structure_links')
-                            ->select('parentStructureId')
-                            ->where('childStructureId', '=', $elementId)
-                            ->whereNotIn('type', $blackList);
-                    });
-            });
+        $parentIds = false;
+        if ($records = $db->table('structure_links')
+            ->select('parentStructureId')
+            ->where('childStructureId', '=', $elementId)
+            ->whereNotIn('type', $blackList)->get()) {
+            $parentIds = array_column($records, 'parentStructureId');
+        }
         $newName = $currentName;
+        if ($parentIds) {
 
-        if ($rows = $query->get()) {
-            $usedNames = array_column($rows, 'structureName');
-            $currentNumber = 1;
-            while (in_array(mb_strtolower($newName), $usedNames)) {
-                $newName = $currentName . $currentNumber;
-                $currentNumber++;
+            $query = $db->table('structure_elements')
+                ->select('structureName')
+                ->where('structureName', 'like', $currentName . '%')
+                ->whereIn('id', function ($subQuery) use ($elementId, $blackList, $parentIds) {
+                    $subQuery->from('structure_links')
+                        ->select('childStructureId')
+                        ->where('childStructureId', '!=', $elementId)
+                        ->whereNotIn('type', $blackList)
+                        ->whereIn('parentStructureId', $parentIds);
+                });
+
+//        $query = $db->table('structure_elements')
+//            ->select('structureName')
+//            ->where('structureName', 'like', $currentName . '%');
+
+            if ($rows = $query->get()) {
+                $usedNames = array_column($rows, 'structureName');
+                $currentNumber = 1;
+                while (in_array(mb_strtolower($newName), $usedNames)) {
+                    $newName = $currentName . $currentNumber;
+                    $currentNumber++;
+                }
             }
         }
         return $newName;

@@ -199,7 +199,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 							productHrefElement.appendChild(productPriceElement)
 						}
 
-						if (currentProduct.isPurchasable) {
+            						if (currentProduct.isPurchasable) {
 							var productAddWrapElement = document.createElement('a')
 							productAddWrapElement.className = 'product_short_basket product_short_button product_buttonsmall_button button'
 							productAddWrapElement.href = currentProduct.URL
@@ -212,16 +212,27 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 						}
 
 						new ProductShortComponent(discountProductElement)
-					}
-				}
-			}
+          }
+        }
+      }
+    }
+  }
+  var submitForm = function (event) {
+    eventsManager.preventDefaultAction(event)
+		var conditionsCheckboxInput = componentElement.querySelector('#shoppingbasket_form_conditions_checkbox')
+		if(conditionsCheckboxInput.checked){
+    formElement.submit()
+  }
+		else {
+			var message = []
+			message['title'] = translationsLogics.get('shoppingbasket.conditions')
+			message['content'] = '<a target="ART" class="modal_link" href="'+window.conditionsLink+'">'+translationsLogics.get('shoppingbasket.conditions_error')+'</a>'
+			message['footer'] = translationsLogics.get('shoppingbasket.agreewithconditions')
+
+			new ModalActionComponent(conditionsCheckboxInput, false, submitButtonElement, message); // checkbox-input, footer advanced, element for position, messages
 		}
 	}
-	var submitForm = function(event) {
-		eventsManager.preventDefaultAction(event)
-		formElement.submit()
-	}
-	init()
+  init()
 }
 
 window.ShoppingBasketTotalsComponent = function(componentElement) {

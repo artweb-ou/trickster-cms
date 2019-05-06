@@ -36,9 +36,9 @@ class receiveSettingsFormDiscountsList extends structureElementAction
                     $linksManager->linkElements($structureElement->id, $parameter->id, 'categoryParameter');
                 }
             }
-            $controller->redirect($structureElement->URL);
+            $controller->redirect($structureElement->getUrl('showSettingsForm'));
         }
-        $structureElement->executeAction("showForm");
+        $structureElement->executeAction("showSettingsForm");
     }
 
     public function setExpectedFields(&$expectedFields)

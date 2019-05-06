@@ -1,0 +1,140 @@
+.under_modal{
+	.modal_container {
+		position: fixed;
+		box-sizing: border-box;
+		left: 0;
+		right: 0;
+		top: 0;
+		z-index: 99;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		flex-basis: 100%;
+		align-content: flex-start;
+		justify-self: flex-start;
+		align-self: flex-start;
+		justify-items: center;
+	}
+}
+
+@keyframes modal_display_anim {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+.modal {
+	display: none;
+	box-sizing: border-box;
+	flex-direction: column;
+	//position: absolute;
+	background-color: @trick_bg_color_01;
+	z-index: 1000;
+	opacity: 0;
+	width: 26em;
+	justify-self: center;
+	flex-wrap: nowrap;
+	align-items: stretch;
+	transition: all .8s linear;
+	
+	&.modal-buttons {
+		border: 5px solid @trick_brd_color_12;
+		margin-top: -10px;
+	}
+
+	&_header {
+		display: flex;
+		flex: none;
+		padding: .5em 1em .5em 1.2em;
+		align-items: center;
+		z-index: 1001;
+		background-color: @trick_bg_color_02;
+	}
+
+	&_content {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow: auto;
+		padding: 1em 3.5em 1em 1.2em;
+		position: relative;
+	}
+	.modal_link {
+		color: inherit;
+		border-bottom: 1px solid currentColor;
+		display: inline;
+		text-decoration: none;
+		
+		&:hover, &:focus{
+			color: @trick_text_color_02;
+			text-decoration: none;
+		}
+	}
+	&_footer {
+		flex: none;
+		padding: 1em 1.2em;
+		text-align: center;
+		z-index: 1001;
+	}
+
+	&_title {
+		flex: 1 1 auto;
+		color: @trick_text_color_01;
+		font-size: 1.2em;
+		padding-left: 0;
+		padding-right: 2em;
+	}
+
+	&_closebutton {
+		.svg-bg(@trick_basket_close, false, @trick_text_color_01);// svg name without ext, 'fill', stroke color
+		background-repeat: no-repeat;
+		width: 2.5em;
+		height: 2.5em;
+		background-size: 65%;
+	    flex: none;
+	    cursor: pointer;
+	    background-position: 100% 50%;
+		.__transition_01__(all, .3s, ease-in-out);
+		
+		&:hover, &:focus{
+			.svg-bg(@trick_basket_close, false, @trick_brd_color_10);// svg name without ext, 'fill', stroke color
+		}
+	}
+
+	&_footer .button {
+		display: block;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		font-size: 1em;
+		width: 100%;
+		line-height: inherit;
+		padding: .75em 1.5em;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+		box-sizing: border-box;
+		box-shadow: 0 0 0 1px @trick_brd_color_12;
+		
+		&.submit.button * {
+			color: inherit;
+		}
+	}
+	.footer.buttons {
+		.button:nth-child(n+2) {
+			margin-top: 6px;
+		}
+	}
+}
+
+.modal.is_open {
+	display: flex;
+	opacity: 1;
+	animation: modal_display_anim 0.25s ease-in-out;
+	transition: all .8s linear;
+}

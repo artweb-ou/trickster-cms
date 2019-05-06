@@ -37,6 +37,14 @@ class ShoppingBasketFormStructure extends ElementForm
         'conditionsLink' => [
             'type' => 'input.text',
         ],
+        'addToBasketButtonAction' => [
+            'type' => 'select.index',
+            'options' => [
+                '0' => 'action_none',
+                '1' => 'action_tooltip',
+                '2' => 'action_modal',
+            ],
+        ],
     ];
 
     protected $additionalContent = 'shared.contentlist_singlepage';

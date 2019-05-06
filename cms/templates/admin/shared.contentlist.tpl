@@ -17,7 +17,11 @@
 					</div>
 				{/if}
 			{/if}
-			{include file=$theme->template('shared.contentTable.tpl')}
+			{if !empty($form) && !empty($form->getAdditionalContentTable())}
+				{include file=$theme->template($form->getAdditionalContentTable())}
+			{else}
+				{include file=$theme->template('shared.contentTable.tpl')}
+			{/if}
 		</form>
 		<div class="content_list_bottom">
 			{if isset($pager) && $currentElement->getChildrenList()}

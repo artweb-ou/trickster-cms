@@ -2,10 +2,18 @@
 
 class CategoryIconStructure extends ElementForm
 {
-    protected $formClass = 'gallery_form';
+    protected $containerClass = 'gallery_form';
+    protected $formClass = 'gallery_form_upload';
     protected $preset = '';
-    protected $additionalContent = 'component.show.icon_form';
-
+    protected $controlsLayout = null;
+    protected $structure = [
+        'image' => [
+            'type' => 'input.dragAndDropImage'
+        ]
+    ];
+    protected $controls = false;
+    protected $additionalContent = 'shared.contentlist';
+    protected $additionalContentTable = 'shared.contenlistGalleryImage.tpl';
     public function getTranslationGroup()
     {
         return 'gallery';

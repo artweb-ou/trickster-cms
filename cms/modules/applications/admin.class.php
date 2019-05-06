@@ -95,7 +95,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $this->renderer->assign('allowedSearchTypes', implode(',', $allowedSearchTypes));
 
         $resourcesUniterHelper = $this->getService('ResourcesUniterHelper', ['currentThemeCode' => $currentTheme->getCode()]);
-        $this->renderer->assign('JSFileName', $resourcesUniterHelper->getResourceCacheFileName('js'));
+        $this->renderer->assign('JSFileName', $this->getJsScripts($resourcesUniterHelper));
         $this->renderer->assign('CSSFileName', $resourcesUniterHelper->getResourceCacheFileName('css'));
 
         $this->renderer->template = $currentTheme->template('index.tpl');
@@ -139,5 +139,28 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
     public function getCurrentTheme()
     {
         return $this->currentTheme;
+    }
+
+    /**
+     * @param $currentElement
+     * @return array
+     */
+    protected function getJsScripts($currentElement)
+    {
+        $controller = controller::getInstance();
+        $jsScripts = [];
+        if ($controller->getDebugMode()) {
+            foreach ($this->currentTheme->getJavascriptResources() as $resource) {
+                $jsScripts[] = $resource['fileUrl'] . $resource['fileName'];
+            };
+        } else {
+            $resourcesUniterHelper = $this->getService('ResourcesUniterHelper');
+            $jsScripts[] = $controller->baseURL . 'javascript/set:' . $this->currentTheme->getCode() . '/file:' . $resourcesUniterHelper->getResourceCacheFileName('js') . '.js';
+        }
+        if ($currentElement instanceof clientScriptsProviderInterface
+        ) {
+            $jsScripts = array_merge($jsScripts, $currentElement->getClientScripts());
+        }
+        return $jsScripts;
     }
 }

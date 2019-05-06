@@ -10,9 +10,9 @@
 }
 .dropdown_block,
 .dropdown_list {
-	color: #000;
-	background: #fff;
-	border: 1px solid #000;
+	color: @trick_text_color_02;
+	background-color: @trick_bg_color_01;
+	border: 1px solid @trick_brd_color_02;
 }
 
 .dropdown_block {
@@ -33,7 +33,7 @@
 		margin-top: -0.25em;
 		border-left: 0.35em solid transparent;
 		border-right: 0.35em solid transparent;
-		border-top: 0.5em solid #000;
+		border-top: 0.5em solid @trick_brd_color_02;
 	}
 }
 
@@ -68,7 +68,7 @@
 	z-index: 10;
 	outline: none;
 	overflow: hidden;
-	color: #000;
+	color: @trick_text_color_02;
 
 	&:first-child {
 		border-top: none;

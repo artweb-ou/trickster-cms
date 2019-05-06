@@ -71,7 +71,7 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
                     if ($languagesElement = $structureManager->getElementById($currentLanguageId)) {
                         //request only 'structure' links to prevent search element in main menu.
                         //review and re-implement if this causes some problems
-                        foreach ($structureManager->getElementsChildren($languagesElement->id, 'container', 'structure', null, true) as $childElement) {
+                        foreach ($structureManager->getElementsChildren($languagesElement->id, 'container', ['structure', 'catalogue'], null, true) as $childElement) {
                             if (!$childElement->hidden) {
                                 $directSubMenuList[] = $childElement;
                             }

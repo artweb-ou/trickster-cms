@@ -1,6 +1,11 @@
 <?php
 
-class campaignsListElement extends menuStructureElement
+/**
+ * Class campaignsListElement
+ *
+ * @property string $columns
+ */
+class campaignsListElement extends menuStructureElement implements ColumnsTypeProvider
 {
     public $dataResourceName = 'module_campaigns_list';
     public $defaultActionName = 'show';
@@ -82,6 +87,11 @@ class campaignsListElement extends menuStructureElement
             $this->listedCampaignsIds = array_reverse($this->listedCampaignsIds);
         }
         return $this->listedCampaignsIds;
+    }
+
+    public function getColumnsType()
+    {
+        return $this->columns;
     }
 }
 

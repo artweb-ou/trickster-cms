@@ -15,8 +15,8 @@ class homepagePdfDesignTheme extends DesignTheme
     {
         if (is_null($this->cssResources)) {
             $this->cssResources = [];
-            $this->appendCssResourceFromTheme('reset.less', 'public');
-            $this->appendCssResourceFromTheme('module.order.less', 'homepagePublic');
+            $this->appendCssResourceFromTheme('reset.less', 'default');
+            $this->appendCssResourceFromTheme('colors_variables.less', 'homepagePublic');
             $this->loadCssResources();
         }
         return $this->cssResources;

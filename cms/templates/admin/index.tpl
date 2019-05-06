@@ -135,6 +135,6 @@
 {/if}
 {include file=$theme->template("javascript.data.tpl")}
 
-<script type="text/javascript" src="{$controller->baseURL}javascript/set:{$theme->getCode()}/file:{$JSFileName}.js"></script>
+{if !empty($JSFileName)}{foreach $JSFileName as $script}<script defer type="text/javascript" src="{$script}"></script>{/foreach}{/if}
 </body>
 </html>
