@@ -325,6 +325,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $this->orderData = [
                 "paymentBank" => $this->getPaymentBank(),
                 "orderNumber" => $this->orderNumber,
+                "orderStatus" => $this->orderStatus,
+                "orderStatusText" => $this->getOrderStatusText(),
                 "dateCreated" => $this->dateCreated,
                 "dueDate" => $this->dueDate,
                 "receiverIsPayer" => $this->receiverIsPayer,
@@ -637,6 +639,8 @@ status_undefined
         $data = [
             'id' => $this->id,
             'orderNumber' => $this->orderNumber,
+            'orderStatus' => $this->orderStatus,
+            'orderStatusText' => $this->getOrderStatusText(),
             'invoiceNumber' => $this->getInvoiceNumber('invoice'),
             'advancePaymentInvoiceNumber' => $this->getInvoiceNumber('advancePaymentInvoice'),
             'orderConfirmationNumber' => $this->getInvoiceNumber('orderConfirmation'),
@@ -657,8 +661,6 @@ status_undefined
             'payerName' => $this->payerName,
             'payerFirstName' => $this->payerFirstName,
             'payerLastName' => $this->payerLastName,
-            'orderStatus' => $this->orderStatus,
-            'orderStatusText' => $this->getOrderStatusText(),
             'products' => $products,
             'discounts' => $this->getDiscounts(),
         ];
