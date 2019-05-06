@@ -16,7 +16,7 @@
 			</tr>
 		</thead>
 		<tbody class="shoppingbasket_table_rows">
-			{foreach from=$element->shoppingBasket->getProductsList() item=product}
+			{foreach from=$shoppingBasketElement->shoppingBasket->getProductsList() item=product}
 			<tr class='shoppingbasket_table_item shoppingbasket_table_{$product->basketProductId}'>
 				<td class='shoppingbasket_table_image_container'>
 					{if $product->image != ""}
@@ -54,16 +54,16 @@
 			</tr>
 			{/foreach}
 		</tbody>
-		{if $element->displayTotals()}
+		{if $shoppingBasketElement->displayTotals()}
 			<tbody class="shoppingbasket_totals">
 				<tr class="shoppingbasket_total shoppingbasket_total_productsfullprice">
 					<th class="shoppingbasket_total_title" colspan="4">{translations name='shoppingbasket.productstable_productsprice'}:</th>
 					<td class="shoppingbasket_total_value">
-						{$element->shoppingBasket->getProductsPrice()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
+						{$shoppingBasketElement->shoppingBasket->getProductsPrice()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
 					</td>
 				</tr>
-				{foreach from=$element->shoppingBasket->getDeliveryTypesList() item=deliveryType}
-					{if $deliveryType->id == $element->shoppingBasket->getSelectedDeliveryTypeId()}
+				{foreach from=$shoppingBasketElement->shoppingBasket->getDeliveryTypesList() item=deliveryType}
+					{if $deliveryType->id == $shoppingBasketElement->shoppingBasket->getSelectedDeliveryTypeId()}
 						{if $deliveryType->getPrice() !== ""}
 						<tr class="shoppingbasket_total shoppingbasket_total_delivery">
 							<th class="shoppingbasket_total_title" colspan="4">
@@ -76,7 +76,7 @@
 						{/if}
 					{/if}
 				{/foreach}
-				{foreach from=$element->shoppingBasket->getDiscountsList() item=discount}
+				{foreach from=$shoppingBasketElement->shoppingBasket->getDiscountsList() item=discount}
 					<tr class="shoppingbasket_total shoppingbasket_total_discount">
 						<th class="shoppingbasket_total_title" colspan="4">
 							{$discount->title}
@@ -92,7 +92,7 @@
 							{translations name='shoppingbasket.vatlesstotalprice'}:
 						</th>
 						<td class="shoppingbasket_total_value">
-							{$element->shoppingBasket->getVatLessTotalPrice()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
+							{$shoppingBasketElement->shoppingBasket->getVatLessTotalPrice()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
 						</td>
 					</tr>
 					<tr class="shoppingbasket_total shoppingbasket_total_vat">
@@ -100,7 +100,7 @@
 							{translations name='shoppingbasket.vatamount'}:
 						</th>
 						<td class="shoppingbasket_total_value">
-							{$element->shoppingBasket->getVatAmount()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
+							{$shoppingBasketElement->shoppingBasket->getVatAmount()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
 						</td>
 					</tr>
 				{/if}
@@ -109,7 +109,7 @@
 						{translations name='shoppingbasket.totalprice'}:
 					</th>
 					<td class="shoppingbasket_total_value">
-						<span class='shoppingbasket_totalprice_value'>{$element->shoppingBasket->getTotalPrice()|string_format:'%01.2f'}</span> {$selectedCurrencyItem->symbol}
+						<span class='shoppingbasket_totalprice_value'>{$shoppingBasketElement->shoppingBasket->getTotalPrice()|string_format:'%01.2f'}</span> {$selectedCurrencyItem->symbol}
 					</td>
 				</tr>
 				{if !$configManager->get('main.displayVat')}
@@ -121,10 +121,10 @@
 		{/if}
 	</table>
 	<div class="shoppingbasket_details_left">
-		{if $element->shoppingBasket->getSelectedDeliveryType() && $element->shoppingBasket->getSelectedDeliveryType()->deliveryFormFields}
+		{if $shoppingBasketElement->shoppingBasket->getSelectedDeliveryType() && $shoppingBasketElement->shoppingBasket->getSelectedDeliveryType()->deliveryFormFields}
 			<h1 class='shoppingbasket_form_heading'>{translations name='shoppingbasket.form_receiverdata'}:</h1>
 			<table class='shoppingbasket_checkout_table'>
-				{foreach from=$element->shoppingBasket->getSelectedDeliveryType()->deliveryFormFields item=deliveryField}
+				{foreach from=$shoppingBasketElement->shoppingBasket->getSelectedDeliveryType()->deliveryFormFields item=deliveryField}
 					<tr>
 						<td class='shoppingbasket_checkout_label'>
 							{$deliveryField.title}:
@@ -139,96 +139,96 @@
 		{/if}
 	</div>
 	<div class="shoppingbasket_details_right">
-		{if !$element->receiverIsPayer}
+		{if !$shoppingBasketElement->receiverIsPayer}
 		<h1 class='shoppingbasket_form_heading'>{translations name='shoppingbasket.form_payerdata'}:</h1>
 		<table class='shoppingbasket_checkout_table'>
-			{if $element->payerCompany}
+			{if $shoppingBasketElement->payerCompany}
 				<tr>
 					<td class='shoppingbasket_checkout_label'>
 						{translations name='shoppingbasket.form_company'}:
 					</td>
 					<td class='shoppingbasket_checkout_value'>
-						{$element->payerCompany}
+						{$shoppingBasketElement->payerCompany}
 					</td>
 				</tr>
 			{/if}
-			{if $element->payerFirstName}
+			{if $shoppingBasketElement->payerFirstName}
 				<tr>
 					<td class='shoppingbasket_checkout_label'>
 						{translations name='shoppingbasket.form_firstname'}:
 					</td>
 					<td class='shoppingbasket_checkout_value'>
-						{$element->payerFirstName}
+						{$shoppingBasketElement->payerFirstName}
 					</td>
 				</tr>
 			{/if}
-			{if $element->payerLastName}
+			{if $shoppingBasketElement->payerLastName}
 				<tr>
 					<td class='shoppingbasket_checkout_label'>
 						{translations name='shoppingbasket.form_lastname'}:
 					</td>
 					<td class='shoppingbasket_checkout_value'>
-						{$element->payerLastName}
+						{$shoppingBasketElement->payerLastName}
 					</td>
 				</tr>
 			{/if}
-			{if $element->payerEmail}
+			{if $shoppingBasketElement->payerEmail}
 				<tr>
 					<td class='shoppingbasket_checkout_label'>
 						{translations name='shoppingbasket.form_email'}:
 					</td>
 					<td class='shoppingbasket_checkout_value'>
-						{$element->payerEmail}
+						{$shoppingBasketElement->payerEmail}
 					</td>
 				</tr>
 			{/if}
-			{if $element->payerPhone}
+			{if $shoppingBasketElement->payerPhone}
 				<tr>
 					<td class='shoppingbasket_checkout_label'>
 						{translations name='shoppingbasket.form_phone'}:
 					</td>
 					<td class='shoppingbasket_checkout_value'>
-						{$element->payerPhone}
+						{$shoppingBasketElement->payerPhone}
 					</td>
 				</tr>
 			{/if}
-			{if $element->payerAddress}
+			{if $shoppingBasketElement->payerAddress}
 				<tr>
 					<td class='shoppingbasket_checkout_label'>
 						{translations name='shoppingbasket.form_address'}:
 					</td>
 					<td class='shoppingbasket_checkout_value'>
-						{$element->payerAddress}
+						{$shoppingBasketElement->payerAddress}
 					</td>
 				</tr>
 			{/if}
-			{if $element->payerCity}
+			{if $shoppingBasketElement->payerCity}
 				<tr>
 					<td class='shoppingbasket_checkout_label'>
 						{translations name='shoppingbasket.form_city'}:
 					</td>
 					<td class='shoppingbasket_checkout_value'>
-						{$element->payerCity}
+						{$shoppingBasketElement->payerCity}
 					</td>
 				</tr>
 			{/if}
-			{if $element->payerPostIndex}
+			{if $shoppingBasketElement->payerPostIndex}
 				<tr>
 					<td class='shoppingbasket_checkout_label'>
 						{translations name='shoppingbasket.form_postindex'}:
 					</td>
 					<td class='shoppingbasket_checkout_value'>
-						{$element->payerPostIndex}
+						{$shoppingBasketElement->payerPostIndex}
 					</td>
 				</tr>
 			{/if}
-			{if $element->payerCountry}
+			{if $shoppingBasketElement->payerCountry}
 				<tr>
 					<td class='shoppingbasket_checkout_label'>
 						{translations name='shoppingbasket.form_country'}:
 					</td>
 					<td class='shoppingbasket_checkout_value'>
-						{$element->payerCountry}
+						{$shoppingBasketElement->payerCountry}
 					</td>
 				</tr>
 			{/if}
