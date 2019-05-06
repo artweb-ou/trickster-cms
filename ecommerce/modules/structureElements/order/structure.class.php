@@ -253,11 +253,14 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $this->servicesList;
     }
 
-    public function getOrderStatusText()
+    public function getOrderStatusText($fromStatus = false)
     {
+        if(!$fromStatus) {
+            $fromStatus = $this->orderStatus;
+        }
         if ($this->orderStatusText === null) {
             $this->orderStatusText = $this->getService('translationsManager')
-                ->getTranslationByName('order.status_' . $this->orderStatus, 'adminTranslations');
+                ->getTranslationByName('order.status_' . $fromStatus, 'adminTranslations');
         }
         return $this->orderStatusText;
     }
@@ -467,7 +470,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         }
     }
 
-    public function sendOrderStatusNotificationEmail($emailType, $statusType, $forceSending = false)
+    public function sendOrderStatusNotificationEmail($emailType, $statusType, $sendTrigger = false, $forceSending = false)
     {
 /*
         payed
@@ -485,11 +488,18 @@ status_payed
 status_sent
 status_undefined
  */
-        if (!$statusType || $forceSending) {
+        if ($statusType !== 'undefined' && $forceSending) {
             $administratorEmail = $this->getAdministratorEmail();
             $data = $this->getOrderData();
             $data['documentType'] = $emailType;
 
+        //  if request from ajax (like orders list button) -> fix orderStatus from URL, else get current real orderStatus;
+            if ($sendTrigger !== 'ajax'){
+                $statusType = '';
+            }
+            else {
+                $data['orderStatus'] = $statusType;
+            }
             $translationsManager = $this->getService('translationsManager');
 
             $settings = $this->getService('settingsManager')->getSettingsList();
@@ -517,7 +527,7 @@ status_undefined
             $subjects['value.orderNumber'] =
                 $this->orderNumber;
             $subjects['value.orderStatusText'] =
-                $this->getOrderStatusText();
+                $this->getOrderStatusText($statusType);
             $subject =
                 $subjects['label.ShopTitle'] .  '. ' .
                 $subjects['label.emailSubjectOrderStatusNotification'] . ' (' .
@@ -530,6 +540,8 @@ status_undefined
             $newDispatchment->setType('orderStatus');
 
             $emailDispatcher->startDispatchment($newDispatchment);
+//            $statusType = 'undefined';
+//            $forceSending = false;
         }
     }
 
