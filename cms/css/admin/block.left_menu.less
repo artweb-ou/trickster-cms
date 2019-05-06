@@ -75,6 +75,20 @@
 .treemenu_selected_item > .structure_element > .icon {
 	color: @color;
 }
+.treemenu_item.treemenu_requested_item >a:after {
+	content: '\e917';
+	font-family: 'icons';
+	display: inline-block;
+	font-size: .8em;
+	margin-left: .85em;
+	color: fade(@white,90);
+	transform: rotate(90deg);
+	transform-origin: 50% 50%;
+	line-height: inherit;
+	width: 1em;
+	height: inherit;
+	overflow: hidden;
+}
 
 .ajaxsearch_block {
 	display: flex;

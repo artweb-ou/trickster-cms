@@ -117,7 +117,7 @@
 			<input type="text" class="ajaxsearch_input" placeholder="{translations name="header.search"}" value=""{if $allowedSearchTypes} data-types="{$allowedSearchTypes}"{/if} />
 		</div>
 		<div class="treemenu_component">
-			{include file=$theme->template('block.tree.tpl') menuLevel=$leftMenu level=0}
+			{include file=$theme->template('block.tree.tpl') menuLevel=$leftMenu level=0 requests = 0}
 		</div>
 		<div class="standalone_menu"></div>
 	</div>
