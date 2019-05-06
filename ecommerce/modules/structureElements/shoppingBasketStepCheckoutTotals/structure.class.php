@@ -1,6 +1,6 @@
 <?php
 
-class shoppingBasketStepProductsElement extends structureElement
+class shoppingBasketStepCheckoutTotalsElement extends structureElement
 {
     use ShoppingBasketStepContentTrait;
     public $dataResourceName = 'module_generic';

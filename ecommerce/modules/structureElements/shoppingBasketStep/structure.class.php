@@ -3,15 +3,15 @@
 class shoppingBasketStepElement extends structureElement
 {
     public $languagesParentElementMarker = 'adminLanguages';
-    public $dataResourceName = 'module_shoppingbasket_step';
+    public $dataResourceName = 'module_generic';
     protected $allowedTypes = [
-        'login',
-        'registration',
         'shoppingBasketStepProducts',
         'shoppingBasketStepDiscounts',
         'shoppingBasketStepDelivery',
         'shoppingBasketStepTotals',
         'shoppingBasketStepPayments',
+        'shoppingBasketStepAccount',
+        'shoppingBasketStepCheckoutTotals',
     ];
     public $defaultActionName = 'show';
     public $role = 'container';

@@ -2,6 +2,7 @@
 
 class shoppingBasketStepDiscountsElement extends structureElement
 {
+    use ShoppingBasketStepContentTrait;
     public $dataResourceName = 'module_generic';
     protected $allowedTypes = [];
     public $defaultActionName = 'show';

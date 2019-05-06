@@ -17,7 +17,3 @@ class showShoppingBasket extends structureElementAction
         }
     }
 }
-
-
-//selection
-//account

@@ -1,7 +1,3 @@
-{assign var='formData' value=$element->getFormData()}
-{assign var='formErrors' value=$element->getFormErrors()}
-{assign var='formNames' value=$element->getFormNames()}
-{capture assign="moduleContent"}
 	<table class='shoppingbasket_checkout_table shoppingbasket_table table_component'>
 		<thead class="shoppingbasket_table_header">
 			<tr>
@@ -240,25 +236,3 @@
 		{/if}
 	</div>
 	<div class="clearfix"></div>
-
-	<form action="{$element->getFormActionURL()}" class='shoppingbasket_checkout_form' method="post" enctype="multipart/form-data" role="form">
-		{include file=$theme->template('shoppingBasket.paymentmethods.tpl')}
-		<div class="shoppingbasket_checkout_controls">
-			<input type="hidden" value="{$element->id}" name="id" />
-			<input type="hidden" value="pay" name="action" />
-			<input class="button button_primary shoppingbasket_checkout_button_order" type="submit" value='{translations name='shoppingbasket.button_checkout'}'/>
-
-			<a href="{$element->URL}?step=delivery" class="button shoppingbasket_checkout_button_back">
-				<span class='button_left'></span>
-				<span class='button_right'></span>
-				<span class='button_center'></span>
-				<span class='button_text'>{translations name='shoppingbasket.button_back'}</span>
-			</a>
-		</div>
-	</form>
-{/capture}
-
-{assign moduleClass "shopping_basket_checkout_block"}
-{assign moduleContentClass "shoppingbasket_checkout_block"}
-
-{include file=$theme->template("component.contentmodule.tpl")}

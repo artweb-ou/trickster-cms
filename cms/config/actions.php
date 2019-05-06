@@ -97,6 +97,8 @@
     'shoppingBasketStepDelivery' => 'showForm',
     'shoppingBasketStepTotals' => 'showForm',
     'shoppingBasketStepPayments' => 'showForm',
+    'shoppingBasketStepAccount' => 'showForm',
+    'shoppingBasketStepCheckoutTotals' => 'showForm',
     'selectedGalleries' => 'showForm',
     'basketInput' => 'showForm',
     'passwordReminder' => 'showForm',

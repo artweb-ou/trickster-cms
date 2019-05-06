@@ -500,30 +500,6 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         return count($availableMethods) == 1 && reset($availableMethods)->getName() == 'invoice';
     }
 
-    public function getLoginForm()
-    {
-        $result = null;
-        foreach ($this->getChildrenList() as $childElement) {
-            if ($childElement->structureType != 'login') {
-                continue;
-            }
-            $result = $childElement;
-        }
-        return $result;
-    }
-
-    public function getRegistrationForm()
-    {
-        $result = null;
-        foreach ($this->getChildrenList() as $childElement) {
-            if ($childElement->structureType != 'registration') {
-                continue;
-            }
-            $result = $childElement;
-        }
-        return $result;
-    }
-
     public function isAccountStepSkippable()
     {
         //???

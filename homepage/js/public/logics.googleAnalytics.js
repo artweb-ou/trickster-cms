@@ -83,7 +83,7 @@ window.googleAnalyticsLogics = new function () {
 
   this.checkoutEvent = function (parameters) {
     var products = []
-    if (parameters) {
+    if (ecommerceEnabled && parameters) {
       for (var i = 0; i < parameters.products.length; i++) {
         products.push({
           'id': parameters.products[i].productId,
@@ -190,10 +190,12 @@ window.googleAnalyticsLogics = new function () {
   }
 
   this.feedbackEvent = function () {
-    gtag('event', 'Send', {
-      'event_category': 'Forms',
-      'event_label': 'Feedback',
-    })
+    if(ecommerceEnabled) {
+      gtag('event', 'Send', {
+        'event_category': 'Forms',
+        'event_label': 'Feedback',
+      })
+    }
   }
 
   this.impressionEvent = function (parameters) {
