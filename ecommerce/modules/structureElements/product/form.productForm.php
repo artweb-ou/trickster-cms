@@ -74,4 +74,27 @@ class ProductFormStructure extends ElementForm
         ],
     ];
 
+    public function getControls()
+    {
+        if(empty($this->controls)) {
+            $this->controls = [
+                'save' => [
+                    'class' => 'success_button',
+                    'type' => 'submit'
+                ],
+                'clone' => [
+                    'class' => 'classic_button',
+                    'action' => 'clone',
+                    'icon' => 'clone'
+                ],
+                'delete' => [
+                    'class' => 'warning_button',
+                    'action' => 'delete',
+                    'icon' => 'delete'
+                ],
+            ];
+        }
+        return $this->controls;
+    }
+
 }
