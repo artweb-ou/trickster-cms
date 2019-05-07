@@ -1,15 +1,16 @@
 window.ShoppingBasketSelectionComponent = function(componentElement) {
-	var conditionsContentElement
-	var conditionsTextElement
-	var submitButtonElement
-	var formElement
-	var contentsElement
-	var messageElement
-	var productPriceElements
-	var totalsContainerElement
-	var footerTotalsContainerElement
-	var totalsComponent
-	var showInBasketDiscountsComponent
+	var conditionsContentElement;
+	var conditionsTextElement;
+	var submitButtonElement;
+	var formElement;
+	var contentsElement;
+	var messageElement;
+	var productPriceElements;
+	var totalsContainerElement;
+	var footerTotalsContainerElement;
+	var totalsComponent;
+	var showInBasketDiscountsComponent;
+	var conditionsCheckboxInput;
 
 	var init = function() {
 		contentsElement = _('.shoppingbasket_contents', componentElement)[0]
@@ -53,15 +54,17 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 			}
 		}
 
-		showInBasketDiscountsComponent = _('.shoppingbasket_discounts', componentElement)[0]
+		conditionsCheckboxInput = componentElement.querySelector('#shoppingbasket_form_conditions_checkbox');
 
-		controller.addListener('startApplication', startApplication)
-		controller.addListener('shoppingBasketUpdated', updateData)
-	}
+		showInBasketDiscountsComponent = _('.shoppingbasket_discounts', componentElement)[0];
+
+		controller.addListener('startApplication', startApplication);
+		controller.addListener('shoppingBasketUpdated', updateData);
+	};
 	var startApplication = function() {
-		window.shoppingBasketLogics.trackCheckout()
+		window.shoppingBasketLogics.trackCheckout();
 		updateData()
-	}
+	};
 	var updateData = function() {
 		if (messageElement) {
 			messageElement.innerHTML = window.shoppingBasketLogics.message
@@ -93,7 +96,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 				footerTotalsContainerElement.style.display = '';
 			}
 
-			if(totalsContainerElement) {
+			if (totalsContainerElement) {
 				totalsContainerElement.style.display = '';
 			}
 		} else {
@@ -101,7 +104,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 				footerTotalsContainerElement.style.display = 'none';
 			}
 
-			if(totalsContainerElement) {
+			if (totalsContainerElement) {
 				totalsContainerElement.style.display = 'none';
 			}
 		}
@@ -199,7 +202,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 							productHrefElement.appendChild(productPriceElement)
 						}
 
-            						if (currentProduct.isPurchasable) {
+						if (currentProduct.isPurchasable) {
 							var productAddWrapElement = document.createElement('a')
 							productAddWrapElement.className = 'product_short_basket product_short_button product_buttonsmall_button button'
 							productAddWrapElement.href = currentProduct.URL
@@ -212,28 +215,30 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 						}
 
 						new ProductShortComponent(discountProductElement)
-          }
-        }
-      }
-    }
-  }
-  var submitForm = function (event) {
-    eventsManager.preventDefaultAction(event)
-		var conditionsCheckboxInput = componentElement.querySelector('#shoppingbasket_form_conditions_checkbox')
-		if(conditionsCheckboxInput.checked){
-    formElement.submit()
-  }
-		else {
-			var message = []
-			message['title'] = translationsLogics.get('shoppingbasket.conditions')
-			message['content'] = '<a target="ART" class="modal_link" href="'+window.conditionsLink+'">'+translationsLogics.get('shoppingbasket.conditions_error')+'</a>'
-			message['footer'] = translationsLogics.get('shoppingbasket.agreewithconditions')
-
-			new ModalActionComponent(conditionsCheckboxInput, false, submitButtonElement, message); // checkbox-input, footer advanced, element for position, messages
+					}
+				}
+			}
 		}
-	}
-  init()
-}
+	};
+	var submitForm = function(event) {
+		eventsManager.preventDefaultAction(event)
+		if (conditionsCheckboxInput) {
+			if (conditionsCheckboxInput.checked) {
+				formElement.submit();
+			} else {
+				var message = []
+				message['title'] = translationsLogics.get('shoppingbasket.conditions')
+				message['content'] = '<a target="ART" class="modal_link" href="' + window.conditionsLink + '">' + translationsLogics.get('shoppingbasket.conditions_error') + '</a>'
+				message['footer'] = translationsLogics.get('shoppingbasket.agreewithconditions')
+
+				new ModalActionComponent(conditionsCheckboxInput, false, submitButtonElement, message); // checkbox-input, footer advanced, element for position, messages
+			}
+		}else {
+			formElement.submit();
+		}
+	};
+	init()
+};
 
 window.ShoppingBasketTotalsComponent = function(componentElement) {
 	var deliveryRow, vatlessRow, vatRow, totalRow, productsFullPrice, pricesIncludeVatRow
