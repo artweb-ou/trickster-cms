@@ -5,7 +5,7 @@
         </span>
         <div class="form_field">
             {if $formData.$fieldName.$languageId != ""}
-                <img src='{$controller->baseURL}image/type:adminImage/id:{$image}/filename:{$formData.originalName.$languageId}' />
+                <img{if !empty($item.class)} class="{$item.class}"{/if} src='{$controller->baseURL}image/type:adminImage/id:{$image}/filename:{$formData.originalName.$languageId}' />
                 <br />
                 <a href="{$element->URL}id:{$element->id}/action:deleteImage/language:{$languageId}/">{translations name="{$structureType}.deleteimage"}</a>
             {else}

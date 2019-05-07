@@ -9,9 +9,31 @@ class GenericIconFormStructure extends ElementForm
         ],
         'image' => [
             'type' => 'input.multi_language_image',
+            'class' => 'genericicon_icon_image',
         ],
         'iconWidth' => [
             'type' => 'input.multi_language_text',
+        ],
+        'iconLocation' => [
+            'type' => 'select.index',
+            'options' => [
+                'loc_top_left',
+                'loc_top_right',
+                'loc_bottom_left',
+                'loc_bottom_right',
+            ],
+         //   'translationGroup' => 'order', //'translationGroup' => 'admintranslation',
+        ],
+        'iconRole' => [
+            'type' => 'select.index',
+            'options' => [
+                'role_default',
+                'role_date',
+                'role_general_discount',
+                'role_availability',
+                'role_by_parameter',
+            ],
+         //   'translationGroup' => 'order', //'translationGroup' => 'admintranslation',
         ],
         'startDate' => [
             'type' => 'input.date',
