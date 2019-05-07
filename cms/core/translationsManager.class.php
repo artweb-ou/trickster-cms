@@ -160,7 +160,7 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
         // for empty language empty array is returned, so can't check for false or null
         if (is_array($translationsList = $this->getTranslationsList($section, $languageId))) {
             $name = strtolower($name);
-            if (isset($translationsList[$name])) {
+            if (!empty($translationsList[$name])) {
                 return $translationsList[$name];
             } else {
                 if ($required) {

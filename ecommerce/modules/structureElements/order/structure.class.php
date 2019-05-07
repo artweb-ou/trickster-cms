@@ -253,11 +253,14 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $this->servicesList;
     }
 
-    public function getOrderStatusText()
+    public function getOrderStatusText($fromStatus = false)
     {
+        if(!$fromStatus) {
+            $fromStatus = $this->orderStatus;
+        }
         if ($this->orderStatusText === null) {
             $this->orderStatusText = $this->getService('translationsManager')
-                ->getTranslationByName('order.status_' . $this->orderStatus, 'adminTranslations');
+                ->getTranslationByName('order.status_' . $fromStatus, 'adminTranslations');
         }
         return $this->orderStatusText;
     }
@@ -325,6 +328,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $this->orderData = [
                 "paymentBank" => $this->getPaymentBank(),
                 "orderNumber" => $this->orderNumber,
+                "orderStatus" => $this->orderStatus,
+                "orderStatusText" => $this->getOrderStatusText(),
                 "dateCreated" => $this->dateCreated,
                 "dueDate" => $this->dueDate,
                 "receiverIsPayer" => $this->receiverIsPayer,
@@ -339,6 +344,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 "payerPhone" => $this->payerPhone,
                 "currency" => $this->currency,
                 "productsPrice" => $this->getProductsPrice(),
+                "deliveryType" => $this->deliveryType,
                 "deliveryPrice" => $this->deliveryPrice,
                 "deliveryTitle" => $this->deliveryTitle,
                 "noVatAmount" => $this->noVatAmount,
@@ -464,6 +470,81 @@ class orderElement extends structureElement implements PaymentOrderInterface
         }
     }
 
+    public function sendOrderStatusNotificationEmail($emailType, $statusType, $sendTrigger = false, $forceSending = false)
+    {
+/*
+        payed
+        failed
+        deleted
+        paid_partial
+        sent
+*/
+/*
+status_deleted
+status_failed
+status_new
+status_paid_partial
+status_payed
+status_sent
+status_undefined
+ */
+        if ($statusType !== 'undefined' && $forceSending) {
+            $administratorEmail = $this->getAdministratorEmail();
+            $data = $this->getOrderData();
+            $data['documentType'] = $emailType;
+
+        //  if request from ajax (like orders list button) -> fix orderStatus from URL, else get current real orderStatus;
+            if ($sendTrigger !== 'ajax'){
+                $statusType = '';
+            }
+            else {
+                $data['orderStatus'] = $statusType;
+            }
+            $translationsManager = $this->getService('translationsManager');
+
+            $settings = $this->getService('settingsManager')->getSettingsList();
+            $emailDispatcher = $this->getService('EmailDispatcher');
+            $newDispatchment = $emailDispatcher->getEmptyDispatchment();
+            $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
+            if ($administratorEmail) {
+                $newDispatchment->setFromEmail($administratorEmail);
+                $newDispatchment->registerReceiver($administratorEmail, null);
+            }
+            $newDispatchment->registerReceiver($this->payerEmail, null);
+
+            $subjects = [];
+            // getTranslationByName($name, $section = null, $required = true, $loggable = true, $languageId = null)
+
+            // if !shop_title in translation, try check default_sender_name in settings, else display shop_title field name
+            $subjects['label.ShopTitle'] =
+                $translationsManager->getTranslationByName('company.shop_title', 'public_translations') ?:
+                !empty($settings['default_sender_name']) ?$settings['default_sender_name']:$translationsManager->getTranslationByName('company.shop_title', 'public_translations');
+
+            $subjects['label.emailSubjectOrderStatusNotification'] =
+                $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification', 'public_translations');
+            $subjects['label.orderNumber'] =
+                $translationsManager->getTranslationByName('labels.order_nr', 'public_translations');
+            $subjects['value.orderNumber'] =
+                $this->orderNumber;
+            $subjects['value.orderStatusText'] =
+                $this->getOrderStatusText($statusType);
+            $subject =
+                $subjects['label.ShopTitle'] .  '. ' .
+                $subjects['label.emailSubjectOrderStatusNotification'] . ' (' .
+                $subjects['label.orderNumber'] . ' ' .
+                $subjects['value.orderNumber'] . ': ' .
+                $subjects['value.orderStatusText'] . ')';
+            $newDispatchment->setSubject($subject);
+            $newDispatchment->setData($data);
+            $newDispatchment->setReferenceId($this->id);
+            $newDispatchment->setType('orderStatus');
+
+            $emailDispatcher->startDispatchment($newDispatchment);
+//            $statusType = 'undefined';
+//            $forceSending = false;
+        }
+    }
+
     protected function getAdministratorEmail()
     {
         $structureManager = $this->getService('structureManager');
@@ -584,6 +665,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $data = [
             'id' => $this->id,
             'orderNumber' => $this->orderNumber,
+            'orderStatus' => $this->orderStatus,
+            'orderStatusText' => $this->getOrderStatusText(),
             'invoiceNumber' => $this->getInvoiceNumber('invoice'),
             'advancePaymentInvoiceNumber' => $this->getInvoiceNumber('advancePaymentInvoice'),
             'orderConfirmationNumber' => $this->getInvoiceNumber('orderConfirmation'),
@@ -595,6 +678,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
             'currency' => $this->currency,
             'payedPrice' => $this->getPayedPrice(),
             'deliveryPrice' => $this->deliveryPrice,
+            'deliveryTitle' => $this->deliveryTitle,
+            'deliveryType' => $this->deliveryType,
             'ourPrice' => $this->ourPrice,
             'URL' => $this->URL,
             'formURL' => $this->URL . 'id:' . $this->id . '/action:showForm/',
@@ -602,8 +687,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
             'payerName' => $this->payerName,
             'payerFirstName' => $this->payerFirstName,
             'payerLastName' => $this->payerLastName,
-            'orderStatus' => $this->orderStatus,
-            'orderStatusText' => $this->getOrderStatusText(),
             'products' => $products,
             'discounts' => $this->getDiscounts(),
         ];

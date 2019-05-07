@@ -74,6 +74,8 @@ window.ordersLogics = new function() {
 						}
 					}
 				}
+			} else if (responseName == 'sendStatus') {
+
 			} else {
 				if (typeof responseData.orders != 'undefined') {
 					ordersList = [];
@@ -102,6 +104,18 @@ window.ordersLogics = new function() {
 			var parameters = {};
 			var URL = data.URL.replace('admin', 'adminAjax') + 'id:' + data.id + '/action:changeStatus/orderStatus:' + newStatus;
 			var request = new JsonRequest(URL, receiveData, 'changeStatus', parameters);
+			request.send();
+		}
+	};
+
+	this.sendStatus = function(id, newStatus) {
+		if (ordersIndex[id] != undefined) {
+			var data = ordersIndex[id];
+			var parameters = {};
+
+			var URL = data.URL.replace('admin', 'adminAjax') + 'id:' + data.id + '/action:sendInvoice/invoiceType:Notification/sendTrigger:ajax/statusType:' + newStatus;
+
+			var request = new JsonRequest(URL, null, 'sendStatus', null);
 			request.send();
 		}
 	};
