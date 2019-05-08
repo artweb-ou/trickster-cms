@@ -129,6 +129,16 @@
                                             <value languageCode="rus">Удалить изображение</value>
                                     </values>
             </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.iconproductavail</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Product availability</value>
+                                            <value languageCode="est">Kauba saadavus</value>
+                                            <value languageCode="rus">Наличие товара</value>
+                                    </values>
+            </AddTranslation>
                 <GenerateTranslations>
             <type>adminTranslations</type>
         </GenerateTranslations>

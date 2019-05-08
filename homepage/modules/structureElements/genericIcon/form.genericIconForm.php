@@ -4,8 +4,6 @@ class GenericIconFormStructure extends ElementForm
 {
     use productsAvailabilityOptionsTrait;
 
-    protected $translationsManager;
-
     protected $formClass = 'genericicon_form';
     protected $structure = [];
     protected $structure_total_top = [
@@ -74,7 +72,7 @@ class GenericIconFormStructure extends ElementForm
     ];
 
     protected $structure_product_avail = [
-        'productAvail' => [
+        'iconProductAvail' => [
             'type' => 'select.universal_options_multiple',
             'select_options' => 'productsAvailOptions',
             'translationGroup' => 'product', //'translationGroup' => 'admintranslation',
@@ -89,7 +87,7 @@ class GenericIconFormStructure extends ElementForm
            return $this->structure_total_top + $this->structure_date + $this->structure_total_bottom;
         }
         elseif ($iconRole == 4) { // 'role_availability'
-            $this->productsAvailOptions =  $this->getProductsAvailOptions();
+            $this->productsAvailOptions =  $this->getProductsAvailOptions(); // list in productsAvailabilityOptionsTrait
             return $this->structure_total_top + $this->structure_product_avail + $this->structure_total_bottom;
         }
         else{
@@ -101,7 +99,6 @@ class GenericIconFormStructure extends ElementForm
         $productsAvailOptions = $this->productsAvailOptions('',1);
         $assoProductsAvailOptions = [];
         foreach ($productsAvailOptions as $optionKey=>$optionValue) {
-         //   $title = $this->getTranslationsManager()->getTranslationByName('product.'.$optionValue, 'admintranslation');
             $assoProductsAvailOptions[] = array('id'=> $optionKey, 'title'=> $optionValue);
         }
         return $assoProductsAvailOptions;

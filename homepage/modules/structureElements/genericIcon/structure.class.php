@@ -25,7 +25,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['iconWidth'] = 'floatNumber';
         $moduleStructure['iconLocation'] = 'naturalNumber';
         $moduleStructure['iconRole'] = 'naturalNumber';
-        $moduleStructure['productAvail'] = 'naturalNumber';
+        $moduleStructure['iconProductAvail'] = 'serializedArray'; //serializedArray
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
