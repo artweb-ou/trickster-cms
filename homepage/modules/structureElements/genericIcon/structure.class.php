@@ -23,6 +23,8 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['endDate'] = 'date';
         $moduleStructure['days'] = 'naturalNumber';
         $moduleStructure['iconWidth'] = 'floatNumber';
+        $moduleStructure['iconLocation'] = 'naturalNumber';
+        $moduleStructure['iconRole'] = 'naturalNumber';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)

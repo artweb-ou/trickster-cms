@@ -38,6 +38,8 @@ class receiveGenericIcon extends structureElementAction
             'endDate',
             'days',
             'iconWidth',
+            'iconLocation',
+            'iconRole',
         ];
     }
 }

@@ -17,24 +17,25 @@ class GenericIconFormStructure extends ElementForm
         'iconLocation' => [
             'type' => 'select.index',
             'options' => [
-                'loc_top_left',
-                'loc_top_right',
-                'loc_bottom_left',
-                'loc_bottom_right',
+                1 => 'loc_top_left',
+                2 => 'loc_top_right',
+                3 => 'loc_bottom_left',
+                4 => 'loc_bottom_right',
             ],
          //   'translationGroup' => 'order', //'translationGroup' => 'admintranslation',
         ],
         'iconRole' => [
             'type' => 'select.index',
             'options' => [
-                'role_default',
-                'role_date',
-                'role_general_discount',
-                'role_availability',
-                'role_by_parameter',
+                1 => 'role_default',
+                2 => 'role_date',
+                3 => 'role_general_discount',
+                4 => 'role_availability',
+                5 => 'role_by_parameter',
             ],
          //   'translationGroup' => 'order', //'translationGroup' => 'admintranslation',
         ],
+
         'startDate' => [
             'type' => 'input.date',
         ],
@@ -44,6 +45,7 @@ class GenericIconFormStructure extends ElementForm
         'days' => [
             'type' => 'input.text',
         ],
+
         'products' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getConnectedProducts',
