@@ -91,10 +91,15 @@ class submitShoppingBasket extends structureElementAction
 
                 $structureElement->saveShoppingBasketForm();
             }
+            if($structureElement->paymentMethodId) {
+                $shoppingBasket->updateBasketFormData([
+                    'paymentMethodId' => $structureElement->paymentMethodId
+                ]);
+            }
             if($structureElement->isLastStep()) {
-                if($structureElement->paymentMethodId) {
+                if($paymentMethodId = $shoppingBasket->getPaymentMethodId()) {
                     $controller->redirect($structureElement->URL . 'id:' . $structureElement->id
-                        . '/action:pay/bank:' . $structureElement->paymentMethodId . '/');
+                        . '/action:pay/bank:' . $paymentMethodId . '/');
                 }else {
                     $structureElement->setViewName('selection');
                 }
@@ -129,9 +134,6 @@ class submitShoppingBasket extends structureElementAction
 
     public function setValidators(&$validators)
     {
-
-
-
         foreach($this->structureElement->getCurrentStepElements() as $stepContentElement) {
             $validators = $validators + $stepContentElement->getValidators($this->elementFormData);
         }
@@ -139,8 +141,6 @@ class submitShoppingBasket extends structureElementAction
         if($this->stepContentIsUsingCustomFields()) {
             $validators = $validators + $this->structureElement->getCustomValidators();
         }
-
-
     }
 
     public function stepContentIsUsingCustomFields() {

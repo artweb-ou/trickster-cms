@@ -387,6 +387,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
         return $this->promoCodeDiscountId;
     }
 
+    //not used
     public function setBasketFormData($formData)
     {
         $this->formData = $formData;
@@ -438,6 +439,14 @@ class shoppingBasket implements DependencyInjectionContextInterface
     public function getBasketFormData()
     {
         return $this->formData;
+    }
+
+    public function getPaymentMethodId() {
+        if(!empty($this->formData['paymentMethodId'])) {
+            return $this->formData['paymentMethodId'];
+        }
+
+        return false;
     }
 
     public function getCountriesList()
