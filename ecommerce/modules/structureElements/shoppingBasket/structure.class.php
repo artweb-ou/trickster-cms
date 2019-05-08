@@ -149,6 +149,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             $this->setFormValue('payerPhone', $formData['payerPhone']);
 
             $this->setFormValue('receiverIsPayer', $formData['receiverIsPayer']);
+            $this->setFormValue('paymentMethodId', $formData['paymentMethodId']);
         } else {
             $user = $this->getService('user');
             if ($user->userName != 'anonymous') {
@@ -198,7 +199,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
 
         $formData['receiverIsPayer'] = $this->receiverIsPayer;
 
-        $shoppingBasket->setBasketFormData($formData);
+        $shoppingBasket->updateBasketFormData($formData);
     }
 
     public function getCustomFieldsList()
@@ -506,7 +507,6 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
 
     public function isAccountStepSkippable()
     {
-        //???
         return !!$this->getService('ConfigManager')->get('main.shoppingasketAccountStepSkippable');
     }
 

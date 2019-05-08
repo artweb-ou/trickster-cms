@@ -25,7 +25,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 		}
 
 		messageElement = _('.shoppingbasket_selection_message', componentElement)[0]
-		var element = _('.shoppingbasket_table', componentElement)[0]
+		var element = _('.shoppingbasket_table_products', componentElement)[0]
 		if (element) {
 			new ShoppingBasketSelectionTable(element)
 		}

@@ -1,4 +1,4 @@
-<table class='shoppingbasket_table table_component'>
+<table class='shoppingbasket_table shoppingbasket_table_products table_component'>
 	<thead class="shoppingbasket_table_header">
 	<tr>
 		<th class='shoppingbasket_table_header_title' colspan='2'>
