@@ -4,7 +4,20 @@
  * Class discountsListElement
  *
  * @property string $columns
+ * @property int $priceSortingEnabled;
+ * @property int $nameSortingEnabled;
+ * @property int $dateSortingEnabled;
+ * @property int $brandSortingEnabled;
+ * @property int $brandFilterEnabled;
+ * @property int $parameterFilterEnabled;
+ * @property int $availabilityFilterEnabled;
+ * @property int $manualSortingEnabled;
+ * @property int $defaultOrder;
+ * @property int $parameters;
+ * @property int $amountOnPageEnabled;
+ *
  */
+
 class discountsListElement extends menuStructureElement implements ConfigurableLayoutsProviderInterface
 {
     use ConfigurableLayoutsProviderTrait;
@@ -57,23 +70,6 @@ class discountsListElement extends menuStructureElement implements ConfigurableL
             'showPositions',
             'showPrivileges',
         ];
-    }
-
-    public function getTextContent()
-    {
-        if (is_null($this->textContent)) {
-            $this->textContent = $this->title . ".";
-
-            if ($contentElements = $this->getContentList()) {
-                foreach ($contentElements as &$contentElement) {
-                    $this->textContent .= " " . $contentElement->title . ".";
-                    if ($contentElement->content) {
-                        $this->textContent .= " " . $contentElement->content;
-                    }
-                }
-            }
-        }
-        return $this->textContent;
     }
 
     public function getDiscounts()

@@ -19,7 +19,7 @@ class brandsElement extends structureElement
         $multiLanguageFields[] = 'title';
     }
 
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
         if (is_null($this->contentList)) {
             $this->contentList = false;

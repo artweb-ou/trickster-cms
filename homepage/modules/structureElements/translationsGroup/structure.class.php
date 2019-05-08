@@ -4,7 +4,7 @@ class translationsGroupElement extends TranslationsGroupStructureElement
 {
     protected $allowedTypes = ['translation'];
 
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
         $structureManager = $this->getService('structureManager');
 

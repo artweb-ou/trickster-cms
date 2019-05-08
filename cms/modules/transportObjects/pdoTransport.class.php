@@ -43,18 +43,6 @@ class pdoTransport extends errorLogger implements transportObject
         $this->dbConnect();
     }
 
-    public function __destruct()
-    {
-        if ($this->debug) {
-            $text = '';
-            foreach ($this->queriesHistory as &$query) {
-                $text .= str_ireplace("\n\r", '', $query) . "\n";
-            }
-            $text .= $this->queriesOverallTime;
-            file_put_contents(ROOT_PATH . 'pdo_debug.txt', $text);
-        }
-    }
-
     protected function dbConnect()
     {
         $app = controller::getInstance()->getApplication();
@@ -82,7 +70,7 @@ class pdoTransport extends errorLogger implements transportObject
             if ($result = $statement->execute()) {
                 if ($this->debug) {
                     $end = microtime(true);
-                    $this->queriesHistory[] = sprintf("%.4f", $end - $start) . "\t\t" . $sqlQuery;
+                    $this->queriesHistory[] = sprintf("%.2f", ($end - $start) * 1000) . "\t" . $sqlQuery;
                     $this->queriesOverallTime += $end - $start;
                 }
                 return $statement;
@@ -431,4 +419,21 @@ class pdoTransport extends errorLogger implements transportObject
     {
         return substr($this->pdo->quote($input), 1, -1);
     }
+
+    /**
+     * @return array
+     */
+    public function getQueriesHistory()
+    {
+        return $this->queriesHistory;
+    }
+
+    /**
+     * @param bool $debug
+     */
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
+    }
+
 }

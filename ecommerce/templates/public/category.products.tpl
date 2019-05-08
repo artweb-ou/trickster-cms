@@ -1,8 +1,6 @@
 {if $element->getProductsLayout() != "hide"}
     <div class="category_details_products_related">
-        {if $element->isFilterable()}
-            {include file=$theme->template('component.productsfilter.tpl')}
-        {/if}
+        {include file=$theme->template('component.productsfilter.tpl')}
         {if $pager && count($pager->pagesList)>1 || $element->isSortable()}
             <div class="products_top_pager">
                 {include file=$theme->template('pager.tpl') pager=$pager}

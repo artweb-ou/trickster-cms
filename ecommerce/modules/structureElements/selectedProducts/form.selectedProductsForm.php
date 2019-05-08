@@ -49,7 +49,7 @@ class SelectedProductsFormStructure extends ElementForm
         ],
         'categoriesIds' => [
             'type' => 'select.universal_options_multiple',
-            'method' => 'getConnectedCategories',
+            'method' => 'getConnectedCategoriesInfo',
             'class' => 'selectedproducts_categoryselect',
             'trClass' => 'auto_selection_related',
         ],
@@ -68,7 +68,7 @@ class SelectedProductsFormStructure extends ElementForm
         ],
         'iconIds' => [
             'type' => 'select.universal_options_multiple',
-            'method' => 'getConnectedIcons',
+            'method' => 'getConnectedIconsInfo',
             'class' => 'selectedproducts_iconselect',
             'trClass' => 'auto_selection_related',
 
@@ -88,7 +88,7 @@ class SelectedProductsFormStructure extends ElementForm
         'displayMenus' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getDisplayMenusInfo',
-
+            'condition' => 'checkDisplayMenus',
         ],
     ];
 }

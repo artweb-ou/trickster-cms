@@ -2,9 +2,35 @@
 
 trait ConnectedCategoriesProviderTrait
 {
+    /**
+     * @var categoryElement[]
+     */
     protected $connectedCategories;
+    /**
+     * @var int[]
+     */
     protected $connectedCategoriesIds;
 
+    /**
+     * @return array
+     */
+    public function getConnectedCategoriesInfo()
+    {
+        $info = [];
+        foreach ($this->getConnectedCategories() as $categoryElement) {
+            $item = [];
+            $item['id'] = $categoryElement->id;
+            $item['title'] = $categoryElement->getTitle();
+            $item['select'] = true;
+            $info[] = $item;
+        }
+
+        return $info;
+    }
+
+    /**
+     * @return categoryElement[]
+     */
     public function getConnectedCategories()
     {
         if ($this->connectedCategories === null) {
@@ -14,13 +40,9 @@ trait ConnectedCategoriesProviderTrait
                  * @var structureManager $structureManager
                  */
                 $structureManager = $this->getService('structureManager');
-                foreach ($categoryIds as &$categoryId) {
+                foreach ($categoryIds as $categoryId) {
                     if ($categoryId && $categoryElement = $structureManager->getElementById($categoryId)) {
-                        $item = [];
-                        $item['id'] = $categoryElement->id;
-                        $item['title'] = $categoryElement->getTitle();
-                        $item['select'] = true;
-                        $this->connectedCategories[] = $item;
+                        $this->connectedCategories[] = $categoryElement;
                     }
                 }
             }
@@ -28,20 +50,30 @@ trait ConnectedCategoriesProviderTrait
         return $this->connectedCategories;
     }
 
-    public function getConnectedCategoriesIds()
+    /**
+     * @param null $linkType
+     * @return int[]
+     */
+    public function getConnectedCategoriesIds($linkType = null)
     {
-        if (is_null($this->connectedCategoriesIds)) {
+        if (!$linkType) {
+            $linkType = $this->structureType . 'Category';
+        }
+        if ($this->connectedCategoriesIds === null) {
             /**
              * @var linksManager $linksManager
              */
             $linksManager = $this->getService('linksManager');
-            $this->connectedCategoriesIds = $linksManager->getConnectedIdList($this->id, $this->structureType . "Category", "parent");
+            $this->connectedCategoriesIds = $linksManager->getConnectedIdList($this->id, $linkType, "parent");
         }
         return $this->connectedCategoriesIds;
     }
 
-    public function updateConnectedCategories($formCategories)
+    public function updateConnectedCategories($formCategories, $linkType = null)
     {
+        if (!$linkType) {
+            $linkType = $this->structureType . 'Category';
+        }
         /**
          * @var linksManager $linksManager
          */
@@ -49,15 +81,16 @@ trait ConnectedCategoriesProviderTrait
 
         // check category links
         if ($connectedCategoriesIds = $this->getConnectedCategoriesIds()) {
-            foreach ($connectedCategoriesIds as &$connectedCategoryId) {
+            foreach ($connectedCategoriesIds as $connectedCategoryId) {
                 if (!in_array($connectedCategoryId, $formCategories)) {
-                    $linksManager->unLinkElements($this->id, $connectedCategoryId, $this->structureType . 'Category');
+                    $linksManager->unLinkElements($this->id, $connectedCategoryId, $linkType);
                 }
             }
         }
         foreach ($formCategories as $selectedCategoryId) {
-            $linksManager->linkElements($this->id, $selectedCategoryId, $this->structureType . 'Category');
+            $linksManager->linkElements($this->id, $selectedCategoryId, $linkType);
         }
         $this->connectedCategoriesIds = null;
+        $this->connectedCategories = null;
     }
 }

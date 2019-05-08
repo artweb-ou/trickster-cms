@@ -77,14 +77,14 @@
 			</label>
 		</div>
 		<div class="filtration_section filtration_form_items">
-			<label class="filtration_form_item">
+			<span class="filtration_form_item">
 				<span class="filtration_form_item_label">
 					{translations name='catalogue.massedit_all_results'}
 				</span>
 				<span class="filtration_form_item_field">
 					<input class='catalogue_masseditor_targetall_checkbox checkbox_placeholder' type="checkbox" value="1" name="{$formNames.targetAll}"{if $element->targetAll} checked="checked"{/if} id="catalogue_masseditor_targetall_checkbox" />
 				</span>
-			</label>
+			</span>
 		</div>
 	</div>
 	<div class="panel_controls">

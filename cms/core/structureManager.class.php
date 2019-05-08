@@ -34,6 +34,10 @@ class structureManager implements DependencyInjectionContextInterface
      * @var linksManager
      */
     protected $linksManager;
+    /**
+     * @var languagesManager
+     */
+    protected $languagesManager;
     protected $defaultRoles = [];
 
     protected $requestedPath = [];
@@ -41,11 +45,19 @@ class structureManager implements DependencyInjectionContextInterface
     public $allowedRoles = [];
     public $customActions = [];
     public $defaultActions = [];
-    protected $pathSearchLinksBlacklist;
+    protected $pathSearchAllowedLinks;
     public $rootURL = "";
     protected $privilegeChecking = true;
     protected $deniedCopyLinkTypes = [];
     protected $elementPathRestrictionId;
+
+    /**
+     * @param languagesManager $languagesManager
+     */
+    public function setLanguagesManager($languagesManager)
+    {
+        $this->languagesManager = $languagesManager;
+    }
 
     public function setLinksManager(linksManager $linksManager)
     {
@@ -86,7 +98,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param int $elementId
      * @param int $roles
      * @param string $linkType
-     * @param bool $useBlackList
+     * @param bool $restrictLinkTypes
      * @param structureElement[] $flatTree
      * @param array $usedIds - prevents cycling
      * @return structureElement[]
@@ -95,17 +107,17 @@ class structureManager implements DependencyInjectionContextInterface
         $elementId,
         $roles = null,
         $linkType = 'structure',
-        $useBlackList = false,
+        $restrictLinkTypes = false,
         &$flatTree = [],
         &$usedIds = []
     )
     {
-        $treeLevel = $this->getElementsChildren($elementId, $roles, $linkType, null, $useBlackList);
+        $treeLevel = $this->getElementsChildren($elementId, $roles, $linkType, null, $restrictLinkTypes);
         foreach ($treeLevel as &$element) {
             if (!in_array($element->id, $usedIds)) {
                 $usedIds[] = $element->id;
                 $flatTree[] = $element;
-                $this->getElementsFlatTree($element->id, $roles, $linkType, $useBlackList, $flatTree, $usedIds);
+                $this->getElementsFlatTree($element->id, $roles, $linkType, $restrictLinkTypes, $flatTree, $usedIds);
             }
         }
         return $flatTree;
@@ -230,18 +242,18 @@ class structureManager implements DependencyInjectionContextInterface
      * @param int $elementId
      * @param bool $forceUpdate - if provided, then cached results are not used and all parents are searched from the scratch
      * @param string $linkType
-     * @param bool $useBlackList
+     * @param bool $restrictLinkTypes
      * @return structureElement[]
      */
-    public function getElementsParents($elementId, $forceUpdate = false, $linkType = null, $useBlackList = true)
+    public function getElementsParents($elementId, $forceUpdate = false, $linkType = null, $restrictLinkTypes = true)
     {
         if (!$linkType) {
             $linkType = '';
         }
         if (!isset($this->elementsParents[$elementId][$linkType]) || $forceUpdate) {
             $this->elementsParents[$elementId][$linkType] = [];
-            if ($useBlackList) {
-                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $linkType, 'child', $forceUpdate, $this->getPathSearchLinksBlackList());
+            if ($restrictLinkTypes && !$linkType) {
+                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $this->getPathSearchAllowedLinks(), 'child', $forceUpdate);
             } else {
                 $elementsLinks = $this->linksManager->getElementsLinks($elementId, $linkType, 'child', $forceUpdate);
             }
@@ -424,7 +436,7 @@ class structureManager implements DependencyInjectionContextInterface
                     }
                 }
                 if (!$result) {
-                    $connectedLinks = $this->linksManager->getElementsLinks($parentElementId, '', 'parent', false, $this->getPathSearchLinksBlackList());
+                    $connectedLinks = $this->linksManager->getElementsLinks($parentElementId, $this->getPathSearchAllowedLinks(), 'parent');
                     $connectedIds = [];
                     foreach ($connectedLinks as $link) {
                         $connectedIds[] = $link->childStructureId;
@@ -731,7 +743,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param string[]|null $allowedRoles
      * @param string|string[] $linkTypes
      * @param string|string[]|null $allowedTypes
-     * @param bool $useBlackList
+     * @param bool $restrictLinkTypes
      * @return structureElement[]
      */
     public function getElementsChildren(
@@ -739,7 +751,7 @@ class structureManager implements DependencyInjectionContextInterface
         $allowedRoles = null,
         $linkTypes = 'structure',
         $allowedTypes = null,
-        $useBlackList = false
+        $restrictLinkTypes = false
     )
     {
         $returnList = [];
@@ -754,8 +766,11 @@ class structureManager implements DependencyInjectionContextInterface
                 }
             }
             //get all structure links for this element
-            if ($useBlackList) {
-                $elementsLinks = $this->linksManager->getElementsLinks($parentElementId, $linkTypes, 'parent', false, $this->getPathSearchLinksBlackList());
+            if ($restrictLinkTypes) {
+                if (!$linkTypes) {
+                    $linkTypes = $this->getPathSearchAllowedLinks();
+                }
+                $elementsLinks = $this->linksManager->getElementsLinks($parentElementId, $linkTypes, 'parent');
             } else {
                 $elementsLinks = $this->linksManager->getElementsLinks($parentElementId, $linkTypes, 'parent');
             }
@@ -855,9 +870,9 @@ class structureManager implements DependencyInjectionContextInterface
             return $loadedElements;
         }
 
-        if ($allowedElements) {
-            $searchFields['structureType'] = $allowedElements;
-        }
+//        if ($allowedElements) {
+//            $searchFields['structureType'] = $allowedElements;
+//        }
         //We have only 3 roles: content, container and hybrid.
         //If there are all roles required, then we don't need to restrict this column,
         //so we can save some sql resources by not sending this info
@@ -1154,7 +1169,7 @@ class structureManager implements DependencyInjectionContextInterface
         if ($id == $parentId) {
             $parentFound = true;
         } else {
-            if ($dataCollection = $this->linksManager->getElementsLinks($id, "", 'child', false, $this->getPathSearchLinksBlackList())) {
+            if ($dataCollection = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child', false)) {
                 foreach ($dataCollection as &$dataObject) {
                     if ($dataObject->parentStructureId == $parentId) {
                         $parentFound = true;
@@ -1315,33 +1330,32 @@ class structureManager implements DependencyInjectionContextInterface
 
     protected function findShortestParentsChain(
         $id,
-        $restrictByParentChain = null,
+        $restrictByParentId = null,
         $nonLoadedOnly = true,
         &$points = 0,
         $chainElements = []
     )
     {
-        $key = 'ch:' . $this->getService('languagesManager')->getCurrentLanguageId() . ':p' . $restrictByParentChain;
+        //if we are searching parent within itself then we will get nothing. we should not restrict parent within itself
+        if ($restrictByParentId == $id) {
+            $restrictByParentId = null;
+        }
+
+        $key = 'ch:' . $this->languagesManager->getCurrentLanguageId() . ':p' . $restrictByParentId;
         if ($cachedChain = $this->cache->get($id . ":" . $key)) {
             return $cachedChain;
         }
-        if ($nonLoadedOnly && !$restrictByParentChain && isset($this->shortestChains[$id])) {
+        if ($nonLoadedOnly && !$restrictByParentId && isset($this->shortestChains[$id])) {
             return $this->shortestChains[$id];
         }
         $this->shortestChains[$id] = false;
 
         $chainElements[$id] = true;
 
-        if ($parentLinks = $this->linksManager->getElementsLinks(
-            $id,
-            "",
-            'child',
-            false,
-            $this->getPathSearchLinksBlackList()
-        )) {
+        if ($parentLinks = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child')) {
             foreach ($parentLinks as &$parentLink) {
                 $parentId = $parentLink->parentStructureId;
-                if (!$restrictByParentChain) {
+                if (!$restrictByParentId) {
                     if (!empty($this->elementsList[$parentId])) {
                         $foundLoaded = $parentId;
                         if ($this->elementsList[$parentId]->requested) {
@@ -1351,7 +1365,7 @@ class structureManager implements DependencyInjectionContextInterface
                     } elseif ($parentId == $this->getRootElementId()) {
                         $foundRequested = $parentId;
                     }
-                } elseif ($parentId == $restrictByParentChain) {
+                } elseif ($parentId == $restrictByParentId) {
                     $foundRestricted = $parentId;
                 }
             }
@@ -1375,14 +1389,14 @@ class structureManager implements DependencyInjectionContextInterface
                         $newPoints = $points + 2;
                         if ($chain = $this->findShortestParentsChain(
                             $parentId,
-                            $restrictByParentChain,
+                            $restrictByParentId,
                             $nonLoadedOnly,
                             $newPoints,
                             $chainElements
                         )
                         ) {
-                            if ((is_array($chain) && !$restrictByParentChain) ||
-                                ($restrictByParentChain !== null && in_array($restrictByParentChain, $chain))
+                            if ((is_array($chain) && !$restrictByParentId) ||
+                                ($restrictByParentId !== null && in_array($restrictByParentId, $chain))
                             ) {
                                 if ($newPoints < $bestPoints || !$bestPoints) {
                                     $bestPoints = $newPoints;
@@ -1477,7 +1491,7 @@ class structureManager implements DependencyInjectionContextInterface
         if (!$currentName) {
             $currentName = $element->structureType . $element->id;
         }
-        $blackList = $this->getPathSearchLinksBlackList();
+        $allowedTypes = $this->getPathSearchAllowedLinks();
         /**
          * @var Connection $db
          */
@@ -1486,7 +1500,7 @@ class structureManager implements DependencyInjectionContextInterface
         if ($records = $db->table('structure_links')
             ->select('parentStructureId')
             ->where('childStructureId', '=', $elementId)
-            ->whereNotIn('type', $blackList)->get()) {
+            ->whereIn('type', $allowedTypes)->get()) {
             $parentIds = array_column($records, 'parentStructureId');
         }
         $newName = $currentName;
@@ -1495,17 +1509,13 @@ class structureManager implements DependencyInjectionContextInterface
             $query = $db->table('structure_elements')
                 ->select('structureName')
                 ->where('structureName', 'like', $currentName . '%')
-                ->whereIn('id', function ($subQuery) use ($elementId, $blackList, $parentIds) {
+                ->whereIn('id', function ($subQuery) use ($elementId, $allowedTypes, $parentIds) {
                     $subQuery->from('structure_links')
                         ->select('childStructureId')
                         ->where('childStructureId', '!=', $elementId)
-                        ->whereNotIn('type', $blackList)
+                        ->whereIn('type', $allowedTypes)
                         ->whereIn('parentStructureId', $parentIds);
                 });
-
-//        $query = $db->table('structure_elements')
-//            ->select('structureName')
-//            ->where('structureName', 'like', $currentName . '%');
 
             if ($rows = $query->get()) {
                 $usedNames = array_column($rows, 'structureName');
@@ -1550,21 +1560,39 @@ class structureManager implements DependencyInjectionContextInterface
 
     /**
      * @param $pathSearchLinksBlacklist
+     *
+     * @deprecated - delete in 04.2021
      */
     public function setPathSearchLinksBlacklist($pathSearchLinksBlacklist)
     {
-        $this->pathSearchLinksBlacklist = $pathSearchLinksBlacklist;
+        $this->logError('Deprecated method used setPathSearchLinksBlacklist');
     }
 
     /**
      * @return string[]
+     *
+     * @deprecated - delete in 04.2021
      */
     protected function getPathSearchLinksBlackList()
     {
-        if ($this->pathSearchLinksBlacklist === null) {
-            $this->getRootElement();
-        }
-        return $this->pathSearchLinksBlacklist;
+        $this->logError('Deprecated method used getPathSearchLinksBlackList');
+        return [];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPathSearchAllowedLinks()
+    {
+        return $this->pathSearchAllowedLinks;
+    }
+
+    /**
+     * @param mixed $pathSearchAllowedLinks
+     */
+    public function setPathSearchAllowedLinks($pathSearchAllowedLinks)
+    {
+        $this->pathSearchAllowedLinks = $pathSearchAllowedLinks;
     }
 
     public function setRootUrl($rootUrl)

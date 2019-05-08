@@ -116,7 +116,7 @@ class ProductIconsManager
 
             //add parent categories' own and global unique icons
             foreach ($categories as $category) {
-                if ($categoryIcons = $category->getIconsCompleteList()) {
+                if ($categoryIcons = $this->getCategoryIcons($category)) {
                     foreach ($categoryIcons as $categoryIcon) {
                         if (!isset($elementIconsIndex[$categoryIcon->id])) {
                             $this->icons[$product->id][] = $categoryIcon;

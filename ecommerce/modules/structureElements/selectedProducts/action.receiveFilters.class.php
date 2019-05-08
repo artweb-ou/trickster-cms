@@ -4,14 +4,16 @@ class receiveFiltersSelectedProducts extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param selectedProductsElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
-            $linksManager = $this->getService('linksManager');
-
             //persist product data
-            $structureElement->prepareActualData();
-            $structureElement->structureName = $structureElement->title;
             $structureElement->persistElementData();
             $structureElement->persistDisplayMenusLinks();
 
@@ -39,9 +41,9 @@ class receiveFiltersSelectedProducts extends structureElementAction
                 $linksManager->linkElements($structureElement->id, $structureElement->catalogueFilterId, "selectedProductsCatalogue");
             }
 
-            $controller->redirect($structureElement->URL);
+            $controller->redirect($structureElement->getUrl('showFilters'));
         } else {
-            $structureElement->executeAction("showForm");
+            $structureElement->executeAction("showFilters");
         }
     }
 
@@ -50,7 +52,7 @@ class receiveFiltersSelectedProducts extends structureElementAction
         $expectedFields = [
             'filterCategory',
             'filterBrand',
-            'filterPrice',
+            'filterPriceEnabled',
             'filterDiscount',
             'availabilityFilterEnabled',
             'priceInterval',

@@ -231,7 +231,7 @@ class deliveryTypeElement extends structureElement
         }
     }
 
-    public function linkWithElements($idsToLink, $linkType, $bidirectional = false)
+    public function linkWithElements($idsToLink, $linkType)
     {
         $linksManager = $this->getService('linksManager');
         if ($linkedIds = $linksManager->getConnectedIdList($this->id, $linkType, "parent")) {
@@ -243,7 +243,7 @@ class deliveryTypeElement extends structureElement
             $idsToLink = array_diff($idsToLink, $linkedIds);
         }
         foreach ($idsToLink as &$idToLink) {
-            $linksManager->linkElements($this->id, $idToLink, $linkType, $bidirectional);
+            $linksManager->linkElements($this->id, $idToLink, $linkType);
         }
     }
 

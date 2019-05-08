@@ -1,5 +1,5 @@
-{assign 'searchBaseElement' $element->getSearchBaseElement()}
-{if $searchBaseElement}
+{assign 'productsListElement' $element->getProductsListElement()}
+{if $productsListElement}
 
 	{if $element->title}
 		{capture assign="moduleTitle"}
@@ -10,11 +10,11 @@
 		<script>
 			/*<![CDATA[*/
 			{if $element->canActLikeFilter()}
-			window.productSearchBaseUrl = '{$searchBaseElement->URL}';
+			window.productsListElementUrl = '{$productsListElement->URL}';
 			{else}
-			window.productSearchBaseUrl = '{$searchBaseElement->URL}id:{$searchBaseElement->id}/action:search/';
+			window.productsListElementUrl = '{$productsListElement->URL}id:{$productsListElement->id}/action:search/';
 			{/if}
-			{if $catalogueElement = $element->getCatalogue()}
+			{if $catalogueElement = $element->getProductCatalogue()}
 			window.productSearchCatalogueUrl = '{$catalogueElement->URL}';
 			{/if}
 			window.categoriesUrls = window.categoriesUrls || {ldelim}{rdelim};
@@ -87,9 +87,9 @@
 			{if $element->sortingEnabled}
 				<div class="productsearch_field">
 					<select class="productsearch_sortselect dropdown_placeholder">
-						{foreach $element->getSortParameters() as $sortParameter}
+						{foreach $element->getSortingOptions() as $sortParameter}
 							<option value='{$sortParameter.value}'{if $controller->getParameter('sort') == $sortParameter.value} selected="selected"{/if}>
-								{$sortParameter.title}
+								{$sortParameter.label}
 							</option>
 						{/foreach}
 					</select>

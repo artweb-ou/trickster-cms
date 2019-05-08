@@ -58,7 +58,7 @@ class newsMailsGroupElement extends structureElement
         return $this->pager;
     }
 
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
         return $this->getEmailAddresses();
     }
