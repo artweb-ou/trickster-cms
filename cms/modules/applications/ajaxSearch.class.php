@@ -53,7 +53,6 @@ class ajaxSearchApplication extends controllerApplication
                 'configActions' => false,
             ], true);
             $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
-            $structureManager->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
         }
         $query = false;
         if ($controller->getParameter('query')) {

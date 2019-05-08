@@ -3,6 +3,9 @@
 class adminApplication extends controllerApplication implements ThemeCodeProviderInterface
 {
     protected $applicationName = 'admin';
+    /**
+     * @var DesignTheme
+     */
     protected $currentTheme;
     protected $themeCode = 'projectAdmin';
     public $rendererName = 'smarty';
@@ -73,7 +76,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $this->renderer->assign('translationsList', $translationsList);
 
         $breadcrumbsManager = $this->getService('breadcrumbsManager');
-        $currentLocation = $breadcrumbsManager->getBreadcrumbs();
+        $currentLocation = $breadcrumbsManager->getBreadcrumbs(false, false, false);
 
         $user = $this->getService('user');
         if ($userElement = $structureManager->getElementById($user->id)) {

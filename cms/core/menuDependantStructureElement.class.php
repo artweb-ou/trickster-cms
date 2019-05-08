@@ -145,9 +145,9 @@ abstract class menuDependantStructureElement extends structureElement implements
         return $url;
     }
 
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
-        $childrenList = parent::getChildrenList($roles, $linkType, $allowedTypes, $useBlackList);
+        $childrenList = parent::getChildrenList($roles, $linkType, $allowedTypes, $restrictLinkTypes);
 
         $controller = controller::getInstance();
         $applicationName = $controller->getApplicationName();

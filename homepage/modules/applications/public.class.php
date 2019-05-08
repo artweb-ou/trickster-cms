@@ -3,6 +3,7 @@
 class publicApplication extends controllerApplication implements ThemeCodeProviderInterface
 {
     use JsTranslationsTrait;
+    use DbLoggableApplication;
     protected $applicationName = 'public';
     /**
      * @var DesignTheme
@@ -32,6 +33,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
      */
     public function execute($controller)
     {
+        $this->startDbLogging();
         $this->checkBotUAs();
         $this->logRequest();
         /**
@@ -42,6 +44,11 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
 
         $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
+
+        $structureManager = $this->getService('structureManager', [
+            'rootUrl' => $controller->rootURL,
+            'rootMarker' => $this->configManager->get('main.rootMarkerPublic'),
+        ], true);
 
         $this->renderer->assign('js_translations', $this->loadJsTranslations());
 
@@ -84,10 +91,6 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             if ($controller->getParameter('qid')) {
                 $this->getService('searchQueriesManager')->markLogAsClicked($controller->getParameter('qid'));
             }
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl' => $controller->rootURL,
-                'rootMarker' => $this->configManager->get('main.rootMarkerPublic'),
-            ], true);
             $this->processRequestParameters();
             if ($currentElement = $structureManager->getCurrentElement()) {
                 /**
@@ -181,6 +184,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         if ($pageNotFound) {
             $this->handle404();
         }
+        $this->saveDbLog();
     }
 
     protected function handle404()

@@ -2,9 +2,14 @@
 
 class showFiltersSelectedProducts extends structureElementAction
 {
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param selectedProductsElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $linksManager = $this->getService('linksManager');
         $renderer = $this->getService('renderer');
 
         if ($structureElement->requested) {
@@ -17,7 +22,7 @@ class showFiltersSelectedProducts extends structureElementAction
                 foreach ($productCatalogues as &$productCatalogue) {
                     $productCatalogueInfo = [];
                     $productCatalogueInfo['linkExists'] = isset($compiledLinks[$productCatalogue->id]);
-                    $productCatalogueInfo['title'] = $productCatalogue->title;
+                    $productCatalogueInfo['title'] = $productCatalogue->getTitle();
                     $productCatalogueInfo['structureName'] = $productCatalogue->structureName;
                     $productCatalogueInfo['id'] = $productCatalogue->id;
                     $productCataloguesInfo[] = $productCatalogueInfo;

@@ -4,7 +4,7 @@ class showDiscount extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $structureElement->setViewName('content');
+        $structureElement->setViewName('detailed');
 
         if ($structureElement->requested) {
             $structureElement->productsList = null;

@@ -5,43 +5,6 @@ class showRoot extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->requested) {
-            $pathSearchLinksBlacklist = [
-                'connected',
-                'connected2',
-                'connected3',
-                'connectedCategory',
-                'displayinmenu',
-                'displayinmenumobile',
-                'selectedProducts',
-                'submenulist',
-                'userRelation',
-                'productbrand',
-                'discountCategory',
-                'categoryParameter',
-                'selectedProductsCategory',
-                'latestNewsNewsList',
-                'productSearchParameter',
-                'productSearchCatalogue',
-                'selectedProducts',
-                'selectedNews',
-                'foreignRelative',
-                'discountCategory',
-                'discountBrand',
-                'discountProduct',
-                'selectedProductsCatalogue',
-                'newsMailTextSubContentCategory',
-                'campaigns',
-                'campaignShop',
-                'shopRoom',
-                'productGalleryProduct',
-                'selectedGalleries',
-                'selectedEventsEvent',
-                'selectedEventsEventsList',
-                'hiddenFields',
-                'connectedGallery',
-            ];
-            $structureManager->setPathSearchLinksBlacklist($pathSearchLinksBlacklist);
-
             $languagesList = [];
             $languageNames = [];
             if ($childrenList = $structureElement->getChildrenList()) {

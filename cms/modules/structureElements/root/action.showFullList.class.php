@@ -6,43 +6,6 @@ class showFullListRoot extends structureElementAction
     {
         $adminRoot = $structureElement->isAdminRoot();
         if ($adminRoot) {
-            $pathSearchLinksBlacklist = [
-                "connected",
-                'connected2',
-                'connected3',
-                'connectedCategory',
-                "selectedProducts",
-                "bannerCategoryBanner",
-                "brands",
-                "categoryParameter",
-                //headerContent should not be added into blacklist or the ajax search doesn't find header contents.
-                //                "headerContent",
-                "orderPayment",
-                "pollLink",
-                "productbrand",
-                "submenulist",
-                "userRelation",
-                "userOrder",
-                "latestNewsNewsList",
-                "productSearchCatalogue",
-                "selectedProducts",
-                "foreignRelative",
-                "catalogue",
-                "displayinmenu",
-                "displayinmenumobile",
-                "selectedProductsCatalogue",
-                "newsMailTextSubContentCategory",
-                "openingHoursInfoGroup",
-                "shopOpeningHours",
-                "productGalleryProduct",
-                "selectedEventsEvent",
-                "selectedGalleries",
-                'selectedEventsEventsList',
-                'hiddenFields',
-                'connectedGallery',
-                'commentTarget',
-            ];
-            $structureManager->setPathSearchLinksBlacklist($pathSearchLinksBlacklist);
             $languageNames = [];
 
             //init login form
@@ -78,7 +41,7 @@ class showFullListRoot extends structureElementAction
             }
             $contentSubTemplate = 'shared.contentlist.tpl';
             $dashboard = null;
-            if ($structureElement->isAdminRoot() && $currentView === 'dashboard') {
+            if ($adminRoot && $currentView === 'dashboard') {
                 $contentSubTemplate = 'dashboard.tpl';
                 $dashboard = new Dashboard();
                 $dashboard->setStructureManager($structureManager);

@@ -26,7 +26,7 @@ class DiscountFormStructure extends ElementForm
             'type' => 'input.multi_language_image',
         ],
         'iconWidth' => [
-            'type' => 'input.multi_language_image',
+            'type' => 'input.multi_language_text',
         ],
         'showInBasket' => [
             'type' => 'input.checkbox',
@@ -82,7 +82,7 @@ class DiscountFormStructure extends ElementForm
         ],
         'categories' => [
             'type' => 'select.universal_options_multiple',
-            'method' => 'getConnectedCategories',
+            'method' => 'getConnectedCategoriesInfo',
             'class' => 'discount_form_categoryselect',
         ],
         'brands' => [

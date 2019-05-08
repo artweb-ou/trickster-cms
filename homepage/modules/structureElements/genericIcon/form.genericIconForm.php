@@ -29,7 +29,7 @@ class GenericIconFormStructure extends ElementForm
         ],
         'categories' => [
             'type' => 'select.universal_options_multiple',
-            'method' => 'getConnectedCategories',
+            'method' => 'getConnectedCategoriesInfo',
             'class' => 'genericicon_form_categoryselect',
         ],
         'brands' => [

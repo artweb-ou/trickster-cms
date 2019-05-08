@@ -1182,14 +1182,14 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
      * @param string $roles
      * @param string $linkType
      * @param null $allowedTypes
-     * @param bool $useBlackList
+     * @param bool $restrictLinkTypes
      * @return structureElement[]
      */
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
         $structureManager = $this->getService('structureManager');
         //is it possible that we should always use blacklist when loading children?
-        $childrenList = $structureManager->getElementsChildren($this->id, $roles, $linkType, $allowedTypes, $useBlackList);
+        $childrenList = $structureManager->getElementsChildren($this->id, $roles, $linkType, $allowedTypes, $restrictLinkTypes);
 
         return $childrenList;
     }

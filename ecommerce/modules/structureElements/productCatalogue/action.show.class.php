@@ -11,7 +11,7 @@ class showProductCatalogue extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($firstParent = $structureManager->getElementsFirstParent($structureElement->id)) {
-            $categories = $structureManager->getElementsChildren($firstParent->id, 'container', 'catalogue');
+            $categories = $structureElement->getCategoriesList();
             /**
              * @var categoryElement[] $categories
              */

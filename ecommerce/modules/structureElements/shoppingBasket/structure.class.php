@@ -434,7 +434,6 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
                             'price' => $product->getPrice(false),
                             'oldPrice' => $product->getOldPrice(),
                             'discountPercent' => round($product->getDiscountPercent()),
-                            'icons' => $product->getIconsCompleteList(),
                             'connectedDiscounts' => $product->getCampaignDiscounts(),
                         ];
                     }
