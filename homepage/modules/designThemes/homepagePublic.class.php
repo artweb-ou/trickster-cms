@@ -106,6 +106,7 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.tracking.js',
             'component.modalAction.js',
             'component.modal.js',
+            'component.feedbackDragAndDrop.js',
         ];
     }
 }
