@@ -85,6 +85,8 @@ class imageProcessRendererPlugin extends rendererPlugin
             $preferredOrder = ['image/jpeg'];
         } elseif ($imageType == 'bmp') {
             $preferredOrder = ['image/x-bmp'];
+        } elseif ($imageType == 'svg') {
+            $preferredOrder = ['image/svg+xml'];
         }
 
         $selectedType = $this->selectHTTPParameter($preferredOrder, $contentTypes, '*/*');

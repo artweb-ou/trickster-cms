@@ -40,6 +40,7 @@ class receiveGenericIcon extends structureElementAction
             'iconWidth',
             'iconLocation',
             'iconRole',
+            'productAvail',
         ];
     }
 }

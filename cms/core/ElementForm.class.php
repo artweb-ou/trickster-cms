@@ -114,6 +114,11 @@ abstract class ElementForm
         return $this->element->$property;
     }
 
+    public function getElementOptions($options)
+    {
+        return $this->$options;
+    }
+
     public function getTranslationGroup()
     {
         return strtolower($this->element->structureType);
