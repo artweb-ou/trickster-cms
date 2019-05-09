@@ -54,7 +54,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $moduleStructure['productsMobileLayout'] = 'text';
         $moduleStructure['categoriesMobileLayout'] = 'text';
 
-        $moduleStructure['brands'] = 'serializedArray';
         $moduleStructure['deliveryStatus'] = 'text';
         $moduleStructure['deliveryPriceType'] = 'text';
         $moduleStructure['formDeliveries'] = 'array';

@@ -2,7 +2,6 @@
 
 class GenericIconFormStructure extends ElementForm
 {
-    use productsAvailabilityOptionsTrait;
 
     protected $formClass = 'genericicon_form';
     protected $structure = [];
@@ -73,46 +72,30 @@ class GenericIconFormStructure extends ElementForm
 
     protected $structure_product_avail = [
         'iconProductAvail' => [
-            'type' => 'select.multiple.multi_language',
-        //    'options' => 'productsAvailOptions',
-            'translationGroup' => 'product', //'translationGroup' => 'admintranslation',
-        ],
-    ];
-
-    protected $structure_test = [
-        'icontest' => [
-            'type' => 'input.text',
+            'type' => 'select.serialized',
+            'method' => 'getProductsAvailabilityOptions',
+            'translationGroup' => 'product',
+            'class' => 'select_simple',
         ],
     ];
 
 
     public function getFormComponents(){
         $iconRole = $this->getElementProperty('iconRole');
-        
+
         if ($iconRole == 2) { // 'role_date'
-           return $this->structure_total_top + $this->structure_date + $this->structure_total_bottom;
+            return $this->structure_total_top + 
+                   $this->structure_date + 
+                   $this->structure_total_bottom;
         }
         elseif ($iconRole == 4) { // 'role_availability'
-            $this->structure_product_avail['iconProductAvail']['options'] =
-                $this->productsAvailOptions('',1); // list in productsAvailabilityOptionsTrait
- //           print_r($this->structure_product_avail);
-//            $this->productsAvailOptions = $this->productsAvailOptions('',1); // list in productsAvailabilityOptionsTrait
-//            $this->productsAvailOptions =  $this->getProductsAvailOptions(); // list in productsAvailabilityOptionsTrait
-            return $this->structure_total_top + $this->structure_product_avail + $this->structure_total_bottom +$this->structure_test;
+            return $this->structure_total_top +
+                   $this->structure_product_avail +
+                   $this->structure_total_bottom;
         }
-        else{
-            return $this->structure_total_top + $this->structure_total_bottom;
+        else {
+            return $this->structure_total_top +
+                   $this->structure_total_bottom;
         }
     }
-
-    public function getProductsAvailOptions()
-    {
-        return $productsAvailOptions = $this->productsAvailOptions('',1);
-//        $assoProductsAvailOptions = [];
-//        foreach ($productsAvailOptions as $optionKey=>$optionValue) {
-//            $assoProductsAvailOptions[] = array('id'=> $optionKey, 'title'=> $optionValue);
-//        }
-//        return $assoProductsAvailOptions;
-    }
-
 }

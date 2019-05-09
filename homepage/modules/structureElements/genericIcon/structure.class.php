@@ -6,6 +6,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
     use ConnectedBrandsProviderTrait;
     use ConnectedCategoriesProviderTrait;
     use ImageUrlProviderTrait;
+    use ProductsAvailabilityOptionsTrait;
 
     public $dataResourceName = 'module_generic_icon';
     public $defaultActionName = 'show';
@@ -25,7 +26,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['iconWidth'] = 'floatNumber';
         $moduleStructure['iconLocation'] = 'naturalNumber';
         $moduleStructure['iconRole'] = 'naturalNumber';
-        $moduleStructure['iconProductAvail'] = 'serializedArray'; // serializedArray naturalNumber serializedIndex
+        $moduleStructure['iconProductAvail'] = 'serializedIndex';
         $moduleStructure['icontest'] = 'naturalNumber';
     }
 
@@ -36,4 +37,11 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $multiLanguageFields[] = 'originalName';
         $multiLanguageFields[] = 'iconWidth';
     }
+
+    public function getProductsAvailabilityOptions()
+    {
+        //  return $this->productsAvailabilityTypes;
+        return $this->productsAvailabilityOptions('',1);
+    }
+
 }
