@@ -5,7 +5,10 @@
 				<div class="product_details_option">
 					{if $selectionInfo.title}
 						<div class="product_details_option_title">
-							{$selectionInfo.title}:
+							<span class="product_details_option_title_value">{$selectionInfo.title}:</span>
+							{if !empty($selectionInfo.hint)}
+								<div class="product_details_option_hint"></div>
+							{/if}
 						</div>
 					{/if}
 					<div class="product_details_option_control" data-elementid="{$selectionInfo.id}" data-influential="{$selectionInfo.influential}">
