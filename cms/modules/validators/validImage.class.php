@@ -6,7 +6,7 @@ class validImageValidator extends validator
     {
         $validated = true;
         if (is_array($formValue)) {
-            $typesArray = ['image/x-png', 'image/png', 'image/bmp', 'image/pjpeg', 'image/jpeg', 'image/gif'];
+            $typesArray = ['image/x-png', 'image/png', 'image/bmp', 'image/pjpeg', 'image/jpeg', 'image/gif', 'image/webp', 'image/svg+xml'];
 
             $validated = false;
 

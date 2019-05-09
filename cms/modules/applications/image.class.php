@@ -28,34 +28,40 @@ class imageApplication extends controllerApplication
         }
         $result = false;
         if (is_file($originalFilePath)) {
-            $this->renderer->assign('registerImage', [
-                'source',
-                $originalFilePath,
-            ]);
-            if (!empty($imagePreset['images'])) {
-                foreach ($imagePreset['images'] as &$imageInfo) {
-                    $this->renderer->assign('registerImage', $imageInfo);
-                }
-            }
-            if (!empty($imagePreset['filters'])) {
-                foreach ($imagePreset['filters'] as &$filter) {
-                    $this->renderer->assign('registerFilter', $filter);
-                }
-            }
-
-            if (!empty($imagePreset['format'])) {
-                if ($contentTypes = $this->getService('requestHeadersManager')->getAcceptedTypes()) {
-                   if (isset ($contentTypes['image/webp'])) {
-                        $imagePreset['format'][1] = 'webp';
-                   }
-                }
-                $this->renderer->assign('registerExport', $imagePreset['format']);
+            if (stripos(strtolower($this->fileName), 'svg') !== false) {
+                $result = true;
+                header('Content-Type: image/svg+xml');
+                file_get_contents($originalFilePath);
             } else {
-                $this->renderer->assign('registerExport', null);
+                $this->renderer->assign('registerImage', [
+                    'source',
+                    $originalFilePath,
+                ]);
+                if (!empty($imagePreset['images'])) {
+                    foreach ($imagePreset['images'] as &$imageInfo) {
+                        $this->renderer->assign('registerImage', $imageInfo);
+                    }
+                }
+                if (!empty($imagePreset['filters'])) {
+                    foreach ($imagePreset['filters'] as &$filter) {
+                        $this->renderer->assign('registerFilter', $filter);
+                    }
+                }
+
+                if (!empty($imagePreset['format'])) {
+                    if ($contentTypes = $this->getService('requestHeadersManager')->getAcceptedTypes()) {
+                        if (isset ($contentTypes['image/webp'])) {
+                            $imagePreset['format'][1] = 'webp';
+                        }
+                    }
+                    $this->renderer->assign('registerExport', $imagePreset['format']);
+                } else {
+                    $this->renderer->assign('registerExport', null);
+                }
+                $this->renderer->setContentDisposition('inline');
+                $this->renderer->display();
+                $result = true;
             }
-            $this->renderer->setContentDisposition('inline');
-            $this->renderer->display();
-            $result = true;
         }
 
         if (!$result) {
