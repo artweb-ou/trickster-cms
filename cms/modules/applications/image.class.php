@@ -45,8 +45,7 @@ class imageApplication extends controllerApplication
 
             if (!empty($imagePreset['format'])) {
                 if ($contentTypes = $this->getService('requestHeadersManager')->getAcceptedTypes()) {
-                    if (($imagePreset['format'][1] !== 'png') && isset ($contentTypes['image/webp'])) {
-//                   if (isset ($contentTypes['image/webp'])) {
+                   if (isset ($contentTypes['image/webp'])) {
                         $imagePreset['format'][1] = 'webp';
                    }
                 }
