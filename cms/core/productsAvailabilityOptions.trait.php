@@ -5,11 +5,10 @@ trait productsAvailabilityOptionsTrait
     public $productsAvailabilityValues = [
         'available',
         'quantity_dependent',
-        'inquirable',
+        'available_inquirable', // it is inquirable and buyable
+        'inquirable', // it is inquirable only
         'unavailable',
-        'available_inquirable',
-        'inquirable_only',
-        'inquirable_and_buyable',
+//        'instock',
     ];
 
     public function productsAvailOptions($prefix='', $start=0){

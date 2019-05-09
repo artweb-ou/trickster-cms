@@ -29,7 +29,7 @@
 					{foreach $options as $option}
 						<option value='{$option.id}'{if !empty($option.select)} selected="selected"{/if}>
 							{if !empty($option.level)}{section name="level" start=0 loop=$option.level}&nbsp;&nbsp;{/section}{/if}
-							{if $translated}
+							{if !empty($translated)}
 								{translations name="{$translated}.{$option.title}"}
 							{else}
 								{$option.title}

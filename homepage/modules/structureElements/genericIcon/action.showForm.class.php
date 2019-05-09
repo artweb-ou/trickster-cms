@@ -17,5 +17,9 @@ class showFormGenericIcon extends structureElementAction
         } else {
             $structureElement->setViewName('form');
         }
+        $structureElement->icontest = $structureElement->getDataChunk("iconProductAvail")->getFormValue();
+//        $structureElement->icontest = $structureElement->getValue("iconProductAvail");
+//              var_dump($structureElement->getDataChunk("iconProductAvail")->getDisplayValue());
+
     }
 }

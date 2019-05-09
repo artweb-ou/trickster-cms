@@ -73,9 +73,15 @@ class GenericIconFormStructure extends ElementForm
 
     protected $structure_product_avail = [
         'iconProductAvail' => [
-            'type' => 'select.universal_options_multiple',
-            'select_options' => 'productsAvailOptions',
+            'type' => 'select.multiple.multi_language',
+        //    'options' => 'productsAvailOptions',
             'translationGroup' => 'product', //'translationGroup' => 'admintranslation',
+        ],
+    ];
+
+    protected $structure_test = [
+        'icontest' => [
+            'type' => 'input.text',
         ],
     ];
 
@@ -87,21 +93,26 @@ class GenericIconFormStructure extends ElementForm
            return $this->structure_total_top + $this->structure_date + $this->structure_total_bottom;
         }
         elseif ($iconRole == 4) { // 'role_availability'
-            $this->productsAvailOptions =  $this->getProductsAvailOptions(); // list in productsAvailabilityOptionsTrait
-            return $this->structure_total_top + $this->structure_product_avail + $this->structure_total_bottom;
+            $this->structure_product_avail['iconProductAvail']['options'] =
+                $this->productsAvailOptions('',1); // list in productsAvailabilityOptionsTrait
+ //           print_r($this->structure_product_avail);
+//            $this->productsAvailOptions = $this->productsAvailOptions('',1); // list in productsAvailabilityOptionsTrait
+//            $this->productsAvailOptions =  $this->getProductsAvailOptions(); // list in productsAvailabilityOptionsTrait
+            return $this->structure_total_top + $this->structure_product_avail + $this->structure_total_bottom +$this->structure_test;
         }
         else{
             return $this->structure_total_top + $this->structure_total_bottom;
         }
     }
+
     public function getProductsAvailOptions()
     {
-        $productsAvailOptions = $this->productsAvailOptions('',1);
-        $assoProductsAvailOptions = [];
-        foreach ($productsAvailOptions as $optionKey=>$optionValue) {
-            $assoProductsAvailOptions[] = array('id'=> $optionKey, 'title'=> $optionValue);
-        }
-        return $assoProductsAvailOptions;
+        return $productsAvailOptions = $this->productsAvailOptions('',1);
+//        $assoProductsAvailOptions = [];
+//        foreach ($productsAvailOptions as $optionKey=>$optionValue) {
+//            $assoProductsAvailOptions[] = array('id'=> $optionKey, 'title'=> $optionValue);
+//        }
+//        return $assoProductsAvailOptions;
     }
 
 }
