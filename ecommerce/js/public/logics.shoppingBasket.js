@@ -48,7 +48,7 @@ window.shoppingBasketLogics = new function() {
 		if(window.orders != undefined) {
 			paymentStatus = window.orders[0].orderStatus;
 		}
-
+		self.trackingPurchase();
 	};
 
 	var importData = function(basketData) {
@@ -171,7 +171,6 @@ window.shoppingBasketLogics = new function() {
 
 			service.updateData(basketData.servicesList[i]);
 		}
-		self.trackingPurchase();
 		controller.fireEvent('shoppingBasketUpdated');
 	};
 
