@@ -1133,7 +1133,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                 $elementData['deliveryFormFields'] = [];
                 if ($fieldsList = $deliveryTypeElement->getFieldsList()) {
                     foreach ($fieldsList as &$record) {
-                        if ($fieldElement = $structureManager->getElementById($record->fieldId)) {
+                        if ($fieldElement = $structureManager->getElementById($record->fieldId, $deliveryTypeElement->id)) {
                             $fieldInfo = [
                                 'id' => $fieldElement->id,
                                 'title' => $fieldElement->title,
