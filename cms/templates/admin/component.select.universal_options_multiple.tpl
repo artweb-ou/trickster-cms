@@ -1,5 +1,6 @@
 {if isset($item.method)}
 	{assign var='options' value=$form->callElementMethod($item.method)}
+	{*{var_dump($options)}*}
 {elseif isset($item.property)}
 	{assign var='options' value=$form->getElementProperty($item.property)}
 {elseif isset($item.select_options)}

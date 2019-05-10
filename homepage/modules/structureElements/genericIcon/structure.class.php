@@ -12,6 +12,9 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
     public $defaultActionName = 'show';
     public $role = 'content';
 
+    /**
+     * @param $moduleStructure
+     */
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
@@ -27,10 +30,13 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['iconLocation'] = 'naturalNumber';
         $moduleStructure['iconRole'] = 'naturalNumber';
         $moduleStructure['iconProductAvail'] = 'serializedIndex';
-        $moduleStructure['icontest'] = 'naturalNumber';
-        $moduleStructure['parametersIds'] = 'numbersArray';    
+        $moduleStructure['parametersIds'] = 'numbersArray';
+        $moduleStructure['parameters'] = 'numbersArray';
     }
 
+    /**
+     * @param $multiLanguageFields
+     */
     protected function setMultiLanguageFields(&$multiLanguageFields)
     {
         $multiLanguageFields[] = 'title';
@@ -39,50 +45,75 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $multiLanguageFields[] = 'iconWidth';
     }
 
-    /*
-        public function getConnectedParametersIds()
-        {
-            return $this->getService('linksManager')->getConnectedIdList($this->id, 'selectedProductsParameter', 'pare);
-        }
-    /*
-            public function getSelectionIdsForFiltering()
-            {
-                $result = [];
-                $connectedIds = $this->getConnectedParametersIds();
-                if ($connectedIds) {
-                    $availableIds = parent::getSelectionIdsForFiltering();
-                    if ($availableIds) {
-                        $result = array_intersect($connectedIds, $availableIds);
-                    }
-                }
-                return $result;
-            }
-
-            public function getConnectedParameters()
-            {
-                if ($this->connectedParameters === null) {
-                    $this->connectedParameters = [];
-                    if ($connectedParametersIds = $this->getConnectedParametersIds()) {
-                        $this->connectedParameters = $this->getService('structureManager')
-                            ->getElementsByIdList($connectedParametersIds, $this->id);
-                    }
-                }
-                return $this->connectedParameters;
-            }*/
-    public function getParameterSelectionsForFiltering()
+    public function getProductSelectionParameters()
     {
-        if ($productsListElement = $this->getProductsListElement()) {
-            return $productsListElement->getParameterSelectionsForFiltering();
+        $selectionParameters = [];
+        $structureManager = $this->getService('structureManager');
+        if ($productSelectionElements = $structureManager->getElementsByType('productSelection')) {
+            $connectedProductSelectionIds = $this->getConnectedProductSelectionIds();
+            foreach ($productSelectionElements as &$productSelectionElement) {
+                $selectionId = $productSelectionElement->id;
+                $selectionParameters[$selectionId] = [
+                    'id' => $productSelectionElement->id,
+                    'title' => $productSelectionElement->title,
+                    'structureName' => $productSelectionElement->structureName,
+                    'select' => in_array($productSelectionElement->id, $connectedProductSelectionIds),
+                ];
+                //                $productSelectionOptions = $structureManager->getElementsChildren($selectionId);
+                //
+                //                foreach ($productSelectionOptions as &$productSelectionOption) {
+                //                    $selectionParameters[$selectionId]['options'][] = array(
+                //                        'id'        => $productSelectionOption->id,
+                //                        'title'     => $productSelectionOption->title,
+                //                        'select'    => in_array($productSelectionOption->id, $connectedProductSelectionIds)
+                //                    );
+                //                }
+            }
         }
-        return false;
+        return $selectionParameters;
+    }
+
+    public function getConnectedProductSelectionIds()
+    {
+        return $this->getService('linksManager')
+            ->getConnectedIdList($this->id, 'selectedProductsProductSelection', 'parent');
+    }
+    public function getSelectionIdsForFiltering()
+    {
+        $result = [];
+        $connectedIds = $this->getConnectedParametersIds();
+        if ($connectedIds) {
+            $availableIds = parent::getSelectionIdsForFiltering();
+            if ($availableIds) {
+                $result = array_intersect($connectedIds, $availableIds);
+            }
+        }
+        return $result;
     }
 
     public function getConnectedParametersIds()
     {
-        return $this->getService('linksManager')->getConnectedIdList($this->id, "productSearchParameter", 'parent');
+        return $this->getService('linksManager')->getConnectedIdList($this->id, 'selectedProductsParameter', 'parent');
+    }
+
+    public function getConnectedParameters()
+    {
+        if ($this->connectedParameters === null) {
+            $this->connectedParameters = [];
+            if ($connectedParametersIds = $this->getConnectedParametersIds()) {
+                $this->connectedParameters = $this->getService('structureManager')
+                    ->getElementsByIdList($connectedParametersIds, $this->id);
+            }
+        }
+        return $this->connectedParameters;
     }
 
 
+
+
+    /**
+     * @return array
+     */
     public function getProductsAvailabilityOptions()
     {
         //  return $this->productsAvailabilityTypes;

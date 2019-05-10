@@ -4,15 +4,6 @@ class serializedIndexDataChunk extends DataChunk implements ElementStorageValueH
 {
     use ElementStorageValueDataChunkTrait;
 
-    public function convertStorageToDisplay()
-    {
-        if ($this->storageValue != '') {
-            $this->displayValue = unserialize($this->storageValue);
-        } else {
-            $this->displayValue = [];
-        }
-    }
-
     public function convertStorageToForm()
     {
         if ($this->storageValue) {
@@ -23,7 +14,7 @@ class serializedIndexDataChunk extends DataChunk implements ElementStorageValueH
     public function convertFormToStorage()
     {
         if (is_array($this->formValue)) {
-            $list = $this->formValue;
+            $list = (array)$this->formValue;
             foreach ($list as $key => &$value) {
                 if ($key === '') {
                     unset($list[$key]);
@@ -41,6 +32,15 @@ class serializedIndexDataChunk extends DataChunk implements ElementStorageValueH
         $this->storageValue = $value;
         $this->formValue = null;
         $this->convertStorageToDisplay();
+    }
+
+    public function convertStorageToDisplay()
+    {
+        if ($this->storageValue != '') {
+            $this->displayValue = unserialize($this->storageValue);
+        } else {
+            $this->displayValue = [];
+        }
     }
 }
 

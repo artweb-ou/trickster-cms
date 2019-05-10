@@ -11,7 +11,8 @@ window.GenericIconFormComponent = function(componentElement) {
 			new AjaxSelectComponent(element, 'brand', 'admin');
 		}
 		if (element = _('.genericicon_form_parameterselect', componentElement)[0]) {
-			new AjaxSelectComponent(element, 'productParameter', 'admin');
+		//	let types = ['productParameter', 'productSelection'];
+			new AjaxSelectComponent(element, 'productSelectionValue', 'admin');
 		}
 	};
 	init();

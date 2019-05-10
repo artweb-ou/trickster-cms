@@ -80,10 +80,12 @@ class GenericIconFormStructure extends ElementForm
     ];
 
     protected $structure_role_by_parameter = [
-        'parametersIds' => [
-//            'type' => 'select.parameters_group',
-            'type' => 'select.universal_options_multiple',
-            'method' => 'getConnectedParameters',
+        'parameters' => [
+            //    'type' => 'select.parameters_group',
+                       'type' => 'select.universal_options_multiple',
+//            'method' => 'getConnectedParameters',
+            'method' => 'getProductSelectionParameters',
+            //            'method' => 'getConnectedParametersIds',
             'class' => 'genericicon_form_parameterselect',
         ],
     ];
