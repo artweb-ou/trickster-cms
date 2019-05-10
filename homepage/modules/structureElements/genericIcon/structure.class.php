@@ -28,6 +28,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['iconRole'] = 'naturalNumber';
         $moduleStructure['iconProductAvail'] = 'serializedIndex';
         $moduleStructure['icontest'] = 'naturalNumber';
+        $moduleStructure['parametersIds'] = 'numbersArray';    
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -37,6 +38,50 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $multiLanguageFields[] = 'originalName';
         $multiLanguageFields[] = 'iconWidth';
     }
+
+    /*
+        public function getConnectedParametersIds()
+        {
+            return $this->getService('linksManager')->getConnectedIdList($this->id, 'selectedProductsParameter', 'pare);
+        }
+    /*
+            public function getSelectionIdsForFiltering()
+            {
+                $result = [];
+                $connectedIds = $this->getConnectedParametersIds();
+                if ($connectedIds) {
+                    $availableIds = parent::getSelectionIdsForFiltering();
+                    if ($availableIds) {
+                        $result = array_intersect($connectedIds, $availableIds);
+                    }
+                }
+                return $result;
+            }
+
+            public function getConnectedParameters()
+            {
+                if ($this->connectedParameters === null) {
+                    $this->connectedParameters = [];
+                    if ($connectedParametersIds = $this->getConnectedParametersIds()) {
+                        $this->connectedParameters = $this->getService('structureManager')
+                            ->getElementsByIdList($connectedParametersIds, $this->id);
+                    }
+                }
+                return $this->connectedParameters;
+            }*/
+    public function getParameterSelectionsForFiltering()
+    {
+        if ($productsListElement = $this->getProductsListElement()) {
+            return $productsListElement->getParameterSelectionsForFiltering();
+        }
+        return false;
+    }
+
+    public function getConnectedParametersIds()
+    {
+        return $this->getService('linksManager')->getConnectedIdList($this->id, "productSearchParameter", 'parent');
+    }
+
 
     public function getProductsAvailabilityOptions()
     {

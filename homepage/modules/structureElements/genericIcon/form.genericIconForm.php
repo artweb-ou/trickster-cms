@@ -58,7 +58,7 @@ class GenericIconFormStructure extends ElementForm
         ],
     ];
 
-    protected $structure_date = [
+    protected $structure_role_date = [
         'startDate' => [
             'type' => 'input.date',
         ],
@@ -70,7 +70,7 @@ class GenericIconFormStructure extends ElementForm
         ],
     ];
 
-    protected $structure_product_avail = [
+    protected $structure_role_availability = [
         'iconProductAvail' => [
             'type' => 'select.serialized',
             'method' => 'getProductsAvailabilityOptions',
@@ -79,18 +79,38 @@ class GenericIconFormStructure extends ElementForm
         ],
     ];
 
+    protected $structure_role_by_parameter = [
+        'parametersIds' => [
+//            'type' => 'select.parameters_group',
+            'type' => 'select.universal_options_multiple',
+            'method' => 'getConnectedParameters',
+            'class' => 'genericicon_form_parameterselect',
+        ],
+    ];
+
+//'parametersIds' => [
+//'trClass' => 'productsearch_parameters',
+//'type' => 'select.universal_options_multiple',
+//'class' => 'productsearch_form_parameters',
+//'method' => 'getConnectedParameters'
+//],
 
     public function getFormComponents(){
         $iconRole = $this->getElementProperty('iconRole');
 
         if ($iconRole == 2) { // 'role_date'
             return $this->structure_total_top + 
-                   $this->structure_date + 
+                   $this->structure_role_date + 
                    $this->structure_total_bottom;
         }
         elseif ($iconRole == 4) { // 'role_availability'
             return $this->structure_total_top +
-                   $this->structure_product_avail +
+                   $this->structure_role_availability +
+                   $this->structure_total_bottom;
+        }
+        elseif ($iconRole == 5) { // 'role_availability'
+            return $this->structure_total_top +
+                   $this->structure_role_by_parameter +
                    $this->structure_total_bottom;
         }
         else {
