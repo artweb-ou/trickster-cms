@@ -79,6 +79,7 @@ class ProductIconsManager
 
             //directly connected global icons
             $elementIconsIndex += $this->linksManager->getConnectedIdIndex($product->id, 'genericIconProduct', 'child');
+            $elementIconsIndex += $this->linksManager->getConnectedIdIndex($product->id, 'genericIconParameter', 'child');
 
             //check all other icons for their logic
             if ($allIcons = $this->iconsManager->getAllIcons()) {

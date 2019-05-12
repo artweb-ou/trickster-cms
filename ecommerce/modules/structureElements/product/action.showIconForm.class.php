@@ -10,7 +10,15 @@ class showIconFormProduct extends structureElementAction
         $form = $structureElement->getForm('icon');
         $form->setFormAction($structureElement->newForm->URL);
 
-        $contentList = $structureElement->getIconsList();
+     //   $contentList = $structureElement->getIconsList();
+
+        $contentList = [];
+        $linksManager = $this->getService('linksManager');
+        $connectedFieldsIds = $linksManager->getConnectedIdList($structureElement->id, 'productIcon');
+        foreach ($connectedFieldsIds as $id) {
+            $element = $structureManager->getElementById($id);
+            $contentList[] = $element;
+        }
 
         $structureElement->setTemplate('shared.content.tpl');
         $renderer = $this->getService('renderer');
