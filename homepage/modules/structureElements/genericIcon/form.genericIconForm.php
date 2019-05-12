@@ -63,7 +63,7 @@ class GenericIconFormStructure extends ElementForm
         $iconRole = $this->getElementProperty('iconRole');
         $iconRoleDependentFormStructureElement = [];
         switch ($iconRole) {
-            case '2': //  // role_date
+            case '2': //  role_date
                 $iconRoleDependentFormStructureElement = [
                     'startDate' => [
                         'type' => 'input.date',
@@ -82,7 +82,7 @@ class GenericIconFormStructure extends ElementForm
                 ];
                 break;
 
-            case '4': //  // role_availability
+            case '4': //  role_availability
                 $iconRoleDependentFormStructureElement = [
                     'iconProductAvail' => [
                         'type'              => 'select.serialized',
@@ -93,7 +93,7 @@ class GenericIconFormStructure extends ElementForm
                 ];
                 break;
 
-            case '5': //  // role_by_parameter
+            case '5': //  role_by_parameter
                 $iconRoleDependentFormStructureElement = [
                     'parameters' => [
                         'type'      => 'select.universal_options_multiple',
