@@ -24,6 +24,16 @@
 		min-width: @192pt;
 		color: @form-label-text-color;
 	}
+	.form_label_after {
+		width: ~"calc(100% - @{176pt} - 1em)";
+		max-width: ~"calc(100% - @{176pt} - 1em)";
+		display: inline-block;
+		text-align: left;
+		padding-top: @13pt;
+		padding-left: @8pt;
+		color: @form-label-text-color;
+	}
+	
 	.form_label.heading {
 		text-align: left;
 		padding: @13pt 0;
@@ -100,12 +110,15 @@
 	.textarea_component {
 		width: 100%;
 		max-width: @509pt;
+		
+		.labelAfter&{
+			width: @176pt;
+		}
 	}
 	.input_date {
 		width: @176pt;
 	}
 }
-
 .form_controls {
 	padding: @15pt @20pt;
 	background-color: @background-color;

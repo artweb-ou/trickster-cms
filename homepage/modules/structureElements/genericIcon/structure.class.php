@@ -1,10 +1,14 @@
 <?php
 
+    /**
+     * Class genericIconElement
+     */
 class genericIconElement extends structureElement implements ImageUrlProviderInterface
 {
     use ConnectedProductsProviderTrait;
     use ConnectedBrandsProviderTrait;
     use ConnectedCategoriesProviderTrait;
+    use ConnectedParametersProviderTrait;
     use ImageUrlProviderTrait;
     use ProductsAvailabilityOptionsTrait;
 
@@ -27,8 +31,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['iconLocation'] = 'naturalNumber';
         $moduleStructure['iconRole'] = 'naturalNumber';
         $moduleStructure['iconProductAvail'] = 'serializedIndex';
-        $moduleStructure['icontest'] = 'naturalNumber';
-        $moduleStructure['parametersIds'] = 'numbersArray';    
+        $moduleStructure['parameters'] = 'numbersArray';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -39,50 +42,9 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $multiLanguageFields[] = 'iconWidth';
     }
 
-    /*
-        public function getConnectedParametersIds()
-        {
-            return $this->getService('linksManager')->getConnectedIdList($this->id, 'selectedProductsParameter', 'pare);
-        }
-    /*
-            public function getSelectionIdsForFiltering()
-            {
-                $result = [];
-                $connectedIds = $this->getConnectedParametersIds();
-                if ($connectedIds) {
-                    $availableIds = parent::getSelectionIdsForFiltering();
-                    if ($availableIds) {
-                        $result = array_intersect($connectedIds, $availableIds);
-                    }
-                }
-                return $result;
-            }
-
-            public function getConnectedParameters()
-            {
-                if ($this->connectedParameters === null) {
-                    $this->connectedParameters = [];
-                    if ($connectedParametersIds = $this->getConnectedParametersIds()) {
-                        $this->connectedParameters = $this->getService('structureManager')
-                            ->getElementsByIdList($connectedParametersIds, $this->id);
-                    }
-                }
-                return $this->connectedParameters;
-            }*/
-    public function getParameterSelectionsForFiltering()
-    {
-        if ($productsListElement = $this->getProductsListElement()) {
-            return $productsListElement->getParameterSelectionsForFiltering();
-        }
-        return false;
-    }
-
-    public function getConnectedParametersIds()
-    {
-        return $this->getService('linksManager')->getConnectedIdList($this->id, "productSearchParameter", 'parent');
-    }
-
-
+    /**
+     * @return array
+     */
     public function getProductsAvailabilityOptions()
     {
         //  return $this->productsAvailabilityTypes;

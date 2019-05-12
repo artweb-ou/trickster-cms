@@ -2,6 +2,10 @@
 
 class productParameterDataResponseConverter extends dataResponseConverter
 {
+    /**
+     * @param structureElement[] $data
+     * @return array
+     */
     public function convert($data)
     {
         $result = [];
@@ -10,7 +14,7 @@ class productParameterDataResponseConverter extends dataResponseConverter
             $info['id'] = $element->id;
             $info['title'] = $element->title;
             if ($parameterGroup = $element->getParameterGroup()) {
-                $info['title'] .= " (" . $parameterGroup->title . ")";
+                $info['title'] .= " (" . $parameterGroup->getTitle() . ")";
             }
             $result[] = $info;
         }

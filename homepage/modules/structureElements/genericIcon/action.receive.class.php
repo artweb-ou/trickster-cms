@@ -12,6 +12,7 @@ class receiveGenericIcon extends structureElementAction
      */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
+
         if ($this->validated) {
             $structureElement->prepareActualData();
 
@@ -27,22 +28,7 @@ class receiveGenericIcon extends structureElementAction
             $structureElement->updateConnectedProducts($structureElement->products);
             $structureElement->updateConnectedCategories($structureElement->categories);
             $structureElement->updateConnectedBrands($structureElement->brands);
-//            $structureElement->updateConnectedParameters($structureElement->parameters);
-
-            $linksManager = $this->getService('linksManager');
-            $connectedParametersIds = $structureElement->getConnectedParametersIds();
-            if ($connectedParametersIds) {
-                foreach ($connectedParametersIds as &$connectedParameterId) {
-                    if (!in_array($connectedParameterId, $structureElement->parametersIds)) {
-                        $linksManager->unLinkElements($structureElement->id, $connectedParameterId, "productSearchParameter");
-                    }
-                }
-            }
-            $idsToConnect = array_diff($structureElement->parametersIds, $connectedParametersIds);
-            foreach ($idsToConnect as $idToConnect) {
-                $linksManager->linkElements($structureElement->id, $idToConnect, "productSearchParameter");
-            }
-
+            $structureElement->updateConnectedParameters($structureElement->parameters);
 
 
             $controller->redirect($structureElement->URL);
@@ -66,7 +52,7 @@ class receiveGenericIcon extends structureElementAction
             'iconLocation',
             'iconRole',
             'iconProductAvail',
-            'parametersIds',
+            'parameters',
         ];
     }
 }

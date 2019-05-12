@@ -5,7 +5,7 @@ class GenericIconFormStructure extends ElementForm
 
     protected $formClass = 'genericicon_form';
     protected $structure = [];
-    protected $structure_total_top = [
+    protected $formStructureElementTop = [
         'title' => [
             'type' => 'input.multi_language_text',
             'class' => 'genericicon_title',
@@ -26,7 +26,6 @@ class GenericIconFormStructure extends ElementForm
                 3 => 'loc_bottom_left',
                 4 => 'loc_bottom_right',
             ],
-         //   'translationGroup' => 'order', //'translationGroup' => 'admintranslation',
         ],
         'iconRole' => [
             'type' => 'select.index',
@@ -37,85 +36,83 @@ class GenericIconFormStructure extends ElementForm
                 4 => 'role_availability',
                 5 => 'role_by_parameter',
             ],
-         //   'translationGroup' => 'order', //'translationGroup' => 'admintranslation',
         ],
     ];
-    protected $structure_total_bottom = [
+    protected $formStructureElementBottom = [
         'products' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getConnectedProducts',
             'class' => 'genericicon_form_productselect',
+            'dataset' => ["data-select", "product"],
         ],
         'categories' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getConnectedCategoriesInfo',
             'class' => 'genericicon_form_categoryselect',
+            'dataset' => ["data-select", "category"],
         ],
         'brands' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getConnectedBrands',
             'class' => 'genericicon_form_brandselect',
+            'dataset' => ["data-select", "brand"],
         ],
     ];
-
-    protected $structure_role_date = [
-        'startDate' => [
-            'type' => 'input.date',
-        ],
-        'endDate' => [
-            'type' => 'input.date',
-        ],
-        'days' => [
-            'type' => 'input.text',
-        ],
-    ];
-
-    protected $structure_role_availability = [
-        'iconProductAvail' => [
-            'type' => 'select.serialized',
-            'method' => 'getProductsAvailabilityOptions',
-            'translationGroup' => 'product',
-            'class' => 'select_simple',
-        ],
-    ];
-
-    protected $structure_role_by_parameter = [
-        'parametersIds' => [
-//            'type' => 'select.parameters_group',
-            'type' => 'select.universal_options_multiple',
-            'method' => 'getConnectedParameters',
-            'class' => 'genericicon_form_parameterselect',
-        ],
-    ];
-
-//'parametersIds' => [
-//'trClass' => 'productsearch_parameters',
-//'type' => 'select.universal_options_multiple',
-//'class' => 'productsearch_form_parameters',
-//'method' => 'getConnectedParameters'
-//],
 
     public function getFormComponents(){
         $iconRole = $this->getElementProperty('iconRole');
+        $iconRoleDependentFormStructureElement = [];
+        switch ($iconRole) {
+            case '2': //  // role_date
+                $iconRoleDependentFormStructureElement = [
+                    'startDate' => [
+                        'type' => 'input.date',
+                    ],
+                    'endDate' => [
+                        'type' => 'input.date',
+                    ],
+                    'days' => [
+                        'type' => 'input.text',
+                        'inputType' => 'number',
+                        'additionalFormat' => [
+                            'labelBefore' => 'days_before',
+                            'labelAfter'  => 'days_after',
+                        ],
+                    ],
+                ];
+                break;
 
-        if ($iconRole == 2) { // 'role_date'
-            return $this->structure_total_top + 
-                   $this->structure_role_date + 
-                   $this->structure_total_bottom;
+            case '4': //  // role_availability
+                $iconRoleDependentFormStructureElement = [
+                    'iconProductAvail' => [
+                        'type'              => 'select.serialized',
+                        'method'            => 'getProductsAvailabilityOptions',
+                        'translationGroup'  => 'product',
+                        'class'             => 'select_simple',
+                    ],
+                ];
+                break;
+
+            case '5': //  // role_by_parameter
+                $iconRoleDependentFormStructureElement = [
+                    'parameters' => [
+                        'type'      => 'select.universal_options_multiple',
+                        'method'    => 'getConnectedParameters',
+                        'class'     => 'genericicon_form_parameterselect',
+                        'dataset'   => [
+                            "data-select", // dataset name
+                            "productSelectionValue" // dataset argument
+                        ],
+                    ],
+                ];
+                break;
+
+            default:
+                break;
         }
-        elseif ($iconRole == 4) { // 'role_availability'
-            return $this->structure_total_top +
-                   $this->structure_role_availability +
-                   $this->structure_total_bottom;
-        }
-        elseif ($iconRole == 5) { // 'role_availability'
-            return $this->structure_total_top +
-                   $this->structure_role_by_parameter +
-                   $this->structure_total_bottom;
-        }
-        else {
-            return $this->structure_total_top +
-                   $this->structure_total_bottom;
-        }
+
+        return $this->formStructureElementTop +
+            $iconRoleDependentFormStructureElement +
+            $this->formStructureElementBottom;
     }
 }
