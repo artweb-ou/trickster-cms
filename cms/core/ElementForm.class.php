@@ -168,4 +168,12 @@ abstract class ElementForm
     {
         return $this->additionalContentTable;
     }
+
+    /**
+     * @return bool
+     */
+    public function formObjectEmpty(){
+        // empty(get_object_vars($form)
+        return empty((array) $this);
+    }
 }
