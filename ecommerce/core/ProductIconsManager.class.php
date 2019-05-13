@@ -113,8 +113,17 @@ class ProductIconsManager
                         $show[] = 'date';
                     }
 
-                    if (!empty($iconElement->getFormData())) {
-                        var_dump($iconElement->getFormData()['iconProductAvail']);
+                    if (!empty($v = $iconElement->getFormData())) {
+
+                    //    $v1 = $iconElement->getTitle('iconProductAvail');
+                        $v2 = $v['iconProductAvail'];
+                        $v11 = $iconElement->productsAvailabilityTypes[$v2];
+
+                        var_dump($v2);
+                           var_dump($v11);
+
+
+                    //    var_dump($iconElement->getFormData()['iconProductAvail']);
                      //   $iconElement->getFormData();
                     }
 
@@ -122,7 +131,7 @@ class ProductIconsManager
                    if (!empty($iconElement->getValue('categories'))) {
                      //   $elementIconsIndex[$iconElement->id] = true;
                      //   $show[] = $iconElement->getValue('categories');
-                        var_dump($iconElement->getConnectedCategories());
+                    //    var_dump($iconElement->getConnectedCategories());
 
                     }
 /*                     if (!empty($iconElement->getFormData('iconProductAvail'))) {
