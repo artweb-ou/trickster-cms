@@ -940,6 +940,11 @@ class productElement extends structureElement implements
                             'image' => $icon->image,
                             'width' => $icon->iconWidth,
                             'fileName' => $icon->originalName,
+                            'iconLocation' => $icon->iconLocation,
+                            'iconRole' => $icon->iconRole,
+                            'products' => $icon->products,
+                            'categories' => $icon->categories,
+                            'brands' => $icon->brands,
                         ];
                     }
                 }

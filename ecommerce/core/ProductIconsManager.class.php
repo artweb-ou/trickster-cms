@@ -103,6 +103,12 @@ class ProductIconsManager
                     if ($dateCreated + $iconElement->days * self::DAILY_SECONDS >= $now) {
                         $elementIconsIndex[$iconElement->id] = true;
                     }
+
+                 //   $elementIconsIndex[$iconElement->id] = true;
+                    if ($iconElement->getValue('parameters')) {
+                        $elementIconsIndex[$iconElement->id] = true;
+                    }
+
                 }
 
                 foreach ($elementIconsIndex as $iconId => $value) {

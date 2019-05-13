@@ -5,9 +5,9 @@
                 <span class="product_discount">-{$element->getDiscountPercent()|round}%</span>
             </div>
         {/if}
-    {/if}{var_dump($element->getIconsInfo())}
+    {/if}
     {foreach $iconsInfo as $iconInfo}
-        <img class='product_icons_image'
+        <img class='product_icons_image {if !empty($iconInfo.iconRole)}badge_{$iconInfo.iconRole}{/if}'
              src='{$controller->baseURL}image/type:productIcon/id:{$iconInfo.image}/filename:{$iconInfo.fileName}'
              {if (!empty($iconInfo.width))}style="width: {$iconInfo.width}%"{/if}
              alt='{$iconInfo.title}'/>
