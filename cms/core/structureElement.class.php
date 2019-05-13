@@ -34,7 +34,6 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     public $dataResourceName;
     protected $contentList;
     public $childrenList = [];
-    protected $moduleDataObject;
     protected $moduleDataObjects = [];
     public $level;
     public $structurePath;
@@ -1425,7 +1424,6 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
             'structureFields',
             'moduleFields',
             'multiLanguageFields',
-            'moduleDataObject',
             'moduleDataObjects',
         ];
         $data = [];
