@@ -10,6 +10,11 @@
 {else}
 	{$translationGroup = $structureType}
 {/if}
+{if !empty($item.valuesTranslationGroup)}
+	{$valuesTranslationGroup = $item.valuesTranslationGroup}
+{else}
+	{$valuesTranslationGroup = $structureType}
+{/if}
 
 {if isset($item.condition)}
 	{assign var='condition' value=$form->callElementMethod($item.condition)}
@@ -31,7 +36,7 @@
 							{if is_numeric($title)}
 								{$title}
 							{else}
-								{translations name="{$translationGroup}.{$title}"}
+								{translations name="{$valuesTranslationGroup}.{$title}"}
 							{/if}
 						</option>
 					{/foreach}

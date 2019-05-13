@@ -85,10 +85,10 @@ class GenericIconFormStructure extends ElementForm
             case '4': //  role_availability
                 $iconRoleDependentFormStructureElement = [
                     'iconProductAvail' => [
-                        'type'              => 'select.serialized',
-                        'method'            => 'getProductsAvailabilityOptions',
-                        'translationGroup'  => 'product',
-                        'class'             => 'select_simple',
+                        'type'                      => 'select.serialized',
+                        'method'                    => 'getProductsAvailabilityOptions',
+                        'valuesTranslationGroup'    => 'product',
+                        'class'                     => 'select_simple',
                     ],
                 ];
                 break;

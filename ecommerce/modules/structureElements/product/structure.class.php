@@ -943,6 +943,7 @@ class productElement extends structureElement implements
                             'iconLocation' => $icon->iconLocation,
                             'iconRole' => $icon->iconRole,
                             'products' => $icon->products,
+                            'iconProductAvail' => $icon->iconProductAvail,
                             'categories' => $icon->categories,
                             'brands' => $icon->brands,
                         ];
