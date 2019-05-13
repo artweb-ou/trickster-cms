@@ -245,7 +245,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         if ($currentMainMenu = $this->getCurrentMainMenu()) {
             if ($currentMainMenu instanceof ColumnsTypeProvider){
                 $columnsType = $currentMainMenu->getColumnsType();
-                if ($columnsType == 'both' || $columnsType == 'left') {
+                if ($columnsType == 'both' || $columnsType == 'right') {
                     $result = $this->getElementsFromContext('rightColumn');
                 }
             }
