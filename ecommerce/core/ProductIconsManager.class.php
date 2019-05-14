@@ -75,21 +75,16 @@ class ProductIconsManager
             $elementIconsIndex = [];
             foreach ($categories as $category) {
                 $elementIconsIndex += $this->linksManager->getConnectedIdIndex($category->id, 'genericIconCategory', 'child');
-            //    var_dump($this->linksManager->getConnectedIdIndex($category->id, 'genericIconCategory', 'child'));
             }
 
             //directly connected global icons
             $elementIconsIndex += $this->linksManager->getConnectedIdIndex($product->id, 'genericIconProduct', 'child');
             $elementIconsIndex += $this->linksManager->getConnectedIdIndex($product->id, 'genericIconParameter', 'child');
 
-        //    var_dump($elementIconsIndex);
             //check all other icons for their logic
             if ($allIcons = $this->iconsManager->getAllIcons()) {
                 $now = time();
-                $show = [];
                 foreach ($allIcons as $iconElement) {
-               //     $elementIconsIndex[$iconElement->id] = false;
-                    $iconElement;
                     $startDate = $iconElement->getValue('startDate');
                     if ($endDate = $iconElement->getValue('endDate')) {
                         $endDate += self::DAILY_SECONDS;
@@ -97,79 +92,48 @@ class ProductIconsManager
                     $dateCreated = $product->getValue('dateCreated');
                     if ($startDate && $endDate) {
                         if ($startDate <= $dateCreated && $endDate >= $dateCreated) {
-                        //    $elementIconsIndex[$iconElement->id] = true;
-                            $show[] = 'date';
+                            $elementIconsIndex[$iconElement->id] = true;
                         }
                     } elseif ($startDate && $startDate <= $dateCreated) {
-                     //   $elementIconsIndex[$iconElement->id] = true;
-                        $show[] = 'date';
+                        $elementIconsIndex[$iconElement->id] = true;
                     } elseif ($endDate && $endDate >= $dateCreated) {
-                   //     $elementIconsIndex[$iconElement->id] = true;
-                        $show[] = 'date';
+                        $elementIconsIndex[$iconElement->id] = true;
                     }
 
                     if ($dateCreated + $iconElement->days * self::DAILY_SECONDS >= $now) {
-                    //    $elementIconsIndex[$iconElement->id] = true;
-                        $show[] = 'date';
+                        $elementIconsIndex[$iconElement->id] = true;
                     }
 
-                    if (!empty($v = $iconElement->getFormData())) {
-
-                    //    $v1 = $iconElement->getTitle('iconProductAvail');
-                        $v2 = $v['iconProductAvail'];
-                        $v11 = $iconElement->productsAvailabilityTypes[$v2];
-
-                        var_dump($v2);
-                           var_dump($v11);
-
-
-                    //    var_dump($iconElement->getFormData()['iconProductAvail']);
-                     //   $iconElement->getFormData();
+                 //   $elementIconsIndex[$iconElement->id] = true;
+                    if ($iconElement->getValue('parameters')) {
+                        $elementIconsIndex[$iconElement->id] = true;
                     }
-
-
-                   if (!empty($iconElement->getValue('categories'))) {
-                     //   $elementIconsIndex[$iconElement->id] = true;
-                     //   $show[] = $iconElement->getValue('categories');
-                    //    var_dump($iconElement->getConnectedCategories());
-
-                    }
-/*                     if (!empty($iconElement->getFormData('iconProductAvail'))) {
-                     //   $elementIconsIndex[$iconElement->id] = true;
-                        $show[] =  $iconElement->getFormData('iconProductAvail');
-                    }
-                    if (!empty($iconElement->getValue('products'))) {
-                    //    $elementIconsIndex[$iconElement->id] = true;
-                        $show[] = $iconElement->getValue('products');
-                    }
-                    if (!empty($iconElement->getValue('brands'))) {
-                    //    $elementIconsIndex[$iconElement->id] = true;
-                        $show[] = 'brands';
-                    }
-                    //   $elementIconsIndex[$iconElement->id] = true;
-                    if (!empty($iconElement->getValue('parameters'))) {
-                    //    $elementIconsIndex[$iconElement->id] = true;
-                        $show[] = $iconElement->getValue('parameters');
-                    }
-                    if (in_array('date', $show) && in_array('categories', $show)){
-                    //    var_dump($show);
-                    //    $elementIconsIndex[$iconElement->id] = true;
-                    }*/
 
                 }
+                /*                    if (!empty($v = $iconElement->getFormData())) {
 
-                 //   var_dump($elementIconsIndex);
+                                        //    $v1 = $iconElement->getTitle('iconProductAvail');
+                                        $v2 = $v['iconProductAvail'];
+                                        if($v2){
+
+                                            foreach($v2 as $v2val){
+                                                $v11 = $iconElement->getProductsAvailabilityOptions()[$v2val];
+                                                var_dump($v11);
+
+                                            }
+                                        }
+                                        //   var_dump($v2);
+
+
+                                        //    var_dump($iconElement->getFormData()['iconProductAvail']);
+                                        //   $iconElement->getFormData();
+                                    }
+                */
+
                 foreach ($elementIconsIndex as $iconId => $value) {
-                 //   var_dump($iconElement->iconRole);
-            //        var_dump($iconElement->getFormData());
-                 //   var_dump($iconElement->categories);
-                    if($value) {
-                        $this->icons[$product->id][] = $this->structureManager->getElementById($iconId);
-                    }
+                    $this->icons[$product->id][] = $this->structureManager->getElementById($iconId);
                 }
-
             }
-       //     var_dump($show);
 
             //add product's own icons
             if ($ownIcons = $this->getOwnIcons($product->id, $product->structureType)) {

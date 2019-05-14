@@ -39,7 +39,7 @@ class ProductFormStructure extends ElementForm
         ],
         'availability' => [
             'type' => 'select.array',
-            'options' => ['available', 'quantity_dependent', 'inquirable', 'unavailable', 'available_inquirable'],
+            'method' => 'productsAvailabilityOptionsList',
             'translationGroup' => 'product',
         ],
         'quantity' => [

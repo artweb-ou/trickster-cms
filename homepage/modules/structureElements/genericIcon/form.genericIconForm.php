@@ -20,12 +20,7 @@ class GenericIconFormStructure extends ElementForm
         ],
         'iconLocation' => [
             'type' => 'select.index',
-            'options' => [
-                1 => 'loc_top_left',
-                2 => 'loc_top_right',
-                3 => 'loc_bottom_left',
-                4 => 'loc_bottom_right',
-            ],
+            'method'  => 'productIconLocationOptionsList',
         ],
         'iconRole' => [
             'type' => 'select.index',
