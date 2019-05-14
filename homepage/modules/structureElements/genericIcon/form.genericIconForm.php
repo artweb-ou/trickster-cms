@@ -24,13 +24,7 @@ class GenericIconFormStructure extends ElementForm
         ],
         'iconRole' => [
             'type' => 'select.index',
-            'options' => [
-                1 => 'role_default',
-                2 => 'role_date',
-                3 => 'role_general_discount',
-                4 => 'role_availability',
-                5 => 'role_by_parameter',
-            ],
+            'method' => 'productIconRoleOptionsList',
         ],
     ];
     protected $formStructureElementBottom = [
@@ -58,7 +52,14 @@ class GenericIconFormStructure extends ElementForm
         $iconRole = $this->getElementProperty('iconRole');
         $iconRoleDependentFormStructureElement = [];
         switch ($iconRole) {
-            case '2': //  role_date
+/*
+default
+date
+general_discount
+availability
+by_parameter
+*/
+            case '1': //  role_date
                 $iconRoleDependentFormStructureElement = [
                     'startDate' => [
                         'type' => 'input.date',
@@ -77,20 +78,20 @@ class GenericIconFormStructure extends ElementForm
                 ];
                 break;
 
-            case '4': //  role_availability
+            case '3': //  role_availability
                 $iconRoleDependentFormStructureElement = [
                     'iconProductAvail' => [
                         'type'                      => 'select.serialized',
-                        'method'                    => 'getProductsAvailabilityOptions',
+                        'method'                    => 'productsAvailabilityOptionsList',
                         'valuesTranslationGroup'    => 'product',
                         'class'                     => 'select_simple',
                     ],
                 ];
                 break;
 
-            case '5': //  role_by_parameter
+            case '4': //  role_by_parameter
                 $iconRoleDependentFormStructureElement = [
-                    'parameters' => [
+                    'iconProductParameters' => [
                         'type'      => 'select.universal_options_multiple',
                         'method'    => 'getConnectedParameters',
                         'class'     => 'genericicon_form_parameterselect',

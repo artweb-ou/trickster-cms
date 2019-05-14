@@ -53,7 +53,7 @@ class productElement extends structureElement implements
     OpenGraphDataProviderInterface,
     TwitterDataProviderInterface
 {
-    use deprecatedProductElementTrait, GalleryInfoProviderTrait, FilesElementTrait, ImagesElementTrait, ProductsAvailabilityOptionsTrait;
+    use deprecatedProductElementTrait, GalleryInfoProviderTrait, FilesElementTrait, ImagesElementTrait;
     use MetadataProviderTrait {
         getTextContent as getTextContentTrait;
     }
@@ -61,6 +61,11 @@ class productElement extends structureElement implements
     use CommentsTrait;
     use DeliveryPricesTrait;
     use EventLoggingElementTrait;
+
+    use ProductsAvailabilityOptionsTrait;
+    use ProductIconLocationOptionsTrait;
+    use ProductIconRoleOptionsTrait;
+    use ConnectedParametersProviderTrait;
 
     public $dataResourceName = 'module_product';
     protected $allowedTypes = ['galleryImage'];
@@ -932,23 +937,35 @@ class productElement extends structureElement implements
             $cache = $this->getService('Cache');
             if (($this->iconsInfo = $cache->get($this->id . ':icons') === false)) {
                 $this->iconsInfo = [];
+                /**
+                 * @var ProductIconsManager $productIconsManager
+                 */
                 $productIconsManager = $this->getService('ProductIconsManager');
                 if ($icons = $productIconsManager->getProductIcons($this)) {
                     foreach ($icons as $icon) {
-                        $this->iconsInfo[] = [
+                        $iconsInfoAllIcons = [];
+                        $iconsInfoGenericIcon = [];
+
+                        $iconsInfoAllIcons = [
                             'title' => $icon->title,
                             'image' => $icon->image,
                             'width' => $icon->iconWidth,
                             'fileName' => $icon->originalName,
-                            'iconLocation' => $icon->iconLocation,
-                            'iconRole' => $icon->iconRole,
-                            'iconRoleValue' => $this->productsAvailabilityOptionsList()[$icon->iconRole],
-                            'products' => $icon->products,
-                            'iconProductAvail' => $icon->iconProductAvail,
-                            'iconProductAvailValue' => $this->productsAvailabilityOptionsList()[$icon->iconProductAvail],
-                            'categories' => $icon->categories,
-                            'brands' => $icon->brands,
                         ];
+
+                        if($icon->structureType == 'genericIcon') {
+                            $iconsInfoGenericIcon = [
+                                'iconLocation' => $this->productIconLocationTypes[$icon->iconLocation],
+                                'iconRole' => $this->productIconRoleTypes[$icon->iconRole],
+                                'iconProductAvail' => $icon->iconProductAvail,
+//                                'iconProductParameters' => $this->getConnectedParametersIds(),
+                             //      'iconProductParameters1' => $this->getConnectedParameters(),
+//                                'iconProductAvail' => $this->productsAvailabilityOptionsList()[$icon->iconProductAvail],
+//                                'iconProductAvail' => $this->getProductsAvailabilityOptionValuesList($icon->iconProductAvail),
+                            ];
+                        }
+                        $this->iconsInfo[] = array_merge($iconsInfoAllIcons, $iconsInfoGenericIcon);
+
                     }
                 }
                 if ($discounts = $this->getCampaignDiscounts()) {

@@ -32,7 +32,7 @@
 			<select class="{if !empty($item.class)}{$item.class} {/if}select_multiple" multiple="multiple" name="{$formNames.$fieldName}[]" autocomplete='off'>
 				{if is_array($options)}
 					{foreach $options as $value=>$title}
-						<option value="{$value}" {if $value|in_array:$formData.$fieldName}selected="selected"{/if}>
+						<option value="{$title}" {if $title|in_array:$formData.$fieldName}selected="selected"{/if}>
 							{if is_numeric($title)}
 								{$title}
 							{else}

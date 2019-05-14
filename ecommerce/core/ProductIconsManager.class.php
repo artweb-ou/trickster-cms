@@ -85,6 +85,7 @@ class ProductIconsManager
             if ($allIcons = $this->iconsManager->getAllIcons()) {
                 $now = time();
                 foreach ($allIcons as $iconElement) {
+                    $elementIconsIndex[$iconElement->id] = false;
                     $startDate = $iconElement->getValue('startDate');
                     if ($endDate = $iconElement->getValue('endDate')) {
                         $endDate += self::DAILY_SECONDS;
@@ -104,34 +105,54 @@ class ProductIconsManager
                         $elementIconsIndex[$iconElement->id] = true;
                     }
 
-                 //   $elementIconsIndex[$iconElement->id] = true;
-                    if ($iconElement->getValue('parameters')) {
+                    /**
+                     * @var iconElement $iconElement
+                     */
+                    if (!empty($iconProductAvail = $iconElement->iconProductAvail)) {
+                        if (in_array($product->availability, $iconProductAvail)) {
+                            $elementIconsIndex[$iconElement->id] = true;
+                        }
+                    }
+
+                    // get parameters List (productSelection only) of current product
+                    $productSelectionOptions = [];
+                    $parametersInfoList = $product->getParametersInfoList();
+                    foreach ($parametersInfoList as $parameterInfoKey=>$parameterInfoValue) {
+                        if ($parameterInfoValue['structureType'] == 'productSelection') {
+                            $productSelectionOptions = array_merge($productSelectionOptions, $parameterInfoValue['productOptions']);
+                        /*
+                           'title' =>string
+                           'id' =>int
+                           'originalName' =>string
+                           'image' =>string
+                           'value' =>string
+                        */
+                        }
+                    }
+                    // get id List of this parameters List
+                    $productSelectionOptionsIds = [];
+                    foreach ($productSelectionOptions as $productSelectionOption) {
+                        $productSelectionOptionsIds[] = $productSelectionOption['id'];
+                    }
+
+                    // get parameters id List of current icon
+                    $productConnectedParametersIds = $iconElement->getConnectedParametersIds();
+
+                    // get intersected parameters id List
+                    $productCurrentSelectionConnectedParametersIds =
+                        array_intersect($productSelectionOptionsIds, $productConnectedParametersIds);
+
+                    if (!empty($productCurrentSelectionConnectedParametersIds)){
                         $elementIconsIndex[$iconElement->id] = true;
                     }
 
                 }
-                /*                    if (!empty($v = $iconElement->getFormData())) {
-
-                                        //    $v1 = $iconElement->getTitle('iconProductAvail');
-                                        $v2 = $v['iconProductAvail'];
-                                        if($v2){
-
-                                            foreach($v2 as $v2val){
-                                                $v11 = $iconElement->getProductsAvailabilityOptions()[$v2val];
-                                                var_dump($v11);
-
-                                            }
-                                        }
-                                        //   var_dump($v2);
-
-
-                                        //    var_dump($iconElement->getFormData()['iconProductAvail']);
-                                        //   $iconElement->getFormData();
-                                    }
-                */
 
                 foreach ($elementIconsIndex as $iconId => $value) {
-                    $this->icons[$product->id][] = $this->structureManager->getElementById($iconId);
+                    if ($value){
+                        $this->icons[$product->id][] = $this->structureManager->getElementById($iconId);
+
+                    }
                 }
             }
 
@@ -142,7 +163,7 @@ class ProductIconsManager
 
             //add parent categories' own and global unique icons
             foreach ($categories as $category) {
-                if ($categoryIcons = $this->getCategoryIcons($category)) {
+                if ($categoryIcons = $this->getCategoryIcons($category)) { // getIconsCompleteList
                     foreach ($categoryIcons as $categoryIcon) {
                         if (!isset($elementIconsIndex[$categoryIcon->id])) {
                             $this->icons[$product->id][] = $categoryIcon;

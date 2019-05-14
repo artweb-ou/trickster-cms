@@ -12,6 +12,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
     use ImageUrlProviderTrait;
     use ProductsAvailabilityOptionsTrait;
     use ProductIconLocationOptionsTrait;
+    use ProductIconRoleOptionsTrait;
 
     public $dataResourceName = 'module_generic_icon';
     public $defaultActionName = 'show';
@@ -32,7 +33,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['iconLocation'] = 'naturalNumber';
         $moduleStructure['iconRole'] = 'naturalNumber';
         $moduleStructure['iconProductAvail'] = 'serializedIndex';
-        $moduleStructure['parameters'] = 'numbersArray';
+        $moduleStructure['iconProductParameters'] = 'numbersArray';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)

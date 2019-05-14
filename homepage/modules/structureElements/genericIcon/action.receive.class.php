@@ -28,7 +28,7 @@ class receiveGenericIcon extends structureElementAction
             $structureElement->updateConnectedProducts($structureElement->products);
             $structureElement->updateConnectedCategories($structureElement->categories);
             $structureElement->updateConnectedBrands($structureElement->brands);
-            $structureElement->updateConnectedParameters($structureElement->parameters);
+            $structureElement->updateConnectedParameters($structureElement->iconProductParameters);
 
 
             $controller->redirect($structureElement->URL);
@@ -52,7 +52,7 @@ class receiveGenericIcon extends structureElementAction
             'iconLocation',
             'iconRole',
             'iconProductAvail',
-            'parameters',
+            'iconProductParameters',
         ];
     }
 }

@@ -6,8 +6,9 @@
             </div>
         {/if}
     {/if}
-    {foreach $iconsInfo as $iconInfo}{if !empty($iconInfo.iconRole)}{var_dump($iconInfo)}{var_dump($fieldName)}{$iconInfo.iconRole}{/if}
-        <img class='product_icons_image {if !empty($iconInfo.iconRole)}badge_{$iconInfo.iconRole}{/if}'
+    {foreach $iconsInfo as $iconInfo}
+        {*{if !empty($iconInfo.iconProductAvail)}{var_dump($iconInfo.title,$iconInfo.iconProductAvail)}{/if}*}
+        <img class='product_icons_image{if !empty($iconInfo.iconRole)} badge_{$iconInfo.iconRole}{/if}{if !empty($iconInfo.iconLocation)} badge_{$iconInfo.iconLocation}{/if}'
              src='{$controller->baseURL}image/type:productIcon/id:{$iconInfo.image}/filename:{$iconInfo.fileName}'
              {if (!empty($iconInfo.width))}style="width: {$iconInfo.width}%"{/if}
              alt='{$iconInfo.title}'/>

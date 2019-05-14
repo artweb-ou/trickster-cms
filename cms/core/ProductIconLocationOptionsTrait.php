@@ -3,10 +3,10 @@
 trait ProductIconLocationOptionsTrait
 {
     public $productIconLocationTypes = [
-        1 => 'loc_top_left',
-        2 => 'loc_top_right',
-        3 => 'loc_bottom_left',
-        4 => 'loc_bottom_right',
+        'loc_top_left',
+        'loc_top_right',
+        'loc_bottom_left',
+        'loc_bottom_right',
     ];
 
     /**
