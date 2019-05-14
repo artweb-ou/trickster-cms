@@ -27,4 +27,8 @@
     'shoppingbasket.agreewithconditions' => true,
     'shoppingbasket.conditions_error' => true,
     'product.details_must_select_options' => true,
+    'shoppingbasket.table_amount_title' => true,
+    'shoppingbasket.table_price_title' => true,
+    'shoppingbasket.productstable_remove' => true,
+    'shoppingbasket.summa' => true,
 ];
