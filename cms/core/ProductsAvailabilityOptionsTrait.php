@@ -10,6 +10,11 @@ trait ProductsAvailabilityOptionsTrait
         'unavailable',
     ];
 
+    public function productsAvailabilityOptionsList()
+    {
+        return $this->productsAvailabilityTypes;
+    }
+
     public function productsAvailabilityOptions($prefix = '', $start = 0)
     {
         $options = [];
@@ -20,5 +25,16 @@ trait ProductsAvailabilityOptionsTrait
         }
         return $options;
     }
+
+
+    /**
+     * @return array
+     */
+    public function getProductsAvailabilityOptions()
+    {
+        //  return $this->productsAvailabilityTypes;
+        return $this->productsAvailabilityOptions('',1);
+    }
+
 
 }

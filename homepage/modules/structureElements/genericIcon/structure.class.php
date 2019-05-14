@@ -11,6 +11,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
     use ConnectedParametersProviderTrait;
     use ImageUrlProviderTrait;
     use ProductsAvailabilityOptionsTrait;
+    use ProductIconLocationOptionsTrait;
 
     public $dataResourceName = 'module_generic_icon';
     public $defaultActionName = 'show';
@@ -40,15 +41,6 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $multiLanguageFields[] = 'image';
         $multiLanguageFields[] = 'originalName';
         $multiLanguageFields[] = 'iconWidth';
-    }
-
-    /**
-     * @return array
-     */
-    public function getProductsAvailabilityOptions()
-    {
-        //  return $this->productsAvailabilityTypes;
-        return $this->productsAvailabilityOptions('',1);
     }
 
 }

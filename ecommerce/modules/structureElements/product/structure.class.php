@@ -53,7 +53,7 @@ class productElement extends structureElement implements
     OpenGraphDataProviderInterface,
     TwitterDataProviderInterface
 {
-    use deprecatedProductElementTrait, GalleryInfoProviderTrait, FilesElementTrait, ImagesElementTrait;
+    use deprecatedProductElementTrait, GalleryInfoProviderTrait, FilesElementTrait, ImagesElementTrait, ProductsAvailabilityOptionsTrait;
     use MetadataProviderTrait {
         getTextContent as getTextContentTrait;
     }
@@ -942,8 +942,10 @@ class productElement extends structureElement implements
                             'fileName' => $icon->originalName,
                             'iconLocation' => $icon->iconLocation,
                             'iconRole' => $icon->iconRole,
+                            'iconRoleValue' => $this->productsAvailabilityOptionsList()[$icon->iconRole],
                             'products' => $icon->products,
                             'iconProductAvail' => $icon->iconProductAvail,
+                            'iconProductAvailValue' => $this->productsAvailabilityOptionsList()[$icon->iconProductAvail],
                             'categories' => $icon->categories,
                             'brands' => $icon->brands,
                         ];
