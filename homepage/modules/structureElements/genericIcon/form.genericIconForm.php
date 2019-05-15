@@ -13,12 +13,12 @@ class GenericIconFormStructure extends ElementForm
         'iconBgColor' => [
             'type' => 'input.text',
             'inputType' => 'color',
-            'inputDefaultValue' => '#ffffff',
+            'inputDefaultValue' => '#bababa',
         ],
         'iconTextColor' => [
             'type' => 'input.text',
             'inputType' => 'color',
-            'inputDefaultValue' => '#ffffff',
+            'inputDefaultValue' => '#484848',
         ],
         'image' => [
             'type' => 'input.multi_language_image',

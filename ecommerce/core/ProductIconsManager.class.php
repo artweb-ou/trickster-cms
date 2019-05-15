@@ -111,6 +111,14 @@ class ProductIconsManager
                         $elementIconsIndex[$iconElement->id] = true;
                     }
 
+                    // by simple
+                    /**
+                     * @var genericIconElement $iconProductAvail
+                     */
+                    if (!empty($iconRoleValue = $iconElement->productIconRoleTypes[$iconElement->iconRole]) and
+                        $iconRoleValue == 'role_simple') {
+                        $elementIconsIndex[$iconElement->id] = true;
+                    }
                     // by availability
                     if (!empty($iconProductAvail = $iconElement->iconProductAvail)) {
                         if (in_array($product->availability, $iconProductAvail)) {
@@ -127,12 +135,7 @@ class ProductIconsManager
                         $product->getDiscountAmount(false) > 0) {
                             $elementIconsIndex[$iconElement->id] = true;
                     }
-//                $discountAmount = $discountsManager->getProductDiscount($this->id, $price);
-//                if ($discountAmount) {
-//                    $price -= $discountAmount;
-//                }
-//                $price = $currencySelector->convertPrice($price);
-//                $selectionsPricings[$combo] = sprintf('%01.2f', $price);
+
 
                     // by parameters (selection)
                     // get parameters List (productSelection only) of current product

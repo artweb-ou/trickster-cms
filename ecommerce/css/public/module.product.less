@@ -26,6 +26,7 @@
 
 .product_thumbnail_image_container {
 	overflow: hidden;
+	position: relative;
 }
 
 .product_thumbnail_image {
@@ -290,7 +291,11 @@
 	*/
 	z-index: 2;
 	box-sizing: border-box;
-	
+
+	.product_details_gallery  + &{
+		bottom: 34%;
+	}
+
 	.giBadge-cells {
 		width: 100%;
 		height: auto;
@@ -306,7 +311,7 @@
 			top: 0;
 		}
 		&:nth-child(2){
-			bottom: 33%;
+			bottom: 0;
 		}
 		
 		>div{
@@ -319,6 +324,7 @@
 			*/
 			display: flex;
 			box-sizing: border-box;
+			flex-wrap: wrap;
 		}
 		.cell-loc_top_left {
 			justify-self: flex-start;
@@ -352,13 +358,13 @@
 		}
 	}
 	
-	.cell-product_icons_image{
-		position: absolute;
-		left: 0;
-		bottom: 0;
-		height: 33%;
-		box-sizing: border-box;
-	}
+	//.cell-product_icons_image{
+	//	position: absolute;
+	//	left: 0;
+	//	bottom: 0;
+	//	height: 33%;
+	//	box-sizing: border-box;
+	//}
 }
 
 .product_icons_image, .product_icons_title {
@@ -377,14 +383,22 @@
 }
 .product_icons_title{
 	padding: .5em;
-	text-overflow: ellipsis;
-	overflow: hidden;
+	//text-overflow: ellipsis;
+	//overflow: hidden;
 	text-align: center;
 	
 	&.giBadge {
 		border-radius: 2px;
 		background-color: @trick_badge_bg_color;
 		color: @trick_badge_text_color;
+
+		width:auto!important;
+		max-width: 100%;
+
+
+		//[data-page="category"] &{
+		//	width:auto!important;
+		//}
 	}
 }
 .product_short_amount_button {

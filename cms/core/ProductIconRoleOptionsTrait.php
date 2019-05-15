@@ -3,7 +3,7 @@
 trait ProductIconRoleOptionsTrait
 {
     public $productIconRoleTypes = [
-        'role_default',
+        'role_simple',
         'role_date',
         'role_general_discount',
         'role_availability',

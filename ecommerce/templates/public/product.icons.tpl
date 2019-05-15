@@ -35,7 +35,6 @@
 'loc_bottom_left',
 'loc_bottom_right',
 *}
-
             {if !empty($iconInfo.image)}
                 {if !empty($iconStyle)}{$iconStyle = ' style="'|cat:$iconStyle|cat:'"'}{/if}
                 {$iconsCell_{$iconLocation} = $iconsCell_{$iconLocation}|cat:"<img class='product_icons_image {$iconAdditionalClass}'{$iconStyle} src='{$controller->baseURL}image/type:productIcon/id:{$iconInfo.image}/filename:{$iconInfo.fileName}' alt='{$iconInfo.title}'/>"}
@@ -51,12 +50,12 @@
         {/if}
     {/foreach}
     <div class="{$iconPrefix}-cells">
-        <div class="cell-loc_top_left">{$iconsCell_loc_top_left}</div>
+        <div class="cell-loc_top_left">{$iconsCell_loc_top_left}{$iconsCell_product_icons_image}</div>
         <div class="cell-loc_top_right">{$iconsCell_loc_top_right}</div>
     </div>
     <div class="{$iconPrefix}-cells">
         <div class="cell-loc_bottom_left">{$iconsCell_loc_bottom_left}</div>
         <div class="cell-loc_bottom_right">{$iconsCell_loc_bottom_right}</div>
     </div>
-    <div class="cell-product_icons_image">{$iconsCell_product_icons_image}</div>
+    {*<div class="cell-product_icons_image">{$iconsCell_product_icons_image}</div>*}
 </div>

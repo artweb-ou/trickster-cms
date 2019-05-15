@@ -191,12 +191,12 @@
             </AddTranslation>
                     <AddTranslation>
                 <type>adminTranslation</type>
-                <code>genericicon.role_default</code>
+                <code>genericicon.role_simple</code>
                 <valueType>text</valueType>
                 <values>
-                                            <value languageCode="eng">Default</value>
-                                            <value languageCode="est">Vaikimisi</value>
-                                            <value languageCode="rus">По умолчанию</value>
+                                            <value languageCode="eng">Simple Icon</value>
+                                            <value languageCode="est">Lihtne ikoon</value>
+                                            <value languageCode="rus">Простая иконка</value>
                                     </values>
             </AddTranslation>
                     <AddTranslation>
