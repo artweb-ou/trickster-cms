@@ -249,6 +249,26 @@
                                             <value languageCode="rus">Товары, которые добавлены за последние</value>
                                     </values>
             </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.iconbgcolor</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Text-Icon background-color</value>
+                                            <value languageCode="est">Tekst-Ikooni taustavärv</value>
+                                            <value languageCode="rus">Цвет фона текстовой иконки</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.icontextcolor</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Text-Icon text color</value>
+                                            <value languageCode="est">Tekst-Ikooni teksti värv</value>
+                                            <value languageCode="rus">Цвет текста текстовой иконки</value>
+                                    </values>
+            </AddTranslation>
                 <GenerateTranslations>
             <type>adminTranslations</type>
         </GenerateTranslations>

@@ -22,8 +22,9 @@
     {/if}
     {foreach $iconsInfo as $iconInfo}
         {$iconStyle = ''}
-        {if !empty($iconInfo.width)} {$iconStyle = "width:"|cat:$iconInfo.width|cat:"%;"}{/if}
+        {if !empty($iconInfo.width) && $iconInfo.iconStructureType != 'genericIcon'} {$iconStyle = "width:"|cat:$iconInfo.width|cat:"%;"}{/if}
         {if $iconInfo.iconStructureType == 'genericIcon'}
+            {if !empty($iconInfo.width)} {$iconStyle = "width:"|cat:$iconInfo.width /2|cat:"%;"}{/if}
             {$iconLocation = $iconInfo.iconLocation}
             {$iconRole = $iconInfo.iconRole}
             {$iconAdditionalClass =  "{$iconPrefix} {$iconPrefix}_{$iconRole} {$iconPrefix}_{$iconLocation}"}
@@ -35,14 +36,14 @@
 'loc_bottom_right',
 *}
 
-            {if !empty($iconInfo.title)}
+            {if !empty($iconInfo.image)}
+                {if !empty($iconStyle)}{$iconStyle = ' style="'|cat:$iconStyle|cat:'"'}{/if}
+                {$iconsCell_{$iconLocation} = $iconsCell_{$iconLocation}|cat:"<img class='product_icons_image {$iconAdditionalClass}'{$iconStyle} src='{$controller->baseURL}image/type:productIcon/id:{$iconInfo.image}/filename:{$iconInfo.fileName}' alt='{$iconInfo.title}'/>"}
+            {elseif !empty($iconInfo.title)}
                 {if (!empty($iconInfo.iconTextColor))} {$iconStyle = $iconStyle|cat:"color:"|cat:$iconInfo.iconTextColor|cat:";"}{/if}
                 {if (!empty($iconInfo.iconBgColor))} {$iconStyle = $iconStyle|cat:"background-color:"|cat:$iconInfo.iconBgColor|cat:";"}{/if}
                 {if !empty($iconStyle)}{$iconStyle = ' style="'|cat:$iconStyle|cat:'"'}{/if}
                 {$iconsCell_{$iconLocation} = $iconsCell_{$iconLocation}|cat:"<span class='product_icons_title {$iconAdditionalClass}'{$iconStyle}>{$iconInfo.title}</span>"}
-            {elseif !empty($iconInfo.image)}
-                {if !empty($iconStyle)}{$iconStyle = ' style="'|cat:$iconStyle|cat:'"'}{/if}
-                {$iconsCell_{$iconLocation} = $iconsCell_{$iconLocation}|cat:"<img class='product_icons_image {$iconAdditionalClass}'{$iconStyle} src='{$controller->baseURL}image/type:productIcon/id:{$iconInfo.image}/filename:{$iconInfo.fileName}' alt='{$iconInfo.title}'/>"}
             {/if}
         {else}
             {if !empty($iconStyle)}{$iconStyle = ' style="'|cat:$iconStyle|cat:'"'}{/if}
