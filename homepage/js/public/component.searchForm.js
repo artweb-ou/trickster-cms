@@ -1,4 +1,4 @@
-function SearchFormComponent(formElement) {
+function SearchFormComponent(formElement, displayInElement, displayTotals, totalsElement) {
 	var self = this;
 
 	this.submitButton = null;
@@ -21,13 +21,20 @@ function SearchFormComponent(formElement) {
 		}
 		inputElement = formElement.querySelector('.ajaxsearch_input');
 		if (inputElement && inputElement.className.indexOf('ajaxsearch_input') != -1) {
+
 			var parameters = {
 				'clickCallback': ajaxSearchResultClick,
 				'apiMode': 'public',
 				'searchStringLimit': 1,
 				'types': allowedSearchTypes
 			};
-			new AjaxSearchComponent(inputElement, parameters);
+			if(typeof displayInElement != "undefined") {
+				parameters.displayInElement = displayInElement;
+			}
+			if(typeof displayTotals != "undefined") {
+				parameters.displayTotals = displayTotals;
+			}
+			new AjaxSearchComponent(inputElement, parameters, totalsElement);
 		}
 
 	};

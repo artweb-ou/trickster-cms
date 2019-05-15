@@ -17,6 +17,9 @@ class categoryDataResponseConverter extends dataResponseConverter
             $info['introductionText'] = $this->htmlToPlainText($element->introduction);
             $info['contentText'] = $this->htmlToPlainText($element->content);
             $info['image'] = $element->image;
+            if($element->productsCount) {
+                $info['productsCount'] = $element->productsCount;
+            }
             $result[] = $info;
         }
 

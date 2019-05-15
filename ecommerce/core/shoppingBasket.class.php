@@ -387,6 +387,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
         return $this->promoCodeDiscountId;
     }
 
+    //not used
     public function setBasketFormData($formData)
     {
         $this->formData = $formData;
@@ -438,6 +439,14 @@ class shoppingBasket implements DependencyInjectionContextInterface
     public function getBasketFormData()
     {
         return $this->formData;
+    }
+
+    public function getPaymentMethodId() {
+        if(!empty($this->formData['paymentMethodId'])) {
+            return $this->formData['paymentMethodId'];
+        }
+
+        return false;
     }
 
     public function getCountriesList()
@@ -1124,7 +1133,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                 $elementData['deliveryFormFields'] = [];
                 if ($fieldsList = $deliveryTypeElement->getFieldsList()) {
                     foreach ($fieldsList as &$record) {
-                        if ($fieldElement = $structureManager->getElementById($record->fieldId)) {
+                        if ($fieldElement = $structureManager->getElementById($record->fieldId, $deliveryTypeElement->id)) {
                             $fieldInfo = [
                                 'id' => $fieldElement->id,
                                 'title' => $fieldElement->title,

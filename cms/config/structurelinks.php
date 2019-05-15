@@ -5,9 +5,6 @@
         'dashboard',
         'deliveryTypeField',
         'deliveryTypePaymentMethod',
-        'discountCategory',
-        'discountProduct',
-        'discountsList',
         'feedbackAnswer',
         'headerContent',
         'leftColumn',
@@ -19,6 +16,7 @@
         'registrationUserGroup',
         'rightColumn',
         'structure',
+        'mobileMenu',
     ],
     'publicAllowed' => [
         'bannerCategoryBanner',
@@ -44,5 +42,6 @@
         'structure',
         'brands',
         'categoryParameter',
+        'mobileMenu',
     ],
 ];

@@ -1,4 +1,4 @@
-window.AjaxSearchComponent = function(componentElement, parameters) {
+window.AjaxSearchComponent = function(componentElement, parameters, totalsElement) {
 	var self = this;
 	var ajaxSearchResultsComponent = false;
 	var inputCheckDelay = 400;
@@ -13,6 +13,8 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
 	var apiMode = 'public';
 	var language = '';
 	var filters = '';
+	this.displayInElement = false;
+	this.displayTotals = false;
 
 	this.componentElement = null;
 	this.inputElement = null;
@@ -27,6 +29,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
 		eventsManager.addHandler(self.inputElement, 'keydown', keyPressHandler);
 		eventsManager.addHandler(self.inputElement, 'paste', pasteHandler);
 		eventsManager.addHandler(window, 'click', windowClickHandler);
+
 		controller.addListener('ajaxSearchResultsReceived', updateData);
 
 	};
@@ -54,6 +57,12 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
 		}
 		if (typeof parameters.filters !== 'undefined') {
 			filters = parameters.filters;
+		}
+		if (typeof parameters.displayInElement !== 'undefined') {
+			self.displayInElement = parameters.displayInElement;
+		}
+		if (typeof parameters.displayTotals !== 'undefined') {
+			self.displayTotals = parameters.displayTotals;
 		}
 	};
 	var pasteHandler = function(event) {
@@ -98,13 +107,16 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
 			}
 			searchString = searchString.replace(/^\s+/, '').replace(/\s+$/, ''); // trim
 			if (types && searchString.length >= searchStringLimit) {
-				ajaxSearchLogics.sendQuery(updateData, encodeURIComponent(searchString), types, apiMode);
+				ajaxSearchLogics.sendQuery(updateData, encodeURIComponent(searchString), types, apiMode, self.displayTotals);
 			}
 		}, inputCheckDelay);
 	};
 	var updateData = function(responseData) {
 		var allElements = [];
 		for (var type in responseData) {
+			if(types.indexOf(type) === -1) {
+				continue;
+			}
 			for (var i = 0; i < responseData[type].length; i++) {
 				if (typeof (responseData[type][i]['searchTitle']) !== 'undefined') {
 					responseData[type][i].title = responseData[type][i]['searchTitle'];
@@ -132,9 +144,13 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
 			});
 			allElements = allElements.concat(responseData[type]);
 		}
+		if(self.displayTotals && totalsElement) {
+			totalsElement.innerHTML = responseData['searchTotal']
+		}
+
 		ajaxSearchResultsComponent.setSelectedIndex(false);
+		ajaxSearchResultsComponent.updateData(allElements);
 		if (allElements.length > 0) {
-			ajaxSearchResultsComponent.updateData(allElements);
 			ajaxSearchResultsComponent.displayComponent();
 		} else {
 			ajaxSearchResultsComponent.hideComponent();
@@ -168,16 +184,22 @@ window.AjaxSearchResultsComponent = function(parentObject) {
 		contentElement.className = 'ajaxsearch_results_list';
 		componentElement.appendChild(contentElement);
 
-		document.body.appendChild(componentElement);
+		if(parentObject.displayInElement) {
+			parentObject.displayInElement.appendChild(componentElement);
+		}else {
+			document.body.appendChild(componentElement);
+		}
 		eventsManager.addHandler(componentElement, 'click', clickHandler);
 		eventsManager.addHandler(window, 'resize', refreshStatus);
 	};
-
-	this.updateData = function(elementsList) {
-		resultItems = [];
+	this.reset = function() {
 		while (contentElement.firstChild) {
 			contentElement.removeChild((contentElement.firstChild));
 		}
+	};
+	this.updateData = function(elementsList) {
+		self.reset();
+		resultItems = [];
 		for (var i = 0; i < elementsList.length; i++) {
 			var item = new AjaxSearchResultsItemComponent(elementsList[i], parentObject);
 			contentElement.appendChild(item.componentElement);
@@ -196,6 +218,7 @@ window.AjaxSearchResultsComponent = function(parentObject) {
 	this.hideComponent = function() {
 		if (self.displayed) {
 			self.displayed = false;
+			self.reset();
 			componentElement.style.visibility = 'hidden';
 		}
 	};
@@ -269,6 +292,7 @@ DomElementMakerMixin.call(AjaxSearchResultsComponent.prototype);
 window.AjaxSearchResultsItemComponent = function(data, parentObject) {
 	var self = this;
 	var componentElement;
+	var total;
 
 	this.componentElement = null;
 	var init = function() {
@@ -285,10 +309,15 @@ window.AjaxSearchResultsItemComponent = function(data, parentObject) {
 			title = title + " (" + data.language + ") ";
 		}
 
+		var productTotals = '';
+		if(parentObject.displayTotals && data.productsCount) {
+			productTotals = ' <span>(' + data.productsCount + ')</span>';
+		}
+
 		if (typeof data.structureType !== 'undefined') {
-			componentElement.innerHTML = '<span class=\"icon icon_' + data.structureType + '\"></span><span class="ajaxsearch_results_item_text">' + title + '</span>';
+			componentElement.innerHTML = '<span class=\"icon icon_' + data.structureType + '\"></span><span class="ajaxsearch_results_item_text">' + title + productTotals + '</span>';
 		} else {
-			componentElement.innerHTML = '<span class="ajaxsearch_results_item_text">' + title + '</span>';
+			componentElement.innerHTML = '<span class="ajaxsearch_results_item_text">' + title + productTotals + '</span>';
 		}
 		eventsManager.addHandler(componentElement, 'mouseup', clickHandler);
 
