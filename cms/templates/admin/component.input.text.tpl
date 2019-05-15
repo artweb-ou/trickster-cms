@@ -11,6 +11,9 @@
 {else}
 	{$labelBefore = $fieldName}
 {/if}
+{if !empty($item.inputDefaultValue) && empty($formData.$fieldName)}
+	{$formData.$fieldName = $item.inputDefaultValue}
+{/if}
 <div class="form_items{if $formErrors.$fieldName} form_error{/if}{if !empty($item.trClass)} {$item.trClass} {/if}">
 		<span class="form_label">
 			{translations name="{$translationGroup}.{$labelBefore}"}

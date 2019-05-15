@@ -10,6 +10,16 @@ class GenericIconFormStructure extends ElementForm
             'type' => 'input.multi_language_text',
             'class' => 'genericicon_title',
         ],
+        'iconBgColor' => [
+            'type' => 'input.text',
+            'inputType' => 'color',
+            'inputDefaultValue' => '#ffffff',
+        ],
+        'iconTextColor' => [
+            'type' => 'input.text',
+            'inputType' => 'color',
+            'inputDefaultValue' => '#ffffff',
+        ],
         'image' => [
             'type' => 'input.multi_language_image',
             'class' => 'genericicon_icon',

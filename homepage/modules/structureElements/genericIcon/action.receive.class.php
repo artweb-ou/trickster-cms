@@ -50,6 +50,8 @@ class receiveGenericIcon extends structureElementAction
             'days',
             'iconWidth',
             'iconLocation',
+            'iconBgColor',
+            'iconTextColor',
             'iconRole',
             'iconProductAvail',
             'iconProductParameters',

@@ -86,6 +86,12 @@ class ProductIconsManager
                 $now = time();
                 foreach ($allIcons as $iconElement) {
                     $elementIconsIndex[$iconElement->id] = false;
+
+                    /**
+                     * @var iconsElement $iconElement
+                     * @var iconElement $iconElement
+                     */
+                    // by date
                     $startDate = $iconElement->getValue('startDate');
                     if ($endDate = $iconElement->getValue('endDate')) {
                         $endDate += self::DAILY_SECONDS;
@@ -105,15 +111,30 @@ class ProductIconsManager
                         $elementIconsIndex[$iconElement->id] = true;
                     }
 
-                    /**
-                     * @var iconElement $iconElement
-                     */
+                    // by availability
                     if (!empty($iconProductAvail = $iconElement->iconProductAvail)) {
                         if (in_array($product->availability, $iconProductAvail)) {
                             $elementIconsIndex[$iconElement->id] = true;
                         }
                     }
 
+                    // by general_discount
+                    /**
+                     * @var genericIconElement $iconProductAvail
+                     */
+                    if (!empty($iconRoleValue = $iconElement->productIconRoleTypes[$iconElement->iconRole]) and
+                        $iconRoleValue == 'role_general_discount' and
+                        $product->getDiscountAmount(false) > 0) {
+                            $elementIconsIndex[$iconElement->id] = true;
+                    }
+//                $discountAmount = $discountsManager->getProductDiscount($this->id, $price);
+//                if ($discountAmount) {
+//                    $price -= $discountAmount;
+//                }
+//                $price = $currencySelector->convertPrice($price);
+//                $selectionsPricings[$combo] = sprintf('%01.2f', $price);
+
+                    // by parameters (selection)
                     // get parameters List (productSelection only) of current product
                     $productSelectionOptions = [];
                     $parametersInfoList = $product->getParametersInfoList();

@@ -114,6 +114,27 @@
 		.labelAfter&{
 			width: @176pt;
 		}
+		&[type=color]{
+			background-color: transparent;
+			mix-blend-mode: inherit;
+			cursor: pointer;
+			padding: 2px;
+			outline: 0!important;
+			
+			&::-webkit-color-swatch {
+				border: none;
+			}
+			&::-webkit-color-swatch-wrapper {
+				padding: 0;
+			}
+			&::-moz-color-swatch,
+			.input_component[type=color]::-moz-focus-inner {
+				border: none;
+			}
+			&::-moz-focus-inner {
+				padding: 0;
+			}
+		}
 	}
 	.input_date {
 		width: @176pt;

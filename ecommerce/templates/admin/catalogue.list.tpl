@@ -119,7 +119,7 @@
 				{$contentItem->code}
 			</td>
 			<td class='price_column'>
-				{$contentItem->price}
+				{$contentItem->price}{if $contentItem->oldPrice && $contentItem->oldPrice >0} (<small><s>{$contentItem->oldPrice}</s></small>){/if}
 			</td>
 			<td class=''>
 				{assign var='type' value="product."|cat:$contentItem->availability}

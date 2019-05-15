@@ -951,17 +951,16 @@ class productElement extends structureElement implements
                             'image' => $icon->image,
                             'width' => $icon->iconWidth,
                             'fileName' => $icon->originalName,
+                            'iconStructureType' => $icon->structureType,
                         ];
 
                         if($icon->structureType == 'genericIcon') {
                             $iconsInfoGenericIcon = [
                                 'iconLocation' => $this->productIconLocationTypes[$icon->iconLocation],
                                 'iconRole' => $this->productIconRoleTypes[$icon->iconRole],
+                                'iconBgColor' => $icon->iconBgColor,
+                                'iconTextColor' => $icon->iconTextColor,
                                 'iconProductAvail' => $icon->iconProductAvail,
-//                                'iconProductParameters' => $this->getConnectedParametersIds(),
-                             //      'iconProductParameters1' => $this->getConnectedParameters(),
-//                                'iconProductAvail' => $this->productsAvailabilityOptionsList()[$icon->iconProductAvail],
-//                                'iconProductAvail' => $this->getProductsAvailabilityOptionValuesList($icon->iconProductAvail),
                             ];
                         }
                         $this->iconsInfo[] = array_merge($iconsInfoAllIcons, $iconsInfoGenericIcon);
