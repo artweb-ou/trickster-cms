@@ -16,6 +16,7 @@
         'registrationUserGroup',
         'rightColumn',
         'structure',
+        'mobileMenu',
     ],
     'publicAllowed' => [
         'bannerCategoryBanner',
@@ -41,5 +42,6 @@
         'structure',
         'brands',
         'categoryParameter',
+        'mobileMenu',
     ],
 ];
