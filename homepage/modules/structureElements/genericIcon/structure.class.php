@@ -46,4 +46,12 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $multiLanguageFields[] = 'iconWidth';
     }
 
+    public function getSettingsVariablles($variable){
+        $settingsManager = $this->getService('settingsManager');
+        $configManager = $this->getService('ConfigManager');
+        $variableValue = $settingsManager->getSetting($variable) ?: $configManager->get($variable);
+
+        return $variableValue;
+    }
+
 }

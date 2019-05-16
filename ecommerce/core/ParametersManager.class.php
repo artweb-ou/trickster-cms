@@ -15,10 +15,6 @@ class ParametersManager extends errorLogger
      */
     protected $languagesManager;
 
-    public function __construct()
-    {
-    }
-
     /**
      * @param languagesManager $languagesManager
      */
