@@ -290,7 +290,15 @@ class linksManager extends errorLogger
      * @param string $linkType
      * @return bool|persistableObject
      */
-    public function linkElements($parentId, $childId, $linkType = 'structure')
+
+    /**
+     * @param $parentId
+     * @param $childId
+     * @param string $linkType
+     * @param bool $bothDirections
+     * @return bool|persistableObject
+     */
+    public function linkElements($parentId, $childId, $linkType = 'structure', $bothDirections = false)
     {
         $result = false;
 
@@ -304,8 +312,16 @@ class linksManager extends errorLogger
         }
 
         if (!$result) {
-            $linksObject = $this->createLinkObject($parentId, $childId, $linkType);
-            $linksObject->persist();
+            if (!$bothDirections) {
+                $linksObject = $this->createLinkObject($parentId, $childId, $linkType);
+                $linksObject->persist();
+            } else {
+                $linksObject = $this->createLinkObject($childId, $parentId, $linkType);
+                $linksObject->persist();
+
+                $linksObject = $this->createLinkObject($parentId, $childId, $linkType);
+                $linksObject->persist();
+            }
             $result = $linksObject;
 
             if (isset($this->elementsConnectedId['child']) && isset($this->elementsConnectedId['child'][$childId]) && isset($this->elementsConnectedId['child'][$childId][$linkType])
