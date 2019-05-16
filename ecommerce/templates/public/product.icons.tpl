@@ -23,7 +23,7 @@
         {$iconStyle = ''}
         {if !empty($iconInfo.width) && $iconInfo.iconStructureType != 'genericIcon'} {$iconStyle = "width:"|cat:$iconInfo.width|cat:"%;"}{/if}
         {if $iconInfo.iconStructureType == 'genericIcon'}
-            {if !empty($iconInfo.width)} {$iconStyle = "width:"|cat:$iconInfo.width /2|cat:"%;"}{/if}
+            {if !empty($iconInfo.width)} {$iconStyle = "width:"|cat:$iconInfo.width *2|cat:"%;"}{/if}
             {$iconLocation = $iconInfo.iconLocation}
             {$iconRole = $iconInfo.iconRole}
             {$iconAdditionalClass =  "{$iconPrefix} {$iconPrefix}_{$iconRole} {$iconPrefix}_{$iconLocation}"}
