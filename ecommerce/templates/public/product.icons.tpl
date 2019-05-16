@@ -7,6 +7,7 @@
     {$iconsCell_loc_bottom_left = ""}
     {$iconsCell_loc_bottom_right = ""}
     {$iconsCell_product_icons_image = ""}
+    {$product_discount_container = ""}
 
     {foreach $iconsInfo as $iconInfo}
         {if !empty($iconInfo.iconRole) && $iconInfo.iconRole =='role_general_discount'}
@@ -15,9 +16,7 @@
     {/foreach}
     {if !empty($displayOldPrice) && $iconRoleGeneralDiscount !==true}
         {if $element->getOldPrice()}
-            <div class="product_discount_container">
-                <span class="product_discount">-{$element->getDiscountPercent()|round}%</span>
-            </div>
+            {$product_discount_container = $iconsCell_product_icons_image|cat:'<div class="product_discount_container"><span class="product_discount">-{$element->getDiscountPercent()|round}%</span></div>'}
         {/if}
     {/if}
     {foreach $iconsInfo as $iconInfo}
@@ -50,7 +49,7 @@
         {/if}
     {/foreach}
     <div class="{$iconPrefix}-cells">
-        <div class="cell-loc_top_left">{$iconsCell_loc_top_left}{$iconsCell_product_icons_image}</div>
+        <div class="cell-loc_top_left">{$product_discount_container}{$iconsCell_loc_top_left}{$iconsCell_product_icons_image}</div>
         <div class="cell-loc_top_right">{$iconsCell_loc_top_right}</div>
     </div>
     <div class="{$iconPrefix}-cells">
