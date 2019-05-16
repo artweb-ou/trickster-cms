@@ -4,9 +4,6 @@ class GalleryImageFormStructure extends ElementForm
 {
     protected $formClass = 'gallery_form_upload';
     protected $structure = [
-        'image' => [
-            'type' => 'input.image',
-        ],
         'title' => [
             'type' => 'input.text',
         ],
@@ -19,6 +16,9 @@ class GalleryImageFormStructure extends ElementForm
         'externalLink' => [
             'type' => 'input.text',
             'textClass' => 'focused_input',
+        ],
+        'image' => [
+            'type' => 'input.image',
         ],
     ];
 

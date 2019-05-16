@@ -4,14 +4,25 @@ class receiveFile extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param fileElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
             $structureElement->prepareActualData();
 
+            if ($structureElement->getDataChunk("file")->originalName) {
+                $structureElement->file = $structureElement->id;
+                $structureElement->fileName = $structureElement->getDataChunk("file")->originalName;
+            }
+
             if ($structureElement->getDataChunk("image")->originalName) {
-                $structureElement->image = $structureElement->id;
-                $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
+                $structureElement->image = $structureElement->id . 'image';
+                $structureElement->imageFileName = $structureElement->getDataChunk("image")->originalName;
             }
 
             if ($structureElement->alt == '') {
@@ -26,10 +37,7 @@ class receiveFile extends structureElementAction
             $structureElement->persistElementData();
         }
         if ($controller->getApplicationName() != 'adminAjax') {
-            $firstParent = $structureManager->getElementsFirstParent($structureElement->id);
-            if ($firstParent) {
-                $controller->redirect($firstParent->URL);
-            }
+            $controller->redirect($structureElement->getUrl('showForm'));
         }
     }
 
@@ -37,6 +45,7 @@ class receiveFile extends structureElementAction
     {
         $expectedFields = [
             'file',
+            'image',
             'title',
         ];
     }

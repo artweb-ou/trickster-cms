@@ -6,6 +6,8 @@
  * @property string $title
  * @property string $file
  * @property string $fileName
+ * @property string $image
+ * @property string $imageFileName
  */
 class fileElement extends structureElement implements StructureElementUploadedFilesPathInterface, ImageUrlProviderInterface
 {
@@ -19,6 +21,8 @@ class fileElement extends structureElement implements StructureElementUploadedFi
         $moduleStructure['title'] = 'text';
         $moduleStructure['file'] = 'file';
         $moduleStructure['fileName'] = 'fileName';
+        $moduleStructure['image'] = 'image';
+        $moduleStructure['imageFileName'] = 'fileName';
     }
 
     public function getUploadedFilesPath()
@@ -42,13 +46,15 @@ class fileElement extends structureElement implements StructureElementUploadedFi
     }
 
 
-    public function getFileName($encoded = false){
-        if ($encoded){
+    public function getFileName($encoded = false)
+    {
+        if ($encoded) {
             return $this->fileName;
-        } else{
+        } else {
             return urldecode($this->fileName);
         }
     }
+
     public function getDownloadUrl($mode = 'download', $appName = 'file')
     {
         $controller = $this->getService('controller');

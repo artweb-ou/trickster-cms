@@ -6,7 +6,7 @@
         <input class="fileinput_placeholder" type="file" name="{$formNames.$fieldName}{if $item.multiple}[]{/if}" {if $item.multiple}multiple{/if}/>
         {if $element->$fieldName}
             <div class="file_container">
-                {if !empty($fileNameProperty)}<span class="file_container_filename">{$formData.$fileNameProperty}</span>{/if}
+                {if !empty($item.fileNameProperty)}<span class="file_container_filename">{$formData.{$item.fileNameProperty}}</span>{/if}
                 <a class="button file_delete_button warning_button" href="{$element->URL}id:{$element->id}/action:deleteFile/file:{$fieldName}">
                     <span class="icon icon_delete"></span>
                     {translations name="$fieldName.deletefile"}
