@@ -7,24 +7,27 @@
     {$iconsCell_loc_bottom_left = ""}
     {$iconsCell_loc_bottom_right = ""}
     {$iconsCell_product_icons_image = ""}
+    {$product_discount_container = ""}
 
     {foreach $iconsInfo as $iconInfo}
         {if !empty($iconInfo.iconRole) && $iconInfo.iconRole =='role_general_discount'}
             {$iconRoleGeneralDiscount = true}
         {/if}
     {/foreach}
-    {if !empty($displayOldPrice) && $iconRoleGeneralDiscount !==true}
+    {if !empty($displayOldPrice) && ($iconRoleGeneralDiscount !==true || !empty($oldPriceElement))}
         {if $element->getOldPrice()}
-            <div class="product_discount_container">
-                <span class="product_discount">-{$element->getDiscountPercent()|round}%</span>
-            </div>
+            {if !empty($oldPriceElement)}
+            {$product_discount_container = $iconsCell_product_icons_image|cat:$oldPriceElement}
+            {else}
+            {$product_discount_container = $iconsCell_product_icons_image|cat:"<div class='product_discount_container'><span class='product_discount'>-{$element->getDiscountPercent()|round}%</span></div>"}
+            {/if}
         {/if}
     {/if}
     {foreach $iconsInfo as $iconInfo}
         {$iconStyle = ''}
         {if !empty($iconInfo.width) && $iconInfo.iconStructureType != 'genericIcon'} {$iconStyle = "width:"|cat:$iconInfo.width|cat:"%;"}{/if}
         {if $iconInfo.iconStructureType == 'genericIcon'}
-            {if !empty($iconInfo.width)} {$iconStyle = "width:"|cat:$iconInfo.width /2|cat:"%;"}{/if}
+            {if !empty($iconInfo.width)} {$iconStyle = "width:"|cat:$iconInfo.width *2|cat:"%;"}{/if}
             {$iconLocation = $iconInfo.iconLocation}
             {$iconRole = $iconInfo.iconRole}
             {$iconAdditionalClass =  "{$iconPrefix} {$iconPrefix}_{$iconRole} {$iconPrefix}_{$iconLocation}"}
@@ -50,7 +53,7 @@
         {/if}
     {/foreach}
     <div class="{$iconPrefix}-cells">
-        <div class="cell-loc_top_left">{$iconsCell_loc_top_left}{$iconsCell_product_icons_image}</div>
+        <div class="cell-loc_top_left">{$product_discount_container}{$iconsCell_loc_top_left}{$iconsCell_product_icons_image}</div>
         <div class="cell-loc_top_right">{$iconsCell_loc_top_right}</div>
     </div>
     <div class="{$iconPrefix}-cells">
