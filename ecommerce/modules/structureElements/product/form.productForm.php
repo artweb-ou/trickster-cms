@@ -67,7 +67,7 @@ class ProductFormStructure extends ElementForm
         'connectedProductCategories' => [
             'type' => 'select.universal_options_multiple',
             'property' => 'connectedProductCategoriesInfo',
-            'class' => 'connectedproducts_select',
+            'class' => 'connectedcategories_select',
         ],
         'qtFromConnectedCategories' => [
             'type' => 'input.text',
