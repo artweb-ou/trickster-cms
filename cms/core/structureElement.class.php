@@ -1474,6 +1474,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
                  * @var ElementForm $form
                  */
                 $form = new $className;
+                $this->instantiateContext($form);
                 $form->setElement($this);
                 $form->setFormAction($this->getFormActionURL());
             } else {

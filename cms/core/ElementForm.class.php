@@ -1,7 +1,8 @@
 <?php
 
-abstract class ElementForm
+abstract class ElementForm implements DependencyInjectionContextInterface
 {
+    use DependencyInjectionContextTrait;
     protected $containerClass;
     protected $formClass = "";
     protected $formEnctype = 'multipart/form-data';

@@ -4,6 +4,7 @@
 {assign var="labelBefore" value=""}
 {assign var="labelAfter" value=""}
 {assign var="formFieldCols" value=""}
+{assign var='primColor' value=''}
 {if !empty($item.additionalFormat)}
     {$labelBefore = $item.additionalFormat.labelBefore}
     {$labelAfter  = $item.additionalFormat.labelAfter}
@@ -11,8 +12,10 @@
 {else}
 	{$labelBefore = $fieldName}
 {/if}
-{if !empty($item.inputDefaultValue) && empty($formData.$fieldName)}
-	{$formData.$fieldName = $item.inputDefaultValue}
+
+{if !empty($item.inputDefaultValueMethod) && empty($formData.$fieldName)}
+	{$defaultValue = $form->callElementMethod($item.inputDefaultValueMethod['method'], $item.inputDefaultValueMethod['variable'])}
+	{$formData.$fieldName = $defaultValue}
 {/if}
 <div class="form_items{if $formErrors.$fieldName} form_error{/if}{if !empty($item.trClass)} {$item.trClass} {/if}">
 		<span class="form_label">
