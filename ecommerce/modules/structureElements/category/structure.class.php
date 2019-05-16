@@ -54,7 +54,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $moduleStructure['productsMobileLayout'] = 'text';
         $moduleStructure['categoriesMobileLayout'] = 'text';
 
-        $moduleStructure['brands'] = 'serializedArray';
         $moduleStructure['deliveryStatus'] = 'text';
         $moduleStructure['deliveryPriceType'] = 'text';
         $moduleStructure['formDeliveries'] = 'array';
@@ -739,7 +738,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 $publicLanguageId = $this->getService('languagesManager')->getCurrentLanguageId($marker);
                 $query = $db->table('module_product');
 
-                if ($arguments['order']['field'] != 'dateModified') {
+                if ($arguments['order']['field'] != 'dateModified' && $arguments['order']['field'] != 'dateCreated') {
                     //get ordered id list where appropriate translation exists
                     $translatedIDs = [];
 
@@ -758,7 +757,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                     });
                 }
 
-                if ($arguments['order']['field'] == 'dateModified') {
+                if ($arguments['order']['field'] == 'dateModified' || $arguments['order']['field'] == 'dateCreated') {
                     $query->leftJoin('structure_elements', 'structure_elements.id', '=', 'module_product.id');
                 }
                 $query->orderBy($arguments['order']['field'], $arguments['order']['argument']);

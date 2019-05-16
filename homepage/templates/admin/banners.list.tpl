@@ -25,7 +25,7 @@
                     <th class="name_column">
 						{translations name='label.name'}
                     </th>
-                    <th class=''></th>
+                    {*<th class=''></th>*}
                     <th class='edit_column'>
 						{translations name='label.edit'}
                     </th>
@@ -36,7 +36,10 @@
 						{translations name='banners.clicks'}
                     </th>
                     <th class='date_column'>
-						{translations name='label.date'}
+						{translations name='label.dateCreated'}
+                    </th>
+                    <th class='date_column'>
+						{translations name='label.dateModified'}
                     </th>
                     <th class='delete_column'>
 						{translations name='label.delete'}
@@ -83,13 +86,16 @@
                                     <a href="{$contentItem->URL}id:{$contentItem->id}/action:showForm" class='icon icon_edit'></a>
 								{/if}
                             </td>
-                            <td>
+                            <td class='view_column'>
 								{$contentItem->views}
                             </td>
-                            <td>
+                            <td class='date_column'>
 								{$contentItem->clicks}
                             </td>
-                            <td>
+                            <td class='date_column'>
+								{$contentItem->dateCreated}
+                            </td>
+                            <td class='date_column'>
 								{$contentItem->dateModified}
                             </td>
                             <td>

@@ -4,8 +4,15 @@ class receiveGenericIcon extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param structureElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
+
         if ($this->validated) {
             $structureElement->prepareActualData();
 
@@ -21,6 +28,9 @@ class receiveGenericIcon extends structureElementAction
             $structureElement->updateConnectedProducts($structureElement->products);
             $structureElement->updateConnectedCategories($structureElement->categories);
             $structureElement->updateConnectedBrands($structureElement->brands);
+            $structureElement->updateConnectedParameters($structureElement->iconProductParameters);
+
+
             $controller->redirect($structureElement->URL);
         }
         $structureElement->executeAction('showForm');
@@ -33,11 +43,18 @@ class receiveGenericIcon extends structureElementAction
             'title',
             'products',
             'categories',
+            'categories',
             'brands',
             'startDate',
             'endDate',
             'days',
             'iconWidth',
+            'iconLocation',
+            'iconBgColor',
+            'iconTextColor',
+            'iconRole',
+            'iconProductAvail',
+            'iconProductParameters',
         ];
     }
 }

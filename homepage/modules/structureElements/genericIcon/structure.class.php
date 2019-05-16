@@ -1,11 +1,18 @@
 <?php
 
+    /**
+     * Class genericIconElement
+     */
 class genericIconElement extends structureElement implements ImageUrlProviderInterface
 {
     use ConnectedProductsProviderTrait;
     use ConnectedBrandsProviderTrait;
     use ConnectedCategoriesProviderTrait;
+    use ConnectedParametersProviderTrait;
     use ImageUrlProviderTrait;
+    use ProductsAvailabilityOptionsTrait;
+    use ProductIconLocationOptionsTrait;
+    use ProductIconRoleOptionsTrait;
 
     public $dataResourceName = 'module_generic_icon';
     public $defaultActionName = 'show';
@@ -23,6 +30,12 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['endDate'] = 'date';
         $moduleStructure['days'] = 'naturalNumber';
         $moduleStructure['iconWidth'] = 'floatNumber';
+        $moduleStructure['iconLocation'] = 'naturalNumber';
+        $moduleStructure['iconBgColor'] = 'text';
+        $moduleStructure['iconTextColor'] = 'text';
+        $moduleStructure['iconRole'] = 'naturalNumber';
+        $moduleStructure['iconProductAvail'] = 'serializedIndex';
+        $moduleStructure['iconProductParameters'] = 'numbersArray';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -32,4 +45,5 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $multiLanguageFields[] = 'originalName';
         $multiLanguageFields[] = 'iconWidth';
     }
+
 }

@@ -211,7 +211,7 @@ class catalogueElement extends structureElement
                 $this->pager = $pager;
                 $orderField = $arguments['order']['field'];
                 $table = 'module_product';
-                if ($orderField == 'dateModified') {
+                if ($orderField == 'dateModified' || $orderField == 'dateCreated') {
                     $table = 'structure_elements';
                 }
                 /**
@@ -220,7 +220,7 @@ class catalogueElement extends structureElement
                 $query = $db->table($table)->select('id');
                 $query->orderBy($orderField, $arguments['order']['argument']);
 
-                if ($orderField != 'dateModified') {
+                if ($orderField != 'dateModified' && $orderField != 'dateCreated') {
                     $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
                     $publicLanguageId = $this->getService('languagesManager')->getCurrentLanguageId($marker);
                     //get ordered id list where appropriate translation exists
@@ -255,7 +255,7 @@ class catalogueElement extends structureElement
                         });
                     });
                 }
-                if ($arguments['order']['field'] == 'dateModified') {
+                if ($arguments['order']['field'] == 'dateModified' || $arguments['order']['field'] == 'dateCreated') {
                     $query->where('structureType', 'product');
                 }
                 if ($filtering) {

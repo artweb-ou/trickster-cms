@@ -29,7 +29,10 @@
                     {translations name='label.type'}
                 </th>
                 <th class='date_column'>
-                    {translations name='label.date'}
+                    {translations name='label.dateCreated'}
+                </th>
+                <th class='date_column'>
+                    {translations name='label.dateModified'}
                 </th>
                 <th class='delete_column'>
 
@@ -60,6 +63,9 @@
                         </td>
                         <td class='type_column'>
                             {translations name=$type}
+                        </td>
+                        <td>
+                            {$contentItem->dateCreated}
                         </td>
                         <td>
                             {$contentItem->dateModified}

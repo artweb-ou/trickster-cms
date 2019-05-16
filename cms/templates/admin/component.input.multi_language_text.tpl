@@ -4,7 +4,7 @@
             {translations name="{$translationGroup}.{strtolower($fieldName)}"} ({$languageNames.$languageId})
         </span>
         <div class="form_field">
-            <input class='input_component' type="text" value="{$object}" name="{$formNames.$fieldName.$languageId}" />
+            <input class='input_component' min="{if !empty($item.minValue)}{$item.minValue}{else}5{/if}"{if !empty($item.maxValue)} max="{$item.maxValue}"{/if} type="{if !empty($item.inputType)}{$item.inputType}{else}text{/if}" value="{$object}" name="{$formNames.$fieldName.$languageId}" />
         </div>
         {include file=$theme->template('component.form_help.tpl') structureType=$element->structureType name=$fieldName}
     </div>

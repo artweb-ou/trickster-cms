@@ -340,7 +340,7 @@ window.StatusChangeButtonComponent = function(orderData) {
 	var status;
 	var init = function() {
 		self.componentElement = document.createElement('span');
-		self.componentElement.className = 'button primary_button';
+		self.componentElement.className = 'button primary_button narrow-sides-button';
 		self.componentElement.style.display = 'none';
 		eventsManager.addHandler(self.componentElement, 'click', clickHandler);
 	};
@@ -357,9 +357,9 @@ window.StatusChangeButtonComponent = function(orderData) {
 			hide();
 		} else {
 			if (sentStatusPossible) {
-				self.componentElement.innerHTML = translationsLogics.get('orders.statuschange_payed');
+				self.componentElement.innerHTML = translationsLogics.get('orders.statuschange_payed') + "<br>" + translationsLogics.get('orders.statuschange_and_send_notification');
 			} else {
-				self.componentElement.innerHTML = translationsLogics.get('orders.statuschange_undefined');
+				self.componentElement.innerHTML = translationsLogics.get('orders.statuschange_undefined') + "<br>" + translationsLogics.get('orders.statuschange_and_send_notification');
 			}
 			display();
 		}
@@ -367,8 +367,10 @@ window.StatusChangeButtonComponent = function(orderData) {
 	var clickHandler = function() {
 		if (status == 'payed') {
 			ordersLogics.setStatus(orderData.id, 'sent');
+			ordersLogics.sendStatus(orderData.id, 'sent');
 		} else if (status == 'undefined') {
 			ordersLogics.setStatus(orderData.id, 'payed');
+			ordersLogics.sendStatus(orderData.id, 'payed');
 		}
 	};
 	var display = function() {

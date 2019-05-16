@@ -4,30 +4,29 @@
 @active-color: #6bbbff;
 
 .ajaxselect_container {
-  position: relative;
-  border: 1px solid @border-color;
-  border-radius: 3px;
-  padding: 0 @15pt;
-  box-sizing: border-box;
-  max-width: @509pt;
-
-  &:hover, &:focus {
-    outline: none;
-    border: 1px solid mix(@active-color, @border-color, 50%);
-  }
-
-  .icon_search {
-    color: @active-color;
-    position: absolute;
-    top: @10pt;
-    right: @13pt;
-  }
+	position: relative;
+	border: 1px solid @border-color;
+	border-radius: 3px;
+	padding: 0 @32pt 0 @15pt;
+	box-sizing: border-box;
+	max-width: @509pt;
+	&:hover, &:focus {
+		outline: none;
+		border: 1px solid mix(@active-color, @border-color, 50%);
+	}
+	.icon_search {
+		color: @active-color;
+		position: absolute;
+		top: @10pt;
+		right: @13pt;
+	}
 }
 
 .ajaxselect_searchinput {
-  border: none;
-  padding: @11pt 0 @11pt;
-  color: @label-color;
+	border: none;
+	width: 100%;
+	padding: @11pt 0 @11pt;
+	color: @label-color;
 
   &:before {
     display: block;
@@ -140,30 +139,28 @@
 }
 
 .ajaxitemsearch_result {
-  background-color: @white;
-  border: 1px solid @border-color;
-  border-radius: 3px;
-  position: absolute;
-  top: -@43pt;
-  left: -@16pt;
-  height: @42pt;
-  border-bottom: 1px solid #dadada;
-  font-size: @15pt;
-  padding: 0 @5pt 0 @28pt;
-  width: e('calc(100% - 0.2rem)');
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  &:hover {
-    overflow: visible;
-    text-overflow: unset;
-  }
-
-  &:hover, &:focus {
-    outline: none;
-    border: 1px solid @hover-blue-color;
-  }
+	background-color: @white;
+	//border: 1px solid @border-color;
+	border-radius: 3px;
+	position: absolute;
+	top: -@43pt;
+	left: -@16pt;
+	height: @42pt;
+	border-bottom: 1px solid #dadada;
+	font-size: @15pt;
+	padding: 0 @5pt 0 @28pt;
+	width: e('calc(100% - 1.2rem)');
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	&:hover {
+		overflow: visible;
+		text-overflow: unset;
+	}
+	&:hover, &:focus {
+		outline: none;
+		border: 1px solid @hover-blue-color;
+	}
 }
 
 .ajaxitemsearch_result_text {
