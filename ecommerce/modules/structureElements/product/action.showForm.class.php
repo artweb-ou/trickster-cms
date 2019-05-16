@@ -2,6 +2,12 @@
 
 class showFormProduct extends structureElementAction
 {
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param productElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         $linksManager = $this->getService('linksManager');
