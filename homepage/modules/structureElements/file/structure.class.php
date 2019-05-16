@@ -37,11 +37,17 @@ class fileElement extends structureElement implements StructureElementUploadedFi
 
     public function getImageId()
     {
+        if ($this->image) {
+            return $this->image;
+        }
         return $this->file;
     }
 
     public function getImageName()
     {
+        if ($this->imageFileName) {
+            return $this->imageFileName;
+        }
         return $this->fileName;
     }
 
