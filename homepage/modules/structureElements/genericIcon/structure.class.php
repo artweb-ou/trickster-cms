@@ -29,7 +29,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['startDate'] = 'date';
         $moduleStructure['endDate'] = 'date';
         $moduleStructure['days'] = 'naturalNumber';
-        $moduleStructure['iconWidth'] = 'floatNumber';
+        $moduleStructure['iconWidth'] = 'text';
         $moduleStructure['iconLocation'] = 'naturalNumber';
         $moduleStructure['iconBgColor'] = 'text';
         $moduleStructure['iconTextColor'] = 'text';

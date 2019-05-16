@@ -33,8 +33,9 @@ class GenericIconFormStructure extends ElementForm
         'iconWidth' => [
             'type' => 'input.multi_language_text',
             'inputType' => 'number',
-        //    'minValue' => '10',
+            'minValue' => '0',
             'maxValue' => '50',
+            'stepValue' => '0.5',
         ],
         'iconLocation' => [
             'type' => 'select.index',
