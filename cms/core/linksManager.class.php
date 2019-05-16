@@ -275,7 +275,7 @@ class linksManager extends errorLogger
      * @param string $elementRole
      * @return array
      */
-    public function getConnectedIdIndex($elementId, $type = 'structure', $elementRole = 'parent')
+    public function getConnectedIdIndex($elementId, $type = 'structure', $elementRole = null)
     {
         $index = [];
         if ($foundIdList = $this->getConnectedIdList($elementId, $type, $elementRole)) {
