@@ -8,6 +8,10 @@ class defaultDesignTheme extends DesignTheme
         $pathsManager = $controller->getPathsManager();
         $tricksterPath = $pathsManager->getPath('trickster');
 
+        $this->fontsFolder = 'cms/fonts/';
+        $this->fontsPath = $tricksterPath . $this->fontsFolder;
+        $this->fontsUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . $this->fontsFolder;
+
         $this->templatesFolder = $tricksterPath . 'cms/templates/default/';
         $this->cssPath = $tricksterPath . 'cms/css/default/';
         $this->imagesFolder = 'trickster/cms/images/default/';
@@ -31,12 +35,16 @@ class defaultDesignTheme extends DesignTheme
             'basic.anchorParameters.js',
             'mixin.domElementMaker.js',
             'mixin.domHelper.js',
+            'logics.ajaxSearch.js',
+            'logics.ajaxSelect.js',
             'logics.checkbox.js',
             'logics.debug.js',
             'logics.fileInput.js',
             'logics.radioButton.js',
             'logics.analytics.js',
             'logics.calendarSelector.js',
+            'component.ajaxSearch.js',
+            'component.ajaxSelect.js',
             'component.checkbox.js',
             'component.debug.js',
             'component.fileInput.js',

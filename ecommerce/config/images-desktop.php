@@ -61,6 +61,18 @@
             'png',
         ],
     ],
+    'productFileImage' => [
+        'filters' => [
+            [
+                'reduce',
+                'width=100, height=100',
+            ],
+        ],
+        'format' => [
+            null,
+            'png',
+        ],
+    ],
     'categoryShortIcon' => [
         'filters' => [
             [
