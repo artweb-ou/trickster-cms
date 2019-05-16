@@ -8,6 +8,7 @@ class productDataResponseConverter extends dataResponseConverter
         foreach ($data as &$element) {
             $info = [];
             $info['id'] = $element->id;
+            $info['searchTitle'] = ''.$element->getSearchTitle();
             $info['structureType'] = $element->structureType;
             $info['structurePath'] = $element->structurePath;
             $info['title'] = $element->title ? $element->title : $element->structureName;
