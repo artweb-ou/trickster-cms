@@ -14,9 +14,13 @@
             {$iconRoleGeneralDiscount = true}
         {/if}
     {/foreach}
-    {if !empty($displayOldPrice) && $iconRoleGeneralDiscount !==true}
+    {if !empty($displayOldPrice) && ($iconRoleGeneralDiscount !==true || !empty($oldPriceElement))}
         {if $element->getOldPrice()}
+            {if !empty($oldPriceElement)}
+            {$product_discount_container = $iconsCell_product_icons_image|cat:$oldPriceElement}
+            {else}
             {$product_discount_container = $iconsCell_product_icons_image|cat:"<div class='product_discount_container'><span class='product_discount'>-{$element->getDiscountPercent()|round}%</span></div>"}
+            {/if}
         {/if}
     {/if}
     {foreach $iconsInfo as $iconInfo}
