@@ -961,7 +961,7 @@ class productElement extends structureElement implements
                             'iconStructureType' => $icon->structureType,
                         ];
 
-                        if($icon->structureType == 'genericIcon') {
+                        if ($icon->structureType == 'genericIcon') {
                             $iconsInfoGenericIcon = [
                                 'iconLocation' => $this->productIconLocationTypes[$icon->iconLocation],
                                 'iconRole' => $this->productIconRoleTypes[$icon->iconRole],
@@ -1121,22 +1121,24 @@ class productElement extends structureElement implements
 
     public function getShuffledProductFromConnectedCategories()
     {
-        $categories = $this->getProductConnectedCategories();
-        $quantity = $this->qtFromConnectedCategories;
-
-        $structureManager = $this->getService('structureManager');
-
-        $db = $this->getService('db');
         $products = [];
-        $records = $db->table('structure_links')
-            ->select('childStructureId')
-            ->where('type', '=', 'catalogue')
-            ->whereIn('parentStructureId', $categories)
-            ->orderByRaw("RAND()")
-            ->take($quantity)
-            ->get();
-        foreach ($records as $record) {
-            $products[] = $structureManager->getElementById($record['childStructureId']);
+        if ($categories = $this->getProductConnectedCategories()) {
+            if ($quantity = $this->qtFromConnectedCategories) {
+
+                $structureManager = $this->getService('structureManager');
+
+                $db = $this->getService('db');
+                $records = $db->table('structure_links')
+                    ->select('childStructureId')
+                    ->where('type', '=', 'catalogue')
+                    ->whereIn('parentStructureId', $categories)
+                    ->orderByRaw("RAND()")
+                    ->take($quantity)
+                    ->get();
+                foreach ($records as $record) {
+                    $products[] = $structureManager->getElementById($record['childStructureId']);
+                }
+            }
         }
 
         return $products;
