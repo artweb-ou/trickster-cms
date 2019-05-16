@@ -54,9 +54,9 @@ class ajaxSearchApplication extends controllerApplication
             ], true);
             $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
         }
-        $query = false;
-        if ($controller->getParameter('query')) {
-            $query = htmlspecialchars(trim($controller->getParameter('query')), ENT_QUOTES);
+        if ($query = $controller->getParameter('query')) {
+            $query = urldecode($query);
+            $query = htmlspecialchars(trim($query), ENT_QUOTES);
         }
         if ($query) {
             if ($controller->getParameter('types')) {

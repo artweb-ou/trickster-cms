@@ -135,6 +135,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
         searchString = self.inputElement.value;
       }
       searchString = searchString.replace(/^\s+/, '').replace(/\s+$/, ''); // trim
+      searchString = (encodeURIComponent(searchString));
       if (types && searchString.length >= searchStringLimit) {
         ajaxSearchLogics.sendQuery(updateData, encodeURIComponent(searchString),
             types, apiMode);

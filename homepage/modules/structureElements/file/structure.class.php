@@ -61,6 +61,17 @@ class fileElement extends structureElement implements StructureElementUploadedFi
         }
     }
 
+    public function getFileExtension()
+    {
+        if ($info = pathinfo($this->fileName)) {
+            if (!empty($info['extension'])) {
+                return $info['extension'];
+            }
+        }
+
+        return false;
+    }
+
     public function getDownloadUrl($mode = 'download', $appName = 'file')
     {
         $controller = $this->getService('controller');
@@ -71,11 +82,9 @@ class fileElement extends structureElement implements StructureElementUploadedFi
 
     public function isImage()
     {
-        if ($info = pathinfo($this->fileName)) {
-            if (!empty($info['extension'])) {
-                if (in_array(strtolower($info['extension']), ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])) {
-                    return true;
-                }
+        if ($extension = $this->getFileExtension()) {
+            if (in_array(strtolower($extension), ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])) {
+                return true;
             }
         }
         return false;
