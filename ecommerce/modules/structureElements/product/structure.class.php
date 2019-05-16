@@ -1800,13 +1800,15 @@ class productElement extends structureElement implements
         return $data;
     }
 
+
     public function getSearchTitle()
     {
-        $title = '';
+
+        $title = $this->getTitle();
+
         if ($category = $this->getParentCategory()) {
-            $title = $category->getTitle();
+            $title .= ' (' . $category->getTitle() . ')';
         }
-        $title .= $this->getTitle();
         return $title;
     }
 
@@ -1817,15 +1819,8 @@ class productElement extends structureElement implements
              * @var structureManager $structureManager
              */
             $structureManager = $this->getService('structureManager');
-            if ($parentsList = $structureManager->getElementsParents($this->id)) {
-                foreach ($parentsList as &$parentElement) {
-                    if ($parentElement->requested) {
-                        $this->requestedParentCategory = $parentElement;
-                        break;
-                    } elseif (!$this->requestedParentCategory) {
-                        $this->requestedParentCategory = $parentElement;
-                    }
-                }
+            if ($parentsList = $structureManager->getElementsParents($this->id, false, 'catalogue')) {
+                $this->parentCategory = reset($parentElement);
             }
         }
         return $this->parentCategory;
@@ -1833,7 +1828,7 @@ class productElement extends structureElement implements
 
     public function persistElementData()
     {
-        if ($this->getService('ConfigManager')->get('product.useCodeForUrlName')){
+        if ($this->getService('ConfigManager')->get('product.useCodeForUrlName')) {
             $this->structureName = $this->code;
         }
         parent::persistElementData();

@@ -2,6 +2,10 @@
 
 class productDataResponseConverter extends dataResponseConverter
 {
+    /**
+     * @param productElement[] $data
+     * @return array
+     */
     public function convert($data)
     {
         $result = [];

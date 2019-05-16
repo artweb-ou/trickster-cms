@@ -21,8 +21,6 @@ class adminDesignTheme extends DesignTheme
 
         $this->javascriptFiles = [
             'logics.addNewElement.js',
-            'logics.ajaxSearch.js',
-            'logics.ajaxSelect.js',
             'logics.contentFilterForm.js',
             'logics.contentList.js',
             'logics.dropDown.js',
@@ -43,8 +41,6 @@ class adminDesignTheme extends DesignTheme
             'component.tableComponent.js',
             'component.addNewElement.js',
             'component.ajaxItemSearch.js',
-            'component.ajaxSearch.js',
-            'component.ajaxSelect.js',
             'component.contentFilterForm.js',
             'component.contentList.js',
             'component.dropDown.js',
