@@ -1,4 +1,4 @@
-window.MobileMenuComponent = function(componentElement) {
+window.MobileMenuComponent = function(componentElement, toggleStartCallback) {
 	var self = this;
 	var closeIconElement;
 	var visible;
@@ -11,6 +11,9 @@ window.MobileMenuComponent = function(componentElement) {
 		closeIconElement.addEventListener('click', closeClick);
 	};
 	this.toggleVisibility = function() {
+		if(toggleStartCallback) {
+			toggleStartCallback();
+		}
 		visible = !visible;
 		if (visible) {
 			DarkLayerComponent.showLayer(function() {
@@ -42,6 +45,9 @@ window.MobileMenuComponent = function(componentElement) {
 	};
 	var closeClick = function(event) {
 		self.toggleVisibility();
+	};
+	this.isVisible = function() {
+		return !!visible;
 	};
 	init();
 };
