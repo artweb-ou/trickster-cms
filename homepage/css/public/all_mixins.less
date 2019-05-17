@@ -1,106 +1,117 @@
 .flex_items_list {
-	//deprecated?
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	align-items: stretch;
-	&::after {
-		flex: auto;
-		content: "";
-		display: block;
-	}
+  //deprecated?
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+
+  &::after {
+    flex: auto;
+    content: "";
+    display: block;
+  }
 }
 
 .grid_container {
-	display: flex;
-	flex-wrap: wrap;
-	&::after {
-		content: "";
-		flex: auto;
-	}
+  display: flex;
+  flex-wrap: wrap;
+
+  &::after {
+    content: "";
+    flex: auto;
+  }
 }
 
-.grid_item(@full_grid_span, @grid_spacing: @default_grid_spacing, @grid_spacing_mobile: @default_grid_spacing_mobile) {
-	//*0.999 is required for incorrect float rounding to px in some browsers/font sizes
-	box-sizing: border-box;
-	margin: 0 @grid_spacing_mobile*0.999 / 2 @grid_spacing_mobile;
-	@media (min-width: 0) and (max-width: @screen_breakpoint_sm) {
-		.fit_into_grid(@full_grid_span - 3, @grid_spacing_mobile);
-	}
-	@media (min-width: @screen_breakpoint_sm) and (max-width: @screen_breakpoint_sm_max) {
-		.fit_into_grid(@full_grid_span - 2, @grid_spacing_mobile);
-	}
-	@media (min-width: @screen_breakpoint_md) and (max-width: @screen_breakpoint_md_max) {
-		.fit_into_grid(@full_grid_span - 1, @grid_spacing_mobile);
-	}
-	@media (min-width: @screen_breakpoint_lg) {
-		margin: 0 @grid_spacing*0.999 / 2 @grid_spacing;
-		.grid_lg & {
-			.fit_into_grid(@full_grid_span, @grid_spacing);
-		}
+.grid_item(
+  @lg_grid_span,
+  @grid_spacing: @default_grid_spacing,
+  @grid_spacing_mobile: @default_grid_spacing_mobile,
+  @xs_grid_span: @lg_grid_span - 3,
+  @sm_grid_span: @lg_grid_span - 2,
+  @md_grid_span: @lg_grid_span - 1
+) {
+  //*0.999 is required for incorrect float rounding to px in some browsers/font sizes
+  box-sizing: border-box;
+  margin: 0 @grid_spacing_mobile*0.999 / 2 @grid_spacing_mobile;
+  @media (min-width: 0) and (max-width: @screen_breakpoint_sm) {
+    .fit_into_grid(@xs_grid_span, @grid_spacing_mobile);
+  }
+  @media (min-width: @screen_breakpoint_sm) and (max-width: @screen_breakpoint_sm_max) {
+    .fit_into_grid(@sm_grid_span, @grid_spacing_mobile);
+  }
+  @media (min-width: @screen_breakpoint_md) and (max-width: @screen_breakpoint_md_max) {
+    .fit_into_grid(@md_grid_span, @grid_spacing_mobile);
+  }
+  @media (min-width: @screen_breakpoint_lg) {
+    margin: 0 @grid_spacing*0.999 / 2 @grid_spacing;
+    .grid_lg & {
+      .fit_into_grid(@lg_grid_span, @grid_spacing);
+    }
 
-		.grid_md & {
-			.fit_into_grid(@full_grid_span - 1, @grid_spacing);
-		}
+    .grid_md & {
+      .fit_into_grid(@lg_grid_span - 1, @grid_spacing);
+    }
 
-		.grid_sm & {
-			.fit_into_grid(@full_grid_span - 2, @grid_spacing);
-		}
-	}
+    .grid_sm & {
+      .fit_into_grid(@lg_grid_span - 2, @grid_spacing);
+    }
+  }
 }
 
 .fit_into_grid_margins(@span) when (@span > 1) {
-	&:nth-of-type(@{span}n + 1) {
-		margin-left: 0;
-	}
-	&:nth-of-type(@{span}n) {
-		margin-right: 0;
-	}
+  &:nth-of-type(@{span}n + 1) {
+    margin-left: 0;
+  }
+  &:nth-of-type(@{span}n) {
+    margin-right: 0;
+  }
 }
 
 .fit_into_grid_margins(@span) when (@span = 1) {
-	&:nth-of-type(n + 1) {
-		margin-left: 0;
-	}
-	&:nth-of-type(n) {
-		margin-right: 0;
-	}
+  &:nth-of-type(n + 1) {
+    margin-left: 0;
+  }
+  &:nth-of-type(n) {
+    margin-right: 0;
+  }
 }
 
 .fit_into_grid_margins(@span) when (@span < 1) {
-	& {
-		margin-left: 0;
-		margin-right: 0;
-	}
+  & {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .fit_into_grid(@external_grid_span, @external_grid_spacing) {
-	@internal_grid_span: max(@external_grid_span, 1);
-	@grid_span_pct: 100 / @internal_grid_span;
-	@internal_grid_spacing: @external_grid_spacing * (@internal_grid_span - 1) / @internal_grid_span;
-	width: e('calc(@{grid_span_pct}% - @{internal_grid_spacing})');
-	.fit_into_grid_margins(@external_grid_span);
+  @internal_grid_span: max(@external_grid_span, 1);
+  @grid_span_pct: 100 / @internal_grid_span;
+  @internal_grid_spacing: @external_grid_spacing * (@internal_grid_span - 1) / @internal_grid_span;
+  width: e('calc(@{grid_span_pct}% - @{internal_grid_spacing})');
+  .fit_into_grid_margins(@external_grid_span);
 }
 
 
 .hidden_on_phone {
-	@media (max-width: @screen_breakpoint_sm_max) {
-		display: none !important;
-	}
+  @media (max-width: @screen_breakpoint_sm_max) {
+    display: none !important;
+  }
 }
 
 //deprecated, use .clearfixin() instead.
 .clearfix {
-	display: block;
-	clear: both;
+  display: block;
+  clear: both;
 }
 
 .__transition_01__(@what, @time, @method) {
-	-webkit-transition: @what @time @method;
-	transition: @what @time @method;
-};
+  -webkit-transition: @what @time @method;
+  transition: @what @time @method;
+}
+
+;
 
 .svg-bg(@svgFile,@color,@stroke) {
-	@svgContent: encodeSvgContent(@svgFile,@color,@stroke);
-	background-image:  url("@{svgContent}");
+  @svgContent: encodeSvgContent(@svgFile, @color, @stroke);
+  background-image: url("@{svgContent}");
 }
