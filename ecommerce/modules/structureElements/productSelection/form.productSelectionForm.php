@@ -54,6 +54,11 @@ class ProductSelectionFormStructure extends ElementForm
             'property' => 'categoriesList',
             'class' => 'select_multiple_categories',
         ],
+        'image' => [
+            'type' => 'input.image',
+            'preset' => 'adminImage',
+            'filename' => 'image',
+        ],
     ];
 
     protected $additionalContent = 'component.block.product_selection';

@@ -264,7 +264,7 @@ class ParametersManager extends errorLogger
                 }
             }
             if ($records = $this->db->table('module_product_selection')
-                ->select('id', 'title', 'type', 'option', 'controlType', 'influential', 'hint')
+                ->select('id', 'title', 'type', 'option', 'controlType', 'influential', 'hint', 'originalName', 'image')
                 ->orWhere(function ($query) use ($currentLanguageId) {
                     $query->where('primary', '=', 1)
                         ->where('languageId', "=", $currentLanguageId);

@@ -33,6 +33,8 @@ class productSelectionElement extends structureElement
         $moduleStructure['controlType'] = 'text';
         $moduleStructure['influential'] = 'checkbox';
 
+        $moduleStructure['originalName'] = 'fileName';
+        $moduleStructure['image'] = 'image';
         $moduleStructure['type'] = 'text';
         $moduleStructure['categoriesIds'] = 'numbersArray';
         $moduleStructure['importInfo'] = 'array';
