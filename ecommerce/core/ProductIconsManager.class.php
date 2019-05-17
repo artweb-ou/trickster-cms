@@ -133,7 +133,7 @@ class ProductIconsManager
                     if (!empty($iconRoleValue = $iconElement->productIconRoleTypes[$iconElement->iconRole]) and
                         $iconRoleValue == 'role_general_discount' and
                         $product->getDiscountAmount(false) > 0) {
-                            $elementIconsIndex[$iconElement->id] = true;
+                        $elementIconsIndex[$iconElement->id] = true;
                     }
 
 
@@ -141,16 +141,16 @@ class ProductIconsManager
                     // get parameters List (productSelection only) of current product
                     $productSelectionOptions = [];
                     $parametersInfoList = $product->getParametersInfoList();
-                    foreach ($parametersInfoList as $parameterInfoKey=>$parameterInfoValue) {
+                    foreach ($parametersInfoList as $parameterInfoKey => $parameterInfoValue) {
                         if ($parameterInfoValue['structureType'] == 'productSelection') {
                             $productSelectionOptions = array_merge($productSelectionOptions, $parameterInfoValue['productOptions']);
-                        /*
-                           'title' =>string
-                           'id' =>int
-                           'originalName' =>string
-                           'image' =>string
-                           'value' =>string
-                        */
+                            /*
+                               'title' =>string
+                               'id' =>int
+                               'originalName' =>string
+                               'image' =>string
+                               'value' =>string
+                            */
                         }
                     }
                     // get id List of this parameters List
@@ -166,14 +166,14 @@ class ProductIconsManager
                     $productCurrentSelectionConnectedParametersIds =
                         array_intersect($productSelectionOptionsIds, $productConnectedParametersIds);
 
-                    if (!empty($productCurrentSelectionConnectedParametersIds)){
+                    if (!empty($productCurrentSelectionConnectedParametersIds)) {
                         $elementIconsIndex[$iconElement->id] = true;
                     }
 
                 }
 
                 foreach ($elementIconsIndex as $iconId => $value) {
-                    if ($value){
+                    if ($value) {
                         $this->icons[$product->id][] = $this->structureManager->getElementById($iconId);
 
                     }
