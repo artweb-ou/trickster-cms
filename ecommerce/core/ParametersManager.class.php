@@ -314,6 +314,11 @@ class ParametersManager extends errorLogger
     {
         if (!isset($this->basketSelections[$productId])) {
             $this->preloadPrimaryParametersForProducts([$productId]);
+            foreach ($this->basketSelections[$productId] as $key => $productSelection) {
+                if (!$productSelection['productOptions']) {
+                    unset($this->basketSelections[$productId][$key]);
+                }
+            }
         }
         return $this->basketSelections[$productId];
     }
