@@ -35,6 +35,7 @@ class productSelectionElement extends structureElement
 
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['image'] = 'image';
+        $moduleStructure['paramRange'] = 'text';
         $moduleStructure['type'] = 'text';
         $moduleStructure['categoriesIds'] = 'numbersArray';
         $moduleStructure['importInfo'] = 'array';

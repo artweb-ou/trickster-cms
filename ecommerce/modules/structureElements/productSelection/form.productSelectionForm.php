@@ -59,6 +59,13 @@ class ProductSelectionFormStructure extends ElementForm
             'preset' => 'adminImage',
             'filename' => 'image',
         ],
+        'paramRange' => [
+            'type' => 'select.array',
+            'options' => [
+                '0' => 'enumeration',
+                '1' => 'range'
+            ]
+        ],
     ];
 
     protected $additionalContent = 'component.block.product_selection';

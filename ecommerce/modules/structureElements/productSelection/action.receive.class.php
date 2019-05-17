@@ -155,6 +155,7 @@ class receiveProductSelection extends structureElementAction
             'controlType',
             'influential',
             'image',
+            'paramRange',
         ];
     }
 
