@@ -327,7 +327,6 @@ window.AjaxSearchResultsComponent = function(
       var inputLeft = inputPositions.x;
       var inputTop = inputPositions.y;
       var inputHeight = parentObject.inputElement.offsetHeight;
-      var width = contentElement.offsetWidth;
       var leftPosition = (inputLeft);
       var topPosition = (inputTop + inputHeight);
       var windowHeight = document.documentElement.offsetHeight;
@@ -341,7 +340,6 @@ window.AjaxSearchResultsComponent = function(
 
       componentElement.style.left = leftPosition + 'px';
       componentElement.style.top = topPosition + 'px';
-      componentElement.style.width = width + 'px';
       componentElement.style.height = height + 'px';
     }
   };
