@@ -1,7 +1,8 @@
 <?php
 
-abstract class ElementForm
+abstract class ElementForm implements DependencyInjectionContextInterface
 {
+    use DependencyInjectionContextTrait;
     protected $containerClass;
     protected $formClass = "";
     protected $formEnctype = 'multipart/form-data';
@@ -112,6 +113,11 @@ abstract class ElementForm
     public function getElementProperty($property)
     {
         return $this->element->$property;
+    }
+
+    public function getElementOptions($options)
+    {
+        return $this->$options;
     }
 
     public function getTranslationGroup()

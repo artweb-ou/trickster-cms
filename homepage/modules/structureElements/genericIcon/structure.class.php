@@ -1,11 +1,18 @@
 <?php
 
+    /**
+     * Class genericIconElement
+     */
 class genericIconElement extends structureElement implements ImageUrlProviderInterface
 {
     use ConnectedProductsProviderTrait;
     use ConnectedBrandsProviderTrait;
     use ConnectedCategoriesProviderTrait;
+    use ConnectedParametersProviderTrait;
     use ImageUrlProviderTrait;
+    use ProductsAvailabilityOptionsTrait;
+    use ProductIconLocationOptionsTrait;
+    use ProductIconRoleOptionsTrait;
 
     public $dataResourceName = 'module_generic_icon';
     public $defaultActionName = 'show';
@@ -22,7 +29,13 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['startDate'] = 'date';
         $moduleStructure['endDate'] = 'date';
         $moduleStructure['days'] = 'naturalNumber';
-        $moduleStructure['iconWidth'] = 'floatNumber';
+        $moduleStructure['iconWidth'] = 'text';
+        $moduleStructure['iconLocation'] = 'naturalNumber';
+        $moduleStructure['iconBgColor'] = 'text';
+        $moduleStructure['iconTextColor'] = 'text';
+        $moduleStructure['iconRole'] = 'naturalNumber';
+        $moduleStructure['iconProductAvail'] = 'serializedIndex';
+        $moduleStructure['iconProductParameters'] = 'numbersArray';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -32,4 +45,13 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $multiLanguageFields[] = 'originalName';
         $multiLanguageFields[] = 'iconWidth';
     }
+
+    public function getSettingsVariablles($variable){
+        $settingsManager = $this->getService('settingsManager');
+        $configManager = $this->getService('ConfigManager');
+        $variableValue = $settingsManager->getSetting($variable) ?: $configManager->get($variable);
+
+        return $variableValue;
+    }
+
 }

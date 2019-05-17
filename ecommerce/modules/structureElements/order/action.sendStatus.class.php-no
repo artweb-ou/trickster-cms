@@ -1,0 +1,49 @@
+<?php
+
+class sendStatusNotification extends structureElementAction
+{
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param orderElement $structureElement
+     * @return mixed|void
+     */
+    public function execute(&$structureManager, &$controller, &$structureElement)
+    {// /sendType:Notification/statusType:sent
+        /*
+        payed
+        failed
+        deleted
+        paid_partial
+        sent
+        */
+        switch ($controller->getParameter('statusType')) {
+            case 'payed':
+                {
+                    $structureElement->sendOrderStatusNotificationEmail('Notification_payed', true);
+                }
+                break;
+            case 'failed':
+                {
+                    $structureElement->sendOrderStatusNotificationEmail('Notification_failed', true);
+                }
+                break;
+            case 'deleted':
+                {
+                    $structureElement->sendOrderStatusNotificationEmail('Notification_deleted', true);
+                }
+                break;
+            case 'paid_partial':
+                {
+                    $structureElement->sendOrderStatusNotificationEmail('Notification_paid_partial', true);
+                }
+                break;
+            case 'sent':
+                {
+                    $structureElement->sendOrderStatusNotificationEmail('Notification_sent', true);
+                }
+                break;
+        }
+        $structureElement->executeAction("showForm");
+    }
+}

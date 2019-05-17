@@ -62,6 +62,11 @@ class productElement extends structureElement implements
     use DeliveryPricesTrait;
     use EventLoggingElementTrait;
 
+    use ProductsAvailabilityOptionsTrait;
+    use ProductIconLocationOptionsTrait;
+    use ProductIconRoleOptionsTrait;
+    use ConnectedParametersProviderTrait;
+
     public $dataResourceName = 'module_product';
     protected $allowedTypes = ['galleryImage'];
     public $defaultActionName = 'show';
@@ -78,7 +83,14 @@ class productElement extends structureElement implements
     /**
      * @var categoryElement
      */
+    protected $parentCategory;
+    /**
+     * @var categoryElement
+     */
     protected $requestedParentCategory;
+    /**
+     * @var categoryElement
+     */
     protected $requestedTopCategory;
     protected $deliveryTypesInfo;
     protected $brandElement;
@@ -708,13 +720,12 @@ class productElement extends structureElement implements
                     }
                     array_multisort($sort, SORT_ASC, $filteredGroupParameters);
 
-                    $groupInfo = [
+                    $this->parametersGroupsInfo[] = [
                         'title' => $group->title,
                         'id' => $group->id,
                         'isMinimized' => $group->isMinimized,
+                        'parametersList' => $filteredGroupParameters,
                     ];
-                    $groupInfo['parametersList'] = $filteredGroupParameters;
-                    $this->parametersGroupsInfo[] = $groupInfo;
                 }
             }
         }
@@ -729,11 +740,6 @@ class productElement extends structureElement implements
              */
             $parametersManager = $this->getService('ParametersManager');
             $this->basketSelectionsInfo = $parametersManager->getProductBasketSelectionsInfo($this->id);
-            foreach ($this->basketSelectionsInfo as $key => $productSelection) {
-                if (!$productSelection['productOptions']) {
-                    unset($this->basketSelectionsInfo[$key]);
-                }
-            }
         }
         return $this->basketSelectionsInfo;
     }
@@ -932,15 +938,34 @@ class productElement extends structureElement implements
             $cache = $this->getService('Cache');
             if (($this->iconsInfo = $cache->get($this->id . ':icons') === false)) {
                 $this->iconsInfo = [];
+                /**
+                 * @var ProductIconsManager $productIconsManager
+                 */
                 $productIconsManager = $this->getService('ProductIconsManager');
                 if ($icons = $productIconsManager->getProductIcons($this)) {
                     foreach ($icons as $icon) {
-                        $this->iconsInfo[] = [
+                        $iconsInfoAllIcons = [];
+                        $iconsInfoGenericIcon = [];
+
+                        $iconsInfoAllIcons = [
                             'title' => $icon->title,
                             'image' => $icon->image,
                             'width' => $icon->iconWidth,
                             'fileName' => $icon->originalName,
+                            'iconStructureType' => $icon->structureType,
                         ];
+
+                        if ($icon->structureType == 'genericIcon') {
+                            $iconsInfoGenericIcon = [
+                                'iconLocation' => $this->productIconLocationTypes[$icon->iconLocation],
+                                'iconRole' => $this->productIconRoleTypes[$icon->iconRole],
+                                'iconBgColor' => $icon->iconBgColor,
+                                'iconTextColor' => $icon->iconTextColor,
+                                'iconProductAvail' => $icon->iconProductAvail,
+                            ];
+                        }
+                        $this->iconsInfo[] = array_merge($iconsInfoAllIcons, $iconsInfoGenericIcon);
+
                     }
                 }
                 if ($discounts = $this->getCampaignDiscounts()) {
@@ -1090,22 +1115,24 @@ class productElement extends structureElement implements
 
     public function getShuffledProductFromConnectedCategories()
     {
-        $categories = $this->getProductConnectedCategories();
-        $quantity = $this->qtFromConnectedCategories;
-
-        $structureManager = $this->getService('structureManager');
-
-        $db = $this->getService('db');
         $products = [];
-        $records = $db->table('structure_links')
-            ->select('childStructureId')
-            ->where('type', '=', 'catalogue')
-            ->whereIn('parentStructureId', $categories)
-            ->orderByRaw("RAND()")
-            ->take($quantity)
-            ->get();
-        foreach ($records as $record) {
-            $products[] = $structureManager->getElementById($record['childStructureId']);
+        if ($categories = $this->getProductConnectedCategories()) {
+            if ($quantity = $this->qtFromConnectedCategories) {
+
+                $structureManager = $this->getService('structureManager');
+
+                $db = $this->getService('db');
+                $records = $db->table('structure_links')
+                    ->select('childStructureId')
+                    ->where('type', '=', 'catalogue')
+                    ->whereIn('parentStructureId', $categories)
+                    ->orderByRaw("RAND()")
+                    ->take($quantity)
+                    ->get();
+                foreach ($records as $record) {
+                    $products[] = $structureManager->getElementById($record['childStructureId']);
+                }
+            }
         }
 
         return $products;
@@ -1793,9 +1820,35 @@ class productElement extends structureElement implements
         return $data;
     }
 
+
+    public function getSearchTitle()
+    {
+
+        $title = $this->getTitle();
+
+        if ($category = $this->getParentCategory()) {
+            $title .= ' (' . $category->getTitle() . ')';
+        }
+        return $title;
+    }
+
+    public function getParentCategory()
+    {
+        if ($this->parentCategory === null) {
+            /**
+             * @var structureManager $structureManager
+             */
+            $structureManager = $this->getService('structureManager');
+            if ($parentsList = $structureManager->getElementsParents($this->id, false, 'catalogue')) {
+                $this->parentCategory = reset($parentElement);
+            }
+        }
+        return $this->parentCategory;
+    }
+
     public function persistElementData()
     {
-        if ($this->getService('ConfigManager')->get('product.useCodeForUrlName')){
+        if ($this->getService('ConfigManager')->get('product.useCodeForUrlName')) {
             $this->structureName = $this->code;
         }
         parent::persistElementData();

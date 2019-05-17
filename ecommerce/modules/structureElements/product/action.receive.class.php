@@ -4,9 +4,18 @@ class receiveProduct extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param productElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
+            /**
+             * @var linksManager $linksManager
+             */
             $linksManager = $this->getService('linksManager');
 
             $structureElement->quantity = (int)$structureElement->quantity;
@@ -137,7 +146,7 @@ class receiveProduct extends structureElementAction
                 }
             }
             //delete obsolete connected categories links
-            foreach ($connectedProductCategoriesIdIndex as $categoryId => &$value) {
+            foreach ($connectedProductCategoriesIdIndex as $categoryId => $value) {
                 $linksManager->unLinkElements($categoryId, $structureElement->id, 'connectedCategory');
             }
 

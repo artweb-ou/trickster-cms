@@ -26,7 +26,19 @@ class sendInvoiceOrder extends structureElementAction
                     $structureElement->sendOrderEmail('invoice', true);
                 }
                 break;
+            case 'Notification':
+                {
+                    $statusTypeNotification = $controller->getParameter('statusType');
+                    $statusSendTrigger = !empty($controller->getParameter('sendTrigger'))?:false;
+                    $structureElement->sendOrderStatusNotificationEmail('Notification', $statusTypeNotification, $statusSendTrigger,true);
+                }
+                break;
         }
-        $structureElement->executeAction("showForm");
+        if ($controller->getParameter('invoiceType') === 'Notification' && $controller->getParameter('sendTrigger') === 'ajax'){
+            $structureElement->executeAction("showForm");
+        }
+        else {
+            $controller->redirect($structureElement->getUrl('showForm'));
+        }
     }
 }

@@ -25,7 +25,7 @@ window.ModalActionComponent = function(checkboxElement, footerElement, elementFo
 			eventsManager.addHandler(submitButtonElement, 'click', submitClick);
 		}
 		else if(footerElement === 'multiple') {
-			footerElements = makeElement('div', 'footer buttons', fragment);
+			footerElements = makeElement('div', 'modal_footer_inner buttons', fragment);
 			footerElements.innerHTML = message['footer'];
 		}
 

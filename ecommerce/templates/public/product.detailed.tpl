@@ -1,12 +1,12 @@
 {assign moduleTitle $element->title}
 {capture assign="moduleSideContent"}
 		{if $element->originalName != ""}
-			<div>
+			<div class="product_detailed_image_container">
 				{include file=$theme->template('component.elementimage.tpl') type='productDetailed' class='product_detailed_image' lazy=true}
+				{if $iconsInfo = $element->getIconsInfo()}
+					{include file=$theme->template('product.icons.tpl') class='product_detailed_icons' displayOldPrice=true}
+				{/if}
 			</div>
-		{/if}
-		{if $iconsInfo = $element->getIconsInfo()}
-			{include file=$theme->template('product.icons.tpl') class='product_detailed_icons' displayOldPrice=true}
 		{/if}
 {/capture}
 {capture assign="moduleContent"}

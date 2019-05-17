@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class productSelectionElement
+ *
+ * @property string $title
+ */
 class productSelectionElement extends structureElement
 {
     public $dataResourceName = 'module_product_selection';
@@ -9,6 +14,9 @@ class productSelectionElement extends structureElement
     public $selectedOptionId = false;
     public $productOptions = false;
     public $options = false;
+    /**
+     * @var productParametersGroupElement
+     */
     protected $parameterGroup;
     protected $selectionOptions;
     protected $usedOptions;
@@ -25,6 +33,8 @@ class productSelectionElement extends structureElement
         $moduleStructure['controlType'] = 'text';
         $moduleStructure['influential'] = 'checkbox';
 
+        $moduleStructure['originalName'] = 'fileName';
+        $moduleStructure['image'] = 'image';
         $moduleStructure['type'] = 'text';
         $moduleStructure['categoriesIds'] = 'numbersArray';
         $moduleStructure['importInfo'] = 'array';

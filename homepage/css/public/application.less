@@ -2,81 +2,68 @@
 /*  BASIC SETTINGS
 /********************************************************/
 html {
-	height: 100%;
-	margin: 0;
-	padding: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-	min-height: 100%;
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	position: relative;
+  min-height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
 }
 
 .main_block {
-	position: relative;
-	margin: 0 auto;
+  position: relative;
+  margin: 0 auto;
 }
 
 .header_block {
-	position: relative;
-	.hidden_on_phone();
+  position: relative;
+  .hidden_on_phone();
 }
 
 .header_gallery {
 }
-.clearfix{
-	.clearfixin();
+
+.clearfix {
+  .clearfixin();
 }
+
 /********************************************************
 /*  COLUMNS
 /********************************************************/
 .columns_table {
-	margin: 0;
-	padding: 0;
-	border-collapse: collapse;
-	border-style: none;
-	width: 100%;
-	table-layout: fixed;
-	display: table;
+  //width: 100%;
+  display: flex;
 }
 
 .left_column {
-	display: table-cell;
-	border-collapse: collapse;
-	border-style: none;
-	width: 20%;
-	padding: 0 3em 0 0;
-	vertical-align: top;
+  flex-shrink: 0;
+  flex-basis: 20%;
+  padding: 0 3em 0 0;
+  box-sizing: border-box;
 }
 
 .center_column {
-	vertical-align: top;
-	position: relative;
-	display: table-cell;
-	border-collapse: collapse;
-	border-style: none;
-	padding: 0;
+  flex-basis: 100%;
+  position: relative;
+  min-width: 0; //required to prevent overlapping
+  box-sizing: border-box;
 }
 
 .right_column {
-	vertical-align: top;
-	display: table-cell;
-	border-collapse: collapse;
-	border-style: none;
-	width: 20%;
-	padding: 0 0 0 3em;
+  flex-shrink: 0;
+  flex-basis: 20%;
+  padding: 0 0 0 3em;
+  box-sizing: border-box;
 }
 
 @media (max-width: @screen_breakpoint_md_max) {
-	.center_column {
-		display: block;
-	}
-
-	.right_column,
-	.left_column {
-		display: none !important;
-	}
+  .right_column,
+  .left_column {
+    display: none !important;
+  }
 }

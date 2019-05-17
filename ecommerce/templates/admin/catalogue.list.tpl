@@ -80,8 +80,16 @@
 				{translations name='label.edit'}
 			</th>
 			<th class='date_column'>
+				<a class="content_list_field_orderable" href="{$element->getContentListOrderUrl('dateCreated')}">
+					{translations name='label.dateCreated'}
+				</a>
+				{if $requestArguments.order && $requestArguments.order.field == 'dateCreated'}
+					<span class="content_list_field_order_indicator content_list_field_order_indicator_{$requestArguments.order.argument}"></span>
+				{/if}
+			</th>
+			<th class='date_column'>
 				<a class="content_list_field_orderable" href="{$element->getContentListOrderUrl('dateModified')}">
-					{translations name='label.date'}
+					{translations name='label.dateModified'}
 				</a>
 				{if $requestArguments.order && $requestArguments.order.field == 'dateModified'}
 					<span class="content_list_field_order_indicator content_list_field_order_indicator_{$requestArguments.order.argument}"></span>
@@ -119,7 +127,7 @@
 				{$contentItem->code}
 			</td>
 			<td class='price_column'>
-				{$contentItem->price}
+				{$contentItem->price}{if $contentItem->oldPrice && $contentItem->oldPrice >0} (<small><s>{$contentItem->oldPrice}</s></small>){/if}
 			</td>
 			<td class=''>
 				{assign var='type' value="product."|cat:$contentItem->availability}
@@ -151,6 +159,9 @@
 				{*{translations name=$type}*}
 			{*</td>*}
 
+			<td>
+				{$contentItem->dateCreated}
+			</td>
 			<td>
 				{$contentItem->dateModified}
 			</td>

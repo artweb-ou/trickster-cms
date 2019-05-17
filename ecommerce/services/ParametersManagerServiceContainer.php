@@ -7,11 +7,14 @@ class ParametersManagerServiceContainer extends DependencyInjectionServiceContai
         return new ParametersManager();
     }
 
+    /**
+     * @param ParametersManager $instance
+     * @return mixed
+     */
     public function makeInjections($instance)
     {
-        $parametersManager = $instance;
-        $parametersManager->setDb($this->registry->getService('db'));
-        $parametersManager->setLanguagesManager($this->registry->getService('languagesManager'));
-        return $parametersManager;
+        $instance->setDb($this->registry->getService('db'));
+        $instance->setLanguagesManager($this->registry->getService('languagesManager'));
+        return $instance;
     }
 }

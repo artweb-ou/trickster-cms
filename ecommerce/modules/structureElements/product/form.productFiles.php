@@ -2,7 +2,7 @@
 
 class ProductFilesStructure extends ElementForm
 {
-    protected $formClass = 'zxitem_form';
+    protected $formClass = 'fileupload_form';
     protected $structure = [
         'connectedFile' => [
             'type' => 'input.file',

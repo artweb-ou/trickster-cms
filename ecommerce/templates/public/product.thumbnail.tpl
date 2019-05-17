@@ -7,10 +7,10 @@
 			{if $element->originalName != ""}
 				{include file=$theme->template('component.elementimage.tpl') type='productThumb' class='product_thumbnail_image' lazy=true}
 			{/if}
+			{if $iconsInfo = $element->getIconsInfo()}
+				{include file=$theme->template('product.icons.tpl') class='product_thumbnail_icons' displayOldPrice=true}
+			{/if}
 		</div>
-		{if $iconsInfo = $element->getIconsInfo()}
-			{include file=$theme->template('product.icons.tpl') class='product_thumbnail_icons' displayOldPrice=true}
-		{/if}
 		<span class="product_thumbnail_price">{if !$element->isEmptyPrice()}{$element->getPrice()}&#xa0;{$selectedCurrencyItem->symbol}{/if}</span>
 	</a>
 {/capture}
