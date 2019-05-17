@@ -542,6 +542,10 @@ class productElement extends structureElement implements
         $structureManager = $this->getService('structureManager');
 
         $categories = [];
+        /**
+         * @var structureManager $structureManager
+         * @var structureElement $parentsList
+         */
         $parentsList = $structureManager->getElementsParents($this->id, $forceUpdate, 'catalogue', false);
         if ($parentsList) {
             foreach ($parentsList as &$parentElement) {
@@ -551,6 +555,29 @@ class productElement extends structureElement implements
             }
         }
         return $categories;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConnectedBrands()
+    {
+        $structureManager = $this->getService('structureManager');
+
+        $brands = [];
+        /**
+         * @var structureManager $structureManager
+         * @var structureElement $parentsList
+         */
+        $parentsList = $structureManager->getElementsParents($this->id, 'catalogue', false);
+        if ($parentsList) {
+            foreach ($parentsList as &$parentElement) {
+                if ($parentElement->structureType == 'brand') {
+                    $brands[] = $parentElement;
+                }
+            }
+        }
+        return $brands;
     }
 
     public function getConnectedCatalogues($forceUpdate = false)
@@ -844,6 +871,9 @@ class productElement extends structureElement implements
         return $this->connectedDiscounts;
     }
 
+    /**
+     * @return array|null
+     */
     public function getDeepParentCategoriesIdList()
     {
         if ($this->deepParentCategoriesIdList === null) {
@@ -968,7 +998,10 @@ class productElement extends structureElement implements
                                 'iconBgColor' => $icon->iconBgColor,
                                 'iconTextColor' => $icon->iconTextColor,
                                 'iconProductAvail' => $icon->iconProductAvail,
-                            ];
+                                'iconProducts' => $icon->iconProducts,
+                                'iconCategories' => $icon->iconCategories,
+                                'iconBrands' => $icon->iconBrands,                          
+                                ];
                         }
                         $this->iconsInfo[] = array_merge($iconsInfoAllIcons, $iconsInfoGenericIcon);
 
@@ -1838,6 +1871,9 @@ class productElement extends structureElement implements
         return $title;
     }
 
+    /**
+     * @return categoryElement|mixed|null
+     */
     public function getParentCategory()
     {
         if ($this->parentCategory === null) {

@@ -14,7 +14,6 @@ class homepagePublicDesignTheme extends DesignTheme
         $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'homepage/js/public/';
         $this->javascriptPath = $tricksterPath . 'homepage/js/public/';
         $this->javascriptFiles = [
-            'logics.ajaxSearch.js',
             'logics.commentForm.js',
             'logics.galleries.js',
             'logics.contentToggler.js',
@@ -56,7 +55,6 @@ class homepagePublicDesignTheme extends DesignTheme
             'mixin.carouselGallery.js',
             'mixin.slideOverlay.js',
             'component.input.js',
-            'component.ajaxSearch.js',
             'component.contentToggler.js',
             'component.gallery.js',
             'component.galleryImage.js',

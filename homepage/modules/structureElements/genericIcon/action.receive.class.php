@@ -24,12 +24,13 @@ class receiveGenericIcon extends structureElementAction
             }
 
             $structureElement->persistElementData();
-
-            $structureElement->updateConnectedProducts($structureElement->products);
-            $structureElement->updateConnectedCategories($structureElement->categories);
-            $structureElement->updateConnectedBrands($structureElement->brands);
+            /**
+             * @var structureElement $structureElement
+             */
+            $structureElement->updateConnectedProducts($structureElement->iconProducts);
+            $structureElement->updateConnectedCategories($structureElement->iconCategories);
+            $structureElement->updateConnectedBrands($structureElement->iconBrands);
             $structureElement->updateConnectedParameters($structureElement->iconProductParameters);
-
 
             $controller->redirect($structureElement->URL);
         }
@@ -41,10 +42,9 @@ class receiveGenericIcon extends structureElementAction
         $expectedFields = [
             'image',
             'title',
-            'products',
-            'categories',
-            'categories',
-            'brands',
+            'iconProducts',
+            'iconCategories',
+            'iconBrands',
             'startDate',
             'endDate',
             'days',
