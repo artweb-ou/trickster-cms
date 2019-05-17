@@ -329,7 +329,7 @@ class ParametersManager extends errorLogger
         }
 
         $query = $this->db->table('module_product_selection')
-            ->select('id', 'title', 'type', 'option', 'controlType', 'influential', 'hint')
+            ->select('id', 'title', 'type', 'option', 'controlType', 'influential', 'hint', 'originalName', 'image')
             ->where('languageId', "=", $currentLanguageId);
         if ($primary) {
             $query->where('primary', "=", '1');
