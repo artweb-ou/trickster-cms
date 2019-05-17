@@ -11,7 +11,6 @@
         'newsmailGroup',
         'productIcon',
         'productSearchParameter',
-        'productSelectionFilterableCategory',
         'registrationField',
         'registrationUserGroup',
         'rightColumn',

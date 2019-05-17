@@ -49,6 +49,7 @@ class homepagePublicDesignTheme extends DesignTheme
             'logics.hiddenFields.js',
             'logics.scrollItems.js',
             'logics.mobile.js',
+            'logics.mobileCommonMenu.js',
             'mixin.LazyLoading.js',
             'mixin.slides.js',
             'mixin.scrollPages.js',
@@ -105,6 +106,7 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.modalAction.js',
             'component.modal.js',
             'component.feedbackDragAndDrop.js',
+            'component.mobileCommonMenu.js',
         ];
     }
 }

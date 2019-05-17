@@ -76,16 +76,6 @@ class ProductIconsManager
              */
 
 
-            //            foreach ($categories as $category) {
-//                $elementIconsIndex += $this->linksManager->getConnectedIdIndex($category->id, 'genericIconCategory', 'child');
-//            }
-//
-//            //directly connected global icons
-//            $elementIconsIndex += $this->linksManager->getConnectedIdIndex($product->id, 'genericIconProduct', 'child');
-//            $elementIconsIndex += $this->linksManager->getConnectedIdIndex($product->id, 'genericIconParameter', 'child');
-//            var_dump($categories);
-//            var_dump(array_column((array)$categories, 'id'));
-
             //check all other icons for their logic
             if ($allIcons = $this->iconsManager->getAllIcons()) {
                 $elementIconsIndex = [];

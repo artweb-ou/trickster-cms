@@ -747,13 +747,12 @@ class productElement extends structureElement implements
                     }
                     array_multisort($sort, SORT_ASC, $filteredGroupParameters);
 
-                    $groupInfo = [
+                    $this->parametersGroupsInfo[] = [
                         'title' => $group->title,
                         'id' => $group->id,
                         'isMinimized' => $group->isMinimized,
+                        'parametersList' => $filteredGroupParameters,
                     ];
-                    $groupInfo['parametersList'] = $filteredGroupParameters;
-                    $this->parametersGroupsInfo[] = $groupInfo;
                 }
             }
         }
@@ -768,11 +767,6 @@ class productElement extends structureElement implements
              */
             $parametersManager = $this->getService('ParametersManager');
             $this->basketSelectionsInfo = $parametersManager->getProductBasketSelectionsInfo($this->id);
-            foreach ($this->basketSelectionsInfo as $key => $productSelection) {
-                if (!$productSelection['productOptions']) {
-                    unset($this->basketSelectionsInfo[$key]);
-                }
-            }
         }
         return $this->basketSelectionsInfo;
     }
