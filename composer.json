@@ -21,6 +21,7 @@
 	    "moroz1999/cache": "1.*",
 	    "smarty/smarty": "3.x",
 	    "pelago/emogrifier": "^2.0",
-	    "tedivm/jshrink": "~1.0"
+	    "tedivm/jshrink": "~1.0",
+	    "colorPicker": "~1.0"
     }
 }

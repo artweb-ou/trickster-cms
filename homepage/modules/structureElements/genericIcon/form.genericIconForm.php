@@ -12,7 +12,7 @@ class GenericIconFormStructure extends ElementForm
         ],
         'iconBgColor' => [
             'type' => 'input.text',
-            'inputType' => 'color',
+	        'textClass' => 'jscolor',
             'inputDefaultValueMethod' => [
                 'method' => 'getSettingsVariablles',
                 'variable' => 'colors.primary_color',
@@ -20,7 +20,7 @@ class GenericIconFormStructure extends ElementForm
         ],
         'iconTextColor' => [
             'type' => 'input.text',
-            'inputType' => 'color',
+            'textClass' => 'jscolor',
             'inputDefaultValueMethod' => [
                 'method' => 'getSettingsVariablles',
                 'variable' => 'colors.primary_color',
