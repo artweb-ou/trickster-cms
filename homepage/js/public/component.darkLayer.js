@@ -1,7 +1,7 @@
 window.DarkLayerComponent = new function() {
 	this.showLayer = function(onclickFunction, callback, allowClose) {
 		if (this.domElement) {
-			opacityHandler.setOpacity(this.domElement, 0);
+			this.domElement.style.opacity = 0;
 			this.domElement.style.display = 'block';
 
 			this.domElement.style.top = '0';

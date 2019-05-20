@@ -66,10 +66,36 @@ window.GalleryImagesCarouselComponent = function(galleryInfo, parentComponent) {
 			'rotateSpeed': 2.7,
 			'autoStart': false,
 			'imageAspectRatio': galleryInfo.getImageAspectRatio(),
-			'preloadCallBack': preloadCallBack
+			'preloadCallBack': preloadCallBack,
+			'touchStartCallBack': touchStartCallBack,
+			'touchDisplayNextImageCallback': touchDisplayNextImageCallback,
+			'touchDisplayPreviousImageCallback': touchDisplayPreviousImageCallback,
+			'touchImageClick': touchImageClick
 		});
-		self.showPage(0);
+		galleryInfo.displayImageByNumber(0);
 		galleryInfo.startSlideShow();
+	};
+
+	var touchStartCallBack = function() {
+		galleryInfo.stopSlideShow();
+	};
+
+	var touchDisplayNextImageCallback = function() {
+		galleryInfo.stopSlideShow();
+		galleryInfo.displayNextImage();
+	};
+
+	var touchDisplayPreviousImageCallback = function() {
+		galleryInfo.stopSlideShow();
+		galleryInfo.displayPreviousImage();
+	};
+
+	var touchImageClick = function() {
+		var currentImage = galleryInfo ? galleryInfo.getCurrentImage() : null;
+		var link = currentImage ? currentImage.getLink() : '';
+		if (link) {
+			document.location.href = link;
+		}
 	};
 
 	var createImageComponents = function() {
@@ -111,6 +137,7 @@ window.GalleryImagesCarouselComponent = function(galleryInfo, parentComponent) {
 		if (fixedImagesHeight) {
 			height = fixedImagesHeight;
 		}
+
 		var i;
 		for (i = leftImagesList.length; i--;) {
 			leftImagesList[i].resize(width, height)
@@ -137,6 +164,10 @@ window.GalleryImagesCarouselComponent = function(galleryInfo, parentComponent) {
 
 	this.hasFullScreenGallery = function() {
 		return galleryInfo.isFullScreenGalleryEnabled();
+	};
+
+	this.videoAutoStart = function() {
+		return galleryInfo.getVideoAutoStart();
 	};
 
 	this.setFixedImageSizes = function(newWidth, newHeight) {

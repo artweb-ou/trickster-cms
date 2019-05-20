@@ -158,8 +158,8 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 
 			displayed = true;
 
+			componentElement.style.opacity = 0;
 			componentElement.style.display = 'block';
-			opacityHandler.setOpacity(componentElement, 0);
 
 			updatePosition();
 

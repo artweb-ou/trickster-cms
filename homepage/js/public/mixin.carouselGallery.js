@@ -16,14 +16,30 @@ window.CarouselPagesMixin = function() {
 	this.cpm_currentNumber = null;
 	this.cpm_imageAspectRatio = 1;
 	this.cpm_autoStart = true;
-	this.cpm_scope = this;
+	this.cpm_touchX = false;
+	this.cpm_moveLength = 0;
+	this.imageWidth = 0;
 
 	this.cpm_preloadCallBack = false;
+	this.cpm_touchStartCallBack = false;
+	this.cpm_touchDisplayNextImageCallback = false;
+	this.cpm_touchDisplayPreviousImageCallback = false;
+	this.cpm_touchImageClick = false;
 	this.cpm_preloadedImagesIndex = {};
 
 	this.initCarouselGallery = function(options) {
 		var scope = this;
+
+		this.cpm_touchStartCaller = this.cpm_touchStart.bind(scope);
+		this.cpm_touchEndCaller = this.cpm_touchEnd.bind(scope);
+		this.cpm_touchMoveCaller = this.cpm_touchMove.bind(scope);
+
 		this.cpm_parseOptions(options);
+
+		if (this.cpm_touchImageClick) {
+			this.cpm_touchImageClickCaller = this.cpm_touchImageClick.bind(scope);
+		}
+
 		if (this.cpm_componentElement) {
 			if (this.cpm_originalPageElements.length > 0) {
 				if (!this.cpm_containerElement) {
@@ -60,13 +76,25 @@ window.CarouselPagesMixin = function() {
 				this.cpm_scrollToCurrent();
 
 				if (this.cpm_autoStart) {
-					this.cpm_rotateInterval = window.setInterval(this.cpm_performAutoRotate, this.cpm_rotateDelay);
+					this.cpm_rotateInterval = window.setInterval(
+						function() {
+							return scope.cpm_performAutoRotate.call(scope)
+						},
+						this.cpm_rotateDelay
+					);
 				}
 				eventsManager.addHandler(window, 'resize',
 					function(event) {
 						return scope.cpm_scrollToCurrent.call(scope, event)
 					}
 				);
+
+				if(this.cpm_originalPageElements.length > 1) {
+					touchManager.setTouchAction(this.cpm_componentElement, 'pan-y');
+					touchManager.addEventListener(this.cpm_componentElement, 'start', this.cpm_touchStartCaller);
+				}else if(this.cpm_originalPageElements.length == 1 && typeof this.cpm_touchImageClickCaller != "undefined") {
+					eventsManager.addHandler(this.cpm_componentElement, "click", this.cpm_touchImageClickCaller);
+				}
 			}
 		}
 	};
@@ -107,36 +135,44 @@ window.CarouselPagesMixin = function() {
 		}
 	};
 
-	this.showPreviousPage = function() {
+	this.showPreviousPage = function(speedCoefficient) {
 		var number = this.cpm_currentNumber - 1;
 		if (number < 0) {
 			number = this.cpm_originalPageElements.length - 1;
 		}
-		this.cpm_scope.showPage(number);
+		this.showPage(number, 'left', speedCoefficient);
 	};
 
-	this.showNextPage = function() {
+	this.showNextPage = function(speedCoefficient) {
 		var number = this.cpm_currentNumber + 1;
 		if (number >= this.cpm_originalPageElements.length) {
 			number = 0;
 		}
-		this.cpm_scope.showPage(number);
+		this.showPage(number, 'right', speedCoefficient);
 	};
 
-	this.showPage = function(newNumber) {
+	this.showPage = function(newNumber, direction, speedCoefficient) {
 		if (this.cpm_preloadCallBack) {
 			var pageWidth = this.cpm_imageAspectRatio * this.cpm_containerElement.offsetHeight;
 
 			var pagesAroundSide = Math.ceil((this.cpm_containerElement.offsetWidth / 2 - pageWidth / 2) / pageWidth);
+			if(!pagesAroundSide) {
+				pagesAroundSide = 1;
+			}
+
 			var page;
 			var setPage;
 			var pagesToCheck = {};
+
 			//preload all the images along the scrolling way
 			for (page = newNumber; newNumber - page <= pagesAroundSide; page--) {
 				if (page < 0) {
 					setPage = this.cpm_originalPageElements.length + page;
 				} else {
 					setPage = page;
+				}
+				if (!this.cpm_preloadedImagesIndex[setPage]) {
+					this.cpm_preloadedImagesIndex[setPage] = false;
 				}
 				pagesToCheck[setPage] = true;
 			}
@@ -146,38 +182,41 @@ window.CarouselPagesMixin = function() {
 				} else {
 					setPage = page;
 				}
-
+				if (!this.cpm_preloadedImagesIndex[setPage]) {
+					this.cpm_preloadedImagesIndex[setPage] = false;
+				}
 				pagesToCheck[setPage] = true;
 			}
 			if (this.cpm_currentNumber) {
 				var startPage = Math.min(newNumber, this.cpm_currentNumber);
 				var endPage = Math.max(newNumber, this.cpm_currentNumber);
 				for (page = startPage; page <= endPage; page++) {
-
+					if (!this.cpm_preloadedImagesIndex[page]) {
+						this.cpm_preloadedImagesIndex[page] = false;
+					}
 					pagesToCheck[page] = true;
 				}
 			} else {
+				if (!this.cpm_preloadedImagesIndex[page]) {
+					this.cpm_preloadedImagesIndex[newNumber] = false;
+				}
 				pagesToCheck[newNumber] = true;
 			}
 			for (page in pagesToCheck) {
 				if (typeof this.cpm_originalPageElements[page] !== 'undefined') {
-					if (!this.cpm_preloadedImagesIndex[page]) {
-						this.cpm_preloadedImagesIndex[page] = false;
-					}
-
-					this.cpm_preloadCallBack(page, function(scope, preloadPage, newNumber) {
+					this.cpm_preloadCallBack(page, function(scope, preloadPage, newNumber, direction, speedCoefficient) {
 						return function() {
-							scope.cpm_checkPreloadedImages.call(scope, preloadPage, newNumber)
+							scope.cpm_checkPreloadedImages.call(scope, preloadPage, newNumber, direction, speedCoefficient)
 						}
-					}(this, page, newNumber));
+					}(this, page, newNumber, direction, speedCoefficient));
 				}
 			}
 		} else {
-			this.cpm_showPageInside(newNumber);
+			this.cpm_showPageInside(newNumber, direction, speedCoefficient);
 		}
 	};
 
-	this.cpm_checkPreloadedImages = function(preloadedImageNumber, newNumber) {
+	this.cpm_checkPreloadedImages = function(preloadedImageNumber, newNumber, direction, speedCoefficient) {
 		this.cpm_preloadedImagesIndex[preloadedImageNumber] = true;
 		this.cpm_leftPageElements[preloadedImageNumber].style.display = "inline-block";
 		this.cpm_originalPageElements[preloadedImageNumber].style.display = "inline-block";
@@ -190,32 +229,57 @@ window.CarouselPagesMixin = function() {
 				break;
 			}
 		}
+
 		if (allPreloaded) {
-			this.cpm_showPageInside.call(this, newNumber);
+			this.cpm_showPageInside.call(this, newNumber, direction, speedCoefficient);
 		}
 	};
 
-	this.cpm_showPageInside = function(newNumber) {
+	this.cpm_showPageInside = function(newNumber, direction, speedCoefficient) {
 		if (newNumber !== this.cpm_currentNumber && this.cpm_originalPageElements[newNumber]) {
 			var oldNumber = this.cpm_currentNumber;
+
 			this.cpm_currentNumber = newNumber;
 			var endScrollLeft;
-			var pageElementLeft = this.cpm_originalPageElements[newNumber].offsetLeft - this.cpm_containerElement.offsetWidth / 2 + this.cpm_originalPageElements[newNumber].offsetWidth / 2;
-			//determine the shortest destination for scrolling
-			if (Math.abs(newNumber - oldNumber) >= Math.abs(newNumber - this.cpm_originalPageElements.length - oldNumber)) {
-				endScrollLeft = pageElementLeft - this.cpm_centerElement.offsetWidth;
-			} else if (Math.abs(newNumber - oldNumber) >= Math.abs(newNumber + this.cpm_originalPageElements.length - oldNumber)) {
-				endScrollLeft = pageElementLeft + this.cpm_centerElement.offsetWidth;
-			} else {
-				endScrollLeft = pageElementLeft;
+			this.imageWidth = this.cpm_originalPageElements[newNumber].offsetWidth;
+			var leftOverFlowWidth = (this.cpm_containerElement.offsetWidth - this.imageWidth) / 2;
+
+			if(oldNumber == null) {
+				oldNumber = 0;
 			}
+
+			if (direction == 'left') {
+				endScrollLeft = this.cpm_originalPageElements[oldNumber].offsetLeft - this.imageWidth - leftOverFlowWidth;
+			} else if (direction == 'right') {
+				endScrollLeft = this.cpm_originalPageElements[oldNumber].offsetLeft + this.imageWidth - leftOverFlowWidth;
+			}else {
+				//artificial intelligence logics
+				var pageElementLeft = this.cpm_originalPageElements[newNumber].offsetLeft - this.cpm_containerElement.offsetWidth / 2 + this.cpm_originalPageElements[newNumber].offsetWidth / 2;
+				//determine the shortest destination for scrolling
+				if (Math.abs(newNumber - oldNumber) >= Math.abs(newNumber - this.cpm_originalPageElements.length - oldNumber)) {
+					endScrollLeft = pageElementLeft - this.cpm_centerElement.offsetWidth;
+				} else if (Math.abs(newNumber - oldNumber) >= Math.abs(newNumber + this.cpm_originalPageElements.length - oldNumber)) {
+					endScrollLeft = pageElementLeft + this.cpm_centerElement.offsetWidth;
+				} else {
+					endScrollLeft = pageElementLeft;
+				}
+			}
+
 			var scope = this;
-			TweenLite.to(this.cpm_containerElement, this.cpm_rotateSpeed, {
+			if(typeof speedCoefficient == "undefined") {
+				speedCoefficient = 1;
+			}
+
+			var ease = Quad.easeInOut;
+			if(speedCoefficient < 0.7) {
+				ease = Linear.easeIn;
+			}
+			TweenLite.to(this.cpm_containerElement, speedCoefficient * this.cpm_rotateSpeed, {
 				'scrollLeft': endScrollLeft,
 				'onComplete': function() {
 					return scope.cpm_finishPageChange.call(scope);
 				},
-				'ease': Quad.easeInOut
+				'ease': ease
 			});
 
 			if (this.cpm_onScrollFinishCallback) {
@@ -233,7 +297,49 @@ window.CarouselPagesMixin = function() {
 	};
 
 	this.cpm_performAutoRotate = function() {
-		this.cpm_scope.showNextPage();
+
+		this.showNextPage();
+	};
+
+	this.cpm_touchStart = function(event, touchInfo) {
+		eventsManager.preventDefaultAction(event);
+
+		this.cpm_touchStartCallBack();
+		this.cpm_touchX = touchInfo.clientX;
+		this.cpm_moveLength = 0;
+		touchManager.removeEventListener(this.cpm_componentElement, 'start', this.cpm_touchStartCaller);
+		touchManager.addEventListener(this.cpm_componentElement, 'end', this.cpm_touchEndCaller);
+		touchManager.addEventListener(this.cpm_componentElement, 'move', this.cpm_touchMoveCaller);
+	};
+
+	this.cpm_touchEnd = function(event, touchInfo) {
+		this.cpm_touchX = false;
+
+		var speedCoefficient = 1 - (Math.abs(this.cpm_moveLength) / this.imageWidth);
+
+		if(this.cpm_moveLength > 1) {
+			this.showNextPage(speedCoefficient);
+			this.cpm_touchDisplayNextImageCallback();
+		}else if(this.cpm_moveLength < -1) {
+			this.showPreviousPage(speedCoefficient);
+			this.cpm_touchDisplayPreviousImageCallback();
+		}else {
+			this.cpm_touchImageClick();
+		}
+
+		touchManager.removeEventListener(this.cpm_componentElement, 'end', this.cpm_touchEndCaller);
+		touchManager.removeEventListener(this.cpm_componentElement, 'move', this.cpm_touchMoveCaller);
+		touchManager.addEventListener(this.cpm_componentElement, 'start', this.cpm_touchStartCaller);
+	};
+
+	this.cpm_touchMove = function(event, touchInfo) {
+		eventsManager.preventDefaultAction(event);
+
+		var diff = this.cpm_touchX - touchInfo.clientX;
+		this.cpm_touchX = touchInfo.clientX;
+		this.cpm_moveLength += diff;
+
+		this.cpm_componentElement.scrollBy(diff, 0);
 	};
 
 	this.cpm_parseOptions = function(options) {
@@ -269,6 +375,18 @@ window.CarouselPagesMixin = function() {
 		}
 		if (typeof options.preloadCallBack !== "undefined") {
 			this.cpm_preloadCallBack = options.preloadCallBack;
+		}
+		if (typeof options.touchStartCallBack !== "undefined") {
+			this.cpm_touchStartCallBack = options.touchStartCallBack;
+		}
+		if (typeof options.touchDisplayNextImageCallback !== "undefined") {
+			this.cpm_touchDisplayNextImageCallback = options.touchDisplayNextImageCallback;
+		}
+		if (typeof options.touchDisplayPreviousImageCallback !== "undefined") {
+			this.cpm_touchDisplayPreviousImageCallback = options.touchDisplayPreviousImageCallback;
+		}
+		if (typeof options.touchImageClick !== "undefined") {
+			this.cpm_touchImageClick = options.touchImageClick;
 		}
 		if (typeof options.imageAspectRatio !== "undefined") {
 			this.cpm_imageAspectRatio = options.imageAspectRatio;

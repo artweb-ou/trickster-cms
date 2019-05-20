@@ -51,7 +51,7 @@ window.GalleryImagesSlideComponent = function(galleryInfo, parentComponent) {
 			"autoStart": false,
 			"preloadCallBack": preloadCallBack
 		});
-		self.showSlide(0);
+		galleryInfo.displayImageByNumber(0);
 		var showDelay = 0;
 		if (typeof galleryInfo.getShowDelay === 'function') {
 			showDelay = galleryInfo.getShowDelay();
@@ -84,6 +84,7 @@ window.GalleryImagesSlideComponent = function(galleryInfo, parentComponent) {
 		height = newHeight;
 		componentElement.style.width = width + 'px';
 		componentElement.style.height = height + 'px';
+
 		for (var i = imagesList.length; i--;) {
 			imagesList[i].resize(width, height)
 		}
@@ -102,6 +103,10 @@ window.GalleryImagesSlideComponent = function(galleryInfo, parentComponent) {
 
 	this.hasFullScreenGallery = function() {
 		return galleryInfo.isFullScreenGalleryEnabled();
+	};
+
+	this.videoAutoStart = function() {
+		return galleryInfo.getVideoAutoStart();
 	};
 
 	init();

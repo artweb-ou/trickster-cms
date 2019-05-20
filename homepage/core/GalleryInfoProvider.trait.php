@@ -21,6 +21,7 @@ trait GalleryInfoProviderTrait
             'fullScreenButtonEnabled' => false,
             'descriptionType' => 'overlay',
             'imagesPrevNextButtonsSeparated' => false,
+            'videoAutoStart' => true,
         ];
         $galleryData = array_merge($galleryData, $galleryOptions);
 
