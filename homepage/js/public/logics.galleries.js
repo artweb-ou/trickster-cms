@@ -352,6 +352,7 @@ window.GalleryImage = function(info, galleryObject) {
 	var alt;
 	var link;
 	var externalLink;
+	var isVideo = false;
 
 	var init = function() {
 		importData(info);
@@ -368,6 +369,14 @@ window.GalleryImage = function(info, galleryObject) {
 		alt = info.alt;
 		link = info.link;
 		externalLink = info.externalLink;
+    if (filename){
+      var parts = filename.split('.');
+      var extension = parts[parts.length - 1].toLowerCase();
+      if (extension == 'mp4') {
+        isVideo = true;
+      }
+    }
+
 	};
 	this.getId = function() {
 		return id;
@@ -399,6 +408,9 @@ window.GalleryImage = function(info, galleryObject) {
 	this.getLink = function() {
 		return link;
 	};
+	this.isVideo = function () {
+		return isVideo;
+	}
 	this.openExternalLink = function() {
 		if (self.isNewWindowUsed()) {
 			window.open(self.getExternalLink(), '_blank');

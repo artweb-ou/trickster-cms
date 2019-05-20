@@ -15,20 +15,11 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
 	var hovered = false;
 	var self = this;
 	var clickable = false;
-	var isVideo = false;
 	var videoLoadStarted = false;
 
 	var init = function() {
-		var filename = imageInfo.getFilename();
-		if (typeof filename != "undefined") {
-			var parts = filename.split('.');
-			var extension = parts[parts.length - 1];
-			if (extension == 'mp4') {
-				isVideo = true;
-			}
-		}
 		createDomStructure();
-		clickable = (parentObject.hasFullScreenGallery() || imageInfo.getExternalLink() || isVideo);
+		clickable = (parentObject.hasFullScreenGallery() || imageInfo.getExternalLink() || imageInfo.isVideo());
 		if (clickable) {
 			componentElement.className += ' gallery_image_clickable';
 			eventsManager.addHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
@@ -37,6 +28,7 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
 			eventsManager.addHandler(componentElement, 'mouseenter', onMouseOver);
 			eventsManager.addHandler(componentElement, 'mouseleave', onMouseOut);
 		}
+		controller.addListener('galleryImageDisplay', displayHandler);
 	};
 
 	var touchStart = function(event) {
@@ -85,13 +77,10 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
 		componentElement.className = 'gallery_image';
 		componentElement.style.display = 'none';
 
-		if (isVideo) {
+		if (imageInfo.isVideo()) {
 			self.checkPreloadImage = checkPreloadVideo;
 
 			mediaElement = document.createElement('video');
-			if (typeof parentObject.videoAutoStart != "undefined") {
-				mediaElement.autoplay = parentObject.videoAutoStart();
-			}
 			mediaElement.loop = true;
 			mediaElement.muted = true;
 			mediaElement.setAttribute('webkit-playsinline', 'webkit-playsinline');
@@ -213,20 +202,28 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
 
 	};
 
-	this.displayComponentElement = function() {
-		componentElement.style.display = '';
-		if (isVideo) {
-			if (mediaElement.autoplay) {
-				mediaElement.play();
-			}
+	var displayHandler = function(newImage) {
+		if (imageInfo.isVideo()) {
+		  if (newImage.getId() === imageInfo.getId()){
+        if (typeof parentObject.videoAutoStart != "undefined") {
+          if (parentObject.videoAutoStart()){
+            mediaElement.play();
+          }
+        }
+      }
+      else {
+        mediaElement.pause();
+      }
 		}
 	};
+
 	this.resize = function(imagesContainerWidth, imagesContainerHeight) {
 		galleryWidth = imagesContainerWidth;
 		galleryHeight = imagesContainerHeight;
 
 		resizeImageElement();
 	};
+	
 	var resizeImageElement = function() {
 		if (galleryWidth && galleryHeight) {
 			componentElement.style.width = galleryWidth + 'px';

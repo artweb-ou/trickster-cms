@@ -98,11 +98,25 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 
 window.GallerySelectorImageComponent = function(imageInfo, parentComponent) {
 	var componentElement;
+	var mediaElement;
+	var sourceElement;
 
 	var init = function() {
 		componentElement = document.createElement('div');
 		componentElement.className = 'gallery_thumbnailsselector_image gallery_thumbnailsselector_image_' + imageInfo.getId();
-		componentElement.style.backgroundImage = 'url(' + imageInfo.getThumbnailImageUrl() + ')';
+		if (imageInfo.isVideo()) {
+			componentElement.className += ' gallery_thumbnailsselector_video';
+			mediaElement = document.createElement('video');
+			mediaElement.autoplay = false;
+			mediaElement.muted = true;
+			componentElement.appendChild(mediaElement);
+			sourceElement = document.createElement('source');
+			sourceElement.type = 'video/mp4';
+			sourceElement.src = imageInfo.getFileUrl();
+			mediaElement.appendChild(sourceElement);
+		} else {
+			componentElement.style.backgroundImage = 'url(' + imageInfo.getThumbnailImageUrl() + ')';
+		}
 
 		window.eventsManager.addHandler(componentElement, 'click', clickHandler)
 	};
