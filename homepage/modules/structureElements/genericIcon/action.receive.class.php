@@ -25,7 +25,7 @@ class receiveGenericIcon extends structureElementAction
 
             $structureElement->persistElementData();
             /**
-             * @var structureElement $structureElement
+             * @var object $structureElement
              */
             $structureElement->updateConnectedProducts($structureElement->iconProducts);
             $structureElement->updateConnectedCategories($structureElement->iconCategories);

@@ -105,6 +105,7 @@ class productElement extends structureElement implements
     protected $calculatedPrice;
     protected $calculatedOldPrice;
     protected $campaignDiscounts;
+    protected $deepParentCategories;
     protected $deepParentCategoriesIdList;
     protected $brandsIdList;
     /**
@@ -558,6 +559,35 @@ class productElement extends structureElement implements
     }
 
     /**
+     * @return array|null
+     */
+    public function getDeepParentCategories()
+    {
+	    $deepCategories = [];
+        if ($this->deepParentCategories === null) {
+            $this->deepParentCategories = [];
+	        /**
+	         * @var structureManager $structureManager
+	         * @var structureElement $parentsList
+	         */
+	        $structureManager = $this->getService('structureManager');
+	        if ($deepCategories = $this->getConnectedCategories()) {
+                foreach ($deepCategories as &$category) {
+                    $this->deepParentCategories[] = $category;
+	                $parentsList = $structureManager->getElementsParents($category->id, false, '', false);
+					foreach ($parentsList as &$parentsListItem) {
+						if ($parentsListItem->structureType == 'category') {
+							$this->deepParentCategories[] = $parentsListItem;
+						}
+					}
+                }
+            }
+        }
+        return $deepCategories + $this->deepParentCategories;
+    }
+
+
+    /**
      * @return array
      */
     public function getConnectedBrands()
@@ -646,7 +676,7 @@ class productElement extends structureElement implements
         if ($this->parametersInfoList === null) {
             $this->getParametersGroupsInfo();
         }
-        return $this->parametersInfoList;
+	    return $this->parametersInfoList;
     }
 
     public function getParametersGroupsInfo()
@@ -654,7 +684,7 @@ class productElement extends structureElement implements
         if ($this->parametersGroupsInfo === null) {
             $this->parametersGroupsInfo = [];
 
-            $groupsParentElements = $this->getConnectedCategories();
+	        $groupsParentElements = $this->getDeepParentCategories(); //+$this->getConnectedCatalogues(true) +$this->getDeepParentCategories()
             if (!$groupsParentElements) {
                 $groupsParentElements = $this->getConnectedCatalogues(true);
             }
@@ -974,9 +1004,11 @@ class productElement extends structureElement implements
                 $productIconsManager = $this->getService('ProductIconsManager');
                 if ($icons = $productIconsManager->getProductIcons($this)) {
                     foreach ($icons as $icon) {
-                        $iconsInfoAllIcons = [];
                         $iconsInfoGenericIcon = [];
-
+	
+	                    /**
+	                     * @var object $icon
+	                     */
                         $iconsInfoAllIcons = [
                             'title' => $icon->title,
                             'image' => $icon->image,
@@ -984,7 +1016,6 @@ class productElement extends structureElement implements
                             'fileName' => $icon->originalName,
                             'iconStructureType' => $icon->structureType,
                         ];
-
                         if ($icon->structureType == 'genericIcon') {
                             $iconsInfoGenericIcon = [
                                 'iconLocation' => $this->productIconLocationTypes[$icon->iconLocation],
@@ -995,6 +1026,7 @@ class productElement extends structureElement implements
                                 'iconProducts' => $icon->iconProducts,
                                 'iconCategories' => $icon->iconCategories,
                                 'iconBrands' => $icon->iconBrands,                          
+                                'iconProductParameters' => $icon->iconProductParameters,
                                 ];
                         }
                         $this->iconsInfo[] = array_merge($iconsInfoAllIcons, $iconsInfoGenericIcon);

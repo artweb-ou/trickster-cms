@@ -2,6 +2,9 @@
 
 trait ProductIconRoleOptionsTrait
 {
+    /**
+     * @var array
+     */
     public $productIconRoleTypes = [
         'role_simple',
         'role_date',
