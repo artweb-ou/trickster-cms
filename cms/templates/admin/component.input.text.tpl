@@ -5,28 +5,40 @@
 {assign var="labelAfter" value=""}
 {assign var="formFieldCols" value=""}
 {assign var='primColor' value=''}
+{assign var="tranlationValueGroup" value=""}
 {if !empty($item.additionalFormat)}
-    {$labelBefore = $item.additionalFormat.labelBefore}
+	{$labelBefore = $item.additionalFormat.labelBefore}
+	{if empty($labelBefore)}
+		{$labelBefore = $fieldName}
+	{/if}
     {$labelAfter  = $item.additionalFormat.labelAfter}
 	{$formFieldCols = ' labelAfter'}
 {else}
 	{$labelBefore = $fieldName}
 {/if}
-
+{if $item.valuesTranslationGroup}
+	{$tranlationValueGroup = $item.valuesTranslationGroup}
+{else}
+	{$tranlationValueGroup = $structureType}
+{/if}
 {if !empty($item.inputDefaultValueMethod) && empty($formData.$fieldName)}
 	{$defaultValue = $form->callElementMethod($item.inputDefaultValueMethod['method'], $item.inputDefaultValueMethod['variable'])}
 	{$formData.$fieldName = $defaultValue}
 {/if}
 <div class="form_items{if $formErrors.$fieldName} form_error{/if}{if !empty($item.trClass)} {$item.trClass} {/if}">
 		<span class="form_label">
-			{translations name="{$translationGroup}.{$labelBefore}"}
+			{if !empty("{$tranlationValueGroup}.{$labelBefore}")}
+				{translations name="{$tranlationValueGroup}.{$labelBefore}"}
+				{else}
+				{translations name="{$structureType}.{$labelBefore}"}
+			{/if}
 		</span>
         <div class="form_field{$formFieldCols}">
 			<input class="input_component{if $item.textClass} {$item.textClass}{/if}" type="{if !empty($item.inputType)}{$item.inputType}{else}text{/if}" value="{$formData.$fieldName}"
 		   name="{$formNames.$fieldName}"/>
 			{if !empty($labelAfter)}
 				<span class="form_label_after">
-				{translations name="{$translationGroup}.{$labelAfter}"}
+				{translations name="{$tranlationValueGroup}.{$labelAfter}"}
 				</span>
 			{/if}
 		</div>

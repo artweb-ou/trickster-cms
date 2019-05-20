@@ -17,6 +17,9 @@ class GenericIconFormStructure extends ElementForm
                 'method' => 'getSettingsVariablles',
                 'variable' => 'colors.primary_color',
             ],
+            'additionalFormat' => [
+                'labelAfter'  => 'select_color',
+            ],
         ],
         'iconTextColor' => [
             'type' => 'input.text',
@@ -24,6 +27,9 @@ class GenericIconFormStructure extends ElementForm
             'inputDefaultValueMethod' => [
                 'method' => 'getSettingsVariablles',
                 'variable' => 'colors.primary_color',
+            ],
+            'additionalFormat' => [
+                'labelAfter'  => 'select_color',
             ],
         ],
         'image' => [
