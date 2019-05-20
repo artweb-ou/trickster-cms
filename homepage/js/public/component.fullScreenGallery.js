@@ -47,6 +47,8 @@ window.FullScreenGalleryComponent = function(galleryObject) {
 		}
 	};
 	var createDomStructure = function() {
+		domCreated = true;
+
 		componentElement = document.createElement('div');
 		componentElement.className = 'fullscreen_gallery_block';
 		componentElement.style.display = 'none';

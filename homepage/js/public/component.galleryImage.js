@@ -55,9 +55,7 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
 
 	var touchEnd = function(event) {
 		resetTouchiness();
-		if (isVideo) {
-			videoPlayPause();
-		} else if (imageInfo.getExternalLink()) {
+		if (imageInfo.getExternalLink()) {
 			imageInfo.openExternalLink();
 		} else {
 			parentObject.displayFullScreenGallery();

@@ -24,8 +24,11 @@ class CmsHttpResponse
         $this->httpResponse['charset'] = null;
         $this->httpResponse['cacheControl'] = null;
         $this->httpResponse['fileName'] = null;
+        $this->httpResponse['contentRange'] = null;
+        $this->httpResponse['acceptRanges'] = null;
 
         $this->statusTextList['200'] = 'OK';
+        $this->statusTextList['206'] = 'Partial Content';
         $this->statusTextList['301'] = 'Moved Permanently';
         $this->statusTextList['302'] = 'Found';
         $this->statusTextList['304'] = 'Not Modified';
@@ -62,8 +65,14 @@ class CmsHttpResponse
                 header('Content-Disposition: ' . $this->httpResponse['contentDisposition']);
             }
         }
+        if (!is_null($this->httpResponse['acceptRanges'])) {
+            header('Accept-Ranges: ' . $this->httpResponse['acceptRanges']);
+        }
         if (!is_null($this->httpResponse['contentEncoding'])) {
             header('Content-Encoding: ' . $this->httpResponse['contentEncoding']);
+        }
+        if (!is_null($this->httpResponse['contentRange'])) {
+            header('Content-Range: ' . $this->httpResponse['contentRange']);
         }
         if (!is_null($this->httpResponse['contentLength'])) {
             header('Content-Length: ' . $this->httpResponse['contentLength']);
@@ -122,6 +131,11 @@ class CmsHttpResponse
         $this->httpResponse['charset'] = $charset;
     }
 
+    public function setContentRange($contentRange)
+    {
+        $this->httpResponse['contentRange'] = $contentRange;
+    }
+
     public function setStatusCode($codeNumber)
     {
         $this->httpResponse['statusCode'] = $codeNumber;
@@ -168,6 +182,11 @@ class CmsHttpResponse
     public function setContentType($contentType)
     {
         $this->httpResponse['contentType'] = $contentType;
+    }
+
+    public function setAcceptRanges($acceptRanges)
+    {
+        $this->httpResponse['acceptRanges'] = $acceptRanges;
     }
 
     public function setFileName($fileName)

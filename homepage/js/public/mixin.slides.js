@@ -22,7 +22,7 @@ window.SlidesMixin = function() {
 				if (this.sl_heightCalculated) {
 					calculateHeight.call(scope);
 					eventsManager.addHandler(window, 'resize', function(event) {
-						return scope.calculateHeight.call(scope, event)
+						return calculateHeight.call(scope, event)
 					});
 				}
 
@@ -53,7 +53,8 @@ window.SlidesMixin = function() {
 				}
 			}(this, newNumber));
 		} else {
-			showSlideInside(newNumber);
+			var scope = this;
+			showSlideInside.call(scope, newNumber);
 		}
 	};
 	var showSlideInside = function(newNumber) {

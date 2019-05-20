@@ -429,7 +429,7 @@ window.HeaderGalleryPopupComponent = function(galleryInfo, scrollContainer) {
 		}
 	};
 	var displayComponent = function(callback) {
-		opacityHandler.setOpacity(self.componentElement, 0);
+		self.componentElement.style.opacity = 0;
 		self.componentElement.style.visibility = 'visible';
 		var leftPosition, topPosition;
 		if (galleryInfo.getPopupPositioning() == 'mark' && currentPlaceMarkComponent) {

@@ -63,8 +63,7 @@ window.GalleryImagesScrollComponent = function(galleryInfo, parentComponent) {
 			"autoStart": false,
 			"preloadCallBack": preloadCallBack
 		});
-		self.showPage(0);
-
+		galleryInfo.displayImageByNumber(0);
 		galleryInfo.startSlideShow();
 	};
 
@@ -106,6 +105,10 @@ window.GalleryImagesScrollComponent = function(galleryInfo, parentComponent) {
 
 	this.hasFullScreenGallery = function() {
 		return galleryInfo.isFullScreenGalleryEnabled();
+	};
+
+	this.videoAutoStart = function() {
+		return galleryInfo.getVideoAutoStart();
 	};
 
 	var touchStart = function(event) {

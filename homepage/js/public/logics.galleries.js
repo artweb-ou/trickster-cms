@@ -87,10 +87,7 @@ window.GalleryItem = function(info) {
 		imagesList = [];
 		id = parseInt(info.id, 10);
 
-		//todo: remove deprecated parameters check 06.2017
-		if (typeof info.heightLogics !== 'undefined') {
-			galleryResizeType = info.heightLogics;
-		} else if (typeof info.galleryResizeType !== 'undefined') {
+		if (typeof info.galleryResizeType !== 'undefined') {
 			galleryResizeType = info.galleryResizeType;
 		} else {
 			galleryResizeType = "viewport";
@@ -224,6 +221,12 @@ window.GalleryItem = function(info) {
 	this.getVideoAutoStart = function() {
 		return videoAutoStart;
 	};
+	this.displayImageByNumber = function(number) {
+		if (typeof imagesList[number] !== 'undefined'){
+			return self.displayImage(imagesList[number].getId());
+		}
+		return false;
+	};
 	this.displayImage = function(imageId) {
 		if (typeof imagesIndex[imageId] !== 'undefined') {
 			currentImage = imagesIndex[imageId];
@@ -327,9 +330,6 @@ window.GalleryItem = function(info) {
 	this.getDisplaySelector = function() {
 		return self.isThumbnailsSelectorEnabled();
 	};
-	this.getHeightLogics = function() {
-		return self.getGalleryResizeType();
-	};
 	this.getHeight = function() {
 		return self.getGalleryHeight();
 	};
@@ -395,6 +395,9 @@ window.GalleryImage = function(info, galleryObject) {
 	};
 	this.getExternalLink = function() {
 		return externalLink;
+	};
+	this.getLink = function() {
+		return link;
 	};
 	this.openExternalLink = function() {
 		if (self.isNewWindowUsed()) {

@@ -27,7 +27,6 @@ class defaultDesignTheme extends DesignTheme
             'basic.TweenLite.min.js',
             'basic.eventsManager.js',
             'basic.mouseTracker.js',
-            'basic.opacityHandler.js',
             'basic.yass.js',
             'basic.controller.js',
             'basic.storageInterface.js',

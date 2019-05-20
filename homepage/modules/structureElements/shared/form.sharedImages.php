@@ -1,6 +1,6 @@
 <?php
 
-class ProductImagesStructure extends ElementForm
+class SharedImagesStructure extends ElementForm
 {
     protected $containerClass = 'gallery_form';
     protected $formClass = 'gallery_form_upload';
