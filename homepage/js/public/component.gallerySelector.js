@@ -3,7 +3,6 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 	var self = this;
 	var componentElement;
 	var centerElement;
-	var thumbnailsList = [];
 	var lastTimeout;
 	var init = function() {
 		componentElement = document.createElement('div');
@@ -18,12 +17,11 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 		for (var i = 0; i < imagesInfoList.length; i++) {
 			var item = new GallerySelectorImageComponent(imagesInfoList[i], self);
 			centerElement.appendChild(item.getComponentElement());
-			if(i == 0) {
+			if(i === 0) {
 				var element = item.getComponentElement();
 				element.classList.add('gallery_thumbnailsselector_active');
 				lastActiveThumbnailElement = element;
 			}
-			thumbnailsList.push(item);
 		}
 
 		if (imagesInfoList.length > 3) {
@@ -43,7 +41,7 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 		}
 		element.classList.add('gallery_thumbnailsselector_active');
 		var center = (centerElement.offsetWidth - element.offsetWidth) / 2;
-		if( centerElement.scrollLeftMax <= (centerElement.scrollLeft + element.offsetWidth + center) || centerElement.scrollLeft == 0) {
+		if( centerElement.scrollLeftMax <= (centerElement.scrollLeft + element.offsetWidth + center) || centerElement.scrollLeft === 0) {
 			center = 0;
 		}
 		lastActiveThumbnailElement = element;

@@ -223,7 +223,7 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
 
 		resizeImageElement();
 	};
-	
+
 	var resizeImageElement = function() {
 		if (galleryWidth && galleryHeight) {
 			componentElement.style.width = galleryWidth + 'px';
