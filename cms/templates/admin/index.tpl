@@ -146,31 +146,11 @@
 	var colors = jsColorPicker('input.jscolor', {
 		customBG: '#222',
 		readOnly: true,
-		// patch: false,
 		init: function(elm, colors) { // colors is a different instance (not connected to colorPicker)
 			elm.style.backgroundColor = elm.value;
 			elm.style.color = colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#ddd';
 		}
 	});
-// 	jsColorPicker('input.input_component');
-// 	// description of option will follow
-// 	jsColorPicker('input.input_component', {
-// 		klass: window.ColorPicker,
-// 		input: elm,
-// 		patch: elm,
-// 		init: function(elm, colors){
-//
-// 		}, // initialization callback (before colorPicker gets initialized though)
-// // animationSpeed: 200, will be supported soon
-// // draggable: true,
-// 		multipleInstances: false,
-// 		margin: {left: -1, top: 2},
-// 		initStyle: 'display: none',
-// 		mode: 'hsv-h',
-// 		size: 1,
-// 		renderCallback: renderCallback
-// // and all other options from color and colorPicker
-// 	});
 	/*]]>*/
 </script>
 {/literal}
