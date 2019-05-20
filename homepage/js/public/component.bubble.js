@@ -91,7 +91,7 @@ window.BubbleComponent = function(referralElement, message, additionalClassName,
 		componentElement.style.overflow = 'hidden';
 		componentElement.style.opacity = 0;
 
-		TweenLite.to(componentElement, 0.5, {'css': {'opacity': 1,'lineHeight': 'inherit','minHeight': bubbleHeight,'overflow': 'visible','left': bubbleLeft, 'top': bubbleTopStop}, 'onComplete': wait});
+		TweenLite.to(componentElement, 0.5, {'css': {'opacity': 1,'lineHeight': 'inherit','hight': 'auto',','minHeight': bubbleHeight,'overflow': 'visible','left': bubbleLeft, 'top': bubbleTopStop}, 'onComplete': wait});
 
 		if (bubbleCloseTag){
 			document.querySelector('.' + additionalClassName + ' .' + bubbleCloseTag).addEventListener('click', function(ev){
