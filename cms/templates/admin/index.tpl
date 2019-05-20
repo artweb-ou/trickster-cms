@@ -146,7 +146,7 @@
 	var colors = jsColorPicker('input.jscolor', {
 		customBG: '#222',
 		readOnly: true,
-		init: function(elm, colors) { // colors is a different instance (not connected to colorPicker)
+		init: function(elm, colors) {
 			elm.style.backgroundColor = elm.value;
 			elm.style.color = colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#ddd';
 		}
