@@ -254,8 +254,8 @@ window.FullScreenGalleryImageComponent = function (imageInfo, parentObject, desc
 
       mediaElement = document.createElement('video')
       mediaElement.loop = true
-      mediaElement.muted = false
-      mediaElement.controls = true
+      mediaElement.muted = true
+      mediaElement.controls = false
       mediaElement.setAttribute('webkit-playsinline', 'webkit-playsinline')
       mediaElement.setAttribute('playsinline', 'playsinline')
       mediaElement.style.visibility = 'hidden'
