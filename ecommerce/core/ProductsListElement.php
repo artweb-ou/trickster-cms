@@ -753,8 +753,14 @@ abstract class ProductsListElement extends menuStructureElement
         return $this->amountSelectionOptions;
     }
 
+    /**
+     * @return mixed
+     */
     public function getParametersIdList()
     {
+        /**
+         * @var linksManager $linksManager
+         */
         $linksManager = $this->getService('linksManager');
         return $linksManager->getConnectedIdList($this->id, $this->structureType . 'Parameter', 'parent');
     }

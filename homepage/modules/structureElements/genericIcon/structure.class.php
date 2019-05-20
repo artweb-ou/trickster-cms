@@ -23,9 +23,9 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['title'] = 'text';
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'fileName';
-        $moduleStructure['products'] = 'numbersArray';
-        $moduleStructure['categories'] = 'numbersArray';
-        $moduleStructure['brands'] = 'numbersArray';
+        $moduleStructure['iconProducts'] = 'numbersArray';
+        $moduleStructure['iconCategories'] = 'numbersArray';
+        $moduleStructure['iconBrands'] = 'numbersArray';
         $moduleStructure['startDate'] = 'date';
         $moduleStructure['endDate'] = 'date';
         $moduleStructure['days'] = 'naturalNumber';

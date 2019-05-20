@@ -13,6 +13,10 @@
 	<script src="{$controller->baseURL}libs/ckfinder/ckfinder.js"></script>
 	<script src="{$controller->baseURL}vendor/artweb/trickster/cms/js/jscolor/jscolor.js"></script>
 	<script src="{$controller->baseURL}vendor/nnnick/chartjs/dist/Chart.js"></script>
+	<script src="{$controller->baseURL}vendor/colorPicker/colors.js"></script>
+	<script src="{$controller->baseURL}vendor/colorPicker/colorPicker.data.js"></script>
+	<script src="{$controller->baseURL}vendor/colorPicker/colorPicker.js"></script>
+	<script src="{$controller->baseURL}vendor/colorPicker/javascript_implementation/jsColor.js"></script>
 </head>
 <body>
 {if isset($loginForm) && $loginForm->displayForm()}
@@ -136,5 +140,19 @@
 {include file=$theme->template("javascript.data.tpl")}
 
 {if !empty($JSFileName)}{foreach $JSFileName as $script}<script defer type="text/javascript" src="{$script}"></script>{/foreach}{/if}
+{literal}
+<script type="text/javascript">
+	/*<![CDATA[*/
+	var colors = jsColorPicker('input.jscolor', {
+		customBG: '#222',
+		readOnly: false,
+		init: function(elm, colors) {
+			elm.style.backgroundColor = elm.value;
+			elm.style.color = colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#ddd';
+		}
+	});
+	/*]]>*/
+</script>
+{/literal}
 </body>
 </html>
