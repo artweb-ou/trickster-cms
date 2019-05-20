@@ -1,8 +1,8 @@
-@page-active-color: #6bbbff;
-@page-text-color: @gray;
-@page-border-color: #d4d4d7;
+@page_active_color: #6bbbff;
+@page_text_color: @gray;
+@page_border_color: #d4d4d7;
 
-@pager-width: @35pt;
+@pager_width: @35pt;
 
 .pager_block {
 	display: flex;
@@ -24,56 +24,56 @@
 	.pager_previous {
 		width: @36pt;
 		text-decoration: none;
-		color: @page-text-color;
+		color: @page_text_color;
 		padding: @6pt 0 0 0;
-		border: 1px solid @page-border-color;
+		border: 1px solid @page_border_color;
 		border-radius: 3px 0 0 3px;
 		&:before {
 			content: '\003c';
 		}
 		&:hover, &:focus {
 			outline: none;
-			background-color: @page-border-color;
+			background-color: @page_border_color;
 			color: @white;
 		}
 	}
 	.pager_page {
 		min-width: @37pt;
-		color: @page-text-color;
+		color: @page_text_color;
 		padding: @6pt @3pt 0;
 		text-decoration: none;
-		border: 1px solid @page-border-color;
+		border: 1px solid @page_border_color;
 		box-sizing: border-box;
 		&:hover, &:focus {
 			outline: none;
-			background-color: @page-border-color;
+			background-color: @page_border_color;
 			color: @white;
 		}
 	}
 	.pager_next {
 		width: @36pt;
 		text-decoration: none;
-		color: @page-text-color;
+		color: @page_text_color;
 		padding: @6pt 0 0 0;
-		border: 1px solid @page-border-color;
+		border: 1px solid @page_border_color;
 		border-radius: 0 3px 3px 0;
 		&:before {
 			content: '\003e';
 		}
 		&:hover, &:focus {
 			outline: none;
-			background-color: @page-border-color;
+			background-color: @page_border_color;
 			color: @white;
 		}
 	}
 	.pager_active {
 		width: @38pt;
-		background-color: @page-active-color;
-		border: 1px solid @page-active-color;
+		background-color: @page_active_color;
+		border: 1px solid @page_active_color;
 		color: @white;
 		&:hover, &:focus {
 			outline: none;
-			background-color: @page-active-color;
+			background-color: @page_active_color;
 		}
 	}
 }

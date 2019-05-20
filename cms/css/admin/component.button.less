@@ -1,19 +1,19 @@
-@grey-color: #f8f8f8;
-@hover-grey-color: #f0f0f1;
-@green-color: #47c650;
-@hover-green-color: #3eab2c;
-@red-color: #ee4f7c;
-@hover-red-color: #cf2051;
-@blue-color: #5eadf0;
-@hover-blue-color: #539cda;
-@yellow-color: #f7be23;
-@hover-yellow-color: #f79623;
-@grey-dark-color: #A6A6A6;
-@hover-grey-dark-color: darken(@grey-dark-color, 10%);
-@border-grey-button-color: #d4d4d7;
-@text-grey-button-color: #3d4a68;
+@grey_color: #f8f8f8;
+@hover_grey_color: #f0f0f1;
+@green_color: #47c650;
+@hover_green_color: #3eab2c;
+@red_color: #ee4f7c;
+@hover_red_color: #cf2051;
+@blue_color: #5eadf0;
+@hover_blue_color: #539cda;
+@yellow_color: #f7be23;
+@hover_yellow_color: #f79623;
+@grey_dark_color: #A6A6A6;
+@hover_grey_dark_color: darken(@grey_dark_color, 10%);
+@border_grey_button_color: #d4d4d7;
+@text_grey_button_color: #3d4a68;
 @color: @white;
-@border-color: #e5e5e8;
+@border_color: #e5e5e8;
 
 .button {
 	display: inline-flex;
@@ -23,14 +23,14 @@
 	box-sizing: border-box;
 	cursor: pointer;
 	border-radius: 3px;
-	background-color: @grey-color;
-	color: @text-grey-button-color;
+	background-color: @grey_color;
+	color: @text_grey_button_color;
 	text-decoration: none;
-	border: 1px solid @border-grey-button-color;
-	transition: @text-background-transition;
+	border: 1px solid @border_grey_button_color;
+	transition: @text_background_transition;
 	&:hover, &:focus {
 		outline: none;
-		background-color: @hover-grey-color;
+		background-color: @hover_grey_color;
 	}
 	.icon {
 		font-size: @9pt;
@@ -57,12 +57,12 @@
 }
 
 .success_button {
-	background-color: @green-color;
+	background-color: @green_color;
 	color: @color;
 	border: none;
 	&:hover, &:focus {
 		outline: none;
-		background-color: @hover-green-color;
+		background-color: @hover_green_color;
 	}
 	.icon {
 		color: inherit;
@@ -70,12 +70,12 @@
 }
 
 .primary_button {
-	background-color: @blue-color;
+	background-color: @blue_color;
 	color: @color;
-	border: 1px solid @blue-color;
+	border: 1px solid @blue_color;
 	&:hover, &:focus {
 		outline: none;
-		background-color: @hover-blue-color;
+		background-color: @hover_blue_color;
 	}
 	.icon {
 		color: inherit;
@@ -83,12 +83,12 @@
 }
 
 .warning_button {
-	background-color: @red-color;
+	background-color: @red_color;
 	color: @color;
 	border: none;
 	&:hover, &:focus {
 		outline: none;
-		background-color: @hover-red-color;
+		background-color: @hover_red_color;
 	}
 	.icon {
 		color: inherit;
@@ -96,24 +96,24 @@
 }
 
 .classic_button {
-	background-color: @grey-dark-color;
+	background-color: @grey_dark_color;
 	color: @color;
 	border: none;
 	&:hover, &:focus {
 		outline: none;
-		background-color: @hover-grey-dark-color;
+		background-color: @hover_grey_dark_color;
 	}
 	.icon {
 		color: inherit;
 	}
 }
 .info_button {
-	background-color: @yellow-color;
+	background-color: @yellow_color;
 	color: @color;
 	border: none;
 	&:hover, &:focus {
 		outline: none;
-		background-color: @hover-yellow-color;
+		background-color: @hover_yellow_color;
 	}
 	.icon {
 		color: inherit;

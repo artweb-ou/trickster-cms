@@ -1,13 +1,13 @@
-@calendar-border-color: #e5e5e8;
-@calendar-text-color: @label-color;
-@calendar-hover-color: @blue-color;
-@calendar-weekend-color: #ee4f7c;
+@calendar_border_color: #e5e5e8;
+@calendar_text_color: @label_color;
+@calendar_hover_color: @blue_color;
+@calendar_weekend_color: #ee4f7c;
 
 .calendar_selector {
 	background-color: #fff;
-	border: 1px solid @calendar-hover-color;
+	border: 1px solid @calendar_hover_color;
 	border-radius: 3px;
-	color: @calendar-text-color;
+	color: @calendar_text_color;
 	padding: @16pt @43pt @13pt @39pt;
 }
 
@@ -23,7 +23,7 @@
 			cursor: pointer;
 			&:hover, &:focus {
 				outline: none;
-				color: @calendar-hover-color;
+				color: @calendar_hover_color;
 			}
 		}
 	}
@@ -34,7 +34,7 @@
 }
 
 .calendar_selector_weekend {
-	color: @calendar-weekend-color;
+	color: @calendar_weekend_color;
 }
 
 .calendar_selector_location {
@@ -46,7 +46,7 @@
 	top: @92pt;
 	right: @19pt;
 	cursor: pointer;
-	color: @calendar-hover-color;
+	color: @calendar_hover_color;
 	&:before {
 		content: '\003e';
 	}
@@ -57,7 +57,7 @@
 	top: @92pt;
 	left: @19pt;
 	cursor: pointer;
-	color: @calendar-hover-color;
+	color: @calendar_hover_color;
 	&:before {
 		content: '\003c';
 	}

@@ -1,6 +1,6 @@
-@input-border-color: #e2e2e5;
-@input-text-color: @label-color;
-@input-focus-color: #6bbbff;
+@input_border_color: #e2e2e5;
+@input_text_color: @label_color;
+@input_focus_color: #6bbbff;
 
 .input_component {
 	.inputs_common();
@@ -11,8 +11,8 @@
 	padding: @10pt @13pt;
 	box-sizing: border-box;
 	border-radius: 3px;
-	border: 1px solid @input-border-color;
-	color: @input-text-color;
+	border: 1px solid @input_border_color;
+	color: @input_text_color;
 	line-height: 1.2;
 	transition: border-color 0.5s;
 
@@ -20,11 +20,11 @@
 		border: 1px solid mix(#6bbbff, #e2e2e5, 50%);
 	}
 	&:focus {
-		border-color: @input-focus-color;
+		border-color: @input_focus_color;
 		outline: none;
 	}
 	&::placeholder {
-		color: @label-color;
+		color: @label_color;
 	}
 }
 

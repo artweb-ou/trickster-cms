@@ -5,14 +5,14 @@
 
 .ajaxselect_container {
 	position: relative;
-	border: 1px solid @border-color;
+	border: 1px solid @border_color;
 	border-radius: 3px;
 	padding: 0 @32pt 0 @15pt;
 	box-sizing: border-box;
 	max-width: @509pt;
 	&:hover, &:focus {
 		outline: none;
-		border: 1px solid mix(@active-color, @border-color, 50%);
+		border: 1px solid mix(@active-color, @border_color, 50%);
 	}
 	.icon_search {
 		color: @active-color;
@@ -26,7 +26,7 @@
 	border: none;
 	width: 100%;
 	padding: @11pt 0 @11pt;
-	color: @label-color;
+	color: @label_color;
 
   &:before {
     display: block;
@@ -37,13 +37,13 @@
   }
 
   &::placeholder {
-    color: @label-color;
+    color: @label_color;
   }
 }
 
 .ajaxselect_item_list {
   position: relative;
-  color: @label-color;
+  color: @label_color;
 }
 
 .ajaxselect_item {
@@ -70,7 +70,7 @@
     cursor: pointer;
     height: @19pt;
     width: @19pt;
-    color: @red-color;
+    color: @red_color;
     font-size: @8pt;
     font-weight: bold;
     line-height: 2.5;
@@ -79,7 +79,7 @@
 
   &:hover, &:focus {
     outline: none;
-    color: @checkbox-hover-color;
+    color: @checkbox_hover_color;
   }
 }
 
@@ -100,7 +100,7 @@
 //higher rule priority is required for CKEDitor ajax search plugin
 .ajaxsearch_results_list {
   padding: 0 @16pt;
-  color: @label-color;
+  color: @label_color;
 
   .ajaxsearch_results_item {
     display: flex;
@@ -117,7 +117,7 @@
       color: @active-color;
     }
     &.ajaxsearch_results_active {
-      background-color: @text-grey-button-color;
+      background-color: @text_grey_button_color;
       color: @white;
     }
   }
@@ -144,7 +144,6 @@
 
 .ajaxitemsearch_result {
 	background-color: @white;
-	//border: 1px solid @border-color;
 	border-radius: 3px;
 	position: absolute;
 	top: -@43pt;
@@ -163,19 +162,19 @@
 	}
 	&:hover, &:focus {
 		outline: none;
-		border: 1px solid @hover-blue-color;
+		border: 1px solid @hover_blue_color;
 	}
 }
 
 .ajaxitemsearch_result_text {
   line-height: @41pt;
-  color: @label-color;
+  color: @label_color;
 }
 
 .ajaxitemsearch_result_remover {
   .icon;
   .icon_delete;
-  color: @red-color;
+  color: @red_color;
   cursor: pointer;
   height: @24pt;
   position: absolute;
