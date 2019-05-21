@@ -1,4 +1,4 @@
-window.ModalActionComponent = function(checkboxElement, footerElement, elementForPosition, message) {
+window.ModalActionComponent = function(checkboxElement, footerElement, elementForPosition, additionalClassName, message) {
 	//	ModalComponent.call(this);
 	var self = this;
 	var html= document.documentElement;
@@ -7,7 +7,7 @@ window.ModalActionComponent = function(checkboxElement, footerElement, elementFo
 
 	var init = function() {
 		var makeElement = selfModalComponent.makeElement;
-		selfModalComponent.addClass('modal-buttons');
+		selfModalComponent.addClass('modal-buttons ' + additionalClassName);
 		selfModalComponent.setTitle(message['title']);
 		selfModalComponent.setContent(message['content']);
 

@@ -80,12 +80,13 @@ addToBasketButtonAction
 		unRegisterEventHandlers();
 		if(addToBasketButtonAction) {
 			var message = [];
+			let additionalContainerClassName = 'notice_box';
 			let additionalClassName = 'notice_basket';
 			message['title'] = window.productDetailsData.name || window.productDetailsData.name_ga;
 			message['content'] = window.translationsLogics.get('product.quantityunavailable');
 			message['footer'] = '';
 // only modal on error
-			new ModalActionComponent(false, false, componentElement, message); // checkbox-input, footer buttons, element for position, messages
+			new ModalActionComponent(false, false, componentElement, additionalContainerClassName, message); // checkbox-input, footer buttons, element for position, messages
 /*
 			switch(addToBasketButtonAction) {
 				case '1': // BubbleComponent
