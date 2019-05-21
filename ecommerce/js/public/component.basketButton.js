@@ -57,7 +57,8 @@ addToBasketButtonAction
 
 			switch(addToBasketButtonAction) {
 				case '1': // BubbleComponent
-					message['title'] = currentProduct.outerHTML;
+					message['title'] = '';
+					// message['title'] = currentProduct.outerHTML;
 					message['content'] = bubbleText.outerHTML;
 					message['footer'] = seeBasket.outerHTML + continueShopping.outerHTML;
 

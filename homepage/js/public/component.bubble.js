@@ -63,13 +63,23 @@ window.BubbleComponent = function(referralElement, message, additionalContainerC
 		var htmlScroll = html.scrollTop;
 	//	var htmlWidth = document.body.clientWidth || document.documentElement.clientWidth || window.innerWidth;
 
-		var parentPositions = referralElement.parentElement.getBoundingClientRect(); // span-checkbox
+		var parentPositions;
+		if (referralElement.dataset.notice) {
+			let noticeParentSelector = referralElement.dataset.notice;
+			parentPositionsX = document.querySelector(noticeParentSelector).getBoundingClientRect();
+		}
+		//document.querySelector('.product_details_button').dataset.notice
+		else {
+			parentPositionsX = referralElement.getBoundingClientRect(); // span-checkbox
+		}
 
-		positionedX = parentPositions.left;
+		parentPositionsY = referralElement.getBoundingClientRect(); // span-checkbox
+
+		positionedX = parentPositionsX.left;
 		// positionedX = parentPositions.left;
-		positionedW = parentPositions.width;
-		positionedY = parentPositions.top;
-		positionedH = parentPositions.height;
+		positionedW = parentPositionsX.width;
+		positionedY = parentPositionsY.top;
+		positionedH = parentPositionsY.height;
 
 		var bubbleGetCompStyle = getComputedStyle(componentElement);
 		bubbleHeight = bubbleGetCompStyle.height;
@@ -82,21 +92,22 @@ window.BubbleComponent = function(referralElement, message, additionalContainerC
 		bubbleWidth 	= positionedW + 'px';
 		bubbleLeft		= positionedX + 'px';
 		bubbleTopStart 	= startY + 'px';
-		bubbleTopStop 	= startY + positionedH - bubbleHeightDigit + 'px';
+		bubbleTopStop 	= Math.ceil(startY + positionedH - bubbleHeightDigit) + 'px';
 		componentElement.style.top = bubbleTopStop;
 		componentElement.style.left = bubbleLeft;
 		componentElement.style.width = bubbleWidth;
+		componentElement.style.fontSize = 0;
 		componentElement.style.lineHeight = 0;
 		componentElement.style.height = 0;
 		componentElement.style.overflow = 'hidden';
 		componentElement.style.opacity = 0;
 
-		TweenLite.to(componentElement, 0.5, {'css': {'opacity': 1,'lineHeight': 'inherit','hight': 'auto', 'minHeight': bubbleHeight,'overflow': 'visible','left': bubbleLeft, 'top': bubbleTopStop}, 'onComplete': wait});
+		TweenLite.to(componentElement, 0.5, {'css': {'opacity': 1,'fontSize': 'inherit','lineHeight': '1','height': bubbleHeight, 'minHeight': bubbleHeight,'overflow': 'visible','left': bubbleLeft, 'top': bubbleTopStop}, 'onComplete': wait});
 
 		if (bubbleCloseTag){
 			document.querySelector('.' + additionalClassName + ' .' + bubbleCloseTag).addEventListener('click', function(ev){
 				ev.preventDefault();
-				contentElement.parentNode.removeChild(contentElement);
+				componentElement.parentNode.removeChild(componentElement);
 			});
 		}
 	};
