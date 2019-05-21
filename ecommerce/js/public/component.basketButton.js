@@ -71,7 +71,7 @@ addToBasketButtonAction
 					message['content'] = bubbleText.innerHTML;
 					message['footer'] = seeBasket.outerHTML + continueShopping.outerHTML;
 
-					new ModalActionComponent(false, 'multiple', componentElement, message); // checkbox-input, multiple footer buttons, element for position, messages
+					new ModalActionComponent(false, 'multiple', componentElement, additionalContainerClassName, message); // checkbox-input, multiple footer buttons, element for position, messages
 					break;
 			}
 		}

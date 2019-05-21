@@ -7,9 +7,13 @@ window.ModalActionComponent = function(checkboxElement, footerElement, elementFo
 
 	var init = function() {
 		var makeElement = selfModalComponent.makeElement;
-		selfModalComponent.addClass('modal-buttons ' + additionalClassName);
-		selfModalComponent.setTitle(message['title']);
-		selfModalComponent.setContent(message['content']);
+		selfModalComponent.addClass('modal_buttons ' + additionalClassName);
+		if(message['title']) {
+			selfModalComponent.setTitle(message['title']);
+		}
+		if(message['content']) {
+			selfModalComponent.setContent(message['content']);
+		}
 
 		var fragment = document.createDocumentFragment();
 		var resetButtonElement, submitButtonElement, footerElements;
@@ -18,13 +22,13 @@ window.ModalActionComponent = function(checkboxElement, footerElement, elementFo
 		resetButtonElement.innerHTML = translationsLogics.get('product.quantityunavailable');
 		eventsManager.addHandler(resetButtonElement, 'click', resetClick);
 */
-		if(checkboxElement){
+		if(checkboxElement && message['footer']){
 			submitButtonElement = makeElement('div', 'submit button', fragment);
 			submitButtonElement.innerHTML = message['footer'];
 			// htmlScrollTopStart = html.scrollTop;
 			eventsManager.addHandler(submitButtonElement, 'click', submitClick);
 		}
-		else if(footerElement === 'multiple') {
+		else if(footerElement === 'multiple' && message['footer']) {
 			footerElements = makeElement('div', 'modal_footer_inner buttons', fragment);
 			footerElements.innerHTML = message['footer'];
 		}
