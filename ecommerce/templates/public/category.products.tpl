@@ -5,10 +5,10 @@
             <div class="products_top_pager">
                 {include file=$theme->template('pager.tpl') pager=$pager}
                 <div class="products_top_pager_controls">
+                    {include file=$theme->template('component.productslimit.tpl')}
                     {if $element->isSortable()}
                         {include file=$theme->template('component.productssorter.tpl')}
                     {/if}
-                    {include file=$theme->template('component.productslimit.tpl')}
                 </div>
             </div>
         {/if}
