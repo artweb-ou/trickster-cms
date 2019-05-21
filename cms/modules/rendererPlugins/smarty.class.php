@@ -88,7 +88,7 @@ class smartyRendererPlugin extends rendererPlugin
             $name = $params['name'];
             if (($text = $this->translationsManager->getTranslationByName($name, $section, $required, $loggable)) !== null) {
                 unset($params['name']);
-                foreach ($params as $key => &$value) {
+                foreach ($params as $key => $value) {
                     $text = str_replace("%" . $key, $value, $text);
                 }
                 return $text;
