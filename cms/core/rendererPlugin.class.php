@@ -22,6 +22,7 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
     protected $expires;
     protected $debugText = '';
     protected $contentText;
+    protected $encoding;
     protected $bytesToSend = false;
     protected $startPoint = 0;
     public $debugMode = false;
@@ -61,14 +62,16 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
         $etag = $this->getEtag();
         $this->httpResponse->setCacheControl($this->cacheControl);
 
+        //encoding should be set before content rendering
+        if (!($this->encoding = $this->getForcedEncoding())) {
+            $this->encoding = $this->selectHTTPParameter($this->preferredEncodings, $this->requestHeadersManager->getAcceptedEncodings());
+        }
+
         if (!$this->checkEtag($etag)) {
             $this->captureDebugText();
             $this->renderContent();
 
-            if (!($encoding = $this->getForcedEncoding())) {
-                $encoding = $this->selectHTTPParameter($this->preferredEncodings, $this->requestHeadersManager->getAcceptedEncodings());
-            }
-            $this->compress($encoding);
+            $this->compress($this->encoding);
             //content length should be taken after possible compression.
             $contentLength = $this->getContentLength();
             if ($rangeValue = $this->requestHeadersManager->getRange()) {
@@ -99,7 +102,7 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
             $this->httpResponse->setExpires($this->expires);
             $this->httpResponse->setEtag($etag);
             $this->httpResponse->setContentDisposition($contentDisposition);
-            $this->httpResponse->setContentEncoding($encoding);
+            $this->httpResponse->setContentEncoding($this->encoding);
             $this->httpResponse->setContentLength($contentLength);
             $this->httpResponse->setContentType($contentType);
             if ($this->acceptRanges) {
