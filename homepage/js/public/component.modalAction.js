@@ -36,7 +36,7 @@ window.ModalActionComponent = function(checkboxElement, footerElement, elementFo
 		selfModalComponent.setControls(fragment);
 		selfModalComponent.setDisplayed(true);
 
-		if (bubbleCloseTag){ console.log('.' + additionalClassName + ' .' + bubbleCloseTag);
+		if (bubbleCloseTag){
 			document.querySelector('.' + additionalClassName + ' .' + bubbleCloseTag).addEventListener('click', function(ev){
 				ev.preventDefault();
 				selfModalComponent.setDisplayed(false);

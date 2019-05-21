@@ -62,7 +62,7 @@ addToBasketButtonAction
 					message['content'] = bubbleText.outerHTML;
 					message['footer'] = seeBasket.outerHTML + continueShopping.outerHTML;
 
-					var bubbleComponent = new BubbleComponent(componentElement, message, additionalContainerClassName, additionalClassName, 'notice_continue_shopping', 999993500);
+					var bubbleComponent = new BubbleComponent(componentElement, message, additionalContainerClassName, additionalClassName, 'notice_continue_shopping', 3500);
 		bubbleComponent.start();
 					break;
 
