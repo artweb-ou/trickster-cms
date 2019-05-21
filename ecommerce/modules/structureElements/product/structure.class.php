@@ -1012,7 +1012,7 @@ class productElement extends structureElement implements
                             'iconLocation' => $this->productIconLocationTypes[0],
                         ];
                         if ($icon->structureType == 'genericIcon') {
-                            if ($icon->iconLocation){
+                            if ($icon->iconLocation) {
                                 $iconInfo['iconLocation'] = $this->productIconLocationTypes[$icon->iconLocation];
                             }
                             $iconInfo['iconRole'] = $this->getProductIconRoleType($icon->iconRole);
@@ -1020,7 +1020,7 @@ class productElement extends structureElement implements
                             $iconInfo['iconTextColor'] = $icon->iconTextColor;
 
                             if (!$iconInfo['title'] && ($icon->getProductIconRoleType($icon->iconRole) == 'role_general_discount')) {
-                                $iconInfo['title'] = $this->getDiscountPercent();
+                                $iconInfo['title'] = '-' . $this->getDiscountPercent() . '%';
                             }
                         }
                         $this->iconsInfo[] = $iconInfo;
