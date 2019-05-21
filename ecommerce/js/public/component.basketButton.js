@@ -53,7 +53,7 @@ addToBasketButtonAction
 
 			var bubbleText = document.createElement('span');
 			bubbleText.className = 'notice_bubble_text';
-			bubbleText.innerHTML  = window.translationsLogics.get('product.addedtobasket') + '('+currentAmount.outerHTML+')';
+			bubbleText.innerHTML  = window.translationsLogics.get('product.addedtobasket') + ' ('+currentAmount.outerHTML+')';
 
 			switch(addToBasketButtonAction) {
 				case '1': // BubbleComponent
