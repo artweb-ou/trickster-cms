@@ -563,23 +563,23 @@ class productElement extends structureElement implements
      */
     public function getDeepParentCategories()
     {
-	    $deepCategories = [];
+        $deepCategories = [];
         if ($this->deepParentCategories === null) {
             $this->deepParentCategories = [];
-	        /**
-	         * @var structureManager $structureManager
-	         * @var structureElement $parentsList
-	         */
-	        $structureManager = $this->getService('structureManager');
-	        if ($deepCategories = $this->getConnectedCategories()) {
+            /**
+             * @var structureManager $structureManager
+             * @var structureElement $parentsList
+             */
+            $structureManager = $this->getService('structureManager');
+            if ($deepCategories = $this->getConnectedCategories()) {
                 foreach ($deepCategories as &$category) {
                     $this->deepParentCategories[] = $category;
-	                $parentsList = $structureManager->getElementsParents($category->id, false, '', false);
-					foreach ($parentsList as &$parentsListItem) {
-						if ($parentsListItem->structureType == 'category') {
-							$this->deepParentCategories[] = $parentsListItem;
-						}
-					}
+                    $parentsList = $structureManager->getElementsParents($category->id, false, '', false);
+                    foreach ($parentsList as &$parentsListItem) {
+                        if ($parentsListItem->structureType == 'category') {
+                            $this->deepParentCategories[] = $parentsListItem;
+                        }
+                    }
                 }
             }
         }
@@ -676,7 +676,7 @@ class productElement extends structureElement implements
         if ($this->parametersInfoList === null) {
             $this->getParametersGroupsInfo();
         }
-	    return $this->parametersInfoList;
+        return $this->parametersInfoList;
     }
 
     public function getParametersGroupsInfo()
@@ -684,7 +684,7 @@ class productElement extends structureElement implements
         if ($this->parametersGroupsInfo === null) {
             $this->parametersGroupsInfo = [];
 
-	        $groupsParentElements = $this->getDeepParentCategories(); //+$this->getConnectedCatalogues(true) +$this->getDeepParentCategories()
+            $groupsParentElements = $this->getDeepParentCategories(); //+$this->getConnectedCatalogues(true) +$this->getDeepParentCategories()
             if (!$groupsParentElements) {
                 $groupsParentElements = $this->getConnectedCatalogues(true);
             }
@@ -1004,41 +1004,40 @@ class productElement extends structureElement implements
                 $productIconsManager = $this->getService('ProductIconsManager');
                 if ($icons = $productIconsManager->getProductIcons($this)) {
                     foreach ($icons as $icon) {
-                        $iconsInfoGenericIcon = [];
-	
-
-                        $iconsInfoAllIcons = [
+                        $iconInfo = [
                             'title' => $icon->title,
                             'image' => $icon->image,
                             'width' => $icon->iconWidth,
                             'fileName' => $icon->originalName,
-                            'iconStructureType' => $icon->structureType,
+                            'iconLocation' => $this->productIconLocationTypes[0],
                         ];
                         if ($icon->structureType == 'genericIcon') {
-                            $iconsInfoGenericIcon = [
-                                'iconLocation' => $this->productIconLocationTypes[$icon->iconLocation],
-                                'iconRole' => $this->getProductIconRoleType($icon->iconRole),
-                                'iconBgColor' => $icon->iconBgColor,
-                                'iconTextColor' => $icon->iconTextColor,
-                                'iconProductAvail' => $icon->iconProductAvail,
-                                'iconProducts' => $icon->iconProducts,
-                                'iconCategories' => $icon->iconCategories,
-                                'iconBrands' => $icon->iconBrands,                          
-                                'iconProductParameters' => $icon->iconProductParameters,
-                                ];
-                        }
-                        $this->iconsInfo[] = array_merge($iconsInfoAllIcons, $iconsInfoGenericIcon);
+                            if ($icon->iconLocation){
+                                $iconInfo['iconLocation'] = $this->productIconLocationTypes[$icon->iconLocation];
+                            }
+                            $iconInfo['iconRole'] = $this->getProductIconRoleType($icon->iconRole);
+                            $iconInfo['iconBgColor'] = $icon->iconBgColor;
+                            $iconInfo['iconTextColor'] = $icon->iconTextColor;
 
+                            if ($icon->getProductIconRoleType($icon->iconRole) == 'role_general_discount') {
+                                $iconInfo['title'] = $this->getDiscountPercent();
+                            }
+                        }
+                        $this->iconsInfo[] = $iconInfo;
                     }
                 }
                 if ($discounts = $this->getCampaignDiscounts()) {
                     foreach ($discounts as $discount) {
-                        $this->iconsInfo[] = [
-                            'title' => $discount->title,
-                            'image' => $discount->icon,
-                            'width' => $discount->iconWidth,
-                            'fileName' => $discount->iconOriginalName,
-                        ];
+                        //only show discount with icon applied
+                        if (!empty($discount->icon)) {
+                            $this->iconsInfo[] = [
+                                'title' => $discount->title,
+                                'image' => $discount->icon,
+                                'width' => $discount->iconWidth,
+                                'fileName' => $discount->iconOriginalName,
+                                'iconLocation' => $this->productIconLocationTypes[0],
+                            ];
+                        }
                     }
                 }
                 $cache->set($this->id . ':icons', $this->iconsInfo, 3600);

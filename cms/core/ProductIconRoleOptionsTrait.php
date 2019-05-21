@@ -26,7 +26,7 @@ trait ProductIconRoleOptionsTrait
         if (isset($this->productIconRoleTypes[$value])) {
             return $this->productIconRoleTypes[$value];
         }
-        return false;
+        return 'role_simple';
     }
 
 }
