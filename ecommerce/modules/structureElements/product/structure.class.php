@@ -1020,7 +1020,7 @@ class productElement extends structureElement implements
                             $iconInfo['iconTextColor'] = $icon->iconTextColor;
 
                             if (!$iconInfo['title'] && ($icon->getProductIconRoleType($icon->iconRole) == 'role_general_discount')) {
-                                $iconInfo['title'] = '-' . $this->getDiscountPercent(true, '%01f') . '%';
+                                $iconInfo['title'] = '-' . $this->getDiscountPercent(true, '%01.0f') . '%';
                             }
                         }
                         $this->iconsInfo[] = $iconInfo;
