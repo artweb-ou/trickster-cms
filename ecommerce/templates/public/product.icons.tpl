@@ -3,7 +3,7 @@
         {foreach $iconsInfo as $iconInfo}
             {if $iconInfo.iconLocation == $cellLocation}
                 {if !empty($iconInfo.image)}
-                    <img class='product_icons_image {$iconRole}'
+                    <img class='product_icon product_icon_image {$iconInfo.iconRole}'
                          {if !empty($iconInfo.width)}style="width:{$iconInfo.width * 2}%;"{/if}
                          src='{$controller->baseURL}image/type:productIcon/id:{$iconInfo.image}/filename:{$iconInfo.fileName}'
                          alt='{$iconInfo.title}'
@@ -12,7 +12,7 @@
                     {$iconStyle = ''}
                     {if (!empty($iconInfo.iconTextColor))} {$iconStyle = "color:{$iconInfo.iconTextColor};"}{/if}
                     {if (!empty($iconInfo.iconBgColor))} {$iconStyle = "{$iconStyle}background-color:{$iconInfo.iconBgColor};"}{/if}
-                    <span class='product_icons_title {$iconRole}' {if !empty($iconStyle)}style="{$iconStyle}"{/if}>{$iconInfo.title}</span>
+                    <span class='product_icon product_icon_text {$iconInfo.iconRole}' {if !empty($iconStyle)}style="{$iconStyle}"{/if}>{$iconInfo.title}</span>
                 {/if}
             {/if}
         {/foreach}
