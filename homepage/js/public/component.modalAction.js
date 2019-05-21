@@ -1,9 +1,9 @@
-window.ModalActionComponent = function(checkboxElement, footerElement, elementForPosition, additionalClassName, message) {
+window.ModalActionComponent = function(checkboxElement, footerElement, elementForPosition, additionalClassName, bubbleCloseTag, message) {
 	//	ModalComponent.call(this);
 	var self = this;
 	var html= document.documentElement;
 	var htmlScrollTopStart;
-	var selfModalComponent = new ModalComponent(elementForPosition);
+	var selfModalComponent = new ModalComponent(elementForPosition, bubbleCloseTag);
 
 	var init = function() {
 		var makeElement = selfModalComponent.makeElement;
@@ -35,6 +35,14 @@ window.ModalActionComponent = function(checkboxElement, footerElement, elementFo
 
 		selfModalComponent.setControls(fragment);
 		selfModalComponent.setDisplayed(true);
+
+		if (bubbleCloseTag){ console.log('.' + additionalClassName + ' .' + bubbleCloseTag);
+			document.querySelector('.' + additionalClassName + ' .' + bubbleCloseTag).addEventListener('click', function(ev){
+				ev.preventDefault();
+				selfModalComponent.setDisplayed(false);
+			});
+
+		}
 	};
 	var submitClick = function(event) {
 		eventsManager.preventDefaultAction(event);
