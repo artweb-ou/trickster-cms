@@ -56,10 +56,10 @@ trait ConnectedCategoriesProviderTrait
      */
     public function getConnectedCategoriesIds($linkType = null)
     {
-        if (!$linkType) {
-            $linkType = $this->structureType . 'Category';
-        }
         if ($this->connectedCategoriesIds === null) {
+            if (!$linkType) {
+                $linkType = $this->structureType . 'Category';
+            }
             /**
              * @var linksManager $linksManager
              */

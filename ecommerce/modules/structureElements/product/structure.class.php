@@ -1006,9 +1006,7 @@ class productElement extends structureElement implements
                     foreach ($icons as $icon) {
                         $iconsInfoGenericIcon = [];
 	
-	                    /**
-	                     * @var object $icon
-	                     */
+
                         $iconsInfoAllIcons = [
                             'title' => $icon->title,
                             'image' => $icon->image,
@@ -1019,7 +1017,7 @@ class productElement extends structureElement implements
                         if ($icon->structureType == 'genericIcon') {
                             $iconsInfoGenericIcon = [
                                 'iconLocation' => $this->productIconLocationTypes[$icon->iconLocation],
-                                'iconRole' => $this->productIconRoleTypes[$icon->iconRole],
+                                'iconRole' => $this->getProductIconRoleType($icon->iconRole),
                                 'iconBgColor' => $icon->iconBgColor,
                                 'iconTextColor' => $icon->iconTextColor,
                                 'iconProductAvail' => $icon->iconProductAvail,
