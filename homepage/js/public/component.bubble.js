@@ -1,4 +1,4 @@
-window.BubbleComponent = function(referralElement, message, additionalClassName, bubbleCloseTag, waitDelay) {
+window.BubbleComponent = function(referralElement, message, additionalContainerClassName, additionalClassName, bubbleCloseTag, waitDelay) {
 	waitDelay = waitDelay?waitDelay:1000;
 
 	var componentElement = false;
@@ -23,7 +23,7 @@ window.BubbleComponent = function(referralElement, message, additionalClassName,
 
 	var init = function() {
 		componentElement = document.createElement('div');
-		componentElement.className = 'tip_popup';
+		componentElement.className = 'tip_popup ' + additionalContainerClassName;
 		componentElement.style.display = 'none';
 
 		contentElement = document.createElement('div');

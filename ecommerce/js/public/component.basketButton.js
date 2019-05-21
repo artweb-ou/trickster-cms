@@ -31,6 +31,7 @@ addToBasketButtonAction
 
 		if(addToBasketButtonAction) {
 			var message = [];
+			let additionalContainerClassName = 'notice_box';
 			let additionalClassName = 'notice_basket';
 			var currentProduct = document.createElement('span');
 			currentProduct.className = 'notice_product_name';
@@ -60,7 +61,7 @@ addToBasketButtonAction
 					message['content'] = bubbleText.outerHTML;
 					message['footer'] = seeBasket.outerHTML + continueShopping.outerHTML;
 
-					var bubbleComponent = new BubbleComponent(componentElement, message, additionalClassName, 'notice_continue_shopping', 3500);
+					var bubbleComponent = new BubbleComponent(componentElement, message, additionalContainerClassName, additionalClassName, 'notice_continue_shopping', 999993500);
 		bubbleComponent.start();
 					break;
 
