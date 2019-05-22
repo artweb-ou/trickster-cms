@@ -22,7 +22,7 @@
 	</div>
 	{stripdomspaces}
 	{if count($element->getProductsList())}
-		{include file=$theme->template('component.productsfilter.tpl')}
+		{include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=true}
 		<div class='brand_details_products'>
 			<div class="products_top_pager">
 				{if $element->isSortable()}

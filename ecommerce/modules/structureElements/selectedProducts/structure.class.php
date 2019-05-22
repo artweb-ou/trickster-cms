@@ -24,6 +24,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
     public $dataResourceName = 'module_selected_products';
     public $defaultActionName = 'show';
     public $role = 'content';
+    
     protected $connectedBrands;
     protected $connectedBrandsIds;
     protected $connectedDiscounts;

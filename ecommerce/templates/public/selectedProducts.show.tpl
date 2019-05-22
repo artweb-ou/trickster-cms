@@ -79,6 +79,11 @@
 			{include file=$theme->template('pager.tpl') pager=$pager}
 		{/if}
 		{/stripdomspaces}
+		{if $element->link}
+		<div class="selectedproducts_view_all">
+			<a href="{$element->link}" class="button selectedproducts_view_all_button"><span class="button_text">{$element->linkText}</span></a>
+		</div>
+		{/if}
 	{/capture}
 
 	{assign moduleClass "selected_products_block"}
