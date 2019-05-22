@@ -1,4 +1,13 @@
 {if $element->getSubMenuList()}
+	{capture assign="moduleTitle"}
+		{if $element->displayHeadingAutomatically}
+			{$currentMainMenu->title}
+		{else}
+			{if $element->title}
+				{$element->title}
+			{/if}
+		{/if}
+	{/capture}
 	{capture assign="moduleContent"}
 		{if $element->popup}
 			<script>
@@ -9,13 +18,6 @@
 			</script>
 		{/if}
 			<nav class='submenu_items_block'>
-                {if $element->displayHeadingAutomatically}
-                    {$currentMainMenu->title}
-                {else}
-                    {if $element->title}
-                        {$element->title}
-                    {/if}
-                {/if}
 				{include file=$theme->template("subMenuList.items.tpl") level=1 levels=$element->levels usePopup=$element->popup subMenus=$element->getSubMenuList()}
 			</nav>
 	{/capture}

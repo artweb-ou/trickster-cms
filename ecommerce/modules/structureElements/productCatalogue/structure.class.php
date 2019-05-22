@@ -13,6 +13,7 @@ class productCatalogueElement extends categoryStructureElement implements Config
     public $role = 'hybrid';
     protected $replacementElements = [];
     protected $categoriesList;
+    public $adminCategoriesList;
     protected $productsListParentElementsIds;
 
     protected function setModuleStructure(&$moduleStructure)
@@ -83,7 +84,6 @@ class productCatalogueElement extends categoryStructureElement implements Config
         }
         return $replacementElements;
     }
-
 
     protected function getProductsListBaseQuery()
     {
@@ -201,11 +201,9 @@ class productCatalogueElement extends categoryStructureElement implements Config
     public function getCategoriesList()
     {
         if ($this->categoriesList === null) {
-
             $this->categoriesList = [];
             $structureManager = $this->getService('structureManager');
             if ($firstParent = $structureManager->getElementsFirstParent($this->id)) {
-
                 $this->categoriesList = $structureManager->getElementsChildren($firstParent->id, 'container', 'catalogue');
             }
         }
