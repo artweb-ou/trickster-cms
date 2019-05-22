@@ -15,9 +15,6 @@
 	{if $element->shopURL}
 		<div class="campaign_details_controls">
 			<a href="{$element->shopURL}" class='campaign_details_readmore button'>
-				<span class='button_left'></span>
-				<span class='button_right'></span>
-				<span class='button_center'></span>
 				<span class='button_text'>{translations name='campaign.shoplink'}</span>
 			</a>
 		</div>
