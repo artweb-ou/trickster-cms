@@ -172,12 +172,24 @@
 .shoppingbasket_form_controls_container {
 	text-align: right;
 }
-
+/********************************************************
+/*  SHOPPING BASKET PRODUCT VARITIONS
+/********************************************************/
+.variation_name {
+}
+.variation_value {
+}
+.variation_separator:after{
+	content:':';
+	width:.5rem;
+	display:inline-block;
+}
 /********************************************************
 /*  SHOPPING BASKET CONDITIONS
 /********************************************************/
 .shoppingbasket_form_conditions {
-	padding: 1px; // fix inner divs margin
+	padding-top: 1px; // fix inner divs margin
+	padding-right: @25pt;
 }
 
 .shoppingbasket_form_conditions_content {

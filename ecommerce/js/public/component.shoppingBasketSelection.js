@@ -601,6 +601,12 @@ window.ShoppingBasketSelectionProduct = function(initData) {
 			}
 		}
 		if (variations.length) {
+			let variationHtml = [];
+			variations.forEach(function (variation, i) {
+				let variationsArray = variation.split(":");
+				variationHtml[i] = '<span class="variation_name">' + variationsArray[0] + '</span><span class="variation_separator"></span><span class="variation_value">' + variationsArray[1] + '</span>';
+			});
+			variations = variationHtml;
 			descriptionElement.innerHTML = '<p>' + variations.join('</p><p>') + '</p>'
 		} else {
 			descriptionElement.innerHTML = ''
