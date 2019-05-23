@@ -20,7 +20,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
     public $dataResourceName = 'module_shoppingbasket';
     public $defaultActionName = 'show';
     protected $allowedTypes = [
-        'shoppingBasketStep'
+        'shoppingBasketStep',
     ];
     public $role = 'container';
     protected $deliveryTypesList = false;
@@ -32,7 +32,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
      * @var shoppingBasket
      */
     public $shoppingBasket;
-    protected $paymentStatus = false;
+    protected $paymentMade = false;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -69,12 +69,13 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $moduleStructure['addToBasketButtonAction'] = 'text';
     }
 
-    public function getNextStep() {
+    public function getNextStep()
+    {
         $steps = $this->getSteps();
-        foreach($steps as $key => $step) {
-            if($this->getCurrentStepElement() == $step) {
+        foreach ($steps as $key => $step) {
+            if ($this->getCurrentStepElement() == $step) {
                 $nextKey = $key + 1;
-                if(isset($steps[$nextKey])) {
+                if (isset($steps[$nextKey])) {
                     return $steps[$nextKey];
                 }
             }
@@ -82,43 +83,45 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         return false;
     }
 
-    public function isLastStep() {
+    public function isLastStep()
+    {
         return !$this->getNextStep();
     }
 
-    public function getCurrentStepElements() {
-        if($stepElement = $this->getCurrentStepElement()) {
+    public function getCurrentStepElements()
+    {
+        if ($stepElement = $this->getCurrentStepElement()) {
             return $stepElement->getChildrenList();
         }
 
         return [];
     }
 
-    public function getCurrentStepElement() {
-        if(is_null($this->currentStep)) {
+    public function getCurrentStepElement()
+    {
+        if ($this->currentStep === null) {
+            $this->currentStep = false;
+
             $controller = $this->getService('controller');
             $steps = $this->getSteps();
-            foreach($steps as $step) {
-                if($controller->getParameter('step')) {
-                    if($step->structureName == $controller->getParameter('step')) {
+            foreach ($steps as $step) {
+                if ($controller->getParameter('step')) {
+                    if ($step->structureName == $controller->getParameter('step')) {
                         $this->currentStep = $step;
                         break;
                     }
-                }else {
+                } else {
                     $this->currentStep = $step;
                     break;
                 }
-            }
-
-            if(!$this->currentStep) {
-                $this->currentStep = false;
             }
         }
 
         return $this->currentStep;
     }
 
-    public function getSteps() {
+    public function getSteps()
+    {
         $structureManager = $this->getService('structureManager');
         return $structureManager->getElementsChildren($this->id, null, 'structure', ['shoppingBasketStep']);
     }
@@ -169,17 +172,17 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
     /**
      * @return bool
      */
-    public function isPaymentStatus()
+    public function isPaymentMade()
     {
-        return $this->paymentStatus;
+        return $this->paymentMade;
     }
 
     /**
-     * @param bool $paymentStatatus
+     * @param bool $paymentMade
      */
-    public function setPaymentStatus($paymentStatatus)
+    public function setPaymentMade($paymentMade)
     {
-        $this->paymentStatus = $paymentStatatus;
+        $this->paymentMade = $paymentMade;
     }
 
     public function saveShoppingBasketForm()
@@ -274,7 +277,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $data["promoCodeDiscountId"] = $this->shoppingBasket->getPromoCodeDiscountId();
         $data["productsAmount"] = $this->shoppingBasket->getProductsAmount();
         $data["productsSalesPrice"] = 0;
-        $data["paymentStatus"] = $this->isPaymentStatus();
+        $data["paymentMade"] = $this->isPaymentMade();
         // products
         $data["productsList"] = [];
         $products = $this->shoppingBasket->getProductsList();
@@ -590,5 +593,17 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
     public function getColumnsType()
     {
         return $this->columns;
+    }
+
+    public function getH1()
+    {
+        $h1 = false;
+        if (!$this->isPaymentMade() && ($currentStep = $this->getCurrentStepElement())) {
+            $h1 = $currentStep->title;
+        }
+        if (!$h1) {
+            $h1 = $this->title;
+        }
+        return $h1;
     }
 }
