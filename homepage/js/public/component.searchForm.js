@@ -1,4 +1,4 @@
-function SearchFormComponent(formElement, displayInElement, displayTotals, totalsElement) {
+function SearchFormComponent(formElement, displayInElement, displayTotals, totalsElement, position) {
 	var self = this;
 
 	this.submitButton = null;
@@ -7,7 +7,7 @@ function SearchFormComponent(formElement, displayInElement, displayTotals, total
 
 	var init = function() {
 		self.formElement = formElement;
-		if (self.submitButton = _('.search_button', formElement)[0]) {
+		if (self.submitButton = formElement.querySelector('.search_button')) {
 			eventsManager.addHandler(self.submitButton, 'click', self.submitForm);
 		}
 		eventsManager.addHandler(self.formElement, 'submit', self.submitForm);
@@ -25,6 +25,8 @@ function SearchFormComponent(formElement, displayInElement, displayTotals, total
 			var parameters = {
 				'clickCallback': ajaxSearchResultClick,
 				'apiMode': 'public',
+				'totalsElement': totalsElement,
+				'position': position,
 				'searchStringLimit': 1,
 				'types': allowedSearchTypes
 			};
@@ -34,7 +36,10 @@ function SearchFormComponent(formElement, displayInElement, displayTotals, total
 			if(typeof displayTotals != "undefined") {
 				parameters.displayTotals = displayTotals;
 			}
-			new AjaxSearchComponent(inputElement, parameters, totalsElement);
+			if(typeof position != "undefined") {
+				parameters.position = position;
+			}
+			new AjaxSearchComponent(inputElement, parameters);
 		}
 
 	};

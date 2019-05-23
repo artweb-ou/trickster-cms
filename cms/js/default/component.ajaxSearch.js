@@ -7,6 +7,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
   var resultsLimit = 30;
 
   var customResultsElement;
+  var totalsElement;
   var getValueCallback;
   var clickCallback;
   var resultsUpdateCallback;
@@ -89,6 +90,9 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
     }
     if (typeof parameters.position !== 'undefined') {
       position = parameters.position;
+    }
+    if (typeof parameters.totalsElement !== 'undefined') {
+      totalsElement = parameters.totalsElement;
     }
     if (typeof parameters.customResultsElement != 'undefined') {
       customResultsElement = parameters.customResultsElement;
@@ -210,15 +214,16 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
 
   init();
 };
-window.AjaxSearchResultsComponent = function(
-    parentObject, customResultsElement) {
+window.AjaxSearchResultsComponent = function(parentObject, customResultsElement) {
   var componentElement;
   var contentElement;
   var resultItems = [];
   var selectedIndex = false;
   var self = this;
+  var position;
   this.displayed = false;
   var init = function() {
+    position = parentObject.getPosition();
     if (customResultsElement) {
       componentElement = customResultsElement;
     } else {
@@ -262,7 +267,7 @@ window.AjaxSearchResultsComponent = function(
       self.displayed = true;
       componentElement.style.visibility = 'hidden';
       componentElement.style.display = 'block';
-      componentElement.style.position = parentObject.getPosition();
+      componentElement.style.position = position;
       componentElement.style.visibility = 'visible';
     }
     updateSizes();
@@ -321,7 +326,7 @@ window.AjaxSearchResultsComponent = function(
     return false;
   };
   var updateSizes = function() {
-    if (!customResultsElement) {
+    if (!customResultsElement && position === 'fixed' || position === 'absolute') {
       var inputPositions = domHelper.getElementPositions(
           parentObject.inputElement.parentElement);
       var inputLeft = inputPositions.x;
