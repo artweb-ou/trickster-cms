@@ -37,15 +37,15 @@ window.BubbleComponent = function(referralElement, message, additionalContainerC
 		footerElement = document.createElement('div');
 		footerElement.className = 'notice_footer';
 
-		if (message['title']){
+		if (message && message['title']){
 			headerElement.innerHTML = '<span class="notice_title">'+message['title']+'</span>';
 			contentElement.appendChild(headerElement);
 		}
-		if (message['content']){
+		if (message && message['content']){
 			middleElement.innerHTML = message['content'];
 			contentElement.appendChild(middleElement);
 		}
-		if (message['footer']){
+		if (message && message['footer']){
 			footerElement.innerHTML = message['footer'];
 			contentElement.appendChild(footerElement);
 		}
