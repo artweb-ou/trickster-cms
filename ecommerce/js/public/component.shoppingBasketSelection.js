@@ -227,11 +227,12 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 				formElement.submit();
 			} else {
 				var message = []
+				let additionalContainerClassName = 'notice_box';
 				message['title'] = translationsLogics.get('shoppingbasket.conditions')
 				message['content'] = '<a target="ART" class="modal_link" href="' + window.conditionsLink + '">' + translationsLogics.get('shoppingbasket.conditions_error') + '</a>'
 				message['footer'] = translationsLogics.get('shoppingbasket.agreewithconditions')
 
-				new ModalActionComponent(conditionsCheckboxInput, false, submitButtonElement, message); // checkbox-input, footer advanced, element for position, messages
+				new ModalActionComponent(conditionsCheckboxInput, false, submitButtonElement, additionalContainerClassName, '', message); // checkbox-input, footer advanced, element for position, messages
 			}
 		}else {
 			formElement.submit();

@@ -8,10 +8,10 @@ window.ModalActionComponent = function(checkboxElement, footerElement, elementFo
 	var init = function() {
 		var makeElement = selfModalComponent.makeElement;
 		selfModalComponent.addClass('modal_buttons ' + additionalClassName);
-		if(message['title']) {
+		if(message && message['title']) {
 			selfModalComponent.setTitle(message['title']);
 		}
-		if(message['content']) {
+		if(message && message['content']) {
 			selfModalComponent.setContent(message['content']);
 		}
 
@@ -22,13 +22,13 @@ window.ModalActionComponent = function(checkboxElement, footerElement, elementFo
 		resetButtonElement.innerHTML = translationsLogics.get('product.quantityunavailable');
 		eventsManager.addHandler(resetButtonElement, 'click', resetClick);
 */
-		if(checkboxElement && message['footer']){
+		if(checkboxElement && message && message['footer']){
 			submitButtonElement = makeElement('div', 'submit button', fragment);
 			submitButtonElement.innerHTML = message['footer'];
 			// htmlScrollTopStart = html.scrollTop;
 			eventsManager.addHandler(submitButtonElement, 'click', submitClick);
 		}
-		else if(footerElement === 'multiple' && message['footer']) {
+		else if(footerElement === 'multiple' && message && message['footer']) {
 			footerElements = makeElement('div', 'modal_footer_inner buttons', fragment);
 			footerElements.innerHTML = message['footer'];
 		}
