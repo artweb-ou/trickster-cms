@@ -11,7 +11,7 @@
 		</tr>
 		<tr class=''>
 			<td class='form_star'></td>
-			<td class='form_field text-center'>
+			<td class='form_field text_center'>
 				<input class="button shoppingbasket_promocode_button" type="button" value="{translations name='shoppingbasket.form_promocode_submit'}"/>
 			</td>
 			<td class='form_extra'></td>
