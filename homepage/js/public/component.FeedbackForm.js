@@ -1,6 +1,7 @@
 window.FeedbackFormComponent = function(componentElement) {
   var fileInputElement;
   var dropAreaElement;
+  var dropHideTimeout;
 
   var init = function() {
     new AjaxFormComponent(componentElement, tracking.feedbackTracking);
@@ -22,9 +23,7 @@ window.FeedbackFormComponent = function(componentElement) {
   var dropAreaDragLeaveHandler = function(event) {
     eventsManager.preventDefaultAction(event);
     eventsManager.cancelBubbling(event);
-    if (event.target === dropAreaElement) {
-      hideDropArea();
-    }
+    dropHideTimeout = setTimeout(hideDropArea, 50);
   };
   var hideDropArea = function() {
     componentElement.classList.remove('feedback_dragged');
@@ -35,6 +34,7 @@ window.FeedbackFormComponent = function(componentElement) {
   var dropAreaDragEnterHandler = function(event) {
     eventsManager.preventDefaultAction(event);
     eventsManager.cancelBubbling(event);
+    clearTimeout(dropHideTimeout);
     showDropArea();
   };
   var importFilesInfo = function(files) {
