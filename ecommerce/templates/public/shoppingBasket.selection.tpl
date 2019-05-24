@@ -39,5 +39,6 @@
 {/capture}
 
 {assign moduleClass "shopping_basket_selection_block"}
-{assign moduleTitleClass "shopping_basket_heading"}
+{assign moduleTitleClass "shopping_basket_heading heading_1"}
+{assign moduleTitleTag "div"}
 {include file=$theme->template("component.contentmodule.tpl")}
