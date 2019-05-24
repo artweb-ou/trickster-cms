@@ -1,5 +1,5 @@
-window.GalleryImageComponent = function(
-    imageInfo, parentObject, descriptionType) {
+window.GalleryImageComponent = function(imageInfo, parentObject,
+                                        descriptionType) {
   this.title = null;
   this.link = null;
   this.preloaded = false;
@@ -17,7 +17,7 @@ window.GalleryImageComponent = function(
   var self = this;
   var clickable = false;
   var videoLoadStarted = false;
-
+  var autoStart = false;
   var init = function() {
     createDomStructure();
     clickable = (parentObject.hasFullScreenGallery() ||
@@ -30,6 +30,11 @@ window.GalleryImageComponent = function(
     if (descriptionType === 'overlay' && infoElement) {
       eventsManager.addHandler(componentElement, 'mouseenter', onMouseOver);
       eventsManager.addHandler(componentElement, 'mouseleave', onMouseOut);
+    }
+    if (typeof parentObject.videoAutoStart != 'undefined') {
+      if (parentObject.videoAutoStart()) {
+        autoStart = true;
+      }
     }
     controller.addListener('galleryImageDisplay', displayHandler);
   };
@@ -211,21 +216,17 @@ window.GalleryImageComponent = function(
   };
 
   var displayHandler = function(newImage) {
-    if (self.preloaded) {
-      if (imageInfo.isVideo()) {
-        if (newImage.getId() === imageInfo.getId()) {
-          if (typeof parentObject.videoAutoStart != 'undefined') {
-            if (parentObject.videoAutoStart()) {
-              mediaElement.play();
-            }
-          }
-        } else {
-          mediaElement.pause();
-        }
+    if (imageInfo.isVideo()) {
+      if (newImage.getId() === imageInfo.getId()) {
+        checkPreloadVideo(videoPlayCallback);
+      } else {
+        mediaElement.pause();
       }
     }
   };
-
+  var videoPlayCallback = function() {
+    mediaElement.play()
+  };
   this.resize = function(imagesContainerWidth, imagesContainerHeight) {
     galleryWidth = imagesContainerWidth;
     galleryHeight = imagesContainerHeight;
