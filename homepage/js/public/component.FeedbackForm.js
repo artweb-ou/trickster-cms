@@ -22,7 +22,9 @@ window.FeedbackFormComponent = function(componentElement) {
   var dropAreaDragLeaveHandler = function(event) {
     eventsManager.preventDefaultAction(event);
     eventsManager.cancelBubbling(event);
-    hideDropArea();
+    if (event.target === dropAreaElement) {
+      hideDropArea();
+    }
   };
   var hideDropArea = function() {
     componentElement.classList.remove('feedback_dragged');
