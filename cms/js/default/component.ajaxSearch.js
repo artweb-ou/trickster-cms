@@ -378,7 +378,7 @@ window.AjaxSearchResultsItemComponent = function(data, parentObject) {
 
     var productTotals = '';
     if (parentObject.displayTotals && data.productsCount) {
-      productTotals = ' <span>(' + data.productsCount + ')</span>';
+      productTotals = ' <span class="found_count">(' + data.productsCount + ')</span>';
     }
 
     if (typeof data.structureType !== 'undefined') {
