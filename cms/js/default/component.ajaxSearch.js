@@ -19,6 +19,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
     var position = 'absolute';
     this.displayInElement = false;
     this.displayTotals = false;
+    this.customShowedElementComponents;
 
     this.componentElement = null;
     this.inputElement = null;
@@ -96,6 +97,9 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
         }
         if (typeof parameters.customResultsElement != 'undefined') {
             customResultsElement = parameters.customResultsElement;
+        }
+        if (typeof parameters.showedElementComponents != 'undefined') {
+            customShowedElementComponents = parameters.showedElementComponents;
         }
     };
     var pasteHandler = function(event) {
@@ -179,6 +183,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
                 return aTitle > bTitle;
             });
             allElements = allElements.concat(responseData[type]);
+
         }
         if (allElements.length !== 0 && self.displayTotals && totalsElement) {
             totalsElement.innerHTML = '(' + responseData['searchTotal'] + ')';
@@ -363,6 +368,7 @@ window.AjaxSearchResultsItemComponent = function(data, parentObject) {
     var self = this;
     var componentElement;
     var total;
+    var subTitle;
 
     this.componentElement = null;
     var init = function() {
@@ -379,19 +385,27 @@ window.AjaxSearchResultsItemComponent = function(data, parentObject) {
             title = title + ' (' + data.language + ') ';
         }
 
+        //   showedElementComponents, set in tpl
+        subTitle = '';
+        if (customShowedElementComponents.split(",").indexOf("introductionText") > 0) {
+            subTitle = data.introductionText;
+            if (typeof data.language !== 'undefined') {
+                subTitle = subTitle + ' (' + data.language + ') ';
+            }
+        }
         var productTotals = '';
         if (parentObject.displayTotals && data.productsCount) {
             productTotals = ' <span class="found_count">(' + data.productsCount + ')</span>';
         }
 
         if (typeof data.structureType !== 'undefined') {
-            componentElement.innerHTML = '<span class=\"icon icon_' +
+            componentElement.innerHTML = '<span class="icon icon_' +
                 data.structureType +
-                '\"></span><span class="ajaxsearch_results_item_text">' + title +
-                productTotals + '</span>';
+                '"></span><span class="ajaxsearch_results_item_texts"><span class="ajaxsearch_results_item_text">' + title +
+                productTotals + '</span><span class="ajaxsearch_results_item_subtext">'+ subTitle + '</span></span>';
         } else {
-            componentElement.innerHTML = '<span class="ajaxsearch_results_item_text">' +
-                title + productTotals + '</span>';
+            componentElement.innerHTML = '<span class="ajaxsearch_results_item_texts"><span class="ajaxsearch_results_item_text">' +
+                title + productTotals + '</span><span class="ajaxsearch_results_item_subtext">'+ subTitle + '</span></span>';
         }
         componentElement.addEventListener('mouseup', clickHandler);
 
