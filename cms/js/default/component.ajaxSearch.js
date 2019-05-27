@@ -185,13 +185,12 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
             allElements = allElements.concat(responseData[type]);
 
         }
-        if (allElements.length !== 0 && self.displayTotals && totalsElement) {
+        if (allElements.length > 0 && self.displayTotals && totalsElement) {
             totalsElement.innerHTML = '(' + responseData['searchTotal'] + ')';
         }
         else if(totalsElement) {
             totalsElement.innerHTML = "(0)";
         }
-
         ajaxSearchResultsComponent.setSelectedIndex(false);
         if (allElements.length > 0) {
             ajaxSearchResultsComponent.updateData(allElements);
@@ -230,6 +229,8 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
     var self = this;
     var position;
     this.displayed = false;
+
+
     var init = function() {
         position = parentObject.getPosition();
         if (customResultsElement) {
@@ -277,15 +278,19 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
             componentElement.style.display = 'block';
             componentElement.style.position = position;
             componentElement.style.visibility = 'visible';
+            window.searchBoxView = 1;
         }
         updateSizes();
+        updateView();
     };
     this.hideComponent = function() {
         if (self.displayed) {
             self.displayed = false;
             self.reset();
             componentElement.style.visibility = 'hidden';
+            window.searchBoxView = 0;
         }
+        updateView();
     };
 
     this.setFirstOption = function() {
@@ -333,6 +338,30 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
         }
         return false;
     };
+    var updateView = function() {
+        let formElement = parentObject.inputElement.form;
+        let searchElementBoxViewArray = [];
+        let searchElementBoxView = [];
+
+        if(formElement) {
+            if (formElement.dataset.openview && formElement.dataset.openview != '') {
+                searchElementBoxViewArray = formElement.dataset.openview.split(",");
+                searchElementBoxView['box'] = searchElementBoxViewArray[0];
+                searchElementBoxView['class'] = searchElementBoxViewArray[1];
+
+                if (searchElementBoxView['box'] != '' && searchElementBoxView['class'] != '') {
+                    let elementBox = document.querySelector(searchElementBoxView['box']);
+                    if (window.searchBoxView > 0) {
+                        domHelper.addClass(elementBox, searchElementBoxView['class']);
+                    }
+                    else {
+                        domHelper.removeClass(elementBox, searchElementBoxView['class']);
+                    }
+                }
+            }
+        }
+    };
+
     var updateSizes = function() {
         if (!customResultsElement && position === 'fixed' || position === 'absolute') {
             var inputPositions = domHelper.getElementPositions(
@@ -387,7 +416,7 @@ window.AjaxSearchResultsItemComponent = function(data, parentObject) {
 
         //   showedElementComponents, set in tpl
         subTitle = '';
-        if (customShowedElementComponents.split(",").indexOf("introductionText") > 0) {
+        if (typeof customShowedElementComponents != 'undefined' && customShowedElementComponents.split(",").indexOf("introductionText") > 0) {
             subTitle = data.introductionText;
             if (typeof data.language !== 'undefined') {
                 subTitle = subTitle + ' (' + data.language + ') ';

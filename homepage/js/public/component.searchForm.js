@@ -29,7 +29,6 @@ function SearchFormComponent(formElement, displayInElement, displayTotals, total
 
 		inputElement = formElement.querySelector('.ajaxsearch_input');
 		if (inputElement && inputElement.className.indexOf('ajaxsearch_input') != -1) {
-
 			var parameters = {
 				'clickCallback': ajaxSearchResultClick,
 				'apiMode': 'public',
