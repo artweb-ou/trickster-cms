@@ -183,7 +183,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
         if (allElements.length !== 0 && self.displayTotals && totalsElement) {
             totalsElement.innerHTML = '(' + responseData['searchTotal'] + ')';
         }
-        else {
+        else if(totalsElement) {
             totalsElement.innerHTML = "(0)";
         }
 
