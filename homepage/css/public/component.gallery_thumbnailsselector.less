@@ -69,9 +69,11 @@
   width: 19%;
   background-size: cover;
   background: no-repeat center;
+  border: transparent solid 1px;
+  transition: border-color 0.2s ease-in-out;
 
   &.gallery_thumbnailsselector_active {
-    border: @primary_color solid 1px;
+    border-color: @primary_color;
   }
 
   &.gallery_thumbnailsselector_video {
