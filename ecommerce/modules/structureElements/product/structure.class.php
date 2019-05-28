@@ -68,7 +68,6 @@ class productElement extends structureElement implements
     use ConnectedParametersProviderTrait;
 
     public $dataResourceName = 'module_product';
-    protected $allowedTypes = ['galleryImage'];
     public $defaultActionName = 'show';
     public $role = 'content';
     protected $connectedProducts;
@@ -1918,5 +1917,15 @@ class productElement extends structureElement implements
             $this->structureName = $this->code;
         }
         parent::persistElementData();
+    }
+
+    public function getAllowedTypes($currentAction = 'showFullList')
+    {
+        if ($currentAction == 'showFiles') {
+            $this->allowedTypes = ['file'];
+        } else {
+            $this->allowedTypes = ['galleryImage'];
+        }
+        return parent::getAllowedTypes($currentAction);
     }
 }

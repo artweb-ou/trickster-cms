@@ -1,8 +1,9 @@
 <?php
 
-class ProductFilesStructure extends ElementForm
+class SharedFilesStructure extends ElementForm
 {
     protected $formClass = 'fileupload_form';
+    protected $controlsLayout = null;
     protected $structure = [
         'connectedFile' => [
             'type' => 'input.file',
@@ -11,5 +12,4 @@ class ProductFilesStructure extends ElementForm
         ],
     ];
     protected $additionalContent = 'shared.contentlist.tpl';
-    protected $additionalControls = false;
 }

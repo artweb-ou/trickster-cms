@@ -21,6 +21,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     protected $childrenLoadStatus;
     protected $newElementUrl;
     protected $allowedTypes;
+    protected $allowedTypesByAction = [];
     protected $multiLanguageChunks = [];
     protected $singleLanguageChunks = [];
     protected $structureFields = [];
@@ -1215,16 +1216,15 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     /**
      * Get allowed children structure elements type according to settings and current user's privileges
      *
-     * @param string $childCreationAction - name of action for adding the child element. Default controlled action is 'showForm'
+     * @param string $currentAction
      * @return string[]
      */
-    public function getAllowedTypes($childCreationAction = 'showForm')
+    public function getAllowedTypes($currentAction = 'showFullList')
     {
-        if ($this->allowedTypes === null) {
-            $this->allowedTypes = [];
-        }
-        if (!isset($this->allowedTypes[$childCreationAction])) {
-            $this->allowedTypes[$childCreationAction] = [];
+        if ($this->allowedTypesByAction[$currentAction] === null) {
+            $this->allowedTypesByAction[$currentAction] = [];
+
+            $childCreationAction = 'showForm';
             /**
              * @var structureManager $structureManager
              */
@@ -1232,13 +1232,13 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
             $privilegesManager = $this->getService('privilegesManager');
             $privileges = $privilegesManager->getElementPrivileges($this->id);
 
-            foreach ($this->allowedTypes as &$type) {
+            foreach ($this->allowedTypes as $type) {
                 if (!$structureManager->getPrivilegeChecking() || (isset($privileges[$type]) && isset($privileges[$type][$childCreationAction]) && $privileges[$type][$childCreationAction] === true)) {
-                    $this->allowedTypes[$childCreationAction][] = $type;
+                    $this->allowedTypesByAction[$currentAction][] = $type;
                 }
             }
         }
-        return $this->allowedTypes[$childCreationAction];
+        return $this->allowedTypesByAction[$currentAction];
     }
 
     /**
@@ -1484,4 +1484,11 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         return $form;
     }
 
+    /**
+     * @return string
+     */
+    public function getActionName()
+    {
+        return $this->actionName;
+    }
 }
