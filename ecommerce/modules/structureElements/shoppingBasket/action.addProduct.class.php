@@ -60,7 +60,7 @@ class addProductShoppingBasket extends structureElementAction
                     $parametersPrice = $productElement->getPriceBySelectedOptions($influentialOptions);
                 }
             }
-            $productPrice = $parametersPrice ?: $productElement->price;
+            $productPrice = !empty($parametersPrice) ?: $productElement->price;
             if (is_numeric($productAmount) && is_numeric($productId) && ($everythingSelected || $controller->getParameter('productVariation'))) {
                 $finalAmount = $shoppingBasket->getProductOverallQuantity($productId) + $productAmount;
                 if ($productElement->isPurchasable($finalAmount)) {
