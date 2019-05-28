@@ -10,7 +10,7 @@
             {if isset($rootPrivileges.deleteElements)}
 
                 <button type='submit' onclick='if (!confirm("{translations name='message.deleteselectedconfirm'}")) return false;'
-                        class='button warning_button important'><span class="icon icon_delete"></span>{translations name='button.deleteselected'}</button>
+                        class='button warning_button warning_button'><span class="icon icon_delete"></span>{translations name='button.deleteselected'}</button>
             {/if}
         </div>
         <table class='content_list'>

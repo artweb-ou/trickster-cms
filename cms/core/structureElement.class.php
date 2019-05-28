@@ -1221,7 +1221,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
      */
     public function getAllowedTypes($currentAction = 'showFullList')
     {
-        if ($this->allowedTypesByAction[$currentAction] === null) {
+        if (!isset($this->allowedTypesByAction[$currentAction])) {
             $this->allowedTypesByAction[$currentAction] = [];
 
             $childCreationAction = 'showForm';

@@ -3,7 +3,6 @@
 class SharedFilesStructure extends ElementForm
 {
     protected $formClass = 'fileupload_form';
-    protected $controlsLayout = null;
     protected $structure = [
         'connectedFile' => [
             'type' => 'input.file',

@@ -122,7 +122,7 @@ window.ImportCalculationsRuleItemComponent = function(ruleInfo, parentComponent,
 		});
 		containerElement.appendChild(typeDropdown.getComponentElement());
 
-		removeButton = self.makeElement('button', {'className': 'button important importcalculationsrule_item_remove', 'type': 'button'}, componentElement);
+		removeButton = self.makeElement('button', {'className': 'button warning_button importcalculationsrule_item_remove', 'type': 'button'}, componentElement);
 		self.makeElement('span', 'icon icon_delete', removeButton);
 		self.makeElement('span', '', removeButton).innerHTML = translationsLogics.get('importcalculationsrule.remove');
 
