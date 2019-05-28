@@ -17,7 +17,6 @@ class galleryElement extends menuDependantStructureElement implements Configurab
         $moduleStructure['title'] = 'text';
         $moduleStructure['content'] = 'html';
         $moduleStructure['listLayout'] = 'text';
-        $moduleStructure['elements'] = 'array';
         $moduleStructure['layout'] = 'text';
         $moduleStructure['metaTitle'] = 'text';
         $moduleStructure['h1'] = 'text';

@@ -11,7 +11,7 @@ class SharedImagesStructure extends ElementForm
             'type' => 'input.dragAndDropImage'
         ]
     ];
-    protected $additionalContent = 'shared.contentlist';
+    protected $additionalContent = 'shared.contentlist.tpl';
     protected $additionalContentTable = 'shared.contenlistGalleryImage.tpl';
     public function getTranslationGroup()
     {

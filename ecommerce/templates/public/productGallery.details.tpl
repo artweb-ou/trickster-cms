@@ -4,7 +4,7 @@
 	{/capture}
 {/if}
 {capture assign="moduleContent"}
-	<script type="text/javascript">
+	<script>
 		{if $galleryInfo = $element->getGalleryInfo(['popupPositioning'=>'mark'])}
 			window.productGalleriesInfo = window.productGalleriesInfo || {ldelim}{rdelim};
 			window.productGalleriesInfo[{$element->id}] = {$galleryInfo};

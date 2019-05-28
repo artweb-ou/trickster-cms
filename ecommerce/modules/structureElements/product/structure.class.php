@@ -160,7 +160,6 @@ class productElement extends structureElement implements
         $moduleStructure['metaDescription'] = 'text';
         $moduleStructure['canonicalUrl'] = 'url';
         $moduleStructure['metaDenyIndex'] = 'checkbox';
-        $moduleStructure['elements'] = 'array';
 
         $moduleStructure['availability'] = 'text';
         $moduleStructure['minimumOrder'] = 'text';

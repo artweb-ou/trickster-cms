@@ -141,8 +141,8 @@
 
 {if !empty($JSFileName)}{foreach $JSFileName as $script}<script defer type="text/javascript" src="{$script}"></script>{/foreach}{/if}
 {literal}
-<script type="text/javascript">
-	/*<![CDATA[*/
+<script>
+
 	var colors = jsColorPicker('input.jscolor', {
 		customBG: '#222',
 		readOnly: false,
@@ -151,7 +151,7 @@
 			elm.style.color = colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#ddd';
 		}
 	});
-	/*]]>*/
+
 </script>
 {/literal}
 </body>

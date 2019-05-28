@@ -1,5 +1,5 @@
 <script>
-	/*<![CDATA[*/
+
 	window.rootURL = '{$controller->rootURL}';
 	window.ajaxURL = '{$controller->baseURL}ajax/';
 	window.baseURL = '{$controller->baseURL}';
@@ -26,7 +26,7 @@
 				window.shopLink = '{$location[0]['URL']}';
 			{/if}
 		window.addToBasketButtonAction = '{$shoppingBasket->addToBasketButtonAction}';
-	{/if}	/*]]>*/
+	{/if}
 </script>
 {*
 addToBasketButtonAction

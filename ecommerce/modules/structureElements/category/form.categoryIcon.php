@@ -12,7 +12,7 @@ class CategoryIconStructure extends ElementForm
         ]
     ];
     protected $controls = false;
-    protected $additionalContent = 'shared.contentlist';
+    protected $additionalContent = 'shared.contentlist.tpl';
     protected $additionalContentTable = 'shared.contenlistGalleryImage.tpl';
     public function getTranslationGroup()
     {

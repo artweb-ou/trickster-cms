@@ -10,7 +10,7 @@
 		{assign var="buttonId" value="addnewelement1"}
 	{/if}
 	<script>
-		/*<![CDATA[*/
+
 		addNewElementInfo = [];
 		{foreach from=$allowedTypes item=type}
 		{assign var='typeLowered' value=$type|strtolower}
@@ -25,7 +25,7 @@
 			window.addNewElementInfoButtons = { } ;
 		}
 		addNewElementInfoButtons['{$buttonId}'] = addNewElementInfo;
-		/*]]>*/
+
 	</script>
 	<button type="button" id="{$buttonId}" class='button primary_button addnewelement_button'>
 		<span class="icon icon_addnew"></span>

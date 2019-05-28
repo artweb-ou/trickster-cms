@@ -7,4 +7,3 @@ $moduleActions[] = 'show';
 $moduleActions[] = 'showForm';
 $moduleActions[] = 'showSeoForm';
 $moduleActions[] = 'receiveSeo';
-$moduleActions[] = 'deleteElements';

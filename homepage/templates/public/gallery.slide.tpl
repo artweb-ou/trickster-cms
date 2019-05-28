@@ -43,14 +43,14 @@
 	{/if}
 
 	<script>
-		/*<![CDATA[*/
+
 		window.galleriesInfo = window.galleriesInfo || {ldelim}{rdelim};
 		window.galleriesInfo['{$element->id}'] = {$element->getGalleryJsonInfo([
 			'galleryResizeType' => 'aspected',
 			'galleryHeight' => 0.5625,
 			'thumbnailsSelectorEnabled' => true
 		], 'gallery', $deviceType)};
-		/*]]>*/
+
 	</script>
 
 	{if $element->serviceElement}

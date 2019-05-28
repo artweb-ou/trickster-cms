@@ -1,3 +1,5 @@
+{if !isset($formElement)}{$formElement = $rootElement}{/if}
+{assign 'formNames' $formElement->getFormNames()}
 <table class='content_list gallery_form_images_table'>
 	<thead>
 	<tr>
