@@ -169,10 +169,13 @@ window.GalleryFormImageComponent = function(fileInfo) {
 		self.componentElement.appendChild(altCell);
 		statusCell = document.createElement('td');
 		statusCell.className = 'generic gallery_form_image_status';
+		statusCell.setAttribute('colspan',3);
 		self.componentElement.appendChild(statusCell);
 		editCell = document.createElement('td');
+		editCell.setAttribute('style','display:none');
 		self.componentElement.appendChild(editCell);
 		deleteCell = document.createElement('td');
+		deleteCell.setAttribute('style','display:none');
 		self.componentElement.appendChild(deleteCell);
 
 		fillUploadInfo();
