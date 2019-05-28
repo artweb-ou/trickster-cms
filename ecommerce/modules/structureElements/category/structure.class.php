@@ -912,4 +912,14 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         }
         return false;
     }
+
+    public function getAllowedTypes($currentAction = 'showFullList')
+    {
+        if ($currentAction == 'showProductsForm') {
+            $this->allowedTypes = ['product'];
+        } elseif ($currentAction == 'showIconForm') {
+            $this->allowedTypes = [];
+        }
+        return parent::getAllowedTypes($currentAction);
+    }
 }

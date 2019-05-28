@@ -1921,10 +1921,10 @@ class productElement extends structureElement implements
 
     public function getAllowedTypes($currentAction = 'showFullList')
     {
-        if ($currentAction == 'showFiles') {
-            $this->allowedTypes = ['file'];
-        } else {
+        if ($currentAction == 'showImages') {
             $this->allowedTypes = ['galleryImage'];
+        } else {
+            $this->allowedTypes = [];
         }
         return parent::getAllowedTypes($currentAction);
     }

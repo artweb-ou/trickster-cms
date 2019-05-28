@@ -1,6 +1,6 @@
 <?php
 
-class CategoryIconStructure extends ElementForm
+class SharedIconStructure extends ElementForm
 {
     protected $containerClass = 'gallery_form';
     protected $formClass = 'gallery_form_upload';
@@ -14,6 +14,7 @@ class CategoryIconStructure extends ElementForm
     protected $controls = false;
     protected $additionalContent = 'shared.contentlist.tpl';
     protected $additionalContentTable = 'shared.contenlistGalleryImage.tpl';
+
     public function getTranslationGroup()
     {
         return 'gallery';

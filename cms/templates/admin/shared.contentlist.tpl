@@ -8,7 +8,7 @@
 	<div class="content_list_block">
 		<form class="content_list_form" action="{$currentElement->getFormActionURL()}" method="post" enctype="multipart/form-data">
 			{if $controls}
-				{if $currentElement->getAllowedTypes($currentElement->getActionName()) || !empty($actionButtons)}
+{*				{if $currentElement->getAllowedTypes($currentElement->getActionName()) || !empty($actionButtons)}*}
 					<div class='controls_block content_list_controls'>
 						{if isset($formElement)}{$elementId=$formElement->id}{else}{$elementId=$rootElement->id}{/if}
 						<input type="hidden" class="content_list_form_id" value="{$elementId}" name="id" />
@@ -16,7 +16,7 @@
 
 						{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedTypes($currentElement->getActionName())}
 					</div>
-				{/if}
+{*				{/if}*}
 			{/if}
 			{if !empty($form) && !empty($form->getAdditionalContentTable())}
 				{include file=$theme->template($form->getAdditionalContentTable())}
