@@ -186,6 +186,19 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
             } else {
                 $actionName = $this->actionName;
             }
+            /**
+             * we need to recheck privileges here if custom action has been called.
+             *
+             * @var privilegesManager $privilegesManager
+             */
+            $privilegesManager = $this->getService('privilegesManager');
+            if (!$privilegesManager->checkPrivilegesForAction(
+                $this->id,
+                $actionName,
+                $this->structureType
+            )){
+                return false;
+            }
 
             $elementType = $this->structureType;
             $actionObjectName = $actionName . ucfirst($elementType);

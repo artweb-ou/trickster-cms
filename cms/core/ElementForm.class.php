@@ -135,17 +135,18 @@ abstract class ElementForm implements DependencyInjectionContextInterface
 
     public function getControls()
     {
-        if(empty($this->controls)) {
+        if (empty($this->controls)) {
             $this->controls = [
                 'save' => [
                     'class' => 'success_button',
-                    'type' => 'submit'
+                    'type' => 'submit',
                 ],
                 'delete' => [
                     'class' => 'warning_button',
                     'action' => 'delete',
-                    'icon' => 'delete'
-                ]
+                    'icon' => 'delete',
+                    'confirmation' => 'message.deleteelementconfirmation',
+                ],
             ];
         }
         return $this->controls;
@@ -178,8 +179,9 @@ abstract class ElementForm implements DependencyInjectionContextInterface
     /**
      * @return bool
      */
-    public function formObjectEmpty(){
+    public function formObjectEmpty()
+    {
         // empty(get_object_vars($form)
-        return empty((array) $this);
+        return empty((array)$this);
     }
 }

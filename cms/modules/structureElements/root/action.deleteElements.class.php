@@ -10,7 +10,7 @@ class deleteElementsRoot extends structureElementAction
 
         if ($this->validated) {
             $elements = $structureElement->elements;
-            foreach ($elements as $elementID => &$value) {
+            foreach ($elements as $elementID => $value) {
                 if ($deletedElement = $structureManager->getElementById($elementID)) {
                     $deletedElement->groupDeletion = true;
                     $deletedElement->executeAction('delete');

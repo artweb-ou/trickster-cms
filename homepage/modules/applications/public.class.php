@@ -217,6 +217,8 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             $languageId = $languagesManager->getCurrentLanguageId();
             if ($languageElement = $structureManager->getElementById($languageId)) {
                 if ($currentElement = $this->getErrorPageElement()) {
+                    $breadcrumbsManager = $this->getService('breadcrumbsManager', ['config' => $this->configManager->getConfig('breadcrumbs')]);
+                    $this->renderer->assign('breadcrumbsManager', $breadcrumbsManager);
                     $this->renderer->assign('currentElement', $currentElement);
                     $this->renderer->setCacheControl('no-cache');
                     $this->renderer->template = $this->currentTheme->template('index.tpl');

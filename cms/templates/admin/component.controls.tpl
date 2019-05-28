@@ -12,7 +12,8 @@
 			'delete' => [
 			'class' => 'warning_button',
 			'action' => 'delete',
-			'icon' => 'delete'
+			'icon' => 'delete',
+			'confirmation' => 'message.deleteelementconfirmation'
 		]
 	]}
 {/if}
@@ -22,7 +23,9 @@
 	{foreach $buttons as $key=>$control}
 		<button class="button {$control.class}"
 			{if !empty($control.type)} type="{$control.type}" {else} type="button"{/if}
-			{if !empty($control.action)} control-action="{$control.action}"{/if}>
+			{if !empty($control.action)} data-action="{$control.action}"{/if}
+			{if !empty($control.confirmation)} data-confirmation="{translations name="{$control.confirmation}"}"{/if}
+		>
 			{translations name="button.{$key}"}
 			{if !empty($control.icon)}<span class="icon icon_{$control.icon}"></span>{/if}
 		</button>
