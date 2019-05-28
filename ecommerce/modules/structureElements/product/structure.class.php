@@ -1893,6 +1893,7 @@ class productElement extends structureElement implements
         return $title;
     }
 
+
     /**
      * @return categoryElement|mixed|null
      */
@@ -1904,11 +1905,12 @@ class productElement extends structureElement implements
              */
             $structureManager = $this->getService('structureManager');
             if ($parentsList = $structureManager->getElementsParents($this->id, false, 'catalogue')) {
-                $this->parentCategory = reset($parentElement);
+                $this->parentCategory = reset($parentsList);
             }
         }
         return $this->parentCategory;
     }
+
 
     public function persistElementData()
     {
