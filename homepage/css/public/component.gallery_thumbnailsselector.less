@@ -70,6 +70,10 @@
   background-size: cover;
   background: no-repeat center;
 
+  &.gallery_thumbnailsselector_active {
+    border: @primary_color solid 1px;
+  }
+
   &.gallery_thumbnailsselector_video {
     &::after {
       background-image: url(getImageUrl('video-icon.svg'));
