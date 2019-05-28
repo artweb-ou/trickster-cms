@@ -15,12 +15,12 @@
 	</head>
 	<body class="floor_mapeditor">
 		{*<div class="">*}
-			<script type="text/javascript">
-				/*<![CDATA[*/
+			<script>
+
 				window.ajaxURL = '{$controller->baseURL}adminAjax/';
 				window.elementId = '{$element->id}';
 				window.editorInfo = {$element->getEditorInfo()|json_encode};
-				/*]]>*/
+
 			</script>
 			<div class='floor_mapeditor_center_block'>
 				<div class='floor_mapeditor_map'>

@@ -10,6 +10,6 @@ class ProductFilesStructure extends ElementForm
             'translationName' => 'files'
         ],
     ];
-    protected $additionalContent = 'shared.contentlist';
+    protected $additionalContent = 'shared.contentlist.tpl';
     protected $additionalControls = false;
 }

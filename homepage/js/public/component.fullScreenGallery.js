@@ -278,9 +278,6 @@ window.FullScreenGalleryImageComponent = function(
       mediaElement = document.createElement('img');
       mediaElement.style.visibility = 'hidden';
       componentElement.appendChild(mediaElement);
-      mediaElement = document.createElement('img');
-      mediaElement.style.display = 'block';
-      componentElement.appendChild(mediaElement);
     }
 
     if (descriptionType === 'overlay' &&
@@ -423,6 +420,9 @@ window.FullScreenGalleryImageComponent = function(
     var imageLeft = (imagesContainerWidth - imageWidth) / 2;
     var imageTop = (imagesContainerHeight - imageHeight) / 2;
 
+
+    mediaElement.style.width = imageWidth + 'px';
+    mediaElement.style.height = imageHeight + 'px';
     componentElement.style.width = imageWidth + 'px';
     componentElement.style.height = imageHeight + 'px';
     componentElement.style.left = imageLeft + 'px';

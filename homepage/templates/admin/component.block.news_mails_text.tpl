@@ -70,13 +70,13 @@
                 <input type="hidden" value="sendEmails" name="action" />
             </div>
         </form>
-        <script type="text/javascript">
-            /*<![CDATA[*/
+        <script>
+
             window.newsMailsGroups = {ldelim}{rdelim};
             {foreach from=$element->groupsList item=group}
             window.newsMailsGroups[{$group->id}] = {ldelim}{rdelim};
             {/foreach}
-            /*]]>*/
+
         </script>
     </div>
 {/if}

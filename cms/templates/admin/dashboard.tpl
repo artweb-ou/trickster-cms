@@ -5,7 +5,7 @@
 				<div class="panel_heading">{translations name='dashboard.orders_statistics'}</div>
 				<div class="panel_content">
 					<canvas class="chart_component" data-chartid="1"></canvas>
-					<script type="text/javascript">
+					<script>
 						chartsData = {$chartData};
 					</script>
 				</div>

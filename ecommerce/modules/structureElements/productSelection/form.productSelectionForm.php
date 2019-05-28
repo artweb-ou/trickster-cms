@@ -68,5 +68,5 @@ class ProductSelectionFormStructure extends ElementForm
         ],
     ];
 
-    protected $additionalContent = 'component.block.product_selection';
+    protected $additionalContent = 'component.block.product_selection.tpl';
 }

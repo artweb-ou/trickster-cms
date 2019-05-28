@@ -1,7 +1,7 @@
 <script>
-	/*<![CDATA[*/
+
 	window.importFormRecords = {json_encode($importFormRecords)};
-	/*]]>*/
+
 </script>
 <div class="form_items">
 	<div class="form_label">

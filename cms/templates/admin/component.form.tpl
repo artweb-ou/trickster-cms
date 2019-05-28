@@ -22,8 +22,8 @@
 		{/if}
 	</form>
 {/if}
-{if $form->getAdditionalContent()}
-	{include file=$theme->template("{$form->getAdditionalContent()}.tpl")}
+{if $additionaContentTemplate = $form->getAdditionalContent()}
+	{include file=$theme->template($additionaContentTemplate)}
 {/if}
 {if $form->getContainerClass()}
 	</div>

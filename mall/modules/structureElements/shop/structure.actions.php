@@ -7,7 +7,6 @@ $moduleActions[] = 'show';
 $moduleActions[] = 'receivePrivileges';
 $moduleActions[] = 'showPrivileges';
 $moduleActions[] = 'showForm';
-$moduleActions[] = 'deleteElements';
 
 $moduleActions[] = 'showTextsForm';
 $moduleActions[] = 'receiveTexts';

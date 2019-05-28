@@ -11,10 +11,10 @@
 	{capture assign="moduleContent"}
 		{if $element->popup}
 			<script>
-				/*<![CDATA[*/
+
 				window.subMenusInfo = window.subMenusInfo || {ldelim}{rdelim};
 				window.subMenusInfo['{$element->id}'] = {$element->getMenusInfo()|json_encode};
-				/*]]>*/
+
 			</script>
 		{/if}
 			<nav class='submenu_items_block'>

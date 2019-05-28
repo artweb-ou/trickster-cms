@@ -8,7 +8,7 @@
 	<div class="map_map googlemap_id_{$element->id}">
 		{if !empty($element->styles|trim)}
 			<script>
-				/*<![CDATA[*/
+
 				window.mapsInfo = window.mapsInfo || {ldelim}{rdelim};
 				window.mapsInfo['{$element->id}'] = {ldelim}
 					'coordinates': '{$element->coordinates}',
@@ -21,7 +21,7 @@
 					'heightAdjusted': 'true',
 					'height': 0.185
 				{rdelim};
-				/*]]>*/
+
 			</script>
 		{else}
 		<div class="gmap_iframe">
