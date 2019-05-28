@@ -278,9 +278,6 @@ window.FullScreenGalleryImageComponent = function(
       mediaElement = document.createElement('img');
       mediaElement.style.visibility = 'hidden';
       componentElement.appendChild(mediaElement);
-      mediaElement = document.createElement('img');
-      mediaElement.style.display = 'block';
-      componentElement.appendChild(mediaElement);
     }
 
     if (descriptionType === 'overlay' &&
