@@ -321,11 +321,14 @@ class catalogueElement extends structureElement
         return $this->productsPageList;
     }
 
-    protected function makePagerUrl(array &$requestArguments)
+    protected function makePagerUrl()
     {
         $url = $this->URL;
         $params = [];
         $params += $_GET;
+        if (isset($params['page'])){
+            unset($params['page']);
+        }
         if ($this->requested && !empty($params)) {
             $url .= '?' . http_build_query($params);
         }
