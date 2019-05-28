@@ -14,21 +14,29 @@ function SearchFormComponent(formElement, displayInElement, displayTotals, total
 		eventsManager.addHandler(self.formElement, 'keydown', self.checkKey);
 
 		var allowedSearchTypes;
-		if (formElement.hasAttribute('data-types') && formElement.getAttribute('data-types') != '') {
-			allowedSearchTypes = formElement.getAttribute('data-types');
+		if (formElement.dataset.types && formElement.dataset.types != '') {
+			allowedSearchTypes = formElement.dataset.types;
 		} else {
 			allowedSearchTypes = 'product,category,news,article,folder,discount';
 		}
+
+		var showedSearchElementComponents;
+		if (formElement.dataset.showed && formElement.dataset.showed != '') {
+			showedSearchElementComponents = formElement.dataset.showed;
+		} else {
+			showedSearchElementComponents = 'title';
+		}
+
 		inputElement = formElement.querySelector('.ajaxsearch_input');
 		if (inputElement && inputElement.className.indexOf('ajaxsearch_input') != -1) {
-
 			var parameters = {
 				'clickCallback': ajaxSearchResultClick,
 				'apiMode': 'public',
 				'totalsElement': totalsElement,
 				'position': position,
 				'searchStringLimit': 1,
-				'types': allowedSearchTypes
+				'types': allowedSearchTypes,
+				'showedElementComponents': showedSearchElementComponents
 			};
 			if(typeof displayInElement != "undefined") {
 				parameters.displayInElement = displayInElement;

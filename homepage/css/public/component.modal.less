@@ -145,9 +145,22 @@
 	}
 	&_footer .buttons {
 		.button:nth-child(n+2) {
-			margin-top: .25em;
+			//margin-top: .25em;
+			margin-left: .25em;
+		}
+		
+		&.modal_footer_inner {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			
+			.button {
+				line-height: 1.25;
+			}
 		}
 	}
+	
 }
 
 .modal.is_open {
