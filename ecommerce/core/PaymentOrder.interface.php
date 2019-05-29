@@ -2,7 +2,7 @@
 
 interface PaymentOrderInterface
 {
-    public function setOrderStatus($orderStatus);
+    public function setOrderStatus($newOrderStatus);
 
     public function getOrderStatus();
 

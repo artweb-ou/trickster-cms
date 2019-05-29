@@ -1,7 +1,7 @@
 <?php
 $moduleActions = [];
 $moduleActions[] = 'delete';
-$moduleActions[] = 'deleteImage';
+$moduleActions[] = 'deleteFile';
 $moduleActions[] = 'receive';
 $moduleActions[] = 'show';
 $moduleActions[] = 'receivePrivileges';

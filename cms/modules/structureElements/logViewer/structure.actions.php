@@ -4,4 +4,3 @@ $moduleActions[] = 'show';
 $moduleActions[] = 'showForm';
 $moduleActions[] = 'receive';
 $moduleActions[] = 'delete';
-$moduleActions[] = 'showErrorPageForm';

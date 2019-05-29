@@ -350,8 +350,8 @@ window.StatusChangeButtonComponent = function(orderData) {
 	};
 	var refreshContents = function() {
 
-		var sentStatusPossible = status == 'payed' || status == 'paid_partial';
-		var paidStatusPossible = status == 'undefined';
+		var sentStatusPossible = status === 'payed' || status === 'paid_partial';
+		var paidStatusPossible = status === 'undefined';
 
 		if (!paidStatusPossible && !sentStatusPossible) {
 			hide();
@@ -365,12 +365,10 @@ window.StatusChangeButtonComponent = function(orderData) {
 		}
 	};
 	var clickHandler = function() {
-		if (status == 'payed') {
+		if (status === 'payed') {
 			ordersLogics.setStatus(orderData.id, 'sent');
-			ordersLogics.sendStatus(orderData.id, 'sent');
-		} else if (status == 'undefined') {
+		} else if (status === 'undefined') {
 			ordersLogics.setStatus(orderData.id, 'payed');
-			ordersLogics.sendStatus(orderData.id, 'payed');
 		}
 	};
 	var display = function() {

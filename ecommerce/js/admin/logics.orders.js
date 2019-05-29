@@ -28,7 +28,7 @@ window.ordersLogics = new function() {
 	};
 	this.getXLSLDownloadUrl = function() {
 		return XLSXDownloadURL;
-	}
+	};
 	this.getOrdersList = function() {
 		return ordersList;
 	};
@@ -64,23 +64,24 @@ window.ordersLogics = new function() {
 		return newOrdersAmount;
 	};
 	var receiveData = function(responseStatus, responseName, responseData) {
-		if (responseStatus == 'success') {
-			if (responseName == 'changeStatus') {
+	  var i;
+		if (responseStatus === 'success') {
+			if (responseName === 'changeStatus') {
 				if (typeof responseData.order != 'undefined') {
-					for (var i = 0; i < responseData.order.length; i++) {
+					for (i = 0; i < responseData.order.length; i++) {
 						var id = responseData.order[i].id;
 						if (ordersIndex[id]) {
 							ordersIndex[id].updateOrderInfo(responseData.order[i]);
 						}
 					}
 				}
-			} else if (responseName == 'sendStatus') {
+			} else if (responseName === 'sendStatus') {
 
 			} else {
 				if (typeof responseData.orders != 'undefined') {
 					ordersList = [];
 					ordersIndex = {};
-					for (var i = 0; i < responseData.orders.ordersList.length; i++) {
+					for (i = 0; i < responseData.orders.ordersList.length; i++) {
 						var order = new OrderData(responseData.orders.ordersList[i]);
 						ordersList.push(order);
 						ordersIndex[order.id] = order;
@@ -99,7 +100,7 @@ window.ordersLogics = new function() {
 		}
 	};
 	this.setStatus = function(id, newStatus) {
-		if (ordersIndex[id] != undefined) {
+		if (typeof ordersIndex[id] !== 'undefined') {
 			var data = ordersIndex[id];
 			var parameters = {};
 			var URL = data.URL.replace('admin', 'adminAjax') + 'id:' + data.id + '/action:changeStatus/orderStatus:' + newStatus;
@@ -108,12 +109,11 @@ window.ordersLogics = new function() {
 		}
 	};
 
-	this.sendStatus = function(id, newStatus) {
-		if (ordersIndex[id] != undefined) {
+	this.sendStatus = function(id) {
+		if (typeof ordersIndex[id] !== 'undefined') {
 			var data = ordersIndex[id];
-			var parameters = {};
 
-			var URL = data.URL.replace('admin', 'adminAjax') + 'id:' + data.id + '/action:sendInvoice/invoiceType:Notification/sendTrigger:ajax/statusType:' + newStatus;
+			var URL = data.URL.replace('admin', 'adminAjax') + 'id:' + data.id + '/action:sendStatusNotification/';
 
 			var request = new JsonRequest(URL, null, 'sendStatus', null);
 			request.send();
@@ -159,7 +159,7 @@ window.OrderData = function(data) {
 		self.currency = importedData.currency;
 
 		self.payedPrice = parseFloat(importedData.payedPrice, 10);
-		if (importedData.deliveryPrice != ''){
+		if (importedData.deliveryPrice !== ''){
 			self.deliveryPrice = parseFloat(importedData.deliveryPrice, 10);
 		} else {
 			self.deliveryPrice = '';

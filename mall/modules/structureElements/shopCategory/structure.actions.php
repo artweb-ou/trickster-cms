@@ -6,6 +6,6 @@ $moduleActions[] = 'show';
 $moduleActions[] = 'showForm';
 $moduleActions[] = 'showSeoForm';
 $moduleActions[] = 'receiveSeo';
-$moduleActions[] = 'deleteImage';
+$moduleActions[] = 'deleteFile';
 $moduleActions[] = 'showPositions';
 $moduleActions[] = 'receivePositions';

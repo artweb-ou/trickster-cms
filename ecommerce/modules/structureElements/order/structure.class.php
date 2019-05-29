@@ -255,7 +255,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function getOrderStatusText($fromStatus = false)
     {
-        if(!$fromStatus) {
+        if (!$fromStatus) {
             $fromStatus = $this->orderStatus;
         }
         if ($this->orderStatusText === null) {
@@ -405,7 +405,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                     'code' => $product->code,
                     'title' => $product->title,
                     'price' => $product->price,
-                    'variation'  => $product->variation,
+                    'variation' => $product->variation,
                     'emptyPrice' => $product->isEmptyPrice(),
                     'amount' => $product->amount,
                     'totalPrice' => $product->getTotalPrice(),
@@ -470,39 +470,20 @@ class orderElement extends structureElement implements PaymentOrderInterface
         }
     }
 
-    public function sendOrderStatusNotificationEmail($emailType, $statusType, $sendTrigger = false, $forceSending = false)
+    public function sendOrderStatusNotificationEmail()
     {
-/*
-        payed
-        failed
-        deleted
-        paid_partial
-        sent
-*/
-/*
-status_deleted
-status_failed
-status_new
-status_paid_partial
-status_payed
-status_sent
-status_undefined
- */
-        if ($statusType !== 'undefined' && $forceSending) {
+        if ($this->orderStatus !== 'undefined') {
             $administratorEmail = $this->getAdministratorEmail();
             $data = $this->getOrderData();
-            $data['documentType'] = $emailType;
+            $data['documentType'] = 'Notification';
+            $data['orderStatus'] = $this->orderStatus;
 
-        //  if request from ajax (like orders list button) -> fix orderStatus from URL, else get current real orderStatus;
-            if ($sendTrigger !== 'ajax'){
-                $statusType = '';
-            }
-            else {
-                $data['orderStatus'] = $statusType;
-            }
             $translationsManager = $this->getService('translationsManager');
 
             $settings = $this->getService('settingsManager')->getSettingsList();
+            /**
+             * @var EmailDispatcher $emailDispatcher
+             */
             $emailDispatcher = $this->getService('EmailDispatcher');
             $newDispatchment = $emailDispatcher->getEmptyDispatchment();
             $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
@@ -512,36 +493,22 @@ status_undefined
             }
             $newDispatchment->registerReceiver($this->payerEmail, null);
 
-            $subjects = [];
-            // getTranslationByName($name, $section = null, $required = true, $loggable = true, $languageId = null)
-
             // if !shop_title in translation, try check default_sender_name in settings, else display shop_title field name
-            $subjects['label.ShopTitle'] =
+            $shopTitle =
                 $translationsManager->getTranslationByName('company.shop_title', 'public_translations') ?:
-                !empty($settings['default_sender_name']) ?$settings['default_sender_name']:$translationsManager->getTranslationByName('company.shop_title', 'public_translations');
+                    !empty($settings['default_sender_name']) ? $settings['default_sender_name'] : $translationsManager->getTranslationByName('company.shop_title', 'public_translations');
 
-            $subjects['label.emailSubjectOrderStatusNotification'] =
-                $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification', 'public_translations');
-            $subjects['label.orderNumber'] =
-                $translationsManager->getTranslationByName('labels.order_nr', 'public_translations');
-            $subjects['value.orderNumber'] =
-                $this->orderNumber;
-            $subjects['value.orderStatusText'] =
-                $this->getOrderStatusText($statusType);
-            $subject =
-                $subjects['label.ShopTitle'] .  '. ' .
-                $subjects['label.emailSubjectOrderStatusNotification'] . ' (' .
-                $subjects['label.orderNumber'] . ' ' .
-                $subjects['value.orderNumber'] . ': ' .
-                $subjects['value.orderStatusText'] . ')';
+            $notification = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification', 'public_translations');
+            $orderNumberText = $translationsManager->getTranslationByName('invoice.order_nr', 'public_translations');
+            $orderNumber = $this->getInvoiceNumber();
+            $statusText = $this->getOrderStatusText($this->orderStatus);
+            $subject = $shopTitle . '. ' . $notification . ' (' . $orderNumberText . ' ' . $orderNumber . ': ' . $statusText . ')';
             $newDispatchment->setSubject($subject);
             $newDispatchment->setData($data);
             $newDispatchment->setReferenceId($this->id);
             $newDispatchment->setType('orderStatus');
 
             $emailDispatcher->startDispatchment($newDispatchment);
-//            $statusType = 'undefined';
-//            $forceSending = false;
         }
     }
 
@@ -870,38 +837,41 @@ status_undefined
         return '';
     }
 
-    public function setOrderStatus($orderStatus)
+    public function setOrderStatus($newOrderStatus)
     {
-        $oldStatus = $this->orderStatus;
-        $this->orderStatus = $orderStatus;
+        if ($this->orderStatus !== $newOrderStatus) {
+            $this->orderStatus = $newOrderStatus;
 
-        if ($this->orderStatus !== $oldStatus &&
-            ($this->orderStatus == 'paid_partial' || $this->orderStatus == 'payed' || $this->orderStatus == 'undefined')
-        ) {
             // Update date, purchase count and quantity for each ordered product
-            if ($this->orderStatus !== 'undefined') {
-                if ($orderProducts = $this->getOrderProducts()) {
-                    $structureManager = $this->getService('structureManager');
+            if ($this->orderStatus == 'paid_partial' || $this->orderStatus == 'payed' || $this->orderStatus == 'undefined') {
+                if ($this->orderStatus !== 'undefined') {
+                    if ($orderProducts = $this->getOrderProducts()) {
+                        $structureManager = $this->getService('structureManager');
 
-                    foreach ($orderProducts as &$orderProduct) {
-                        /**
-                         * @var productElement $product
-                         */
-                        if ($product = $structureManager->getElementById($orderProduct->productId)) {
-                            $product->purchaseCount++;
-                            $product->lastPurchaseDate = time();
-                            $product->quantity -= $orderProduct->amount;
-                            if ($product->quantity < 0) {
-                                $product->quantity = 0;
+                        foreach ($orderProducts as &$orderProduct) {
+                            /**
+                             * @var productElement $product
+                             */
+                            if ($product = $structureManager->getElementById($orderProduct->productId)) {
+                                $product->purchaseCount++;
+                                $product->lastPurchaseDate = time();
+                                $product->quantity -= $orderProduct->amount;
+                                if ($product->quantity < 0) {
+                                    $product->quantity = 0;
+                                }
+                                $product->persistElementData();
                             }
-                            $product->persistElementData();
                         }
                     }
                 }
+
+                $this->checkInvoiceSending();
+                $this->persistElementData();
             }
 
-            $this->checkInvoiceSending();
-            $this->persistElementData();
+            if ($this->orderStatus !== 'undefined') {
+                $this->sendOrderStatusNotificationEmail();
+            }
         }
     }
 

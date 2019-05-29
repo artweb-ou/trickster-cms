@@ -35,7 +35,7 @@ class OrderFormStructure extends ElementForm
             'translationGroup' => 'order',
             'additionalCell' => [
                 'additionalFieldName' => 'Notification',
-                'template' => 'component.block.status.notification.tpl'
+                'template' => 'component.block.order.notification.tpl'
             ],
         ],
         'currency' => [
