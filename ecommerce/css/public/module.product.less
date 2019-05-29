@@ -355,38 +355,38 @@
 }
 
 
-.product_icon{
+.product_icon {
 	display: inline-block;
 	vertical-align: top;
-	margin: .5em;
+	margin: .25em 0;
 	box-sizing: border-box;
 	
-	&.product_icons {
-		display: block;
-		
-		[data-page="category"] & {
-			min-width: 18%;
-		}
-	}
-}
-
-.product_icon_text {
-	padding: .5em;
-	text-align: center;
-	
-	&.product_icons {
+	&.product_icon_text {
 		border-radius: 2px;
 		background-color: @trick_badge_bg_color;
 		color: @trick_badge_text_color;
 		
-		width: auto !important;
+		width: auto;
 		max-width: 100%;
-		
+
+		background-clip: padding-box;
+		border: .25em solid transparent;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		padding: .25em .5em;
+
 		.product_thumbnailsmall_icons & {
 			font-size: .75em;
 		}
 	}
+
+	&.product_icon_image {
+		max-width: 100%;
+		padding: .25em;
+	}
+
 }
+
 
 .product_short_amount_button {
 	min-width: 0;
