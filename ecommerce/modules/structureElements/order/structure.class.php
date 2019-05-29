@@ -92,6 +92,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return [
             'showForm',
             'showProducts',
+            'showOrderFields',
             'showPaymentData',
         ];
     }
