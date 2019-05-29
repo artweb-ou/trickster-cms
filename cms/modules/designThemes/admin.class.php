@@ -37,6 +37,7 @@ class adminDesignTheme extends DesignTheme
             'logics.animation.js',
             'logics.tableComponent.js',
             'logics.imagePreview.js',
+            'logics.jsColor.js',
             'component.tableComponent.js',
             'component.addNewElement.js',
             'component.ajaxItemSearch.js',
