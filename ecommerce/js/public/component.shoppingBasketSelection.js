@@ -86,7 +86,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 			if (totalsComponent) {
 				totalsComponent.updateData()
 			}
-			contentsElement.style.display = 'block'
+			contentsElement.style.display = ''
 		} else {
 			contentsElement.style.display = 'none'
 		}
@@ -134,7 +134,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 						discountProductElement.className = 'subcontentmodule_component subcontentmodule_square product_buttonsmall product_short productid_' + currentProduct.id
 						discountProductsElement.appendChild(discountProductElement)
 
-						var titleElement = document.createElement('h2')
+						var titleElement = document.createElement('div')
 						titleElement.className = 'subcontentmodule_title product_buttonsmall_title'
 						titleElement.innerHTML = currentProduct.title
 						discountProductElement.appendChild(titleElement)
@@ -462,6 +462,12 @@ window.ShoppingBasketSelectionProduct = function(initData) {
 		// image cell
 		var cellElement = self.makeElement('td', 'shoppingbasket_table_image_container', self.componentElement)
 		imageElement = cellElement.appendChild(self.makeElement('img', 'shoppingbasket_table_image', cellElement))
+		
+		
+		
+		
+		
+		
 		// info cell
 		cellElement = self.makeElement('td', 'shoppingbasket_table_title', self.componentElement)
 		titleElement = self.makeElement('a', 'shoppingbasket_table_title', cellElement)

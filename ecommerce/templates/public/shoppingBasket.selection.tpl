@@ -2,7 +2,11 @@
     {$element->getH1()}
 {/capture}
 {capture assign="moduleContent"}
-    <div class='shoppingbasket_selection'>
+    {if $theme->templateExists("custom.shoppingBasketViewParameters.tpl")}
+        {include file=$theme->template("custom.shoppingBasketViewParameters.tpl")}
+    {/if}
+
+    <div class='shoppingbasket_selection'{if !empty($viewParameters)}{$viewParameters}{/if}>
         <div class="shoppingbasket_selection_message">
             {$element->shoppingBasket->getMessage()}
         </div>
