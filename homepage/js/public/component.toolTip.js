@@ -15,10 +15,14 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 	var fixedY = false;
 	var excludedElements;
 	var classNameExtra;
+	var behaviourType;
 	var beforeDisplay;
-	var behaviourType = 'mouseover';
+	var behaviourTypeDefault = 'mouseover';
 	var elementsCreated = false;
 	var attached = false;
+	var popupPointerStyle;
+	var classNameReferralSelected;
+
 	var init = function() {
 		//backward compatibility with old arguments, comes first
 		if (typeof parameters == 'object') {
@@ -57,7 +61,16 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 		if (typeof parameters.behaviourType !== 'undefined') {
 			behaviourType = parameters.behaviourType;
 		} else {
-			behaviourType = 'mouseover';
+			behaviourType = behaviourTypeDefault;
+		}
+		if (typeof parameters.hintPointer !== 'undefined') {
+			hintPointer = parameters.hintPointer;
+		}
+		if (typeof parameters.classNameReferralSelected !== 'undefined') {
+			classNameReferralSelected = parameters.classNameReferralSelected;
+		}
+		if (typeof parameters.fixedX !== 'undefined') {
+			fixedX = parameters.fixedX;
 		}
 		if (typeof parameters.hideOnClick !== 'undefined') {
 			hideOnClick = parameters.hideOnClick;
@@ -93,7 +106,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 	};
 	var attach = function() {
 		if (!attached) {
-			if (!elementsCreated){
+			if (!elementsCreated) {
 				createDomElements();
 			}
 			attached = true;
@@ -110,7 +123,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 		updatePosition();
 	};
 	var resizeHandler = function() {
-		if (behaviourType == 'mouseover') {
+		if (behaviourType === 'mouseover' || behaviourType === 'click') {
 			// handle zoom changes
 			updatePosition();
 		}
@@ -131,6 +144,17 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 			}
 		} else if (displayed) {
 			self.hideComponent();
+		}
+	};
+	var clickHandler = function(event) {
+		displayAllowed = checkExcluded(event.target)
+		if (popupText && (displayAllowed)) {
+			if (!displayed) {
+				self.displayComponent();
+			}
+			else if (displayed && hideOnClick) {
+				self.hideComponent();
+			}
 		}
 	};
 	var checkExcluded = function(element) {
@@ -162,13 +186,18 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 			componentElement.style.display = 'block';
 
 			updatePosition();
-
+			if(classNameReferralSelected){
+				domHelper.addClass(referralElement, classNameReferralSelected);
+			}
 			TweenLite.to(componentElement, 0.5, {'css': {'opacity': 1}});
 		}
 	};
 	this.hideComponent = function(callBack) {
 		displayed = false;
 		// componentElement.style.display = 'none';
+		if(classNameReferralSelected){
+			domHelper.removeClass(referralElement, classNameReferralSelected);
+		}
 		detach();
 		if (callBack) {
 			callBack();
@@ -180,22 +209,43 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 		}
 		var verticalMouseCoord = window.mouseTracker.mouseX;
 		var verticalOffsetWidth = window.innerWidth;
-		var popupHeight = componentElement.offsetHeight;
-		var popupWidth = componentElement.offsetWidth;
+
+		var referralStyle = getComputedStyle(referralElement);
+		var referralPosition = referralElement.getBoundingClientRect();
+
+		var popupStyle = getComputedStyle(componentElement);
+		var popupHeight = parseFloat(popupStyle.height);
+		var popupWidth = parseFloat(popupStyle.width);
+
+		if (hintPointer) {
+			popupPointerStyle = getComputedStyle(componentElement, 'before');
+		}
 		var xPosition = 0;
 		if (fixedX) {
 			xPosition = fixedX;
-		} else {
+		} else if (!fixedX && !hintPointer) {
 			xPosition = window.mouseTracker.mouseX + popupOffset;
 			if (verticalOffsetWidth - verticalMouseCoord < popupWidth) {
 				xPosition = xPosition - popupWidth;
 			}
+		} else if (hintPointer) {
+			let popupPointerWidth = parseFloat(popupPointerStyle.width);
+			let popupPointerRight = parseFloat(popupPointerStyle.right);
+			let referralWidth = parseFloat(referralStyle.width) - parseFloat(referralStyle.paddingLeft) - parseFloat(referralStyle.paddingRight);
+			let referralRight = referralPosition.right;
+
+			xPosition = referralRight - referralWidth/2 - popupWidth + popupPointerWidth /2 + popupPointerRight;
 		}
 		var yPosition = 0;
 		if (fixedY) {
 			yPosition = fixedY - popupHeight;
-		} else {
+		} else if(!fixedY && !hintPointer) {
 			yPosition = window.mouseTracker.mouseY - popupHeight - popupOffset;
+		} else if(hintPointer) {
+			// let popupPointerHeight = parseFloat(popupPointerStyle.height);
+			let referralHeight = parseFloat(referralStyle.height);
+
+			yPosition = window.mouseTracker.mouseY - referralHeight/2 - popupHeight;
 		}
 
 
@@ -213,7 +263,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 		return _child === _parent;
 	};
 	var addMouseHandlers = function() {
-		if (behaviourType == 'mouseover') {
+		if (behaviourType === 'mouseover') {
 			window.eventsManager.addHandler(window, 'resize', resizeHandler);
 			window.eventsManager.addHandler(referralElement, 'mousemove', moveHandler);
 			window.eventsManager.addHandler(referralElement, 'mouseover', overHandler);
@@ -224,6 +274,10 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 			if (hideOnClick) {
 				window.eventsManager.addHandler(referralElement, 'click', leaveHandler);
 			}
+		}
+		if (behaviourType === 'click') {
+			window.eventsManager.addHandler(window, 'resize', resizeHandler);
+			window.eventsManager.addHandler(referralElement, 'click', clickHandler);
 		}
 	};
 	this.setDisplayDelay = function(delay) {
@@ -244,7 +298,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 		if (referralElement) {
 			window.eventsManager.removeHandler(referralElement, 'mousemove', moveHandler);
 			window.eventsManager.removeHandler(referralElement, 'mouseover', overHandler);
-			window.eventsManager.removeHandler(referralElement, 'mouseenter', enterHandler)
+			window.eventsManager.removeHandler(referralElement, 'mouseenter', enterHandler);
 			window.eventsManager.removeHandler(referralElement, 'mouseleave', leaveHandler);
 			window.eventsManager.removeHandler(referralElement, 'click', leaveHandler);
 		}
