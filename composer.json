@@ -2,6 +2,12 @@
     "name": "artweb/trickster",
     "description": "Trickster CMS packages",
     "license": "proprietary",
+    	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/PitPik/colorPicker"
+		}
+	],
     "require": {    
 	    "illuminate/database": "5.2.*",
 	    "mk-j/php_xlsxwriter": "^0.36",
@@ -21,6 +27,8 @@
 	    "moroz1999/cache": "1.*",
 	    "smarty/smarty": "3.x",
 	    "pelago/emogrifier": "^2.0",
-	    "tedivm/jshrink": "~1.0"
+	    "tedivm/jshrink": "~1.0",
+	    "pitpik/colorpicker": "*"
     }
+    
 }
