@@ -253,13 +253,13 @@ window.GalleryFormImageComponent = function(fileInfo) {
 	var refreshContents = function() {
 		var statusText = '';
 		if (self.status == 'failed') {
-			statusText = 'Üleslaadimine ebaõnnestus';
+			statusText = translationsLogics.get('gallery.failed'); //'Üleslaadimine ebaõnnestus';
 		} else if (self.status == 'uploaded') {
-			statusText = 'Laetud ülesse';
+			statusText = translationsLogics.get('gallery.uploaded'); // 'Laetud ülesse';
 		} else if (self.status == 'inprogress') {
-			statusText = 'Laetakse ülesse (' + progress.toFixed(2) + "%)";
+			statusText = translationsLogics.get('gallery.inprogress') + ' (' + progress.toFixed(2) + "%)"; //'Laetakse ülesse (' + progress.toFixed(2) + "%)";
 		} else if (self.status == 'awaiting') {
-			statusText = 'Ootab üleslaadimist';
+			statusText = translationsLogics.get('gallery.awaiting'); //'Ootab üleslaadimist';
 		}
 		statusElement.innerHTML = statusText;
 	};
