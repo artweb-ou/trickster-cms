@@ -449,7 +449,7 @@ window.ShoppingBasketSelectionTable = function(componentElement) {
 window.ShoppingBasketSelectionProduct = function(initData) {
 	var self = this;
 
-	console.log(basketView['imageCell'])
+	// console.log(basketView['imageCell'])
 	var productData = false;
 	var changeTimeOut = false;
 	var keyUpDelay = 400;
@@ -650,7 +650,6 @@ window.ShoppingBasketSelectionProduct = function(initData) {
 				//
 				deleteContainer = self.makeElement('div', 'shoppingbasket_table_delete_container', priceCellContainer);
 				deleteElement = self.makeElement('div', 'shoppingbasket_table_remove', deleteContainer);
-				console.log(priceCellContainer)
 			}
 			else {
 				cellElement = self.makeElement('td', 'shoppingbasket_table_remove', self.componentElement);
