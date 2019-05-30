@@ -1,117 +1,241 @@
 .flex_items_list {
-  //deprecated?
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: stretch;
+	//deprecated?
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: stretch;
 
-  &::after {
-    flex: auto;
-    content: "";
-    display: block;
-  }
+	&::after {
+		flex: auto;
+		content: "";
+		display: block;
+	}
 }
 
 .grid_container {
-  display: flex;
-  flex-wrap: wrap;
+	display: flex;
+	flex-wrap: wrap;
 
-  &::after {
-    content: "";
-    flex: auto;
-  }
+	&::after {
+		content: "";
+		flex: auto;
+	}
 }
 
 .grid_item(
-  @lg_grid_span,
-  @grid_spacing: @default_grid_spacing,
-  @grid_spacing_mobile: @default_grid_spacing_mobile,
-  @md_grid_span: @lg_grid_span - 1,
-  @sm_grid_span: @lg_grid_span - 2,
-  @xs_grid_span: @lg_grid_span - 3
+	@lg_grid_span,
+	@grid_spacing: @default_grid_spacing,
+	@grid_spacing_mobile: @default_grid_spacing_mobile,
+	@md_grid_span: @lg_grid_span - 1,
+	@sm_grid_span: @lg_grid_span - 2,
+	@xs_grid_span: @lg_grid_span - 3
 ) {
-  //*0.999 is required for incorrect float rounding to px in some browsers/font sizes
-  box-sizing: border-box;
-  margin: 0 @grid_spacing_mobile*0.999 / 2 @grid_spacing_mobile;
-  @media (min-width: 0) and (max-width: @screen_breakpoint_sm) {
-    .fit_into_grid(@xs_grid_span, @grid_spacing_mobile);
-  }
-  @media (min-width: @screen_breakpoint_sm) and (max-width: @screen_breakpoint_sm_max) {
-    .fit_into_grid(@sm_grid_span, @grid_spacing_mobile);
-  }
-  @media (min-width: @screen_breakpoint_md) and (max-width: @screen_breakpoint_md_max) {
-    .fit_into_grid(@md_grid_span, @grid_spacing_mobile);
-  }
-  @media (min-width: @screen_breakpoint_lg) {
-    margin: 0 @grid_spacing*0.999 / 2 @grid_spacing;
-    .grid_lg & {
-      .fit_into_grid(@lg_grid_span, @grid_spacing);
-    }
+	//*0.999 is required for incorrect float rounding to px in some browsers/font sizes
+	box-sizing: border-box;
+	margin: 0 @grid_spacing_mobile*0.999 / 2 @grid_spacing_mobile;
+	@media (min-width: 0) and (max-width: @screen_breakpoint_sm) {
+		.fit_into_grid(@xs_grid_span, @grid_spacing_mobile);
+	}
+	@media (min-width: @screen_breakpoint_sm) and (max-width: @screen_breakpoint_sm_max) {
+		.fit_into_grid(@sm_grid_span, @grid_spacing_mobile);
+	}
+	@media (min-width: @screen_breakpoint_md) and (max-width: @screen_breakpoint_md_max) {
+		.fit_into_grid(@md_grid_span, @grid_spacing_mobile);
+	}
+	@media (min-width: @screen_breakpoint_lg) {
+		margin: 0 @grid_spacing*0.999 / 2 @grid_spacing;
+		.grid_lg & {
+			.fit_into_grid(@lg_grid_span, @grid_spacing);
+		}
 
-    .grid_md & {
-      .fit_into_grid(@lg_grid_span - 1, @grid_spacing);
-    }
+		.grid_md & {
+			.fit_into_grid(@lg_grid_span - 1, @grid_spacing);
+		}
 
-    .grid_sm & {
-      .fit_into_grid(@lg_grid_span - 2, @grid_spacing);
-    }
-  }
+		.grid_sm & {
+			.fit_into_grid(@lg_grid_span - 2, @grid_spacing);
+		}
+	}
 }
 
 .fit_into_grid_margins(@span) when (@span > 1) {
-  &:nth-of-type(@{span}n + 1) {
-    margin-left: 0;
-  }
-  &:nth-of-type(@{span}n) {
-    margin-right: 0;
-  }
+	&:nth-of-type(@{span}n + 1) {
+		margin-left: 0;
+	}
+	&:nth-of-type(@{span}n) {
+		margin-right: 0;
+	}
 }
 
 .fit_into_grid_margins(@span) when (@span = 1) {
-  &:nth-of-type(n + 1) {
-    margin-left: 0;
-  }
-  &:nth-of-type(n) {
-    margin-right: 0;
-  }
+	&:nth-of-type(n + 1) {
+		margin-left: 0;
+	}
+	&:nth-of-type(n) {
+		margin-right: 0;
+	}
 }
 
 .fit_into_grid_margins(@span) when (@span < 1) {
-  & {
-    margin-left: 0;
-    margin-right: 0;
-  }
+	& {
+		margin-left: 0;
+		margin-right: 0;
+	}
 }
 
 .fit_into_grid(@external_grid_span, @external_grid_spacing) {
-  @internal_grid_span: max(@external_grid_span, 1);
-  @grid_span_pct: 100 / @internal_grid_span;
-  @internal_grid_spacing: @external_grid_spacing * (@internal_grid_span - 1) / @internal_grid_span;
-  width: e('calc(@{grid_span_pct}% - @{internal_grid_spacing})');
-  .fit_into_grid_margins(@external_grid_span);
+	@internal_grid_span: max(@external_grid_span, 1);
+	@grid_span_pct: 100 / @internal_grid_span;
+	@internal_grid_spacing: @external_grid_spacing * (@internal_grid_span - 1) / @internal_grid_span;
+	width: e('calc(@{grid_span_pct}% - @{internal_grid_spacing})');
+	.fit_into_grid_margins(@external_grid_span);
 }
 
 
 .hidden_on_phone {
-  @media (max-width: @screen_breakpoint_sm_max) {
-    display: none !important;
-  }
+	@media (max-width: @screen_breakpoint_sm_max) {
+		display: none !important;
+	}
 }
 
 //deprecated, use .clearfixin() instead.
 .clearfix {
-  display: block;
-  clear: both;
+	display: block;
+	clear: both;
 }
 
 .__transition_01__(@what, @time, @method) {
-  -webkit-transition: @what @time @method;
-  transition: @what @time @method;
+	-webkit-transition: @what @time @method;
+	transition: @what @time @method;
 }
 
-;
-
-.svg-bg(@svgFile,@color,@stroke) {
-  @svgContent: encodeSvgContent(@svgFile, @color, @stroke);
-  background-image: url("@{svgContent}");
+// SVG background-image,
+// todo: need additional code clean in CssUniter
+.svg-bg(@svgFile,@fill,@stroke) {
+	@svgContent: encodeSvgContent(@svgFile, @fill, @stroke); // file name, fill color, stroke color
+	background-image: url("@{svgContent}");
 }
+
+// Flexy ITEMS
+// Flexy items width
+.flexy_columns_All_Items(@columns; @gap; @padding; @width_Border; @color_Border) {
+	//width: (100% - (@columns - 1) * @gap) / @columns; // 2% gap // 100% - 3 - 1 - 1*2%/3 - 1
+	width: auto;
+	border: @width_Border solid @color_Border;
+	box-sizing: border-box;
+}
+
+// childs start from 2.
+.flexy_columns_Other_Cols(@columns; @start; @gap) when (@start < @columns) {
+	&:nth-of-type(@{columns}n + @{start}) {
+		margin-left: @gap; // 2% gap
+		margin-right: 0;
+		padding-left: @padding; //
+		padding-right: @padding;
+	}
+	.flexy_columns_Other_Cols(@columns; @start+1; @gap);
+}
+.flexy_columns_Other_Cols(@columns; @start; @gap) {};
+
+// 1. child on row
+.flexy_columns_First_Col(@columns; @start) {
+	&:nth-of-type(@{columns}n + 1) {
+		margin-left: 0;
+		margin-right: 0;
+		padding-right: @padding; //
+	}
+}
+// last child on row
+.flexy_columns_Last_Col(@columns; @start; @gap) when (@columns >= @start) {
+	&:nth-of-type(@{columns}n) {
+		margin-left: @gap;// 2% gap
+		margin-right: 0;
+		padding-left: @padding; //
+	}
+}
+.flexy_columns_Last_Col(@columns; @start; @gap){};
+
+// first row
+.flexy_columns_First_Row(@columns) {
+	&:nth-of-type(-n + @{columns}) {
+		margin-bottom: 0;
+		margin-top: 0;
+	}
+}
+// other rows, start 2.
+.flexy_columns_Other_Rows(@columns; @gap) {
+	&:nth-of-type(n +  @{columns}) {
+		margin-bottom: 0;
+		margin-top: @gap;
+	}
+}
+
+// total Flexy
+.flexy_column_Total(@columns; @start; @gap; @padding; @width_Border; @color_Border){
+	.flexy_columns_All_Items(@columns; @gap; @padding; @width_Border; @color_Border);
+	.flexy_columns_First_Col(@columns; @start);
+	.flexy_columns_Other_Cols(@columns; @start; @gap);
+	.flexy_columns_Last_Col(@columns; @start; @gap);
+	.flexy_columns_First_Row(@columns);
+	.flexy_columns_Other_Rows(@columns+1; @gap);
+}
+// Flexy ITEMS end
+
+// Flexy ITEM
+.flexy_item(@columns575; @columns; @start; @gap; @padding; @width_Border; @color_Border) {  //@columns575; @columns; @start=2; @gap; @padding; @width_Border; @color_Border
+	box-sizing: border-box;
+	margin: 0;
+	
+	@media (max-width: @screen_breakpoint_xs_max) {
+		.flexy_lg & {
+			.flexy_column_Total(@columns575; @start; @gap; @padding * 2; @width_Border; @color_Border)
+		}
+		.flexy_md & {
+			.flexy_column_Total(@columns575; @start; @gap; @padding * 2; @width_Border; @color_Border)
+		}
+	}
+	@media (min-width: @screen_breakpoint_sm) and (max-width: @screen_breakpoint_sm_max) {
+		.flexy_lg & {
+			.flexy_column_Total(@columns - 2; @start; @gap; @padding / 3; @width_Border; @color_Border)
+		}
+		.flexy_md & {
+			.flexy_column_Total(@columns - 2; @start; @gap; @padding / 3; @width_Border; @color_Border)
+		}
+	}
+	@media (min-width: @screen_breakpoint_md) and (max-width: @screen_breakpoint_md_max) {
+		.flexy_lg & {
+			.flexy_column_Total(@columns - 2; @start; @gap; @padding / 3; @width_Border; @color_Border)
+		}
+		.flexy_md & {
+			.flexy_column_Total(@columns - 2; @start; @gap; @padding / 3; @width_Border; @color_Border)
+		}
+	}
+	@media (min-width: @screen_breakpoint_lg) and (max-width: @screen_breakpoint_lg_max) {
+		.flexy_lg & {
+			.flexy_column_Total(@columns; @start; @gap; @padding / 3; @width_Border; @color_Border)
+		}
+		.flexy_md & {
+			.flexy_column_Total(@columns; @start; @gap; @padding / 3; @width_Border; @color_Border)
+		}
+	}
+	@media (min-width: @screen_breakpoint_xl) and (max-width: @screen_breakpoint_xl_max) {
+		.flexy_lg & {
+			.flexy_column_Total(@columns; @start; @gap; @padding / 2; @width_Border; @color_Border)
+		}
+		.flexy_md & {
+			.flexy_column_Total(@columns; @start; @gap; @padding / 2; @width_Border; @color_Border)
+		}
+	}
+	@media (min-width: @screen_breakpoint_xxl) {
+		.flexy_lg & {
+			.flexy_column_Total(@columns; @start; @gap; @padding; @width_Border; @color_Border)
+		}
+		.flexy_lg .linklist_items & {
+			.flexy_column_Total(@columns; @start; @gap; @padding; @width_Border; @color_Border)
+		}
+		.flexy_md & {
+			.flexy_column_Total(@columns; @start; @gap; @padding; @width_Border; @color_Border)
+		}
+	}
+}
+// Flexy ITEM end
