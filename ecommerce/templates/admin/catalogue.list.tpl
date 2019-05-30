@@ -65,14 +65,14 @@
 					<span class="content_list_field_order_indicator content_list_field_order_indicator_{$requestArguments.order.argument}"></span>
 				{/if}
 			</th>
-			{*<th>*}
-				{*<a class="content_list_field_orderable" href="{$element->getContentListOrderUrl('showincategory')}">*}
-					{*{translations name='productslist.displayinshort'}*}
-				{*</a>*}
-				{*{if $requestArguments.order && $requestArguments.order.field == 'showincategory'}*}
-					{*<span class="content_list_field_order_indicator content_list_field_order_indicator_{$requestArguments.order.argument}"></span>*}
-				{*{/if}*}
-			{*</th>*}
+			<th>
+				<a class="content_list_field_orderable" href="{$element->getContentListOrderUrl('quantity')}">
+					{translations name='productslist.quantity'}
+				</a>
+				{if $requestArguments.order && $requestArguments.order.field == 'quantity'}
+					<span class="content_list_field_order_indicator content_list_field_order_indicator_{$requestArguments.order.argument}"></span>
+				{/if}
+			</th>
 			<th class='category_column'>
 				{translations name='label.category'}
 			</th>
@@ -121,8 +121,6 @@
 					<span class='icon icon_{$contentItem->structureType}'></span>{$contentItem->getTitle()}
 				</a>
 			</td>
-
-
 			<td class='code_column'>
 				{$contentItem->code}
 			</td>
@@ -132,15 +130,9 @@
 			<td class=''>
 				{assign var='type' value="product."|cat:$contentItem->availability}
 				{translations name=$type}
-				{*{if $contentItem->availability == 'available'}*}
-					{*{translations name='label.available'}*}
-				{*{elseif $contentItem->availability == 'quantity_dependent'}*}
-					{*{translations name='label.quantity_dependent'}*}
-				{*{elseif $contentItem->availability == 'inquirable'}*}
-					{*{translations name='label.inquirable'}*}
-				{*{elseif $contentItem->availability == 'unavailable'}*}
-					{*{translations name='label.unavailable'}*}
-				{*{/if}*}
+			</td>
+			<td class=''>
+				{if $contentItem->availability=='quantity_dependent'}{$contentItem->quantity}{/if}
 			</td>
 			<td class='category_column'>
 				{foreach $contentItem->getConnectedAdminCategories() as $category}
