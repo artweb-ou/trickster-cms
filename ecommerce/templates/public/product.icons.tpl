@@ -1,5 +1,5 @@
 {function productIconsCell}
-    <div class="product_icons_cell {$cellLocation}">
+    <span class="product_icons_cell {$cellLocation}">
         {foreach $iconsInfo as $iconInfo}
             {if $iconInfo.iconLocation == $cellLocation}
                 {if !empty($iconInfo.image)}
@@ -16,15 +16,15 @@
                 {/if}
             {/if}
         {/foreach}
-    </div>
+    </span>
 {/function}
-<div class="product_icons {$class}">
-    <div class="product_icons_cells">
+<span class="product_icons {$class}">
+    <span class="product_icons_cells">
         {productIconsCell cellLocation='loc_top_left'}
         {productIconsCell cellLocation='loc_top_right'}
-    </div>
-    <div class="product_icons_cells">
+    </span>
+    <span class="product_icons_cells">
         {productIconsCell cellLocation='loc_bottom_left'}
         {productIconsCell cellLocation='loc_bottom_right'}
-    </div>
-</div>
+    </span>
+</span>
