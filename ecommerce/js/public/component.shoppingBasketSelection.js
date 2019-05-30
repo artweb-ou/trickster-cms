@@ -11,6 +11,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 	var totalsComponent;
 	var showInBasketDiscountsComponent;
 	var conditionsCheckboxInput;
+	var basketCells =[];
 
 	var init = function() {
 		contentsElement = _('.shoppingbasket_contents', componentElement)[0]
@@ -23,6 +24,27 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 				eventsManager.addHandler(submitButtonElement, 'click', submitForm)
 			}
 		}
+
+		let separator = /\s*,\s*/;
+		if(componentElement.dataset.imagecell){
+			basketCells['imageCell'] = componentElement.dataset.imagecell.split(separator);
+		}
+		if(componentElement.dataset.infocell){
+			basketCells['infoCell'] = componentElement.dataset.infocell.split(separator);
+		}
+		if(componentElement.dataset.amountcell){
+			basketCells['amountCell'] = componentElement.dataset.amountcell.split(separator);
+		}
+		if(componentElement.dataset.totalcell){
+			basketCells['totalCell'] = componentElement.dataset.totalcell.split(separator);
+		}
+		if(componentElement.dataset.pricecell){
+			basketCells['priceCell'] = componentElement.dataset.pricecell.split(separator);
+		}
+		if(componentElement.dataset.removecell){
+			basketCells['removeCell'] = componentElement.dataset.removecell.split(separator);
+		}
+		this.basketView = basketCells;
 
 		messageElement = _('.shoppingbasket_selection_message', componentElement)[0]
 		var element = _('.shoppingbasket_table_products', componentElement)[0]
@@ -234,7 +256,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 
 				new ModalActionComponent(conditionsCheckboxInput, false, submitButtonElement, additionalContainerClassName, '', message); // checkbox-input, footer advanced, element for position, messages
 			}
-		}else {
+		} else {
 			formElement.submit();
 		}
 	};
@@ -335,16 +357,16 @@ window.ShoppingBasketTotalsComponent = function(componentElement) {
 				delete (serviceRows[id])
 			}
 		}
-	}
+	};
 	this.getComponentElement = function() {
 		return componentElement
-	}
-	init()
-}
+	};
+	init();
+};
 
 window.ShoppingBasketTotalsRowComponent = function(typeName) {
-	var self = this
-	var componentElement, titleElement, valueElement
+	var self = this;
+	var componentElement, titleElement, valueElement;
 
 	var init = function() {
 		componentElement = self.makeElement('tr', 'shoppingbasket_total shoppingbasket_total_' + typeName)
@@ -357,7 +379,7 @@ window.ShoppingBasketTotalsRowComponent = function(typeName) {
 			valueElement = self.makeElement('td', 'shoppingbasket_total_value', componentElement)
 			valueElement.colSpan = 2
 		}
-	}
+	};
 	this.setTitle = function(newTitle) {
 		if (typeName == 'pricesincludevat') {
 			titleElement.innerHTML = newTitle
@@ -365,20 +387,20 @@ window.ShoppingBasketTotalsRowComponent = function(typeName) {
 			titleElement.innerHTML = newTitle + ':'
 		}
 
-	}
+	};
 	this.setPrice = function(newPrice) {
 		if (newPrice !== '') {
-			valueElement.innerHTML = domHelper.roundNumber(newPrice, 2) + ' ' + window.selectedCurrencyItem.symbol
+			valueElement.innerHTML = domHelper.roundNumber(newPrice, 2) + ' ' + window.selectedCurrencyItem.symbol;
 			componentElement.style.display = ''
 		} else {
 			componentElement.style.display = 'none'
 		}
-	}
+	};
 	this.getComponentElement = function() {
 		return componentElement
-	}
-	init()
-}
+	};
+	init();
+};
 DomElementMakerMixin.call(ShoppingBasketTotalsRowComponent.prototype)
 
 window.ShoppingBasketSelectionTable = function(componentElement) {
@@ -386,7 +408,6 @@ window.ShoppingBasketSelectionTable = function(componentElement) {
 	var rowsContainerElement = false
 	var productRowsList = []
 	var productRowsIndex = {}
-
 	var init = function() {
 		rowsContainerElement = _('.shoppingbasket_table_rows', componentElement)[0]
 
@@ -426,92 +447,227 @@ window.ShoppingBasketSelectionTable = function(componentElement) {
 	init()
 }
 window.ShoppingBasketSelectionProduct = function(initData) {
-	var self = this
+	var self = this;
 
-	var productData = false
-	var changeTimeOut = false
-	var keyUpDelay = 400
-	var amountUpDelay = 200
-	var minimumOrder = 1
+	console.log(basketView['imageCell'])
+	var productData = false;
+	var changeTimeOut = false;
+	var keyUpDelay = 400;
+	var amountUpDelay = 200;
+	var minimumOrder = 1;
 
-	var imageElement
-	var titleElement
-	var codeElement
-	var descriptionElement
-	var priceElement
-	var fullPriceElement
-	var totalPriceElement
-	var amountPlusButton
-	var amountMinusButton
-	var amountInput
-	var removeButton
+	var imageElement;
+	var titleElement;
+	var codeElement;
+	var descriptionElement;
+	var priceElement;
+	var priceCellContainer;
+	var fullPriceElement;
+	var totalPriceElement;
+	var amountPlusButton;
+	var amountMinusButton;
+	var amountInput;
+	var removeButton;
+	var categoryTitle;
 
 	this.componentElement = false
 	this.basketProductId = false
 
 	var init = function() {
-		productData = initData
-		self.basketProductId = productData.basketProductId
-		minimumOrder = productData.minimumOrder
-		createDomStructure()
-		self.updateContents()
-	}
+		productData = initData;
+		self.basketProductId = productData.basketProductId;
+		minimumOrder = productData.minimumOrder;
+		createDomStructure();
+		self.updateContents();
+	};
 	var createDomStructure = function() {
-		self.componentElement = self.makeElement('tr', 'shoppingbasket_table_item')
+		self.componentElement = self.makeElement('tr', 'shoppingbasket_table_item');
+		var cellElement;
 
-		// image cell
-		var cellElement = self.makeElement('td', 'shoppingbasket_table_image_container', self.componentElement)
-		imageElement = cellElement.appendChild(self.makeElement('img', 'shoppingbasket_table_image', cellElement))
-		
-		
-		
-		
-		
-		
-		// info cell
-		cellElement = self.makeElement('td', 'shoppingbasket_table_title', self.componentElement)
-		titleElement = self.makeElement('a', 'shoppingbasket_table_title', cellElement)
-		codeElement = self.makeElement('div', 'shoppingbasket_table_code', cellElement)
-		descriptionElement = self.makeElement('div', 'shoppingbasket_table_description', cellElement)
 
-		// price cell
-		cellElement = self.makeElement('td', 'shoppingbasket_table_price', self.componentElement)
+		/**
+		 imageCell:
+		 0: "imageElement"
+		 1: "codeElement"
+		 */
+		/* default
+         imageCell:
+         0: "imageElement"
+         */
+		if(basketView['imageCell']) {
+			let imageCell = basketView['imageCell'];
+			cellElement = self.makeElement('td', 'shoppingbasket_table_image_container', self.componentElement);
 
-		fullPriceElement = self.makeElement('div', 'shoppingbasket_table_full_price_value', cellElement)
-		fullPriceElement.style.display = 'none'
-		if (productData.salesPrice != productData.price) {
-			domHelper.addClass(fullPriceElement, 'lined_price')
-			fullPriceElement.style.display = 'block'
+			if(imageCell.indexOf('imageElement') > -1) {
+				imageElement = cellElement.appendChild(self.makeElement('img', 'shoppingbasket_table_image', cellElement));
+			}
+			if(imageCell.indexOf('codeElement') > -1) {
+				var codeElement = self.makeElement('div', 'shoppingbasket_code_container', self.cellElement);
+				codeElement.innerHTML = window.translationsLogics.get('shoppingbasket.productstable_productcode') + ': ' + productData.code;
+				cellElement.appendChild(codeElement);
+			}
 		}
 
-		priceElement = self.makeElement('div', 'shoppingbasket_table_price_value', cellElement)
+		/*
+		 infoCell:
+		 0: "productContainerElement"
+		 1: "productInnerElement"
+		 2: "categoryTitleElement"
+		 3: "titleElement"
+		 4: "descriptionElement"
+		 */
+		/* default
+         infoCell:
+         0: "tableTitleElement"
+         3: "titleElement"
+         3: "codeElement"
+         4: "descriptionElement"
+         */
 
-		// amount cell
-		cellElement = self.makeElement('td', 'shoppingbasket_table_amount', self.componentElement)
-		var amountContainerElement = self.makeElement('div', 'shoppingbasket_table_amount_container', cellElement)
+		if(basketView['infoCell']) {
+			let infoCell = basketView['infoCell'];
+			if(infoCell.indexOf('tableTitleElement') > -1) {
+				cellElement = self.makeElement('td', 'shoppingbasket_table_title', self.componentElement);
+			} else if(infoCell.indexOf('productContainerElement') > -1) {
+				cellElement = self.makeElement('td', 'shoppingbasket_table_product_container', self.componentElement);
+			}
+			if(infoCell.indexOf('productInnerElement') > -1) {
+				cellElement = self.makeElement('div', 'shoppingbasket_table_product_inner', cellElement);
+			}
+			if(infoCell.indexOf('categoryTitleElement') > -1) {
+				categoryTitle = self.makeElement('div', 'shoppingbasket_table_category_title', cellElement);
+				domHelper.addClass(categoryTitle, 'text_uppercase');
+			}
+			if(infoCell.indexOf('titleElement') > -1) {
+				titleElement = self.makeElement('a', 'shoppingbasket_table_title', cellElement)
+			}
+			if(infoCell.indexOf('codeElement') > -1) {
+				codeElement = self.makeElement('div', 'shoppingbasket_table_code', cellElement)
+			}
+			if(infoCell.indexOf('descriptionElement') > -1) {
+				descriptionElement = self.makeElement('div', 'shoppingbasket_table_description', cellElement)
+			}
+		}
 
-		amountMinusButton = self.makeElement('a', 'button shoppingbasket_table_amount_minus', amountContainerElement)
-		amountMinusButton.innerHTML = '<span class="button_text">-</span>'
-		eventsManager.addHandler(amountMinusButton, 'click', minusClickHandler)
 
-		amountInput = self.makeElement('input', 'input_component shoppingbasket_table_amount_input', amountContainerElement)
-		eventsManager.addHandler(amountInput, 'keyup', amountKeyUpHandler)
-		eventsManager.addHandler(amountInput, 'change', amountChangeHandler)
-		new window.InputComponent({'componentClass': 'shoppingbasket_table_amount_block', 'inputElement': amountInput})
+		/*
+		 amountCell:
+		 0: "amountChangeElementWrap"
+		 1: "amountChangeElement"
+		 2: "amountTitleElement"
+		 */
+		/* default
+         amountCell:
+         []
+         */
+		if(basketView['amountCell']) {
+			let amountCell = basketView['amountCell'];
+			cellElement = self.makeElement('td', 'shoppingbasket_table_amount', self.componentElement);
+			var amountContainerElement;
+			if(amountCell.indexOf('amountChangeElementWrap') > -1) {
+				var amountChangeWrapper = self.makeElement('div', 'shoppingbasket_table_amount_wrapper', cellElement)
+				var amountTitle = self.makeElement('div', 'shoppingbasket_table_amount_title', amountChangeWrapper)
+				amountTitle.innerHTML = translationsLogics.get('shoppingbasket.table_amount_title')
+				amountContainerElement = self.makeElement('div', 'shoppingbasket_table_amount_container', amountChangeWrapper)
+			}
+			else {
+				amountContainerElement = self.makeElement('div', 'shoppingbasket_table_amount_container', cellElement)
+			}
 
-		amountPlusButton = self.makeElement('a', 'button shoppingbasket_table_amount_plus', amountContainerElement)
-		amountPlusButton.innerHTML = '<span class="button_text">+</span>'
-		eventsManager.addHandler(amountPlusButton, 'click', plusClickHandler)
+			amountMinusButton = self.makeElement('a', 'button shoppingbasket_table_amount_minus', amountContainerElement)
+			amountMinusButton.innerHTML = '<span class="button_text">-</span>'
+			eventsManager.addHandler(amountMinusButton, 'click', minusClickHandler)
 
-		// total cell
-		cellElement = self.makeElement('td', 'shoppingbasket_table_totalprice', self.componentElement)
-		totalPriceElement = self.makeElement('span', 'shoppingbasket_table_totalprice_value', cellElement)
+			amountInput = self.makeElement('input', 'input_component shoppingbasket_table_amount_input', amountContainerElement)
+			eventsManager.addHandler(amountInput, 'keyup', amountKeyUpHandler)
+			eventsManager.addHandler(amountInput, 'change', amountChangeHandler)
+			new window.InputComponent({'componentClass': 'shoppingbasket_table_amount_block', 'inputElement': amountInput})
 
-		// remove cell
-		cellElement = self.makeElement('td', 'shoppingbasket_table_remove', self.componentElement)
-		removeButton = self.makeElement('a', 'shoppingbasket_table_remove_button', cellElement)
-		eventsManager.addHandler(removeButton, 'click', removeClickHandler)
-	}
+			amountPlusButton = self.makeElement('a', 'button shoppingbasket_table_amount_plus', amountContainerElement)
+			amountPlusButton.innerHTML = '<span class="button_text">+</span>'
+			eventsManager.addHandler(amountPlusButton, 'click', plusClickHandler)
+		}
+
+		if(basketView['totalCell']) {
+			// total cell
+			cellElement = self.makeElement('td', 'shoppingbasket_table_totalprice', self.componentElement)
+			totalPriceElement = self.makeElement('span', 'shoppingbasket_table_totalprice_value', cellElement)
+		}
+
+
+		/*
+		 priceCell:
+		 0: "fullPriceElement"
+		 1: "salesPriceElement"
+		 2: "priceTitleElement"
+		*/
+		/* default
+         priceCell:
+         0: "fullPriceElement"
+         1: "salesPriceElement"
+        */
+
+		if(basketView['priceCell']) {
+			let priceCell = basketView['priceCell'];
+			cellElement = self.makeElement('td', 'shoppingbasket_table_price', self.componentElement);
+			priceCellContainer = cellElement;
+
+			if(priceCell.indexOf('fullPriceElement') > -1) {
+				fullPriceElement = self.makeElement('div', 'shoppingbasket_table_full_price_value', cellElement)
+				fullPriceElement.style.display = 'none'
+				if (productData.salesPrice != productData.price) {
+					domHelper.addClass(fullPriceElement, 'lined_price')
+					fullPriceElement.style.display = 'block'
+				}
+			}
+			if(priceCell.indexOf('priceTitleElement') > -1) {
+				var priceTitleElement = self.makeElement('div', 'shoppingbasket_table_price_title', cellElement)
+				priceTitleElement.innerHTML = translationsLogics.get('shoppingbasket.table_price_title')
+			}
+
+			priceElement = self.makeElement('div', 'shoppingbasket_table_price_value', cellElement)
+		}
+
+		/*
+		 removeCell:
+		 0: "deleteContainerParent"
+		 0: "deleteContainer"
+		 1: "deleteElementText"
+		 */
+		/* default
+         removeCell:
+         1: "deleteElementButton"
+         */
+		if(basketView['removeCell']){
+			let removeCell = basketView['removeCell'];
+			let cellElement;
+			let deleteContainer;
+			let deleteElement;
+			if(removeCell.indexOf('deleteContainer') > -1) {
+				// if(removeCell.indexOf('deleteContainerParent') > -1){
+				// 	cellElement = priceElement;
+				// }
+				//
+				deleteContainer = self.makeElement('div', 'shoppingbasket_table_delete_container', priceCellContainer);
+				deleteElement = self.makeElement('div', 'shoppingbasket_table_remove', deleteContainer);
+				console.log(priceCellContainer)
+			}
+			else {
+				cellElement = self.makeElement('td', 'shoppingbasket_table_remove', self.componentElement);
+			}
+
+			if(removeCell.indexOf('deleteElementText') > -1) {
+				deleteElement.innerHTML = translationsLogics.get('shoppingbasket.productstable_remove');
+				eventsManager.addHandler(deleteElement, 'click', removeClickHandler)
+			}
+			else {
+				removeButton = self.makeElement('a', 'shoppingbasket_table_remove_button', cellElement);
+				eventsManager.addHandler(removeButton, 'click', removeClickHandler);
+			}
+		}
+
+	};
+
 	var plusClickHandler = function(event) {
 		eventsManager.preventDefaultAction(event)
 		var amount = parseInt(amountInput.value, 10)
@@ -594,10 +750,14 @@ window.ShoppingBasketSelectionProduct = function(initData) {
 		} else {
 			imageElement.style.display = 'none'
 		}
-
+		if (categoryTitle){
+			categoryTitle.innerHTML = productData.category
+		}
 		titleElement.innerHTML = productData.title
-		titleElement.href = productData.url
-		codeElement.innerHTML = window.translationsLogics.get('shoppingbasket.productstable_productcode') + ': ' + productData.code
+		titleElement.href = productData.url;
+		if (codeElement){
+			codeElement.innerHTML = window.translationsLogics.get('shoppingbasket.productstable_productcode') + ': ' + productData.code
+		}
 		var variations = []
 		if (productData.variation) {
 			if (typeof productData.variation == 'object' && productData.variation.length) {
@@ -629,8 +789,9 @@ window.ShoppingBasketSelectionProduct = function(initData) {
 			} else {
 				fullPriceElement.style.display = 'none'
 			}
-
-			totalPriceElement.innerHTML = domHelper.roundNumber(productData.totalSalesPrice, 2) + ' ' + window.selectedCurrencyItem.symbol
+			if(totalPriceElement){
+				totalPriceElement.innerHTML = domHelper.roundNumber(productData.totalSalesPrice, 2) + ' ' + window.selectedCurrencyItem.symbol;
+			}
 		}
 		amountInput.value = productData.amount
 	}
@@ -922,14 +1083,16 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
 		if (info.error != '0' && info.error) {
 			componentElement.className = 'form_error'
 		}
-		labelElement = self.makeElement('td', 'form_label', componentElement)
-		starElement = self.makeElement('td', 'form_star', componentElement)
-		fieldElement = self.makeElement('td', 'form_field', componentElement)
+		var container = self.makeElement('td', 'form_container', componentElement)
+		container.style.width = '100%'
+		labelElement = self.makeElement('span', 'form_label', container)
+		starElement = self.makeElement('span', 'form_star', container)
+		fieldElement = self.makeElement('div', 'form_field', container)
 
 		if (info.required) {
 			starElement.innerHTML = '*'
 		}
-		labelElement.innerHTML = info.title + ':'
+		labelElement.innerHTML = info.title
 		if (info.fieldType == 'select') {
 			var parameters = {}
 			parameters.className = 'shoppingbasket_delivery_form_dropdown'
