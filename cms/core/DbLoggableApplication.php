@@ -34,7 +34,7 @@ trait DbLoggableApplication
             if ($this->transportObject) {
                 if ($log = $this->transportObject->getQueriesHistory()) {
                     foreach ($log as $item) {
-                        $text .= $item . "\r\n";
+                        $text .= $item . ";\r\n";
                     }
                 }
             }
@@ -46,7 +46,7 @@ trait DbLoggableApplication
                             $binding = "'" . array_shift($item['bindings']) . "'";
                             $query = substr_replace($query, $binding, stripos($query, '?'), 1);
                         }
-                        $text .= $item['time'] . "\t" . $query . "\r\n";
+                        $text .= $item['time'] . "\t" . $query . ";\r\n";
                     }
                 }
             }

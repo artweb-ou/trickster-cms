@@ -67,10 +67,12 @@ abstract class ProductsListElement extends menuStructureElement
          * @var Connection $db
          */
         $db = $this->getService('db');
+        $languagesManager = $this->getService('languagesManager');
 
         //basic query to get all non-hidden products available in stock
         $query = $db->table('module_product');
-        $query->select(['module_product.id', 'module_product.title', 'module_product.brandId', 'module_product.availability', 'module_product.price'])->distinct();
+        $query->select(['module_product.id', 'module_product.title', 'module_product.brandId', 'module_product.availability', 'module_product.price']);
+        $query->where('module_product.languageId', '=', $languagesManager->getCurrentLanguageId());
         $query->where(function (Builder $query) {
             $query->where('inactive', '!=', '1');
             $query->where(function (Builder $query) {
