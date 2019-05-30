@@ -1,5 +1,5 @@
 window.BasketButtonComponent = function(componentElement, onClick) {
-	let addToBasketButtonAction = window.addToBasketButtonAction;
+	var addToBasketButtonAction = window.addToBasketButtonAction;
 	/*
 addToBasketButtonAction
 '0' => 'action_none',
@@ -31,8 +31,8 @@ addToBasketButtonAction
 
 		if(addToBasketButtonAction) {
 			var message = [];
-			let additionalContainerClassName = 'notice_box';
-			let additionalClassName = 'notice_basket';
+			var additionalContainerClassName = 'notice_box';
+			var additionalClassName = 'notice_basket';
 			var currentProduct = document.createElement('span');
 			currentProduct.className = 'notice_product_name';
 			currentProduct.textContent  = window.productDetailsData.name || window.productDetailsData.name_ga;
@@ -80,8 +80,8 @@ addToBasketButtonAction
 		unRegisterEventHandlers();
 		if(addToBasketButtonAction) {
 			var message = [];
-			let additionalContainerClassName = 'notice_box';
-			let additionalClassName = 'notice_basket';
+			var additionalContainerClassName = 'notice_box';
+			var additionalClassName = 'notice_basket';
 			message['title'] = window.productDetailsData.name || window.productDetailsData.name_ga;
 			message['content'] = window.translationsLogics.get('product.quantityunavailable');
 			message['footer'] = '';
