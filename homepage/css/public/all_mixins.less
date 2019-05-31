@@ -104,13 +104,6 @@
   clear: both;
 }
 
-.__transition_01__(@what, @time, @method) {
-  -webkit-transition: @what @time @method;
-  transition: @what @time @method;
-}
-
-;
-
 .svg-bg(@svgFile,@color,@stroke) {
   @svgContent: encodeSvgContent(@svgFile, @color, @stroke);
   background-image: url("@{svgContent}");
