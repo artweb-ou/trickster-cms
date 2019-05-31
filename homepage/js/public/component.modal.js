@@ -15,6 +15,7 @@ window.ModalComponent = function(referralElement) {
 	var init = function() {
 		var makeElement = self.makeElement;
 		modalContainer = makeElement('div', MODAL_CONTAINER);
+
 		componentElement = makeElement('div', 'modal', modalContainer);
 
 		var element 		= makeElement('div', 'modal_header', componentElement);
@@ -26,9 +27,6 @@ window.ModalComponent = function(referralElement) {
 		var buttonElement = makeElement('div', 'modal_closebutton', element);
 		eventsManager.addHandler(buttonElement, 'click', closeClick);
 		footerElement = makeElement('div', 'modal_footer', componentElement);
-
-
-
 	};
 	var closeClick = function(event) {
 		eventsManager.preventDefaultAction(event);
@@ -58,7 +56,7 @@ window.ModalComponent = function(referralElement) {
 		}
 		displayed = newDisplayed;
 		if (displayed) {
-			DarkLayerComponent.showLayer(closeClick, self.displayComponent, false); // onclickFunction, callback, allowClose
+			DarkLayerComponent.showLayer(closeClick, self.displayComponent, true); // onclickFunction, callback, allowClose
 			domHelper.addClass(document.body, UNDER_MODAL);
 			document.body.appendChild(modalContainer);
 			self.addClass(CLASS_OPEN);
