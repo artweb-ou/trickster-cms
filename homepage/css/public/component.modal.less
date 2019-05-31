@@ -1,156 +1,158 @@
 .under_modal {
-  .modal_container {
-    position: fixed;
-    box-sizing: border-box;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: 99;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex-basis: 100%;
-    align-content: flex-start;
-    justify-self: flex-start;
-    align-self: flex-start;
-    justify-items: center;
-  }
+	.modal_container {
+		position: fixed;
+		box-sizing: border-box;
+		left: 0;
+		right: 0;
+		top: 0;
+		z-index: 99;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		flex-basis: 100%;
+		align-content: flex-start;
+		justify-self: flex-start;
+		align-self: flex-start;
+		justify-items: center;
+		pointer-events: none;
+	}
 }
 
 @keyframes modal_display_anim {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
+	0% {
+		opacity: 0;
+	}
+	
+	100% {
+		opacity: 1;
+	}
 }
 
 .modal {
-  display: none;
-  box-sizing: border-box;
-  flex-direction: column;
-  background-color: @trick_bg_color_01;
-  z-index: 1000;
-  opacity: 0;
-  width: 26rem;
-  justify-self: center;
-  flex-wrap: nowrap;
-  align-items: stretch;
+	display: none;
+	box-sizing: border-box;
+	flex-direction: column;
+	background-color: @trick_bg_color_01;
+	z-index: 1000;
+	opacity: 0;
+	width: 26rem;
+	justify-self: center;
+	flex-wrap: nowrap;
+	align-items: stretch;
+	pointer-events: auto;
 
-  &.modal_buttons {
-    border: @5pt solid @trick_brd_color_12;
-    margin-top: -1*@10pt;
-  }
-
-  &_header {
-    display: flex;
-    flex: none;
-    padding: .6rem 0.8rem;
-    align-items: center;
-    background-color: @trick_bg_color_02;
-    box-sizing: border-box;
-
-    &:empty {
-      display: none;
-    }
-  }
-
-  &_content {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: auto;
-    padding: 1.2rem 0.8rem 1.6rem;
-    position: relative;
-
-    &:empty {
-      display: none;
-    }
-  }
-
-  .modal_link {
-    color: inherit;
-    border-bottom: 1px solid currentColor;
-    display: inline;
-    text-decoration: none;
-    line-height: 1.44;
-
-    &:hover, &:focus {
-      color: @trick_text_color_02;
-      text-decoration: none;
-    }
-  }
-
-  &_footer {
-    flex: none;
-    padding: 0.8rem;
-    text-align: center;
-
-    &:empty {
-      display: none;
-    }
-  }
-
-  &_title {
-    flex: 1 1 auto;
-    color: @trick_text_color_01;
-
-    &:empty {
-      display: none;
-    }
-  }
-
-  &_closebutton {
-    .svg-bg(@trick_basket_close, false, @trick_text_color_01); // svg name without ext, 'fill', stroke color
-    background-repeat: no-repeat;
-    width: 2.5rem;
-    height: 2.5rem;
-    background-size: 65%;
-    flex: none;
-    cursor: pointer;
-    background-position: 100% 50%;
-
-    &:hover, &:focus {
-      .svg-bg(@trick_basket_close, false, @trick_brd_color_10); // svg name without ext, 'fill', stroke color
-    }
-  }
-
-  &_footer .button {
-    display: block;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    flex-basis: 100%;
-    line-height: inherit;
-    margin-right: 0.8rem;
-
-    &:last-child {
-      margin-right: 0;
-    }
-
-  }
-
-  &_footer .buttons {
-    &.modal_footer_inner {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-
-      .button {
-        line-height: 1.25;
-      }
-    }
-  }
-
+	&.modal_buttons {
+		border: @5pt solid @trick_brd_color_12;
+		margin-top: -1*@10pt;
+	}
+	
+	&_header {
+		display: flex;
+		flex: none;
+		padding: .6rem 0.8rem;
+		align-items: center;
+		background-color: @trick_bg_color_02;
+		box-sizing: border-box;
+		
+		&:empty {
+			display: none;
+		}
+	}
+	
+	&_content {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow: auto;
+		padding: 1.2rem 0.8rem 1.6rem;
+		position: relative;
+		
+		&:empty {
+			display: none;
+		}
+	}
+	
+	.modal_link {
+		color: inherit;
+		border-bottom: 1px solid currentColor;
+		display: inline;
+		text-decoration: none;
+		line-height: 1.44;
+		
+		&:hover, &:focus {
+			color: @trick_text_color_02;
+			text-decoration: none;
+		}
+	}
+	
+	&_footer {
+		flex: none;
+		padding: 0.8rem;
+		text-align: center;
+		
+		&:empty {
+			display: none;
+		}
+	}
+	
+	&_title {
+		flex: 1 1 auto;
+		color: @trick_text_color_01;
+		
+		&:empty {
+			display: none;
+		}
+	}
+	
+	&_closebutton {
+		.svg-bg(@trick_basket_close, false, @trick_text_color_01); // svg name without ext, 'fill', stroke color
+		background-repeat: no-repeat;
+		width: 2.5rem;
+		height: 2.5rem;
+		background-size: 65%;
+		flex: none;
+		cursor: pointer;
+		background-position: 100% 50%;
+		
+		&:hover, &:focus {
+			.svg-bg(@trick_basket_close, false, @trick_brd_color_10); // svg name without ext, 'fill', stroke color
+		}
+	}
+	
+	&_footer .button {
+		display: block;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		flex-basis: 100%;
+		line-height: inherit;
+		margin-right: 0.8rem;
+		
+		&:last-child {
+			margin-right: 0;
+		}
+		
+	}
+	
+	&_footer .buttons {
+		&.modal_footer_inner {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			
+			.button {
+				line-height: 1.25;
+			}
+		}
+	}
+	
 }
 
 .modal.is_open {
-  display: flex;
-  opacity: 1;
-  animation: modal_display_anim 0.25s ease-in-out;
+	display: flex;
+	opacity: 1;
+	animation: modal_display_anim 0.25s ease-in-out;
 }
