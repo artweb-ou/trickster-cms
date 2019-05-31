@@ -3,8 +3,9 @@
 
 {$views['imageCell'] = "imageElement"}
 {$views['infoCell'] = "tableTitleElement, titleElement, codeElement, descriptionElement"}
-{$views['amountCell'] = ""}
 {$views['priceCell'] = "fullPriceElement, salesPriceElement"}
+{$views['amountCell'] = "amountInput"}
+{$views['totalPriceCell'] = "totalPriceElement"}
 {$views['removeCell'] = "deleteElementButton"}
 {foreach $views as $viewKey=>$viewValue }
 	{$viewsArr = $viewsArr|cat:' data-'|cat:$viewKey|cat:'="'|cat:$viewValue|cat:'"'}
