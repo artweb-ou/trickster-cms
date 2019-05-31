@@ -218,7 +218,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 		var popupWidth = parseFloat(popupStyle.width);
 
 		if (hintPointer) {
-			popupPointerStyle = getComputedStyle(componentElement, 'before');
+			popupPointerStyle = getComputedStyle(componentElement, ':before');
 		}
 		var xPosition = 0;
 		if (fixedX) {
@@ -233,9 +233,9 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 			let popupPointerRight = parseFloat(popupPointerStyle.right);
 			let referralWidth = parseFloat(referralStyle.width) - parseFloat(referralStyle.paddingLeft) - parseFloat(referralStyle.paddingRight);
 			let referralRight = referralPosition.right;
-
 			xPosition = referralRight - referralWidth/2 - popupWidth + popupPointerWidth /2 + popupPointerRight;
 		}
+		console.log('hintPointer ', hintPointer)
 		var yPosition = 0;
 		if (fixedY) {
 			yPosition = fixedY - popupHeight;
