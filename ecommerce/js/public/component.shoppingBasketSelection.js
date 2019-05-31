@@ -568,7 +568,7 @@ window.ShoppingBasketSelectionProduct = function(initData) {
         var priceTitleElement = self.makeElement('div', 'shoppingbasket_table_price_title', cellElement);
         priceTitleElement.innerHTML = translationsLogics.get('shoppingbasket.table_price_title');
       }
-      priceElement = self.makeElement('div', 'shoppingbasket_table_price_value', cellElement)
+      priceElement = self.makeElement('div', 'shoppingbasket_table_price_value', cellElement);
     }
 
     /*
@@ -1060,18 +1060,15 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
   var fieldElement;
   var fieldComponent;
   var textareaElement;
-  var formElement;
 
   var init = function() {
     componentElement = document.createElement('tr');
     if (info.error != '0' && info.error) {
       componentElement.className = 'form_error';
     }
-    var container = self.makeElement('td', 'form_container', componentElement);
-    container.style.width = '100%';
-    labelElement = self.makeElement('span', 'form_label', container);
-    starElement = self.makeElement('span', 'form_star', container);
-    fieldElement = self.makeElement('div', 'form_field', container);
+    labelElement = self.makeElement('td', 'form_label', componentElement);
+    starElement = self.makeElement('td', 'form_star', componentElement);
+    fieldElement = self.makeElement('td', 'form_field', componentElement);
 
     if (info.required) {
       starElement.innerHTML = '*';
