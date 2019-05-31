@@ -17,6 +17,7 @@
 		justify-self: flex-start;
 		align-self: flex-start;
 		justify-items: center;
+		pointer-events: none;
 	}
 }
 
@@ -29,7 +30,6 @@
 		opacity: 1;
 	}
 }
-
 .modal {
 	display: none;
 	box-sizing: border-box;
@@ -43,6 +43,7 @@
 	flex-wrap: nowrap;
 	align-items: stretch;
 	transition: all .8s linear;
+	pointer-events: auto;
 	
 	&.modal_buttons {
 		border: 5px solid @trick_brd_color_12;
