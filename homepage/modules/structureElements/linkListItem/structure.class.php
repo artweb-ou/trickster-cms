@@ -1,8 +1,9 @@
 <?php
 
-class linkListItemElement extends structureElement implements ConfigurableLayoutsElementsInterface
+class linkListItemElement extends structureElement implements ConfigurableLayoutsElementsInterface, ImageUrlProviderInterface
 {
     use SearchTypesProviderTrait;
+	use ImageUrlProviderTrait;
     public $dataResourceName = 'module_linklist_item';
     public $defaultActionName = 'show';
     public $role = 'content';
