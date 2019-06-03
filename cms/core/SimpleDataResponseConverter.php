@@ -7,7 +7,7 @@ trait SimpleDataResponseConverter
         return [
             'id' => 'id',
             'title' => 'title',
-            'searchTitle' => 'getSearchTitle',
+            'searchTitle' => 'title',
             'url' => 'getUrl',
             'structureType' => 'structureType',
             'dateCreated' => function ($element) {
