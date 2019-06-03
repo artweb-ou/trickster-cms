@@ -35,12 +35,15 @@ function FileInputComponent(inputElement) {
 
 		inputElement.parentNode.insertBefore(componentElement, inputElement);
 		componentElement.appendChild(inputElement);
+		if(inputElement.dataset.inrow) {
+			componentElement.appendChild(inputElement.form.querySelector(inputElement.dataset.inrow));
+		}
 		eventsManager.addHandler(componentElement, 'click', clickHandler);
 	};
 	var processInputElement = function() {
 		inputElement.style.position = 'absolute';
 		inputElement.style.visibility = 'hidden';
-		inputElement.style.left = 0;
+		inputElement.style.left = '-1000px';
 		inputElement.style.top = 0;
 
 		eventsManager.addHandler(inputElement, 'change', synchronizeContent);
