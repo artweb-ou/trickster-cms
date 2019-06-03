@@ -1,28 +1,53 @@
 <?php
 
-class serviceDataResponseConverter extends dataResponseConverter
+class serviceDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
+    protected $defaultPreset = 'api';
+
+    protected function getRelationStructure()
     {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['structureType'] = $element->structureType;
-            $info['structurePath'] = $element->structurePath;
-            $info['title'] = $element->title;
-            $info['url'] = $element->URL;
-            $info['content'] = $element->content;
-            $info['introductionText'] = $this->htmlToPlainText($element->introduction);
-            $info['contentText'] = $this->htmlToPlainText($element->content);
-            $info['image'] = $element->image;
-            if ($relatedLanguage = $element->getRelatedLanguageElement()) {
-                $info['language'] = $relatedLanguage->iso6393;
-            } else {
-                $info['language'] = "";
-            }
-            $result[] = $info;
-        }
-        return $result;
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'searchTitle' => function ($element) {
+                if ($relatedLanguage = $element->getRelatedLanguageElement()) {
+                    return $element->title . '(' . $relatedLanguage->iso6393 . ')';
+                } else {
+                    return $element->title;
+                }
+            }, 'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'image' => 'image',
+            'content' => 'content',
+            'introduction' => 'introduction',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+                'image',
+                'content',
+                'introduction',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+            ],
+        ];
     }
 }

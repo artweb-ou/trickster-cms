@@ -1,17 +1,7 @@
 <?php
 
-class floorDataResponseConverter extends dataResponseConverter
+class floorDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
-    {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['title'] = $element->title;
-            $info['url'] = $element->URL;
-            $result[] = $info;
-        }
-        return $result;
-    }
+    use SimpleDataResponseConverter;
+    protected $defaultPreset = 'api';
 }

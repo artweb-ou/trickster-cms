@@ -1,17 +1,8 @@
 <?php
 
-class eventsListDataResponseConverter extends dataResponseConverter
+class eventsListDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
-    {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['title'] = $element->title;
-            $result[] = $info;
-        }
-        return $result;
-    }
+    use SimpleDataResponseConverter;
+    protected $defaultPreset = 'api';
 }
 

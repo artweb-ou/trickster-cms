@@ -257,11 +257,12 @@
             80,
         ],
     ],
+    //this one would become deprecated in 06.2020
     'productIcon' => [
         'filters' => [
             [
                 'reduce',
-                'width=240, height=240',
+                'width=100, height=50',
             ],
         ],
         'format' => [
@@ -269,11 +270,11 @@
             'png',
         ],
     ],
-    'productIconBig' => [
+    'productIconDynamic' => [
         'filters' => [
             [
                 'reduce',
-                'width=128, height=128',
+                'width=240, height=240',
             ],
         ],
         'format' => [

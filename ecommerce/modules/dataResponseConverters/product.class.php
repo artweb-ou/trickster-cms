@@ -1,29 +1,55 @@
 <?php
 
-class productDataResponseConverter extends dataResponseConverter
+class productDataResponseConverter extends StructuredDataResponseConverter
 {
-    /**
-     * @param productElement[] $data
-     * @return array
-     */
-    public function convert($data)
+    protected $defaultPreset = 'api';
+
+    protected function getRelationStructure()
     {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['searchTitle'] = ''.$element->getSearchTitle();
-            $info['structureType'] = $element->structureType;
-            $info['structurePath'] = $element->structurePath;
-            $info['title'] = $element->title ? $element->title : $element->structureName;
-            $info['url'] = $element->URL;
-            $info['introduction'] = $element->introduction;
-            $info['content'] = $element->content;
-            $info['introductionText'] = $this->htmlToPlainText($element->introduction);
-            $info['contentText'] = $this->htmlToPlainText($element->content);
-            $info['image'] = $element->image;
-            $result[] = $info;
-        }
-        return $result;
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'searchTitle' => 'getSearchTitle',
+            'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'image' => 'image',
+            'content' => 'content',
+            'introduction' => 'introduction',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+            'introductionText' => function ($element, $scope) {
+                return $scope->htmlToPlainText($element->introduction);
+            },
+            'contentText' => function ($element, $scope) {
+                return $scope->htmlToPlainText($element->content);
+            },
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+                'image',
+                'content',
+                'introduction',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+                'introductionText',
+            ],
+        ];
     }
 }

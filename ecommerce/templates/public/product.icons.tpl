@@ -4,8 +4,12 @@
             {if $iconInfo.iconLocation == $cellLocation}
                 {if !empty($iconInfo.image)}
                     <img class='product_icon product_icon_image {$iconInfo.iconRole}'
-                         {if !empty($iconInfo.width)}style="width:{$iconInfo.width * 2}%;"{/if}
-                         src='{$controller->baseURL}image/type:productIcon/id:{$iconInfo.image}/filename:{$iconInfo.fileName}'
+                         {if !empty($iconInfo.width)}
+                            style="width:{$iconInfo.width * 2}%;"
+                            src='{$controller->baseURL}image/type:productIconDynamic/id:{$iconInfo.image}/filename:{$iconInfo.fileName}'
+                         {else}
+                            src='{$controller->baseURL}image/type:productIcon/id:{$iconInfo.image}/filename:{$iconInfo.fileName}'
+                         {/if}
                          alt='{$iconInfo.title}'
                     />
                 {elseif !empty($iconInfo.title)}

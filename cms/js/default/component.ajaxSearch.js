@@ -7,6 +7,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
     var resultsLimit = 30;
 
     var customResultsElement;
+    var customShowedElementComponents;
     var totalsElement;
     var getValueCallback;
     var clickCallback;
@@ -14,12 +15,10 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
     var types;
     var searchString;
     var apiMode = 'public';
-    var language = '';
     var filters = '';
     var position = 'absolute';
     this.displayInElement = false;
     this.displayTotals = false;
-    this.customShowedElementComponents;
 
     this.componentElement = null;
     this.inputElement = null;
@@ -53,7 +52,6 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
             window.addEventListener('click', windowClickHandler);
         }
         controller.addListener('ajaxSearchResultsReceived', updateData);
-
     };
     var parseParameters = function(parameters) {
         if (typeof parameters.clickCallback !== 'undefined') {
@@ -76,9 +74,6 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
         }
         if (typeof parameters.resultsLimit !== 'undefined') {
             resultsLimit = parseInt(parameters.resultsLimit, 10);
-        }
-        if (typeof parameters.language !== 'undefined') {
-            language = parameters.language;
         }
         if (typeof parameters.filters !== 'undefined') {
             filters = parameters.filters;
@@ -214,7 +209,9 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
             clickCallback(data);
         }
     };
-
+    this.getCustomShowedElementComponents = function(){
+      return customShowedElementComponents;
+    };
     this.setTypes = function(newTypes) {
         types = newTypes;
     };
@@ -339,9 +336,9 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
         return false;
     };
     var updateView = function() {
-        let formElement = parentObject.inputElement.form;
-        let searchElementBoxViewArray = [];
-        let searchElementBoxView = [];
+        var formElement = parentObject.inputElement.form;
+        var searchElementBoxViewArray = [];
+        var searchElementBoxView = [];
 
         if(formElement) {
             if (formElement.dataset.openview && formElement.dataset.openview != '') {
@@ -350,7 +347,7 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
                 searchElementBoxView['class'] = searchElementBoxViewArray[1];
 
                 if (searchElementBoxView['box'] != '' && searchElementBoxView['class'] != '') {
-                    let elementBox = document.querySelector(searchElementBoxView['box']);
+                    var elementBox = document.querySelector(searchElementBoxView['box']);
                     if (window.searchBoxView > 0) {
                         domHelper.addClass(elementBox, searchElementBoxView['class']);
                     }
@@ -389,6 +386,9 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
         eventsManager.preventDefaultAction(event);
         eventsManager.cancelBubbling(event);
     };
+    this.getCustomShowedElementComponents = function(){
+      return parentObject.getCustomShowedElementComponents();
+    };
     init();
 };
 DomElementMakerMixin.call(AjaxSearchResultsComponent.prototype);
@@ -410,19 +410,21 @@ window.AjaxSearchResultsItemComponent = function(data, parentObject) {
 
         componentElement.className = 'ajaxsearch_results_item';
         var title = data.title;
-        if (typeof data.language !== 'undefined') {
-            title = title + ' (' + data.language + ') ';
-        }
 
         //   showedElementComponents, set in tpl
         subTitle = '';
-        if (typeof customShowedElementComponents != 'undefined' && customShowedElementComponents.split(",").indexOf("introductionText") > 0) {
-            subTitle = data.introductionText;
-            if (typeof data.language !== 'undefined') {
-                subTitle = subTitle + ' (' + data.language + ') ';
+        var customShowedElementComponents = parentObject.getCustomShowedElementComponents();
+        if (customShowedElementComponents){
+            var properties = parentObject.getCustomShowedElementComponents().split(",");
+            for (var i=0; i<properties.length;i++){
+                var name = properties[i];
+                if (typeof data[name] !== 'undefined'){
+                    subTitle = data[name]+' ';
+                }
             }
         }
-        var productTotals = '';
+
+      var productTotals = '';
         if (parentObject.displayTotals && data.productsCount) {
             productTotals = ' <span class="found_count">(' + data.productsCount + ')</span>';
         }

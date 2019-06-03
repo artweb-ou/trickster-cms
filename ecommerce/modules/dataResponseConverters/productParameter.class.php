@@ -1,23 +1,48 @@
 <?php
 
-class productParameterDataResponseConverter extends dataResponseConverter
+class productParameterDataResponseConverter extends StructuredDataResponseConverter
 {
-    /**
-     * @param structureElement[] $data
-     * @return array
-     */
-    public function convert($data)
+    protected $defaultPreset = 'api';
+
+    protected function getRelationStructure()
     {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['title'] = $element->title;
-            if ($parameterGroup = $element->getParameterGroup()) {
-                $info['title'] .= " (" . $parameterGroup->getTitle() . ")";
-            }
-            $result[] = $info;
-        }
-        return $result;
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'searchTitle' => function ($element) {
+                if ($parameterGroup = $element->getParameterGroup()) {
+                    return $element->title . '(' . $parameterGroup->getTitle() . ')';
+                } else {
+                    return $element->title;
+                }
+            },
+            'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+            ],
+        ];
     }
 }

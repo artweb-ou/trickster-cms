@@ -7,7 +7,7 @@
             {if $formData.$fieldName.$languageId != ""}
                 <img{if !empty($item.class)} class="{$item.class}_image"{/if} src='{$controller->baseURL}image/type:adminImage/id:{$image}/filename:{$formData.originalName.$languageId}' />
                 <br />
-                <a href="{$element->URL}id:{$element->id}/action:deleteImage/language:{$languageId}/">{translations name="{$structureType}.deleteimage"}</a>
+                <a href="{$element->URL}id:{$element->id}/action:deleteFile/file:{$fieldName}/language:{$languageId}/">{translations name="{$structureType}.deleteimage"}</a>
             {else}
                 <input class="fileinput_placeholder" type="file" name="{$formNames.$fieldName.$languageId}" />
             {/if}

@@ -54,4 +54,14 @@ abstract class TranslationStructureElement extends structureElement
     {
         return $this->structureName;
     }
+
+    public function getSearchTitle()
+    {
+        $title = $this->getTitle();
+
+        if ($parentGroup = $this->getCurrentParentElement()) {
+            $title = $parentGroup->getTitle() . '.' . $title;
+        }
+        return $title;
+    }
 }
