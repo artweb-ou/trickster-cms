@@ -15,7 +15,6 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
     var types;
     var searchString;
     var apiMode = 'public';
-    var language = '';
     var filters = '';
     var position = 'absolute';
     this.displayInElement = false;
@@ -75,9 +74,6 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
         }
         if (typeof parameters.resultsLimit !== 'undefined') {
             resultsLimit = parseInt(parameters.resultsLimit, 10);
-        }
-        if (typeof parameters.language !== 'undefined') {
-            language = parameters.language;
         }
         if (typeof parameters.filters !== 'undefined') {
             filters = parameters.filters;
@@ -340,9 +336,9 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
         return false;
     };
     var updateView = function() {
-        let formElement = parentObject.inputElement.form;
-        let searchElementBoxViewArray = [];
-        let searchElementBoxView = [];
+        var formElement = parentObject.inputElement.form;
+        var searchElementBoxViewArray = [];
+        var searchElementBoxView = [];
 
         if(formElement) {
             if (formElement.dataset.openview && formElement.dataset.openview != '') {
@@ -351,7 +347,7 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
                 searchElementBoxView['class'] = searchElementBoxViewArray[1];
 
                 if (searchElementBoxView['box'] != '' && searchElementBoxView['class'] != '') {
-                    let elementBox = document.querySelector(searchElementBoxView['box']);
+                    var elementBox = document.querySelector(searchElementBoxView['box']);
                     if (window.searchBoxView > 0) {
                         domHelper.addClass(elementBox, searchElementBoxView['class']);
                     }
@@ -414,14 +410,11 @@ window.AjaxSearchResultsItemComponent = function(data, parentObject) {
 
         componentElement.className = 'ajaxsearch_results_item';
         var title = data.title;
-        if (typeof data.language !== 'undefined') {
-            title = title + ' (' + data.language + ') ';
-        }
 
         //   showedElementComponents, set in tpl
         subTitle = '';
-        var customShowedELementComponents = parentObject.getCustomShowedElementComponents();
-        if (customShowedELementComponents){
+        var customShowedElementComponents = parentObject.getCustomShowedElementComponents();
+        if (customShowedElementComponents){
             var properties = parentObject.getCustomShowedElementComponents().split(",");
             for (var i=0; i<properties.length;i++){
                 var name = properties[i];

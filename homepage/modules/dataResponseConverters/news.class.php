@@ -1,29 +1,60 @@
 <?php
 
-class newsDataResponseConverter extends dataResponseConverter
+class newsDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
-    {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['structureType'] = $element->structureType;
-            $info['title'] = $element->title;
-            $info['url'] = $element->URL;
-            $info['introduction'] = $element->introduction;
-            $info['content'] = $element->content;
-            $info['introductionText'] = $this->htmlToPlainText($element->introduction);
-            $info['contentText'] = $this->htmlToPlainText($element->content);
-            $info['image'] = $element->image;
-            if ($relatedLanguage = $element->getRelatedLanguageElement()) {
-                $info['language'] = $relatedLanguage->iso6393;
-            } else {
-                $info['language'] = "";
-            }
-            $result[] = $info;
-        }
+    protected $defaultPreset = 'api';
 
-        return $result;
+    protected function getRelationStructure()
+    {
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'searchTitle' => function ($element) {
+                if ($relatedLanguage = $element->getRelatedLanguageElement()) {
+                    return $element->title . '(' . $relatedLanguage->iso6393 . ')';
+                } else {
+                    return $element->title;
+                }
+            }, 'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'image' => 'image',
+            'content' => 'content',
+            'introduction' => 'introduction',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+            'introductionText' => function ($element, $scope) {
+                return $scope->htmlToPlainText($element->introduction);
+            },
+            'contentText' => function ($element, $scope) {
+                return $scope->htmlToPlainText($element->content);
+            },
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+                'image',
+                'content',
+                'introduction',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+                'introductionText',
+            ],
+        ];
     }
 }

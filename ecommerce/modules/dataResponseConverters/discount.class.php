@@ -1,23 +1,50 @@
 <?php
 
-class discountDataResponseConverter extends dataResponseConverter
+class discountDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
-    {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['title'] = $element->title;
-            $info['url'] = $element->URL;
-            $info['image'] = $element->image;
-            $info['icon'] = $element->icon;
-            $info['link'] = $element->link;
-            $info['content'] = $element->content;
-            $result[] = $info;
-        }
+    protected $defaultPreset = 'api';
 
-        return $result;
+    protected function getRelationStructure()
+    {
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'searchTitle' => 'title',
+            'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'image' => 'image',
+            'icon' => 'icon',
+            'link' => 'link',
+            'content' => 'content',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+                'image',
+                'icon',
+                'link',
+                'content',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+            ],
+        ];
     }
 }
-
