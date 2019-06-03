@@ -3,169 +3,169 @@
 @mobileheader_height: 3.5em;
 
 .mobileheader {
-  position: relative;
-  padding-top: @mobileheader_height;
-  z-index: 32;
-  @media (min-width: @screen_breakpoint_md) {
-    & {
-      display: none !important;
-    }
-  }
-
-  .breadcrumbs_block {
-    padding: 0.25em 1em;
-  }
+	position: relative;
+	padding-top: @mobileheader_height;
+	z-index: 32;
+	@media (min-width: @screen_breakpoint_md) {
+		& {
+			display: none !important;
+		}
+	}
+	
+	.breadcrumbs_block {
+		padding: 0.25em 1em;
+	}
 }
 
 .mobileheader_inner {
-  background-color: @header_background_color;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+	background-color: @header_background_color;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
 }
 
 .mobileheader_drawer {
-  height: 0;
-  overflow: hidden;
-
-  .search_form {
-    display: flex;
-  }
-
-  .search_form .input_component {
-    flex: 1;
-  }
-
-  .header_search_controls {
-    flex: none;
-  }
-
-  .login_status_logout {
-    margin-left: 1em;
-  }
-
-  .login_remember {
-    margin-bottom: 0.917em;
-  }
-
-  .mobile_header_login_button {
-    min-width: 7em;
-  }
-
-  .mobile_header_login_footer {
-    text-align: center;
-  }
-
-  .popup_component_controls {
-    text-align: center;
-  }
-
-  .mobile_header_login_recovery_link {
-    display: block;
-    text-align: center;
-    margin-top: 1.556em;
-  }
-
-  .mobile_header_login_register_link {
-    margin-top: 1.556em;
-    margin-left: -2.1em;
-    display: block;
-    text-align: center;
-
-    &:before {
-      content: '';
-      display: inline-block;
-      width: 2em;
-      height: 2em;
-      background: url(getImageUrl('register_icon.png')) no-repeat top left;
-      background-size: 100% 100%;
-      margin-right: 0.723em;
-      vertical-align: middle;
-    }
-  }
+	height: 0;
+	overflow: hidden;
+	
+	.search_form {
+		display: flex;
+	}
+	
+	.search_form .input_component {
+		flex: 1;
+	}
+	
+	.header_search_controls {
+		flex: none;
+	}
+	
+	.login_status_logout {
+		margin-left: 1em;
+	}
+	
+	.login_remember {
+		margin-bottom: 0.917em;
+	}
+	
+	.mobile_header_login_button {
+		min-width: 7em;
+	}
+	
+	.mobile_header_login_footer {
+		text-align: center;
+	}
+	
+	.popup_component_controls {
+		text-align: center;
+	}
+	
+	.mobile_header_login_recovery_link {
+		display: block;
+		text-align: center;
+		margin-top: 1.556em;
+	}
+	
+	.mobile_header_login_register_link {
+		margin-top: 1.556em;
+		margin-left: -2.1em;
+		display: block;
+		text-align: center;
+		
+		&:before {
+			content: '';
+			display: inline-block;
+			width: 2em;
+			height: 2em;
+			background: url(getImageUrl('register_icon.png')) no-repeat top left;
+			background-size: 100% 100%;
+			margin-right: 0.723em;
+			vertical-align: middle;
+		}
+	}
 }
 
 .mobileheader_drawer_content {
-  display: none;
-  padding: 1.25em 1.75em;
-  border-bottom: @mobileheader_line_width solid @primary_color;
-  box-sizing: border-box;
+	display: none;
+	padding: 1.25em 1.75em;
+	border-bottom: @mobileheader_line_width solid @primary_color;
+	box-sizing: border-box;
 }
 
 .mobileheader_main {
-  height: @mobileheader_height;
-  color: @mobileheader_text_color;
-  position: relative;
-  display: flex;
+	height: @mobileheader_height;
+	color: @mobileheader_text_color;
+	position: relative;
+	display: flex;
 }
 
 .mobileheader_logo {
-  position: relative;
-  display: block;
-  flex-shrink: 1;
-  flex-grow: 1;
-  height: 100%;
+	position: relative;
+	display: block;
+	flex-shrink: 1;
+	flex-grow: 1;
+	height: 100%;
 }
 
 .mobileheader_graphic {
-  position: absolute;
-  left: 0.25em;
-  right: 0.25em;
-  top: 0.5em;
-  bottom: 0.5em;
-  display: block;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-size: contain;
+	position: absolute;
+	left: 0.25em;
+	right: 0.25em;
+	top: 0.5em;
+	bottom: 0.5em;
+	display: block;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: contain;
 }
 
 .mobileheader_control {
-  position: relative;
-  border: 0;
-  margin-left: @mobileheader_line_width;
-  outline: none;
-  text-decoration: none;
-  padding: 0;
-  display: block;
-  box-sizing: content-box;
-  height: @mobileheader_height;
-  width: @mobileheader_height;
-  cursor: pointer;
-  color: inherit;
-  background: @primary_color none scroll 50% 50% no-repeat;
-  background-size: auto 39%;
-  flex-shrink: 0;
-  flex-grow: 0;
+	position: relative;
+	border: 0;
+	margin-left: @mobileheader_line_width;
+	outline: none;
+	text-decoration: none;
+	padding: 0;
+	display: block;
+	box-sizing: content-box;
+	height: @mobileheader_height;
+	width: @mobileheader_height;
+	cursor: pointer;
+	color: inherit;
+	background: @primary_color none scroll 50% 50% no-repeat;
+	background-size: auto 39%;
+	flex-shrink: 0;
+	flex-grow: 0;
 }
 
 .mobileheader_control_menu {
-  background-image: url(getImageUrl('mobileheader_menu.svg'));
-  background-size: 31% auto;
+	background-image: url(getImageUrl('mobileheader_menu.svg'));
+	background-size: 31% auto;
 }
 
 .mobileheader_control_search {
-  background-image: url(getImageUrl('mobileheader_search.svg'));
+	background-image: url(getImageUrl('mobileheader_search.svg'));
 }
 
 .mobileheader_control_user {
-  background-image: url(getImageUrl('mobileheader_user.svg'));
+	background-image: url(getImageUrl('mobileheader_user.svg'));
 }
 
 .mobileheader_control_cart {
-  background-image: url(getImageUrl('mobileheader_cart.svg'));
+	background-image: url(getImageUrl('mobileheader_cart.svg'));
 }
 
 .mobileheader_control_cart_active {
-  background-color: @secondary_color;
+	background-color: @secondary_color;
 }
 
 .mobileheader_cart_badge {
-  position: absolute;
-  font-size: 0.6em;
-  top: 0.3em;
-  left: 50%;
-  text-align: center;
-  min-width: 1em;
-  display: none;
+	position: absolute;
+	font-size: 0.6em;
+	top: 0.3em;
+	left: 50%;
+	text-align: center;
+	min-width: 1em;
+	display: none;
 }
