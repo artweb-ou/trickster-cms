@@ -36,15 +36,18 @@ function FileInputComponent(inputElement) {
 		inputElement.parentNode.insertBefore(componentElement, inputElement);
 		componentElement.appendChild(inputElement);
 		if(inputElement.dataset.inrow) {
-			componentElement.appendChild(inputElement.form.querySelector(inputElement.dataset.inrow));
+			let submit = inputElement.form.querySelector(inputElement.dataset.inrow).cloneNode(true);
+			componentElement.appendChild(submit);
+			submit.remove();
 		}
 		eventsManager.addHandler(componentElement, 'click', clickHandler);
 	};
 	var processInputElement = function() {
 		inputElement.style.position = 'absolute';
 		inputElement.style.visibility = 'hidden';
+		inputElement.style.left = 0;
 		inputElement.style.left = '-1000px';
-		inputElement.style.top = 0;
+		// inputElement.style.top = 0;
 
 		eventsManager.addHandler(inputElement, 'change', synchronizeContent);
 
@@ -55,6 +58,7 @@ function FileInputComponent(inputElement) {
 		let manusNimi = '';
 		let manus = '';
 		if(inputElement.value != '') {
+			console.log(inputElement.value)
 			manusSuurus = (this.files[0].size/1024/1024).toFixed(4);// + " MB"
 			manusNimi = this.files[0].name;
 			manus = manusNimi + ' (' + manusSuurus + '  MB)';
