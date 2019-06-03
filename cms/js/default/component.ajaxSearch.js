@@ -7,6 +7,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
     var resultsLimit = 30;
 
     var customResultsElement;
+    var customShowedElementComponents;
     var totalsElement;
     var getValueCallback;
     var clickCallback;
@@ -19,7 +20,6 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
     var position = 'absolute';
     this.displayInElement = false;
     this.displayTotals = false;
-    this.customShowedElementComponents;
 
     this.componentElement = null;
     this.inputElement = null;
@@ -53,7 +53,6 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
             window.addEventListener('click', windowClickHandler);
         }
         controller.addListener('ajaxSearchResultsReceived', updateData);
-
     };
     var parseParameters = function(parameters) {
         if (typeof parameters.clickCallback !== 'undefined') {
@@ -214,7 +213,9 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
             clickCallback(data);
         }
     };
-
+    this.getCustomShowedElementComponents = function(){
+      return customShowedElementComponents;
+    };
     this.setTypes = function(newTypes) {
         types = newTypes;
     };
@@ -389,6 +390,9 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
         eventsManager.preventDefaultAction(event);
         eventsManager.cancelBubbling(event);
     };
+    this.getCustomShowedElementComponents = function(){
+      return parentObject.getCustomShowedElementComponents();
+    };
     init();
 };
 DomElementMakerMixin.call(AjaxSearchResultsComponent.prototype);
@@ -416,13 +420,18 @@ window.AjaxSearchResultsItemComponent = function(data, parentObject) {
 
         //   showedElementComponents, set in tpl
         subTitle = '';
-        if (typeof customShowedElementComponents != 'undefined' && customShowedElementComponents.split(",").indexOf("introductionText") > 0) {
-            subTitle = data.introductionText;
-            if (typeof data.language !== 'undefined') {
-                subTitle = subTitle + ' (' + data.language + ') ';
+        var customShowedELementComponents = parentObject.getCustomShowedElementComponents();
+        if (customShowedELementComponents){
+            var properties = parentObject.getCustomShowedElementComponents().split(",");
+            for (var i=0; i<properties.length;i++){
+                var name = properties[i];
+                if (typeof data[name] !== 'undefined'){
+                    subTitle = data[name]+' ';
+                }
             }
         }
-        var productTotals = '';
+
+      var productTotals = '';
         if (parentObject.displayTotals && data.productsCount) {
             productTotals = ' <span class="found_count">(' + data.productsCount + ')</span>';
         }
