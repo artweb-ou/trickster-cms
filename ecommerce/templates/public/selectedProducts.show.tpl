@@ -4,13 +4,13 @@
 	{capture assign="moduleContent"}
 		{stripdomspaces}
 
-		{if $element->title}
+		{if !empty($element->getTitle())}
 			{capture assign="moduleTitle"}
-				{$element->title}
+				{$element->getTitle()}
 			{/capture}
 		{/if}
 
-		{if $element->content}
+		{if !empty($element->content)}
 			<div class='selectedproducts_content html_content'>
 				{$element->content}
 			</div>
@@ -80,7 +80,7 @@
 			{include file=$theme->template('pager.tpl') pager=$pager}
 		{/if}
 		{/stripdomspaces}
-		{if $element->link}
+		{if !empty($element->link)}
 		<div class="selectedproducts_view_all">
 			<a href="{$element->link}" class="button selectedproducts_view_all_button"><span class="button_text">{$element->linkText}</span></a>
 		</div>
