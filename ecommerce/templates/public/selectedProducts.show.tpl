@@ -29,6 +29,7 @@
 			</div>
 		{/if}
 		{if $element->getCurrentLayout() == 'scrolling'}
+			{assign "parameters" $element->getUsedParametersInfo()}
 			<div class="selectedproducts_scroll" data-auto="1">
 				{foreach $products as $product}
 					{include file=$theme->template($product->getTemplate($element->getCurrentLayout("productsLayout"))) element=$product selectedProductsElement=$element parameters=$parameters}
