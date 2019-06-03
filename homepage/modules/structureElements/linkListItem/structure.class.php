@@ -1,6 +1,6 @@
 <?php
 
-class linkListItemElement extends structureElement implements ConfigurableLayoutsElementsInterface, ImageUrlProviderInterface
+class linkListItemElement extends structureElement implements ConfigurableLayoutsElementsInterface
 {
     use SearchTypesProviderTrait;
 	use ImageUrlProviderTrait;
