@@ -1883,11 +1883,16 @@ class productElement extends structureElement implements
 
     public function getSearchTitle()
     {
-
         $title = $this->getTitle();
 
-        if ($category = $this->getParentCategory()) {
-            $title .= ' (' . $category->getTitle() . ')';
+        /**
+         * @var structureManager $structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        if ($structureManager->getRootElementMarker() == 'admin_root') {
+            if ($category = $this->getParentCategory()) {
+                $title .= ' (' . $category->getTitle() . ')';
+            }
         }
         return $title;
     }
