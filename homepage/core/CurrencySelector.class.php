@@ -56,9 +56,17 @@ class CurrencySelector implements DependencyInjectionContextInterface
         return $this->getCurrencyObjectsList();
     }
 
-    public function convertPrice($price)
+    public function convertPrice($price, bool $format = true)
     {
-        return $price * $this->getSelectedCurrencyRate();
+        $value = $price * $this->getSelectedCurrencyRate();
+        if ($format) {
+            return $this->formatPrice($value);
+        }
+        return $value;
+    }
+
+    public function formatPrice($price) {
+        return number_format($price, 2, ',', ' ');
     }
 
     public function getSelectedCurrencyCode()

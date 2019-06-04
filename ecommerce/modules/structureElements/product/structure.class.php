@@ -303,6 +303,7 @@ class productElement extends structureElement implements
             }
         }
         $price = $this->calculatedPrice;
+        $currencySelector = $this->getService('CurrencySelector');
         if (!$includeVat) {
             $mainConfig = $this->getService('ConfigManager')->getConfig('main');
             $vatRateSetting = $mainConfig->get('vatRate');
@@ -310,11 +311,10 @@ class productElement extends structureElement implements
             $price /= $vatRateSetting;
         }
         if (!$originalCurrency) {
-            $currencySelector = $this->getService('CurrencySelector');
-            $price = $currencySelector->convertPrice($price);
+            $price = $currencySelector->convertPrice($price, false);
         }
         if ($formatted) {
-            $price = sprintf($format, $price);
+            $price = $currencySelector->formatPrice($price);
         }
         return $price;
     }
@@ -1656,14 +1656,13 @@ class productElement extends structureElement implements
                     $price *= $vatRateSetting;
                 }
 
-                $selectionsOldPricings[$combo] = sprintf('%01.2f', $price);
+                $selectionsOldPricings[$combo] = $currencySelector->convertPrice($price);
 
                 $discountAmount = $discountsManager->getProductDiscount($this->id, $price);
                 if ($discountAmount) {
                     $price -= $discountAmount;
                 }
-                $price = $currencySelector->convertPrice($price);
-                $selectionsPricings[$combo] = sprintf('%01.2f', $price);
+                $selectionsPricings[$combo] = $currencySelector->convertPrice($price);
             }
         }
         $languageManager = $this->getService('languagesManager');

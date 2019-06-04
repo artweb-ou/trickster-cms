@@ -50,7 +50,7 @@ window.ShoppingBasketPopupComponent = function(componentElement, parentObject) {
 				}
 			}
 			var totalPrice = window.shoppingBasketLogics.productsSalesPrice;
-			totalElement.innerHTML = domHelper.roundNumber(totalPrice, 2) + ' ' + window.selectedCurrencyItem.symbol;
+			totalElement.innerHTML = totalPrice + ' ' + window.selectedCurrencyItem.symbol;
 
 			if (window.shoppingBasketLogics.displayTotals) {
 				totalContainerElement.style.display = 'block';
@@ -204,10 +204,10 @@ window.ShoppingBasketPopupProductComponent = function(productInfo) {
 		variationElement.innerHTML = variations.join(', ');
 
 		if (!newData.emptyPrice) {
-			salesPriceElement.innerHTML = domHelper.roundNumber(newData.totalSalesPrice, 2) + ' ' + window.selectedCurrencyItem.symbol;
+			salesPriceElement.innerHTML = newData.totalSalesPrice + ' ' + window.selectedCurrencyItem.symbol;
 		}
 		if (newData.totalSalesPrice != newData.totalPrice) {
-			fullPriceElement.innerHTML = domHelper.roundNumber(newData.totalPrice, 2) + ' ' + window.selectedCurrencyItem.symbol;
+			fullPriceElement.innerHTML = newData.totalPrice + ' ' + window.selectedCurrencyItem.symbol;
 		} else {
 			fullPriceElement.innerHTML = '';
 		}

@@ -251,6 +251,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
 
     public function getElementData()
     {
+        $currencySelector = $this->getService('CurrencySelector');
         $structureManager = $this->getService('structureManager');
         $languageManager = $this->getService('languagesManager');
         $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
@@ -289,7 +290,8 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             $productData["title"] = $product->title;
             $productData["title_dl"] = $product->title_dl;
             $productData["code"] = $product->code;
-            $productData["price"] = $product->getPrice(false);
+            $productData["price"] = $product->getPrice();
+            $productData["totalPrice"] = $currencySelector->formatPrice($productData["price"] * $product->amount);
             $productData["emptyPrice"] = $product->emptyPrice;
             $productData["unit"] = $product->unit;
             $productData["category"] = $structureManager->getElementById($product->productId)
@@ -300,15 +302,18 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             $productData['salesPrice'] = $product->getPrice(false);
             $productData["amount"] = $product->amount;
             $productData['salesPrice'] -= $product->discount;
+            $productData['totalSalesPrice'] = $currencySelector->formatPrice($productData["salesPrice"] * $product->amount);
             $productData["variation"] = $product->variation;
             $productData["variation_dl"] = $product->variation_dl;
             $productData["description"] = $product->description;
             $productData["image"] = $product->image;
             $productData["url"] = $product->URL;
             $productData["minimumOrder"] = $product->minimumOrder;
+            $productData['salesPrice'] = $currencySelector->formatPrice($productData['salesPrice']);
             $data["productsSalesPrice"] += $productData['amount'] * $productData['salesPrice'];
             $data["productsList"][] = $productData;
         }
+        $data["productsSalesPrice"] = $currencySelector->formatPrice($data["productsSalesPrice"]);
         // countries
         $data["countriesList"] = [];
         $countries = $this->shoppingBasket->getCountriesList();

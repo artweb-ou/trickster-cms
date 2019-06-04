@@ -62,16 +62,16 @@ window.shoppingBasketLogics = new function() {
 		self.promoCodeDiscountId = parseInt(basketData.promoCodeDiscountId, 10);
 		self.productsAmount = parseInt(basketData.productsAmount, 10);
 		if (basketData.deliveryPrice !== '') {
-			self.deliveryPrice = parseFloat(basketData.deliveryPrice);
+			self.deliveryPrice = basketData.deliveryPrice;
 		} else {
 			self.deliveryPrice = '';
 		}
-		self.productsPrice = parseFloat(basketData.productsPrice);
-		self.totalPrice = parseFloat(basketData.totalPrice);
-		self.vatAmount = parseFloat(basketData.vatAmount);
-		self.vatLessTotalPrice = parseFloat(basketData.vatLessTotalPrice);
+		self.productsPrice = basketData.productsPrice;
+		self.totalPrice = basketData.totalPrice;
+		self.vatAmount = basketData.vatAmount;
+		self.vatLessTotalPrice = basketData.vatLessTotalPrice;
 
-		self.productsSalesPrice = parseFloat(basketData.productsSalesPrice);
+		self.productsSalesPrice = basketData.productsSalesPrice;
 
 		self.message = basketData.message;
 		selectedServicesPrice = basketData.selectedServicesPrice;
@@ -380,17 +380,17 @@ window.shoppingBasketLogics = new function() {
 window.ShoppingBasketProduct = function() {
 	this.updateData = function(data) {
 		importData(data);
-		recalculate();
+		// recalculate();
 	};
 	var importData = function(data) {
 		self.basketProductId = data.basketProductId;
 		self.productId = parseInt(data.productId, 10);
-		self.price = parseFloat(data.price, 10);
+		self.price = data.price;
 		self.emptyPrice = data.emptyPrice;
 		self.unit = data.unit;
-		self.salesPrice = parseFloat(data.salesPrice);
-		self.totalSalesPrice = parseFloat(data.salesPrice * parseInt(data.amount, 10));
-		self.totalPrice = parseFloat(data.totalPrice, 10);
+		self.salesPrice = data.salesPrice;
+		self.totalSalesPrice = data.totalSalesPrice;
+		self.totalPrice = data.totalPrice;
 		self.amount = parseInt(data.amount, 10);
 		self.minimumOrder = parseInt(data.minimumOrder, 10);
 		if (self.minimumOrder < 1) {

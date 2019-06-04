@@ -886,6 +886,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
      */
     public function createOrderProducts($products)
     {
+        $currencySelector = $this->getService('CurrencySelector');
         $structureManager = $this->getService('structureManager');
         $this->orderProducts = [];
         foreach ($products as &$product) {
@@ -904,7 +905,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 } else {
                     $price = $product->getPrice(true, false);
                     if ($product->discount) {
-                        $newData['price'] = number_format((float)$price - $product->discount, 2, '.', '');
+                        $newData['price'] = $currencySelector->formatPrice($price - $product->discount);
                         $newData['oldPrice'] = $price;
                     } else {
                         $newData['price'] = $product->getPrice(true, false);

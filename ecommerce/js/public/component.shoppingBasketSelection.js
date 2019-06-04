@@ -106,7 +106,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
     var products = window.shoppingBasketLogics.productsList;
     if (products.length > 0) {
       for (var i = 0; i < productPriceElements.length; i++) {
-        productPriceElements[i].innerHTML = domHelper.roundNumber(shoppingBasketLogics.productsSalesPrice, 2) + ' ' + window.selectedCurrencyItem.symbol;
+        productPriceElements[i].innerHTML = shoppingBasketLogics.productsSalesPrice + ' ' + window.selectedCurrencyItem.symbol;
       }
       if (totalsComponent) {
         totalsComponent.updateData();
@@ -394,7 +394,7 @@ window.ShoppingBasketTotalsRowComponent = function(typeName) {
   };
   this.setPrice = function(newPrice) {
     if (newPrice !== '') {
-      valueElement.innerHTML = domHelper.roundNumber(newPrice, 2) + ' ' + window.selectedCurrencyItem.symbol;
+      valueElement.innerHTML = newPrice + ' ' + window.selectedCurrencyItem.symbol;
       componentElement.style.display = '';
     } else {
       componentElement.style.display = 'none';
@@ -764,16 +764,16 @@ window.ShoppingBasketSelectionProduct = function(initData) {
       descriptionElement.innerHTML = '';
     }
     if (!productData.emptyPrice) {
-      priceElement.innerHTML = domHelper.roundNumber(productData.price, 2) + ' ' + window.selectedCurrencyItem.symbol;
+      priceElement.innerHTML = productData.price + ' ' + window.selectedCurrencyItem.symbol;
 
       if (productData.salesPrice != productData.price) {
-        fullPriceElement.innerHTML = domHelper.roundNumber(productData.price, 2) + ' ' + window.selectedCurrencyItem.symbol;
+        fullPriceElement.innerHTML = productData.price + ' ' + window.selectedCurrencyItem.symbol;
         fullPriceElement.style.display = 'block';
       } else {
         fullPriceElement.style.display = 'none';
       }
       if (totalPriceElement) {
-        totalPriceElement.innerHTML = domHelper.roundNumber(productData.totalSalesPrice, 2) + ' ' + window.selectedCurrencyItem.symbol;
+        totalPriceElement.innerHTML = productData.totalSalesPrice + ' ' + window.selectedCurrencyItem.symbol;
       }
     }
     amountInput.value = productData.amount;
@@ -836,7 +836,7 @@ window.ShoppingBasketSelectionService = function(info) {
     var priceElement = document.createElement('span');
     priceElement.className = 'shoppingbasket_service_price';
     priceElement.colSpan = 2;
-    priceElement.innerHTML = domHelper.roundNumber(info.price, 2) + ' ' + window.selectedCurrencyItem.symbol;
+    priceElement.innerHTML = info.price + ' ' + window.selectedCurrencyItem.symbol;
     componentElement.appendChild(priceElement);
 
     self.componentElement = componentElement;
