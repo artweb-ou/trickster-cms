@@ -1,19 +1,45 @@
 <?php
 
-class newsMailAddressDataResponseConverter extends dataResponseConverter
+class newsMailAddressDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
+    protected $defaultPreset = 'api';
+
+    protected function getRelationStructure()
     {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['title'] = $element->email;
-            $info['personalName'] = $element->personalName;
-            $info['url'] = $element->URL;
-            $info['email'] = $element->email;
-            $result[] = $info;
-        }
-        return $result;
+        return [
+            'id' => 'id',
+            'email' => 'email',
+            'personalName' => 'personalName',
+            'searchTitle' =>'email',
+            'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+                'email',
+                'personalName',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+            ],
+        ];
     }
 }

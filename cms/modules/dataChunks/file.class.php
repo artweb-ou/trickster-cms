@@ -67,7 +67,7 @@ class fileDataChunk extends DataChunk implements ElementHolderInterface, Element
             $pathsManager->ensureDirectory($uploadsPath);
             $pathsManager->ensureDirectory($cachePath);
             if (is_file($cachePath . $this->temporaryName)) {
-                copy($cachePath . $this->temporaryName, $uploadsPath . $this->storageValue . $this->originalName);
+                copy($cachePath . $this->temporaryName, $uploadsPath . $this->storageValue);
                 unlink($cachePath . $this->temporaryName);
             }
         }

@@ -1,19 +1,38 @@
 <?php
 
-class adminTranslationDataResponseConverter extends dataResponseConverter
+class adminTranslationDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
-    {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['structureType'] = $element->structureType;
-            $info['title'] = $element->structureName;
-            $info['url'] = $element->URL;
-            $result[] = $info;
-        }
+    protected $defaultPreset = 'api';
 
-        return $result;
+    protected function getRelationStructure()
+    {
+        return [
+            'id'               => 'id',
+            'title'            => 'title',
+            'searchTitle'      => 'getSearchTitle',
+            'url'              => 'getUrl',
+            'structureType'    => 'structureType',
+            'dateCreated'   => function ($element) { return $element->getValue('dateCreated'); },
+            'dateModified'  => function ($element) { return $element->getValue('dateModified'); },
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api'    => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+            ],
+        ];
     }
 }

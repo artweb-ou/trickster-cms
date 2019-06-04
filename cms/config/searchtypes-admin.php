@@ -3,5 +3,6 @@
         'language',
         'translation',
         'adminTranslation',
+        'user',
     ],
 ];

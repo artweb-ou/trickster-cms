@@ -1,6 +1,6 @@
 <?php
 
-abstract class StructuredDataResponseConverter implements PresetDataResponseConverterInterface
+abstract class StructuredDataResponseConverter extends dataResponseConverter implements PresetDataResponseConverterInterface
 {
     protected $preset;
     protected $defaultPreset;
@@ -22,7 +22,7 @@ abstract class StructuredDataResponseConverter implements PresetDataResponseConv
                     if (isset($relationStructure[$key])) {
                         $value = $relationStructure[$key];
                         if ($value instanceof Closure) {
-                            if ($endValue = $value($element)) {
+                            if ($endValue = $value($element, $this)) {
                                 $info[$key] = $endValue;
                             }
                         } elseif (method_exists($element, $value)) {
