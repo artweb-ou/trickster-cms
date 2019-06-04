@@ -90,5 +90,16 @@ class SelectedProductsFormStructure extends ElementForm
             'method' => 'getDisplayMenusInfo',
             'condition' => 'checkDisplayMenus',
         ],
+        'buttonTitle' => [
+            'type' => 'input.text',
+        ],
+        'buttonUrl' => [
+            'type' => 'input.text',
+        ],
+        'buttonConnectedMenu' => [
+            'type' => 'select.element',
+            'method' => 'getConnectedButtonMenu',
+            'defaultRequired' => true,
+        ],
     ];
 }

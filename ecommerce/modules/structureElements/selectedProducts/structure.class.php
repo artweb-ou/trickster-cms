@@ -64,6 +64,9 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         // filters related:
         $moduleStructure['parametersIds'] = 'numbersArray';
         $moduleStructure['catalogueFilterId'] = 'text';
+        $moduleStructure['buttonTitle'] = 'text';
+        $moduleStructure['buttonUrl'] = 'url';
+        $moduleStructure['buttonConnectedMenu'] = 'text';
     }
 
     protected function getTabsList()
@@ -436,6 +439,30 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
     protected function getProductsListFixedLimit()
     {
         return $this->amount;
+    }
+
+    public function getConnectedButtonMenu() {
+        $linksManager = $this->getService('linksManager');
+        $buttonConnectedMenuId = $linksManager->getConnectedIdList($this->id, "buttonConnectedMenu", "parent");
+        $menus = $this->getDisplayMenusInfo();
+        foreach ($menus as &$menu) {
+            if($buttonConnectedMenuId[0] === $menu['id']) {
+                $menu['select'] = true;
+            }
+        }
+        return $menus;
+    }
+
+    public function getButtonConnectedMenuUrl() {
+        $linksManager = $this->getService('linksManager');
+        $connectedProductsIds = $linksManager->getConnectedIdList($this->id, "buttonConnectedMenu", "parent");
+        if(!empty($connectedProductsIds)) {
+            $structureManager = $this->getService('structureManager');
+            $element = $structureManager->getElementById($connectedProductsIds[0]);
+            if($element) {
+                return $element->URL;
+            }
+        }
     }
 }
 
