@@ -80,8 +80,8 @@
 			{include file=$theme->template('pager.tpl') pager=$pager}
 		{/if}
 		{/stripdomspaces}
-		{if !empty($element->buttonTitle) && (!empty($element->buttonUrl) || !empty($element->buttonConnectedMenu))}
-			{if !empty($element->buttonConnectedMenu)}
+		{if !empty($element->buttonTitle) && (!empty($element->buttonUrl) || !empty($element->getButtonConnectedMenuUrl()))}
+			{if $element->getButtonConnectedMenuUrl()}
 				{$Url = $element->getButtonConnectedMenuUrl()}
 			{else}
 				{$Url = $element->buttonUrl}

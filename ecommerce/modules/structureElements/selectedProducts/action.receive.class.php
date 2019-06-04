@@ -18,9 +18,7 @@ class receiveSelectedProducts extends structureElementAction
             $connectedProductsIds = $linksManager->getConnectedIdList($structureElement->id, "buttonConnectedMenu", "parent");
             if ($connectedProductsIds) {
                 foreach ($connectedProductsIds as &$connectedProductId) {
-                    if (!in_array($connectedProductId, $structureElement->products)) {
-                        $linksManager->unLinkElements($structureElement->id, $connectedProductId, "buttonConnectedMenu");
-                    }
+                    $linksManager->unLinkElements($structureElement->id, $connectedProductId, "buttonConnectedMenu");
                 }
             }
             $linksManager->linkElements($structureElement->id, $structureElement->buttonConnectedMenu, "buttonConnectedMenu");
