@@ -15,6 +15,16 @@ class receiveSelectedProducts extends structureElementAction
             $structureElement->persistElementData();
             $structureElement->persistDisplayMenusLinks();
 
+            $connectedProductsIds = $linksManager->getConnectedIdList($structureElement->id, "buttonConnectedMenu", "parent");
+            if ($connectedProductsIds) {
+                foreach ($connectedProductsIds as &$connectedProductId) {
+                    if (!in_array($connectedProductId, $structureElement->products)) {
+                        $linksManager->unLinkElements($structureElement->id, $connectedProductId, "buttonConnectedMenu");
+                    }
+                }
+            }
+            $linksManager->linkElements($structureElement->id, $structureElement->buttonConnectedMenu, "buttonConnectedMenu");
+
             //todo: use ConnectedProductsProvider instead!
             // connect products
             $connectedProductsIds = $linksManager->getConnectedIdList($structureElement->id, "selectedProducts", "parent");
@@ -102,6 +112,9 @@ class receiveSelectedProducts extends structureElementAction
             'nameSortingEnabled',
             'dateSortingEnabled',
             'amountOnPageEnabled',
+            'buttonTitle',
+            'buttonUrl',
+            'buttonConnectedMenu'
         ];
     }
 

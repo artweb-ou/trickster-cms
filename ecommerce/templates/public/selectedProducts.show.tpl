@@ -80,10 +80,15 @@
 			{include file=$theme->template('pager.tpl') pager=$pager}
 		{/if}
 		{/stripdomspaces}
-		{if !empty($element->link)}
-		<div class="selectedproducts_view_all">
-			<a href="{$element->link}" class="button selectedproducts_view_all_button"><span class="button_text">{$element->linkText}</span></a>
-		</div>
+		{if !empty($element->buttonTitle) && (!empty($element->buttonUrl) || !empty($element->buttonConnectedMenu))}
+			{if !empty($element->buttonConnectedMenu)}
+				{$Url = $element->getButtonConnectedMenuUrl()}
+			{else}
+				{$Url = $element->buttonUrl}
+			{/if}
+			<div class="selectedproducts_view_all">
+				<a href="{$Url}" class="button selectedproducts_view_all_button"><span class="button_text">{$element->buttonTitle}</span></a>
+			</div>
 		{/if}
 	{/capture}
 
