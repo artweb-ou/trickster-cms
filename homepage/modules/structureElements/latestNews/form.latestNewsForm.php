@@ -45,6 +45,10 @@ class LatestNewsFormStructure extends ElementForm
             'method' => 'getDisplayMenusInfo',
             'condition' => 'checkDisplayMenus',
         ],
+        'header' => [
+            'type' => 'group_header',
+            'text' => 'group_header.button_module'
+        ],
         'buttonTitle' => [
             'type' => 'input.text',
         ],
