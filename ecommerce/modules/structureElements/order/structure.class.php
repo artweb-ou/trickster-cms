@@ -125,16 +125,17 @@ class orderElement extends structureElement implements PaymentOrderInterface
         if ($totalPrice < 0) {
             $totalPrice = 0;
         }
-        $totalPrice = number_format((float)$totalPrice, 2, '.', '');
+        $currencySelector = $this->getService('CurrencySelector');
+        $totalPrice = $currencySelector->formatPrice($totalPrice);
 
         $this->totalAmount = count($this->orderProducts);
 
         $vatRateSetting = $this->getService('ConfigManager')->get('main.vatRate');
         $this->vatAmount = round($totalPrice - $totalPrice / $vatRateSetting, 2);
-        $this->vatAmount = number_format((float)$this->vatAmount, 2, '.', '');
+        $this->vatAmount = $currencySelector->formatPrice($this->vatAmount);
 
         $this->noVatAmount = round($totalPrice / $vatRateSetting, 2);
-        $this->noVatAmount = number_format((float)$this->noVatAmount, 2, '.', '');
+        $this->noVatAmount = $currencySelector->formatPrice($this->noVatAmount);
 
         if ($this->paymentElement) {
             if ($this->paymentElement->paymentStatus == 'success') {

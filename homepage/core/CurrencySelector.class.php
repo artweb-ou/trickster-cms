@@ -66,7 +66,8 @@ class CurrencySelector implements DependencyInjectionContextInterface
     }
 
     public function formatPrice($price) {
-        return number_format($price, 2, ',', ' ');
+        $currentFormat = $this->getCurrentCurrencyFormat();
+        return number_format($price, $currentFormat['decimals'], $currentFormat['decPoint'], $currentFormat['thousandsSep']);
     }
 
     public function getSelectedCurrencyCode()
@@ -86,6 +87,19 @@ class CurrencySelector implements DependencyInjectionContextInterface
             }
         }
         return $result;
+    }
+
+    public function getCurrentCurrencyFormat() {
+        if ($currencyObjectsIndex = $this->getCurrencyObjectsIndex()) {
+            if (isset($currencyObjectsIndex[$this->getSelectedCurrencyCode()])) {
+                $result = $currencyObjectsIndex[$this->getSelectedCurrencyCode()];
+                return $format = [
+                    'decimals' => $result->decimals,
+                    'decPoint' => $result->decPoint,
+                    'thousandsSep' => $result->thousandsSep
+                ];
+            }
+        }
     }
 
     public function getDefaultCurrencyItem()
@@ -221,6 +235,9 @@ class CurrencySelectorItem
         $this->rate = $info['rate'];
         //		$this->image = $info['image'];
         $this->title = $info['title'];
+        $this->decimals = $info['decimals'];
+        $this->decPoint = $info['decPoint'];
+        $this->thousandsSep = $info['thousandsSep'];
 
         $this->prepareURL($currentURL);
 

@@ -15,12 +15,10 @@ class receiveSelectedProducts extends structureElementAction
             $structureElement->persistElementData();
             $structureElement->persistDisplayMenusLinks();
 
-            $connectedProductsIds = $linksManager->getConnectedIdList($structureElement->id, "buttonConnectedMenu", "parent");
-            if ($connectedProductsIds) {
-                foreach ($connectedProductsIds as &$connectedProductId) {
-                    if (!in_array($connectedProductId, $structureElement->products)) {
-                        $linksManager->unLinkElements($structureElement->id, $connectedProductId, "buttonConnectedMenu");
-                    }
+            $buttonConnectedIds = $linksManager->getConnectedIdList($structureElement->id, "buttonConnectedMenu", "parent");
+            if ($buttonConnectedIds) {
+                foreach ($buttonConnectedIds as &$buttonConnectedId) {
+                    $linksManager->unLinkElements($structureElement->id, $buttonConnectedId, "buttonConnectedMenu");
                 }
             }
             $linksManager->linkElements($structureElement->id, $structureElement->buttonConnectedMenu, "buttonConnectedMenu");
