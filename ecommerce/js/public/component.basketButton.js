@@ -39,7 +39,10 @@ addToBasketButtonAction
 
       var currentAmount = document.createElement('em');
       currentAmount.className = 'notice_product_amount';
-      currentAmount.textContent = document.querySelector('.product_details_amount_input').value;
+      
+      if (document.querySelector('.product_details_amount_input')) {
+        currentAmount.textContent = document.querySelector('.product_details_amount_input').value;
+      }
 
       var seeBasket = document.createElement('a');
       seeBasket.className = 'notice_see_basket button';
