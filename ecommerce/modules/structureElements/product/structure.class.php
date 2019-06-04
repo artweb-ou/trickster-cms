@@ -1656,13 +1656,13 @@ class productElement extends structureElement implements
                     $price *= $vatRateSetting;
                 }
 
-                $selectionsOldPricings[$combo] = $currencySelector->convertPrice($price);
+                $selectionsOldPricings[$combo] = $currencySelector->formatPrice($price);
 
                 $discountAmount = $discountsManager->getProductDiscount($this->id, $price);
                 if ($discountAmount) {
                     $price -= $discountAmount;
                 }
-                $selectionsPricings[$combo] = $currencySelector->convertPrice($price);
+                $selectionsPricings[$combo] = $currencySelector->formatPrice($price);
             }
         }
         $languageManager = $this->getService('languagesManager');

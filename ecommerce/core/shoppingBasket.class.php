@@ -325,14 +325,14 @@ class shoppingBasket implements DependencyInjectionContextInterface
             $this->productsAmount = $productsAmount;
             $this->productsPrice = $currencySelector->convertPrice($productsPrice);
             if (is_numeric($deliveryPrice)) {
-                $this->deliveryPrice = $currencySelector->convertPrice($deliveryPrice);
+                $this->deliveryPrice = $currencySelector->convertPrice($deliveryPrice, false);
             } else {
                 $this->deliveryPrice = $deliveryPrice;
             }
-            $this->selectedServicesPrice = $currencySelector->convertPrice($servicesPrice);
-            $this->totalPrice = $currencySelector->convertPrice($totalPrice);
-            $this->vatLessTotalPrice = $currencySelector->convertPrice($this->vatLessTotalPrice);
-            $this->vatAmount = $currencySelector->convertPrice($this->vatAmount);
+            $this->selectedServicesPrice = $currencySelector->convertPrice($servicesPrice, false);
+            $this->totalPrice = $currencySelector->convertPrice($totalPrice, false);
+            $this->vatLessTotalPrice = $currencySelector->convertPrice($this->vatLessTotalPrice, false);
+            $this->vatAmount = $currencySelector->convertPrice($this->vatAmount, false);
 
             if ($this->message == '' && $productsAmount < 1) {
                 $translationsManager = $this->getService('translationsManager');
@@ -492,7 +492,8 @@ class shoppingBasket implements DependencyInjectionContextInterface
 
     public function getProductsPrice()
     {
-        return $this->productsPrice;
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->productsPrice);
     }
 
     public function getSelectedCityId()
@@ -711,7 +712,7 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
         if ($mainConfig->get('pricesContainVat') === false && $mainConfig->has('vatRate') && !$this->vatIncluded) {
             $this->price *= $mainConfig->get('vatRate');
         }
-        $this->totalPrice = $currencySelector->formatPrice($this->price * $this->amount);
+        $this->totalPrice = $this->price * $this->amount;
     }
 
     /**

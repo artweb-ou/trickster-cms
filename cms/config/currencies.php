@@ -1,10 +1,13 @@
 <?php return [
-    'list' => [
-        [
-            'title' => 'Euro',
-            'code' => 'eur',
-            'symbol' => '€',
-            'rate' => '1.00',
-        ],
-    ],
+	'list' => [
+		[
+			'code' => 'EUR',
+			'rate' => '1.20',
+			'title' => 'EUR',
+			'symbol' => '€',
+			'decimals' => '2.00',
+			'decPoint' => ',',
+			'thousandsSep' => ' ',
+		],
+	],
 ];

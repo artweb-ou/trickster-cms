@@ -299,7 +299,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
                 ->getValue('title', $defaultLanguage->id);
             $productData["brand"] = $this->getBrands($product->productId);
             //@todo refactor - move functionality to shoppingbasketdiscounts.class
-            $productData['salesPrice'] = $product->getPrice(false);
+            $productData['salesPrice'] = $product->getPrice();
             $productData["amount"] = $product->amount;
             $productData['salesPrice'] -= $product->discount;
             $productData['totalSalesPrice'] = $currencySelector->formatPrice($productData["salesPrice"] * $product->amount);

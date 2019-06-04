@@ -14,6 +14,9 @@ class generateCurrencies extends structureElementAction
             $currenciesDataItem['rate'] = $element->rate;
             $currenciesDataItem['title'] = $element->title;
             $currenciesDataItem['symbol'] = $element->symbol;
+            $currenciesDataItem['decimals'] = $element->decimals;
+            $currenciesDataItem['decPoint'] = $element->decPoint;
+            $currenciesDataItem['thousandsSep'] = $element->thousandsSep;
 
             $currenciesData[] = $currenciesDataItem;
         }
