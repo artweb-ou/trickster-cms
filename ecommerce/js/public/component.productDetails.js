@@ -107,7 +107,8 @@ window.ProductDetailsComponent = function(componentElement) {
 	};
 	var basketButtonClickHandler = function() {
 		if (!optionsSelected) {
-			alert(window.translationsLogics.get('product.details_must_select_options'));
+			// alert(window.translationsLogics.get('product.details_must_select_options'));
+			controller.fireEvent('shoppingBasketProductAddFailure', 'product.details_must_select_options');
 			return;
 		}
 		var optionsArgument = selectedOptions;

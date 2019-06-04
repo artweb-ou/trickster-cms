@@ -173,7 +173,32 @@ window.ShoppingBasketPopupProductComponent = function(productInfo) {
 	};
 	var shoppingBasketProductAddFailureHandler = function() {
 		unRegisterEventHandlers();
-		alert(window.translationsLogics.get('product.quantityunavailable'));
+		// alert(window.translationsLogics.get('product.quantityunavailable'));
+
+		if (addToBasketButtonAction) {
+			var message = [];
+			var additionalContainerClassName = 'notice_box';
+			var additionalClassName = 'notice_basket';
+			message['title'] = window.productDetailsData.name || window.productDetailsData.name_ga;
+			message['content'] = window.translationsLogics.get('product.quantityunavailable');
+			message['footer'] = '';
+			// only modal on error
+			new ModalActionComponent(false, false, componentElement, additionalContainerClassName, '', message); // checkbox-input, footer buttons, element for position, messages
+			/*
+				  switch(addToBasketButtonAction) {
+					case '1': // BubbleComponent
+					  var bubbleComponent = new BubbleComponent(componentElement, message, additionalClassName, '', 3500);
+					  bubbleComponent.start();
+					  break;
+
+					case '2': // ModalActionComponent
+					  new ModalActionComponent(false, false, componentElement, message); // checkbox-input, footer buttons, element for position, messages
+					  break;
+				  }
+			*/
+		}
+
+
 		amountInputElement.value--;
 	};
 	var registerEventHandlers = function() {

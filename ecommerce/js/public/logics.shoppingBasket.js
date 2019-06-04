@@ -369,7 +369,7 @@ window.shoppingBasketLogics = new function() {
 
 		} else if (responseStatus == 'fail') {
 			if (requestName == 'addProduct' || requestName == 'changeAmount') {
-				controller.fireEvent('shoppingBasketProductAddFailure');
+				controller.fireEvent('shoppingBasketProductAddFailure', 'product.quantityunavailable');
 			}
 		}
 	};
