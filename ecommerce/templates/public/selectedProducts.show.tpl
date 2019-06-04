@@ -86,8 +86,8 @@
 			{else}
 				{$Url = $element->buttonUrl}
 			{/if}
-			<div class="selectedproducts_view_all">
-				<a href="{$Url}" class="button selectedproducts_view_all_button"><span class="button_text">{$element->buttonTitle}</span></a>
+			<div class="view_all">
+				<a href="{$Url}" class="button view_all_button"><span class="button_text">{$element->buttonTitle}</span></a>
 			</div>
 		{/if}
 	{/capture}
