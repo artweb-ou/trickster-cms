@@ -21,6 +21,9 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
         $moduleStructure['layout'] = 'text';
         $moduleStructure['column'] = 'text';
         $moduleStructure['orderType'] = 'text';
+        $moduleStructure['buttonTitle'] = 'text';
+        $moduleStructure['buttonUrl'] = 'url';
+        $moduleStructure['buttonConnectedMenu'] = 'text';
     }
 
     protected function getTabsList()
@@ -225,5 +228,29 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
     public function getPager()
     {
         return $this->pager;
+    }
+
+    public function getConnectedButtonMenu() {
+        $linksManager = $this->getService('linksManager');
+        $buttonConnectedMenuId = $linksManager->getConnectedIdList($this->id, "buttonConnectedMenu", "parent");
+        $menus = $this->getDisplayMenusInfo();
+        foreach ($menus as &$menu) {
+            if($buttonConnectedMenuId[0] === $menu['id']) {
+                $menu['select'] = true;
+            }
+        }
+        return $menus;
+    }
+
+    public function getButtonConnectedMenuUrl() {
+        $linksManager = $this->getService('linksManager');
+        $connectedProductsIds = $linksManager->getConnectedIdList($this->id, "buttonConnectedMenu", "parent");
+        if(!empty($connectedProductsIds)) {
+            $structureManager = $this->getService('structureManager');
+            $element = $structureManager->getElementById($connectedProductsIds[0]);
+            if($element) {
+                return $element->URL;
+            }
+        }
     }
 }
