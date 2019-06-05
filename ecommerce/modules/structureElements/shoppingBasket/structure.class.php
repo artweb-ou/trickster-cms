@@ -439,7 +439,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
                             'URL' => $product->URL,
                             'isPurchasable' => $product->isPurchasable(),
                             'addtobasket' => $translationsManager->getTranslationByName("product.addtobasket"),
-                            'price' => $product->getPrice(false),
+                            'price' => $product->getPrice(),
                             'oldPrice' => $product->getOldPrice(),
                             'discountPercent' => round($product->getDiscountPercent()),
                             'connectedDiscounts' => $product->getCampaignDiscounts(),

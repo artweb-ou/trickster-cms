@@ -325,7 +325,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
             $this->productsAmount = $productsAmount;
             $this->productsPrice = $currencySelector->convertPrice($productsPrice, false);
             if (is_numeric($deliveryPrice)) {
-                $this->deliveryPrice = $currencySelector->convertPrice($deliveryPrice, false);
+                $this->deliveryPrice = $currencySelector->convertPrice($deliveryPrice);
             } else {
                 $this->deliveryPrice = $deliveryPrice;
             }
