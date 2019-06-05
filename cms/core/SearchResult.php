@@ -16,7 +16,7 @@ class SearchResult
         foreach ($this->sets as $set) {
             $allTotal += $set->getTotalCount();
             if ($subCount = $set->getSubCount()){
-                $allTotal += $subCount;
+                $allTotal += $subCount - 1;
             }
         }
 
