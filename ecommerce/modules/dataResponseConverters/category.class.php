@@ -24,12 +24,7 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
             'contentText' => function ($element, $scope) {
                 return $scope->htmlToPlainText($element->content);
             },
-            'productsCount' => function ($element) {
-                if ($element->productsCount) {
-                    return $element->productsCount;
-                }
-                return false;
-            },
+            'searchAmount' => 'getProductsListBaseAmount',
             'introduction' => 'introduction',
             'content' => 'content',
             'image' => 'image',
@@ -55,7 +50,7 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
                 'url',
                 'structureType',
                 'introductionText',
-                'productsCount',
+                'searchAmount',
             ],
         ];
     }

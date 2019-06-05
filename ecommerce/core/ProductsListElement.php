@@ -73,16 +73,17 @@ abstract class ProductsListElement extends menuStructureElement
         $query = $db->table('module_product');
         $query->select(['module_product.id', 'module_product.title', 'module_product.brandId', 'module_product.availability', 'module_product.price']);
         $query->where('module_product.languageId', '=', $languagesManager->getCurrentLanguageId());
+        $query->where('inactive', '!=', '1');
         $query->where(function (Builder $query) {
-            $query->where('inactive', '!=', '1');
-            $query->where(function (Builder $query) {
-                $query->orWhere('availability', '!=', 'unavailable');
-                $query->orWhere(function (Builder $query) {
-                    $query->where('availability', '=', 'quantity_dependent');
-                    $query->where('quantity', '!=', 0);
-                });
+            $query->orWhere('availability', '!=', 'unavailable');
+            $query->orWhere(function (Builder $query) {
+                $query->where('availability', '=', 'quantity_dependent');
+                $query->where('quantity', '!=', 0);
             });
         });
+        //required for any kinds of joins made with this query outside of this method, prevents duplicated product rows from being selected
+        $query->groupBy('module_product.id');
+
         return $query;
     }
 
