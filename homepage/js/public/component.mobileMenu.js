@@ -17,9 +17,10 @@ window.MobileMenuComponent = function(componentElement, toggleStartCallback) {
 		visible = !visible;
 		if (visible) {
 			DarkLayerComponent.showLayer(function() {
-				self.toggleVisibility
+				self.toggleVisibility;
 			}, null);
 			domHelper.addClass(componentElement, 'mobilemenu_visible');
+			domHelper.addClass(document.documentElement, 'overflow_hidden');
 			TweenLite.to(componentElement, 0.3, {
 				'css': {'right': 0},
 				'ease': Power2.easeInOut,
@@ -32,6 +33,7 @@ window.MobileMenuComponent = function(componentElement, toggleStartCallback) {
 				'ease': Power2.easeInOut,
 				'onComplete': function() {
 					domHelper.removeClass(componentElement, 'mobilemenu_visible');
+					domHelper.removeClass(document.documentElement, 'overflow_hidden');
 				}
 			});
 			DarkLayerComponent.hideLayer();
