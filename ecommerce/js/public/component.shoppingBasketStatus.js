@@ -91,7 +91,6 @@ window.ShoppingBasketStatusComponent = function(componentElement) {
 	};
 
 	var updateData = function() {
-		var text;
 		var productsAmount = window.shoppingBasketLogics.productsAmount;
 		if (productsAmount > 0) {
 			if (emptyTextElement) {
@@ -99,8 +98,7 @@ window.ShoppingBasketStatusComponent = function(componentElement) {
 			}
 			if (priceElement) {
 				var productsPrice = window.shoppingBasketLogics.productsSalesPrice;
-				text = domHelper.roundNumber(productsPrice, 2);
-				priceValueElement.innerHTML = text;
+				priceValueElement.innerHTML = productsPrice;
 				priceElement.style.display = 'block';
 			}
 			if (amountElement) {

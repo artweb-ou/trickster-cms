@@ -269,7 +269,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $data["totalPrice"] = $this->shoppingBasket->getTotalPrice();
         $data["productsPrice"] = $this->shoppingBasket->getProductsPrice();
         $data["vatAmount"] = $this->shoppingBasket->getVatAmount();
-        $data["vatLessTotalPrice"] = $this->shoppingBasket->getVatLessTotalPrice(false);
+        $data["vatLessTotalPrice"] = $this->shoppingBasket->getVatLessTotalPrice(true);
         $data["deliveryPrice"] = $this->shoppingBasket->getDeliveryPrice();
         $data["selectedDeliveryTypeId"] = $deliveryTypeid;
         $data["selectedDeliveryTypeTitleDl"] = $deliveryTypeElement ? $deliveryTypeElement->getValue('title', $defaultLanguage->id) : '';
