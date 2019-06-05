@@ -191,7 +191,6 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
         return selectorComponent;
     };
     this.recalculateSizes = function() {
-        var isMobile = window.innerWidth < 768;
         var imagesComponentHeight;
         var computedStyle;
         if (typeof window.getComputedStyle !== 'undefined') {
@@ -201,9 +200,8 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
         }
         var galleryWidth = componentElement.offsetWidth - parseFloat(computedStyle.paddingLeft) - parseFloat(computedStyle.paddingRight);
         var galleryHeight;
-
-        var galleryHeightSetting = galleryInfo.getGalleryHeight(isMobile);
-        var galleryResizeType = galleryInfo.getGalleryResizeType(isMobile);
+        var galleryHeightSetting = galleryInfo.getGalleryHeight(window.mobileLogics.isPhoneActive());
+        var galleryResizeType = galleryInfo.getGalleryResizeType(window.mobileLogics.isPhoneActive());
         if (galleryResizeType === 'imagesHeight') {
             imagesComponentHeight = galleryHeightSetting;
         } else if (galleryResizeType === 'aspected') {

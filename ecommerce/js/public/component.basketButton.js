@@ -85,7 +85,6 @@ window.BasketButtonComponent = function(componentElement, onClick, productId = n
 		}
 	};
 	var shoppingBasketProductAddFailureHandler = function(argument) { // argument - is translation
-	//	console.log(argument)
 		unRegisterEventHandlers();
 		if (addToBasketButtonAction) {
 			var message = [];

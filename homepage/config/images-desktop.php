@@ -63,11 +63,39 @@
             85,
         ],
     ],
+    'headerGalleryImageMobile' => [
+        'filters' => [
+            [
+                'fit',
+                'width=1415, height=325',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            '',
+            85,
+        ],
+    ],
     'headerGalleryFullImage' => [
         'filters' => [
             [
                 'reduce',
                 'width=1920, height=1080',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            null,
+            80,
+        ],
+    ],
+    'headerGalleryFullImageMobile' => [
+        'filters' => [
+            [
+                'reduce',
+                'width=768, height=768',
             ],
         ],
         'format' => [
@@ -164,6 +192,20 @@
         ],
     ],
     'galleryFullImage' => [
+        'filters' => [
+            [
+                'reduce',
+                'width=1920, height=1080',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            null,
+            80,
+        ],
+    ],
+    'galleryFullImageMobile' => [
         'filters' => [
             [
                 'reduce',

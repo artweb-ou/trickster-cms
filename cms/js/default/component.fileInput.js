@@ -58,12 +58,10 @@ function FileInputComponent(inputElement) {
 		let manusNimi = '';
 		let manus = '';
 		if(inputElement.value != '') {
-			console.log(inputElement.value)
 			manusSuurus = (this.files[0].size/1024/1024).toFixed(4);// + " MB"
 			manusNimi = this.files[0].name;
 			manus = manusNimi + ' (' + manusSuurus + '  MB)';
 		}
-		// fakeField.innerHTML = inputElement.value.replace('C:\\fakepath\\', '');
 		fakeField.innerHTML = manus;
 	};
 	var clickHandler = function() {

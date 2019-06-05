@@ -1,4 +1,4 @@
-window.mobileLogics = new function() {
+window.mobileMenuLogics = new function() {
 	var menu;
 	var self = this;
 

@@ -4,6 +4,12 @@ class receiveGalleryImage extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param galleryImageElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
@@ -12,6 +18,11 @@ class receiveGalleryImage extends structureElementAction
             if ($structureElement->getDataChunk("image")->originalName) {
                 $structureElement->image = $structureElement->id;
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
+            }
+
+            if ($structureElement->getDataChunk("mobileImage")->originalName) {
+                $structureElement->mobileImage = $structureElement->id.'_mobile';
+                $structureElement->mobileImageName = $structureElement->getDataChunk("mobileImage")->originalName;
             }
 
             if ($structureElement->alt == '') {
@@ -34,6 +45,7 @@ class receiveGalleryImage extends structureElementAction
     {
         $expectedFields = [
             'image',
+            'mobileImage',
             'alt',
             'title',
             'description',

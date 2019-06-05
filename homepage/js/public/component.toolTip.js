@@ -235,7 +235,6 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 			let referralRight = referralPosition.right;
 			xPosition = referralRight - referralWidth/2 - popupWidth + popupPointerWidth /2 + popupPointerRight;
 		}
-		console.log('hintPointer ', hintPointer)
 		var yPosition = 0;
 		if (fixedY) {
 			yPosition = fixedY - popupHeight;

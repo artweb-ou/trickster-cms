@@ -13,7 +13,6 @@ window.DarkLayerComponent = new function() {
 				this.fullOpacity = this.darkLayerComponentOpacity;
 			}
 			if (callback) {
-				console.log()
 				TweenLite.to(this.domElement, 0.2, {'css': {'opacity': this.fullOpacity}, 'onComplete': callback});
 			} else {
 				TweenLite.to(this.domElement, 0.2, {'css': {'opacity': this.fullOpacity}});

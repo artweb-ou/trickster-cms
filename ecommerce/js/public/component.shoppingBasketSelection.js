@@ -453,7 +453,6 @@ window.ShoppingBasketSelectionTable = function(componentElement) {
 window.ShoppingBasketSelectionProduct = function(initData) {
 	var self = this;
 
-	// console.log(basketView['imageCell'])
 	var productData = false;
 	var changeTimeOut = false;
 	var keyUpDelay = 400;
