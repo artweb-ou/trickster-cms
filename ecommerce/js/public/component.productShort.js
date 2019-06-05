@@ -32,7 +32,7 @@ function ProductShortComponent(componentElement) {
       }
     }
     if (basketButton = componentElement.querySelector('.product_short_basket')) {
-      new BasketButtonComponent(basketButton, onBasketButtonClick);
+      new BasketButtonComponent(basketButton, onBasketButtonClick, productId);
     }
     if (detailsButton = componentElement.querySelector('.product_short_details')) {
       eventsManager.addHandler(detailsButton, 'click', clickHandler);

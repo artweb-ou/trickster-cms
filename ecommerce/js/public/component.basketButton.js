@@ -1,4 +1,4 @@
-window.BasketButtonComponent = function(componentElement, onClick) {
+window.BasketButtonComponent = function(componentElement, onClick, productId = null) {
 	var addToBasketButtonAction = window.addToBasketButtonAction;
 /*
 	in settings in admin
@@ -37,12 +37,13 @@ window.BasketButtonComponent = function(componentElement, onClick) {
 			var currentProduct = document.createElement('span');
 			currentProduct.className = 'notice_product_name';
 			currentProduct.textContent = window.productDetailsData.name || window.productDetailsData.name_ga;
-
 			var currentAmount = document.createElement('em');
 			currentAmount.className = 'notice_product_amount';
 
 			if (document.querySelector('.product_details_amount_input')) {
 				currentAmount.textContent = document.querySelector('.product_details_amount_input').value;
+			} else {
+				currentAmount.textContent = 1;
 			}
 
 			var seeBasket = document.createElement('a');
@@ -58,7 +59,6 @@ window.BasketButtonComponent = function(componentElement, onClick) {
 			var bubbleText = document.createElement('span');
 			bubbleText.className = 'notice_bubble_text';
 			bubbleText.innerHTML = window.translationsLogics.get('product.addedtobasket') + ' (' + currentAmount.outerHTML + ')';
-
 			switch (addToBasketButtonAction) {
 				case '1': // BubbleComponent
 					message['title'] = '';
@@ -71,7 +71,11 @@ window.BasketButtonComponent = function(componentElement, onClick) {
 					break;
 
 				case '2': // ModalActionComponent
-					message['title'] = currentProduct.innerHTML;
+					if(Array.isArray(window.productDetailsData)) {
+						message['title'] = window.productDetailsData[productId].name;
+					} else {
+						message['title'] = currentProduct.innerHTML;
+					}
 					message['content'] = bubbleText.innerHTML;
 					message['footer'] = seeBasket.outerHTML + continueShopping.outerHTML;
 
