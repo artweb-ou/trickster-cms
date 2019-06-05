@@ -160,15 +160,15 @@
 			</td>
 			<td style="white-space: nowrap;">
 				{if !$productInfo.emptyPrice}
-					{$productInfo.price|string_format:"%.2f"} {$data.currency} {if $productInfo.unit} / {$productInfo.unit}{/if}
+					{$productInfo.price} {$data.currency} {if $productInfo.unit} / {$productInfo.unit}{/if}
 				{/if}
 			</td>
 			<td>
-				{$productInfo.amount|string_format:"%.2f"}
+				{$productInfo.amount}
 			</td>
 			<td>
 				{if !$productInfo.emptyPrice}
-					{$productInfo.totalPrice|string_format:"%.2f"} {$data.currency}
+					{$productInfo.totalPrice} {$data.currency}
 				{/if}
 			</td>
 		</tr>
@@ -195,7 +195,7 @@
 				{translations name='invoice.productstotal'}
 			</td>
 			<td class="order_productstable_value">
-				{$data.productsPrice|string_format:"%.2f"} {$data.currency}
+				{$data.productsPrice} {$data.currency}
 			</td>
 		</tr>
 		{foreach $data.servicesList as $service}
@@ -205,7 +205,7 @@
 					{$service.title}
 				</td>
 				<td class="order_productstable_value">
-					{$service.price|string_format:"%.2f"} {$data.currency}
+					{$service.price} {$data.currency}
 				</td>
 			</tr>
 		{/foreach}
@@ -216,7 +216,7 @@
 					{translations name='invoice.deliveryprice'}{if $data.deliveryTitle} ({$data.deliveryTitle}){/if}
 				</td>
 				<td class="order_productstable_value">
-					{$data.deliveryPrice|string_format:"%.2f"} {$data.currency}
+					{$data.deliveryPrice} {$data.currency}
 				</td>
 			</tr>
 		{/if}
@@ -238,7 +238,7 @@
 					{translations name='invoice.novat'}
 				</td>
 				<td class="order_productstable_value">
-					{$data.noVatAmount|string_format:"%.2f"} {$data.currency}
+					{$data.noVatAmount} {$data.currency}
 				</td>
 			</tr>
 			<tr>
@@ -247,7 +247,7 @@
 					{translations name='invoice.vat'}
 				</td>
 				<td class="order_productstable_value">
-					{$data.vatAmount|string_format:"%.2f"} {$data.currency}
+					{$data.vatAmount} {$data.currency}
 				</td>
 			</tr>
 			<tr class="order_productstable_summary_total">
@@ -256,7 +256,7 @@
 					{translations name='invoice.ordertotalprice'}
 				</td>
 				<td class="order_productstable_value">
-					{$data.totalPrice|string_format:"%.2f"} {$data.currency}
+					{$data.totalPrice} {$data.currency}
 				</td>
 			</tr>
 		{/if}
