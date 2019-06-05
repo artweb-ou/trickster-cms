@@ -245,14 +245,14 @@ class productElement extends structureElement implements
     {
         $oldPrice = false;
         if ($this->getPrice() < $this->calculatedOldPrice) {
+            $currencySelector = $this->getService('CurrencySelector');
             if ($originalCurrency) {
-                $oldPrice = $this->calculatedOldPrice;
+                $oldPrice = (float)$this->calculatedOldPrice;
             } else {
-                $currencySelector = $this->getService('CurrencySelector');
-                $oldPrice = $currencySelector->convertPrice($this->calculatedOldPrice);
+                $oldPrice = $currencySelector->convertPrice($this->calculatedOldPrice, false);
             }
             if ($formatted) {
-                $oldPrice = sprintf('%01.2f', $oldPrice);
+                $oldPrice = $currencySelector->formatPrice($oldPrice);
             }
         }
 
@@ -405,12 +405,12 @@ class productElement extends structureElement implements
     public function getDiscountAmount($formatted = true, $originalCurrency = false)
     {
         $amount = $this->getOldPrice(false, true) - $this->getPrice(false, true);
+        $currencySelector = $this->getService('CurrencySelector');
         if (!$originalCurrency) {
-            $currencySelector = $this->getService('CurrencySelector');
-            $amount = $currencySelector->convertPrice($amount);
+            $amount = $currencySelector->convertPrice($amount, false);
         }
         if ($formatted) {
-            $amount = sprintf('%01.2f', $amount);
+            $amount = $currencySelector->formatPrice($amount);
         }
         return $amount;
     }
@@ -1018,7 +1018,7 @@ class productElement extends structureElement implements
                             $iconInfo['iconTextColor'] = $icon->iconTextColor;
 
                             if (!$iconInfo['title'] && ($icon->getProductIconRoleType($icon->iconRole) == 'role_general_discount')) {
-                                $iconInfo['title'] = '-' . $this->getDiscountPercent(true, '%01.0f') . '%';
+                                $iconInfo['title'] = '-' . $this->getDiscountPercent() . '%';
                             }
                         }
                         $this->iconsInfo[] = $iconInfo;

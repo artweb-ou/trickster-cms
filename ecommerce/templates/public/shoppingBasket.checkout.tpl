@@ -40,7 +40,7 @@
 				</td>
 				<td class='shoppingbasket_table_price'>
 					{if !$product->emptyPrice}
-						{$product->price|string_format:'%01.2f'} {$selectedCurrencyItem->symbol} {if $product->unit}/ {$product->unit}{/if}
+						{$product->getPrice(true)} {$selectedCurrencyItem->symbol} {if $product->unit}/ {$product->unit}{/if}
 					{/if}
 				</td>
 				<td class='shoppingbasket_table_amount'>
@@ -48,7 +48,7 @@
 				</td>
 				<td class='shoppingbasket_table_totalprice'>
 					{if !$product->emptyPrice}
-						{$product->totalPrice} {$selectedCurrencyItem->symbol}
+						{$product->getTotalPrice()} {$selectedCurrencyItem->symbol}
 					{/if}
 				</td>
 			</tr>

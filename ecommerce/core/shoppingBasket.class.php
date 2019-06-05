@@ -738,6 +738,15 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
         return $price;
 
     }
+
+    /**
+     * @return string
+     */
+    public function getTotalPrice() : string
+    {
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->totalPrice);
+    }
 }
 
 class shoppingBasketDeliveryTargets implements DependencyInjectionContextInterface
