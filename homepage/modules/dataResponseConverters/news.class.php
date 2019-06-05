@@ -11,7 +11,7 @@ class newsDataResponseConverter extends StructuredDataResponseConverter
             'title' => 'title',
             'searchTitle' => function ($element) {
                 if ($relatedLanguage = $element->getRelatedLanguageElement()) {
-                    return $element->title . '(' . $relatedLanguage->iso6393 . ')';
+                    return $element->title . '<em class="search_title_lang">(' . $relatedLanguage->iso6393 . ')</em>';
                 } else {
                     return $element->title;
                 }
