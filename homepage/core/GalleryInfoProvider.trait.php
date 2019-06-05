@@ -19,6 +19,9 @@ trait GalleryInfoProviderTrait
             'imagesPrevNextButtonsEnabled' => false,
             'fullScreenGalleryEnabled' => true,
             'fullScreenButtonEnabled' => false,
+            'mobileGalleryHeight' => false,
+            'mobileGalleryResizeType' => false,
+            'mobileImageResizeType' => false,
             'descriptionType' => 'overlay',
             'imagesPrevNextButtonsSeparated' => false,
             'videoAutoStart' => true,
@@ -46,8 +49,8 @@ trait GalleryInfoProviderTrait
                 'link' => $imageElement->link,
                 'externalLink' => $imageElement->externalLink,
                 'id' => $imageElement->id,
-                'filename'    => $imageElement->originalName,
-                'fileUrl'    => $controller->baseURL . 'file/id:' . $imageElement->id . '/filename:' . $imageElement->originalName,
+                'filename' => $imageElement->originalName,
+                'fileUrl' => $controller->baseURL . 'file/id:' . $imageElement->id . '/filename:' . $imageElement->originalName,
             ];
         }
         return json_encode($galleryData);
