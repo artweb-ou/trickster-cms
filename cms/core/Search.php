@@ -121,12 +121,17 @@ class Search implements DependencyInjectionContextInterface
                     }
 
                     foreach ($idsByType as $type => &$idList) {
-                        $set = new SearchResultSet();
+                        $customSetName = ucfirst($type) . 'SearchResultSet';
+                        if (class_exists($customSetName)) {
+                            $set = new $customSetName();
+                        } else {
+                            $set = new SearchResultSet();
+                        }
                         $set->type = $type;
                         $set->partial = !$exact;
 
                         $typeResultsAmount = count($idList);
-                        $set->totalCount = $typeResultsAmount;
+                        $set->setTotalCount($typeResultsAmount);
                         if ($typeResultsAmount < $averageAmount) {
                             $baseSliceAmount = $typeResultsAmount;
                         } else {
@@ -136,21 +141,21 @@ class Search implements DependencyInjectionContextInterface
                         //if some elements are not available by "getElementById" we get next elements what were sliced in $idList
                         $elements = [];
                         $slicedAmount = 0;
-                        while($baseSliceAmount) {
+                        while ($baseSliceAmount) {
                             $slicedIdList = array_slice($idList, $slicedAmount, $baseSliceAmount);
                             $slicedAmount += $baseSliceAmount;
                             $baseSliceAmount = 0;
                             foreach ($slicedIdList as $elementId) {
                                 if ($element = $structureManager->getElementById($elementId, $this->languageId)) {
                                     $elements[] = $element;
-                                }else {
+                                } else {
                                     $baseSliceAmount++;
-                                    $set->totalCount--;
+                                    $set->setTotalCount($set->getTotalCount() - 1);
                                 }
                             }
                         }
 
-                        foreach($elements as $element) {
+                        foreach ($elements as $element) {
                             $set->elements[] = $element;
                             $searchResult->elements[] = $element;
                         }
@@ -204,22 +209,4 @@ class Search implements DependencyInjectionContextInterface
         return $queryStrings;
     }
 }
-
-class SearchResult
-{
-    public $count = 0;
-    public $sets = [];
-    public $elements = [];
-    public $exactMatches = true;
-}
-
-class SearchResultSet
-{
-    public $type = '';
-    public $template = false;
-    public $partial = false;
-    public $totalCount = 0;
-    public $elements = [];
-}
-
 
