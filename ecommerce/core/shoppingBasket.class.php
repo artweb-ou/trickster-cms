@@ -730,13 +730,13 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
     {
         $price = $this->price;
         $currencySelector = $this->getService('CurrencySelector');
-        if ($round) {
-            return $currencySelector->convertPrice($price);
-        } elseif ($useCurrency) {
+        if ($useCurrency) {
             return $currencySelector->convertPrice($price, false);
         }
+        if ($round) {
+            return $currencySelector->formatPrice($price);
+        }
         return $price;
-
     }
 
     /**
