@@ -372,6 +372,9 @@ window.GalleryImage = function(info, galleryObject) {
     var fullImageUrl;
     var bigImageUrl;
     var thumbnailImageUrl;
+    var mobileFullImageUrl;
+    var mobileBigImageUrl;
+    var mobileThumbnailImageUrl;
     var fileUrl;
     var filename;
     var title;
@@ -389,6 +392,15 @@ window.GalleryImage = function(info, galleryObject) {
         fullImageUrl = info.fullImageUrl;
         bigImageUrl = info.bigImageUrl;
         thumbnailImageUrl = info.thumbnailImageUrl;
+        if (typeof info.mobileFullImageUrl !== 'undefined') {
+            mobileFullImageUrl = info.mobileFullImageUrl;
+        }
+        if (typeof info.mobileBigImageUrl !== 'undefined') {
+            mobileBigImageUrl = info.mobileBigImageUrl;
+        }
+        if (typeof info.mobileThumbnailImageUrl !== 'undefined') {
+            mobileThumbnailImageUrl = info.mobileThumbnailImageUrl;
+        }
         fileUrl = info.fileUrl;
         filename = info.filename;
         title = info.title;
@@ -414,20 +426,29 @@ window.GalleryImage = function(info, galleryObject) {
     this.getDescription = function() {
         return description;
     };
-    this.getFullImageUrl = function() {
+    this.getFullImageUrl = function(mobile) {
+        if (mobile) {
+            return mobileFullImageUrl;
+        }
         return fullImageUrl;
     };
-    this.getBigImageUrl = function() {
+    this.getBigImageUrl = function(mobile) {
+        if (mobile) {
+            return mobileFullImageUrl;
+        }
         return bigImageUrl;
+    };
+    this.getThumbnailImageUrl = function(mobile) {
+        if (mobile) {
+            return mobileFullImageUrl;
+        }
+        return thumbnailImageUrl;
     };
     this.getFileUrl = function() {
         return fileUrl;
     };
     this.getFilename = function() {
         return filename;
-    };
-    this.getThumbnailImageUrl = function() {
-        return thumbnailImageUrl;
     };
     this.getExternalLink = function() {
         return externalLink;

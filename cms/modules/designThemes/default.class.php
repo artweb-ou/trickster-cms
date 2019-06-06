@@ -34,6 +34,7 @@ class defaultDesignTheme extends DesignTheme
             'basic.anchorParameters.js',
             'mixin.domElementMaker.js',
             'mixin.domHelper.js',
+            'logics.mobile.js',
             'logics.ajaxSearch.js',
             'logics.ajaxSelect.js',
             'logics.checkbox.js',

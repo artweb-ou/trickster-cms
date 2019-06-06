@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Class galleryImageElement
+ *
+ * @property string $title
+ * @property string $description
+ * @property string $alt
+ * @property string $image
+ * @property string $originalName
+ * @property string $mobileImage
+ * @property string $mobileImageName
+ * @property string $externalLink
+ */
 class galleryImageElement extends structureElement implements ImageUrlProviderInterface
 {
     use ImageUrlProviderTrait;
@@ -15,6 +27,8 @@ class galleryImageElement extends structureElement implements ImageUrlProviderIn
         $moduleStructure['alt'] = 'text';
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'fileName';
+        $moduleStructure['mobileImage'] = 'image';
+        $moduleStructure['mobileImageName'] = 'fileName';
         $moduleStructure['externalLink'] = 'url';
     }
 

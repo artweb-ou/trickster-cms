@@ -54,7 +54,7 @@ window.MobileHeaderComponent = function(componentElement) {
 		}
 	};
 	var menuControlClick = function(event) {
-		mobileLogics.toggleMenu();
+		mobileMenuLogics.toggleMenu();
 	};
 	init();
 };
