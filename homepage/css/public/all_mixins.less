@@ -56,6 +56,22 @@
 			.fit_into_grid(@lg_grid_span - 2, @grid_spacing);
 		}
 	}
+	.selectedproducts_scroll & {
+		margin-right: @grid_spacing*0.999 / 2 !important;
+		margin-left: @grid_spacing*0.999 / 2 !important;
+		&:first-child{
+			margin-left: 0 !important;
+		}
+		&:last-child{
+			margin-right: 0 !important;
+		}
+	}
+	@media (min-width: 0) and (max-width: @screen_breakpoint_md_max) {
+		.selectedproducts_scroll & {
+			margin-right: @grid_spacing_mobile*0.999 / 2 !important;
+			margin-left: @grid_spacing_mobile*0.999 / 2 !important;
+		}
+	}
 }
 
 .fit_into_grid_margins(@span) when (@span > 1) {

@@ -32,6 +32,7 @@ class defaultDesignTheme extends DesignTheme
             'basic.storageInterface.js',
             'basic.jsonRequest.js',
             'basic.anchorParameters.js',
+            'basic.touchManager.js',
             'mixin.domElementMaker.js',
             'mixin.domHelper.js',
             'logics.ajaxSearch.js',
