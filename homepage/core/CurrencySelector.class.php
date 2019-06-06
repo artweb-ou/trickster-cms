@@ -66,8 +66,23 @@ class CurrencySelector implements DependencyInjectionContextInterface
     }
 
     public function formatPrice($price) {
+        $formattedPrice = '0';
         $currentFormat = $this->getCurrentCurrencyFormat();
-        return number_format($price, $currentFormat['decimals'], $currentFormat['decPoint'], $currentFormat['thousandsSep']);
+        $currentDecimals = (int)$currentFormat['decimals'];
+        if($currentFormat['decimals'] == 0) {
+            $currentFormat['decimals'] = 2;
+        }
+        $stringPrice = number_format($price, $currentFormat['decimals'], $currentFormat['decPoint'], $currentFormat['thousandsSep']);
+        $int = substr($stringPrice,0, -$currentFormat['decimals']-1);
+        $decimals = substr($stringPrice, -$currentFormat['decimals']);
+        if($currentDecimals === 0) {
+            if((int)$decimals === 0) {
+                $formattedPrice =  $int;
+            } elseif((int)$decimals >> 0) {
+                $formattedPrice = $int .$currentFormat['decPoint']. $decimals;
+            }
+        }
+        return $formattedPrice;
     }
 
     public function getSelectedCurrencyCode()
