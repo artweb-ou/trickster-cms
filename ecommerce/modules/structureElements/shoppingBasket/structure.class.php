@@ -309,8 +309,8 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             $productData["image"] = $product->image;
             $productData["url"] = $product->URL;
             $productData["minimumOrder"] = $product->minimumOrder;
-            $productData['salesPrice'] = $currencySelector->formatPrice($productData['salesPrice']);
             $data["productsSalesPrice"] += $productData['amount'] * $productData['salesPrice'];
+            $productData['salesPrice'] = $currencySelector->formatPrice($productData['salesPrice']);
             $data["productsList"][] = $productData;
         }
         $data["productsSalesPrice"] = $currencySelector->formatPrice($data["productsSalesPrice"]);
