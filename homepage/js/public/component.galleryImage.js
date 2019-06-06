@@ -172,6 +172,7 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
     this.checkPreloadImage = null;
 
     var checkPreloadImage = function(callBack) {
+        test = mediaElement.style.width;
         if (!mediaElement.src) {
             mediaElement.src = imageInfo.getBigImageUrl(window.mobileLogics.isPhoneActive());
             mediaElement.style.visibility = 'hidden';
@@ -287,7 +288,7 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
                     positionTop = (galleryHeight - imageHeight) / 2;
                     positionLeft = (galleryWidth - imageWidth) / 2;
                 }
-                if (mediaElement) {
+                if (mediaElement && self.preloaded) {
                     mediaElement.style.width = imageWidth + 'px';
                     mediaElement.style.height = imageHeight ? imageHeight + 'px' : '';
                     mediaElement.style.left = positionLeft + 'px';
