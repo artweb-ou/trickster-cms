@@ -290,42 +290,43 @@ class orderElement extends structureElement implements PaymentOrderInterface
     public function getPayedPrice()
     {
         $this->recalculate();
-
-        return $this->payedPrice ? $this->payedPrice : 0;
+        $currencySelector = $this->getService('CurrencySelector');
+        return $this->payedPrice ? $currencySelector->formatPrice($this->payedPrice) : 0;
     }
 
     public function getVatAmount()
     {
         $this->recalculate();
-
-        return $this->vatAmount;
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->vatAmount);
     }
 
     public function getProductsPrice()
     {
         $this->recalculate();
-
-        return $this->productsPrice;
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->productsPrice);
     }
 
     public function getTotalAmount()
     {
         $this->recalculate();
-
         return $this->totalAmount;
     }
 
     public function getTotalPrice()
     {
+        $currencySelector = $this->getService('CurrencySelector');
         if ($this->totalPrice === null) {
             $this->recalculate();
         }
-        return $this->totalPrice;
+        return $currencySelector->formatPrice($this->totalPrice);
     }
 
     public function getOrderData()
     {
         if ($this->orderData === null) {
+            $currencySelector = $this->getService('CurrencySelector');
             $pricesIncludeVat = !$this->getService('ConfigManager')->get('main.displayVat');
             $this->orderData = [
                 "paymentBank" => $this->getPaymentBank(),
@@ -347,9 +348,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 "currency" => $this->currency,
                 "productsPrice" => $this->getProductsPrice(),
                 "deliveryType" => $this->deliveryType,
-                "deliveryPrice" => $this->deliveryPrice,
+                "deliveryPrice" => $currencySelector->formatPrice($this->deliveryPrice),
                 "deliveryTitle" => $this->deliveryTitle,
-                "noVatAmount" => $this->noVatAmount,
+                "noVatAmount" => $this->getNoVatAmount(),
                 "vatAmount" => $this->getVatAmount(),
                 "totalPrice" => $this->getTotalPrice(),
                 "invoiceNumber" => $this->invoiceNumber,
@@ -406,11 +407,11 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $this->orderData['addedProducts'][] = [
                     'code' => $product->code,
                     'title' => $product->title,
-                    'price' => $product->price,
+                    'price' => $product->getPrice(),
                     'variation' => $product->variation,
                     'emptyPrice' => $product->isEmptyPrice(),
                     'amount' => $product->amount,
-                    'totalPrice' => $product->getTotalPrice(),
+                    'totalPrice' => $product->getTotalPrice(true),
                     'unit' => $product->unit,
                 ];
             }
@@ -1007,4 +1008,15 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $this->logError('Deprecated method used: ' . __CLASS__ . '::getReceiverFields');
         return $this->getOrderFields();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getNoVatAmount()
+    {
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->noVatAmount);
+    }
+
+
 }

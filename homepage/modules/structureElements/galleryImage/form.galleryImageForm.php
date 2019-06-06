@@ -20,6 +20,9 @@ class GalleryImageFormStructure extends ElementForm
         'image' => [
             'type' => 'input.image',
         ],
+        'mobileImage' => [
+            'type' => 'input.image',
+        ],
     ];
 
 }

@@ -16,7 +16,7 @@
 {else}
 	{$labelBefore = $fieldName}
 {/if}
-{if $item.valuesTranslationGroup}
+{if !empty($item.valuesTranslationGroup)}
 	{$tranlationValueGroup = $item.valuesTranslationGroup}
 {else}
 	{$tranlationValueGroup = $structureType}

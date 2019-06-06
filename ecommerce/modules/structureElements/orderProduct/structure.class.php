@@ -95,4 +95,15 @@ class orderProductElement extends structureElement
             return $this->totalPrice;
         }
     }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->price);
+    }
+
+
 }

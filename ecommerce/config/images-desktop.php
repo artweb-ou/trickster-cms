@@ -456,6 +456,52 @@
             80,
         ],
     ],
+    'productGalleryImageMobile' => [
+        'filters' => [
+            [
+                'reduce',
+                'height=600',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            '',
+            80,
+        ],
+    ],
+    'productGallerySmallThumbnailImageMobile' => [
+        'filters' => [
+            [
+                'fit',
+                'width=110, height=85',
+            ],
+            [
+                'crop',
+                'width=110, height=85, color=#ffffff',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            '',
+            80,
+        ],
+    ],
+    'productGalleryFullImageMobile' => [
+        'filters' => [
+            [
+                'reduce',
+                'width=1920, height=1080',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            null,
+            80,
+        ],
+    ],
     'productGallery' => [
         'filters' => [
             [

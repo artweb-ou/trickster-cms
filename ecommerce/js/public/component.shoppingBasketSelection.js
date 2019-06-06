@@ -453,7 +453,6 @@ window.ShoppingBasketSelectionTable = function(componentElement) {
 window.ShoppingBasketSelectionProduct = function(initData) {
 	var self = this;
 
-	// console.log(basketView['imageCell'])
 	var productData = false;
 	var changeTimeOut = false;
 	var keyUpDelay = 400;
@@ -556,19 +555,20 @@ window.ShoppingBasketSelectionProduct = function(initData) {
 			var priceCell = basketView['priceCell'];
 			cellElement = self.makeElement('td', 'shoppingbasket_table_price', self.componentElement);
 			priceCellContainer = cellElement;
-
+			var priceElementClassName = 'shoppingbasket_table_price_value';
 			if (priceCell.indexOf('fullPriceElement') > -1) {
 				fullPriceElement = self.makeElement('div', 'shoppingbasket_table_full_price_value', cellElement);
 				if (productData.salesPrice != productData.price) {
 					domHelper.addClass(fullPriceElement, 'lined_price');
 					fullPriceElement.style.display = 'block';
+					priceElementClassName += ' new_price';
 				}
 			}
 			if (priceCell.indexOf('priceTitleElement') > -1) {
 				var priceTitleElement = self.makeElement('div', 'shoppingbasket_table_price_title', cellElement);
 				priceTitleElement.innerHTML = translationsLogics.get('shoppingbasket.table_price_title');
 			}
-			priceElement = self.makeElement('div', 'shoppingbasket_table_price_value', cellElement);
+			priceElement = self.makeElement('div', priceElementClassName, cellElement);
 		}
 
 		/*

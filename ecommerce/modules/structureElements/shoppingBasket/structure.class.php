@@ -269,7 +269,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $data["totalPrice"] = $this->shoppingBasket->getTotalPrice();
         $data["productsPrice"] = $this->shoppingBasket->getProductsPrice();
         $data["vatAmount"] = $this->shoppingBasket->getVatAmount();
-        $data["vatLessTotalPrice"] = $this->shoppingBasket->getVatLessTotalPrice(false);
+        $data["vatLessTotalPrice"] = $this->shoppingBasket->getVatLessTotalPrice(true);
         $data["deliveryPrice"] = $this->shoppingBasket->getDeliveryPrice();
         $data["selectedDeliveryTypeId"] = $deliveryTypeid;
         $data["selectedDeliveryTypeTitleDl"] = $deliveryTypeElement ? $deliveryTypeElement->getValue('title', $defaultLanguage->id) : '';
@@ -291,7 +291,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             $productData["title_dl"] = $product->title_dl;
             $productData["code"] = $product->code;
             $productData["price"] = $product->getPrice();
-            $productData["totalPrice"] = $currencySelector->formatPrice($productData["price"] * $product->amount);
+            $productData["totalPrice"] = $currencySelector->formatPrice($product->getPrice(false) * $product->amount);
             $productData["emptyPrice"] = $product->emptyPrice;
             $productData["unit"] = $product->unit;
             $productData["category"] = $structureManager->getElementById($product->productId)
@@ -299,7 +299,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
                 ->getValue('title', $defaultLanguage->id);
             $productData["brand"] = $this->getBrands($product->productId);
             //@todo refactor - move functionality to shoppingbasketdiscounts.class
-            $productData['salesPrice'] = $product->getPrice();
+            $productData['salesPrice'] = $product->getPrice(false);
             $productData["amount"] = $product->amount;
             $productData['salesPrice'] -= $product->discount;
             $productData['totalSalesPrice'] = $currencySelector->formatPrice($productData["salesPrice"] * $product->amount);
@@ -309,8 +309,8 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             $productData["image"] = $product->image;
             $productData["url"] = $product->URL;
             $productData["minimumOrder"] = $product->minimumOrder;
-            $productData['salesPrice'] = $currencySelector->formatPrice($productData['salesPrice']);
             $data["productsSalesPrice"] += $productData['amount'] * $productData['salesPrice'];
+            $productData['salesPrice'] = $currencySelector->formatPrice($productData['salesPrice']);
             $data["productsList"][] = $productData;
         }
         $data["productsSalesPrice"] = $currencySelector->formatPrice($data["productsSalesPrice"]);
@@ -439,7 +439,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
                             'URL' => $product->URL,
                             'isPurchasable' => $product->isPurchasable(),
                             'addtobasket' => $translationsManager->getTranslationByName("product.addtobasket"),
-                            'price' => $product->getPrice(false),
+                            'price' => $product->getPrice(),
                             'oldPrice' => $product->getOldPrice(),
                             'discountPercent' => round($product->getDiscountPercent()),
                             'connectedDiscounts' => $product->getCampaignDiscounts(),

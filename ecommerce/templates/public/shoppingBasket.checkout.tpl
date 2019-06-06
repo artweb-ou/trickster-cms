@@ -40,7 +40,7 @@
 				</td>
 				<td class='shoppingbasket_table_price'>
 					{if !$product->emptyPrice}
-						{$product->price|string_format:'%01.2f'} {$selectedCurrencyItem->symbol} {if $product->unit}/ {$product->unit}{/if}
+						{$product->getPrice(true)} {$selectedCurrencyItem->symbol} {if $product->unit}/ {$product->unit}{/if}
 					{/if}
 				</td>
 				<td class='shoppingbasket_table_amount'>
@@ -48,7 +48,7 @@
 				</td>
 				<td class='shoppingbasket_table_totalprice'>
 					{if !$product->emptyPrice}
-						{$product->totalPrice|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
+						{$product->getTotalPrice()} {$selectedCurrencyItem->symbol}
 					{/if}
 				</td>
 			</tr>
@@ -59,7 +59,7 @@
 				<tr class="shoppingbasket_total shoppingbasket_total_productsfullprice">
 					<th class="shoppingbasket_total_title" colspan="4">{translations name='shoppingbasket.productstable_productsprice'}:</th>
 					<td class="shoppingbasket_total_value">
-						{$shoppingBasketElement->shoppingBasket->getProductsPrice()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
+						{$shoppingBasketElement->shoppingBasket->getProductsPrice()} {$selectedCurrencyItem->symbol}
 					</td>
 				</tr>
 				{foreach from=$shoppingBasketElement->shoppingBasket->getDeliveryTypesList() item=deliveryType}
@@ -70,7 +70,7 @@
 								{$deliveryType->title}
 							</th>
 							<td class="shoppingbasket_total_value">
-								{$deliveryType->getPrice()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
+								{$deliveryType->getPrice(true)} {$selectedCurrencyItem->symbol}
 							</td>
 						</tr>
 						{/if}
@@ -82,7 +82,7 @@
 							{$discount->title}
 						</th>
 						<td class="shoppingbasket_total_value">
-							{$discount->getAllDiscountsAmount()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
+							{$discount->getAllDiscountsAmount()} {$selectedCurrencyItem->symbol}
 						</td>
 					</tr>
 				{/foreach}
@@ -92,7 +92,7 @@
 							{translations name='shoppingbasket.vatlesstotalprice'}:
 						</th>
 						<td class="shoppingbasket_total_value">
-							{$shoppingBasketElement->shoppingBasket->getVatLessTotalPrice()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
+							{$shoppingBasketElement->shoppingBasket->getVatLessTotalPrice(true)} {$selectedCurrencyItem->symbol}
 						</td>
 					</tr>
 					<tr class="shoppingbasket_total shoppingbasket_total_vat">
@@ -100,7 +100,7 @@
 							{translations name='shoppingbasket.vatamount'}:
 						</th>
 						<td class="shoppingbasket_total_value">
-							{$shoppingBasketElement->shoppingBasket->getVatAmount()|string_format:'%01.2f'} {$selectedCurrencyItem->symbol}
+							{$shoppingBasketElement->shoppingBasket->getVatAmount()} {$selectedCurrencyItem->symbol}
 						</td>
 					</tr>
 				{/if}
@@ -109,7 +109,7 @@
 						{translations name='shoppingbasket.totalprice'}:
 					</th>
 					<td class="shoppingbasket_total_value">
-						<span class='shoppingbasket_totalprice_value'>{$shoppingBasketElement->shoppingBasket->getTotalPrice()|string_format:'%01.2f'}</span> {$selectedCurrencyItem->symbol}
+						<span class='shoppingbasket_totalprice_value'>{$shoppingBasketElement->shoppingBasket->getTotalPrice()}</span> {$selectedCurrencyItem->symbol}
 					</td>
 				</tr>
 				{if !$configManager->get('main.displayVat')}

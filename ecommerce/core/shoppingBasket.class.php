@@ -325,7 +325,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
             $this->productsAmount = $productsAmount;
             $this->productsPrice = $currencySelector->convertPrice($productsPrice, false);
             if (is_numeric($deliveryPrice)) {
-                $this->deliveryPrice = $currencySelector->convertPrice($deliveryPrice, false);
+                $this->deliveryPrice = $currencySelector->convertPrice($deliveryPrice);
             } else {
                 $this->deliveryPrice = $deliveryPrice;
             }
@@ -513,7 +513,8 @@ class shoppingBasket implements DependencyInjectionContextInterface
 
     public function getTotalPrice()
     {
-        return $this->totalPrice;
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->totalPrice);
     }
 
     public function getVatAmount($round = true, $useCurrency = true)
@@ -729,13 +730,22 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
     {
         $price = $this->price;
         $currencySelector = $this->getService('CurrencySelector');
+        if ($useCurrency) {
+            $price = $currencySelector->convertPrice($price, false);
+        }
         if ($round) {
-            return $currencySelector->convertPrice($price);
-        } elseif ($useCurrency) {
-            return $currencySelector->convertPrice($price, false);
+            $price = $currencySelector->formatPrice($price);
         }
         return $price;
+    }
 
+    /**
+     * @return string
+     */
+    public function getTotalPrice() : string
+    {
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->totalPrice);
     }
 }
 
@@ -1320,12 +1330,12 @@ class shoppingBasketDeliveryType implements DependencyInjectionContextInterface
 
         //empty price means "no price defined"
         if (is_numeric($price)) {
+            $currencySelector = $this->getService('CurrencySelector');
             if ($useCurrency) {
-                $currencySelector = $this->getService('CurrencySelector');
-                $price = $currencySelector->convertPrice($price);
+                $price = $currencySelector->convertPrice($price, false);
             }
             if ($round) {
-                $price = sprintf('%01.2f', $price);
+                $price = $currencySelector->formatPrice($price);
             }
         }
 
