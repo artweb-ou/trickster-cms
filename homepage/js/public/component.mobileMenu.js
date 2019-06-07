@@ -16,6 +16,7 @@ window.MobileMenuComponent = function(componentElement, toggleStartCallback) {
 		}
 		visible = !visible;
 		if (visible) {
+			DarkLayerComponent.darkLayerComponentOpacity = .6;
 			DarkLayerComponent.showLayer(function() {
 				self.toggleVisibility;
 			}, null);
