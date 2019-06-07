@@ -5,6 +5,7 @@
     'cookiepolicy.infoLinkText' => true,
     'gallery.next' => true,
     'gallery.previous' => true,
+    'gallery.explore_categories' => true,
     'calendar.month_1' => true,
     'calendar.month_2' => true,
     'calendar.month_3' => true,
@@ -17,5 +18,6 @@
     'calendar.month_10' => true,
     'calendar.month_11' => true,
     'calendar.month_12' => true,
+    'button.file_upload' => true,
     'button.file_upload' => true,
 ];
