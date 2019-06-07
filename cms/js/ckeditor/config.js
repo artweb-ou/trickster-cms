@@ -12,7 +12,6 @@ CKEDITOR.editorConfig = function(config) {
 
 	config.extraPlugins = 'justify,templates,iframe,mediaembed,undo,font,removeformat,image2,texttransform,html5video';
 	config.removePlugins = 'image,forms';
-
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
 		{name: 'document', groups: ['mode', 'doctools', 'undo', 'cleanup']},
@@ -45,7 +44,8 @@ CKEDITOR.editorConfig = function(config) {
 	config.ignoreEmptyParagraph = true;
 	config.contentsCss = '/css/set:ckeditor/15072013.css' ;
 	config.bodyClass = 'html_content' ;
-	config.templates_files = [ CKEDITOR.getUrl( '/../../../project/js/ckeditor/project.templates.js') ];
+	// config.templates_files = [ CKEDITOR.getUrl( '/../../../project/js/ckeditor/project.templates.js') ];
+	config.templates_files = [ '/project/js/ckeditor/project.templates.js' ];
 	config.templates_replaceContent = false;
 	config.allowedContent = true;
 	config.resize_dir = "both";
