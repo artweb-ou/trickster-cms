@@ -31,6 +31,7 @@ window.ProductsFilterPriceComponent = function(componentElement, onChange) {
 		eventsManager.addHandler(startInputElement, 'keyup', inputKeyUp);
 		eventsManager.addHandler(endInputElement, 'change', inputChange);
 		eventsManager.addHandler(endInputElement, 'keyup', inputKeyUp);
+		controller.addListener('MobileCommonMenuReappended', self.refresh);
 	};
 
 	var inputKeyUp = function(event) {
