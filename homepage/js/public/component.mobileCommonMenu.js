@@ -42,6 +42,7 @@ window.MobileCommonMenuComponent = function(buttonElement) {
 		}else {
 			menuElement.appendChild(contentElement);
 		}
+		controller.fireEvent('MobileCommonMenuReappended');
 	};
 
 	init();
