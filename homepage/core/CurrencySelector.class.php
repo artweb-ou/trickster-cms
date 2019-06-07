@@ -58,7 +58,9 @@ class CurrencySelector implements DependencyInjectionContextInterface
 
     public function convertPrice($price, bool $format = true)
     {
-        $value = $price * $this->getSelectedCurrencyRate();
+        $currentFormat = $this->getCurrentCurrencyFormat();
+        $value = floatval(
+            str_replace($currentFormat['decPoint'], '.', str_replace($currentFormat['thousandsSep'], '', $price))) * floatval($this->getSelectedCurrencyRate());
         if ($format) {
             return $this->formatPrice($value);
         }
