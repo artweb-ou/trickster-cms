@@ -2,6 +2,7 @@ window.ProductSearchComponent = function(componentElement) {
 	var sortSelectElement;
 	var searchBaseUrl;
 	var filters = [];
+	var submitLocation = false;
 	var self = this;
 
 	var init = function() {
@@ -24,6 +25,11 @@ window.ProductSearchComponent = function(componentElement) {
 		var resetElement = _('.productsearch_reset', componentElement)[0];
 		if (resetElement) {
 			eventsManager.addHandler(resetElement, 'click', reset);
+		}
+
+		var submitElement = _('.productsearch_submit', componentElement)[0];
+		if (submitElement) {
+			eventsManager.addHandler(submitElement, 'click', submitForm);
 		}
 		controller.addListener('TabsComponent.tabActivated', tabActivated);
 	};
@@ -95,8 +101,18 @@ window.ProductSearchComponent = function(componentElement) {
 			}
 		}
 		baseUrl = baseUrl || window.productsListElementUrl;
-		document.location.href = baseUrl + generateQueryString(arguments);
-		// document.location.href = baseUrl + generateQueryString(arguments) + 'productsearch:1/';
+		submitLocation = baseUrl + generateQueryString(arguments);
+		//autoSubmit by default
+		if(typeof window.productSearchLogics.useAutoSubmit == "undefined" || window.productSearchLogics.useAutoSubmit()) {
+			submitForm();
+		}
+	};
+
+	var submitForm = function() {
+		if(!submitLocation) {
+			self.refresh();
+		}
+		document.location.href = submitLocation;
 	};
 
 	var generateQueryString = function(arguments) {

@@ -4,7 +4,9 @@ window.MobileCommonMenuComponent = function(buttonElement) {
 	var menuElement;
 	var menuContainer;
 	var closeElement;
+	var additionalCloseElements;
 	var menu;
+	var menuHeaderElement;
 	var self = this;
 
 	var init = function() {
@@ -24,16 +26,28 @@ window.MobileCommonMenuComponent = function(buttonElement) {
 				menuElement.className = 'mobilemenu_main';
 				menuContainer.appendChild(menuElement);
 
+				menuHeaderElement = document.createElement('div');
+				menuHeaderElement.className = 'mobilemenu_header';
+				menuElement.appendChild(menuHeaderElement);
+
 				closeElement = document.createElement('div');
 				closeElement.className = 'mobilemenu_closeicon';
-				menuContainer.appendChild(closeElement);
+				menuHeaderElement.appendChild(closeElement);
+
+				additionalCloseElements = contentElement.querySelectorAll('.mobile_common_menu_close');
 
 				menu = new MobileMenuComponent(menuContainer, toggleStartCallback);
 
-				eventsManager.addHandler(closeElement, 'click', menu.toggleVisibility);
-				eventsManager.addHandler(buttonElement, 'click', menu.toggleVisibility);
+				for (var i = 0; i < additionalCloseElements.length; ++i) {
+					eventsManager.addHandler(additionalCloseElements[i], 'click', toggleMenu);
+				}
+				eventsManager.addHandler(buttonElement, 'click', toggleMenu);
 			}
 		}
+	};
+
+	var toggleMenu = function() {
+		menu.toggleVisibility();
 	};
 
 	var toggleStartCallback = function() {
