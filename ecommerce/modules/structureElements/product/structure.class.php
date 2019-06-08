@@ -261,8 +261,7 @@ class productElement extends structureElement implements
     public function getBrandsIdList()
     {
         if ($this->brandsIdList === null) {
-            $this->brandsIdList = $this->getService('linksManager')
-                ->getConnectedIdList($this->id, 'productbrand', 'child');
+            $this->brandsIdList = $this->getService('linksManager')->getConnectedIdList($this->id, 'productbrand', 'child');
         }
         return $this->brandsIdList;
     }

@@ -28,7 +28,7 @@ class imageApplication extends controllerApplication
         }
         $result = false;
         if (is_file($originalFilePath)) {
-            if (stripos(strtolower($this->fileName), 'svg') !== false) {
+            if (substr(strtolower($this->fileName), -4) === '.svg') {
                 $result = true;
                 header('Content-Type: image/svg+xml');
                 echo file_get_contents($originalFilePath);
