@@ -23,17 +23,6 @@
                     {foreach $element->getCurrentStepElements() as $contentItem}
                         {include file=$theme->template($contentItem->getTemplate()) element=$contentItem shoppingBasketElement=$element}
                     {/foreach}
-                {else}
-                    {*Default steps:*}
-                    {*1:*}
-                    {*products*}
-                    {*discounts*}
-                    {*delivery*}
-                    {*totals*}
-                    {*2:*}
-                    {*paymentmethods*}
-                    {*3:*}
-                    {*checkoutTotals*}
                 {/if}
             </div>
             {include file=$theme->template('shoppingBasket.controls.tpl') element=$element}

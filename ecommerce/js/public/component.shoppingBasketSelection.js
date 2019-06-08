@@ -56,8 +56,8 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
 		}
 		totalsContainerElement = _('.shoppingbasket_total_products')[0];
 		productPriceElements = _('.shoppingbasket_total_products .shoppingbasket_total_value');
-		element = _('.shoppingbasket_services_component', componentElement)[0];
-		if (element) {
+
+		if (element = componentElement.querySelector('.shoppingbasket_services_component')) {
 			new ShoppingBasketSelectionServices(element);
 		}
 		element = _('.shoppingbasket_form_block', componentElement)[0];
