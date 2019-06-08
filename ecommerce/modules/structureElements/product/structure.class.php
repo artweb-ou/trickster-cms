@@ -243,20 +243,19 @@ class productElement extends structureElement implements
      */
     public function getOldPrice($formatted = true, $originalCurrency = false)
     {
-        $oldPrice = false;
-        if ($this->getPrice() < $this->calculatedOldPrice) {
-            $currencySelector = $this->getService('CurrencySelector');
+        if ($this->getPrice(false) < $this->calculatedOldPrice) {
             if ($originalCurrency) {
-                $oldPrice = (float)$this->calculatedOldPrice;
+                if ($formatted) {
+                    return $this->getService('CurrencySelector')->formatPrice($this->calculatedOldPrice);
+                } else {
+                    return $this->calculatedOldPrice;
+                }
             } else {
-                $oldPrice = $currencySelector->convertPrice($this->calculatedOldPrice, false);
-            }
-            if ($formatted) {
-                $oldPrice = $currencySelector->formatPrice($oldPrice);
+                return $this->getService('CurrencySelector')->convertPrice($this->calculatedOldPrice, $formatted);
             }
         }
 
-        return $oldPrice;
+        return false;
     }
 
     public function getBrandsIdList()
@@ -276,7 +275,7 @@ class productElement extends structureElement implements
     /**
      * @param bool $formatted
      * @param bool $originalCurrency
-     * @param string $format
+     * @param string $format - deprecated
      * @param bool $includeVat
      * @return float
      */
@@ -286,6 +285,9 @@ class productElement extends structureElement implements
             $discountsManager = $this->getService('shoppingBasketDiscounts');
             $this->calculatedPrice = $this->price;
             $this->calculatedOldPrice = $this->oldPrice;
+            /**
+             * @var Config $mainConfig
+             */
             $mainConfig = $this->getService('ConfigManager')->getConfig('main');
             $vatRateSetting = $mainConfig->get('vatRate');
             $vatIncluded = $this->vatIncluded || $mainConfig->get('pricesContainVat') === true;
@@ -303,6 +305,9 @@ class productElement extends structureElement implements
             }
         }
         $price = $this->calculatedPrice;
+        /**
+         * @var CurrencySelector $currencySelector
+         */
         $currencySelector = $this->getService('CurrencySelector');
         if (!$includeVat) {
             $mainConfig = $this->getService('ConfigManager')->getConfig('main');
@@ -311,9 +316,8 @@ class productElement extends structureElement implements
             $price /= $vatRateSetting;
         }
         if (!$originalCurrency) {
-            $price = $currencySelector->convertPrice($price, false);
-        }
-        if ($formatted) {
+            $price = $currencySelector->convertPrice($price, $formatted);
+        } elseif ($formatted) {
             $price = $currencySelector->formatPrice($price);
         }
         return $price;
