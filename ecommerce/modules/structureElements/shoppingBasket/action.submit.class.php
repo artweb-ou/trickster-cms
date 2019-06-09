@@ -1,9 +1,20 @@
 <?php
 
+/**
+ * Class submitShoppingBasket
+ *
+ * @property shoppingBasketElement $structureElement
+ */
 class submitShoppingBasket extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param shoppingBasketElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         $shoppingBasket = $this->getService('shoppingBasket');
@@ -17,7 +28,7 @@ class submitShoppingBasket extends structureElementAction
 
         $formErrors = $structureElement->getFormErrors();
         $formData = $structureElement->getFormData();
-        if($this->stepContentIsUsingCustomFields()) {
+        if ($this->stepContentIsUsingCustomFields()) {
             $deliveryType = $shoppingBasket->getSelectedDeliveryType();
             if ($customFields = $structureElement->getCustomFieldsList()) {
                 foreach ($customFields as &$field) {
@@ -42,7 +53,7 @@ class submitShoppingBasket extends structureElementAction
         }
 
         if ($this->validated) {
-            if($this->stepContentIsUsingCustomFields()) {
+            if ($this->stepContentIsUsingCustomFields()) {
                 if ($structureElement->receiverIsPayer && $customFields = $structureElement->getCustomFieldsList()) {
                     foreach ($customFields as &$field) {
                         $fieldName = $field->fieldName;
@@ -91,19 +102,19 @@ class submitShoppingBasket extends structureElementAction
 
                 $structureElement->saveShoppingBasketForm();
             }
-            if($structureElement->paymentMethodId) {
+            if ($structureElement->paymentMethodId) {
                 $shoppingBasket->updateBasketFormData([
-                    'paymentMethodId' => $structureElement->paymentMethodId
+                    'paymentMethodId' => $structureElement->paymentMethodId,
                 ]);
             }
-            if($structureElement->isLastStep()) {
-                if($paymentMethodId = $shoppingBasket->getPaymentMethodId()) {
+            if ($structureElement->isLastStep()) {
+                if ($paymentMethodId = $shoppingBasket->getPaymentMethodId()) {
                     $controller->redirect($structureElement->URL . 'id:' . $structureElement->id
                         . '/action:pay/bank:' . $paymentMethodId . '/');
-                }else {
+                } else {
                     $structureElement->setViewName('selection');
                 }
-            }else {
+            } else {
                 $nextStep = $structureElement->getNextStep();
                 $controller->redirect($structureElement->URL . 'step:' . $nextStep->structureName . '/');
             }
@@ -134,18 +145,19 @@ class submitShoppingBasket extends structureElementAction
 
     public function setValidators(&$validators)
     {
-        foreach($this->structureElement->getCurrentStepElements() as $stepContentElement) {
+        foreach ($this->structureElement->getCurrentStepElements() as $stepContentElement) {
             $validators = $validators + $stepContentElement->getValidators($this->elementFormData);
         }
 
-        if($this->stepContentIsUsingCustomFields()) {
+        if ($this->stepContentIsUsingCustomFields()) {
             $validators = $validators + $this->structureElement->getCustomValidators();
         }
     }
 
-    public function stepContentIsUsingCustomFields() {
-        foreach($this->structureElement->getCurrentStepElements() as $stepContentElement) {
-            if($stepContentElement->useCustomFields()) {
+    public function stepContentIsUsingCustomFields()
+    {
+        foreach ($this->structureElement->getCurrentStepElements() as $stepContentElement) {
+            if ($stepContentElement->useCustomFields()) {
                 return true;
             }
         }

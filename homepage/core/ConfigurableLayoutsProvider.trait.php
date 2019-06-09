@@ -30,7 +30,7 @@ trait ConfigurableLayoutsProviderTrait
         }
 
         //now check normal format
-        if (!$result){
+        if (!$result) {
             $result = $layoutsConfig->get("{$this->structureType}.$layout.options");
         }
         return (array)$result;

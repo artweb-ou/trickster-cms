@@ -1,6 +1,6 @@
 <?php
 
-class ShoppingBasketStepDiscountsFormStructure extends ElementForm
+class ShoppingBasketStepPromoFormStructure extends ElementForm
 {
     protected $structure = [
         'title' => [

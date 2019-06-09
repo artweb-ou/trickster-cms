@@ -1,6 +1,6 @@
 <?php
 
-class receiveShoppingBasketStepProducts extends structureElementAction
+class receiveShoppingBasketStepCheckout extends structureElementAction
 {
     protected $loggable = true;
 

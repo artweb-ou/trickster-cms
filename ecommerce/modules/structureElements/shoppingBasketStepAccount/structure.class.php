@@ -2,8 +2,9 @@
 
 class shoppingBasketStepAccountElement extends structureElement
 {
+    use ConfigurableLayoutsProviderTrait;
     use ShoppingBasketStepContentTrait;
-    public $dataResourceName = 'module_generic';
+    public $dataResourceName = 'module_shoppingbasket_step_account';
     protected $allowedTypes = [
         'login',
         'registration',
@@ -14,6 +15,7 @@ class shoppingBasketStepAccountElement extends structureElement
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['layout'] = 'text';
     }
 
     public function getLoginForm()

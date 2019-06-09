@@ -1,6 +1,6 @@
 <?php
 
-class showShoppingBasketStepAccount extends structureElementAction
+class showShoppingBasketStepCheckout extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {

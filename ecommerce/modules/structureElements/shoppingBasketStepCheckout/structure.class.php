@@ -1,10 +1,10 @@
 <?php
 
-class shoppingBasketStepProductsElement extends structureElement
+class shoppingBasketStepCheckoutElement extends structureElement
 {
     use ShoppingBasketStepContentTrait;
     use ConfigurableLayoutsProviderTrait;
-    public $dataResourceName = 'module_shoppingbasket_step_products';
+    public $dataResourceName = 'module_shoppingbasket_step_checkout';
     protected $allowedTypes = [];
     public $defaultActionName = 'show';
     public $role = 'content';
@@ -12,7 +12,6 @@ class shoppingBasketStepProductsElement extends structureElement
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
-        $moduleStructure['layout'] = 'text';
-    }
+        $moduleStructure['layout'] = 'text';}
 }
 

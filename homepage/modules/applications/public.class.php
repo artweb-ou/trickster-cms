@@ -162,7 +162,6 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                 }
 
                 $this->renderer->assign('jsScripts', $this->getJsScripts($currentElement));
-                $this->renderer->assign('layoutsManager', $this->getService('LayoutsManager'));
                 $this->renderer->assign('application', $this);
                 $this->renderer->assign('currentMetaDescription', $currentMetaDescription);
                 $this->renderer->assign('currentMetaKeywords', $currentMetaKeywords);
