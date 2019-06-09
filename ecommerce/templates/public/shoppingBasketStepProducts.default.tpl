@@ -18,8 +18,7 @@
 		</th>
 	</tr>
 	</thead>
-	<tbody class="shoppingbasket_table_rows">
-	</tbody>
+	<tbody class="shoppingbasket_table_rows"></tbody>
 	<tbody class="shoppingbasket_total shoppingbasket_total_products">
 	<tr class="shoppingbasket_total">
 		<th class="shoppingbasket_total_title" colspan="4">

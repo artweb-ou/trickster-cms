@@ -1,12 +1,11 @@
 function TextareaComponent(textareaBlockElement) {
-    var init = function () {
+    var init = function() {
         eventsManager.addHandler(textareaBlockElement, 'click', clickHandler);
 
         originalClass = textareaBlockElement.className;
         if (textareaBlockElement.tagName.toLowerCase() == 'textarea') {
             textareaElement = textareaBlockElement;
-        }
-        else if (textareaElement = textareaBlockElement.querySelector('textarea')) {
+        } else if (textareaElement = textareaBlockElement.querySelector('textarea')) {
             eventsManager.addHandler(textareaElement, 'focus', focusHandler);
             eventsManager.addHandler(textareaElement, 'blur', blurHandler);
         }
@@ -18,28 +17,28 @@ function TextareaComponent(textareaBlockElement) {
 
         refresh();
     };
-    var clickHandler = function () {
+    var clickHandler = function() {
         textareaElement.focus();
     };
-    var mouseOverHandler = function () {
+    var mouseOverHandler = function() {
         hovered = true;
         refresh();
     };
-    var mouseOutHandler = function () {
+    var mouseOutHandler = function() {
         hovered = false;
         refresh();
     };
-    var focusHandler = function () {
-        domHelper.addClass(textareaBlockElement, "textarea_component_focused");
+    var focusHandler = function() {
+        domHelper.addClass(textareaBlockElement, 'textarea_component_focused');
         focused = true;
         refresh();
     };
-    var blurHandler = function () {
-        domHelper.removeClass(textareaBlockElement, "textarea_component_focused");
+    var blurHandler = function() {
+        domHelper.removeClass(textareaBlockElement, 'textarea_component_focused');
         focused = false;
         refresh();
     };
-    var refresh = function () {
+    var refresh = function() {
         var newClass = originalClass;
 
         if (hovered) {
