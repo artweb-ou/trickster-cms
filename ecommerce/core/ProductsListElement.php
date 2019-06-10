@@ -445,6 +445,14 @@ abstract class ProductsListElement extends menuStructureElement
         return $this->filterPriceString;
     }
 
+    public function getSelectedFiltersCount() {
+        $selectedFiltersCount = count($this->getFilterParameterValueIds());
+        if($this->getFilterPrice()) {
+            $selectedFiltersCount++;
+        }
+        return $selectedFiltersCount;
+    }
+
     /**
      * @return mixed
      */
