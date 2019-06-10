@@ -27,6 +27,7 @@
     'discountsList' => 'showForm',
     'shoppingBasketStatus' => 'showForm',
     'shoppingBasketStep' => 'showFullList',
+    'shoppingBasketStepAgreement' => 'showForm',
     'shoppingBasketStepProducts' => 'showForm',
     'shoppingBasketStepDiscounts' => 'showForm',
     'shoppingBasketStepDelivery' => 'showForm',

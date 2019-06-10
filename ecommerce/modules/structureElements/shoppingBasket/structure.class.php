@@ -152,8 +152,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
     public function prepareFormInformation()
     {
         $shoppingBasket = $this->getService('shoppingBasket');
-        $formData = $shoppingBasket->getBasketFormData();
-        if (count($formData) > 0) {
+        if ($formData = $shoppingBasket->getBasketFormData()) {
             $this->setFormValue('payerCompany', $formData['payerCompany']);
             $this->setFormValue('payerFirstName', $formData['payerFirstName']);
             $this->setFormValue('payerLastName', $formData['payerLastName']);

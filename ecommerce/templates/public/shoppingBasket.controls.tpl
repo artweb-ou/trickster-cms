@@ -1,7 +1,4 @@
 <div class='shoppingbasket_form_controls'>
-    {if $element->isLastStep()}
-        {include file=$theme->template('shoppingBasket.conditions.tpl')}
-    {/if}
 	<div>
 		<input type="hidden" value="{$element->id}" name="id" />
 		<input type="hidden" value="submit" name="action" />

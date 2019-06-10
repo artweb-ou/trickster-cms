@@ -7,6 +7,7 @@ class shoppingBasketStepElement extends structureElement
     public $languagesParentElementMarker = 'adminLanguages';
     public $dataResourceName = 'module_generic';
     protected $allowedTypes = [
+        'shoppingBasketStepAgreement',
         'shoppingBasketStepProducts',
         'shoppingBasketStepDiscounts',
         'shoppingBasketStepDelivery',

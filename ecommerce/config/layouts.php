@@ -188,6 +188,14 @@
     ],
     'shoppingBasketStepTotals.layout.default' => 'default',
 
+    'shoppingBasketStepAgreement.layouts' => [
+        'layout',
+    ],
+    'shoppingBasketStepAgreement.layout.options' => [
+        'default',
+    ],
+    'shoppingBasketStepAgreement.layout.default' => 'default',
+
     'shoppingBasketStepDiscounts.layouts' => [
         'layout',
     ],
