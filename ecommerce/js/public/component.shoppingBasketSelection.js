@@ -19,8 +19,8 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
             conditionsContentElement = _('.shoppingbasket_form_conditions_content', formElement)[0];
             conditionsTextElement = _('.shoppingbasket_form_conditions_text', conditionsContentElement)[0];
         }
-        if (formElement = _('.shoppingbasket_form', componentElement)[0]) {
-            if (submitButtonElement = _('.shoppingbasket_form_submit')[0]) {
+        if (formElement = componentElement.querySelector('.shoppingbasket_form', componentElement)) {
+            if (submitButtonElement = componentElement.querySelector('.shoppingbasket_form_submit')) {
                 eventsManager.addHandler(submitButtonElement, 'click', submitForm);
             }
         }

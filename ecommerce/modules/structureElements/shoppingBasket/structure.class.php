@@ -4,11 +4,21 @@
  * Class shoppingBasketElement
  *
  * @property string conditionsLink
+ * @property int receiverIsPayer
  * @property string paymentSuccessfulText
  * @property string paymentDeferredText
  * @property string paymentInvoiceText
  * @property string paymentQueryText
  * @property string paymentFailedText
+ * @property string payerCompany
+ * @property string payerFirstName
+ * @property string payerLastName
+ * @property string payerEmail
+ * @property string payerPhone
+ * @property string payerAddress
+ * @property string payerCity
+ * @property string payerPostIndex
+ * @property string payerCountry
  * @property string columns
  * @property mixed|null structureElement
  */
@@ -26,6 +36,9 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
     protected $deliveryTypesList = false;
     protected $displayedProducts = false;
     public $errorMessage = '';
+    /**
+     * @var shoppingBasketStepElement
+     */
     protected $currentStep;
     //todo: make $shoppingBasket protected, provide getter
     /**

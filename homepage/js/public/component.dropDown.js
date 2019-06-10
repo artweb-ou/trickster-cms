@@ -379,6 +379,7 @@ window.DropDownComponentList = function(parentObject, initOptionsData) {
         }
         var dropDownPositions = getElementPositions(parentObject.componentElement);
         var dropDownLeft = dropDownPositions.x;
+        var dropDownRight = dropDownLeft + parentObject.componentElement.offsetWidth;
         var dropDownTop = dropDownPositions.y;
         var dropDownHeight = parentObject.componentElement.offsetHeight;
 
@@ -418,8 +419,12 @@ window.DropDownComponentList = function(parentObject, initOptionsData) {
             var topPosition = (dropDownTop + dropDownHeight);
             domHelper.removeClass(self.componentElement, 'dropdown_list_is_above');
         }
+        if(self.componentElement.offsetWidth + leftPosition > window.innerWidth) {
+            self.componentElement.style.left = dropDownRight - self.componentElement.offsetWidth + 'px';
+        } else {
+            self.componentElement.style.left = leftPosition + 'px';
+        }
 
-        self.componentElement.style.left = leftPosition + 'px';
         self.componentElement.style.top = topPosition + 'px';
 
         if (contentElement.scrollHeight > contentElement.offsetHeight) {
