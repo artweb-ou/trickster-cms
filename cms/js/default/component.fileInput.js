@@ -36,9 +36,10 @@ function FileInputComponent(inputElement) {
         inputElement.parentNode.insertBefore(componentElement, inputElement);
         componentElement.appendChild(inputElement);
         if (inputElement.dataset.inrow) {
-            let submit = inputElement.form.querySelector(inputElement.dataset.inrow).cloneNode(true);
+            let submit = inputElement.form.querySelector(inputElement.dataset.inrow);
+        //    console.log(submit)
             componentElement.appendChild(submit);
-            submit.remove();
+         //   submit.remove();
         }
         eventsManager.addHandler(componentElement, 'click', clickHandler);
     };
