@@ -346,6 +346,9 @@ window.shoppingBasketLogics = new function() {
     this.getSelectedServicesPrice = function() {
         return selectedServicesPrice;
     };
+    this.getProductsPrice = function() {
+        return self.productsPrice;
+    };
     var sendData = function(actionName, requestParameters) {
         var requestURL = window.ajaxURL + 'id:' + elementId + '/action:' + actionName;
         var request = new JsonRequest(requestURL, receiveData, actionName, requestParameters);

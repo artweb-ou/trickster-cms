@@ -224,9 +224,7 @@ class smartyRendererPlugin extends rendererPlugin
     public static function stripDomSpaces($params, $content, Smarty_Internal_Template $template, &$repeat)
     {
         if (!$repeat) {
-            //		$content = preg_replace('/^\s+|\s+$/u', ' ', $content);
             $content = preg_replace('/([}>])\s+([{<])/u', '$1$2', $content);
-            //		$content = preg_replace('/\s+/u', '', $content);
         }
         return $content;
     }

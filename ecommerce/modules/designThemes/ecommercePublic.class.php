@@ -52,7 +52,7 @@ class ecommercePublicDesignTheme extends DesignTheme
             'component.ShoppingBasketSelectionFormDpdPoint.js',
             'component.ShoppingBasketSelectionFormSmartPostAutomate.js',
             'component.ShoppingBasketSelectionForm.js',
-            'component.ShoppingBasketSelectionTable.js',
+            'component.ShoppingBasketSelectionProducts.js',
             'component.ShoppingBasketSelectionFormFieldHelper.js',
             'component.ShoppingBasketSelectionProduct.js',
             'component.ShoppingBasketSelectionCountriesSelector.js',

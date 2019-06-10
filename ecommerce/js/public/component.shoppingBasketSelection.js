@@ -50,9 +50,9 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
         this.basketView = basketCells;
 
         messageElement = _('.shoppingbasket_selection_message', componentElement)[0];
-        var element = _('.shoppingbasket_table_products', componentElement)[0];
+        var element = _('.shoppingbasket_products', componentElement)[0];
         if (element) {
-            new ShoppingBasketSelectionTable(element);
+            new ShoppingBasketSelectionProducts(element);
         }
         totalsContainerElement = _('.shoppingbasket_total_products')[0];
         productPriceElements = _('.shoppingbasket_total_products .shoppingbasket_total_value');

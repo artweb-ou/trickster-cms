@@ -1,0 +1,1 @@
+{include file=$theme->template('shoppingBasketStepProducts.default.tpl') checkout=true}

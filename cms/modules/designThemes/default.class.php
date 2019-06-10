@@ -34,6 +34,7 @@ class defaultDesignTheme extends DesignTheme
             'basic.anchorParameters.js',
             'basic.touchManager.js',
             'basic.smart.min.js',
+            'basic.smart.plugins.js', //must go after basic.smart.min.js
             'mixin.domElementMaker.js',
             'mixin.domHelper.js',
             'logics.mobile.js',
