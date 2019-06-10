@@ -17,18 +17,14 @@ class CurrencySelectorItem
     {
         $this->code = strtolower($info['code']);
         $this->symbol = $info['symbol'];
-        //todo: parse rate into float safely using strreplace
-        $this->rate = $info['rate'];
+        $this->rate = floatval(str_replace([" ", ','], ["", '.'], $info['rate']));
         //		$this->image = $info['image'];
         $this->title = $info['title'];
-        $this->decimals = $info['decimals'];
-        $this->decPoint = $info['decPoint'];
-        $this->thousandsSep = $info['thousandsSep'];
 
-        //todo: use locale info for decPoint and thousandsSep if empty in database
-        //    $LocaleInfo = localeconv();
-        //    $LocaleInfo["mon_thousands_sep"]
-        //    $LocaleInfo["mon_decimal_point"]
+        $LocaleInfo = localeconv();
+        $this->decimals = !empty($info['decimals']) ? $info['decimals'] : 2;
+        $this->decPoint = !empty($info['decPoint']) ? $info['decPoint'] : $LocaleInfo["mon_decimal_point"];
+        $this->thousandsSep = !empty($info['thousandsSep']) ? $info['thousandsSep'] :  $LocaleInfo["mon_thousands_sep"];
 
         $this->prepareURL($currentURL);
 
