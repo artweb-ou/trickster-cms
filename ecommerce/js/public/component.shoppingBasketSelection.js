@@ -25,30 +25,6 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
             }
         }
 
-        var separator = /\s*,\s*/;
-        if (componentElement.dataset.imagecell) {
-            basketCells['imageCell'] = componentElement.dataset.imagecell.split(separator);
-        }
-        if (componentElement.dataset.infocell) {
-            basketCells['infoCell'] = componentElement.dataset.infocell.split(separator);
-        }
-        if (componentElement.dataset.pricecell) {
-            basketCells['priceCell'] = componentElement.dataset.pricecell.split(separator);
-        }
-        if (componentElement.dataset.amountcell) {
-            basketCells['amountCell'] = componentElement.dataset.amountcell.split(separator);
-        }
-        if (componentElement.dataset.totalcell) {
-            basketCells['totalCell'] = componentElement.dataset.totalcell.split(separator);
-        }
-        if (componentElement.dataset.totalpricecell) {
-            basketCells['totalPriceCell'] = componentElement.dataset.totalpricecell.split(separator);
-        }
-        if (componentElement.dataset.removecell) {
-            basketCells['removeCell'] = componentElement.dataset.removecell.split(separator);
-        }
-        this.basketView = basketCells;
-
         messageElement = _('.shoppingbasket_selection_message', componentElement)[0];
         var element = _('.shoppingbasket_products', componentElement)[0];
         if (element) {
