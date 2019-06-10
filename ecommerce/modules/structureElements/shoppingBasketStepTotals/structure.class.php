@@ -3,7 +3,9 @@
 class shoppingBasketStepTotalsElement extends structureElement
 {
     use ShoppingBasketStepContentTrait;
-    public $dataResourceName = 'module_generic';
+    use ConfigurableLayoutsProviderTrait;
+
+    public $dataResourceName = 'module_shoppingbasket_step_totals';
     protected $allowedTypes = [];
     public $defaultActionName = 'show';
     public $role = 'content';
@@ -11,6 +13,7 @@ class shoppingBasketStepTotalsElement extends structureElement
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['layout'] = 'text';
     }
 }
 

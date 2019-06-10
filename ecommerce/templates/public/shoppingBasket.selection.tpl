@@ -11,29 +11,13 @@
         </div>
         <form action="{$element->getFormActionURL()}" class='shoppingbasket_contents shoppingbasket_form' method="post"
               enctype="multipart/form-data" role="form">
-            <div class="shoppingbasket_step_container">
-                {if $element->errorMessage != ""}
-                    <p class="shoppingbasket_selection_error form_error" role="alert">{$element->errorMessage}</p>
-                {/if}
-                {assign var='formData' value=$element->getFormData()}
-                {assign var='formErrors' value=$element->getFormErrors()}
-                {assign var='formNames' value=$element->getFormNames()}
+            {assign var='formData' value=$element->getFormData()}
+            {assign var='formErrors' value=$element->getFormErrors()}
+            {assign var='formNames' value=$element->getFormNames()}
 
-                {if $element->getSteps()}
-                    {foreach $element->getCurrentStepElements() as $contentItem}
-                        {include file=$theme->template($contentItem->getTemplate()) element=$contentItem shoppingBasketElement=$element}
-                    {/foreach}
-                {else}
-                    {*Default steps:*}
-                    {*1:*}
-                    {*products*}
-                    {*discounts*}
-                    {*delivery*}
-                    {*totals*}
-                    {*2:*}
-                    {*paymentmethods*}
-                    {*3:*}
-                    {*checkoutTotals*}
+            <div class="shoppingbasket_step_container">
+                {if $currentStep = $element->getCurrentStepElement()}
+                    {include file=$theme->template($currentStep->getTemplate($currentStep->getCurrentLayout())) element=$currentStep shoppingBasketElement=$element}
                 {/if}
             </div>
             {include file=$theme->template('shoppingBasket.controls.tpl') element=$element}

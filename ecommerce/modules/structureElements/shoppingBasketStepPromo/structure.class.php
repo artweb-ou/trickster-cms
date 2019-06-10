@@ -1,9 +1,10 @@
 <?php
 
-class shoppingBasketStepCheckoutTotalsElement extends structureElement
+class shoppingBasketStepPromoElement extends structureElement
 {
     use ShoppingBasketStepContentTrait;
-    public $dataResourceName = 'module_generic';
+    use ConfigurableLayoutsProviderTrait;
+    public $dataResourceName = 'module_shoppingbasket_step_promo';
     protected $allowedTypes = [];
     public $defaultActionName = 'show';
     public $role = 'content';
@@ -11,6 +12,7 @@ class shoppingBasketStepCheckoutTotalsElement extends structureElement
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['layout'] = 'text';
     }
 }
 

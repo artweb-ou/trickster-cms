@@ -13,7 +13,7 @@
 		{include file=$theme->template("product.details.connected_categories.tpl")}
 	{/stripdomspaces}
 	<script>
-		window.productDetailsData = {json_encode($element->getProductDetailsJsData())};
+		window.productDetailsData = {json_encode($element->getElementData(true))};
 	</script>
 {/capture}
 {assign moduleClass "product_details_block"}

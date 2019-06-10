@@ -29,26 +29,9 @@ class CurrencySelector implements DependencyInjectionContextInterface
         }
     }
 
-    /**
-     * @var CurrencySelector
-     */
-    private static $instance = false;
-
-    /**
-     * @return CurrencySelector
-     * @deprecated
-     */
-    public static function getInstance()
-    {
-        if (!self::$instance) {
-            self::$instance = new CurrencySelector();
-        }
-        return self::$instance;
-    }
-
     public function __construct()
     {
-        self::$instance = $this;
+
     }
 
     public function getCurrenciesList()
@@ -58,31 +41,33 @@ class CurrencySelector implements DependencyInjectionContextInterface
 
     public function convertPrice($price, bool $format = true)
     {
-        $currentFormat = $this->getCurrentCurrencyFormat();
-        $value = floatval(
-            str_replace($currentFormat['decPoint'], '.', str_replace($currentFormat['thousandsSep'], '', $price))) * floatval($this->getSelectedCurrencyRate());
+        $value = floatval(str_replace([" ", ','], ["", '.'], $price)) * $this->getSelectedCurrencyRate();
+
         if ($format) {
             return $this->formatPrice($value);
         }
         return $value;
     }
 
-    public function formatPrice($price) {
+    public function formatPrice($price)
+    {
         $formattedPrice = '0';
         $currentFormat = $this->getCurrentCurrencyFormat();
         $currentDecimals = (int)$currentFormat['decimals'];
-        if($currentFormat['decimals'] == 0) {
+        if ($currentFormat['decimals'] == 0) {
             $currentFormat['decimals'] = 2;
         }
         $stringPrice = number_format($price, $currentFormat['decimals'], $currentFormat['decPoint'], $currentFormat['thousandsSep']);
-        $int = substr($stringPrice,0, -$currentFormat['decimals']-1);
+        $int = substr($stringPrice, 0, -$currentFormat['decimals'] - 1);
         $decimals = substr($stringPrice, -$currentFormat['decimals']);
-        if($currentDecimals === 0) {
-            if((int)$decimals === 0) {
-                $formattedPrice =  $int;
-            } elseif((int)$decimals >> 0) {
-                $formattedPrice = $int .$currentFormat['decPoint']. $decimals;
+        if ($currentDecimals === 0) {
+            if ((int)$decimals === 0) {
+                $formattedPrice = $int;
+            } elseif ((int)$decimals >> 0) {
+                $formattedPrice = $int . $currentFormat['decPoint'] . $decimals;
             }
+        } else {
+            $formattedPrice = $stringPrice;
         }
         return $formattedPrice;
     }
@@ -106,14 +91,15 @@ class CurrencySelector implements DependencyInjectionContextInterface
         return $result;
     }
 
-    public function getCurrentCurrencyFormat() {
+    public function getCurrentCurrencyFormat()
+    {
         if ($currencyObjectsIndex = $this->getCurrencyObjectsIndex()) {
             if (isset($currencyObjectsIndex[$this->getSelectedCurrencyCode()])) {
                 $result = $currencyObjectsIndex[$this->getSelectedCurrencyCode()];
                 return $format = [
                     'decimals' => $result->decimals,
                     'decPoint' => $result->decPoint,
-                    'thousandsSep' => $result->thousandsSep
+                    'thousandsSep' => $result->thousandsSep,
                 ];
             }
         }
@@ -150,20 +136,8 @@ class CurrencySelector implements DependencyInjectionContextInterface
     protected function getCurrenciesInformationList()
     {
         if ($this->currenciesInformationList === null) {
-            $this->currenciesInformationList = [];
-            if (defined('CONFIGURATION_PATH')) {
-                // deprecated since 2016.03
-                $currenciesConfigFile = CONFIGURATION_PATH . "configuration_currencies.php";
-                if (is_file($currenciesConfigFile)) {
-                    include $currenciesConfigFile;
-                    if (isset($currenciesData)) {
-                        $this->currenciesInformationList = $currenciesData;
-                    }
-                }
-            } else {
-                $configManager = $this->getService('ConfigManager');
-                $this->currenciesInformationList = (array)$configManager->get('currencies.list');
-            }
+            $configManager = $this->getService('ConfigManager');
+            $this->currenciesInformationList = (array)$configManager->get('currencies.list');
         }
         return $this->currenciesInformationList;
     }
@@ -233,39 +207,6 @@ class CurrencySelector implements DependencyInjectionContextInterface
                 }
             }
         }
-    }
-}
-
-class CurrencySelectorItem
-{
-    public $code;
-    public $symbol;
-    public $rate;
-    public $URL;
-    public $image;
-    public $active = false;
-
-    public function __construct($info, $activeCode, $currentURL)
-    {
-        $this->code = strtolower($info['code']);
-        $this->symbol = $info['symbol'];
-        $this->rate = $info['rate'];
-        //		$this->image = $info['image'];
-        $this->title = $info['title'];
-        $this->decimals = $info['decimals'];
-        $this->decPoint = $info['decPoint'];
-        $this->thousandsSep = $info['thousandsSep'];
-
-        $this->prepareURL($currentURL);
-
-        if ($this->code == $activeCode) {
-            $this->active = true;
-        }
-    }
-
-    protected function prepareURL($currentURL)
-    {
-        $this->URL = $currentURL . 'currency:' . $this->code . '/';
     }
 }
 

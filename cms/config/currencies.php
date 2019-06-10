@@ -2,10 +2,10 @@
 	'list' => [
 		[
 			'code' => 'EUR',
-			'rate' => '1.20',
-			'title' => 'EUR',
+			'rate' => '1',
+			'title' => 'Euro',
 			'symbol' => '€',
-			'decimals' => '2.00',
+			'decimals' => '2',
 			'decPoint' => ',',
 			'thousandsSep' => ' ',
 		],

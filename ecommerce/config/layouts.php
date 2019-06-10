@@ -120,15 +120,15 @@
     ],
     'brandsList.productsLayout.default' => 'thumbnail',
 
-    'product.layouts'           => [
+    'product.layouts' => [
         'search',
         'connected',
     ],
-    'product.search.default'    => 'detailed',
+    'product.search.default' => 'detailed',
     'product.connected.default' => 'thumbnailsmall',
 
-    'productGallery.layouts'                => [
-        'productsLayout'
+    'productGallery.layouts' => [
+        'productsLayout',
     ],
     'productGallery.productsLayout.options' => [
         'thumbnailsmall',
@@ -138,4 +138,70 @@
         'wide',
     ],
     'productGallery.productsLayout.default' => 'thumbnail',
+
+    'shoppingBasketStep.layouts' => [
+        'layout',
+    ],
+    'shoppingBasketStep.layout.options' => [
+        'default',
+    ],
+    'shoppingBasketStep.layout.default' => 'default',
+    'shoppingBasketStepAccount.layouts' => [
+        'layout',
+    ],
+    'shoppingBasketStepAccount.layout.options' => [
+        'default',
+    ],
+    'shoppingBasketStepAccount.layout.default' => 'default',
+    'shoppingBasketStepCheckout.layouts' => [
+        'layout',
+    ],
+    'shoppingBasketStepCheckout.layout.options' => [
+        'default',
+    ],
+    'shoppingBasketStepCheckout.layout.default' => 'default',
+    'shoppingBasketStepProducts.layouts' => [
+        'layout',
+    ],
+    'shoppingBasketStepProducts.layout.options' => [
+        'default',
+        'checkout',
+    ],
+    'shoppingBasketStepProducts.layout.default' => 'default',
+    'shoppingBasketStepDelivery.layouts' => [
+        'layout',
+    ],
+    'shoppingBasketStepDelivery.layout.options' => [
+        'default',
+    ],
+    'shoppingBasketStepDelivery.layout.default' => 'default',
+    'shoppingBasketStepTotals.layouts' => [
+        'layout',
+    ],
+    'shoppingBasketStepTotals.layout.options' => [
+        'default',
+    ],
+    'shoppingBasketStepTotals.layout.default' => 'default',
+    'shoppingBasketStepDiscounts.layouts' => [
+        'layout',
+    ],
+    'shoppingBasketStepDiscounts.layout.options' => [
+        'default',
+    ],
+    'shoppingBasketStepDiscounts.layout.default' => 'default',
+    'shoppingBasketStepPayments.layouts' => [
+        'layout',
+    ],
+    'shoppingBasketStepPayments.layout.options' => [
+        'default',
+    ],
+    'shoppingBasketStepPayments.layout.default' => 'default',
+    'shoppingBasketStepPromo.layouts' => [
+        'layout',
+    ],
+    'shoppingBasketStepPromo.layout.options' => [
+        'default',
+    ],
+    'shoppingBasketStepPromo.layout.default' => 'default',
+
 ];

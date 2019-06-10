@@ -33,6 +33,7 @@ class defaultDesignTheme extends DesignTheme
             'basic.jsonRequest.js',
             'basic.anchorParameters.js',
             'basic.touchManager.js',
+            'basic.smart.min.js',
             'mixin.domElementMaker.js',
             'mixin.domHelper.js',
             'logics.mobile.js',

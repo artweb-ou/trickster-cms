@@ -6,9 +6,6 @@ class ShoppingBasketStepTotalsFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
-        'marker' => [
-            'type' => 'input.text',
-        ],
     ];
 
 }

@@ -141,5 +141,4 @@
 			</tr>
 		</table>
 	</div>
-	{include file=$theme->template("shoppingBasket.promoCodeForm.tpl")}
 </div>
