@@ -146,6 +146,7 @@
         'default',
     ],
     'shoppingBasketStep.layout.default' => 'default',
+
     'shoppingBasketStepAccount.layouts' => [
         'layout',
     ],
@@ -153,6 +154,7 @@
         'default',
     ],
     'shoppingBasketStepAccount.layout.default' => 'default',
+
     'shoppingBasketStepCheckout.layouts' => [
         'layout',
     ],
@@ -160,6 +162,7 @@
         'default',
     ],
     'shoppingBasketStepCheckout.layout.default' => 'default',
+
     'shoppingBasketStepProducts.layouts' => [
         'layout',
     ],
@@ -168,6 +171,7 @@
         'checkout',
     ],
     'shoppingBasketStepProducts.layout.default' => 'default',
+
     'shoppingBasketStepDelivery.layouts' => [
         'layout',
     ],
@@ -175,6 +179,7 @@
         'default',
     ],
     'shoppingBasketStepDelivery.layout.default' => 'default',
+
     'shoppingBasketStepTotals.layouts' => [
         'layout',
     ],
@@ -182,6 +187,7 @@
         'default',
     ],
     'shoppingBasketStepTotals.layout.default' => 'default',
+
     'shoppingBasketStepDiscounts.layouts' => [
         'layout',
     ],
@@ -189,6 +195,7 @@
         'default',
     ],
     'shoppingBasketStepDiscounts.layout.default' => 'default',
+
     'shoppingBasketStepPayments.layouts' => [
         'layout',
     ],
@@ -196,6 +203,7 @@
         'default',
     ],
     'shoppingBasketStepPayments.layout.default' => 'default',
+
     'shoppingBasketStepPromo.layouts' => [
         'layout',
     ],

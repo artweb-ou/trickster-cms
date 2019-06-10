@@ -17,6 +17,9 @@ class submitShoppingBasket extends structureElementAction
      */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
+        /**
+         * @var shoppingBasket $shoppingBasket
+         */
         $shoppingBasket = $this->getService('shoppingBasket');
         $structureElement->shoppingBasket = $shoppingBasket;
         if (!$structureElement->shoppingBasket->getProductsList()) {
@@ -31,7 +34,7 @@ class submitShoppingBasket extends structureElementAction
         if ($this->stepContentIsUsingCustomFields()) {
             $deliveryType = $shoppingBasket->getSelectedDeliveryType();
             if ($customFields = $structureElement->getCustomFieldsList()) {
-                foreach ($customFields as &$field) {
+                foreach ($customFields as $field) {
                     $fieldName = $field->fieldName;
                     $deliveryType->setFieldValue($fieldName, $formData[$fieldName]);
                     if (isset($formErrors[$fieldName]) && $formErrors[$fieldName]) {
@@ -55,32 +58,34 @@ class submitShoppingBasket extends structureElementAction
         if ($this->validated) {
             if ($this->stepContentIsUsingCustomFields()) {
                 if ($structureElement->receiverIsPayer && $customFields = $structureElement->getCustomFieldsList()) {
-                    foreach ($customFields as &$field) {
+                    foreach ($customFields as $field) {
                         $fieldName = $field->fieldName;
-                        if ($field->autocomplete == 'company' && $structureElement->$fieldName != '') {
-                            $structureElement->payerCompany = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'fullName' && $structureElement->$fieldName != '') {
-                            $values = explode(' ', trim($structureElement->$fieldName));
-                            $structureElement->payerFirstName = $values[0];
-                            if (isset($values[1])) {
-                                $structureElement->payerLastName = $values[1];
+                        if ($structureElement->$fieldName != '') {
+                            if ($field->autocomplete == 'company') {
+                                $structureElement->payerCompany = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'fullName') {
+                                $values = explode(' ', trim($structureElement->$fieldName));
+                                $structureElement->payerFirstName = $values[0];
+                                if (isset($values[1])) {
+                                    $structureElement->payerLastName = $values[1];
+                                }
+                            } elseif ($field->autocomplete == 'firstName') {
+                                $structureElement->payerFirstName = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'lastName') {
+                                $structureElement->payerLastName = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'email') {
+                                $structureElement->payerEmail = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'phone') {
+                                $structureElement->payerPhone = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'address') {
+                                $structureElement->payerAddress = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'city') {
+                                $structureElement->payerCity = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'country') {
+                                $structureElement->payerCountry = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'postIndex') {
+                                $structureElement->payerPostIndex = $structureElement->$fieldName;
                             }
-                        } elseif ($field->autocomplete == 'firstName' && $structureElement->$fieldName != '') {
-                            $structureElement->payerFirstName = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'lastName' && $structureElement->$fieldName != '') {
-                            $structureElement->payerLastName = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'email' && $structureElement->$fieldName != '') {
-                            $structureElement->payerEmail = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'phone' && $structureElement->$fieldName != '') {
-                            $structureElement->payerPhone = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'address' && $structureElement->$fieldName != '') {
-                            $structureElement->payerAddress = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'city' && $structureElement->$fieldName != '') {
-                            $structureElement->payerCity = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'country' && $structureElement->$fieldName != '') {
-                            $structureElement->payerCountry = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'postIndex' && $structureElement->$fieldName != '') {
-                            $structureElement->payerPostIndex = $structureElement->$fieldName;
                         }
                     }
                 }
