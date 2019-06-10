@@ -37,7 +37,7 @@ trait ConfigurableLayoutsProviderTrait
 
         //now check normal format
         if (!$result) {
-            $result = $layoutsConfig->get("{$this->structureType}.$layout.options");
+            $result = $layoutsConfig->getMerged("{$this->structureType}.$layout.options");
         }
         return (array)$result;
     }

@@ -13,6 +13,7 @@ class shoppingBasketStepElement extends structureElement
         'shoppingBasketStepDelivery',
         'shoppingBasketStepPromo',
         'shoppingBasketStepTotals',
+        'shoppingBasketStepServices',
         'shoppingBasketStepPayments',
         'shoppingBasketStepAccount',
         'shoppingBasketStepCheckout',

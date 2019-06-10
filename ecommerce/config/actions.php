@@ -32,6 +32,7 @@
     'shoppingBasketStepDiscounts' => 'showForm',
     'shoppingBasketStepDelivery' => 'showForm',
     'shoppingBasketStepTotals' => 'showForm',
+    'shoppingBasketStepServices' => 'showForm',
     'shoppingBasketStepPayments' => 'showForm',
     'shoppingBasketStepAccount' => 'showForm',
     'shoppingBasketStepCheckout' => 'showForm',
