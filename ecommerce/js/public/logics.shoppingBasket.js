@@ -371,8 +371,11 @@ window.shoppingBasketLogics = new function() {
             }
 
         } else if (responseStatus == 'fail') {
-            if (requestName == 'addProduct' || requestName == 'changeAmount') {
+            if (requestName == 'addProduct') {
                 controller.fireEvent('shoppingBasketProductAddFailure', 'product.quantityunavailable');
+            }
+            if (requestName == 'changeAmount') {
+                controller.fireEvent('shoppingBasketProductChangeFailure', 'product.quantityunavailable');
             }
         }
     };
