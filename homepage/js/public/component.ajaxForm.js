@@ -124,6 +124,10 @@ function AjaxFormComponent(formElement, callCallback) {
                     break;
             }
         }
+        if(formElement.querySelector('.file_input_field')) {
+            formElement.querySelector('.file_input_field').innerHTML = '';
+        }
+
     };
     init();
 }
