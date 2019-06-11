@@ -1,6 +1,6 @@
-<div class="shoppingbasket_details_left">
+<div class="shoppingbasket_checkout_receiver">
 	{if $shoppingBasketElement->shoppingBasket->getSelectedDeliveryType() && $shoppingBasketElement->shoppingBasket->getSelectedDeliveryType()->deliveryFormFields}
-		<h1 class='shoppingbasket_form_heading'>{translations name='shoppingbasket.form_receiverdata'}:</h1>
+		<div class='shoppingbasket_form_heading'>{translations name='shoppingbasket.form_receiverdata'}:</div>
 		<table class='shoppingbasket_checkout_table'>
 			{foreach from=$shoppingBasketElement->shoppingBasket->getSelectedDeliveryType()->deliveryFormFields item=deliveryField}
 				<tr>
@@ -16,9 +16,9 @@
 		</table>
 	{/if}
 </div>
-<div class="shoppingbasket_details_right">
+<div class="shoppingbasket_checkout_payer">
 	{if !$shoppingBasketElement->receiverIsPayer}
-	<h1 class='shoppingbasket_form_heading'>{translations name='shoppingbasket.form_payerdata'}:</h1>
+	<div class='shoppingbasket_form_heading'>{translations name='shoppingbasket.form_payerdata'}:</div>
 	<table class='shoppingbasket_checkout_table'>
 		{if $shoppingBasketElement->payerCompany}
 			<tr>

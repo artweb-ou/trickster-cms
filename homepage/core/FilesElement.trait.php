@@ -6,7 +6,8 @@
  */
 trait FilesElementTrait
 {
-    use CacheOperatingElement;
+    //todo: restore this after PHP7.3 fix on Zone
+//    use CacheOperatingElement;
 
     /**
      * @var fileElement[][]
