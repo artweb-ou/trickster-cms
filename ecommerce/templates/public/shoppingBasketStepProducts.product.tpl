@@ -18,13 +18,20 @@
         <div class="shoppingbasket_table_price_value">{if $element->getSalesPrice() != $element->getPrice()}{$element->getSalesPrice()} {$selectedCurrencyItem->symbol}{else}{$element->getPrice()} {$selectedCurrencyItem->symbol}{/if}</div>
     </td>
     <td class="shoppingbasket_table_amount">
+        {if !$checkout}
         <div class="shoppingbasket_table_amount_container">
             <span class="button shoppingbasket_table_amount_minus"><span class="button_text">-</span></span>
             <input class="input_component shoppingbasket_table_amount_input" value="{$element->getAmount()}">
             <span class="button shoppingbasket_table_amount_plus"><span class="button_text">+</span></span>
         </div>
+        {else}
+            {$element->getAmount()}
+        {/if}
     </td>
-    <td class="shoppingbasket_table_totalprice"><span
-                class="shoppingbasket_table_totalprice_value">{$element->getTotalPrice()} {$selectedCurrencyItem->symbol}</span></td>
+    <td class="shoppingbasket_table_totalprice">
+        <span class="shoppingbasket_table_totalprice_value">{$element->getTotalPrice()} {$selectedCurrencyItem->symbol}</span>
+    </td>
+    {if !$checkout}
     <td class="shoppingbasket_table_remove"><a class="shoppingbasket_table_remove_button"></a></td>
+    {/if}
 </tr>

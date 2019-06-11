@@ -22,7 +22,7 @@
     </thead>
     <tbody class="shoppingbasket_table_rows">
     {foreach from=$element->getProducts() item=product}
-        {include file='shoppingBasketStepProducts.product.tpl' element=$product}
+        {include file='shoppingBasketStepProducts.product.tpl' element=$product checkout=$checkout}
     {/foreach}
     </tbody>
     <tbody class="shoppingbasket_total shoppingbasket_total_products">
@@ -33,7 +33,9 @@
         <td class="shoppingbasket_total_value">
             {$element->getProductsPrice()} {$selectedCurrencyItem->symbol}
         </td>
-        <td class="shoppingbasket_total_value_spacer"></td>
+        {if !$checkout}
+            <td class="shoppingbasket_total_value_spacer"></td>
+        {/if}
     </tr>
     </tbody>
 </table>

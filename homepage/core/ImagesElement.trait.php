@@ -8,7 +8,8 @@
 trait ImagesElementTrait
 {
     protected $imagesList;
-    use CacheOperatingElement;
+    //todo: restore this after PHP7.3 fix on Zone
+//    use CacheOperatingElement;
 
     /**
      * @return galleryImageElement[]

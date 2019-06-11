@@ -5,6 +5,8 @@ class galleryElement extends menuDependantStructureElement implements Configurab
     use GalleryInfoProviderTrait;
     use ConfigurableLayoutsProviderTrait;
     use ImagesElementTrait;
+    //todo: remove this trait usage after PHP7.3 fix on Zone
+    use CacheOperatingElement;
 
     public $dataResourceName = 'module_gallery';
     protected $allowedTypes = ['galleryImage'];

@@ -1,6 +1,6 @@
 <div class="shoppingbasket_form_block">
 	<div class='shoppingbasket_receiver_data'>
-		<h1 class='shoppingbasket_form_heading'>{translations name='shoppingbasket.receiverdata'}:</h1>
+		<div class='shoppingbasket_form_heading'>{translations name='shoppingbasket.receiverdata'}:</div>
 		<table class='form_table shoppingbasket_delivery_form'>
 			<tbody class='form_table shoppingbasket_delivery_form_controls'>
 			<tr class="shoppingbasket_delivery_form_country">
@@ -47,7 +47,7 @@
 		<input type="hidden" class="shoppingbasket_delivery_form_fieldsname" value="{$shoppingBasketElement->getFormNamesBase()}" />
 	</div>
 	<div class='shoppingbasket_payer_data'>
-		<h1 class='shoppingbasket_form_heading'>{translations name='shoppingbasket.payerdata'}:</h1>
+		<div class='shoppingbasket_form_heading'>{translations name='shoppingbasket.payerdata'}:</div>
 		<table class='form_table shoppingbasket_delivery_form'>
 			<tr class='{if $formErrors.payerCompany} form_error{/if}'>
 				<td class='form_label'>

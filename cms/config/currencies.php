@@ -6,7 +6,7 @@
 			'title' => 'Euro',
 			'symbol' => '€',
 			'decimals' => '2',
-			'decPoint' => ',',
+			'decPoint' => '.',
 			'thousandsSep' => ' ',
 		],
 	],

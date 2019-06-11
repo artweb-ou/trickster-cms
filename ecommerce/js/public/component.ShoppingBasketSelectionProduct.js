@@ -16,6 +16,7 @@ window.ShoppingBasketSelectionProduct = function(basketProductId, initData) {
 
     var init = function() {
         productData = initData;
+        controller.addListener('shoppingBasketProductChangeFailure', shoppingBasketProductChangeFailure);
     };
     this.setComponentElement = function(newComponentElement) {
         componentElement = newComponentElement;
@@ -68,37 +69,19 @@ window.ShoppingBasketSelectionProduct = function(basketProductId, initData) {
             amount = minimumOrder;
         }
         if (!isNaN(amount) && amount > 0) {
-            registerEventHandlers();
             window.shoppingBasketLogics.changeAmount(basketProductId, amount);
         }
     };
 
-    var shoppingBasketProductAdditionHandler = function() {
-        unRegisterEventHandlers();
-    };
-    var shoppingBasketProductAddFailureHandler = function() {
-        unRegisterEventHandlers();
-        if (addToBasketButtonAction) {
-            var message = [];
-            var additionalContainerClassName = 'notice_box';
-            message['title'] = window.productDetailsData.name || window.productDetailsData.name_ga;
-            message['content'] = window.translationsLogics.get('product.quantityunavailable');
-            message['footer'] = '';
-            // only modal on error
-            new ModalActionComponent(false, false, componentElement, additionalContainerClassName, '', message); // checkbox-input, footer buttons, element for position, messages
-        }
+    var shoppingBasketProductChangeFailure = function() {
+        var message = [];
+        var additionalContainerClassName = 'notice_box';
+        message['title'] = productData.title;
+        message['content'] = window.translationsLogics.get('product.quantityunavailable');
+        message['footer'] = '';
+        new ModalActionComponent(false, false, componentElement, additionalContainerClassName, '', message);
 
-        amountInput.value--;
-    };
-
-    var registerEventHandlers = function() {
-        controller.addListener('shoppingBasketProductAdded', shoppingBasketProductAdditionHandler);
-        controller.addListener('shoppingBasketProductAddFailure', shoppingBasketProductAddFailureHandler);
-    };
-
-    var unRegisterEventHandlers = function() {
-        controller.removeListener('shoppingBasketProductAdded', shoppingBasketProductAdditionHandler);
-        controller.removeListener('shoppingBasketProductAddFailure', shoppingBasketProductAddFailureHandler);
+        amountInput.value = productData.amount;
     };
 
     var amountChangeHandler = function() {

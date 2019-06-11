@@ -28,7 +28,7 @@ class submitShoppingBasket extends structureElementAction
         }
         $renderer = $this->getService('renderer');
         $renderer->assign('shoppingBasket', $structureElement);
-
+        $currentStep = $structureElement->getCurrentStepElement();
         $formErrors = $structureElement->getFormErrors();
         $formData = $structureElement->getFormData();
         if ($this->stepContentIsUsingCustomFields()) {
@@ -49,7 +49,7 @@ class submitShoppingBasket extends structureElementAction
 
         if (!$this->validated) {
             $structureElement->errorMessage = $translationsManager->getTranslationByName('shoppingbasket.form_error');
-        } elseif ($structureElement->isLastStep() && $formData['conditions'] != '1') {
+        } elseif ($currentStep->getStepElementByType('agreement') && $formData['conditions'] != '1') {
             $structureElement->setFormError('conditions');
             $structureElement->errorMessage = $translationsManager->getTranslationByName('shoppingbasket.conditions_error');
             $this->validated = false;
