@@ -24,8 +24,7 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
             imageInfo.getExternalLink() || imageInfo.isVideo());
         if (clickable) {
             componentElement.className += ' gallery_image_clickable';
-            eventsManager.addHandler(componentElement,
-                eventsManager.getPointerStartEventName(), touchStart);
+            eventsManager.addHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
         }
         if (descriptionType === 'overlay' && infoElement) {
             eventsManager.addHandler(componentElement, 'mouseenter', onMouseOver);
@@ -51,7 +50,7 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
 
     var touchStart = function(event) {
         //ignore right mouse click
-        if (typeof event.which === 'undefined' || event.which === 1) {
+        if (typeof event.which === 'undefined' || event.which !== 3) {
             eventsManager.removeHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
             eventsManager.addHandler(componentElement, eventsManager.getPointerEndEventName(), touchEnd);
             eventsManager.addHandler(componentElement, eventsManager.getPointerMoveEventName(), touchMove);
@@ -59,7 +58,6 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
     };
 
     var touchMove = function(event) {
-        // gallery is being massaged, don't open fullscreen gallery for this touch
         resetTouchiness();
     };
 
@@ -73,12 +71,9 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
     };
 
     var resetTouchiness = function() {
-        eventsManager.removeHandler(componentElement,
-            eventsManager.getPointerEndEventName(), touchEnd);
-        eventsManager.removeHandler(componentElement,
-            eventsManager.getPointerMoveEventName(), touchMove);
-        eventsManager.addHandler(componentElement,
-            eventsManager.getPointerStartEventName(), touchStart);
+        eventsManager.removeHandler(componentElement, eventsManager.getPointerEndEventName(), touchEnd);
+        eventsManager.removeHandler(componentElement, eventsManager.getPointerMoveEventName(), touchMove);
+        eventsManager.addHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
     };
     this.destroy = function() {
         eventsManager.removeHandler(componentElement,
