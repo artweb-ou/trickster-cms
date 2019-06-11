@@ -1727,7 +1727,7 @@ class AddTranslationDeploymentProcedure extends DeploymentProcedure
      */
     public function __construct(SimpleXMLElement $xmlNode)
     {
-        $this->updateExisting = (string)$xmlNode['updateExisting'] === 'yes';
+        $this->updateExisting = !((string)$xmlNode['updateExisting'] === 'no');
         if (!empty($xmlNode->type)) {
             $this->type = Deployment::processXmlNodeValue($xmlNode->type);
         }
