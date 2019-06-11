@@ -18,9 +18,8 @@ function FileInputComponent(inputElement) {
         componentElement.className = 'file_input_container';
 
         fakeField = document.createElement('div');
-        fakeField.className = 'input_component file_input_field';
+        fakeField.className = 'input_component file_input_field'; // file name etc...
         fakeField.tabIndex = 0;
-        componentElement.appendChild(fakeField);
 
         fakeButton = document.createElement('div');
         fakeButton.className = 'button file_input_button';
@@ -33,14 +32,14 @@ function FileInputComponent(inputElement) {
         var content = document.createTextNode(buttonText);
         fakeButtonText.appendChild(content);
 
-        inputElement.parentNode.insertBefore(componentElement, inputElement);
+        var inputParent = (inputElement.dataset.parent)?inputElement.form.querySelector(inputElement.dataset.parent):inputElement.parentNode;
+
         componentElement.appendChild(inputElement);
-        if (inputElement.dataset.inrow) {
-            let submit = inputElement.form.querySelector(inputElement.dataset.inrow);
-        //    console.log(submit)
-            componentElement.appendChild(submit);
-         //   submit.remove();
-        }
+
+        var submit = (inputElement.dataset.firstChild)?inputParent.querySelector(inputElement.dataset.firstChild):inputParent.firstChild;
+        inputParent.insertBefore(fakeField, submit);
+        inputParent.insertBefore(componentElement, submit);
+
         eventsManager.addHandler(componentElement, 'click', clickHandler);
     };
     var processInputElement = function() {
