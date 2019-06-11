@@ -75,7 +75,9 @@ abstract class ProductsListElement extends menuStructureElement
         $query->where('module_product.languageId', '=', $languagesManager->getCurrentLanguageId());
         $query->where('inactive', '!=', '1');
         $query->where(function (Builder $query) {
-            $query->orWhere('availability', '!=', 'unavailable');
+            $query->orWhere('availability', '=', 'available');
+            $query->orWhere('availability', '=', 'inquirable');
+            $query->orWhere('availability', '=', 'available_inquirable');
             $query->orWhere(function (Builder $query) {
                 $query->where('availability', '=', 'quantity_dependent');
                 $query->where('quantity', '!=', 0);
