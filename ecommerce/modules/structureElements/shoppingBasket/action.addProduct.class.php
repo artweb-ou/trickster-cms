@@ -50,17 +50,18 @@ class addProductShoppingBasket extends structureElementAction
                         $variations_dl[] = ($select?
                             $select->getValue('title',$defaultLanguage->id) : '' ). ': '
                             . ($variant? $variant->getValue('title', $defaultLanguage->id): '');
+                        if ($selection['influential']) {
+                            $influentialOptions[] = $selectedOption;
+                        }
                         break;
-                    }
-                    if ($selection['influential']) {
-                        $influentialOptions[] = $selectedOption;
                     }
                 }
                 if ($everythingSelected && $influentialOptions) {
                     $parametersPrice = $productElement->getPriceBySelectedOptions($influentialOptions);
                 }
             }
-            $productPrice = $parametersPrice ?: $productElement->price;
+            $currencySelector = $this->getService('CurrencySelector');
+            $productPrice = !empty($parametersPrice) ?$currencySelector->formatPrice($parametersPrice): $productElement->price;
             if (is_numeric($productAmount) && is_numeric($productId) && ($everythingSelected || $controller->getParameter('productVariation'))) {
                 $finalAmount = $shoppingBasket->getProductOverallQuantity($productId) + $productAmount;
                 if ($productElement->isPurchasable($finalAmount)) {

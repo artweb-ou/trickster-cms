@@ -22,7 +22,7 @@ class ProductCatalogueFormStructure extends ElementForm
         ],
         'categories' => [
             'type'     => 'select.universal_options_multiple',
-            'property' => 'categoriesList',
+            'property' => 'adminCategoriesList',
             'trClass'  => 'productcatalogue_form_check_row_categories'
         ],
         'structureRole' => [

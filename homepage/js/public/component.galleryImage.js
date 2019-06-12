@@ -1,309 +1,322 @@
 window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType) {
-	this.title = null;
-	this.link = null;
-	this.preloaded = false;
+    var self = this;
 
-	var mediaOriginalWidth;
-	var mediaOriginalHeight;
-	var galleryWidth;
-	var galleryHeight;
+    this.title = null;
+    this.link = null;
+    this.preloaded = false;
 
-	var componentElement;
-	var mediaElement;
-	var sourceElement;
-	var infoElement;
-	var hovered = false;
-	var self = this;
-	var clickable = false;
-	var isVideo = false;
-	var videoLoadStarted = false;
+    var mediaOriginalWidth;
+    var mediaOriginalHeight;
+    var galleryWidth;
+    var galleryHeight;
 
-	var init = function() {
-		var filename = imageInfo.getFilename();
-		if (typeof filename != "undefined") {
-			var parts = filename.split('.');
-			var extension = parts[parts.length - 1];
-			if (extension == 'mp4') {
-				isVideo = true;
-			}
-		}
-		createDomStructure();
-		clickable = (parentObject.hasFullScreenGallery() || imageInfo.getExternalLink() || isVideo);
-		if (clickable) {
-			componentElement.className += ' gallery_image_clickable';
-			eventsManager.addHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
-		}
-		if (descriptionType === "overlay" && infoElement) {
-			eventsManager.addHandler(componentElement, 'mouseenter', onMouseOver);
-			eventsManager.addHandler(componentElement, 'mouseleave', onMouseOut);
-		}
-	};
+    var componentElement;
+    var mediaElement;
+    var sourceElement;
+    var infoElement;
+    var hovered = false;
+    var clickable = false;
+    var videoLoadStarted = false;
+    var autoStart = false;
+    var init = function() {
+        createDomStructure();
+        clickable = (parentObject.hasFullScreenGallery() ||
+            imageInfo.getExternalLink() || imageInfo.isVideo());
+        if (clickable) {
+            componentElement.className += ' gallery_image_clickable';
+            eventsManager.addHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
+        }
+        if (descriptionType === 'overlay' && infoElement) {
+            eventsManager.addHandler(componentElement, 'mouseenter', onMouseOver);
+            eventsManager.addHandler(componentElement, 'mouseleave', onMouseOut);
+        }
+        if (typeof parentObject.videoAutoStart != 'undefined') {
+            if (parentObject.videoAutoStart()) {
+                autoStart = true;
+            }
+        }
+        controller.addListener('galleryImageDisplay', displayHandler);
+        controller.addListener('mobileBreakpointChanged', mobileBreakpointCallback);
+    };
 
-	var touchStart = function(event) {
-		//ignore right mouse click
-		if (typeof event.which === 'undefined' || event.which === 1) {
-			eventsManager.removeHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
-			eventsManager.addHandler(componentElement, eventsManager.getPointerEndEventName(), touchEnd);
-			eventsManager.addHandler(componentElement, eventsManager.getPointerMoveEventName(), touchMove);
-		}
-	};
+    var mobileBreakpointCallback = function() {
+        createMediaElement();
+        self.preloaded = false;
+        self.checkPreloadImage(function() {
+            componentElement.style.display = '';
+        });
+    };
 
-	var touchMove = function(event) {
-		// gallery is being massaged, don't open fullscreen gallery for this touch
-		resetTouchiness();
-	};
 
-	var touchEnd = function(event) {
-		resetTouchiness();
-		if (isVideo) {
-			videoPlayPause();
-		} else if (imageInfo.getExternalLink()) {
-			imageInfo.openExternalLink();
-		} else {
-			parentObject.displayFullScreenGallery();
-		}
-	};
+    var touchStart = function(event) {
+        //ignore right mouse click
+        if (typeof event.which === 'undefined' || event.which !== 3) {
+            eventsManager.removeHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
+            eventsManager.addHandler(componentElement, eventsManager.getPointerEndEventName(), touchEnd);
+            eventsManager.addHandler(componentElement, eventsManager.getPointerMoveEventName(), touchMove);
+        }
+    };
 
-	var videoPlayPause = function() {
-		if (mediaElement.paused) {
-			mediaElement.play();
-		} else {
-			mediaElement.pause();
-		}
-	};
+    var touchMove = function(event) {
+        resetTouchiness();
+    };
 
-	var resetTouchiness = function() {
-		eventsManager.removeHandler(componentElement, eventsManager.getPointerEndEventName(), touchEnd);
-		eventsManager.removeHandler(componentElement, eventsManager.getPointerMoveEventName(), touchMove);
-		eventsManager.addHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
-	};
-	this.destroy = function() {
-		eventsManager.removeHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
-		eventsManager.removeHandler(componentElement, eventsManager.getPointerEndEventName(), touchEnd);
-		eventsManager.removeHandler(componentElement, eventsManager.getPointerMoveEventName(), touchMove);
-	};
-	var createDomStructure = function() {
-		componentElement = document.createElement('div');
-		componentElement.className = 'gallery_image';
-		componentElement.style.display = 'none';
+    var touchEnd = function(event) {
+        resetTouchiness();
+        if (imageInfo.getExternalLink()) {
+            imageInfo.openExternalLink();
+        } else {
+            parentObject.displayFullScreenGallery();
+        }
+    };
 
-		if (isVideo) {
-			self.checkPreloadImage = checkPreloadVideo;
+    var resetTouchiness = function() {
+        eventsManager.removeHandler(componentElement, eventsManager.getPointerEndEventName(), touchEnd);
+        eventsManager.removeHandler(componentElement, eventsManager.getPointerMoveEventName(), touchMove);
+        eventsManager.addHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
+    };
+    this.destroy = function() {
+        eventsManager.removeHandler(componentElement,
+            eventsManager.getPointerStartEventName(), touchStart);
+        eventsManager.removeHandler(componentElement,
+            eventsManager.getPointerEndEventName(), touchEnd);
+        eventsManager.removeHandler(componentElement,
+            eventsManager.getPointerMoveEventName(), touchMove);
+    };
+    var createDomStructure = function() {
+        componentElement = document.createElement('div');
+        componentElement.className = 'gallery_image';
+        componentElement.style.display = 'none';
 
-			mediaElement = document.createElement('video');
-			if (typeof parentObject.videoAutoStart != "undefined") {
-				mediaElement.autoplay = parentObject.videoAutoStart();
-			}
-			mediaElement.loop = true;
-			mediaElement.muted = true;
-			mediaElement.setAttribute('webkit-playsinline', 'webkit-playsinline');
-			mediaElement.setAttribute('playsinline', 'playsinline');
-			mediaElement.style.visibility = 'hidden';
-			componentElement.appendChild(mediaElement);
-			sourceElement = document.createElement('source');
-			sourceElement.type = 'video/mp4';
-			sourceElement.src = imageInfo.getFileUrl();
-			mediaElement.appendChild(sourceElement);
-		} else {
-			self.checkPreloadImage = checkPreloadImage;
+        createMediaElement();
 
-			mediaElement = document.createElement('img');
-			mediaElement.style.visibility = 'hidden';
-			componentElement.appendChild(mediaElement);
-		}
+        if (descriptionType === 'overlay' &&
+            (imageInfo.getDescription() || imageInfo.getTitle())) {
+            infoElement = self.makeElement('div', 'gallery_image_info',
+                componentElement);
+            self.makeElement('div', 'gallery_image_info_background', infoElement);
 
-		if (descriptionType === "overlay" && (imageInfo.getDescription() || imageInfo.getTitle())) {
-			infoElement = self.makeElement("div", "gallery_image_info", componentElement);
-			self.makeElement("div", "gallery_image_info_background", infoElement);
+            var info;
+            if (info = imageInfo.getTitle()) {
+                var titleElement = self.makeElement('div', 'gallery_image_title',
+                    infoElement);
+                titleElement.innerHTML = info;
+            }
+            if (info = imageInfo.getDescription()) {
+                var descriptionElement = self.makeElement('div',
+                    'gallery_image_description', infoElement);
+                descriptionElement.innerHTML = info;
+            }
+        }
+    };
+    var createMediaElement = function() {
+        if (mediaElement) {
+            componentElement.removeChild(mediaElement);
+        }
+        if (imageInfo.isVideo()) {
+            self.checkPreloadImage = checkPreloadVideo;
 
-			var info;
-			if (info = imageInfo.getTitle()) {
-				var titleElement = self.makeElement("div", "gallery_image_title", infoElement);
-				titleElement.innerHTML = info;
-			}
-			if (info = imageInfo.getDescription()) {
-				var descriptionElement = self.makeElement("div", "gallery_image_description", infoElement);
-				descriptionElement.innerHTML = info;
-			}
-		}
-	};
+            mediaElement = document.createElement('video');
+            mediaElement.loop = true;
+            mediaElement.muted = true;
+            mediaElement.setAttribute('webkit-playsinline', 'webkit-playsinline');
+            mediaElement.setAttribute('playsinline', 'playsinline');
+            mediaElement.style.visibility = 'hidden';
+            componentElement.appendChild(mediaElement);
+            sourceElement = document.createElement('source');
+            sourceElement.type = 'video/mp4';
+            sourceElement.src = imageInfo.getFileUrl();
+            mediaElement.appendChild(sourceElement);
+        } else {
+            self.checkPreloadImage = checkPreloadImage;
 
-	var showInfo = function() {
-		if (hovered) {
-			domHelper.addClass(infoElement, "gallery_image_info_visible");
-			TweenLite.to(infoElement, 0.5, {'css': {'opacity': 1}});
-		}
-	};
+            mediaElement = document.createElement('img');
+            mediaElement.style.visibility = 'hidden';
+            componentElement.appendChild(mediaElement);
+        }
+    };
+    var showInfo = function() {
+        if (hovered) {
+            domHelper.addClass(infoElement, 'gallery_image_info_visible');
+            TweenLite.to(infoElement, 0.5, {'css': {'opacity': 1}});
+        }
+    };
 
-	var hideInfo = function() {
-		TweenLite.to(infoElement, 0.25, {
-			'css': {'opacity': 0}, 'onComplete': function() {
-				domHelper.removeClass(infoElement, "gallery_image_info_visible");
-			}
-		});
-	};
+    var hideInfo = function() {
+        TweenLite.to(infoElement, 0.25, {
+            'css': {'opacity': 0}, 'onComplete': function() {
+                domHelper.removeClass(infoElement, 'gallery_image_info_visible');
+            },
+        });
+    };
 
-	var onMouseOver = function() {
-		hovered = true;
-		if (infoElement) {
-			executeAfterImageHasLoaded(showInfo);
-		}
-	};
+    var onMouseOver = function() {
+        hovered = true;
+        if (infoElement) {
+            executeAfterImageHasLoaded(showInfo);
+        }
+    };
 
-	var onMouseOut = function() {
-		hovered = false;
-		if (infoElement) {
-			hideInfo();
-		}
-	};
+    var onMouseOut = function() {
+        hovered = false;
+        if (infoElement) {
+            hideInfo();
+        }
+    };
 
-	this.checkPreloadImage = null;
+    this.checkPreloadImage = null;
 
-	var checkPreloadImage = function(callBack) {
-		if (!mediaElement.src) {
-			mediaElement.src = imageInfo.getBigImageUrl();
-			mediaElement.style.visibility = 'hidden';
-			componentElement.style.display = '';
-		}
-		if (!mediaElement.complete) {
-			window.setTimeout(function(callBack) {
-				return function() {
-					self.checkPreloadImage(callBack);
-				};
-			}(callBack), 100);
-		} else {
-			if (!self.preloaded) {
-				mediaElement.style.visibility = 'visible';
-				mediaOriginalWidth = mediaElement.offsetWidth;
-				mediaOriginalHeight = mediaElement.offsetHeight;
-				componentElement.style.display = 'none';
-				self.preloaded = true;
-				resizeImageElement();
-			}
+    var checkPreloadImage = function(callBack) {
+        test = mediaElement.style.width;
+        if (!mediaElement.src) {
+            mediaElement.src = imageInfo.getBigImageUrl(window.mobileLogics.isPhoneActive());
+            mediaElement.style.visibility = 'hidden';
+            componentElement.style.display = '';
+        }
+        if (!mediaElement.complete) {
+            window.setTimeout(function(callBack) {
+                return function() {
+                    self.checkPreloadImage(callBack);
+                };
+            }(callBack), 100);
+        } else {
+            if (!self.preloaded) {
+                mediaElement.style.visibility = 'visible';
+                mediaOriginalWidth = mediaElement.offsetWidth;
+                mediaOriginalHeight = mediaElement.offsetHeight;
+                componentElement.style.display = 'none';
+                self.preloaded = true;
+                resizeImageElement();
+            }
 
-			if (callBack) {
-				callBack();
-			}
-		}
-	};
+            if (callBack) {
+                callBack();
+            }
+        }
+    };
 
-	var checkPreloadVideo = function(callBack) {
-		if (mediaElement.readyState < 3) {
-			if (!videoLoadStarted) {
-				videoLoadStarted = true;
-				mediaElement.load();
-			}
-			window.setTimeout(function(callBack) {
-				return function() {
-					self.checkPreloadImage(callBack);
-				};
-			}(callBack), 100);
-		} else {
-			if (!self.preloaded) {
-				mediaElement.style.visibility = 'visible';
-				mediaOriginalWidth = mediaElement.videoWidth;
-				mediaOriginalHeight = mediaElement.videoHeight;
+    var checkPreloadVideo = function(callBack) {
+        if (mediaElement.readyState < 3) {
+            if (!videoLoadStarted) {
+                videoLoadStarted = true;
+                var promise = mediaElement.load();
+            }
+            window.setTimeout(function(callBack) {
+                return function() {
+                    self.checkPreloadImage(callBack);
+                };
+            }(callBack), 100);
+        } else {
+            if (!self.preloaded) {
+                mediaElement.style.visibility = 'visible';
+                mediaOriginalWidth = mediaElement.videoWidth;
+                mediaOriginalHeight = mediaElement.videoHeight;
 
-				componentElement.style.display = 'none';
-				self.preloaded = true;
-				resizeImageElement();
-			}
-			if (callBack) {
-				callBack();
-			}
-		}
+                componentElement.style.display = 'none';
+                self.preloaded = true;
+                resizeImageElement();
+            }
+            if (callBack) {
+                callBack();
+            }
+        }
 
-	};
+    };
 
-	this.displayComponentElement = function() {
-		componentElement.style.display = '';
-		if (isVideo) {
-			if (mediaElement.autoplay) {
-				mediaElement.play();
-			}
-		}
-	};
-	this.resize = function(imagesContainerWidth, imagesContainerHeight) {
-		galleryWidth = imagesContainerWidth;
-		galleryHeight = imagesContainerHeight;
+    var displayHandler = function(newImage) {
+        if (imageInfo.isVideo()) {
+            if (newImage.getId() === imageInfo.getId()) {
+                checkPreloadVideo(videoPlayCallback);
+            } else {
+                mediaElement.pause();
+            }
+        }
+    };
+    var videoPlayCallback = function() {
+        mediaElement.play();
+    };
+    this.resize = function(imagesContainerWidth, imagesContainerHeight) {
+        galleryWidth = imagesContainerWidth;
+        galleryHeight = imagesContainerHeight;
 
-		resizeImageElement();
-	};
-	var resizeImageElement = function() {
-		if (galleryWidth && galleryHeight) {
-			componentElement.style.width = galleryWidth + 'px';
-			componentElement.style.height = galleryHeight + 'px';
+        resizeImageElement();
+    };
 
-			if (mediaOriginalWidth && mediaOriginalHeight) {
-				var imageWidth, imageHeight;
-				var positionTop = 0, positionLeft = 0;
+    var resizeImageElement = function() {
+        if (galleryWidth && galleryHeight) {
+            componentElement.style.width = galleryWidth + 'px';
+            componentElement.style.height = galleryHeight + 'px';
 
-				var logic = imageInfo.getImageResizeType();
-				var aspectRatio = mediaOriginalWidth / mediaOriginalHeight;
-				if (logic === "fill") {
-					imageHeight = galleryHeight;
-					imageWidth = imageHeight * aspectRatio;
-					if (imageWidth < galleryWidth) {
-						imageWidth = galleryWidth;
-						imageHeight = imageWidth / aspectRatio;
-					}
-					// centering
-					if (imageHeight > galleryHeight) {
-						positionTop = (imageHeight - galleryHeight) / -2;
-					}
-					if (imageWidth > galleryWidth) {
-						positionLeft = (imageWidth - galleryWidth) / -2;
-					}
-				} else {
-					imageWidth = mediaOriginalWidth;
-					imageHeight = mediaOriginalHeight;
+            if (mediaOriginalWidth && mediaOriginalHeight) {
+                var imageWidth, imageHeight;
+                var positionTop = 0, positionLeft = 0;
 
-					if (imageWidth > galleryWidth) {
-						imageWidth = galleryWidth;
-						imageHeight = imageWidth / aspectRatio;
-					}
+                var logic = imageInfo.getImageResizeType(window.mobileLogics.isPhoneActive());
+                var aspectRatio = mediaOriginalWidth / mediaOriginalHeight;
+                if (logic === 'fill') {
+                    imageHeight = galleryHeight;
+                    imageWidth = imageHeight * aspectRatio;
+                    if (imageWidth < galleryWidth) {
+                        imageWidth = galleryWidth;
+                        imageHeight = imageWidth / aspectRatio;
+                    }
+                    // centering
+                    if (imageHeight > galleryHeight) {
+                        positionTop = (imageHeight - galleryHeight) / -2;
+                    }
+                    if (imageWidth > galleryWidth) {
+                        positionLeft = (imageWidth - galleryWidth) / -2;
+                    }
+                } else {
+                    imageWidth = mediaOriginalWidth;
+                    imageHeight = mediaOriginalHeight;
 
-					if (imageHeight > galleryHeight) {
-						imageHeight = galleryHeight;
-						imageWidth = imageHeight * aspectRatio;
-					}
-					positionTop = (galleryHeight - imageHeight) / 2;
-					positionLeft = (galleryWidth - imageWidth) / 2;
-				}
-				if (mediaElement) {
-					mediaElement.style.width = imageWidth + 'px';
-					mediaElement.style.height = imageHeight ? imageHeight + 'px' : "";
-					mediaElement.style.left = positionLeft + 'px';
-					mediaElement.style.top = positionTop + 'px';
-				}
-			}
-		}
-	};
+                    if (imageWidth > galleryWidth) {
+                        imageWidth = galleryWidth;
+                        imageHeight = imageWidth / aspectRatio;
+                    }
 
-	var executeAfterImageHasLoaded = function(callBack) {
-		if (mediaElement.complete) {
-			callBack();
-		} else {
-			window.setTimeout(executeAfterImageHasLoaded, 100);
-		}
-	};
+                    if (imageHeight > galleryHeight) {
+                        imageHeight = galleryHeight;
+                        imageWidth = imageHeight * aspectRatio;
+                    }
+                    positionTop = (galleryHeight - imageHeight) / 2;
+                    positionLeft = (galleryWidth - imageWidth) / 2;
+                }
+                if (mediaElement && self.preloaded) {
+                    mediaElement.style.width = imageWidth + 'px';
+                    mediaElement.style.height = imageHeight ? imageHeight + 'px' : '';
+                    mediaElement.style.left = positionLeft + 'px';
+                    mediaElement.style.top = positionTop + 'px';
+                }
+            }
+        }
+    };
 
-	this.getComponentElement = function() {
-		return componentElement;
-	};
-	this.getImageElement = function() {
-		return mediaElement;
-	};
-	this.getId = function() {
-		return imageInfo.getId();
-	};
+    var executeAfterImageHasLoaded = function(callBack) {
+        if (mediaElement.complete) {
+            callBack();
+        } else {
+            window.setTimeout(executeAfterImageHasLoaded, 100);
+        }
+    };
 
-	this.activate = function() {
-		imageInfo.display();
-	};
-	this.getImageInfo = function() {
-		return imageInfo;
-	};
-	init();
+    this.getComponentElement = function() {
+        return componentElement;
+    };
+    this.getImageElement = function() {
+        return mediaElement;
+    };
+    this.getId = function() {
+        return imageInfo.getId();
+    };
+
+    this.activate = function() {
+        imageInfo.display();
+    };
+    this.getImageInfo = function() {
+        return imageInfo;
+    };
+    init();
 };
 DomElementMakerMixin.call(GalleryImageComponent.prototype);

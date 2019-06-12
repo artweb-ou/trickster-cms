@@ -27,7 +27,7 @@ class paymentResultShoppingBasket extends structureElementAction
         if ($status == 'success') {
             $shoppingBasket->clearShoppingBasket();
             $shoppingBasket->setMessage($structureElement->paymentSuccessfulText);
-            $structureElement->setPaymentStatus(true);
+            $structureElement->setPaymentMade(true);
         } elseif ($status == 'deferred') {
             $shoppingBasket->clearShoppingBasket();
             $shoppingBasket->setMessage($structureElement->paymentDeferredText);
@@ -35,7 +35,7 @@ class paymentResultShoppingBasket extends structureElementAction
             $shoppingBasket->clearShoppingBasket();
             if ($bank == 'invoice') {
                 $shoppingBasket->setMessage($structureElement->paymentInvoiceText);
-                $structureElement->setPaymentStatus(true);
+                $structureElement->setPaymentMade(true);
             } elseif ($bank == 'query') {
                 $shoppingBasket->setMessage($structureElement->paymentQueryText);
             }
@@ -43,7 +43,7 @@ class paymentResultShoppingBasket extends structureElementAction
             $structureElement->errorMessage = $structureElement->paymentFailedText;
         }
         $structureElement->executeAction('show');
-        if ($structureElement->isPaymentStatus()) {
+        if ($structureElement->isPaymentMade()) {
             $renderer = $this->getService('renderer');
             $renderer->assign('currentOrder', $orderElement);
         }

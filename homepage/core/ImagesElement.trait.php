@@ -8,6 +8,8 @@
 trait ImagesElementTrait
 {
     protected $imagesList;
+    //todo: restore this after PHP7.3 fix on Zone
+//    use CacheOperatingElement;
 
     /**
      * @return galleryImageElement[]
@@ -16,13 +18,17 @@ trait ImagesElementTrait
     {
         $structureManager = $this->getService('structureManager');
         if ($this->imagesList === null) {
-            $this->imagesList = [];
-            if ($childElements = $structureManager->getElementsChildren($this->id, null, $this->getImagesLinkType())) {
-                foreach ($childElements as $childElement) {
-                    if ($childElement->structureType == 'galleryImage') {
-                        $this->imagesList[] = $childElement;
+            $cache = $this->getElementsListCache('imgs', 3600);
+            if (($this->imagesList = $cache->load()) === false) {
+                $this->imagesList = [];
+                if ($childElements = $structureManager->getElementsChildren($this->id, null, $this->getImagesLinkType())) {
+                    foreach ($childElements as $childElement) {
+                        if ($childElement->structureType == 'galleryImage') {
+                            $this->imagesList[] = $childElement;
+                        }
                     }
                 }
+                $cache->save($this->imagesList);
             }
         }
         return $this->imagesList;

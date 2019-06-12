@@ -12,18 +12,24 @@ class GenericIconFormStructure extends ElementForm
         ],
         'iconBgColor' => [
             'type' => 'input.text',
-            'inputType' => 'color',
+	        'textClass' => 'jscolor',
             'inputDefaultValueMethod' => [
                 'method' => 'getSettingsVariablles',
                 'variable' => 'colors.primary_color',
             ],
+            'additionalFormat' => [
+                'labelAfter'  => 'select_color',
+            ],
         ],
         'iconTextColor' => [
             'type' => 'input.text',
-            'inputType' => 'color',
+            'textClass' => 'jscolor',
             'inputDefaultValueMethod' => [
                 'method' => 'getSettingsVariablles',
                 'variable' => 'colors.primary_color',
+            ],
+            'additionalFormat' => [
+                'labelAfter'  => 'select_color',
             ],
         ],
         'image' => [
@@ -47,19 +53,19 @@ class GenericIconFormStructure extends ElementForm
         ],
     ];
     protected $formStructureElementBottom = [
-        'products' => [
+        'iconProducts' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getConnectedProducts',
             'class' => 'genericicon_form_productselect',
             'dataset' => ["data-select", "product"],
         ],
-        'categories' => [
+        'iconCategories' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getConnectedCategoriesInfo',
             'class' => 'genericicon_form_categoryselect',
             'dataset' => ["data-select", "category"],
         ],
-        'brands' => [
+        'iconBrands' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getConnectedBrands',
             'class' => 'genericicon_form_brandselect',

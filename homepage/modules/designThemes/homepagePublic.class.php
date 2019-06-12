@@ -14,7 +14,6 @@ class homepagePublicDesignTheme extends DesignTheme
         $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'homepage/js/public/';
         $this->javascriptPath = $tricksterPath . 'homepage/js/public/';
         $this->javascriptFiles = [
-            'logics.ajaxSearch.js',
             'logics.commentForm.js',
             'logics.galleries.js',
             'logics.contentToggler.js',
@@ -49,14 +48,14 @@ class homepagePublicDesignTheme extends DesignTheme
             'logics.subMenu.js',
             'logics.hiddenFields.js',
             'logics.scrollItems.js',
-            'logics.mobile.js',
+            'logics.mobileMenu.js',
+            'logics.mobileCommonMenu.js',
             'mixin.LazyLoading.js',
             'mixin.slides.js',
             'mixin.scrollPages.js',
             'mixin.carouselGallery.js',
             'mixin.slideOverlay.js',
             'component.input.js',
-            'component.ajaxSearch.js',
             'component.contentToggler.js',
             'component.gallery.js',
             'component.galleryImage.js',
@@ -106,7 +105,8 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.tracking.js',
             'component.modalAction.js',
             'component.modal.js',
-            'component.feedbackDragAndDrop.js',
+            'component.FeedbackForm.js',
+            'component.mobileCommonMenu.js',
         ];
     }
 }

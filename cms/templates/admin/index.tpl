@@ -11,8 +11,10 @@
 
 	<script src="{$controller->baseURL}vendor/ckeditor/ckeditor/ckeditor.js"></script>
 	<script src="{$controller->baseURL}libs/ckfinder/ckfinder.js"></script>
-	<script src="{$controller->baseURL}vendor/artweb/trickster/cms/js/jscolor/jscolor.js"></script>
+	{*<script src="{$controller->baseURL}vendor/artweb/trickster/cms/js/jscolor/jscolor.js"></script>*}
 	<script src="{$controller->baseURL}vendor/nnnick/chartjs/dist/Chart.js"></script>
+{*	<script src="{$controller->baseURL}trickster/cms/js/jscolor/color.all.min.js"></script>*}
+	<script src="{$controller->baseURL}vendor/artweb/trickster/cms/js/jscolor/jsColorPicker.min.js"></script>
 </head>
 <body>
 {if isset($loginForm) && $loginForm->displayForm()}
@@ -134,7 +136,6 @@
 	</div>
 {/if}
 {include file=$theme->template("javascript.data.tpl")}
-
 {if !empty($JSFileName)}{foreach $JSFileName as $script}<script defer type="text/javascript" src="{$script}"></script>{/foreach}{/if}
 </body>
 </html>

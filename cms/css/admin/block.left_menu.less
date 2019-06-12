@@ -1,12 +1,7 @@
 /********************************************************
 /*  TREE COMPONENT
 /********************************************************/
-@white: #fff;
-@treemenu-text-color: #95a5c5;
-@left-menu-background-color: #314269;
-@search-border-color: #202c48;
-@search-background-color: #213053;
-@placeholder-icon-color: #7483a3;
+
 
 .treemenu_component {
 	margin: @15pt 0 0 @2pt;
@@ -47,13 +42,13 @@
 
 	.structure_element {
 		display: flex;
-		color: @treemenu-text-color;
+		color: @treemenu_text_color;
 		text-decoration: none;
-		transition: @text-hover-transition;
+		transition: @text_hover_transition;
 
 		.icon {
-			color: @treemenu-text-color;
-			transition: @text-hover-transition;
+			color: @treemenu_text_color;
+			transition: @text_hover_transition;
 		}
 		&:hover, &:focus {
 			color: @white;
@@ -98,15 +93,15 @@
 	width: 5%;
 	height: @37pt;
 	line-height: @37pt;
-	background-color: @search-background-color;
-	border-left: 1px solid @search-border-color;
-	border-top: 1px solid @search-border-color;
-	border-bottom: 1px solid @search-border-color;
+	background-color: @search_background_color;
+	border-left: 1px solid @search_border_color;
+	border-top: 1px solid @search_border_color;
+	border-bottom: 1px solid @search_border_color;
 	border-right: none;
 	border-radius: 3px 0 0 3px;
 	padding-left: @7pt;
 	.icon {
-		color: @placeholder-icon-color;
+		color: @placeholder_icon_color;
 	}
 }
 
@@ -114,11 +109,11 @@
 	width: 95%;
 	height: @35pt;
 	border-radius: 0 3px 3px 0;
-	border-right: 1px solid @search-border-color;
-	border-top: 1px solid @search-border-color;
-	border-bottom: 1px solid @search-border-color;
+	border-right: 1px solid @search_border_color;
+	border-top: 1px solid @search_border_color;
+	border-bottom: 1px solid @search_border_color;
 	border-left: none;
-	background-color: @search-background-color;
+	background-color: @search_background_color;
 	text-indent: @16pt;
 	color: @white;
 	&::placeholder {

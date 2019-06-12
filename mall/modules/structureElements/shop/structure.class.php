@@ -33,7 +33,6 @@ class shopElement extends structureElement implements MetadataProviderInterface
         $moduleStructure['photo'] = 'image';
         $moduleStructure['photoOriginalName'] = 'fileName';
         $moduleStructure['roomId'] = 'serializedArray';
-        $moduleStructure['elements'] = 'array';
         $moduleStructure['customOpeningHours'] = 'jsonSerialized';
 
         $moduleStructure['categories'] = 'numbersArray';

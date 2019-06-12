@@ -4,7 +4,7 @@
 		{include file=$theme->template('component.elementimage.tpl') type='productWide' class='product_wide_image' lazy=true}
 	{/if}
 	{if $iconsInfo = $element->getIconsInfo()}
-		{include file=$theme->template('product.icons.tpl') class='product_wide_icons' displayOldPrice=true}
+		{include file=$theme->template('product.icons.tpl') class='product_wide_icons'}
 	{/if}
 {/capture}
 {capture assign="moduleContent"}

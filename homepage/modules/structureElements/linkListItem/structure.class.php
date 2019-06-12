@@ -3,6 +3,7 @@
 class linkListItemElement extends structureElement implements ConfigurableLayoutsElementsInterface
 {
     use SearchTypesProviderTrait;
+	use ImageUrlProviderTrait;
     public $dataResourceName = 'module_linklist_item';
     public $defaultActionName = 'show';
     public $role = 'content';

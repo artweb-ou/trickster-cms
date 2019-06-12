@@ -1,14 +1,14 @@
 {if $element->getProductsLayout() != "hide"}
     <div class="category_details_products_related">
-        {include file=$theme->template('component.productsfilter.tpl')}
+        {include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=true}
         {if $pager && count($pager->pagesList)>1 || $element->isSortable()}
             <div class="products_top_pager">
                 {include file=$theme->template('pager.tpl') pager=$pager}
                 <div class="products_top_pager_controls">
+                    {include file=$theme->template('component.productslimit.tpl')}
                     {if $element->isSortable()}
                         {include file=$theme->template('component.productssorter.tpl')}
                     {/if}
-                    {include file=$theme->template('component.productslimit.tpl')}
                 </div>
             </div>
         {/if}

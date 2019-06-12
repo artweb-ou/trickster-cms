@@ -21,7 +21,7 @@ class LinkListFormStructure extends ElementForm
         ],
     ];
 
-    public $additionalContent = 'shared.contentlist';
+    protected $additionalContent = 'shared.contentlist.tpl';
 
     protected function getSearchTypes()
     {

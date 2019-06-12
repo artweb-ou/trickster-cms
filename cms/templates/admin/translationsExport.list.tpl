@@ -69,7 +69,7 @@
 								<table class="table_component translations_export_table">
 									<thead>
 									<tr>
-										<th class="checkbox_cell">
+										<th class="checkbox_column">
 											<input class='groupbox checkbox_placeholder' type="checkbox" value='1' />
 										</th>
 										<th class="table_header"><h3>{$translationGroupName}</h3></th>

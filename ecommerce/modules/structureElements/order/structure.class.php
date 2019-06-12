@@ -92,6 +92,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return [
             'showForm',
             'showProducts',
+            'showOrderFields',
             'showPaymentData',
         ];
     }
@@ -124,16 +125,17 @@ class orderElement extends structureElement implements PaymentOrderInterface
         if ($totalPrice < 0) {
             $totalPrice = 0;
         }
-        $totalPrice = number_format((float)$totalPrice, 2, '.', '');
+        $currencySelector = $this->getService('CurrencySelector');
+        $totalPrice = $currencySelector->formatPrice($totalPrice);
 
         $this->totalAmount = count($this->orderProducts);
 
         $vatRateSetting = $this->getService('ConfigManager')->get('main.vatRate');
         $this->vatAmount = round($totalPrice - $totalPrice / $vatRateSetting, 2);
-        $this->vatAmount = number_format((float)$this->vatAmount, 2, '.', '');
+        $this->vatAmount = $currencySelector->formatPrice($this->vatAmount);
 
         $this->noVatAmount = round($totalPrice / $vatRateSetting, 2);
-        $this->noVatAmount = number_format((float)$this->noVatAmount, 2, '.', '');
+        $this->noVatAmount = $currencySelector->formatPrice($this->noVatAmount);
 
         if ($this->paymentElement) {
             if ($this->paymentElement->paymentStatus == 'success') {
@@ -255,7 +257,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function getOrderStatusText($fromStatus = false)
     {
-        if(!$fromStatus) {
+        if (!$fromStatus) {
             $fromStatus = $this->orderStatus;
         }
         if ($this->orderStatusText === null) {
@@ -288,42 +290,43 @@ class orderElement extends structureElement implements PaymentOrderInterface
     public function getPayedPrice()
     {
         $this->recalculate();
-
-        return $this->payedPrice ? $this->payedPrice : 0;
+        $currencySelector = $this->getService('CurrencySelector');
+        return $this->payedPrice ? $currencySelector->formatPrice($this->payedPrice) : 0;
     }
 
     public function getVatAmount()
     {
         $this->recalculate();
-
-        return $this->vatAmount;
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->vatAmount);
     }
 
     public function getProductsPrice()
     {
         $this->recalculate();
-
-        return $this->productsPrice;
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->productsPrice);
     }
 
     public function getTotalAmount()
     {
         $this->recalculate();
-
         return $this->totalAmount;
     }
 
     public function getTotalPrice()
     {
+        $currencySelector = $this->getService('CurrencySelector');
         if ($this->totalPrice === null) {
             $this->recalculate();
         }
-        return $this->totalPrice;
+        return $currencySelector->formatPrice($this->totalPrice);
     }
 
     public function getOrderData()
     {
         if ($this->orderData === null) {
+            $currencySelector = $this->getService('CurrencySelector');
             $pricesIncludeVat = !$this->getService('ConfigManager')->get('main.displayVat');
             $this->orderData = [
                 "paymentBank" => $this->getPaymentBank(),
@@ -345,9 +348,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 "currency" => $this->currency,
                 "productsPrice" => $this->getProductsPrice(),
                 "deliveryType" => $this->deliveryType,
-                "deliveryPrice" => $this->deliveryPrice,
+                "deliveryPrice" => $currencySelector->formatPrice($this->deliveryPrice),
                 "deliveryTitle" => $this->deliveryTitle,
-                "noVatAmount" => $this->noVatAmount,
+                "noVatAmount" => $this->getNoVatAmount(),
                 "vatAmount" => $this->getVatAmount(),
                 "totalPrice" => $this->getTotalPrice(),
                 "invoiceNumber" => $this->invoiceNumber,
@@ -404,11 +407,11 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $this->orderData['addedProducts'][] = [
                     'code' => $product->code,
                     'title' => $product->title,
-                    'price' => $product->price,
-                    'variation'  => $product->variation,
+                    'price' => $product->getPrice(),
+                    'variation' => $product->variation,
                     'emptyPrice' => $product->isEmptyPrice(),
                     'amount' => $product->amount,
-                    'totalPrice' => $product->getTotalPrice(),
+                    'totalPrice' => $product->getTotalPrice(true),
                     'unit' => $product->unit,
                 ];
             }
@@ -470,39 +473,20 @@ class orderElement extends structureElement implements PaymentOrderInterface
         }
     }
 
-    public function sendOrderStatusNotificationEmail($emailType, $statusType, $sendTrigger = false, $forceSending = false)
+    public function sendOrderStatusNotificationEmail()
     {
-/*
-        payed
-        failed
-        deleted
-        paid_partial
-        sent
-*/
-/*
-status_deleted
-status_failed
-status_new
-status_paid_partial
-status_payed
-status_sent
-status_undefined
- */
-        if ($statusType !== 'undefined' && $forceSending) {
+        if ($this->orderStatus !== 'undefined') {
             $administratorEmail = $this->getAdministratorEmail();
             $data = $this->getOrderData();
-            $data['documentType'] = $emailType;
+            $data['documentType'] = 'Notification';
+            $data['orderStatus'] = $this->orderStatus;
 
-        //  if request from ajax (like orders list button) -> fix orderStatus from URL, else get current real orderStatus;
-            if ($sendTrigger !== 'ajax'){
-                $statusType = '';
-            }
-            else {
-                $data['orderStatus'] = $statusType;
-            }
             $translationsManager = $this->getService('translationsManager');
 
             $settings = $this->getService('settingsManager')->getSettingsList();
+            /**
+             * @var EmailDispatcher $emailDispatcher
+             */
             $emailDispatcher = $this->getService('EmailDispatcher');
             $newDispatchment = $emailDispatcher->getEmptyDispatchment();
             $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
@@ -512,36 +496,22 @@ status_undefined
             }
             $newDispatchment->registerReceiver($this->payerEmail, null);
 
-            $subjects = [];
-            // getTranslationByName($name, $section = null, $required = true, $loggable = true, $languageId = null)
-
             // if !shop_title in translation, try check default_sender_name in settings, else display shop_title field name
-            $subjects['label.ShopTitle'] =
+            $shopTitle =
                 $translationsManager->getTranslationByName('company.shop_title', 'public_translations') ?:
-                !empty($settings['default_sender_name']) ?$settings['default_sender_name']:$translationsManager->getTranslationByName('company.shop_title', 'public_translations');
+                    !empty($settings['default_sender_name']) ? $settings['default_sender_name'] : $translationsManager->getTranslationByName('company.shop_title', 'public_translations');
 
-            $subjects['label.emailSubjectOrderStatusNotification'] =
-                $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification', 'public_translations');
-            $subjects['label.orderNumber'] =
-                $translationsManager->getTranslationByName('labels.order_nr', 'public_translations');
-            $subjects['value.orderNumber'] =
-                $this->orderNumber;
-            $subjects['value.orderStatusText'] =
-                $this->getOrderStatusText($statusType);
-            $subject =
-                $subjects['label.ShopTitle'] .  '. ' .
-                $subjects['label.emailSubjectOrderStatusNotification'] . ' (' .
-                $subjects['label.orderNumber'] . ' ' .
-                $subjects['value.orderNumber'] . ': ' .
-                $subjects['value.orderStatusText'] . ')';
+            $notification = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification', 'public_translations');
+            $orderNumberText = $translationsManager->getTranslationByName('invoice.order_nr', 'public_translations');
+            $orderNumber = $this->getInvoiceNumber();
+            $statusText = $this->getOrderStatusText($this->orderStatus);
+            $subject = $shopTitle . '. ' . $notification . ' (' . $orderNumberText . ' ' . $orderNumber . ': ' . $statusText . ')';
             $newDispatchment->setSubject($subject);
             $newDispatchment->setData($data);
             $newDispatchment->setReferenceId($this->id);
             $newDispatchment->setType('orderStatus');
 
             $emailDispatcher->startDispatchment($newDispatchment);
-//            $statusType = 'undefined';
-//            $forceSending = false;
         }
     }
 
@@ -870,38 +840,41 @@ status_undefined
         return '';
     }
 
-    public function setOrderStatus($orderStatus)
+    public function setOrderStatus($newOrderStatus)
     {
-        $oldStatus = $this->orderStatus;
-        $this->orderStatus = $orderStatus;
+        if ($this->orderStatus !== $newOrderStatus) {
+            $this->orderStatus = $newOrderStatus;
 
-        if ($this->orderStatus !== $oldStatus &&
-            ($this->orderStatus == 'paid_partial' || $this->orderStatus == 'payed' || $this->orderStatus == 'undefined')
-        ) {
             // Update date, purchase count and quantity for each ordered product
-            if ($this->orderStatus !== 'undefined') {
-                if ($orderProducts = $this->getOrderProducts()) {
-                    $structureManager = $this->getService('structureManager');
+            if ($this->orderStatus == 'paid_partial' || $this->orderStatus == 'payed' || $this->orderStatus == 'undefined') {
+                if ($this->orderStatus !== 'undefined') {
+                    if ($orderProducts = $this->getOrderProducts()) {
+                        $structureManager = $this->getService('structureManager');
 
-                    foreach ($orderProducts as &$orderProduct) {
-                        /**
-                         * @var productElement $product
-                         */
-                        if ($product = $structureManager->getElementById($orderProduct->productId)) {
-                            $product->purchaseCount++;
-                            $product->lastPurchaseDate = time();
-                            $product->quantity -= $orderProduct->amount;
-                            if ($product->quantity < 0) {
-                                $product->quantity = 0;
+                        foreach ($orderProducts as &$orderProduct) {
+                            /**
+                             * @var productElement $product
+                             */
+                            if ($product = $structureManager->getElementById($orderProduct->productId)) {
+                                $product->purchaseCount++;
+                                $product->lastPurchaseDate = time();
+                                $product->quantity -= $orderProduct->amount;
+                                if ($product->quantity < 0) {
+                                    $product->quantity = 0;
+                                }
+                                $product->persistElementData();
                             }
-                            $product->persistElementData();
                         }
                     }
                 }
+
+                $this->checkInvoiceSending();
+                $this->persistElementData();
             }
 
-            $this->checkInvoiceSending();
-            $this->persistElementData();
+            if ($this->orderStatus !== 'undefined') {
+                $this->sendOrderStatusNotificationEmail();
+            }
         }
     }
 
@@ -915,6 +888,7 @@ status_undefined
      */
     public function createOrderProducts($products)
     {
+        $currencySelector = $this->getService('CurrencySelector');
         $structureManager = $this->getService('structureManager');
         $this->orderProducts = [];
         foreach ($products as &$product) {
@@ -933,7 +907,7 @@ status_undefined
                 } else {
                     $price = $product->getPrice(true, false);
                     if ($product->discount) {
-                        $newData['price'] = number_format((float)$price - $product->discount, 2, '.', '');
+                        $newData['price'] = $currencySelector->formatPrice($price - $product->discount);
                         $newData['oldPrice'] = $price;
                     } else {
                         $newData['price'] = $product->getPrice(true, false);
@@ -1034,4 +1008,15 @@ status_undefined
         $this->logError('Deprecated method used: ' . __CLASS__ . '::getReceiverFields');
         return $this->getOrderFields();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getNoVatAmount()
+    {
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->noVatAmount);
+    }
+
+
 }

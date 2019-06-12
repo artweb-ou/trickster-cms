@@ -1,21 +1,48 @@
 <?php
 
-class productCatalogueDataResponseConverter extends dataResponseConverter
+class productCatalogueDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
+    protected $defaultPreset = 'api';
+
+    protected function getRelationStructure()
     {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['title'] = $element->title;
-            if ($relatedLanguage = $element->getRelatedLanguageElement()) {
-                $info['language'] = $relatedLanguage->iso6393;
-            } else {
-                $info['language'] = "";
-            }
-            $result[] = $info;
-        }
-        return $result;
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'searchTitle' => function ($element) {
+                if ($relatedLanguage = $element->getRelatedLanguageElement()) {
+                    return $element->title . '<em class="search_title_lang">(' . $relatedLanguage->iso6393 . ')</em>';
+                } else {
+                    return $element->title;
+                }
+            },
+            'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+            ],
+        ];
     }
 }

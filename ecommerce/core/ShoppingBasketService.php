@@ -55,18 +55,17 @@ class ShoppingBasketService implements DependencyInjectionContextInterface
      * @param bool $useCurrency
      * @return string
      */
-    public function getPrice(bool $round = true, bool $useCurrency = true): string
+    public function getPrice(bool $round = true, bool $useCurrency = true)
     {
         $price = $this->price;
-        if ($useCurrency) {
-            $currencySelector = $this->getService('CurrencySelector');
-            if ($currencySelector) {
-                $price = $currencySelector->convertPrice($price);
+        $currencySelector = $this->getService('CurrencySelector');
+        if ($currencySelector) {
+            if ($useCurrency) {
+                return $currencySelector->convertPrice($price, false);
+            }
+            if ($round) {
+                return $currencySelector->formatPrice($price);
             }
         }
-        if ($round) {
-            $price = sprintf('%01.2f', $price);
-        }
-        return $price;
     }
 }

@@ -1,19 +1,53 @@
 <?php
 
-class eventDataResponseConverter extends dataResponseConverter
+class eventDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
+    protected $defaultPreset = 'api';
+
+    protected function getRelationStructure()
     {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['title'] = $element->title;
-            $info['url'] = $element->URL;
-            $info['content'] = $element->description;
-            $result[] = $info;
-        }
-        return $result;
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'searchTitle' => function ($element) {
+                if ($relatedLanguage = $element->getRelatedLanguageElement()) {
+                    return $element->title . '<em class="search_title_lang">(' . $relatedLanguage->iso6393 . ')</em>';
+                } else {
+                    return $element->title;
+                }
+            }, 'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'image' => 'image',
+            'content' => 'content',
+            'introduction' => 'introduction',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+                'image',
+                'content',
+                'introduction',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+            ],
+        ];
     }
 }
-

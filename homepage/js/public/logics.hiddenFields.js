@@ -7,13 +7,13 @@ window.hiddenFieldsLogics = new function() {
                 for (var i = 0; i < window.hiddenFieldsData[t].length; i++) {
                     var currentFieldData = window.hiddenFieldsData[t][i];
                     var elementWrapper = _('.field' + currentFieldData.selectId)[0];
-                    if(currentFieldData.selectionType == 'radiobutton') {
+                    if (currentFieldData.selectionType == 'radiobutton') {
                         var masterElements = _('.radio_holder', elementWrapper);
                         var selectionType = 'radio';
-                    }else if(currentFieldData.selectionType == 'checkbox') {
+                    } else if (currentFieldData.selectionType == 'checkbox') {
                         var masterElements = _('.checkbox_placeholder', elementWrapper);
                         var selectionType = 'checkbox';
-                    }else {
+                    } else {
                         var masterElements = _('.dropdown_placeholder', elementWrapper);
                         var selectionType = 'dropdown';
                     }
@@ -26,7 +26,7 @@ window.hiddenFieldsLogics = new function() {
                             selectComponent.addOption(optionComponent);
 
                             for (var j = 0; j < currentFieldData.options[k].fields.length; j++) {
-                                if(typeof servants[currentFieldData.options[k].fields[j]] == 'undefined') {
+                                if (typeof servants[currentFieldData.options[k].fields[j]] == 'undefined') {
                                     var servantElement = _('.field' + currentFieldData.options[k].fields[j])[0];
                                     var servantComponent = new servantFieldComponent(servantElement);
                                     servants[currentFieldData.options[k].fields[j]] = servantComponent;

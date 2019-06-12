@@ -19,6 +19,8 @@ class ajaxResponse
             }
             $responseData = $converter->convert($data);
             $this->responseData[$type] = $responseData;
+        } else {
+            $this->responseData[$type] = $data;
         }
     }
 

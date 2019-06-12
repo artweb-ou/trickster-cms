@@ -93,7 +93,7 @@
 							{/if}
 						{/if}
 						<div class="header_gallery galleryid_{$headerGallery->id} gallery_scroll">
-							<script>/*<![CDATA[*/
+							<script>
 								window.galleriesInfo = window.galleriesInfo || {ldelim}{rdelim};
 								window.galleriesInfo['{$headerGallery->id}'] = {$headerGallery->getGalleryJsonInfo([
 								'descriptionType'=>'hidden',
@@ -107,7 +107,7 @@
 								'fullScreenGalleryEnabled'=>false,
 								'enablePrevNextImagesButtons'=>true
 								], 'headerGallery', 'desktop')};
-								/*]]>*/</script>
+								</script>
 						</div>
 						<div class="clearfix"></div>
 					</div>

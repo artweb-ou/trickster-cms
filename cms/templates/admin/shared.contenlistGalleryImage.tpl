@@ -1,3 +1,5 @@
+{if !isset($formElement)}{$formElement = $rootElement}{/if}
+{assign 'formNames' $formElement->getFormNames()}
 <table class='content_list gallery_form_images_table'>
 	<thead>
 	<tr>
@@ -31,7 +33,7 @@
 			{assign var='type' value="element."|cat:$typeLowered}
 			{assign var='privilege' value=$privileges.$typeName}
 			<tr class="content_list_item elementid_{$contentItem->id}">
-				<td class="checkbox_cell">
+				<td class="checkbox_column">
 					<input class='singlebox checkbox_placeholder' type="checkbox" name="{$formNames.elements}[{$contentItem->id}]" value="1" />
 				</td>
 				{if method_exists ($contentItem, 'getImageUrl')}

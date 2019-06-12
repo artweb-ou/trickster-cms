@@ -1,18 +1,30 @@
 {if !isset($item.textClass)}
     {$item.textClass = ''}
 {/if}
+{if !empty($item.translationGroup)}
+{$translationGroup = $item.translationGroup}
+{else}
+	{$translationGroup = $structureType}
+{/if}
 {assign var="labelBefore" value=""}
 {assign var="labelAfter" value=""}
 {assign var="formFieldCols" value=""}
 {assign var='primColor' value=''}
 {if !empty($item.additionalFormat)}
-    {$labelBefore = $item.additionalFormat.labelBefore}
+	{$labelBefore = $item.additionalFormat.labelBefore}
+	{if empty($labelBefore)}
+		{$labelBefore = $fieldName}
+	{/if}
     {$labelAfter  = $item.additionalFormat.labelAfter}
 	{$formFieldCols = ' labelAfter'}
 {else}
 	{$labelBefore = $fieldName}
 {/if}
-
+{if !empty($item.valuesTranslationGroup)}
+	{$valuesTranslationGroup = $item.valuesTranslationGroup}
+{else}
+	{$valuesTranslationGroup = $structureType}
+{/if}
 {if !empty($item.inputDefaultValueMethod) && empty($formData.$fieldName)}
 	{$defaultValue = $form->callElementMethod($item.inputDefaultValueMethod['method'], $item.inputDefaultValueMethod['variable'])}
 	{$formData.$fieldName = $defaultValue}
@@ -26,7 +38,7 @@
 		   name="{$formNames.$fieldName}"/>
 			{if !empty($labelAfter)}
 				<span class="form_label_after">
-				{translations name="{$translationGroup}.{$labelAfter}"}
+				{translations name="{$valuesTranslationGroup}.{$labelAfter}"}
 				</span>
 			{/if}
 		</div>

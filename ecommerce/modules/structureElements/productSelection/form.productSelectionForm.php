@@ -54,7 +54,19 @@ class ProductSelectionFormStructure extends ElementForm
             'property' => 'categoriesList',
             'class' => 'select_multiple_categories',
         ],
+        'image' => [
+            'type' => 'input.image',
+            'preset' => 'adminImage',
+            'filename' => 'image',
+        ],
+        'paramRange' => [
+            'type' => 'select.array',
+            'options' => [
+                '0' => 'enumeration',
+                '1' => 'range'
+            ]
+        ],
     ];
 
-    protected $additionalContent = 'component.block.product_selection';
+    protected $additionalContent = 'component.block.product_selection.tpl';
 }

@@ -5,4 +5,4 @@ $moduleActions[] = 'receive';
 $moduleActions[] = 'show';
 $moduleActions[] = 'showForm';
 $moduleActions[] = 'receiveSeo';
-$moduleActions[] = 'deleteImage';
+$moduleActions[] = 'deleteFile';

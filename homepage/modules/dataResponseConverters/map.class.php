@@ -1,26 +1,51 @@
 <?php
 
-class mapDataResponseConverter extends dataResponseConverter
+class mapDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
-    {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['title'] = $element->title;
-            $info['url'] = $element->URL;
-            $info['content'] = $element->content;
-            $info['mapCode'] = $this->htmlToPlainText($element->mapCode);
-            if ($relatedLanguage = $element->getRelatedLanguageElement()) {
-                $info['language'] = $relatedLanguage->iso6393;
-            } else {
-                $info['language'] = "";
-            }
-            $result[] = $info;
-        }
+    protected $defaultPreset = 'api';
 
-        return $result;
+    protected function getRelationStructure()
+    {
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'searchTitle' => function ($element) {
+                if ($relatedLanguage = $element->getRelatedLanguageElement()) {
+                    return $element->title . '<em class="search_title_lang">(' . $relatedLanguage->iso6393 . ')</em>';
+                } else {
+                    return $element->title;
+                }
+            }, 'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'content' => 'content',
+            'mapCode' => 'mapCode',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+                'content',
+                'mapCode',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+            ],
+        ];
     }
 }
-

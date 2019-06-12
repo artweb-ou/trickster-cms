@@ -3,7 +3,6 @@
 class SharedLayoutStructure extends ElementForm
 {
 
-
     public function getTranslationGroup()
     {
         return 'layout';

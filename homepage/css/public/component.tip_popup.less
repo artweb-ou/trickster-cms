@@ -10,20 +10,17 @@
 
 .tip_popup_content {
 	font-size: 0.9em;
-	padding: 0.5em 1em;
 	display: block;
-	border: 1px solid @trick_brd_color_12;
-	background-color: @trick_bg_color_01;
-
 	box-sizing: border-box;
 	position: relative;
-	box-shadow: 0 0 0 1px @trick_brd_color_12;
+	background-color: @trick_bg_color_01;
+	box-shadow: 0 0 0 1px @trick_brd_color_08;
 	padding: 0;
 	color: @trick_text_color_01;
 	line-height: 1.25;
 
 	&.notice_basket {
-		border: 5px solid @trick_text_color_01;
+		border: 5px solid @trick_bg_color_10;
 		transition: height 1s linear;
 	}
 
@@ -48,7 +45,6 @@
 	.notice_bubble_text {
 	}
 	.notice_product_amount{
-		font-style: normal;
 		font-weight: bolder;
 	}
 
@@ -60,6 +56,7 @@
 		align-items: center;
 		z-index: 1001;
 		background-color: @trick_bg_color_02;
+		box-sizing: border-box;
 
 		.notice_title {
 			flex: 1 1 auto;
@@ -73,8 +70,9 @@
 		flex: 1 1 auto;
 		min-height: 0;
 		overflow: auto;
-		padding: .5em;
+		padding: 1em .5em;
 		position: relative;
+		color: @trick_text_color_02;
 	}
 	.notice_link {
 		color: inherit;
@@ -83,15 +81,18 @@
 		text-decoration: none;
 
 		&:hover, &:focus{
-			color: @trick_brd_color_06;
+			color: @trick_text_color_08;
 			text-decoration: none;
 		}
 	}
 	.notice_footer {
-		flex: none;
-		padding: .5em;
 		text-align: center;
 		z-index: 1001;
+		display: flex;
+		flex-direction: row;
+		justify-items: center;
+		justify-content: space-between;
+		padding: 0;
 
 		.button {
 			display: block;
@@ -99,13 +100,13 @@
 			justify-content: center;
 			text-align: center;
 			font-size: 1em;
-			width: 100%;
+			max-width: 100%;
 			line-height: inherit;
 			padding: .75em 1.5em;
 			letter-spacing: 1px;
 			text-transform: uppercase;
 			box-sizing: border-box;
-			box-shadow: 0 0 0 1px @trick_brd_color_12;
+			box-shadow: 0 0 0 1px @trick_brd_color_08;
 
 			&.submit.button * {
 				color: inherit;
@@ -117,4 +118,7 @@
 			}
 		}
 	}
+}
+.notice_product_amount{
+	font-style: normal;
 }

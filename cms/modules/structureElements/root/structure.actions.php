@@ -10,4 +10,3 @@ $moduleActions[] = 'copyElements';
 $moduleActions[] = 'moveElements';
 $moduleActions[] = 'pasteElements';
 $moduleActions[] = 'cloneElements';
-$moduleActions[] = 'massModify';

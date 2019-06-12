@@ -2,8 +2,6 @@
 
 class requestHeadersManager
 {
-    /** @var requestHeadersManager */
-    protected static $instance;
     protected $httpRequest;
     protected $referer;
     protected $ifNoneMatch;
@@ -24,20 +22,17 @@ class requestHeadersManager
     public function __construct()
     {
         $this->httpRequest = $_SERVER;
-        self::$instance = $this;
     }
 
-    /**
-     * @return requestHeadersManager
-     * @deprecated
-     */
-    public static function getInstance()
+
+    public function getRequestType()
     {
-        if (!self::$instance) {
-            $className = __CLASS__;
-            self::$instance = new $className();
-        }
-        return self::$instance;
+        return strtoupper($_SERVER['REQUEST_METHOD']);
+    }
+
+    public function getRange()
+    {
+        return !empty($_SERVER['HTTP_RANGE']) ? $_SERVER['HTTP_RANGE'] : false;
     }
 
     public function getIfModifiedSince()
@@ -301,25 +296,17 @@ class requestHeadersManager
             // silk = kindle fire silk
             // froyo = samsung galazy tab
             // xoom = motorola xoom, xyboard
-            if (preg_match('/(kindle|silk|froyo|xoom|ipad|playbook)|(android(?!.*(mobi|opera mini)))|(tablet(?! pc))/i', $UAString)) {
+            // symbian = nokia phone
+            if (preg_match('/(kindle|silk|froyo|xoom|tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', $UAString)) {
                 $this->userAgentDeviceType = 'tablet';
             } elseif ($this->userAgentDevice == 'iPod' || stripos($UAString, 'phone') !== false || stripos($UAString, 'mobile') !== false) {
                 $this->userAgentDeviceType = 'phone';
             } elseif (stripos($UAString, 'android') !== false) {
                 $this->userAgentDeviceType = 'tablet';
+            } elseif (stripos($UAString, 'symbian') !== false) {
+                $this->userAgentDeviceType = 'phone';
             } else {
                 $this->userAgentDeviceType = 'desktop';
-            }
-
-            // Handeling Exeptions
-            $exeptions = [
-                'symbian' => 'phone', // symbian = nokia phone
-                'lg-p990/v08c build/frg83' => 'phone', // LG Optimus 2x
-            ];
-            foreach ($exeptions as $exeption => $type) {
-                if (stripos($UAString, $exeption) !== false) {
-                    $this->userAgentDeviceType = $type;
-                }
             }
 
             // Set browserType & browserVersion
@@ -363,17 +350,19 @@ class requestHeadersManager
                 $this->engineVersion = false;
             } elseif (preg_match('/trident\/([0-9\.]+)/i', $UAString, $matches) || $this->browserType == 'MSIE') {
                 $this->engineType = 'Trident';
+
                 if (stripos($UAString, 'trident/5.') !== false) {
                     $this->browserVersion = '9.0';
                     $this->engineVersion = 5;
                 } elseif (stripos($UAString, 'trident/4.') !== false) {
                     $this->browserVersion = '8.0';
                     $this->engineVersion = 4;
+                } elseif ($this->browserVersion > '7.0') {
+                    $this->engineVersion = 3;
                 } elseif (isset($matches[1])) {
                     $this->engineVersion = $matches[1];
-                }
-                if ($this->browserVersion > '7.0') {
-                    $this->engineVersion = 3;
+                } else {
+                    $this->engineVersion = false;
                 }
             } elseif (stripos($UAString, 'blink') !== false) {
                 $this->engineType = 'Blink';
@@ -390,4 +379,3 @@ class requestHeadersManager
         }
     }
 }
-

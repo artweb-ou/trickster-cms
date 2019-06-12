@@ -7,20 +7,18 @@
 
 		<script src="{$controller->baseURL}libs/ckeditor/ckeditor.js"></script>
 		<script src="{$controller->baseURL}libs/ckfinder/ckfinder.js"></script>
-		<script src="{$controller->baseURL}trickster/cms/js/calendar/calendar.js"></script>
-		<script src="{$controller->baseURL}trickster/cms/js/jscolor/jscolor.js"></script>
 		<script type="text/javascript" src="{$controller->baseURL}javascript/set:{$theme->getCode()}/file:{$JSFileName}.js"></script>
 		<link rel="shortcut icon" href="{$theme->getImageUrl("icons/favicon.ico")}"/>
 		<link rel="stylesheet" type="text/css" href="{$controller->baseURL}css/set:{$theme->getCode()}/file:{$CSSFileName}.css"/>
 	</head>
 	<body class="floor_mapeditor">
 		{*<div class="">*}
-			<script type="text/javascript">
-				/*<![CDATA[*/
+			<script>
+
 				window.ajaxURL = '{$controller->baseURL}adminAjax/';
 				window.elementId = '{$element->id}';
 				window.editorInfo = {$element->getEditorInfo()|json_encode};
-				/*]]>*/
+
 			</script>
 			<div class='floor_mapeditor_center_block'>
 				<div class='floor_mapeditor_map'>

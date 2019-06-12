@@ -1,23 +1,48 @@
 <?php
 
-class brandDataResponseConverter extends dataResponseConverter
+class brandDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
-    {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['structureType'] = $element->structureType;
-            $info['structurePath'] = $element->structurePath;
-            $info['title'] = $element->title;
-            $info['url'] = $element->URL;
-            $info['introduction'] = $element->introduction;
-            $info['content'] = $element->content;
-            $info['image'] = $element->image;
-            $result[] = $info;
-        }
+    protected $defaultPreset = 'api';
 
-        return $result;
+    protected function getRelationStructure()
+    {
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'searchTitle' => 'title',
+            'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+            'introduction' => 'introduction',
+            'content' => 'content',
+            'image' => 'image',
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+                'introduction',
+                'content',
+                'image',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+            ],
+        ];
     }
 }

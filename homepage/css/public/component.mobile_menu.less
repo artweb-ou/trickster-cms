@@ -43,7 +43,6 @@
 }
 
 .mobilemenu_module_title {
-	padding: 0.9em 0 1em 0.8em;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	padding: .9em 0 1em .8em;
@@ -57,4 +56,10 @@
 
 .mobilemenu_module_submenulist .mobilemenu_module_content {
 	padding: 0;
+}
+
+@media (min-width: @screen_breakpoint_md_max) {
+	.mobile_common_menu_button {
+		display: none;
+	}
 }

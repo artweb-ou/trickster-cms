@@ -108,21 +108,24 @@ class logViewerElement extends structureElement
     {
         $logMessages = [];
         if ($content = $this->getLogContents($logPath)) {
-            if ($messages = array_slice(array_filter(preg_split('#(^|\n)[0-9]{4}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]\n#i', $content)), 0)) {
-                foreach ($messages as $message) {
-                    if (($rows = array_slice(array_filter(preg_split('#(\s)*(^|\n)-(\s)*#', $message)), 0)) && count($rows) == 3) {
-                        if (substr($rows[1], 0, 13) == 'REQUEST_URI: ') {
-                            $uri = substr($rows[1], 13);
-                        } else {
-                            $uri = $rows[1];
-                        }
-                        $logMessage = [
-                            'error' => $rows[0],
-                            'uri' => $uri,
-                            'referrer' => $rows[2],
-                        ];
+            $logMessage = [];
+            foreach (preg_split("/((\r?\n)|(\r\n?))/", $content) as $line) {
+                if (isset($logMessage['uri'])) {
+                    if (substr($line, 0, 16) == '- HTTP_REFERER: ') {
+                        $logMessage['referrer'] = substr($line, 16);
                         $logMessages[] = $logMessage;
+                        $logMessage = [];
                     }
+                } elseif (isset($logMessage['error'])) {
+                    if (substr($line, 0, 15) == '- REQUEST_URI: ') {
+                        $logMessage['uri'] = substr($line, 15);
+                    }
+                } elseif (isset($logMessage['date'])) {
+                    if ($line) {
+                        $logMessage['error'] = substr($line, 2);
+                    }
+                } elseif (preg_match('#(^|\n)[0-9]{4}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]#i', $line)) {
+                    $logMessage['date'] = $line;
                 }
             }
         }

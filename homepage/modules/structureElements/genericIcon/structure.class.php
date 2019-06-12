@@ -1,8 +1,15 @@
 <?php
 
-    /**
-     * Class genericIconElement
-     */
+/**
+ * Class genericIconElement
+ *
+ * @property int $iconRole
+ * @property int $days
+ * @property string[] $iconProductAvail
+ * @property string $startDate
+ * @property string $endDate
+ * @property string $iconWidth
+ */
 class genericIconElement extends structureElement implements ImageUrlProviderInterface
 {
     use ConnectedProductsProviderTrait;
@@ -23,9 +30,9 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['title'] = 'text';
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'fileName';
-        $moduleStructure['products'] = 'numbersArray';
-        $moduleStructure['categories'] = 'numbersArray';
-        $moduleStructure['brands'] = 'numbersArray';
+        $moduleStructure['iconProducts'] = 'numbersArray';
+        $moduleStructure['iconCategories'] = 'numbersArray';
+        $moduleStructure['iconBrands'] = 'numbersArray';
         $moduleStructure['startDate'] = 'date';
         $moduleStructure['endDate'] = 'date';
         $moduleStructure['days'] = 'naturalNumber';
@@ -46,7 +53,8 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $multiLanguageFields[] = 'iconWidth';
     }
 
-    public function getSettingsVariablles($variable){
+    public function getSettingsVariablles($variable)
+    {
         $settingsManager = $this->getService('settingsManager');
         $configManager = $this->getService('ConfigManager');
         $variableValue = $settingsManager->getSetting($variable) ?: $configManager->get($variable);

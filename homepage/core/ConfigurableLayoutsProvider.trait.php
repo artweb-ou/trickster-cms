@@ -12,32 +12,41 @@ trait ConfigurableLayoutsProviderTrait
 {
     public function getLayoutTypes()
     {
+        /**
+         * @var Config $layoutsConfig
+         */
         $layoutsConfig = $this->getService('ConfigManager')->getConfig('layouts');
-        $result = $layoutsConfig->get("{$this->structureType}.layouts");
+        $result = $layoutsConfig->getMerged("{$this->structureType}.layouts");
 
         return (array)$result;
     }
 
     public function getLayoutsSelection($layout = "layout")
     {
+        /**
+         * @var Config $layoutsConfig
+         */
         $layoutsConfig = $this->getService('ConfigManager')->getConfig('layouts');
         $result = false;
         //check deprecated layout format
         if ($layout === 'layout') {
-            if ($result = $layoutsConfig->get("{$this->structureType}.main.options")) {
+            if ($result = $layoutsConfig->getMerged("{$this->structureType}.main.options")) {
                 $this->logError('deprecated layout main used:' . __CLASS__);
             }
         }
 
         //now check normal format
-        if (!$result){
-            $result = $layoutsConfig->get("{$this->structureType}.$layout.options");
+        if (!$result) {
+            $result = $layoutsConfig->getMerged("{$this->structureType}.$layout.options");
         }
         return (array)$result;
     }
 
     public function getDefaultLayout($layout = "layout")
     {
+        /**
+         * @var Config $layoutsConfig
+         */
         $layoutsConfig = $this->getService('ConfigManager')->getConfig('layouts');
         $result = $layoutsConfig->get("{$this->structureType}.$layout.default");
         if (!$result && $layout === 'layout') {

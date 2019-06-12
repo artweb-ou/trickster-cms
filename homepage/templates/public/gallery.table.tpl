@@ -43,12 +43,12 @@
 	{/if}
 
 	<script>
-		/*<![CDATA[*/
+
 		window.galleriesInfo = window.galleriesInfo || {ldelim}{rdelim};
 		window.galleriesInfo['{$element->id}'] = {$element->getGalleryJsonInfo([
 		'heightLogics,'=>'viewport'
 		])}
-		/*]]>*/
+
 	</script>
 
 	{if $element->serviceElement}

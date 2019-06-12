@@ -3,7 +3,8 @@
 class shoppingBasketStepDeliveryElement extends structureElement
 {
     use ShoppingBasketStepContentTrait;
-    public $dataResourceName = 'module_generic';
+    use ConfigurableLayoutsProviderTrait;
+    public $dataResourceName = 'module_shoppingbasket_step_delivery';
     protected $allowedTypes = [];
     public $defaultActionName = 'show';
     public $role = 'content';
@@ -11,6 +12,7 @@ class shoppingBasketStepDeliveryElement extends structureElement
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['layout'] = 'text';
     }
 
     public function getValidators($formData = []) {

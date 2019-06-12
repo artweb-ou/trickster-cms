@@ -18,6 +18,9 @@ class deleteFileShared extends structureElementAction
                 $fileNameField = 'originalName';
             } else {
                 $fileNameField = $fileField . "Name";
+                if (!$structureElement->$fileNameField) {
+                    $fileNameField = $fileField . 'OriginalName';
+                }
             }
 
             foreach ($structureElement->getAllDataChunks() as $langId => $chunks) {
@@ -32,6 +35,6 @@ class deleteFileShared extends structureElementAction
             $structureElement->persistElementData();
         }
 
-        $controller->restart($structureElement->URL);
+        $controller->restart($structureElement->getUrl('showForm'));
     }
 }

@@ -4,19 +4,19 @@
 	{capture assign="moduleContent"}
 		{stripdomspaces}
 
-		{if $element->title}
+		{if !empty($element->getTitle())}
 			{capture assign="moduleTitle"}
-				{$element->title}
+				{$element->getTitle()}
 			{/capture}
 		{/if}
 
-		{if $element->content}
+		{if !empty($element->content)}
 			<div class='selectedproducts_content html_content'>
 				{$element->content}
 			</div>
 		{/if}
 
-		{include file=$theme->template('component.productsfilter.tpl')}
+		{include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=false}
 		{if $element->isSortable() || ($element->getCurrentLayout() != 'scrolling' && $pager && count($pager->pagesList) > 1)}
 			<div class="products_top_pager">
 				{if $element->isSortable()}
@@ -29,10 +29,11 @@
 			</div>
 		{/if}
 		{if $element->getCurrentLayout() == 'scrolling'}
+			{assign "parameters" $element->getUsedParametersInfo()}
 			<div class="selectedproducts_scroll" data-auto="1">
-			{foreach $products as $product}
-				{include file=$theme->template($product->getTemplate($element->getCurrentLayout("productsLayout"))) element=$product selectedProductsElement=$element}
-			{/foreach}
+				{foreach $products as $product}
+					{include file=$theme->template($product->getTemplate($element->getCurrentLayout("productsLayout"))) element=$product selectedProductsElement=$element parameters=$parameters}
+				{/foreach}
 			</div>
 			<div class="selectedproducts_scrollbutton scroll_pages_button selectedproducts_scrollbutton_left scroll_pages_previous"></div>
 			<div class="selectedproducts_scrollbutton scroll_pages_button selectedproducts_scrollbutton_right scroll_pages_next"></div>
@@ -75,10 +76,20 @@
 			{/if}
 		{/if}
 
-	{if $element->getCurrentLayout() != 'scrolling'}
-		{include file=$theme->template('pager.tpl') pager=$pager}
-	{/if}
+		{if $element->getCurrentLayout() != 'scrolling'}
+			{include file=$theme->template('pager.tpl') pager=$pager}
+		{/if}
 		{/stripdomspaces}
+		{if !empty($element->buttonTitle) && (!empty($element->buttonUrl) || !empty($element->getButtonConnectedMenuUrl()))}
+			{if $element->getButtonConnectedMenuUrl()}
+				{$Url = $element->getButtonConnectedMenuUrl()}
+			{else}
+				{$Url = $element->buttonUrl}
+			{/if}
+			<div class="view_all">
+				<a href="{$Url}" class="button view_all_button"><span class="button_text">{$element->buttonTitle}</span></a>
+			</div>
+		{/if}
 	{/capture}
 
 	{assign moduleClass "selected_products_block"}

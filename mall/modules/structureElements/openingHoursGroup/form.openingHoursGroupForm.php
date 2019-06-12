@@ -11,5 +11,5 @@ class OpeningHoursGroupFormStructure extends ElementForm
         ],
     ];
     protected $controls = 'controls';
-    protected $additionalContent = 'shared.contentlist_singlepage';
+    protected $additionalContent = 'shared.contentlist_singlepage.tpl';
 }

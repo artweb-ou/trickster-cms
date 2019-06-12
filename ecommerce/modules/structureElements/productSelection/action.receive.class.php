@@ -7,6 +7,10 @@ class receiveProductSelection extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
+            if ($structureElement->getDataChunk('image')->originalName !== null) {
+                $structureElement->image = $structureElement->id;
+                $structureElement->originalName = $structureElement->getDataChunk('image')->originalName;
+            }
             $structureElement->prepareActualData();
             $structureElement->structureName = $structureElement->title;
             $structureElement->persistElementData();
@@ -150,6 +154,8 @@ class receiveProductSelection extends structureElementAction
             'formFilterableCategoriesIds',
             'controlType',
             'influential',
+            'image',
+            'paramRange',
         ];
     }
 

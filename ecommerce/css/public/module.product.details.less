@@ -399,7 +399,7 @@
   align-items: center;
 
   .addtobasket_button {
-    .__transition_01__(all, .2s, ease-in-out);
+    transition: all .2s ease-in-out;
 
     .button_icon {
       display: block;
@@ -415,13 +415,13 @@
 
     &.basket_product_added {
       .button_icon {
-        width: 40px;
+        width: @40pt;
         //noinspection LessResolvedByNameOnly
         //	.svg-bg(@basket_product_added, none, @button_text1);//'fill', arrows_minus
       }
 
       .button_text {
-        padding-left: 40px;
+        padding-left: @40pt;
       }
     }
   }

@@ -3,5 +3,5 @@ $moduleActions = [];
 $moduleActions[] = 'show';
 $moduleActions[] = 'receive';
 $moduleActions[] = 'delete';
-$moduleActions[] = 'deleteImage';
+$moduleActions[] = 'deleteFile';
 $moduleActions[] = 'showForm';

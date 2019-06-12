@@ -144,9 +144,9 @@ class visitorsElement extends structureElement
                 $query->select($db->raw(1))
                     ->from('event')
                     ->where([
-                        ['engine_event.visitorId', '=', 'engine_visitor.id'],
-                        ['engine_event.typeId', '=', $eventTypeId],
-                        ['"engine_event.elementId', '=', $productId],
+                        ['event.visitorId', '=', 'engine_visitor.id'],
+                        ['event.typeId', '=', $eventTypeId],
+                        ['event.elementId', '=', $productId],
                     ]);
             });
         }
@@ -157,9 +157,9 @@ class visitorsElement extends structureElement
                 $query->select($db->raw(1))
                     ->from('event')
                     ->where([
-                        ['engine_event.visitorId', '=', 'engine_visitor.id'],
-                        ['engine_event.typeId', '=', $eventTypeId],
-                        ['"engine_event.elementId', '=', $categoryId],
+                        ['event.visitorId', '=', 'engine_visitor.id'],
+                        ['event.typeId', '=', $eventTypeId],
+                        ['event.elementId', '=', $categoryId],
                     ]);
             });
         }
@@ -179,7 +179,6 @@ class visitorsElement extends structureElement
             ->take($elementsOnPage);
         $order = $this->getContentListOrder();
         $query->orderBy($order, $this->getContentListDirection());
-        $succesfullyPaid = ['paid_partial', 'payed'];
 
         $result = $query->get();
         $this->visitorsList = $result;
