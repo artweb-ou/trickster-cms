@@ -10,42 +10,59 @@ window.MapComponent = function(componentElement, id) {
         });
     };
     var lazyLoadingCallback = function() {
-        info = window.mapsLogics.mapsIndex[id];
+        info = window.mapsLogics.getMapInfo(id);
         eventsManager.addHandler(window, 'resize', onResize);
 
         if (info.isHeightAdjusted()) {
             adjustHeight();
         }
 
-        var coordinates = info.getCoordinates();
-        latlng = new google.maps.LatLng(coordinates[0], coordinates[1]);
-        var options = {
-            zoom: 14,
-            //disableDefaultUI: true,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            mapTypeControl: info.getMapTypeControlEnabled(),
-            zoomControl: info.getZoomControlEnabled(),
-            streetViewControl: info.getStreetViewControlEnabled(),
-        };
-        var styles = info.getStyles();
-        if (styles.length > 0) {
-            options.styles = styles;
-        }
-        googleMap = new google.maps.Map(componentElement, options);
+        var mapCode = info.getMapCode();
+        if (mapCode) {
+            componentElement.innerHTML = mapCode;
+        } else {
+            var coordinates = info.getCoordinates();
+            if (coordinates) {
+                var styles = info.getStyles();
+                if (styles) {
+                    latlng = new google.maps.LatLng(coordinates[0], coordinates[1]);
+                    var options = {
+                        zoom: 14,
+                        //disableDefaultUI: true,
+                        center: latlng,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        mapTypeControl: info.getMapTypeControlEnabled(),
+                        zoomControl: info.getZoomControlEnabled(),
+                        streetViewControl: info.getStreetViewControlEnabled(),
+                    };
+                    if (styles.length > 0) {
+                        options.styles = styles;
+                    }
+                    googleMap = new google.maps.Map(componentElement, options);
 
-        if (info.getContent()) {
-            infowindow = new google.maps.InfoWindow({
+                    if (info.getContent()) {
+                        infowindow = new google.maps.InfoWindow({
+                            content: info.getContent(),
+                        });
+                    }
+                    marker = new google.maps.Marker({
+                        position: latlng,
+                        map: googleMap,
+                        title: info.getTitle(),
+                    });
+                    google.maps.event.addListener(marker, 'click', onMarkerClick);
+                } else {
+                    var title = info.getTitle() ? '&q=+(' + info.getTitle() + ')' : '';
 
-                content: info.getContent(),
-            });
+                    var iframe = document.createElement('iframe');
+                    componentElement.classList.add('googlemap_iframe');
+                    var src = 'https://maps.google.com/?q=' + coordinates + title + '&hl=' + window.mapsLogics.getShortLanguageCode() + '&z=' + 14 + '&output=embed';
+                    iframe.setAttribute('src', src);
+                    iframe.setAttribute('allowfullscreen', true);
+                    componentElement.appendChild(iframe);
+                }
+            }
         }
-        marker = new google.maps.Marker({
-            position: latlng,
-            map: googleMap,
-            title: info.getTitle(),
-        });
-        google.maps.event.addListener(marker, 'click', onMarkerClick);
     };
 
     var onMarkerClick = function() {
@@ -83,37 +100,16 @@ window.MapComponent = function(componentElement, id) {
 };
 LazyLoadingMixin.call(MapComponent.prototype);
 
-window.EmbeddedMapComponent = function(componentElement) {
-    var init = function() {
-        adjustHeight();
-        eventsManager.addHandler(window, 'resize', adjustHeight);
-    };
-
-    var adjustHeight = function() {
-        componentElement.style.minHeight = componentElement.offsetWidth / 2 + 'px';
-        componentElement.style.height = '';
-        componentElement.style.height = componentElement.parentNode.offsetHeight + 'px';
-    };
-    init();
-};
-
 window.iframeMapComponent = function(componentElement, id, lang) {
+    var info;
     var init = function() {
         adjustHeight();
         eventsManager.addHandler(window, 'resize', adjustHeight);
     };
 
     var adjustHeight = function() {
-        info = window.mapsLogics.mapsIframeIndex[id];
+        info = window.mapsLogics.getMapInfo(id);
         var coordinates = info.getCoordinates();
-        var title = info.getTitle() ? '&q=+(' + info.getTitle() + ')' : '';
-
-        var iframe = document.createElement('iframe');
-        componentElement.classList.add('googlemap_iframe');
-        var src = 'https://maps.google.com/?q=' + coordinates + title + '&hl=' + lang + '&z=' + 14 + '&output=embed';
-        iframe.setAttribute('src', src);
-        iframe.setAttribute('allowfullscreen', true);
-        componentElement.appendChild(iframe);
 
         componentElement.style.minHeight = componentElement.offsetWidth / 2 + 'px';
         componentElement.style.height = '';
