@@ -2,7 +2,6 @@
     'dpdEnabled' => false,
     'post24Enabled' => false,
     'smartPostEnabled' => false,
-    'shoppingasketCheckoutStepEnabled' => true,
-    'pageAmountProducts' => 20,
-    'availablePageAmountProducts' => [2, 20, 40, 100],
+    'pageAmountProducts' => 40,
+    'availablePageAmountProducts' => [20, 40, 60, 100],
 ];

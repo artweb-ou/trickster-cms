@@ -5,7 +5,7 @@ class adminTranslationsGroupElement extends TranslationsGroupStructureElement
     use SortedChildrenListTrait;
     protected $allowedTypes = ['adminTranslation'];
 
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
         $childrenList = parent::getChildrenList();
         if ($childrenList) {

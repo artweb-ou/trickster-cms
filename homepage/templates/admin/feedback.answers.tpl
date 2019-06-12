@@ -30,7 +30,10 @@
 									</th>
 								{/foreach}
 								<th class='date_column'>
-									{translations name='label.date'}
+									{translations name='label.dateCreated'}
+								</th>
+								<th class='date_column'>
+									{translations name='label.dateModified'}
 								</th>
 								<th class='delete_column'>
 									{translations name='label.delete'}
@@ -65,7 +68,10 @@
 										{/if}
 									</td>
 								{/foreach}
-								<td>
+								<td class='date_column'>
+									{$answer.element->dateCreated}
+								</td>
+								<td class='date_column'>
 									{$answer.element->dateModified}
 								</td>
 								<td>

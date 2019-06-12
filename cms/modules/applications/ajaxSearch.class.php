@@ -53,11 +53,10 @@ class ajaxSearchApplication extends controllerApplication
                 'configActions' => false,
             ], true);
             $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
-            $structureManager->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
         }
-        $query = false;
-        if ($controller->getParameter('query')) {
-            $query = htmlspecialchars(trim($controller->getParameter('query')), ENT_QUOTES);
+        if ($query = $controller->getParameter('query')) {
+            $query = urldecode($query);
+            $query = htmlspecialchars(trim($query), ENT_QUOTES);
         }
         if ($query) {
             if ($controller->getParameter('types')) {
@@ -115,6 +114,20 @@ class ajaxSearchApplication extends controllerApplication
                         $element->URL .= "qid:" . $searchId . "/";
                     }
                 }
+
+                if($controller->getParameter('totals')) {
+                    $allTotal = 0;
+                    foreach ($result->sets as $set) {
+                        $allTotal += $set->totalCount;
+                    }
+                    $response->setResponseData('searchTotal', $allTotal);
+                    foreach($result->elements as &$element) {
+                        if($element instanceof categoryElement) {
+                            $element->productsCount = count($element->getConnectedProductsIds());
+                        }
+                    }
+                }
+
                 foreach ($result->sets as $set) {
                     $response->setResponseData($set->type, $set->elements);
                 }

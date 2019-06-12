@@ -84,7 +84,7 @@
 						<td class='type_column'>
 							{translations name=$type}
 						</td>
-						<td>
+						<td class='date_column'>
 							{$contentItem->dateModified}
 						</td>
 						<td>

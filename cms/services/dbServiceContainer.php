@@ -31,14 +31,19 @@ class dbServiceContainer extends DependencyInjectionServiceContainer
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => $dbConfig->get('mysqlTablesPrefix'),
+            'options' => [
+                PDO::ATTR_PERSISTENT => true,
+            ],
         ]);
         $capsule->setFetchMode(PDO::FETCH_ASSOC);
         if ($config == 'transport') {
             $capsule->setAsGlobal();
         }
-        if ($pdo = $capsule->getConnection()->getPdo()) {
+        $connection = $capsule->getConnection();
+        if ($pdo = $connection->getPdo()) {
             $pdo->query('SET sql_mode = ""');
         }
-        return $capsule->getConnection();
+
+        return $connection;
     }
 }

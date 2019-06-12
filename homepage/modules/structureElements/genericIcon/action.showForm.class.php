@@ -2,6 +2,12 @@
 
 class showFormGenericIcon extends structureElementAction
 {
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param genericIconElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->final) {
@@ -17,5 +23,6 @@ class showFormGenericIcon extends structureElementAction
         } else {
             $structureElement->setViewName('form');
         }
+
     }
 }

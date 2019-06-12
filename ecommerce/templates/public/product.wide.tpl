@@ -3,30 +3,8 @@
 	{if $element->originalName != ""}
 		{include file=$theme->template('component.elementimage.tpl') type='productWide' class='product_wide_image' lazy=true}
 	{/if}
-
-	{$icons=$element->getIconsCompleteList()}
-	{$connectedDiscounts=$element->getCampaignDiscounts()}
-	{if $icons || $connectedDiscounts}
-		<div class="product_wide_icons">
-			{if $element->getOldPrice()}
-				{if $discount = $element->getDiscountPercent()}
-					<div class="product_discount_container">
-							<span class="product_discount">
-								-{$discount}%
-							</span>
-					</div>
-				{/if}
-			{/if}
-			{foreach $icons as $icon}
-				<img class='product_wide_icons_image lazy_image' src="{$theme->getImageUrl('lazy.png')}" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$icon->image}/filename:{$icon->originalName}' alt='{$icon->title}'{if $icon->iconWidth > 0} style="max-width: {$icon->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
-			{/foreach}
-
-			{foreach from=$connectedDiscounts item=discount}
-				{if $discount->icon}
-					<img class='product_wide_icons_image lazy_image' src="{$theme->getImageUrl('lazy.png')}" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$discount->icon}/filename:{$discount->iconOriginalName}' alt='{$discount->title}'{if $discount->iconWidth > 0} style="max-width: {$discount->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
-				{/if}
-			{/foreach}
-		</div>
+	{if $iconsInfo = $element->getIconsInfo()}
+		{include file=$theme->template('product.icons.tpl') class='product_wide_icons' displayOldPrice=true}
 	{/if}
 {/capture}
 {capture assign="moduleContent"}
@@ -49,17 +27,7 @@
 						<td class="product_wide_parameter">
 							<span class="product_wide_parameter_title">{$parameterInfo.title}:</span>
 							<span class="product_wide_parameter_value">
-								{if $parameterInfo.structureType == 'productParameter'}
-									{$parameterInfo.value}
-								{elseif $parameterInfo.structureType == 'productSelection'}
-									{foreach from=$parameterInfo.productOptions item=option name=options}
-										{if $option.originalName}
-											<img class="product_parameter_icons_item fancytitle lazy_image" src="{$theme->getImageUrl('lazy.png')}" data-lazysrc="{$controller->baseURL}image/type:productOption/id:{$option.image}/filename:{$option.originalName}" alt="{$option.title}" title="{$option.title}" />
-										{else}
-											{$option.title}{if !$smarty.foreach.options.last},&#32;{/if}
-										{/if}
-									{/foreach}
-								{/if}
+								{include file=$theme->template("product.details.parameters.options.tpl") parameterInfo = $parameterInfo}
 							</span>
 						</td>
 

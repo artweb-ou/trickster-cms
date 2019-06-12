@@ -21,8 +21,8 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     protected $childrenLoadStatus;
     protected $newElementUrl;
     protected $allowedTypes;
-    protected $multilanguageChunks = [];
-    protected $singlelanguageChunks = [];
+    protected $multiLanguageChunks = [];
+    protected $singleLanguageChunks = [];
     protected $structureFields = [];
     protected $moduleFields = [];
     protected $multiLanguageFields = [];
@@ -34,7 +34,6 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     public $dataResourceName;
     protected $contentList;
     public $childrenList = [];
-    protected $moduleDataObject;
     protected $moduleDataObjects = [];
     public $level;
     public $structurePath;
@@ -969,14 +968,14 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
      */
     public function getDataChunk($propertyName, $languageId = null)
     {
-        if (isset($this->singlelanguageChunks[$propertyName])) {
-            return $this->singlelanguageChunks[$propertyName];
+        if (isset($this->singleLanguageChunks[$propertyName])) {
+            return $this->singleLanguageChunks[$propertyName];
         }
         if ($languageId === null) {
             $languageId = $this->getCurrentLanguage();
         }
-        if (isset($this->multilanguageChunks[$languageId][$propertyName])) {
-            return $this->multilanguageChunks[$languageId][$propertyName];
+        if (isset($this->multiLanguageChunks[$languageId][$propertyName])) {
+            return $this->multiLanguageChunks[$languageId][$propertyName];
         }
 
         if (isset($this->structureFields[$propertyName])) {
@@ -984,7 +983,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
                 if ($chunkObject instanceof ElementStorageValueHolderInterface) {
                     $chunkObject->setElementStorageValue($this->structureDataObject->$propertyName);
                 }
-                $this->singlelanguageChunks[$propertyName] = $chunkObject;
+                $this->singleLanguageChunks[$propertyName] = $chunkObject;
                 return $chunkObject;
             }
         } elseif (isset($this->moduleFields[$propertyName]) && ($moduleDataObject = $this->getModuleDataObject($languageId))
@@ -995,9 +994,9 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
                     $chunkObject->setElementStorageValue($moduleDataObject->$propertyName);
                 }
                 if (isset($this->multiLanguageFields[$propertyName])) {
-                    $this->multilanguageChunks[$languageId][$propertyName] = $chunkObject;
+                    $this->multiLanguageChunks[$languageId][$propertyName] = $chunkObject;
                 } else {
-                    $this->singlelanguageChunks[$propertyName] = $chunkObject;
+                    $this->singleLanguageChunks[$propertyName] = $chunkObject;
                 }
 
                 return $chunkObject;
@@ -1182,14 +1181,14 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
      * @param string $roles
      * @param string $linkType
      * @param null $allowedTypes
-     * @param bool $useBlackList
+     * @param bool $restrictLinkTypes
      * @return structureElement[]
      */
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
         $structureManager = $this->getService('structureManager');
         //is it possible that we should always use blacklist when loading children?
-        $childrenList = $structureManager->getElementsChildren($this->id, $roles, $linkType, $allowedTypes, $useBlackList);
+        $childrenList = $structureManager->getElementsChildren($this->id, $roles, $linkType, $allowedTypes, $restrictLinkTypes);
 
         return $childrenList;
     }
@@ -1420,13 +1419,11 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         $this->getModuleDataObjects();
         $fields = [
             'structureDataObject',
-            'structureInfoActual',
-            'multilanguageChunks',
-            'singlelanguageChunks',
+            'multiLanguageChunks',
+            'singleLanguageChunks',
             'structureFields',
             'moduleFields',
             'multiLanguageFields',
-            'moduleDataObject',
             'moduleDataObjects',
         ];
         $data = [];
@@ -1477,6 +1474,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
                  * @var ElementForm $form
                  */
                 $form = new $className;
+                $this->instantiateContext($form);
                 $form->setElement($this);
                 $form->setFormAction($this->getFormActionURL());
             } else {

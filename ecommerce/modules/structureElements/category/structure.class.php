@@ -54,7 +54,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $moduleStructure['productsMobileLayout'] = 'text';
         $moduleStructure['categoriesMobileLayout'] = 'text';
 
-        $moduleStructure['brands'] = 'serializedArray';
         $moduleStructure['deliveryStatus'] = 'text';
         $moduleStructure['deliveryPriceType'] = 'text';
         $moduleStructure['formDeliveries'] = 'array';
@@ -127,17 +126,9 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         ];
     }
 
-    protected function getProductsListParentElementsIds()
-    {
-        $categoriesIds = [];
-        $subCategoriesIdIndex = [];
-        $this->gatherSubCategoriesIdIndex($this->id, $subCategoriesIdIndex);
-        if ($subCategoriesIdIndex) {
-            $categoriesIds = array_keys($subCategoriesIdIndex);
-        }
-        return $categoriesIds;
-    }
-
+    /**
+     * @return array|mixed|null
+     */
     public function getConnectedProductsIds()
     {
         if (!is_null($this->connectedProductsIds)) {
@@ -184,9 +175,29 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return $this->connectedProductsIds;
     }
 
-    public function getProductsListBaseIds()
+    protected function getProductsListBaseQuery()
     {
-        return array_intersect($this->getActiveProductsIds(), $this->getConnectedProductsIds());
+        if ($this->productsListBaseQuery !== null) {
+            return $this->productsListBaseQuery;
+        }
+        $this->productsListBaseQuery = false;
+
+        $query = $this->getProductsQuery();
+
+        $query->leftJoin('structure_links', 'module_product.id', '=', 'childStructureId');
+
+        //include only the products connected to this category or include all subcategories as well
+        if ($this->getService('ConfigManager')->get('main.displaySubCategoryProducts')) {
+            $subCategoriesIdIndex = [];
+            $this->gatherSubCategoriesIdIndex($this->id, $subCategoriesIdIndex);
+            $query->whereIn('parentStructureId', array_keys($subCategoriesIdIndex));
+        } else {
+            $query->where('parentStructureId', '=', $this->id);
+        }
+        $query->where('type', '=', 'catalogue');
+
+        $this->productsListBaseQuery = $query;
+        return $this->productsListBaseQuery;
     }
 
     public function getMainParentCategory()
@@ -484,46 +495,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return $residingCategories;
     }
 
-    public function prepareFilters($arguments)
-    {
-        if ($this->baseFilter === null) {
-            if ($this->isFilterNeeded('brand')) {
-                $filter = $this->createProductFilter('brand', $arguments['brand']);
-                $this->addFilter($filter);
-            }
-            if ($this->isFilterNeeded('discount')) {
-                $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
-                $discountsList = $shoppingBasketDiscounts->getApplicableDiscountsList();
-                if ($discountsList) {
-                    $filter = $this->createProductFilter('discount', $arguments['discount']);
-                    $this->addFilter($filter);
-                }
-            }
-            if ($this->isFilterNeeded('parameter')) {
-                $this->prepareParametersFilters($arguments);
-            }
-            if ($this->isFilterNeeded('price')) {
-                $filter = $this->createProductFilter('price', $arguments['price']);
-                $structureManager = $this->getService('structureManager');
-                $languageId = $this->getService('languagesManager')->getCurrentLanguageId();
-                $elements = $structureManager->getElementsByType('productSearch', $languageId);
-                if ($elements) {
-                    $productSearchElement = $elements[0];
-                    $filter->setRangeInterval($productSearchElement->priceInterval);
-                }
-                $this->addFilter($filter);
-            }
-            if ($this->isFilterNeeded('category')) {
-                $filters = $this->getTreeFilters();
-                $this->filtersIndex['category'] = $filters;
-            }
-            if ($this->isFilterNeeded('availability')) {
-                $filter = new availabilityProductFilter($arguments['availability']);
-                $this->addFilter($filter);
-            }
-        }
-    }
-
     public function getTreeFilters()
     {
         $filters = [];
@@ -539,7 +510,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
 
     public function makeCategoryFilters($category)
     {
-        $arguments = $this->parseSearchArguments();
+        $arguments = $this->getFilterArguments();
 
         $categoriesIds = [];
         $categoriesIds[] = $category->id;
@@ -666,7 +637,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $this->currentProductCatalogue = $element;
     }
 
-    public function getIconsList()
+    public function getAdminIconsList()
     {
         if ($this->iconsList === null) {
             /**
@@ -676,21 +647,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             $this->iconsList = $productIconsManager->getOwnIcons($this->id, $this->structureType);
         }
         return $this->iconsList;
-    }
-
-    public function getIconsCompleteList()
-    {
-        if ($this->iconsCompleteList === null) {
-            $this->iconsCompleteList = $this->getIconsList();
-
-            /**
-             * @var ProductIconsManager $productIconsManager
-             */
-            $productIconsManager = $this->getService('ProductIconsManager');
-            $this->iconsCompleteList = $productIconsManager->getCategoryIcons($this);
-        }
-
-        return $this->iconsCompleteList;
     }
 
     /**
@@ -782,7 +738,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 $publicLanguageId = $this->getService('languagesManager')->getCurrentLanguageId($marker);
                 $query = $db->table('module_product');
 
-                if ($arguments['order']['field'] != 'dateModified') {
+                if ($arguments['order']['field'] != 'dateModified' && $arguments['order']['field'] != 'dateCreated') {
                     //get ordered id list where appropriate translation exists
                     $translatedIDs = [];
 
@@ -801,7 +757,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                     });
                 }
 
-                if ($arguments['order']['field'] == 'dateModified') {
+                if ($arguments['order']['field'] == 'dateModified' || $arguments['order']['field'] == 'dateCreated') {
                     $query->leftJoin('structure_elements', 'structure_elements.id', '=', 'module_product.id');
                 }
                 $query->orderBy($arguments['order']['field'], $arguments['order']['argument']);

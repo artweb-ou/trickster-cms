@@ -7,31 +7,10 @@
 			{if $element->originalName != ""}
 				{include file=$theme->template('component.elementimage.tpl') type='productThumb' class='product_thumbnail_image' lazy=true}
 			{/if}
-			{if $element->getOldPrice()}
-				{if $discount = $element->getDiscountPercent()}
-					<div class="product_discount_container">
-						<span class="product_discount">
-							-{$discount}%
-						</span>
-					</div>
-				{/if}
+			{if $iconsInfo = $element->getIconsInfo()}
+				{include file=$theme->template('product.icons.tpl') class='product_thumbnail_icons' displayOldPrice=true}
 			{/if}
 		</div>
-		{$icons=$element->getIconsCompleteList()}
-		{$connectedDiscounts=$element->getCampaignDiscounts()}
-		{if $icons || $connectedDiscounts}
-			<div class="product_thumbnail_icons">
-				{foreach $icons as $icon}
-					<img class='product_thumbnail_icons_image lazy_image' src="{$theme->getImageUrl('lazy.png')}" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$icon->image}/filename:{$icon->originalName}' alt='{$icon->title}'{if $icon->iconWidth > 0} style="max-width: {$icon->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
-				{/foreach}
-
-				{foreach from=$connectedDiscounts item=discount}
-					{if $discount->icon}
-						<img class='product_thumbnail_icons_image lazy_image' src="{$theme->getImageUrl('lazy.png')}" data-lazysrc='{$controller->baseURL}image/type:productIcon/id:{$discount->icon}/filename:{$discount->iconOriginalName}' alt='{$discount->title}'{if $discount->iconWidth > 0} style="max-width: {$discount->iconWidth}%; width: auto; max-height: none; height: auto;"{/if}/>
-					{/if}
-				{/foreach}
-			</div>
-		{/if}
 		<span class="product_thumbnail_price">{if !$element->isEmptyPrice()}{$element->getPrice()}&#xa0;{$selectedCurrencyItem->symbol}{/if}</span>
 	</a>
 {/capture}

@@ -3,17 +3,8 @@
 	{if $element->content}
 		<div class='product_details_description html_content'>{$element->content}</div>
 	{/if}
-	{if $element->getFilesList()}
-		<div class="productdetails_files">
-			{foreach $element->getFilesList() as $fileElement}
-				{if $fileElement->fileName != ''}
-					<a href="{$controller->baseURL}file/id:{$fileElement->file}/filename:{$fileElement->fileName}" class="productdetails_file">
-						{$fileElement->title}
-					</a>
-				{/if}
-			{/foreach}
-		</div>
-	{/if}
+	{include $theme->template('product.details.files.tpl')}
+
 	{*dicounts reference text*}
 	{$connectedDiscounts=$element->getCampaignDiscounts()}
 	{if $connectedDiscounts}

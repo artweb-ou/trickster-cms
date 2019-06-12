@@ -26,6 +26,7 @@
 
 .product_thumbnail_image_container {
 	overflow: hidden;
+	position: relative;
 }
 
 .product_thumbnail_image {
@@ -41,54 +42,21 @@
 }
 
 .product_thumbnail_price {
-	display: block;
-	position: relative;
-	text-align: center;
-	margin-bottom: 0.5em;
+  display: block;
+  position: relative;
+  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
-/* discounts */
-
-.product_thumbnail_icons {
-	position: absolute;
-	top: 0.5em;
-	left: 0.5em;
-	right: 0.5em;
-	text-align: left;
-}
-
-.product_thumbnail_icons_image {
-	vertical-align: top;
-	margin: 0.5em;
-}
-
-//.product_discount_container {
-//	display: inline-block;
-//	background-color: @trick_bg_color_01;
-//	border: 2px solid @trick_brd_color_13;
-//	border-radius: 50%;
-//	width: 4em;
-//	height: 4em;
-//	margin-left: -0.5em;
-//	margin-top: -0.7em;
-//	.product_discount {
-//		font-size: 1.412em;
-//		font-weight: bold;
-//		display: block;
-//		color: @trick_text_color_12;
-//		text-align: center;
-//		margin-top: 0.7em;
-//	}
-//}
 
 /********************************************************
 /*  PRODUCT WIDE VIEW
 /********************************************************/
 .product_wide {
-	display: block;
-	margin-bottom: 1em;
-	box-sizing: border-box;
-	position: relative;
+  display: block;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .product_wide_image {
@@ -123,20 +91,20 @@
 }
 
 .product_wide_price {
-	font-size: 1.3em;
-	margin-bottom: 0.5em;
+  font-size: 1.3em;
+  margin-bottom: 0.5rem;
 }
 
 .product_wide_code {
-	display: block;
-	margin-bottom: 0.5em;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 .product_wide_controls {
 	.product_short_amount_block {
 		vertical-align: top;
 	}
-
+	
 	.product_short_basket {
 		vertical-align: top;
 	}
@@ -147,19 +115,6 @@
 	margin-left: 1em;
 }
 
-.product_wide_icons {
-	position: absolute;
-	top: 0.5em;
-	left: 0.5em;
-	right: 0.5em;
-	bottom: 0.5em;
-}
-
-.product_wide_icons_image {
-	vertical-align: top;
-	margin: 0.5em;
-}
-
 /********************************************************
 /*  PRODUCT DETAILED VIEW
 /********************************************************/
@@ -167,20 +122,20 @@
 	display: inline-block;
 	position: relative;
 	vertical-align: top;
-	.grid_item(4);
+	.grid_item(3);
 }
 
 .product_detailed_header {
-	.clearfixin();
-	overflow: hidden;
-	margin-bottom: 1em;
+  .clearfixin();
+  overflow: hidden;
+  margin-bottom: 1rem;
 }
 
 .product_detailed_price {
-	display: block;
-	position: relative;
-	text-align: left;
-	margin-bottom: 0.5em;
+  display: block;
+  position: relative;
+  text-align: left;
+  margin-bottom: 0.5rem;
 }
 
 .product_detailed_column_right {
@@ -233,31 +188,21 @@
 }
 
 .product_detailed_controls {
-
+	
 	right: 0.5em;
 	bottom: 0.5em;
 }
 
 .product_detailed_button {
-	display: block;
+  display: block;
 
-	&:first-child {
-		margin-bottom: 0.5em;
-	}
+  &:first-child {
+    margin-bottom: 0.5rem;
+  }
 }
-
-.product_detailed_icons {
-	position: absolute;
-	top: 0.5em;
-	left: 0.5em;
-	right: 0.5em;
+.product_detailed_image_container{
+	position: relative;
 }
-
-.product_detailed_icons_image {
-	vertical-align: top;
-	margin: 0.5em;
-}
-
 .product_detailed_image {
 	max-width: 100%;
 }
@@ -266,7 +211,7 @@
 	.product_detailed_controls {
 		position: static;
 	}
-
+	
 }
 
 /********************************************************
@@ -295,31 +240,31 @@
 }
 
 .product_thumbnailsmall_image_container {
-	display: block;
-	text-align: center;
-	margin-bottom: 0.5em;
-	position: relative;
+  display: block;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  position: relative;
 
-	.product_thumbnailsmall_image {
-		display: block;
-		width: 100%;
-	}
+  .product_thumbnailsmall_image {
+    display: block;
+    width: 100%;
+  }
 }
 
 .product_thumbnailsmall_title {
-	display: block;
-	position: relative;
-	text-align: center;
-	margin-bottom: 0.5em;
-	text-overflow: ellipsis;
-	overflow: hidden;
+  display: block;
+  position: relative;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .product_thumbnailsmall_price {
-	display: block;
-	position: relative;
-	text-align: center;
-	margin-bottom: 0.5em;
+  display: block;
+  position: relative;
+  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
 .product_thumbnailsmall_status {
@@ -330,24 +275,138 @@
 	font-style: normal;
 }
 
-.product_thumbnailsmall_icons {
-	position: absolute;
-	top: 0.25em;
-	left: 0.25em;
-	right: 0.25em;
-	text-align: left;
-}
-
-.product_thumbnailsmall_icons_image {
-	vertical-align: top;
-	margin: 0.25em;
-	max-width: 30%;
-}
-
 /********************************************************
 /*  PRODUCT SHORT
 /********************************************************/
+.product_icons {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	/*
+	top: 0.5em;
+	left: 0.5em;
+	right: 0.5em;
+	bottom: .5em;
+	text-align: left;
+	*/
+	z-index: 2;
+	box-sizing: border-box;
 
+	.product_details_gallery  + &{
+		bottom: 34%;
+	}
+
+	.giBadge-cells {
+		width: 100%;
+		height: auto;
+		display: flex;
+		flex-direction: row;
+		flex-basis: 100%;
+		position: absolute;
+		left: 0;
+		justify-content: space-between;
+		box-sizing: border-box;
+		
+		&:first-child{
+			top: 0;
+		}
+		&:nth-child(2){
+			bottom: 0;
+		}
+		.product_discount_container {
+			position: static;
+		}
+		>div{
+			width: auto;
+			flex-basis: 50%;
+			/*
+			width: 50%;
+			flex-basis: 50%;
+			flex-direction: column;
+			*/
+			display: flex;
+			box-sizing: border-box;
+			flex-wrap: wrap;
+		}
+		.cell-loc_top_left {
+			justify-self: flex-start;
+			align-self: flex-start;
+			align-items: flex-start;
+			justify-content: flex-start;
+		}
+		
+		.cell-loc_top_right {
+			justify-self: flex-end;
+			align-self: flex-start;
+			justify-content: flex-end;
+			justify-items: flex-end;
+			align-items: flex-start;
+			text-align: right;
+		}
+		
+		.cell-loc_bottom_left {
+			justify-self: flex-start;
+			align-self: flex-end;
+			justify-content: flex-start;
+			align-items: flex-end;
+		}
+		
+		.cell-loc_bottom_right {
+			justify-self: flex-end;
+			align-self: flex-end;
+			align-items: flex-end;
+			justify-content: flex-end;
+			text-align: right;
+		}
+	}
+	
+	//.cell-product_icons_image{
+	//	position: absolute;
+	//	left: 0;
+	//	bottom: 0;
+	//	height: 33%;
+	//	box-sizing: border-box;
+	//}
+}
+
+.product_icons_image, .product_icons_title {
+	display: inline-block;
+	vertical-align: top;
+	margin: .5em;
+	box-sizing: border-box;
+	
+	&.giBadge{
+		display: block;
+
+		[data-page="category"] &{
+			min-width: 18%;
+		}
+	}
+}
+.product_icons_title{
+	padding: .5em;
+	//text-overflow: ellipsis;
+	//overflow: hidden;
+	text-align: center;
+	
+	&.giBadge {
+		border-radius: 2px;
+		background-color: @trick_badge_bg_color;
+		color: @trick_badge_text_color;
+
+		width:auto!important;
+		max-width: 100%;
+
+		.product_thumbnailsmall_icons &{
+			font-size:.75em;
+		}
+		//[data-page="category"] &{
+		//	width:auto!important;
+		//}
+	}
+}
 .product_short_amount_button {
 	min-width: 0;
 }
@@ -355,7 +414,7 @@
 .product_short_amount_block {
 	display: inline-block;
 	white-space: nowrap;
-
+	
 	.input_component {
 		margin: 0 0.25em;
 		text-align: center;
@@ -401,31 +460,31 @@
 }
 
 .product_buttonsmall_image_container {
-	display: block;
-	text-align: center;
-	margin-bottom: 0.5em;
-	position: relative;
+  display: block;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  position: relative;
 
-	.product_buttonsmall_image {
-		display: block;
-		width: 100%;
-	}
+  .product_buttonsmall_image {
+    display: block;
+    width: 100%;
+  }
 }
 
 .product_buttonsmall_title {
-	display: block;
-	position: relative;
-	text-align: center;
-	margin-bottom: 0.5em;
-	text-overflow: ellipsis;
-	overflow: hidden;
+  display: block;
+  position: relative;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .product_buttonsmall_price {
-	display: block;
-	position: relative;
-	text-align: center;
-	margin-bottom: 0.5em;
+  display: block;
+  position: relative;
+  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
 .product_buttonsmall_status {
@@ -443,11 +502,11 @@
 }
 
 .product_buttonsmall_icons_image {
-	vertical-align: top;
-	margin-left: 1em;
-	margin-bottom: 1em;
+  vertical-align: top;
+  margin-left: 1em;
+  margin-bottom: 1rem;
 
-	&:first-child {
-		margin-left: 0;
-	}
+  &:first-child {
+    margin-left: 0;
+  }
 }

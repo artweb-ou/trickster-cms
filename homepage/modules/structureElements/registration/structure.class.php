@@ -174,14 +174,12 @@ class registrationElement extends menuDependantStructureElement
         $userGroupsElements = $structureManager->getElementsChildren($groupsElementId);
         if ($userGroupsElements) {
             $connectedIds = $this->getConnectedUserGroupsIds();
-            if ($connectedIds) {
-                foreach ($userGroupsElements as &$userGroup) {
-                    $item = [];
-                    $item['id'] = $userGroup->id;
-                    $item['title'] = $userGroup->getTitle();
-                    $item['select'] = in_array($userGroup->id, $connectedIds);
-                    $userGroups[] = $item;
-                }
+            foreach ($userGroupsElements as &$userGroup) {
+                $item = [];
+                $item['id'] = $userGroup->id;
+                $item['title'] = $userGroup->getTitle();
+                $item['select'] = in_array($userGroup->id, $connectedIds);
+                $userGroups[] = $item;
             }
         }
         return $userGroups;

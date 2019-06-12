@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class productSelectionElement
+ *
+ * @property string $title
+ */
 class productSelectionElement extends structureElement
 {
     public $dataResourceName = 'module_product_selection';
@@ -9,6 +14,9 @@ class productSelectionElement extends structureElement
     public $selectedOptionId = false;
     public $productOptions = false;
     public $options = false;
+    /**
+     * @var productParametersGroupElement
+     */
     protected $parameterGroup;
     protected $selectionOptions;
     protected $usedOptions;
@@ -128,7 +136,7 @@ class productSelectionElement extends structureElement
         return $this->usedOptions;
     }
 
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
         return $this->getSelectionOptions();
     }

@@ -30,19 +30,7 @@ class receiveSelectedProducts extends structureElementAction
                 $linksManager->linkElements($structureElement->id, $selectedProductId, "selectedProducts");
             }
 
-            // connect categories
-            $connectedCategoriesIds = $structureElement->getConnectedCategoriesIds();
-            if ($connectedCategoriesIds) {
-                foreach ($connectedCategoriesIds as &$connectedCategoryId) {
-                    if (!in_array($connectedCategoryId, $structureElement->categoriesIds)) {
-                        $linksManager->unLinkElements($structureElement->id, $connectedCategoryId, "selectedProductsCategory");
-                    }
-                }
-            }
-            $idsToConnect = array_diff($structureElement->categoriesIds, $connectedCategoriesIds);
-            foreach ($idsToConnect as $selectedCategoryId) {
-                $linksManager->linkElements($structureElement->id, $selectedCategoryId, "selectedProductsCategory");
-            }
+            $structureElement->updateConnectedCategories($structureElement->categoriesIds);
 
             // connect brands
             $connectedBrandsIds = $structureElement->getConnectedBrandsIds();

@@ -34,7 +34,7 @@ class AutoLoadManager
                 }
             } elseif (strpos($className, 'ProductFilter') !== false) {
                 $filePath = $pathsManager->getIncludeFilePath($pathsManager->getRelativePath('modules')
-                    . 'productFilters/' . $className . '.class.php');
+                    . 'productFilters/' . $className . '.php');
                 if ($filePath !== false) {
                     include_once $filePath;
                 }

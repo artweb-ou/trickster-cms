@@ -39,7 +39,7 @@ class ProductFormStructure extends ElementForm
         ],
         'availability' => [
             'type' => 'select.array',
-            'options' => ['available', 'quantity_dependent', 'inquirable', 'unavailable', 'available_inquirable'],
+            'method' => 'productsAvailabilityOptionsList',
             'translationGroup' => 'product',
         ],
         'quantity' => [
@@ -67,7 +67,7 @@ class ProductFormStructure extends ElementForm
         'connectedProductCategories' => [
             'type' => 'select.universal_options_multiple',
             'property' => 'connectedProductCategoriesInfo',
-            'class' => 'connectedproducts_select',
+            'class' => 'connectedcategories_select',
         ],
         'qtFromConnectedCategories' => [
             'type' => 'input.text',

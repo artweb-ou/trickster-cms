@@ -50,12 +50,13 @@ trait CommentsTrait
          */
         $structureManager = $this->getService('structureManager');
 
-        $commentForm = $structureManager->createElement(
+        if ($commentForm = $structureManager->createElement(
             'comment',
             'showForm',
             $this->id
-        );
-        $commentForm->setViewName('form');
+        )){
+            $commentForm->setViewName('form');
+        }
         return $commentForm;
     }
 

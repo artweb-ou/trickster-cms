@@ -1,4 +1,5 @@
 window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
+	var lastActiveThumbnailElement;
 	var self = this;
 	var componentElement;
 	var centerElement;
@@ -17,7 +18,11 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 		for (var i = 0; i < imagesInfoList.length; i++) {
 			var item = new GallerySelectorImageComponent(imagesInfoList[i], self);
 			centerElement.appendChild(item.getComponentElement());
-
+			if(i == 0) {
+				var element = item.getComponentElement();
+				element.classList.add('gallery_thumbnailsselector_active');
+				lastActiveThumbnailElement = element;
+			}
 			thumbnailsList.push(item);
 		}
 
@@ -28,32 +33,43 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 			var rightButton = new GallerySelectorRightComponent(self);
 			componentElement.appendChild(rightButton.getComponentElement());
 		}
+		controller.addListener('galleryImageDisplay', updateEvent);
 
 	};
+	var updateEvent = function(image) {
+		var element = centerElement.querySelector('.gallery_thumbnailsselector_image_' + image.getId());
+		if (lastActiveThumbnailElement) {
+			lastActiveThumbnailElement.classList.remove('gallery_thumbnailsselector_active');
+		}
+		element.classList.add('gallery_thumbnailsselector_active');
+		var center = (centerElement.offsetWidth - element.offsetWidth) / 2;
+		if( centerElement.scrollLeftMax <= (centerElement.scrollLeft + element.offsetWidth + center) || centerElement.scrollLeft == 0) {
+			center = 0;
+		}
+		lastActiveThumbnailElement = element;
+		TweenLite.to(centerElement, 2, {
+			scrollTo : {
+				x : element,
+				offsetX : center
+			},
+			ease : Power2.easeOut
+		});
+	};
+
 	this.getComponentElement = function() {
 		return componentElement;
 	};
-	this.scrollLeft = function() {
-		if (centerElement) {
-			centerElement.scrollLeft = centerElement.scrollLeft - 3;
-			if (requestAnimationFrame) {
-				lastTimeout = requestAnimationFrame(self.scrollLeft)
-			} else {
-				lastTimeout = setTimeout(self.scrollLeft, 1000 / 60);
-			}
-		}
-	};
-	this.scrollRight = function() {
-		if (centerElement) {
-			centerElement.scrollLeft = centerElement.scrollLeft + 3;
 
-			if (requestAnimationFrame) {
-				lastTimeout = requestAnimationFrame(self.scrollRight)
-			} else {
-				lastTimeout = setTimeout(self.scrollRight, 1000 / 60);
-			}
-		}
+	this.scrollLeft = function() {
+		galleryInfo.displayPreviousImage();
+		galleryInfo.stopSlideShow();
 	};
+
+	this.scrollRight = function() {
+		galleryInfo.displayNextImage();
+		galleryInfo.stopSlideShow();
+	};
+
 	this.scrollStop = function() {
 		if (lastTimeout) {
 			if (window.cancelAnimationFrame) {
@@ -64,28 +80,33 @@ window.GallerySelectorComponent = function(galleryInfo, imagesComponent) {
 			lastTimeout = false;
 		}
 	};
+
 	this.setSizes = function(width, height) {
 		componentElement.style.height = height + 'px';
 	};
+
 	this.getGalleryHeight = function() {
 		return componentElement.offsetHeight;
 	};
+
 	this.stopSlideShow = function() {
 		galleryInfo.stopSlideShow();
 	};
+
 	init();
 };
+
 window.GallerySelectorImageComponent = function(imageInfo, parentComponent) {
 	var componentElement;
 
 	var init = function() {
 		componentElement = document.createElement('div');
-		componentElement.className = 'gallery_thumbnailsselector_image';
-		componentElement.style.backgroundImage = 'url('+imageInfo.getThumbnailImageUrl()+')';
+		componentElement.className = 'gallery_thumbnailsselector_image gallery_thumbnailsselector_image_' + imageInfo.getId();
+		componentElement.style.backgroundImage = 'url(' + imageInfo.getThumbnailImageUrl() + ')';
 
 		window.eventsManager.addHandler(componentElement, 'click', clickHandler)
 	};
-	var clickHandler = function() {
+	var clickHandler = function(e) {
 		parentComponent.stopSlideShow();
 		imageInfo.display();
 	};
@@ -103,19 +124,14 @@ window.GallerySelectorLeftComponent = function(selectorObject) {
 		componentElement = document.createElement('span');
 		componentElement.className = 'gallery_thumbnailsselector_left';
 
-		eventsManager.addHandler(componentElement, 'mouseover', overHandler);
-		eventsManager.addHandler(componentElement, 'mouseout', outHandler);
 		eventsManager.addHandler(componentElement, 'click', clickHandler);
 	};
+
 	var clickHandler = function(event) {
-		eventsManager.preventDefaultAction(event);
-	};
-	var overHandler = function() {
+		selectorObject.scrollStop();
 		selectorObject.scrollLeft();
 	};
-	var outHandler = function() {
-		selectorObject.scrollStop();
-	};
+
 	this.getComponentElement = function() {
 		return componentElement;
 	};
@@ -128,19 +144,14 @@ window.GallerySelectorRightComponent = function(selectorObject) {
 		componentElement = document.createElement('span');
 		componentElement.className = 'gallery_thumbnailsselector_right';
 
-		eventsManager.addHandler(componentElement, 'mouseover', overHandler);
-		eventsManager.addHandler(componentElement, 'mouseout', outHandler);
 		eventsManager.addHandler(componentElement, 'click', clickHandler);
 	};
+
 	var clickHandler = function(event) {
-		eventsManager.preventDefaultAction(event);
-	};
-	var overHandler = function() {
+		selectorObject.scrollStop();
 		selectorObject.scrollRight();
 	};
-	var outHandler = function() {
-		selectorObject.scrollStop();
-	};
+
 	this.getComponentElement = function() {
 		return componentElement;
 	};

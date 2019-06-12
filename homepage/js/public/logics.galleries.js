@@ -68,6 +68,7 @@ window.GalleryItem = function(info) {
 	var imagesPrevNextButtonsSeparated = false;
 	var fullScreenButtonEnabled = false;
 	var imageAspectRatio;
+	var videoAutoStart = false;
 
 	var imagesIndex;
 	var imagesList;
@@ -135,6 +136,10 @@ window.GalleryItem = function(info) {
 			changeDelay = parseInt(info.changeDelay, 10);
 		} else {
 			changeDelay = 6000;
+		}
+
+		if (typeof info.videoAutoStart !== 'undefined') {
+			videoAutoStart = !!info.videoAutoStart;
 		}
 
 		if (typeof info.imageAspectRatio !== 'undefined') {
@@ -215,6 +220,9 @@ window.GalleryItem = function(info) {
 	};
 	this.getImageAspectRatio = function() {
 		return imageAspectRatio;
+	};
+	this.getVideoAutoStart = function() {
+		return videoAutoStart;
 	};
 	this.displayImage = function(imageId) {
 		if (typeof imagesIndex[imageId] !== 'undefined') {
@@ -337,6 +345,8 @@ window.GalleryImage = function(info, galleryObject) {
 	var fullImageUrl;
 	var bigImageUrl;
 	var thumbnailImageUrl;
+	var fileUrl;
+	var filename;
 	var title;
 	var description;
 	var alt;
@@ -351,6 +361,8 @@ window.GalleryImage = function(info, galleryObject) {
 		fullImageUrl = info.fullImageUrl;
 		bigImageUrl = info.bigImageUrl;
 		thumbnailImageUrl = info.thumbnailImageUrl;
+		fileUrl = info.fileUrl;
+		filename = info.filename;
 		title = info.title;
 		description = info.description;
 		alt = info.alt;
@@ -371,6 +383,12 @@ window.GalleryImage = function(info, galleryObject) {
 	};
 	this.getBigImageUrl = function() {
 		return bigImageUrl;
+	};
+	this.getFileUrl = function() {
+		return fileUrl;
+	};
+	this.getFilename = function() {
+		return filename;
 	};
 	this.getThumbnailImageUrl = function() {
 		return thumbnailImageUrl;

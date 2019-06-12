@@ -4,7 +4,7 @@ trait SortedChildrenListTrait
 {
     protected $childrenListSortDirection = SORT_ASC;
 
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
     {
         if ($childrenList = parent::getChildrenList($roles, $linkType)) {
             $sort = [];

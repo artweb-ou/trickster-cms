@@ -3,8 +3,28 @@
 trait ConnectedIconsProviderTrait
 {
     protected $connectedIconsIds;
+    /**
+     * @var genericIconElement[]
+     */
     protected $connectedIcons;
 
+    public function getConnectedIconsInfo()
+    {
+        $info = [];
+        foreach ($this->getConnectedIcons() as $connectedIcon) {
+            $item = [];
+            $item['id'] = $connectedIcon->id;
+            $item['title'] = $connectedIcon->getTitle();
+            $item['select'] = true;
+            $info[] = $item;
+        }
+
+        return $info;
+    }
+
+    /**
+     * @return genericIconElement[]
+     */
     public function getConnectedIcons()
     {
         if ($this->connectedIcons === null) {

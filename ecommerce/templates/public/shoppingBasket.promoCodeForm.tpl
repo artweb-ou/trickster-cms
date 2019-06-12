@@ -1,4 +1,4 @@
-{if $element->hasPromoDiscounts()}
+{if $shoppingBasketElement->hasPromoDiscounts()}
 <div class="shoppingbasket_promocode shoppingbasket_aside">
 	<h1 class='shoppingbasket_form_heading'>{translations name='shoppingbasket.promocode'}:</h1>
 	<table class='shoppingbasket_promocode_form form_table shoppingbasket_delivery_form'>

@@ -85,8 +85,8 @@
 				{translations name='selectedproducts.filter_price'}:
 			</td>
 			<td>
-				<input class='checkbox_placeholder' type="checkbox" value="1" name="{$formNames.filterPrice}"{if $element->filterPrice} checked="checked"{/if}/>
-				{include file=$theme->template('component.form_help.tpl') structureType=$element->structureType name="filterPrice"}
+				<input class='checkbox_placeholder' type="checkbox" value="1" name="{$formNames.filterPriceEnabled}"{if $element->filterPriceEnabled} checked="checked"{/if}/>
+				{include file=$theme->template('component.form_help.tpl') structureType=$element->structureType name="filterPriceEnabled"}
 			</td>
 		</tr>
 		<tr class="form_label"{if $formErrors.priceInterval} class="form_error"{/if}>

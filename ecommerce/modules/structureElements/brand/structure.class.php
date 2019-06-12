@@ -1,6 +1,16 @@
 <?php
 
-class brandElement extends productsListStructureElement implements ImageUrlProviderInterface
+/**
+ * Class brandElement
+ *
+ * @property int $amountOnPageEnabled
+ * @property int $brandFilterEnabled
+ * @property int $discountFilterEnabled
+ * @property int $parameterFilterEnabled
+ * @property int $availabilityFilterEnabled
+ */
+
+class brandElement extends ProductsListElement implements ImageUrlProviderInterface
 {
     use ImageUrlProviderTrait;
     use ConfigurableLayoutsProviderTrait;
@@ -24,6 +34,7 @@ class brandElement extends productsListStructureElement implements ImageUrlProvi
     protected $parentCategory;
     protected $topProductsList;
     protected $sortParameters;
+    protected $connectedProductsIds;
     protected $brandFiltered = false;
     public $selectedFilter;
 
@@ -68,7 +79,7 @@ class brandElement extends productsListStructureElement implements ImageUrlProvi
         ];
     }
 
-    public function getConnectedProductsIds()
+    protected function getConnectedProductsIds()
     {
         if (is_null($this->connectedProductsIds)) {
             $this->connectedProductsIds = [];
@@ -112,11 +123,6 @@ class brandElement extends productsListStructureElement implements ImageUrlProvi
         return $this->connectedProductsIds;
     }
 
-    public function getDefaultOrder()
-    {
-        return 'manual';
-    }
-
     public function getConnectedBrandsListsIds()
     {
         return $this->getService('linksManager')->getConnectedIdList($this->id, 'brands', 'child');
@@ -146,20 +152,36 @@ class brandElement extends productsListStructureElement implements ImageUrlProvi
         parent::deleteElementData();
     }
 
-    public function isFilterableByAvailability()
+    public function isFilterableByType($filterType)
     {
-        return $this->availabilityFilterEnabled;
+        switch ($filterType) {
+            case 'category':
+                //todo: implement checkbox in admin form
+                $result = false;
+                break;
+            case 'brand':
+                $result = $this->brandFilterEnabled;
+                break;
+            case 'discount':
+                $result = $this->discountFilterEnabled;
+                break;
+            case 'parameter':
+                $result = $this->parameterFilterEnabled;
+                break;
+            case 'price':
+                //todo: implement checkbox in admin form
+                $result = false;
+                break;
+            case 'availability':
+                $result = $this->availabilityFilterEnabled;
+                break;
+            default:
+                $result = true;
+        }
+
+        return $result;
     }
 
-    public function isFilterableByParameter()
-    {
-        return $this->parameterFilterEnabled;
-    }
-
-    public function isFilterableByDiscount()
-    {
-        return $this->discountFilterEnabled;
-    }
 
     public function getProductsLayout()
     {
@@ -178,5 +200,24 @@ class brandElement extends productsListStructureElement implements ImageUrlProvi
         $brandInfo["URL"] = $this->URL;
         $brandInfo["image"] = controller::getInstance()->baseURL . "image/type:brandWidgetItem/id:" . $this->image . "/filename:" . $this->originalName;
         return $brandInfo;
+    }
+
+    public function isAmountSelectionEnabled()
+    {
+        return $this->amountOnPageEnabled;
+    }
+
+    protected function getProductsListBaseQuery()
+    {
+        if ($this->productsListBaseQuery !== null) {
+            return $this->productsListBaseQuery;
+        }
+        $this->productsListBaseQuery = false;
+
+        $query = $this->getProductsQuery();
+        $query->where('brandId', '=', $this->id);
+
+        $this->productsListBaseQuery = $query;
+        return $this->productsListBaseQuery;
     }
 }

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?><deployment>
+    <version></version>
+    <type></type>
+    <requiredVersions>
+        <requiredVersion>
+            <version></version>
+            <type></type>
+        </requiredVersion>
+    </requiredVersions>
+    <description></description>
+    <procedures>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>product.unavailable</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Unavailable</value>
+                                            <value languageCode="est">Pole saadaval</value>
+                                            <value languageCode="rus">Нет в наличии</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>product.available</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Available</value>
+                                            <value languageCode="est">Saadaval</value>
+                                            <value languageCode="rus">В наличии</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>product.quantity_dependent</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Availability depends on quantity</value>
+                                            <value languageCode="est">Kättesaadavus sõltub kogusest</value>
+                                            <value languageCode="rus">Наличие зависит от количества</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>product.inquirable</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Inquirable only</value>
+                                            <value languageCode="est">Ainult ettetellimisel</value>
+                                            <value languageCode="rus">Только по заказу</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>product.available_inquirable</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Inquirable and buyable</value>
+                                            <value languageCode="est">Ettetellimisel ja müügil olev</value>
+                                            <value languageCode="rus">По заказу и в продаже</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>product.hidden</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Hidden</value>
+                                            <value languageCode="est">Varjatud</value>
+                                            <value languageCode="rus">Скрыто</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>product.availability</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Availability</value>
+                                            <value languageCode="est">Kättesaadavus</value>
+                                            <value languageCode="rus">Наличие</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>product.inactive</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Hidden</value>
+                                            <value languageCode="est">Varjatud</value>
+                                            <value languageCode="rus">Скрыто</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.loc_top_left</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Top-Left</value>
+                                            <value languageCode="est">Top-Left</value>
+                                            <value languageCode="rus">Top-Left</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.loc_top_right</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Top-Right</value>
+                                            <value languageCode="est">Top-Right</value>
+                                            <value languageCode="rus">Top-Right</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.loc_bottom_left</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Bottom-Left</value>
+                                            <value languageCode="est">Bottom-Left</value>
+                                            <value languageCode="rus">Bottom-Left</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.loc_bottom_right</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Bottom-Right</value>
+                                            <value languageCode="est">Bottom-Right</value>
+                                            <value languageCode="rus">Bottom-Right</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.iconlocation</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Icon Location</value>
+                                            <value languageCode="est">Ikooni asukoht</value>
+                                            <value languageCode="rus">Позиция Иконки</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.iconrole</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Icon Role</value>
+                                            <value languageCode="est">Ikooni Roll</value>
+                                            <value languageCode="rus">Роль Иконки</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.role_general_discount</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">General discount</value>
+                                            <value languageCode="est">Üldine allahindlus</value>
+                                            <value languageCode="rus">Общая скидка</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.role_availability</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Availability</value>
+                                            <value languageCode="est">Saadavus</value>
+                                            <value languageCode="rus">Наличие</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.role_by_parameter</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">By Parameter</value>
+                                            <value languageCode="est">Parameetri järgi</value>
+                                            <value languageCode="rus">По параметру</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.role_date</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Date</value>
+                                            <value languageCode="est">Kuupäev</value>
+                                            <value languageCode="rus">Дата</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.role_simple</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Simple Icon</value>
+                                            <value languageCode="est">Lihtne ikoon</value>
+                                            <value languageCode="rus">Простая иконка</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.deleteimage</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Delete image</value>
+                                            <value languageCode="est">Kustuta pilt</value>
+                                            <value languageCode="rus">Удалить изображение</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.iconproductavail</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Product availability</value>
+                                            <value languageCode="est">Kauba saadavus</value>
+                                            <value languageCode="rus">Наличие товара</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.days_after</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">days</value>
+                                            <value languageCode="est">päeva jooksul</value>
+                                            <value languageCode="rus">дней/дня</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.iconproductparameters</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Connection with parameters of products</value>
+                                            <value languageCode="est">Seos toodete parameetritega</value>
+                                            <value languageCode="rus">Связь с параметрами товаров</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.days_before</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Products that have been added in last</value>
+                                            <value languageCode="est">Tooted, mis on lisatud viimase</value>
+                                            <value languageCode="rus">Товары, которые добавлены за последние</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.iconbgcolor</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Text-Icon background-color</value>
+                                            <value languageCode="est">Tekst-Ikooni taustavärv</value>
+                                            <value languageCode="rus">Цвет фона текстовой иконки</value>
+                                    </values>
+            </AddTranslation>
+                    <AddTranslation>
+                <type>adminTranslation</type>
+                <code>genericicon.icontextcolor</code>
+                <valueType>text</valueType>
+                <values>
+                                            <value languageCode="eng">Text-Icon text color</value>
+                                            <value languageCode="est">Tekst-Ikooni teksti värv</value>
+                                            <value languageCode="rus">Цвет текста текстовой иконки</value>
+                                    </values>
+            </AddTranslation>
+                <GenerateTranslations>
+            <type>adminTranslations</type>
+        </GenerateTranslations>
+    </procedures>
+</deployment>

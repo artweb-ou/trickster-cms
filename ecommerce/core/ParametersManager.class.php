@@ -15,10 +15,6 @@ class ParametersManager extends errorLogger
      */
     protected $languagesManager;
 
-    public function __construct()
-    {
-    }
-
     /**
      * @param languagesManager $languagesManager
      */
@@ -214,13 +210,13 @@ class ParametersManager extends errorLogger
                                             $productBasketSelections[$parameterId]['structureType'] = 'productSelection';
                                         }
                                         $productBasketSelections[$parameterId]['productOptions'][] = $optionsInfoIndex[$record['value']];
-                                    } else {
-                                        if (!isset($productPrimaryParameters[$parameterId])) {
-                                            $productPrimaryParameters[$parameterId] = $selectionsInfoIndex[$parameterId];
-                                            $productPrimaryParameters[$parameterId]['structureType'] = 'productSelection';
-                                        }
-                                        $productPrimaryParameters[$parameterId]['productOptions'][] = $optionsInfoIndex[$record['value']];
                                     }
+                                    if (!isset($productPrimaryParameters[$parameterId])) {
+                                        $productPrimaryParameters[$parameterId] = $selectionsInfoIndex[$parameterId];
+                                        $productPrimaryParameters[$parameterId]['structureType'] = 'productSelection';
+                                    }
+                                    $productPrimaryParameters[$parameterId]['productOptions'][] = $optionsInfoIndex[$record['value']];
+
                                 } elseif (isset($parametersInfoIndex[$parameterId])) {
                                     if (!isset($productPrimaryParameters[$parameterId])) {
                                         $productPrimaryParameters[$parameterId] = $parametersInfoIndex[$parameterId];

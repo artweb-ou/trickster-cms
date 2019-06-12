@@ -126,21 +126,36 @@ class Search implements DependencyInjectionContextInterface
                         $set->partial = !$exact;
 
                         $typeResultsAmount = count($idList);
+                        $set->totalCount = $typeResultsAmount;
                         if ($typeResultsAmount < $averageAmount) {
-                            $sliceAmount = $typeResultsAmount;
+                            $baseSliceAmount = $typeResultsAmount;
                         } else {
-                            $sliceAmount = $averageAmount + round($extraAmount / $typesWithExtra);
+                            $baseSliceAmount = $averageAmount + round($extraAmount / $typesWithExtra);
                         }
 
-                        $idList = array_slice($idList, 0, $sliceAmount);
-                        foreach ($idList as $elementId) {
-                            if ($element = $structureManager->getElementById($elementId, $this->languageId)) {
-                                $set->elements[] = $element;
-                                $searchResult->elements[] = $element;
+                        //if some elements are not available by "getElementById" we get next elements what were sliced in $idList
+                        $elements = [];
+                        $slicedAmount = 0;
+                        while($baseSliceAmount) {
+                            $slicedIdList = array_slice($idList, $slicedAmount, $baseSliceAmount);
+                            $slicedAmount += $baseSliceAmount;
+                            $baseSliceAmount = 0;
+                            foreach ($slicedIdList as $elementId) {
+                                if ($element = $structureManager->getElementById($elementId, $this->languageId)) {
+                                    $elements[] = $element;
+                                }else {
+                                    $baseSliceAmount++;
+                                    $set->totalCount--;
+                                }
                             }
                         }
+
+                        foreach($elements as $element) {
+                            $set->elements[] = $element;
+                            $searchResult->elements[] = $element;
+                        }
                         $searchResult->sets[] = $set;
-                        $searchResult->count += $sliceAmount;
+                        $searchResult->count += count($elements);
                     }
                 } else {
                     $resultsNeeded = $this->limit;
@@ -203,7 +218,7 @@ class SearchResultSet
     public $type = '';
     public $template = false;
     public $partial = false;
-    public $count = 0;
+    public $totalCount = 0;
     public $elements = [];
 }
 

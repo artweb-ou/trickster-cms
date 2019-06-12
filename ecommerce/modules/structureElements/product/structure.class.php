@@ -62,6 +62,11 @@ class productElement extends structureElement implements
     use DeliveryPricesTrait;
     use EventLoggingElementTrait;
 
+    use ProductsAvailabilityOptionsTrait;
+    use ProductIconLocationOptionsTrait;
+    use ProductIconRoleOptionsTrait;
+    use ConnectedParametersProviderTrait;
+
     public $dataResourceName = 'module_product';
     protected $allowedTypes = ['galleryImage'];
     public $defaultActionName = 'show';
@@ -78,15 +83,24 @@ class productElement extends structureElement implements
     /**
      * @var categoryElement
      */
+    protected $parentCategory;
+    /**
+     * @var categoryElement
+     */
     protected $requestedParentCategory;
+    /**
+     * @var categoryElement
+     */
     protected $requestedTopCategory;
     protected $deliveryTypesInfo;
     protected $brandElement;
     protected $connectedDiscounts;
     protected $inquryForm;
     protected $imageIds;
-    protected $iconsList;
-    protected $iconsCompleteList;
+    protected $adminIconsList;
+    /**
+     * @var galleryImageElement
+     */
     protected $firstImage;
     protected $calculatedPrice;
     protected $calculatedOldPrice;
@@ -105,6 +119,8 @@ class productElement extends structureElement implements
     protected $productUnit;
     protected $influentialSelections;
     protected $selectionsPricingMap;
+
+    protected $iconsInfo;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -402,7 +418,7 @@ class productElement extends structureElement implements
 
     public function isPurchasable($purchaseQuantity = 1)
     {
-        //cache magic availability in variable to get extra speed on this method.
+        //put magic property "availability" to variable to get extra speed on this method when repeated for 1000 products.
         $availability = $this->availability;
         return !($availability == "inquirable" || $availability == "unavailable" || ($availability == "quantity_dependent" && $purchaseQuantity > (int)$this->quantity));
     }
@@ -545,7 +561,7 @@ class productElement extends structureElement implements
         $parentsList = $structureManager->getElementsParents($this->id, $forceUpdate, 'productCatalogueProduct');
         if ($parentsList) {
             foreach ($parentsList as &$parentElement) {
-                if ($parentElement instanceof categoryStructureElement) {
+                if ($parentElement instanceof categoryElement) {
                     $catalogues[] = $parentElement;
                 }
             }
@@ -885,25 +901,33 @@ class productElement extends structureElement implements
         if (!empty($this->firstImage)) {
             return $this->firstImage->getImageUrl();
         }
+        return false;
     }
 
-    public function getIconsList()
+    /**
+     * @return galleryImageElement method for admin panel's icons list
+     */
+    public function getAdminIconsList()
     {
-        if ($this->iconsList === null) {
+        if ($this->adminIconsList === null) {
             /**
              * @var ProductIconsManager $productIconsManager
              */
             $productIconsManager = $this->getService('ProductIconsManager');
-            $this->iconsList = $productIconsManager->getOwnIcons($this->id, $this->structureType);
+            $this->adminIconsList = $productIconsManager->getOwnIcons($this->id, $this->structureType);
         }
-        return $this->iconsList;
+        return $this->adminIconsList;
     }
 
+    /**
+     * @return genericIconElement[]
+     *
+     * @deprecated
+     */
     public function getIconsCompleteList()
     {
+        $this->logError('deprecated method getIconsCompleteList used');
         if ($this->iconsCompleteList === null) {
-            $this->iconsCompleteList = $this->getIconsList();
-
             /**
              * @var ProductIconsManager $productIconsManager
              */
@@ -913,6 +937,59 @@ class productElement extends structureElement implements
 
         return $this->iconsCompleteList;
     }
+
+    public function getIconsInfo()
+    {
+        if ($this->iconsInfo == null) {
+            $cache = $this->getService('Cache');
+            if (($this->iconsInfo = $cache->get($this->id . ':icons') === false)) {
+                $this->iconsInfo = [];
+                /**
+                 * @var ProductIconsManager $productIconsManager
+                 */
+                $productIconsManager = $this->getService('ProductIconsManager');
+                if ($icons = $productIconsManager->getProductIcons($this)) {
+                    foreach ($icons as $icon) {
+                        $iconsInfoAllIcons = [];
+                        $iconsInfoGenericIcon = [];
+
+                        $iconsInfoAllIcons = [
+                            'title' => $icon->title,
+                            'image' => $icon->image,
+                            'width' => $icon->iconWidth,
+                            'fileName' => $icon->originalName,
+                            'iconStructureType' => $icon->structureType,
+                        ];
+
+                        if ($icon->structureType == 'genericIcon') {
+                            $iconsInfoGenericIcon = [
+                                'iconLocation' => $this->productIconLocationTypes[$icon->iconLocation],
+                                'iconRole' => $this->productIconRoleTypes[$icon->iconRole],
+                                'iconBgColor' => $icon->iconBgColor,
+                                'iconTextColor' => $icon->iconTextColor,
+                                'iconProductAvail' => $icon->iconProductAvail,
+                            ];
+                        }
+                        $this->iconsInfo[] = array_merge($iconsInfoAllIcons, $iconsInfoGenericIcon);
+
+                    }
+                }
+                if ($discounts = $this->getCampaignDiscounts()) {
+                    foreach ($discounts as $discount) {
+                        $this->iconsInfo[] = [
+                            'title' => $discount->title,
+                            'image' => $discount->icon,
+                            'width' => $discount->iconWidth,
+                            'fileName' => $discount->iconOriginalName,
+                        ];
+                    }
+                }
+                $cache->set($this->id . ':icons', $this->iconsInfo, 3600);
+            }
+        }
+        return $this->iconsInfo;
+    }
+
 
     public function deleteElementData()
     {
@@ -1044,22 +1121,24 @@ class productElement extends structureElement implements
 
     public function getShuffledProductFromConnectedCategories()
     {
-        $categories = $this->getProductConnectedCategories();
-        $quantity = $this->qtFromConnectedCategories;
-
-        $structureManager = $this->getService('structureManager');
-
-        $db = $this->getService('db');
         $products = [];
-        $records = $db->table('structure_links')
-            ->select('childStructureId')
-            ->where('type', '=', 'catalogue')
-            ->whereIn('parentStructureId', $categories)
-            ->orderByRaw("RAND()")
-            ->take($quantity)
-            ->get();
-        foreach ($records as $record) {
-            $products[] = $structureManager->getElementById($record['childStructureId']);
+        if ($categories = $this->getProductConnectedCategories()) {
+            if ($quantity = $this->qtFromConnectedCategories) {
+
+                $structureManager = $this->getService('structureManager');
+
+                $db = $this->getService('db');
+                $records = $db->table('structure_links')
+                    ->select('childStructureId')
+                    ->where('type', '=', 'catalogue')
+                    ->whereIn('parentStructureId', $categories)
+                    ->orderByRaw("RAND()")
+                    ->take($quantity)
+                    ->get();
+                foreach ($records as $record) {
+                    $products[] = $structureManager->getElementById($record['childStructureId']);
+                }
+            }
         }
 
         return $products;
@@ -1547,9 +1626,9 @@ class productElement extends structureElement implements
             'selectionsPricings' => $selectionsPricings ?: new stdClass(),
             'selectionsOldPricings' => $selectionsOldPricings ?: new stdClass(),
             'selectionsImages' => $this->getOptionsImagesInfo() ?: new stdClass(),
-            'name_ga'               => $this->getValue('title', $defaultLanguage->id),
-            'category_ga'           => $categoryElement->getValue('title', $defaultLanguage->id),
-            'brand_ga'              => $brandElement ? $brandElement->getValue('title', $defaultLanguage->id) : ''
+            'name_ga' => $this->getValue('title', $defaultLanguage->id),
+            'category_ga' => $categoryElement->getValue('title', $defaultLanguage->id),
+            'brand_ga' => $brandElement ? $brandElement->getValue('title', $defaultLanguage->id) : '',
         ];
     }
 
@@ -1604,7 +1683,7 @@ class productElement extends structureElement implements
             "@type" => "Product",
             "name" => $this->title,
             "sku" => $this->code,
-            "url" => $this->URL
+            "url" => $this->URL,
         ];
         $data["description"] = $this->getTextContent();
         if ($brand = $this->getBrandElement()) {
@@ -1635,7 +1714,8 @@ class productElement extends structureElement implements
         return $data;
     }
 
-    public function getImageUrl() {
+    public function getImageUrl()
+    {
         if ($image = $this->getFirstImageElement()) {
             $controller = controller::getInstance();
             return $controller->baseURL . 'image/type:galleryFullImage/id:' . $image->id . '/filename:' . $image->originalName;
@@ -1647,7 +1727,7 @@ class productElement extends structureElement implements
     {
         $controller = controller::getInstance();
         $configManager = $controller->getConfigManager();
-        return $configManager->get('productDetails.showFeedbackForm');
+        return $configManager->get('product.showFeedbackForm');
     }
 
     public function getImagesLinkType()
@@ -1715,13 +1795,14 @@ class productElement extends structureElement implements
         }
         return $countriesList;
     }
+
     public function getOpenGraphData()
     {
         $data = [
             'title' => $this->title,
-            'url'   => $this->URL,
+            'url' => $this->URL,
             'description' => $this->getMetaDescription(),
-            'type'  => 'product',
+            'type' => 'product',
             'image' => '',
         ];
         if ($this->image) {
@@ -1733,15 +1814,49 @@ class productElement extends structureElement implements
     public function getTwitterData()
     {
         $data = [
-            'card'        => 'summary_large_image',
+            'card' => 'summary_large_image',
             'description' => $this->getMetaDescription(),
-            'title'       => $this->title,
-            'url'         => $this->URL,
-            'image'       => '',
+            'title' => $this->title,
+            'url' => $this->URL,
+            'image' => '',
         ];
         if ($this->image) {
             $data['image'] = $this->getImageUrl();
         }
         return $data;
+    }
+
+
+    public function getSearchTitle()
+    {
+
+        $title = $this->getTitle();
+
+        if ($category = $this->getParentCategory()) {
+            $title .= ' (' . $category->getTitle() . ')';
+        }
+        return $title;
+    }
+
+    public function getParentCategory()
+    {
+        if ($this->parentCategory === null) {
+            /**
+             * @var structureManager $structureManager
+             */
+            $structureManager = $this->getService('structureManager');
+            if ($parentsList = $structureManager->getElementsParents($this->id, false, 'catalogue')) {
+                $this->parentCategory = reset($parentElement);
+            }
+        }
+        return $this->parentCategory;
+    }
+
+    public function persistElementData()
+    {
+        if ($this->getService('ConfigManager')->get('product.useCodeForUrlName')) {
+            $this->structureName = $this->code;
+        }
+        parent::persistElementData();
     }
 }

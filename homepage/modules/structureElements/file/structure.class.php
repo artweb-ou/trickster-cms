@@ -6,6 +6,8 @@
  * @property string $title
  * @property string $file
  * @property string $fileName
+ * @property string $image
+ * @property string $imageFileName
  */
 class fileElement extends structureElement implements StructureElementUploadedFilesPathInterface, ImageUrlProviderInterface
 {
@@ -19,6 +21,8 @@ class fileElement extends structureElement implements StructureElementUploadedFi
         $moduleStructure['title'] = 'text';
         $moduleStructure['file'] = 'file';
         $moduleStructure['fileName'] = 'fileName';
+        $moduleStructure['image'] = 'image';
+        $moduleStructure['imageFileName'] = 'fileName';
     }
 
     public function getUploadedFilesPath()
@@ -33,22 +37,41 @@ class fileElement extends structureElement implements StructureElementUploadedFi
 
     public function getImageId()
     {
+        if ($this->image) {
+            return $this->image;
+        }
         return $this->file;
     }
 
     public function getImageName()
     {
+        if ($this->imageFileName) {
+            return $this->imageFileName;
+        }
         return $this->fileName;
     }
 
 
-    public function getFileName($encoded = false){
-        if ($encoded){
+    public function getFileName($encoded = false)
+    {
+        if ($encoded) {
             return $this->fileName;
-        } else{
+        } else {
             return urldecode($this->fileName);
         }
     }
+
+    public function getFileExtension()
+    {
+        if ($info = pathinfo($this->fileName)) {
+            if (!empty($info['extension'])) {
+                return $info['extension'];
+            }
+        }
+
+        return false;
+    }
+
     public function getDownloadUrl($mode = 'download', $appName = 'file')
     {
         $controller = $this->getService('controller');
@@ -59,11 +82,9 @@ class fileElement extends structureElement implements StructureElementUploadedFi
 
     public function isImage()
     {
-        if ($info = pathinfo($this->fileName)) {
-            if (!empty($info['extension'])) {
-                if (in_array(strtolower($info['extension']), ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])) {
-                    return true;
-                }
+        if ($extension = $this->getFileExtension()) {
+            if (in_array(strtolower($extension), ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'])) {
+                return true;
             }
         }
         return false;

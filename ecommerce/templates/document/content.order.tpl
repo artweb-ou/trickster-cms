@@ -1,5 +1,4 @@
 {assign var='paymentBank' value=$data.paymentBank}
-
 <div class="invoice_header_block">
 	<table class="invoice_header_table">
 		<tr>
@@ -157,7 +156,7 @@
 				{$productInfo.code}
 			</td>
 			<td>
-				{$productInfo.title} ({$productInfo.variation})
+				{$productInfo.title} {if $productInfo.variation}({$productInfo.variation}){/if}
 			</td>
 			<td style="white-space: nowrap;">
 				{if !$productInfo.emptyPrice}

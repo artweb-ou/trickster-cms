@@ -1,6 +1,6 @@
 <?php
 
-abstract class categoryStructureElement extends productsListStructureElement
+abstract class categoryStructureElement extends ProductsListElement
 {
     protected $parametersGroups;
     protected $sortingOptions;
@@ -49,85 +49,36 @@ abstract class categoryStructureElement extends productsListStructureElement
         }
     }
 
-    public function isFilterable()
+    public function isFilterableByType($filterType)
     {
-        return $this->productsLayout !== 'hide' && parent::isFilterable();
-    }
-
-    public function isFilterableByBrand()
-    {
-        return $this->isSettingEnabled('brandFilterEnabled');
-    }
-
-    public function isFilterableByDiscount()
-    {
-        return $this->isSettingEnabled('discountFilterEnabled');
-    }
-
-    public function isFilterableByAvailability()
-    {
-        return ($this->isSettingEnabled('availabilityFilterEnabled'));
-    }
-
-    public function isFilterableByParameter()
-    {
-        return ($this->isSettingEnabled('parameterFilterEnabled') && $this->getFilterSelections());
-    }
-
-    /**
-     * @return array
-     *
-     * @deprecated since 31.10.16
-     */
-    public function getSortParameters()
-    {
-        $this->logError('Deprecated method getSortParameters used, use getSortingOptions');
-        if (is_null($this->sortParameters)) {
-            $arguments = $this->parseSearchArguments();
-            $filteredUrl = $this->getFilteredUrl();
-            $this->sortParameters = [];
-            if ($this->isSettingEnabled("manualSortingEnabled")) {
-                $this->sortParameters['manual'] = [
-                    'url' => $filteredUrl,
-                    'active' => false,
-                    'reversable' => false,
-                ];
-            }
-
-            if ($this->isSettingEnabled("priceSortingEnabled")) {
-                $this->sortParameters['price'] = [
-                    'url' => $filteredUrl . 'sort:price/',
-                    'active' => false,
-                    'reversable' => true,
-                ];
-            }
-            if ($this->isSettingEnabled("nameSortingEnabled")) {
-                $this->sortParameters['title'] = [
-                    'url' => $filteredUrl . 'sort:title/',
-                    'active' => false,
-                    'reversable' => true,
-                ];
-            }
-            if ($this->isSettingEnabled("dateSortingEnabled")) {
-                $this->sortParameters['date'] = [
-                    'url' => $filteredUrl . 'sort:date/',
-                    'active' => false,
-                    'reversable' => true,
-                ];
-            }
-            $activeSortArgument = $arguments['sort'];
-            $activeOrderArgument = $arguments['order'];
-            if (isset($this->sortParameters[$arguments['sort']])) {
-                $this->sortParameters[$activeSortArgument]['active'] = true;
-                if ($activeSortArgument !== 'manual' && $activeOrderArgument !== 'desc') {
-                    $this->sortParameters[$activeSortArgument]['url'] = $filteredUrl . 'sort:' . $arguments['sort'] . ';' . 'desc/';
-                }
+        if ($this->role == 'content' || $this->requested) {
+            switch ($filterType) {
+                case 'category':
+                    $result = $this->isSettingEnabled('categoryFilterEnabled');
+                    break;
+                case 'brand':
+                    $result = $this->isSettingEnabled('brandFilterEnabled');
+                    break;
+                case 'discount':
+                    $result = $this->isSettingEnabled('discountFilterEnabled');
+                    break;
+                case 'parameter':
+                    $result = $this->isSettingEnabled('parameterFilterEnabled');
+                    break;
+                case 'price':
+                    $result = $this->isSettingEnabled('priceFilterEnabled');
+                    break;
+                case 'availability':
+                    $result = $this->isSettingEnabled('availabilityFilterEnabled');
+                    break;
+                default:
+                    $result = true;
             }
         }
-        return $this->sortParameters;
+        return $result;
     }
 
-    protected function isFieldSortable($field)
+    public function isFieldSortable($field)
     {
         switch ($field) {
             case 'manual':
@@ -142,7 +93,7 @@ abstract class categoryStructureElement extends productsListStructureElement
         return false;
     }
 
-    protected function getParentRestrictionId()
+    protected function getProductsListParentRestrictionId()
     {
         return $this->id;
     }
@@ -150,21 +101,7 @@ abstract class categoryStructureElement extends productsListStructureElement
     protected function getSelectionIdsForFiltering()
     {
         if ($this->selectionsIdsForFiltering === null) {
-            $structureManager = $this->getService('structureManager');
-            $currentLanguageId = $this->getService('languagesManager')->getCurrentLanguageId();
-            $productSearchElements = $structureManager->getElementsByType('productSearch', $currentLanguageId);
-            $gotPageIndependentProductSearches = false;
-            foreach ($productSearchElements as &$element) {
-                if (!$element->pageDependent) {
-                    $gotPageIndependentProductSearches = true;
-                    break;
-                }
-            }
-            if (!$gotPageIndependentProductSearches) {
-                $this->selectionsIdsForFiltering = $this->getSelectionsIdsConnectedForFiltering();
-            } else {
-                $this->selectionsIdsForFiltering = parent::getSelectionIdsForFiltering();
-            }
+            $this->selectionsIdsForFiltering = $this->getSelectionsIdsConnectedForFiltering();
         }
         return $this->selectionsIdsForFiltering;
     }
@@ -193,5 +130,17 @@ abstract class categoryStructureElement extends productsListStructureElement
                 $enabled = false;
         }
         return $enabled;
+    }
+
+    abstract public function getCategoriesList();
+
+    public function isAmountSelectionEnabled()
+    {
+        return $this->isSettingEnabled('amountOnPageEnabled');
+    }
+
+    public function getProductsListCategories()
+    {
+        return $this->getCategoriesList();
     }
 }

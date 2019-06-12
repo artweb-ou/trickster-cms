@@ -1,6 +1,13 @@
 <?php
 
-class discountElement extends productsListStructureElement
+/**
+ * Class discountElement
+ *
+ * @property string $deliveryTypesDiscountInfo
+ * @property int $startDate
+ * @property int $endDate
+ */
+class discountElement extends ProductsListElement
 {
     use ConfigurableLayoutsProviderTrait;
 
@@ -16,6 +23,18 @@ class discountElement extends productsListStructureElement
     protected $connectedDiscounts;
     protected $connectedDiscountsIds;
     protected $deliveryTypesDiscountsIndex;
+
+    protected $priceSortingEnabled;
+    protected $nameSortingEnabled;
+    protected $dateSortingEnabled;
+    protected $brandSortingEnabled;
+    protected $brandFilterEnabled;
+    protected $parameterFilterEnabled;
+    protected $availabilityFilterEnabled;
+    protected $manualSortingEnabled;
+    protected $defaultOrder;
+    protected $parameters;
+    protected $amountOnPageEnabled;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -47,14 +66,6 @@ class discountElement extends productsListStructureElement
         $moduleStructure['icon'] = 'image';
         $moduleStructure['iconOriginalName'] = 'text';
         $moduleStructure['link'] = 'url';
-
-        //        $moduleStructure['priceSortingEnabled'] = 'text';
-        //        $moduleStructure['nameSortingEnabled'] = 'text';
-        //        $moduleStructure['dateSortingEnabled'] = 'text';
-        //        $moduleStructure['availabilityFilterEnabled'] = 'checkbox';
-        //        $moduleStructure['brandFilterEnabled'] = 'checkbox';
-        //        $moduleStructure['parameterFilterEnabled'] = 'checkbox';
-        //        $moduleStructure['amountOnPageEnabled'] = 'checkbox';
 
         $moduleStructure['metaTitle'] = 'text';
         $moduleStructure['metaDescription'] = 'text';
@@ -128,6 +139,9 @@ class discountElement extends productsListStructureElement
     {
         $selectedId = $this->formData['conditionUserGroupId'];
         $userGroupsList = [];
+        /**
+         * @var structureManager $structureManager
+         */
         $structureManager = $this->getService('structureManager');
         if ($userGroupsFolder = $structureManager->getElementByMarker('userGroups')) {
             foreach ($structureManager->getElementsChildren($userGroupsFolder->id) as $element) {
@@ -176,11 +190,6 @@ class discountElement extends productsListStructureElement
         return $stamp;
     }
 
-    //    public function getDefaultOrder()
-    //    {
-    //        return 'manual';
-    //    }
-
     /**
      * @return array
      *
@@ -205,6 +214,9 @@ class discountElement extends productsListStructureElement
 
     protected function getPotentialIdsForPublicProductsList()
     {
+        /**
+         * @var shoppingBasketDiscounts $shoppingBasketDiscounts
+         */
         $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
         if ($logicObject = $shoppingBasketDiscounts->getDiscount($this->id)) {
             return $logicObject->getApplicableProductsIds();
@@ -212,34 +224,68 @@ class discountElement extends productsListStructureElement
         return [];
     }
 
-    protected function getProductsListParentElementsIds()
+    protected function getProductsListBaseQuery()
     {
-        $result = [$this->id];
+        if ($this->productsListBaseQuery !== null) {
+            return $this->productsListBaseQuery;
+        }
+        $this->productsListBaseQuery = false;
+
+        $this->productsListBaseQuery = $this->getProductsQuery();
+        $id = $this->id;
+        $this->productsListBaseQuery->whereIn('module_product.id', function ($query) use ($id) {
+            $query->from('structure_links')
+                ->select('childStructureId')
+                ->where('parentStructureId', '=', $id)
+                ->where('type', '=', 'discountProduct');
+        });
+
         $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
         if ($logicObject = $shoppingBasketDiscounts->getDiscount($this->id)) {
-            if ($categories = $logicObject->discountedCategoriesIds) {
-                $result = array_merge($result, $logicObject->discountedCategoriesIds);
+            if ($categoryIds = $logicObject->discountedCategoriesIds) {
+                $this->productsListBaseQuery->orWhereIn('module_product.id', function ($query) use ($categoryIds) {
+                    $query->from('structure_links')
+                        ->select('childStructureId')
+                        ->whereIn('parentStructureId', $categoryIds)
+                        ->where('type', '=', 'catalogue');
+                });
             }
             if ($brands = $logicObject->discountedBrandIds) {
-                $result = array_merge($result, $brands);
+                $this->productsListBaseQuery->orWhereIn('brandId', $brands);
             }
         }
+        return $this->productsListBaseQuery;
+    }
+
+    public function isFilterableByType($filterType)
+    {
+        switch ($filterType) {
+            case 'category':
+                $result = false;
+//                    $result = $this->categoryFilterEnabled;
+                break;
+            case 'brand':
+                $result = $this->brandFilterEnabled;
+                break;
+            case 'discount':
+                $result = false;
+//                    $result = $this->discountFilterEnabled;
+                break;
+            case 'parameter':
+                $result = $this->parameterFilterEnabled;
+                break;
+            case 'price':
+                $result = false;
+//                    $result = $this->isSettingEnabled('priceFilterEnabled');
+                break;
+            case 'availability':
+                $result = $this->availabilityFilterEnabled;
+                break;
+            default:
+                $result = true;
+        }
+
         return $result;
-    }
-
-    public function isFilterableByAvailability()
-    {
-        return $this->availabilityFilterEnabled;
-    }
-
-    public function isFilterableByParameter()
-    {
-        return $this->parameterFilterEnabled;
-    }
-
-    public function isFilterableByBrand()
-    {
-        return $this->brandFilterEnabled;
     }
 
     public function loadDiscountsListFilterData()
@@ -259,6 +305,9 @@ class discountElement extends productsListStructureElement
         }
     }
 
+    /**
+     * @return discountsListElement|boolean
+     */
     public function getRequestedDiscountsList()
     {
         foreach ($this->getService('structureManager')->getElementsParents($this->id) as $parent) {
@@ -276,6 +325,7 @@ class discountElement extends productsListStructureElement
         if ($parent = $this->getRequestedDiscountsList()) {
             return $parent->getCurrentLayout('selectedDiscountProductsLayout');
         }
+        return false;
     }
 
     public function getDefaultLimit()
@@ -286,8 +336,8 @@ class discountElement extends productsListStructureElement
         return parent::getDefaultLimit();
     }
 
-    public function asd($a, $b)
+    public function isAmountSelectionEnabled()
     {
-        $this->multilanguageChunks[$b]['iconOriginalName'] = $a;
+        return $this->amountOnPageEnabled;
     }
 }

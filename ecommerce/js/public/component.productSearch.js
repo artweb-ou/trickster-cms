@@ -41,7 +41,8 @@ window.ProductSearchComponent = function(componentElement) {
 	};
 
 	var reset = function() {
-		document.location.href = window.productSearchBaseUrl + 'productsearch:1/';
+		// document.location.href = window.productsListElementUrl + 'productsearch:1/';
+		document.location.href = window.productsListElementUrl;
 	};
 
 	this.refresh = function(changedFilter) {
@@ -93,8 +94,9 @@ window.ProductSearchComponent = function(componentElement) {
 				}
 			}
 		}
-		baseUrl = baseUrl || window.productSearchBaseUrl;
-		document.location.href = baseUrl + generateQueryString(arguments) + 'productsearch:1/';
+		baseUrl = baseUrl || window.productsListElementUrl;
+		document.location.href = baseUrl + generateQueryString(arguments);
+		// document.location.href = baseUrl + generateQueryString(arguments) + 'productsearch:1/';
 	};
 
 	var generateQueryString = function(arguments) {

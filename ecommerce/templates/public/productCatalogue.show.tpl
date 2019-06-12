@@ -27,9 +27,7 @@
 
 	{if $element->productsLayout != "hide" && $element->getProductsList()}
 
-		{if $element->isFilterable()}
-			{include file=$theme->template('component.productsfilter.tpl')}
-		{/if}
+		{include file=$theme->template('component.productsfilter.tpl')}
 		<div class="products_top_pager">
 			{if $element->isSortable()}
 				{include file=$theme->template('component.productssorter.tpl')}

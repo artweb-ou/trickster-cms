@@ -2,6 +2,10 @@
 
 class productSelectionDataResponseConverter extends dataResponseConverter
 {
+    /**
+     * @param productSelectionElement[] $data
+     * @return array
+     */
     public function convert($data)
     {
         $result = [];
@@ -9,8 +13,9 @@ class productSelectionDataResponseConverter extends dataResponseConverter
             $info = [];
             $info['id'] = $element->id;
             $info['title'] = $element->title;
+            $info['url'] = $element->URL;
             if ($parameterGroup = $element->getParameterGroup()) {
-                $info['title'] .= " (" . $parameterGroup->title . ")";
+                $info['title'] .= " (" . $parameterGroup->getTitle() . ")";
             }
             $result[] = $info;
         }

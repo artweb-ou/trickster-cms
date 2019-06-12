@@ -53,6 +53,9 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
                 $directSubMenuList = [];
 
                 $linksManager = $this->getService('linksManager');
+                /**
+                 * @var structureManager $structureManager
+                 */
                 $structureManager = $this->getService('structureManager');
                 $languagesManager = $this->getService('languagesManager');
                 $currentLanguageId = $languagesManager->getCurrentLanguageId();
@@ -69,9 +72,7 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
                 } else {
                     //gather all submenus automatically
                     if ($languagesElement = $structureManager->getElementById($currentLanguageId)) {
-                        //request only 'structure' links to prevent search element in main menu.
-                        //review and re-implement if this causes some problems
-                        foreach ($structureManager->getElementsChildren($languagesElement->id, 'container', ['structure', 'catalogue'], null, true) as $childElement) {
+                        foreach ($structureManager->getElementsChildren($languagesElement->id, 'container', null, null, true) as $childElement) {
                             if (!$childElement->hidden) {
                                 $directSubMenuList[] = $childElement;
                             }

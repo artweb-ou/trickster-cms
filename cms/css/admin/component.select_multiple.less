@@ -1,6 +1,12 @@
 .select_multiple {
 	.inputs_common();
 	height: @300pt;
+
+	&.select_simple{
+		height: auto;
+		max-height: @300pt;
+	}
+
 	option {
 		padding: @5pt;
 		&:hover, &:focus {

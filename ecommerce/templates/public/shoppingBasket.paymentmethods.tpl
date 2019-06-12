@@ -9,7 +9,7 @@
 	{/if}
 	<div class="shopping_basket_selection_paymentmethods_options">
 		{if $formErrors.paymentMethodId}{/if}
-		{$paymentMethods = $element->getAvailablePaymentMethods()}
+		{$paymentMethods = $shoppingBasketElement->getAvailablePaymentMethods()}
 		{foreach $paymentMethods as $method}{$fieldId = "shoppingbasket_paymentmethod_{$method->id}"}<label class="shoppingbasket_paymentmethod" for="{$fieldId}" title="{$method->title}">
 			<input type="radio" {if $method@first}checked="checked"{/if} class="shoppingbasket_paymentmethod_radio radio_holder" name="{$formNames.paymentMethodId}" value="{$method->id}"{if $formData.paymentMethodId == $method->id} checked="checked"{/if} id="{$fieldId}">{if $method->image}<img class="shoppingbasket_paymentmethod_image" src='{$controller->baseURL}image/type:basketPaymentMethod/id:{$method->image}/filename:{$method->originalName}' alt="{$method->title}"/>
 				{else}<span class="shoppingbasket_paymentmethod_text">{$method->title}</span>

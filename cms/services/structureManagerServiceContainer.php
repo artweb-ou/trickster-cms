@@ -30,6 +30,13 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
             $structureManager->setLinksManager($this->registry->getService('linksManager'));
         }
 
+        if ($languagesManager = $this->getOption('languagesManager')) {
+            $structureManager->setLanguagesManager($languagesManager);
+        } else {
+            $languagesManager = $this->registry->getService('languagesManager');
+            $structureManager->setLanguagesManager($languagesManager);
+        }
+
         if ($privilegesManager = $this->getOption('privilegesManager')) {
             $structureManager->setPrivilegesManager($privilegesManager);
         } else {
@@ -43,11 +50,25 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
             $structureManager->setRootUrl($controller->rootURL);
         }
 
-        if ($rootMarker = $this->getOption('rootMarker')) {
-            $structureManager->setRootElementMarker($rootMarker);
-        } else {
-            $structureManager->setRootElementMarker($configManager->get('main.rootMarkerAdmin'));
+        $adminRootMarker = $configManager->get('main.rootMarkerAdmin');
+        if (!($rootMarker = $this->getOption('rootMarker'))) {
+            $rootMarker = $adminRootMarker;
         }
+        $structureManager->setRootElementMarker($rootMarker);
+
+        if ($rootMarker == $adminRootMarker) {
+            $structureManager->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.adminAllowed'));
+        } else {
+            $structureManager->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.publicAllowed'));
+            //we only need to restrict globally path search by current language if we have cache enabled.
+            //otherwise this makes a huge performance hit which has to be investigated (todo: investigate)
+            if ($cache = $this->registry->getService('Cache')){
+                if ($cache->isEnabled()){
+                    $structureManager->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
+                }
+            }
+        }
+
 
         if ($rootId = $this->getOption('rootId')) {
             $structureManager->setRootElementId($rootId);
