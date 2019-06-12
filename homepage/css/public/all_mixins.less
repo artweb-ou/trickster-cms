@@ -33,7 +33,7 @@
 	//*0.999 is required for incorrect float rounding to px in some browsers/font sizes
 	box-sizing: border-box;
 	margin: 0 @grid_spacing_mobile*0.999 / 2 @grid_spacing_mobile;
-	@media (min-width: 0) and (max-width: @screen_breakpoint_sm) {
+	@media (min-width: 0) and (max-width: @screen_breakpoint_xs_max) {
 		.fit_into_grid(@xs_grid_span, @grid_spacing_mobile);
 	}
 	@media (min-width: @screen_breakpoint_sm) and (max-width: @screen_breakpoint_sm_max) {
