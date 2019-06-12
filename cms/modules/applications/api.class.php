@@ -2,7 +2,6 @@
 
 class apiApplication extends controllerApplication
 {
-    use CrawlerFilterTrait;
     protected $applicationName = 'api';
     protected $mode = 'public';
     public $rendererName = 'json';
@@ -25,7 +24,7 @@ class apiApplication extends controllerApplication
             $this->startSession($this->mode, $configManager->get('main.publicSessionLifeTime'));
         }
         $this->createRenderer();
-        return !$this->isCrawlerDetected();
+        return true;
     }
 
     public function execute($controller)

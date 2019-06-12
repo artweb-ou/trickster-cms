@@ -1152,7 +1152,7 @@ class structureManager implements DependencyInjectionContextInterface
             $dataCollection = $this->elementsDataCollection->load($searchFields);
             foreach ($dataCollection as &$dataElement) {
                 if (!$parentElementId || $this->checkElementInParent($dataElement->id, $parentElementId)) {
-                    $this->cachedMarkers[$cacheParentElementId][$marker] = $this->getElementById($dataElement->id);
+                    $this->cachedMarkers[$cacheParentElementId][$marker] = $this->getElementById($dataElement->id, $parentElementId);
                     break;
                 }
             }
