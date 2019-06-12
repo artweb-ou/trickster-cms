@@ -80,4 +80,12 @@ class mapElement extends menuDependantStructureElement implements ConfigurableLa
             'mapTypeControlEnabled' => !!$this->mapTypeControlEnabled,
         ]);
     }
+    public function getJsonMapIframeInfo()
+    {
+        return json_encode([
+            'coordinates' => $this->coordinates,
+            'heightAdjusted' => true,
+            'title' => $this->title,
+        ]);
+    }
 }

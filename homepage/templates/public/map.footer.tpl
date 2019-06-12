@@ -5,29 +5,27 @@
 			{$element->mapCode}
 		</div>
 	{elseif $element->coordinates}
-	<div class="map_map googlemap_id_{$element->id}">
-		{if !empty($element->styles|trim)}
-			<script>
-
-				window.mapsInfo = window.mapsInfo || {ldelim}{rdelim};
-				window.mapsInfo['{$element->id}'] = {ldelim}
-					'coordinates': '{$element->coordinates}',
-					'title': '{$element->title}',
-					'content': '{$element->description}',
-					'zoomControlEnabled': true,
-					'streetViewControlEnabled': false,
-					'mapTypeControlEnabled': false,
-					{if $element->styles}'styles': {$element->styles},{/if}
-					'heightAdjusted': 'true',
-					'height': 0.185
+		<script>
+			/*<![CDATA[*/
+			{if !empty($element->styles|trim)}
+			window.mapsInfo = window.mapsInfo || {ldelim}{rdelim};
+			window.mapsInfo['{$element->id}'] = {ldelim}
+				'coordinates': '{$element->coordinates}',
+				'title': '{$element->title}',
+				'content': '{$element->description}',
+				'zoomControlEnabled': true,
+				'streetViewControlEnabled': false,
+				'mapTypeControlEnabled': false,
+				{if $element->styles}'styles': {$element->styles},{/if}
+				'heightAdjusted': 'true',
+				'height': 0.185
 				{rdelim};
-
-			</script>
-		{else}
-		<div class="gmap_iframe">
-				<iframe src = "https://maps.google.com/maps?q={$element->coordinates}&z=14&amp;output=embed"></iframe>
-		</div>
-		{/if}
-		</div>
+			{else}
+			window.mapsIframe = window.mapsIframe || {ldelim}{rdelim};
+			window.mapsIframe['{$element->id}'] = {$element->getJsonMapIframeInfo()};
+			window.mapsIframe['{$element->id}']['height'] = 0.185;
+			{/if}
+			/*]]>*/
+		</script>
 	{/if}
 </div>
