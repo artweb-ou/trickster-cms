@@ -450,25 +450,37 @@
     overflow: hidden;
 }
 
-.product_details_amount_minus .button_icon,
-.product_details_amount_plus .button_icon {
-    background-size: 21px 21px;
-    background-position: 49% 49%;
-    background-repeat: no-repeat;
-    //width: 3.4em;
-    width: 100%;
-}
 .product_details_amount {
     padding: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
     &.button {
         padding: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
     }
+
+    .button_icon {
+        line-height: 2.5;
+        height: 2.5em; // .45em *2 + 2.5
+        display: block;
+        overflow: hidden;
+        background-size: 22px 22px;
+        background-repeat: no-repeat;
+        //width: 3.4em;
+        width: 100%;
+
+        .product_details_amount_minus&{
+            background-position: 54% 49%; // visual efect for
+        }
+        .product_details_amount_plus&{
+            background-position: 46% 49%; // visual efect for
+        }
+    }
+
 }
 
 .product_details_amount_minus {
