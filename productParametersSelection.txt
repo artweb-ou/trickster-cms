@@ -1,3 +1,0 @@
-
-ALTER TABLE `engine_module_product_selection` ADD `originalName` VARCHAR(255) NOT NULL AFTER `influential`;
-ALTER TABLE `engine_module_product_selection` ADD `image` INT(11) NOT NULL AFTER `originalName`;

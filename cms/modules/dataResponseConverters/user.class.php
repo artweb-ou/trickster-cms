@@ -1,22 +1,53 @@
 <?php
 
-class userDataResponseConverter extends dataResponseConverter
+class userDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
+    protected $defaultPreset = 'api';
+
+    protected function getRelationStructure()
     {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['title'] = $element->userName;
-            $info['userName'] = $element->userName;
-            $info['firstName'] = $element->firstName;
-            $info['lastName'] = $element->lastName;
-            $info['email'] = $element->email;
-            $info['phone'] = $element->phone;
-            $info['website'] = $element->website;
-            $result[] = $info;
-        }
-        return $result;
+        return [
+            'id' => 'id',
+            'searchTitle' => 'getTitle',
+            'url' => 'getUrl',
+            'structureType' => 'structureType',
+            'dateCreated' => function ($element) {
+                return $element->getValue('dateCreated');
+            },
+            'dateModified' => function ($element) {
+                return $element->getValue('dateModified');
+            },
+            'userName' => 'userName',
+            'firstName' => 'firstName',
+            'lastName' => 'lastName',
+            'email' => 'email',
+            'phone' => 'phone',
+            'website' => 'website',
+        ];
+    }
+
+    protected function getPresetsStructure()
+    {
+        return [
+            'api' => [
+                'id',
+                'title',
+                'dateCreated',
+                'dateModified',
+                'url',
+                'userName',
+                'firstName',
+                'lastName',
+                'email',
+                'phone',
+                'website',
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+            ],
+        ];
     }
 }

@@ -2,10 +2,16 @@
 
 class showFormProductCatalogue extends structureElementAction
 {
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param productCatalogueElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         $structureElement->setReplacementElements([$structureElement]);
-        $structureElement->categoriesList = [];
+        $structureElement->adminCategoriesList = [];
 
         if ($structureElement->final) {
             if ($categoriesElement = $structureManager->getElementByMarker('categories')) {
@@ -17,14 +23,14 @@ class showFormProductCatalogue extends structureElementAction
                     $compiledLinks = $linksManager->getElementsLinksIndex($elementParent->id, 'catalogue', 'parent');
                 }
 
-                foreach ($categoriesList as &$category) {
+                foreach ($categoriesList as $category) {
                     $categoryItem = [];
                     $categoryItem['level'] = $category->level - 3;
 
                     $categoryItem['title'] = $category->getTitle();
                     $categoryItem['id'] = $category->id;
                     $categoryItem['select'] = isset($compiledLinks[$category->id]);
-                    $structureElement->categoriesList[] = $categoryItem;
+                    $structureElement->adminCategoriesList[] = $categoryItem;
                 }
             }
 

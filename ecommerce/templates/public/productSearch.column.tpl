@@ -7,7 +7,7 @@
 	{/if}
 	{capture assign="moduleContent"}
 		<script>
-			/*<![CDATA[*/
+
 			{if $element->canActLikeFilter()}
 				window.productsListElementUrl = '{$productsListElement->URL}';
 			{else}
@@ -20,18 +20,18 @@
 			{if $currentElement->type == 'category'}
 				window.categoriesUrls[{$currentElement->id}] = '{$currentElement->URL}';
 			{/if}
-			/*]]>*/
+
 		</script>
 
 		<div class="productsearch_categories">
 			{foreach $element->getFiltersByType('category') as $filter}
 					{include $theme->template('productSearch.dropdownfilter.tpl')}
 					<script>
-						/*<![CDATA[*/
+
 						{foreach $filter->getOptionsInfo() as $optionInfo}
 							window.categoriesUrls[{$optionInfo.id}] = '{$optionInfo.url}';
 						{/foreach}
-						/*]]>*/
+
 					</script>
 			{/foreach}
 		</div>

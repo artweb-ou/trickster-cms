@@ -53,10 +53,10 @@
 	{if $images = $element->getImagesList()}
 		<div class="shop_details_gallery gallery_details">
 			<script>
-				/*<![CDATA[*/
+
 				window.galleriesInfo = window.galleriesInfo || {ldelim}{rdelim};
 				window.galleriesInfo['{$element->id}'] = {$element->getGalleryJsonInfo(true, true, true)};
-				/*]]>*/
+
 			</script>
 			{stripdomspaces}
 			<div class="gallery_details_images gallery_static galleryid_{$element->id}">

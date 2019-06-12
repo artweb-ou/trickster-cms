@@ -1,4 +1,5 @@
 <?php
+
 abstract class DesignTheme extends errorLogger
 {
     protected $inheritedThemes = [];
@@ -203,6 +204,7 @@ abstract class DesignTheme extends errorLogger
         }
         return $this->imagesFolder;
     }
+
     /**
      * Returns fonts folder of current theme. If it's undefined, then it's taken form inherited themes
      *
@@ -428,6 +430,27 @@ abstract class DesignTheme extends errorLogger
         return false;
     }
 
+    /**
+     * Returns uncompiled template source
+     *
+     * @param string $template
+     * @param boolean $mayFail
+     * @return bool|string
+     */
+    public function getTemplateSource($template, $json = false)
+    {
+        if ($path = $this->template($template)) {
+            if ($content = file_get_contents($path)) {
+                if ($json) {
+                    return json_encode($content);
+                } else {
+                    return $content;
+                }
+            }
+        }
+        return false;
+    }
+
     public function templateExists($template)
     {
         if ($resources = $this->getTemplateResources()) {
@@ -460,6 +483,7 @@ abstract class DesignTheme extends errorLogger
         }
         return $this->imagesPaths;
     }
+
     /**
      * Returns list of font folders paths including the inherited folders from parent objects in themes' chain
      * @return array

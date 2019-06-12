@@ -46,7 +46,13 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
     public function getSubMenuList($linkType = 'structure')
     {
         if ($this->subMenuList === null) {
-            $cache = $this->getElementsListCache('il', 36000);
+            $structureManager = $this->getService('structureManager');
+            if ($currentElement = $structureManager->getCurrentElement()){
+                $key = 'il:'.$currentElement->id;
+            } else {
+                $key = 'il:0';
+            }
+            $cache = $this->getElementsListCache($key, 36000);
             if (($this->subMenuList = $cache->load()) === false) {
 
                 $this->subMenuList = [];
@@ -56,7 +62,6 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
                 /**
                  * @var structureManager $structureManager
                  */
-                $structureManager = $this->getService('structureManager');
                 $languagesManager = $this->getService('languagesManager');
                 $currentLanguageId = $languagesManager->getCurrentLanguageId();
 

@@ -20,6 +20,13 @@ class receiveLatestNews extends structureElementAction
 
             $structureElement->persistDisplayMenusLinks();
 
+            $buttonConnectedIds = $linksManager->getConnectedIdList($structureElement->id, "buttonConnectedMenu", "parent");
+            if ($buttonConnectedIds) {
+                foreach ($buttonConnectedIds as &$buttonConnectedId) {
+                    $linksManager->unLinkElements($structureElement->id, $buttonConnectedId, "buttonConnectedMenu");
+                }
+            }
+            $linksManager->linkElements($structureElement->id, $structureElement->buttonConnectedMenu, "buttonConnectedMenu");
             //persist connected news
             $compiledLinks = $linksManager->getElementsLinksIndex($structureElement->id, 'selectedNews');
             foreach ($structureElement->newsManualSearch as &$newsId) {
@@ -63,6 +70,9 @@ class receiveLatestNews extends structureElementAction
             'formNewsListsLimitIds',
             'itemsOnPage',
             'orderType',
+            'buttonTitle',
+            'buttonUrl',
+            'buttonConnectedMenu'
         ];
     }
 

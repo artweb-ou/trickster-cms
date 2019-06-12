@@ -74,7 +74,8 @@ class orderProductElement extends structureElement
     {
         $this->totalPrice = $this->price * $this->amount;
         if ($formatted) {
-            return number_format((float)$this->totalPrice, 2, '.', '');
+            $currencySelector = $this->getService('CurrencySelector');
+            return $currencySelector->formatPrice($this->totalPrice);
         } else {
             return $this->totalPrice;
         }
@@ -88,9 +89,21 @@ class orderProductElement extends structureElement
             $this->totalPrice = $this->price * $this->amount;
         }
         if ($formatted) {
-            return number_format((float)$this->totalPrice, 2, '.', '');
+            $currencySelector = $this->getService('CurrencySelector');
+            return $currencySelector->formatPrice($this->totalPrice);
         } else {
             return $this->totalPrice;
         }
     }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->price);
+    }
+
+
 }

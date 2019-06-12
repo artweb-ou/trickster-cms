@@ -8,5 +8,5 @@ class FormFieldsGroupFormStructure extends ElementForm
         ],
     ];
 
-    protected $additionalContent = 'shared.contentlist';
+    protected $additionalContent = 'shared.contentlist.tpl';
 }

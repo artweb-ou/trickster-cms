@@ -257,11 +257,12 @@
             80,
         ],
     ],
+    //this one would become deprecated in 06.2020
     'productIcon' => [
         'filters' => [
             [
                 'reduce',
-                'width=240, height=240',
+                'width=100, height=50',
             ],
         ],
         'format' => [
@@ -269,11 +270,11 @@
             'png',
         ],
     ],
-    'productIconBig' => [
+    'productIconDynamic' => [
         'filters' => [
             [
                 'reduce',
-                'width=128, height=128',
+                'width=240, height=240',
             ],
         ],
         'format' => [
@@ -442,6 +443,52 @@
         ],
     ],
     'productGalleryFullImage' => [
+        'filters' => [
+            [
+                'reduce',
+                'width=1920, height=1080',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            null,
+            80,
+        ],
+    ],
+    'productGalleryImageMobile' => [
+        'filters' => [
+            [
+                'reduce',
+                'height=600',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            '',
+            80,
+        ],
+    ],
+    'productGallerySmallThumbnailImageMobile' => [
+        'filters' => [
+            [
+                'fit',
+                'width=110, height=85',
+            ],
+            [
+                'crop',
+                'width=110, height=85, color=#ffffff',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            '',
+            80,
+        ],
+    ],
+    'productGalleryFullImageMobile' => [
         'filters' => [
             [
                 'reduce',

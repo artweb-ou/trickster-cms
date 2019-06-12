@@ -13,9 +13,9 @@
 					{/if}
 					<div class="product_details_option_control" data-elementid="{$selectionInfo.id}" data-influential="{$selectionInfo.influential}">
 						{if $selectionInfo.controlType == 'radios'}
-							{foreach $selectionInfo.productOptions as $value}
+							{foreach from=$selectionInfo.productOptions key=valueKey item=value}
 								<div class="product_details_option_radio_item">
-									<input class="radio_holder product_details_option_radio_item_control" type="radio" name="product_selection_option[{$selectionInfo.id}]" id="product_selection_option_{$value.id}" value="{$value.id}" />
+									<input class="radio_holder product_details_option_radio_item_control" type="radio" name="product_selection_option[{$selectionInfo.id}]" id="product_selection_option_{$value.id}" value="{$value.id}" {if $valueKey === 0}checked{/if} />
 									{if $value.image}
 										<label class="product_details_option_label" for="product_selection_option_{$value.id}">
 											<img class="product_details_option_image" src="{$controller->baseURL}image/type:productSelection/id:{$value.image}/filename:{$value.originalName}" alt="{$value.title}" title="{$value.title}" />

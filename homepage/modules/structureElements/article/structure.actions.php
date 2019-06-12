@@ -7,6 +7,6 @@ $moduleActions[] = 'showForm';
 $moduleActions[] = 'comment';
 $moduleActions[] = 'showPrivileges';
 $moduleActions[] = 'receivePrivileges';
-$moduleActions[] = 'deleteImage';
+$moduleActions[] = 'deleteFile';
 $moduleActions[] = 'receiveLayout';
 $moduleActions[] = 'showLayoutForm';

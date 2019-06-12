@@ -17,7 +17,7 @@
 		<td>
 			{if $element->originalName != ""}
 				<img src='{$controller->baseURL}image/type:adminImage/id:{$element->image}/filename:{$element->originalName}' />
-				<a href="{$element->URL}id:{$element->id}/action:deleteImage" >{translations name='label.deleteimage'}</a>
+				<a href="{$element->URL}id:{$element->id}/action:deleteFile/file:image/" >{translations name='label.deleteimage'}</a>
 			{/if}
 			<input class="fileinput_placeholder" type="file" name="{$formNames.image}" />
 		</td>

@@ -12,7 +12,7 @@
 					<input type="hidden" value="{$rootElement->id}" name="id" />
 					<input type="hidden" class="content_list_form_action" value="deleteElements" name="action" />
 					{if isset($rootPrivileges.deleteElements)}
-						<button class='button important actions_form_delete'><span class="icon icon_delete"></span>{translations name='button.deleteselected'}</button>
+						<button class='button warning_button actions_form_delete'><span class="icon icon_delete"></span>{translations name='button.deleteselected'}</button>
 					{/if}
 					<a class="button primary_button" href="{$element->URL}id:{$element->id}/action:export/">{translations name='feedback.csv_export'}</a>
 				</div>

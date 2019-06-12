@@ -1,6 +1,6 @@
 window.OpeningHoursGroupFormComponent = function(componentElement) {
-	var init = function() {
+    var init = function() {
 
-	};
-	init();
+    };
+    init();
 };

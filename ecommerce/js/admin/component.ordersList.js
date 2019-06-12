@@ -1,383 +1,381 @@
 window.OrdersListComponent = function(componentElement) {
-	var init = function() {
-		var element;
-		if (element = _('.orders_list_table', componentElement)[0]) {
-			new OrdersListTableComponent(element);
-		}
-		if (element = _('.orders_list_heading', componentElement)[0]) {
-			new OrdersListHeadingComponent(element);
-		}
-		if (element = _('.orders_list_filtration', componentElement)[0]) {
-			new OrdersListFiltrationForm(element);
-		}
-	};
-	init();
+    var init = function() {
+        var element;
+        if (element = _('.orders_list_table', componentElement)[0]) {
+            new OrdersListTableComponent(element);
+        }
+        if (element = _('.orders_list_heading', componentElement)[0]) {
+            new OrdersListHeadingComponent(element);
+        }
+        if (element = _('.orders_list_filtration', componentElement)[0]) {
+            new OrdersListFiltrationForm(element);
+        }
+    };
+    init();
 };
 
 window.OrdersListHeadingComponent = function(componentElement) {
-	var PDFDownloadLink;
-	var PDFDisplayLink;
-	var XLSXDownloadLink;
-	var startDateElement;
-	var endDateElement;
-	var tableComponent;
+    var PDFDownloadLink;
+    var PDFDisplayLink;
+    var XLSXDownloadLink;
+    var startDateElement;
+    var endDateElement;
+    var tableComponent;
 
-	var init = function() {
-		var dateHeading = _('.orders_list_heading_date', tableComponent)[0];
-		tableComponent = document.querySelectorAll('.orders_list_table')[0];
-		PDFDownloadLink = _('.orders_list_heading_downloadpdf', componentElement)[0];
-		PDFDisplayLink = _('.orders_list_heading_displaypdf', componentElement)[0];
-		XLSXDownloadLink = _('.orders_list_heading_exportxlsx', componentElement)[0];
-		startDateElement = _('.orders_list_heading_start', dateHeading)[0];
-		endDateElement = _('.orders_list_heading_end', dateHeading)[0];
-		if (startDateElement && endDateElement) {
-			controller.addListener('ordersListUpdated', importInformation);
-		}
-		var element = _('.orders_list_heading_new', componentElement)[0];
-		if (element) {
-			new OrdersListNewOrdersComponent(element);
-		}
-	};
-	var importInformation = function() {
-		var startDate = ordersLogics.getStartDate();
-		var endDate = ordersLogics.getEndDate();
-		startDateElement.innerHTML = startDate;
-		endDateElement.innerHTML = endDate;
+    var init = function() {
+        var dateHeading = _('.orders_list_heading_date', tableComponent)[0];
+        tableComponent = document.querySelectorAll('.orders_list_table')[0];
+        PDFDownloadLink = _('.orders_list_heading_downloadpdf', componentElement)[0];
+        PDFDisplayLink = _('.orders_list_heading_displaypdf', componentElement)[0];
+        XLSXDownloadLink = _('.orders_list_heading_exportxlsx', componentElement)[0];
+        startDateElement = _('.orders_list_heading_start', dateHeading)[0];
+        endDateElement = _('.orders_list_heading_end', dateHeading)[0];
+        if (startDateElement && endDateElement) {
+            controller.addListener('ordersListUpdated', importInformation);
+        }
+        var element = _('.orders_list_heading_new', componentElement)[0];
+        if (element) {
+            new OrdersListNewOrdersComponent(element);
+        }
+    };
+    var importInformation = function() {
+        var startDate = ordersLogics.getStartDate();
+        var endDate = ordersLogics.getEndDate();
+        startDateElement.innerHTML = startDate;
+        endDateElement.innerHTML = endDate;
 
-		PDFDownloadLink.href = ordersLogics.getPDFDownloadURL();
-		PDFDisplayLink.href = ordersLogics.getPDFDisplayURL();
-		XLSXDownloadLink.href = ordersLogics.getXLSLDownloadUrl();
-	};
+        PDFDownloadLink.href = ordersLogics.getPDFDownloadURL();
+        PDFDisplayLink.href = ordersLogics.getPDFDisplayURL();
+        XLSXDownloadLink.href = ordersLogics.getXLSLDownloadUrl();
+    };
 
-	init();
+    init();
 };
 
 window.OrdersListNewOrdersComponent = function(componentElement) {
-	var linkElement;
-	var valueElement;
-	var init = function() {
-		linkElement = _('.orders_list_heading_new_link', componentElement)[0];
-		valueElement = _('.orders_list_heading_new_value', componentElement)[0];
-		if (linkElement && valueElement) {
-			eventsManager.addHandler(linkElement, 'click', clickHandler);
-			controller.addListener('ordersListUpdated', importInformation);
-		}
-	};
-	var importInformation = function() {
-		var ordersAmount = ordersLogics.getNewOrdersAmount();
-		if (ordersAmount > 0) {
-			valueElement.innerHTML = ordersAmount;
+    var linkElement;
+    var valueElement;
+    var init = function() {
+        linkElement = _('.orders_list_heading_new_link', componentElement)[0];
+        valueElement = _('.orders_list_heading_new_value', componentElement)[0];
+        if (linkElement && valueElement) {
+            eventsManager.addHandler(linkElement, 'click', clickHandler);
+            controller.addListener('ordersListUpdated', importInformation);
+        }
+    };
+    var importInformation = function() {
+        var ordersAmount = ordersLogics.getNewOrdersAmount();
+        if (ordersAmount > 0) {
+            valueElement.innerHTML = ordersAmount;
 
-			componentElement.style.visibility = 'visible';
-		} else {
-			componentElement.style.visibility = 'hidden';
-		}
-	};
-	var clickHandler = function(event) {
-		eventsManager.preventDefaultAction(event);
-		controller.fireEvent('ordersListDisplayNew');
-	};
+            componentElement.style.visibility = 'visible';
+        } else {
+            componentElement.style.visibility = 'hidden';
+        }
+    };
+    var clickHandler = function(event) {
+        eventsManager.preventDefaultAction(event);
+        controller.fireEvent('ordersListDisplayNew');
+    };
 
-	init();
+    init();
 };
 
 window.OrdersListTableComponent = function(componentElement) {
-	var rowsElement;
-	var payedTotalElement;
-	var totalPriceElement;
-	var deliveryTotalElement;
-	var filterSelector;
+    var rowsElement;
+    var payedTotalElement;
+    var totalPriceElement;
+    var deliveryTotalElement;
+    var filterSelector;
 
-	var init = function() {
-		if (rowsElement = _('.content_list_item', componentElement)[0]) {
-			controller.addListener('ordersListUpdated', updateOrdersList);
-		}
-		payedTotalElement = _('.orders_list_table_payedtotal', componentElement)[0];
-		deliveryTotalElement = _('.orders_list_table_deliverytotal', componentElement)[0];
-		totalPriceElement = _('.orders_list_table_totalprice', componentElement)[0];
+    var init = function() {
+        if (rowsElement = _('.content_list_item', componentElement)[0]) {
+            controller.addListener('ordersListUpdated', updateOrdersList);
+        }
+        payedTotalElement = _('.orders_list_table_payedtotal', componentElement)[0];
+        deliveryTotalElement = _('.orders_list_table_deliverytotal', componentElement)[0];
+        totalPriceElement = _('.orders_list_table_totalprice', componentElement)[0];
 
-		if (filterSelector = _('select.orders_list_table_filter', componentElement)[0]) {
-			reportFilterTypes();
-			eventsManager.addHandler(filterSelector, 'change', filterSelectorChangeHandler);
-			controller.addListener('ordersListDisplayNew', displayNewOrders);
-		}
-	};
-	var requestOrdersList = function() {
-		window.ordersLogics.filterOrders();
-	};
-	var filterSelectorChangeHandler = function() {
-		reportFilterTypes();
-		requestOrdersList();
-	};
-	var reportFilterTypes = function() {
-		var filterTypes = filterSelector.value;
-		window.ordersLogics.setFilterData(false, false, false, filterTypes);
-	};
-	var displayNewOrders = function() {
-		filterSelector.value = 'payed;undefined';
-		eventsManager.fireEvent(filterSelector, 'change');
-	};
-	var updateOrdersList = function() {
-		var ordersList = ordersLogics.getOrdersList();
-		while (rowsElement.firstChild) {
-			rowsElement.removeChild(rowsElement.firstChild);
-		}
+        if (filterSelector = _('select.orders_list_table_filter', componentElement)[0]) {
+            reportFilterTypes();
+            eventsManager.addHandler(filterSelector, 'change', filterSelectorChangeHandler);
+            controller.addListener('ordersListDisplayNew', displayNewOrders);
+        }
+    };
+    var requestOrdersList = function() {
+        window.ordersLogics.filterOrders();
+    };
+    var filterSelectorChangeHandler = function() {
+        reportFilterTypes();
+        requestOrdersList();
+    };
+    var reportFilterTypes = function() {
+        var filterTypes = filterSelector.value;
+        window.ordersLogics.setFilterData(false, false, false, filterTypes);
+    };
+    var displayNewOrders = function() {
+        filterSelector.value = 'payed;undefined';
+        eventsManager.fireEvent(filterSelector, 'change');
+    };
+    var updateOrdersList = function() {
+        var ordersList = ordersLogics.getOrdersList();
+        while (rowsElement.firstChild) {
+            rowsElement.removeChild(rowsElement.firstChild);
+        }
 
-		var payedTotal = 0;
-		var deliveryTotal = 0;
-		var totalPricesTotal = 0;
+        var payedTotal = 0;
+        var deliveryTotal = 0;
+        var totalPricesTotal = 0;
 
-		for (var i = 0; i < ordersList.length; i++) {
-			var row = new OrdersListRowComponent(i, ordersList[i]);
-			rowsElement.appendChild(row.componentElement);
+        for (var i = 0; i < ordersList.length; i++) {
+            var row = new OrdersListRowComponent(i, ordersList[i]);
+            rowsElement.appendChild(row.componentElement);
 
-			payedTotal += ordersList[i].payedPrice;
-			deliveryTotal += ordersList[i].deliveryPrice;
-			totalPricesTotal += ordersList[i].totalPrice;
-		}
+            payedTotal += ordersList[i].payedPrice;
+            deliveryTotal += ordersList[i].deliveryPrice;
+            totalPricesTotal += ordersList[i].totalPrice;
+        }
 
-		payedTotalElement.innerHTML = domHelper.roundNumber(payedTotal, 2) + ' €';
-		if (deliveryTotal !== ''){
-			deliveryTotalElement.innerHTML = domHelper.roundNumber(deliveryTotal, 2) + ' €';
-		} else {
-			deliveryTotalElement.innerHTML = '';
-		}
-		totalPriceElement.innerHTML = domHelper.roundNumber(totalPricesTotal, 2) + ' €';
-	};
+        payedTotalElement.innerHTML = domHelper.roundNumber(payedTotal, 2) + ' €';
+        if (deliveryTotal !== '') {
+            deliveryTotalElement.innerHTML = domHelper.roundNumber(deliveryTotal, 2) + ' €';
+        } else {
+            deliveryTotalElement.innerHTML = '';
+        }
+        totalPriceElement.innerHTML = domHelper.roundNumber(totalPricesTotal, 2) + ' €';
+    };
 
-	init();
+    init();
 };
 
 window.OrdersListRowComponent = function(number, orderData) {
-	var self = this;
-	this.componentElement = null;
-	var ordererCell;
-	var numberCell;
-	var orderNumberCell;
-	var orderLink;
-	var payedPriceCell;
-	var totalPriceCell;
-	var deliveryPriceCell;
-	var statusCell;
-	var statusChangeCell;
-	var statusChangeButton;
-	var dateCell;
-	var removeCell;
-	var removeButton;
+    var self = this;
+    this.componentElement = null;
+    var ordererCell;
+    var numberCell;
+    var orderNumberCell;
+    var orderLink;
+    var payedPriceCell;
+    var totalPriceCell;
+    var deliveryPriceCell;
+    var statusCell;
+    var statusChangeCell;
+    var statusChangeButton;
+    var dateCell;
+    var removeCell;
+    var removeButton;
 
-	var init = function() {
-		createDomStructure();
-		refreshContents();
-		controller.addListener('orderInfoUpdated', orderInfoUpdatedHandler)
-	};
-	var createDomStructure = function() {
-		self.componentElement = document.createElement('tr');
+    var init = function() {
+        createDomStructure();
+        refreshContents();
+        controller.addListener('orderInfoUpdated', orderInfoUpdatedHandler);
+    };
+    var createDomStructure = function() {
+        self.componentElement = document.createElement('tr');
 
-		numberCell = document.createElement('td');
-		numberCell.className = 'orders_list_row_cellnumber';
-		self.componentElement.appendChild(numberCell);
+        numberCell = document.createElement('td');
+        numberCell.className = 'orders_list_row_cellnumber';
+        self.componentElement.appendChild(numberCell);
 
-		orderNumberCell = document.createElement('td');
-		orderNumberCell.className = 'name_column';
-		self.componentElement.appendChild(orderNumberCell);
+        orderNumberCell = document.createElement('td');
+        orderNumberCell.className = 'name_column';
+        self.componentElement.appendChild(orderNumberCell);
 
-		orderLink = document.createElement('a');
-		orderLink.className = 'orders_list_row_orderlink';
-		orderNumberCell.appendChild(orderLink);
+        orderLink = document.createElement('a');
+        orderLink.className = 'orders_list_row_orderlink';
+        orderNumberCell.appendChild(orderLink);
 
-		ordererCell = document.createElement('td');
-		ordererCell.className = 'orders_list_row_cellorderer';
-		self.componentElement.appendChild(ordererCell);
+        ordererCell = document.createElement('td');
+        ordererCell.className = 'orders_list_row_cellorderer';
+        self.componentElement.appendChild(ordererCell);
 
-		payedPriceCell = document.createElement('td');
-		payedPriceCell.className = 'orders_list_row_payedprice';
-		self.componentElement.appendChild(payedPriceCell);
+        payedPriceCell = document.createElement('td');
+        payedPriceCell.className = 'orders_list_row_payedprice';
+        self.componentElement.appendChild(payedPriceCell);
 
-		deliveryPriceCell = document.createElement('td');
-		deliveryPriceCell.className = 'orders_list_row_deliveryprice';
-		self.componentElement.appendChild(deliveryPriceCell);
+        deliveryPriceCell = document.createElement('td');
+        deliveryPriceCell.className = 'orders_list_row_deliveryprice';
+        self.componentElement.appendChild(deliveryPriceCell);
 
-		totalPriceCell = document.createElement('td');
-		totalPriceCell.className = 'orders_list_row_totalprice';
-		self.componentElement.appendChild(totalPriceCell);
+        totalPriceCell = document.createElement('td');
+        totalPriceCell.className = 'orders_list_row_totalprice';
+        self.componentElement.appendChild(totalPriceCell);
 
-		statusCell = document.createElement('td');
-		statusCell.className = 'orders_list_row_status';
-		self.componentElement.appendChild(statusCell);
+        statusCell = document.createElement('td');
+        statusCell.className = 'orders_list_row_status';
+        self.componentElement.appendChild(statusCell);
 
-		statusChangeCell = document.createElement('td');
-		statusChangeCell.className = 'orders_list_row_statuschange';
-		self.componentElement.appendChild(statusChangeCell);
+        statusChangeCell = document.createElement('td');
+        statusChangeCell.className = 'orders_list_row_statuschange';
+        self.componentElement.appendChild(statusChangeCell);
 
-		statusChangeButton = new StatusChangeButtonComponent(orderData);
-		statusChangeCell.appendChild(statusChangeButton.componentElement);
+        statusChangeButton = new StatusChangeButtonComponent(orderData);
+        statusChangeCell.appendChild(statusChangeButton.componentElement);
 
-		dateCell = document.createElement('td');
-		dateCell.className = 'orders_list_row_date';
-		self.componentElement.appendChild(dateCell);
+        dateCell = document.createElement('td');
+        dateCell.className = 'orders_list_row_date';
+        self.componentElement.appendChild(dateCell);
 
-		removeCell = document.createElement('td');
-		removeCell.className = 'orders_list_row_remove';
-		self.componentElement.appendChild(removeCell);
+        removeCell = document.createElement('td');
+        removeCell.className = 'orders_list_row_remove';
+        self.componentElement.appendChild(removeCell);
 
-		removeButton = new ContentListRemoveButton('orders_list_row_remove_button');
-		removeCell.appendChild(removeButton.componentElement);
-	};
-	var refreshContents = function() {
-		numberCell.innerHTML = number + 1;
-		orderLink.innerHTML = orderData.orderNumber;
-		ordererCell.innerHTML = orderData.payerFirstName + " " + orderData.payerLastName;
-		payedPriceCell.innerHTML = domHelper.roundNumber(orderData.payedPrice, 2) + ' ' + orderData.currency;
-		if (orderData.deliveryPrice !== ''){
-			deliveryPriceCell.innerHTML = domHelper.roundNumber(orderData.deliveryPrice, 2) + ' ' + orderData.currency;
-		} else {
-			deliveryPriceCell.innerHTML = '';
-		}
-		totalPriceCell.innerHTML = domHelper.roundNumber(orderData.totalPrice, 2) + ' ' + orderData.currency;
-		statusCell.innerHTML = orderData.orderStatusText;
+        removeButton = new ContentListRemoveButton('orders_list_row_remove_button');
+        removeCell.appendChild(removeButton.componentElement);
+    };
+    var refreshContents = function() {
+        numberCell.innerHTML = number + 1;
+        orderLink.innerHTML = orderData.orderNumber;
+        ordererCell.innerHTML = orderData.payerFirstName + ' ' + orderData.payerLastName;
+        payedPriceCell.innerHTML = domHelper.roundNumber(orderData.payedPrice, 2) + ' ' + orderData.currency;
+        if (orderData.deliveryPrice !== '') {
+            deliveryPriceCell.innerHTML = domHelper.roundNumber(orderData.deliveryPrice, 2) + ' ' + orderData.currency;
+        } else {
+            deliveryPriceCell.innerHTML = '';
+        }
+        totalPriceCell.innerHTML = domHelper.roundNumber(orderData.totalPrice, 2) + ' ' + orderData.currency;
+        statusCell.innerHTML = orderData.orderStatusText;
 
-		dateCell.innerHTML = orderData.dateCreated;
+        dateCell.innerHTML = orderData.dateCreated;
 
-		self.componentElement.className = 'content_list_item content_list_item_' + orderData.orderStatus;
-		statusChangeButton.setStatus(orderData.orderStatus);
-		removeButton.setURL(orderData.deleteURL);
-		orderLink.href = orderData.formURL;
-	};
-	var orderInfoUpdatedHandler = function(id) {
-		if (id == orderData.id) {
-			refreshContents();
-		}
-	};
-	init();
+        self.componentElement.className = 'content_list_item content_list_item_' + orderData.orderStatus;
+        statusChangeButton.setStatus(orderData.orderStatus);
+        removeButton.setURL(orderData.deleteURL);
+        orderLink.href = orderData.formURL;
+    };
+    var orderInfoUpdatedHandler = function(id) {
+        if (id == orderData.id) {
+            refreshContents();
+        }
+    };
+    init();
 };
 
 window.OrdersListFiltrationForm = function(componentElement) {
-	var formElement;
-	var startInput;
-	var endInput;
+    var formElement;
+    var startInput;
+    var endInput;
 
-	var presetSelector;
-	var startDate;
-	var endDate;
-	var requestURL;
+    var presetSelector;
+    var startDate;
+    var endDate;
+    var requestURL;
 
-	var init = function() {
-		if (formElement = _('.orders_list_filtration_form', componentElement)[0]) {
-			requestURL = formElement.getAttribute('action').replace('/admin/', '/adminAjax/');
+    var init = function() {
+        if (formElement = _('.orders_list_filtration_form', componentElement)[0]) {
+            requestURL = formElement.getAttribute('action').replace('/admin/', '/adminAjax/');
 
-			if (presetSelector = _('select.orders_list_filtration_preset', componentElement)[0]) {
-				eventsManager.addHandler(presetSelector, 'change', presetSelectorChangeHandler);
-			}
-			startInput = _('.orders_list_filtration_start', componentElement)[0];
-			endInput = _('.orders_list_filtration_end', componentElement)[0];
-			if (startInput && endInput) {
-				startInput.onchange = inputsChangeHandler;
-				endInput.onchange = inputsChangeHandler;
-				controller.addListener('startApplication', startApplicationHandler);
+            if (presetSelector = _('select.orders_list_filtration_preset', componentElement)[0]) {
+                eventsManager.addHandler(presetSelector, 'change', presetSelectorChangeHandler);
+            }
+            startInput = _('.orders_list_filtration_start', componentElement)[0];
+            endInput = _('.orders_list_filtration_end', componentElement)[0];
+            if (startInput && endInput) {
+                startInput.onchange = inputsChangeHandler;
+                endInput.onchange = inputsChangeHandler;
+                controller.addListener('startApplication', startApplicationHandler);
 
-				reportInputsState();
-			}
-		}
-	};
-	var startApplicationHandler = function() {
-		if (presetSelector && startInput.value == '' && endInput.value == '') {
-			presetSelectorChangeHandler();
-		} else if (startInput.value != '' && endInput.value != '') {
-			inputsChangeHandler();
-		}
-	};
-	var presetSelectorChangeHandler = function() {
-		var startDate = presetSelector.value.split('-')[0];
-		var endDate = presetSelector.value.split('-')[1];
-		startInput.value = startDate;
-		endInput.value = endDate;
+                reportInputsState();
+            }
+        }
+    };
+    var startApplicationHandler = function() {
+        if (presetSelector && startInput.value == '' && endInput.value == '') {
+            presetSelectorChangeHandler();
+        } else if (startInput.value != '' && endInput.value != '') {
+            inputsChangeHandler();
+        }
+    };
+    var presetSelectorChangeHandler = function() {
+        var startDate = presetSelector.value.split('-')[0];
+        var endDate = presetSelector.value.split('-')[1];
+        startInput.value = startDate;
+        endInput.value = endDate;
 
-		inputsChangeHandler();
-	};
-	var reportInputsState = function() {
-		startDate = startInput.value;
-		endDate = endInput.value;
+        inputsChangeHandler();
+    };
+    var reportInputsState = function() {
+        startDate = startInput.value;
+        endDate = endInput.value;
 
-		window.ordersLogics.setFilterData(requestURL, startDate, endDate);
-	};
-	var inputsChangeHandler = function() {
-		reportInputsState();
-		if (startDate != '' && endDate != '') {
-			window.ordersLogics.filterOrders(requestURL, startDate, endDate);
-		}
-	};
+        window.ordersLogics.setFilterData(requestURL, startDate, endDate);
+    };
+    var inputsChangeHandler = function() {
+        reportInputsState();
+        if (startDate != '' && endDate != '') {
+            window.ordersLogics.filterOrders(requestURL, startDate, endDate);
+        }
+    };
 
-	init();
+    init();
 };
 
 window.ContentListRemoveButton = function(extraClassName) {
-	var self = this;
-	this.componentElement = null;
+    var self = this;
+    this.componentElement = null;
 
-	var init = function() {
-		self.componentElement = document.createElement('a');
-		var className = 'icon icon_delete';
-		if (extraClassName) {
-			className = className + ' ' + extraClassName;
-		}
-		self.componentElement.className = className;
+    var init = function() {
+        self.componentElement = document.createElement('a');
+        var className = 'icon icon_delete';
+        if (extraClassName) {
+            className = className + ' ' + extraClassName;
+        }
+        self.componentElement.className = className;
 
-		eventsManager.addHandler(self.componentElement, 'click', clickHandler);
-	};
-	this.setURL = function(URL) {
-		self.componentElement.href = URL;
-	};
-	var clickHandler = function(event) {
-		eventsManager.preventDefaultAction(event);
-		document.location.href = self.componentElement.href;
-	};
+        eventsManager.addHandler(self.componentElement, 'click', clickHandler);
+    };
+    this.setURL = function(URL) {
+        self.componentElement.href = URL;
+    };
+    var clickHandler = function(event) {
+        eventsManager.preventDefaultAction(event);
+        document.location.href = self.componentElement.href;
+    };
 
-	init();
+    init();
 };
 window.StatusChangeButtonComponent = function(orderData) {
-	var self = this;
-	this.componentElement = null;
-	var status;
-	var init = function() {
-		self.componentElement = document.createElement('span');
-		self.componentElement.className = 'button primary_button narrow-sides-button';
-		self.componentElement.style.display = 'none';
-		eventsManager.addHandler(self.componentElement, 'click', clickHandler);
-	};
-	this.setStatus = function(newStatus) {
-		status = newStatus;
-		refreshContents();
-	};
-	var refreshContents = function() {
+    var self = this;
+    this.componentElement = null;
+    var status;
+    var init = function() {
+        self.componentElement = document.createElement('span');
+        self.componentElement.className = 'button primary_button narrow-sides-button';
+        self.componentElement.style.display = 'none';
+        eventsManager.addHandler(self.componentElement, 'click', clickHandler);
+    };
+    this.setStatus = function(newStatus) {
+        status = newStatus;
+        refreshContents();
+    };
+    var refreshContents = function() {
 
-		var sentStatusPossible = status == 'payed' || status == 'paid_partial';
-		var paidStatusPossible = status == 'undefined';
+        var sentStatusPossible = status === 'payed' || status === 'paid_partial';
+        var paidStatusPossible = status === 'undefined';
 
-		if (!paidStatusPossible && !sentStatusPossible) {
-			hide();
-		} else {
-			if (sentStatusPossible) {
-				self.componentElement.innerHTML = translationsLogics.get('orders.statuschange_payed') + "<br>" + translationsLogics.get('orders.statuschange_and_send_notification');
-			} else {
-				self.componentElement.innerHTML = translationsLogics.get('orders.statuschange_undefined') + "<br>" + translationsLogics.get('orders.statuschange_and_send_notification');
-			}
-			display();
-		}
-	};
-	var clickHandler = function() {
-		if (status == 'payed') {
-			ordersLogics.setStatus(orderData.id, 'sent');
-			ordersLogics.sendStatus(orderData.id, 'sent');
-		} else if (status == 'undefined') {
-			ordersLogics.setStatus(orderData.id, 'payed');
-			ordersLogics.sendStatus(orderData.id, 'payed');
-		}
-	};
-	var display = function() {
-		self.componentElement.style.display = 'inline-flex';
-	};
-	var hide = function() {
-		self.componentElement.style.display = 'none';
-	};
-	init();
+        if (!paidStatusPossible && !sentStatusPossible) {
+            hide();
+        } else {
+            if (sentStatusPossible) {
+                self.componentElement.innerHTML = translationsLogics.get('orders.statuschange_payed') + '<br>' + translationsLogics.get('orders.statuschange_and_send_notification');
+            } else {
+                self.componentElement.innerHTML = translationsLogics.get('orders.statuschange_undefined') + '<br>' + translationsLogics.get('orders.statuschange_and_send_notification');
+            }
+            display();
+        }
+    };
+    var clickHandler = function() {
+        if (status === 'payed') {
+            ordersLogics.setStatus(orderData.id, 'sent');
+        } else if (status === 'undefined') {
+            ordersLogics.setStatus(orderData.id, 'payed');
+        }
+    };
+    var display = function() {
+        self.componentElement.style.display = 'inline-flex';
+    };
+    var hide = function() {
+        self.componentElement.style.display = 'none';
+    };
+    init();
 };

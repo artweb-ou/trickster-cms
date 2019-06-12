@@ -1,5 +1,5 @@
 <?php return [
     'enabled' => false,
-    'driver' => 'OpcacheFile',
+    'driver' => 'File',
     'prefix' => 'c',
 ];

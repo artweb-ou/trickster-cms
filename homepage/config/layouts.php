@@ -118,6 +118,7 @@
     ],
     'newsList.layout.options' => [
         'details',
-        'thumbnails',
+        'wide',
+        'short',
     ],
 ];

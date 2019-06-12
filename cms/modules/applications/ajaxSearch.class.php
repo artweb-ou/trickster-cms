@@ -115,18 +115,7 @@ class ajaxSearchApplication extends controllerApplication
                     }
                 }
 
-                if($controller->getParameter('totals')) {
-                    $allTotal = 0;
-                    foreach ($result->sets as $set) {
-                        $allTotal += $set->totalCount;
-                    }
-                    $response->setResponseData('searchTotal', $allTotal);
-                    foreach($result->elements as &$element) {
-                        if($element instanceof categoryElement) {
-                            $element->productsCount = count($element->getConnectedProductsIds());
-                        }
-                    }
-                }
+                $response->setResponseData('searchTotal', $result->getSearchTotal());
 
                 foreach ($result->sets as $set) {
                     $response->setResponseData($set->type, $set->elements);

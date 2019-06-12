@@ -6,3 +6,5 @@ $moduleActions[] = 'showPositions';
 $moduleActions[] = 'receivePositions';
 $moduleActions[] = 'show';
 $moduleActions[] = 'delete';
+$moduleActions[] = 'showLayoutForm';
+$moduleActions[] = 'receiveLayout';

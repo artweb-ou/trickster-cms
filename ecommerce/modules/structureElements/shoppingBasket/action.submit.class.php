@@ -1,11 +1,25 @@
 <?php
 
+/**
+ * Class submitShoppingBasket
+ *
+ * @property shoppingBasketElement $structureElement
+ */
 class submitShoppingBasket extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param shoppingBasketElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
+        /**
+         * @var shoppingBasket $shoppingBasket
+         */
         $shoppingBasket = $this->getService('shoppingBasket');
         $structureElement->shoppingBasket = $shoppingBasket;
         if (!$structureElement->shoppingBasket->getProductsList()) {
@@ -14,13 +28,13 @@ class submitShoppingBasket extends structureElementAction
         }
         $renderer = $this->getService('renderer');
         $renderer->assign('shoppingBasket', $structureElement);
-
+        $currentStep = $structureElement->getCurrentStepElement();
         $formErrors = $structureElement->getFormErrors();
         $formData = $structureElement->getFormData();
-        if($this->stepContentIsUsingCustomFields()) {
+        if ($this->stepContentIsUsingCustomFields()) {
             $deliveryType = $shoppingBasket->getSelectedDeliveryType();
             if ($customFields = $structureElement->getCustomFieldsList()) {
-                foreach ($customFields as &$field) {
+                foreach ($customFields as $field) {
                     $fieldName = $field->fieldName;
                     $deliveryType->setFieldValue($fieldName, $formData[$fieldName]);
                     if (isset($formErrors[$fieldName]) && $formErrors[$fieldName]) {
@@ -35,41 +49,43 @@ class submitShoppingBasket extends structureElementAction
 
         if (!$this->validated) {
             $structureElement->errorMessage = $translationsManager->getTranslationByName('shoppingbasket.form_error');
-        } elseif ($structureElement->isLastStep() && $formData['conditions'] != '1') {
+        } elseif ($currentStep->getStepElementByType('agreement') && $formData['conditions'] != '1') {
             $structureElement->setFormError('conditions');
             $structureElement->errorMessage = $translationsManager->getTranslationByName('shoppingbasket.conditions_error');
             $this->validated = false;
         }
 
         if ($this->validated) {
-            if($this->stepContentIsUsingCustomFields()) {
+            if ($this->stepContentIsUsingCustomFields()) {
                 if ($structureElement->receiverIsPayer && $customFields = $structureElement->getCustomFieldsList()) {
-                    foreach ($customFields as &$field) {
+                    foreach ($customFields as $field) {
                         $fieldName = $field->fieldName;
-                        if ($field->autocomplete == 'company' && $structureElement->$fieldName != '') {
-                            $structureElement->payerCompany = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'fullName' && $structureElement->$fieldName != '') {
-                            $values = explode(' ', trim($structureElement->$fieldName));
-                            $structureElement->payerFirstName = $values[0];
-                            if (isset($values[1])) {
-                                $structureElement->payerLastName = $values[1];
+                        if ($structureElement->$fieldName != '') {
+                            if ($field->autocomplete == 'company') {
+                                $structureElement->payerCompany = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'fullName') {
+                                $values = explode(' ', trim($structureElement->$fieldName));
+                                $structureElement->payerFirstName = $values[0];
+                                if (isset($values[1])) {
+                                    $structureElement->payerLastName = $values[1];
+                                }
+                            } elseif ($field->autocomplete == 'firstName') {
+                                $structureElement->payerFirstName = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'lastName') {
+                                $structureElement->payerLastName = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'email') {
+                                $structureElement->payerEmail = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'phone') {
+                                $structureElement->payerPhone = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'address') {
+                                $structureElement->payerAddress = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'city') {
+                                $structureElement->payerCity = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'country') {
+                                $structureElement->payerCountry = $structureElement->$fieldName;
+                            } elseif ($field->autocomplete == 'postIndex') {
+                                $structureElement->payerPostIndex = $structureElement->$fieldName;
                             }
-                        } elseif ($field->autocomplete == 'firstName' && $structureElement->$fieldName != '') {
-                            $structureElement->payerFirstName = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'lastName' && $structureElement->$fieldName != '') {
-                            $structureElement->payerLastName = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'email' && $structureElement->$fieldName != '') {
-                            $structureElement->payerEmail = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'phone' && $structureElement->$fieldName != '') {
-                            $structureElement->payerPhone = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'address' && $structureElement->$fieldName != '') {
-                            $structureElement->payerAddress = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'city' && $structureElement->$fieldName != '') {
-                            $structureElement->payerCity = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'country' && $structureElement->$fieldName != '') {
-                            $structureElement->payerCountry = $structureElement->$fieldName;
-                        } elseif ($field->autocomplete == 'postIndex' && $structureElement->$fieldName != '') {
-                            $structureElement->payerPostIndex = $structureElement->$fieldName;
                         }
                     }
                 }
@@ -91,19 +107,19 @@ class submitShoppingBasket extends structureElementAction
 
                 $structureElement->saveShoppingBasketForm();
             }
-            if($structureElement->paymentMethodId) {
+            if ($structureElement->paymentMethodId) {
                 $shoppingBasket->updateBasketFormData([
-                    'paymentMethodId' => $structureElement->paymentMethodId
+                    'paymentMethodId' => $structureElement->paymentMethodId,
                 ]);
             }
-            if($structureElement->isLastStep()) {
-                if($paymentMethodId = $shoppingBasket->getPaymentMethodId()) {
+            if ($structureElement->isLastStep()) {
+                if ($paymentMethodId = $shoppingBasket->getPaymentMethodId()) {
                     $controller->redirect($structureElement->URL . 'id:' . $structureElement->id
                         . '/action:pay/bank:' . $paymentMethodId . '/');
-                }else {
+                } else {
                     $structureElement->setViewName('selection');
                 }
-            }else {
+            } else {
                 $nextStep = $structureElement->getNextStep();
                 $controller->redirect($structureElement->URL . 'step:' . $nextStep->structureName . '/');
             }
@@ -134,18 +150,19 @@ class submitShoppingBasket extends structureElementAction
 
     public function setValidators(&$validators)
     {
-        foreach($this->structureElement->getCurrentStepElements() as $stepContentElement) {
+        foreach ($this->structureElement->getCurrentStepElements() as $stepContentElement) {
             $validators = $validators + $stepContentElement->getValidators($this->elementFormData);
         }
 
-        if($this->stepContentIsUsingCustomFields()) {
+        if ($this->stepContentIsUsingCustomFields()) {
             $validators = $validators + $this->structureElement->getCustomValidators();
         }
     }
 
-    public function stepContentIsUsingCustomFields() {
-        foreach($this->structureElement->getCurrentStepElements() as $stepContentElement) {
-            if($stepContentElement->useCustomFields()) {
+    public function stepContentIsUsingCustomFields()
+    {
+        foreach ($this->structureElement->getCurrentStepElements() as $stepContentElement) {
+            if ($stepContentElement->useCustomFields()) {
                 return true;
             }
         }

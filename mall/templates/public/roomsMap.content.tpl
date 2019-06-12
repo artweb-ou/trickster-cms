@@ -53,8 +53,8 @@
 </div>
 {/stripdomspaces}
 <script>
-	/*<![CDATA[*/
+
 		window.shopDefaultImage = '{$theme->getImageUrl('shop_default.jpg', false, false)}';
 		window.roomsMapInfo = {$element->getInfo()|json_encode};
-	/*]]>*/
+
 </script>

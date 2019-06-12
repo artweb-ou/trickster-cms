@@ -2,20 +2,30 @@
 
 trait ImageUrlProviderTrait
 {
-    public function getImageId()
+    public function getImageId($mobile = false)
     {
+        if ($mobile) {
+            return $this->mobileImage;
+        }
         return $this->image;
     }
 
-    public function getImageName()
+    public function getImageName($mobile = false)
     {
+        if ($mobile) {
+            return $this->mobileImageName;
+        }
         return $this->originalName;
     }
 
-    public function getImageUrl($preset = 'adminImage')
+    public function getImageUrl($preset = 'adminImage', $mobile = false)
     {
         $controller = $this->getService('controller');
-        $url = $controller->baseURL . 'image/type:' . $preset . '/id:' . $this->getImageId() . '/filename:' . $this->getImageName();
+        if ($mobile && ($imageId = $this->getImageId($mobile))) {
+            $url = $controller->baseURL . 'image/type:' . $preset . '/id:' . $this->getImageId(true) . '/filename:' . $this->getImageName(true);
+        } else {
+            $url = $controller->baseURL . 'image/type:' . $preset . '/id:' . $this->getImageId() . '/filename:' . $this->getImageName();
+        }
         return $url;
     }
 }

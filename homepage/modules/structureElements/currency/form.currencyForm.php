@@ -15,6 +15,15 @@ class CurrencyFormStructure extends ElementForm
         'rate' => [
             'type' => 'input.text',
         ],
+        'decimals' => [
+            'type' => 'input.text',
+        ],
+        'decPoint' => [
+            'type' => 'input.text',
+        ],
+        'thousandsSep' => [
+            'type' => 'input.text',
+        ],
     ];
 
 }

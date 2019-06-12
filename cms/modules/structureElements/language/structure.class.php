@@ -196,13 +196,12 @@ class languageElement extends structureElement implements MetadataProviderInterf
     {
         $result = [];
         if ($currentMainMenu = $this->getCurrentMainMenu()) {
-            if ($currentMainMenu instanceof ColumnsTypeProvider){
+            if ($currentMainMenu instanceof ColumnsTypeProvider) {
                 $columnsType = $currentMainMenu->getColumnsType();
                 if ($columnsType == 'both' || $columnsType == 'left') {
                     $result = $this->getElementsFromContext('leftColumn');
                 }
-            }
-            elseif (!empty($currentMainMenu->columns)){
+            } elseif (!empty($currentMainMenu->columns)) {
                 //todo: remove after 04.2021
                 $this->logError('Deprecated direct property "columns" access. Implement ColumnsTypeProvider instead');
                 if ($currentMainMenu->columns == 'both' || $currentMainMenu->columns == 'left') {
@@ -243,13 +242,12 @@ class languageElement extends structureElement implements MetadataProviderInterf
     {
         $result = [];
         if ($currentMainMenu = $this->getCurrentMainMenu()) {
-            if ($currentMainMenu instanceof ColumnsTypeProvider){
+            if ($currentMainMenu instanceof ColumnsTypeProvider) {
                 $columnsType = $currentMainMenu->getColumnsType();
                 if ($columnsType == 'both' || $columnsType == 'right') {
                     $result = $this->getElementsFromContext('rightColumn');
                 }
-            }
-            elseif (!empty($currentMainMenu->columns)){
+            } elseif (!empty($currentMainMenu->columns)) {
                 //todo: remove after 04.2021
                 $this->logError('Deprecated direct property "columns" access. Implement ColumnsTypeProvider instead');
                 if ($currentMainMenu->columns == 'both' || $currentMainMenu->columns == 'right') {
@@ -401,12 +399,16 @@ class languageElement extends structureElement implements MetadataProviderInterf
     /**
      * Get allowed children structure elements type according to settings, current user's privileges and selected type
      *
-     * @param string $childCreationAction - name of action for adding the child element. Default controlled action is 'showForm'
+     * @param string $currentAction
      * @return string[]
      */
-    public function getAllowedTypes($childCreationAction = 'showForm')
+    public function getAllowedTypes($currentAction = 'showFullList')
     {
-        if (is_null($this->allowedTypes)) {
+        if ($this->allowedTypesByAction[$currentAction] === null) {
+            $this->allowedTypesByAction[$currentAction] = [];
+
+            $childCreationAction = 'showForm';
+
             $contentType = 'structure';
             $controller = controller::getInstance();
             if ($controller->getApplicationName() != 'adminAjax') {
@@ -430,17 +432,16 @@ class languageElement extends structureElement implements MetadataProviderInterf
                 $allowedTypes = $configManager->getMerged('language-allowedTypes.content');
             }
 
-            $this->allowedTypes = [];
             $privilegesManager = $this->getService('privilegesManager');
             $privileges = $privilegesManager->getElementPrivileges($this->id);
 
             foreach ($allowedTypes as &$type) {
                 if (isset($privileges[$type]) && isset($privileges[$type][$childCreationAction]) && $privileges[$type][$childCreationAction] === true) {
-                    $this->allowedTypes[] = $type;
+                    $this->allowedTypesByAction[$currentAction][] = $type;
                 }
             }
         }
-        return $this->allowedTypes;
+        return $this->allowedTypesByAction[$currentAction];
     }
 
     public function getMostSuitableHeaderGallery()

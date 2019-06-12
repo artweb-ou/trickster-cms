@@ -1,5 +1,5 @@
 <script>
-	/*<![CDATA[*/
+
 	window.menusInfo = [];
 	{foreach from=$currentLanguage->getMainMenuElements() item=menu}
 		{if !$menu->hidden}
@@ -21,5 +21,5 @@
 			{*{/foreach}*}
 		{/if}
 	{/foreach}
-	/*]]>*/
+
 </script>

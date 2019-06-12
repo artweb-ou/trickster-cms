@@ -45,7 +45,6 @@ class eventElement extends structureElement implements MetadataProviderInterface
         $moduleStructure['canonicalUrl'] = 'url';
         $moduleStructure['metaDenyIndex'] = 'checkbox';
         // tmp
-        $moduleStructure['elements'] = 'numbersArray';
         $moduleStructure['connectedEventsLists'] = 'numbersArray';
     }
 

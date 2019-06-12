@@ -16,6 +16,16 @@
 			{include file=$theme->template('pager.tpl')}
 		{/if}
 		{/stripdomspaces}
+		{if !empty($element->buttonTitle) && (!empty($element->buttonUrl) || !empty($element->getButtonConnectedMenuUrl()))}
+			{if $element->getButtonConnectedMenuUrl()}
+				{$Url = $element->getButtonConnectedMenuUrl()}
+			{else}
+				{$Url = $element->buttonUrl}
+			{/if}
+			<div class="view_all">
+				<a href="{$Url}" class="button view_all_button"><span class="button_text">{$element->buttonTitle}</span></a>
+			</div>
+		{/if}
 	{/capture}
 
 	{assign moduleClass "latestnews latestnews_layout_{$element->getCurrentLayout()}"}

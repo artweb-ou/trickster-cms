@@ -11,5 +11,5 @@ class TabsWidgetFormStructure extends ElementForm
         ],
     ];
 
-    protected $additionalContent = 'component.block.list_content';
+    protected $additionalContent = 'component.block.list_content.tpl';
 }

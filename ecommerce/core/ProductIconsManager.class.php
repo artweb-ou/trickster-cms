@@ -8,6 +8,10 @@ class ProductIconsManager
      */
     protected $structureManager;
     /**
+     * @var parametersManager
+     */
+    protected $parametersManager;
+    /**
      * @var Illuminate\Database\Capsule\Manager()
      */
     protected $db;
@@ -20,7 +24,7 @@ class ProductIconsManager
      */
     protected $linksManager;
     /**
-     * @var genericIconElement[]
+     * @var genericIconElement[][]
      */
     protected $icons = [];
     /**
@@ -35,6 +39,14 @@ class ProductIconsManager
     public function setStructureManager($structureManager)
     {
         $this->structureManager = $structureManager;
+    }
+
+    /**
+     * @param $parametersManager
+     */
+    public function setParametersManager($parametersManager)
+    {
+        $this->parametersManager = $parametersManager;
     }
 
     /**
@@ -64,160 +76,107 @@ class ProductIconsManager
 
     /**
      * @param productElement $product
-     * @return genericIconElement[]
+     * @return genericIconElement[]|galleryImageElement[]
      */
     public function getProductIcons($product)
     {
-        $categoriesIndex = [];
         if (!isset($this->icons[$product->id])) {
             $this->icons[$product->id] = [];
+            $elementIconsIndex = [];
+
             /**
-             * @var categoriesElement $categories
+             * @var categoryElement[] $categories
              */
+            $categories = $product->getDeepParentCategories();
 
-
-            //check all other icons for their logic
             if ($allIcons = $this->iconsManager->getAllIcons()) {
-                $elementIconsIndex = [];
-                // get Categories ID List of current product
-                $productCategoriesIds = $product->getDeepParentCategoriesIdList();
-                $brands = $product->getConnectedBrands();
                 $now = time();
-                 foreach ($allIcons as $iconElement) {
-                    $elementIconsIndex[$iconElement->id] = false;
-                    $selectedCategoriesInIconIs = false;
-                    $selectedProductsInIconIs = false;
-                    $selectedBrandsInIconIs = false;
-                    $selectedElementsInIconIs = [];
 
-                    // check is selected categories exixts
-                    // get selected Categories ID List of current icon
-                    if(!empty($productConnectedCategoriesIds = $iconElement->getConnectedCategoriesIds())){
-//                        var_dump($productCategoriesIds);
-//                        var_dump($productConnectedCategoriesIds);
-                        if (!empty(array_intersect($productCategoriesIds, $productConnectedCategoriesIds))){
-                            $selectedElementsInIconIs[] = 1;
+                foreach ($allIcons as $iconElement) {
+                    //if icon has products filter, check if product ID matches
+                    if (!empty($iconConnectedProductsIds = $iconElement->getConnectedProductsIds())) {
+                        if (!in_array($product->id, $iconConnectedProductsIds)) {
+                            continue;
                         }
                     }
 
-                    // check is selected brands exixts
-                    // get selected Brands ID List of current icon
-                    if(!empty($productConnectedBrandsIds = $iconElement->getConnectedBrandsIds())){
-
-                        // get Categories ID List of current product
-                        $productBrandsIds = array_column($brands, 'id');
-
-                        if (empty(array_intersect($productBrandsIds, $productConnectedBrandsIds))){
-                            $selectedElementsInIconIs[] = 1;
+                    //if icon has categories filter, check it first
+                    if ($iconConnectedCategoriesIds = $iconElement->getConnectedCategoriesIds()) {
+                        $productCategoriesIds = array_column($categories, 'id');
+                        if (!array_intersect($productCategoriesIds, $iconConnectedCategoriesIds)) {
+                            continue;
                         }
                     }
 
-                    // check is selected products exixts
-                    // get selected Products ID List of current icon
-                    if(!empty($productConnectedProductsIds = $iconElement->getConnectedProductsIds())){
-
-                        if (!in_array($product->id, $productConnectedProductsIds)){
-                            $selectedElementsInIconIs[] = 1;
+                    //if icon has brands filter, check if product brand ID matches
+                    if ($iconConnectedBrandsIds = $iconElement->getConnectedBrandsIds()) {
+                        if (!in_array($product->brandId, $iconConnectedBrandsIds)) {
+                            continue;
                         }
                     }
 
-                    if(!empty($selectedElementsInIconIs)){
-                     //   var_dump(array_keys($selectedElementsInIconIs));
-                     //   continue;
-                        /**
-                         * @var iconsElement $iconElement
-                         * @var iconElement $iconElement
-                         */
-                        // by date
-                        $startDate = $iconElement->getValue('startDate');
-                        if ($endDate = $iconElement->getValue('endDate')) {
-                            $endDate += self::DAILY_SECONDS;
-                        }
-                        $dateCreated = $product->getValue('dateCreated');
-                        if ($startDate && $endDate) {
-                            if ($startDate <= $dateCreated && $endDate >= $dateCreated) {
-                                $elementIconsIndex[$iconElement->id] = true;
+                    $iconApplicable = false;
+                    switch ($iconElement->getProductIconRoleType($iconElement->iconRole)) {
+                        case 'role_date':
+                            $startDate = $iconElement->getValue('startDate');
+                            if ($endDate = $iconElement->getValue('endDate')) {
+                                $endDate += self::DAILY_SECONDS;
                             }
-                        } elseif ($startDate && $startDate <= $dateCreated) {
-                            $elementIconsIndex[$iconElement->id] = true;
-                        } elseif ($endDate && $endDate >= $dateCreated) {
-                            $elementIconsIndex[$iconElement->id] = true;
-                        }
-
-                        if ($dateCreated + $iconElement->days * self::DAILY_SECONDS >= $now) {
-                            $elementIconsIndex[$iconElement->id] = true;
-                        }
-
-                        // by simple
-                        /**
-                         * @var genericIconElement $iconProductAvail
-                         */
-                        if (!empty($iconRoleValue = $iconElement->productIconRoleTypes[$iconElement->iconRole]) and
-                            $iconRoleValue == 'role_simple') {
-                            $elementIconsIndex[$iconElement->id] = true;
-                        }
-
-                        // by availability
-                        if (!empty($iconProductAvail = $iconElement->iconProductAvail)) {
-                            if (in_array($product->availability, $iconProductAvail)) {
-                                $elementIconsIndex[$iconElement->id] = true;
+                            $dateCreated = $product->getValue('dateCreated');
+                            if ($startDate && $endDate) {
+                                if ($startDate <= $dateCreated && $endDate >= $dateCreated) {
+                                    $iconApplicable = true;
+                                }
+                            } elseif ($startDate && $startDate <= $dateCreated) {
+                                $iconApplicable = true;
+                            } elseif ($endDate && $endDate >= $dateCreated) {
+                                $iconApplicable = true;
                             }
-                        }
 
-                        // by general_discount
-                        /**
-                         * @var genericIconElement $iconProductAvail
-                         */
-                        if (!empty($iconRoleValue = $iconElement->productIconRoleTypes[$iconElement->iconRole]) and
-                            $iconRoleValue == 'role_general_discount' and
-                            $product->getDiscountAmount(false) > 0) {
-                            $elementIconsIndex[$iconElement->id] = true;
-                        }
-
-
-                        // by parameters (selection)
-                        // get parameters List (productSelection only) of current product
-                        $productSelectionOptions = [];
-                        if (!empty($parametersInfoList = $product->getParametersInfoList())) {
-                            foreach ($parametersInfoList as $parameterInfoKey=>$parameterInfoValue) {
-                                if ($parameterInfoValue['structureType'] == 'productSelection') {
-                                    $productSelectionOptions = array_merge($productSelectionOptions, $parameterInfoValue['productOptions']);
-                                    /*
-                                       'title' =>string
-                                       'id' =>int
-                                       'originalName' =>string
-                                       'image' =>string
-                                       'value' =>string
-                                    */
+                            if ($dateCreated + $iconElement->days * self::DAILY_SECONDS >= $now) {
+                                $iconApplicable = true;
+                            }
+                            break;
+                        case 'role_availability':
+                            if (!empty($iconProductAvail = $iconElement->iconProductAvail)) {
+                                if (in_array($product->availability, $iconProductAvail)) {
+                                    $iconApplicable = true;
                                 }
                             }
-                            // get id List of this parameters List
-                            $productSelectionOptionsIds = array_column($productSelectionOptions, 'id');
-
-                            // get parameters id List of current icon
-                            $productConnectedParametersIds = $iconElement->getConnectedParametersIds();
-
-                            // get intersected parameters id List
-                            $productCurrentSelectionConnectedParametersIds =
-                                array_intersect($productSelectionOptionsIds, $productConnectedParametersIds);
-
-                            if (!empty($productCurrentSelectionConnectedParametersIds)){
-                                $elementIconsIndex[$iconElement->id] = true;
+                            break;
+                        case 'role_general_discount':
+                            if ($product->getDiscountAmount(false) > 0) {
+                                $iconApplicable = true;
                             }
-
-                        }
+                            break;
+                        case 'role_by_parameter':
+                            if (($iconConnectedParametersIds = $iconElement->getConnectedParametersIds()) && ($parametersInfoList = $product->getParametersInfoList())) {
+                                $productSelectionOptions = [];
+                                foreach ($parametersInfoList as $parameterInfoKey => $parameterInfoValue) {
+                                    if ($parameterInfoValue['structureType'] == 'productSelection') {
+                                        $productSelectionOptions = array_merge($productSelectionOptions, $parameterInfoValue['productOptions']);
+                                        /*
+                                           'title' =>string
+                                           'id' =>int
+                                           'originalName' =>string
+                                           'image' =>string
+                                           'value' =>string
+                                        */
+                                    }
+                                }
+                                // get ID list of this parameters List
+                                $productSelectionOptionsIds = array_column($productSelectionOptions, 'id');
+                                if (array_intersect($productSelectionOptionsIds, $iconConnectedParametersIds)) {
+                                    $iconApplicable = true;
+                                }
+                            }
+                            break;
+                        default:
+                            $iconApplicable = true;
+                            break;
                     }
-
-
-
-
-                }
-
-
-                foreach ($elementIconsIndex as $iconId => $value) {
-                    if ($value){
-                        $this->icons[$product->id][] = $this->structureManager->getElementById($iconId);
-
+                    if ($iconApplicable) {
+                        $this->icons[$product->id][] = $iconElement;
                     }
                 }
             }
@@ -229,7 +188,7 @@ class ProductIconsManager
 
             //add parent categories' own and global unique icons
             foreach ($categories as $category) {
-                if ($categoryIcons = $this->getCategoryIcons($category)) { // getIconsCompleteList
+                if ($categoryIcons = $this->getCategoryIcons($category)) {
                     foreach ($categoryIcons as $categoryIcon) {
                         if (!isset($elementIconsIndex[$categoryIcon->id])) {
                             $this->icons[$product->id][] = $categoryIcon;

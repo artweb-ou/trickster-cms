@@ -1,7 +1,7 @@
 {if $element->images}
 	<div class="header_gallery_container">
 		<div class="header_gallery galleryid_{$element->id} gallery_slide">
-			<script>/*<![CDATA[*/
+			<script>
 				window.galleriesInfo = window.galleriesInfo || {ldelim}{rdelim};
 				window.galleriesInfo['{$element->id}'] = {$element->getGalleryJsonInfo([
 				'imagesButtonsEnabled'=>true,
@@ -12,7 +12,7 @@
 				'imageResizeType'=>'fill',
 				'fullScreenGalleryEnabled'=>false
 				], 'headerGallery', 'desktop')};
-				/*]]>*/</script>
+				</script>
 			{* You can use this for ordering or wrapping gallery components
 			<div class="gallery_structure">
 				<div class="gallery_images_container"></div>

@@ -9,4 +9,4 @@ $moduleActions[] = 'showPrivileges';
 $moduleActions[] = 'showFullList';
 $moduleActions[] = 'receivePositions';
 $moduleActions[] = 'showPositions';
-$moduleActions[] = 'deleteImage';
+$moduleActions[] = 'deleteFile';

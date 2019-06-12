@@ -29,7 +29,7 @@ class NewsMailsTextFormStructure extends ElementForm
         ],
     ];
 
-    protected $additionalContent = 'component.block.news_mails_text';
+    protected $additionalContent = 'component.block.news_mails_text.tpl';
 
     protected function getSearchTypes()
     {

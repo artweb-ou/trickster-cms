@@ -2,7 +2,7 @@
 $moduleActions = [];
 $moduleActions[] = 'show';
 $moduleActions[] = 'delete';
-$moduleActions[] = 'deleteImage';
+$moduleActions[] = 'deleteFile';
 $moduleActions[] = 'deleteFile';
 $moduleActions[] = 'receive';
 $moduleActions[] = 'receiveSeo';

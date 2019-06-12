@@ -323,16 +323,16 @@ class shoppingBasket implements DependencyInjectionContextInterface
 
             $currencySelector = $this->getService('CurrencySelector');
             $this->productsAmount = $productsAmount;
-            $this->productsPrice = $currencySelector->convertPrice($productsPrice);
+            $this->productsPrice = $currencySelector->convertPrice($productsPrice, false);
             if (is_numeric($deliveryPrice)) {
                 $this->deliveryPrice = $currencySelector->convertPrice($deliveryPrice);
             } else {
                 $this->deliveryPrice = $deliveryPrice;
             }
-            $this->selectedServicesPrice = $currencySelector->convertPrice($servicesPrice);
-            $this->totalPrice = $currencySelector->convertPrice($totalPrice);
-            $this->vatLessTotalPrice = $currencySelector->convertPrice($this->vatLessTotalPrice);
-            $this->vatAmount = $currencySelector->convertPrice($this->vatAmount);
+            $this->selectedServicesPrice = $currencySelector->convertPrice($servicesPrice, false);
+            $this->totalPrice = $currencySelector->convertPrice($totalPrice, false);
+            $this->vatLessTotalPrice = $currencySelector->convertPrice($this->vatLessTotalPrice, false);
+            $this->vatAmount = $currencySelector->convertPrice($this->vatAmount, false);
 
             if ($this->message == '' && $productsAmount < 1) {
                 $translationsManager = $this->getService('translationsManager');
@@ -441,8 +441,9 @@ class shoppingBasket implements DependencyInjectionContextInterface
         return $this->formData;
     }
 
-    public function getPaymentMethodId() {
-        if(!empty($this->formData['paymentMethodId'])) {
+    public function getPaymentMethodId()
+    {
+        if (!empty($this->formData['paymentMethodId'])) {
             return $this->formData['paymentMethodId'];
         }
 
@@ -491,7 +492,8 @@ class shoppingBasket implements DependencyInjectionContextInterface
 
     public function getProductsPrice()
     {
-        return $this->productsPrice;
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->productsPrice);
     }
 
     public function getSelectedCityId()
@@ -511,20 +513,20 @@ class shoppingBasket implements DependencyInjectionContextInterface
 
     public function getTotalPrice()
     {
-        return $this->totalPrice;
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->totalPrice);
     }
 
     public function getVatAmount($round = true, $useCurrency = true)
     {
         $price = $this->vatAmount;
+        $currencySelector = $this->getService('CurrencySelector');
         if ($useCurrency) {
-            $currencySelector = $this->getService('CurrencySelector');
-            $price = $currencySelector->convertPrice($price);
+            $price = $currencySelector->convertPrice($price, false);
         }
         if ($round) {
-            $price = sprintf('%01.2f', $price);
+            $price = $currencySelector->formatPrice($price);
         }
-
         return $price;
     }
 
@@ -552,14 +554,13 @@ class shoppingBasket implements DependencyInjectionContextInterface
     public function getVatLessTotalPrice($round = true, $useCurrency = true)
     {
         $price = $this->vatLessTotalPrice;
+        $currencySelector = $this->getService('CurrencySelector');
         if ($useCurrency) {
-            $currencySelector = $this->getService('CurrencySelector');
-            $price = $currencySelector->convertPrice($price);
+            $price = $currencySelector->convertPrice($price, false);
         }
         if ($round) {
-            $price = sprintf('%01.2f', $price);
+            $price = $currencySelector->formatPrice($price);
         }
-
         return $price;
     }
 
@@ -705,6 +706,7 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
 
     public function recalculate()
     {
+        $currencySelector = $this->getService('CurrencySelector');
         $this->amount = $this->storageData['amount'];
         $this->price = $this->storageData['price'];
         $mainConfig = $this->getService('ConfigManager')->getConfig('main');
@@ -721,20 +723,29 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
     public function getPriceForDisplaying()
     {
         $currencySelector = $this->getService('CurrencySelector');
-        return sprintf('%01.2f', $currencySelector->convertPrice($this->price));
+        return $currencySelector->convertPrice($this->price);
     }
 
     public function getPrice($round = true, $useCurrency = true)
     {
         $price = $this->price;
+        $currencySelector = $this->getService('CurrencySelector');
         if ($useCurrency) {
-            $currencySelector = $this->getService('CurrencySelector');
-            $price = $currencySelector->convertPrice($price);
+            $price = $currencySelector->convertPrice($price, false);
         }
         if ($round) {
-            $price = sprintf('%01.2f', $price);
+            $price = $currencySelector->formatPrice($price);
         }
         return $price;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTotalPrice() : string
+    {
+        $currencySelector = $this->getService('CurrencySelector');
+        return $currencySelector->formatPrice($this->totalPrice);
     }
 }
 
@@ -1125,7 +1136,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                     foreach ($pricesIndex as &$record) {
                         $elementData['deliveryTargetsInfo'][] = [
                             'targetId' => $record->targetId,
-                            'price' => $record->price,
+                            'price'    => $record->price,
                         ];
                     }
                 }
@@ -1135,16 +1146,16 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                     foreach ($fieldsList as &$record) {
                         if ($fieldElement = $structureManager->getElementById($record->fieldId, $deliveryTypeElement->id)) {
                             $fieldInfo = [
-                                'id' => $fieldElement->id,
-                                'title' => $fieldElement->title,
-                                'fieldName' => $fieldElement->fieldName,
-                                'fieldType' => $fieldElement->fieldType,
-                                'dataChunk' => $fieldElement->dataChunk,
-                                'required' => (int)$record->required,
-                                'validator' => $fieldElement->validator,
+                                'id'           => $fieldElement->id,
+                                'title'        => $fieldElement->title,
+                                'fieldName'    => $fieldElement->fieldName,
+                                'fieldType'    => $fieldElement->fieldType,
+                                'dataChunk'    => $fieldElement->dataChunk,
+                                'required'     => (int)$record->required,
+                                'validator'    => $fieldElement->validator,
                                 'autocomplete' => $fieldElement->autocomplete,
-                                'error' => false,
-                                'value' => $fieldElement->getAutoCompleteValue(),
+                                'error'        => false,
+                                'value'        => $fieldElement->getAutoCompleteValue(),
                             ];
                             if ($fieldElement->fieldType == 'select') {
                                 $fieldInfo['options'] = [];
@@ -1152,7 +1163,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                                 foreach ($options as &$option) {
                                     $fieldInfo['options'][] = [
                                         'value' => $option->title,
-                                        'text' => $option->title,
+                                        'text'  => $option->title,
                                     ];
                                 }
                             } elseif ($fieldElement->fieldType == 'input') {
@@ -1319,12 +1330,12 @@ class shoppingBasketDeliveryType implements DependencyInjectionContextInterface
 
         //empty price means "no price defined"
         if (is_numeric($price)) {
+            $currencySelector = $this->getService('CurrencySelector');
             if ($useCurrency) {
-                $currencySelector = $this->getService('CurrencySelector');
-                $price = $currencySelector->convertPrice($price);
+                $price = $currencySelector->convertPrice($price, false);
             }
             if ($round) {
-                $price = sprintf('%01.2f', $price);
+                $price = $currencySelector->formatPrice($price);
             }
         }
 

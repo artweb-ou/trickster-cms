@@ -64,9 +64,9 @@
                                     {else}
                                         <div id="banner_{$contentItem->id}"></div>
                                         <script>
-                                            /*<![CDATA[*/
+
                                             swfobject.embedSWF("{$controller->baseURL}file/mode:view/id:{$contentItem->image}/filename:{$contentItem->originalName}", "banner_{$contentItem->id}", '{$contentItem->width}', '{$contentItem->height}', '9.0.0');
-                                            /*]]>*/
+
                                         </script>
                                     {/if}
                                 {/if}

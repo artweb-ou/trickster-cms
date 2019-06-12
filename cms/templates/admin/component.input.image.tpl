@@ -12,7 +12,7 @@
         <input class="fileinput_placeholder" type="file" name="{$formNames.$fieldName}"/>
             <div class="form_image_component{if !$element->$fieldName} form_image_component_hidden{/if}">
                 <img class="form_image {$item.imageClass}"
-                     src='{$controller->baseURL}image/type:{$item.preset}/id:{$element->$fieldName}'/>
+                     src='{$controller->baseURL}image/type:{$item.preset}/id:{$element->$fieldName}/filename:{$formData.originalName}'/>
                 <a class="form_image_delete_button" href="{$element->URL}id:{$element->id}/action:deleteFile/file:{$fieldName}/">
                 </a>
             </div>

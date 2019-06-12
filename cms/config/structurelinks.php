@@ -9,6 +9,7 @@
         'headerContent',
         'leftColumn',
         'newsmailGroup',
+        'categoryIcon',
         'productIcon',
         'productSearchParameter',
         'registrationField',

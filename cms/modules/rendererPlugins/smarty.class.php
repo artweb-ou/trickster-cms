@@ -88,7 +88,7 @@ class smartyRendererPlugin extends rendererPlugin
             $name = $params['name'];
             if (($text = $this->translationsManager->getTranslationByName($name, $section, $required, $loggable)) !== null) {
                 unset($params['name']);
-                foreach ($params as $key => &$value) {
+                foreach ($params as $key => $value) {
                     $text = str_replace("%" . $key, $value, $text);
                 }
                 return $text;
@@ -224,9 +224,7 @@ class smartyRendererPlugin extends rendererPlugin
     public static function stripDomSpaces($params, $content, Smarty_Internal_Template $template, &$repeat)
     {
         if (!$repeat) {
-            //		$content = preg_replace('/^\s+|\s+$/u', ' ', $content);
             $content = preg_replace('/([}>])\s+([{<])/u', '$1$2', $content);
-            //		$content = preg_replace('/\s+/u', '', $content);
         }
         return $content;
     }

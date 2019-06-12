@@ -1,4 +1,3 @@
-@form-label-text-color: @label-color;
 .form_container {
 	background-color: @white;
 }
@@ -22,7 +21,7 @@
 		text-align: right;
 		padding-top: @13pt;
 		min-width: @192pt;
-		color: @form-label-text-color;
+		color: @form_label_text_color;
 	}
 	.form_label_after {
 		width: ~"calc(100% - @{176pt} - 1em)";
@@ -31,7 +30,7 @@
 		text-align: left;
 		padding-top: @13pt;
 		padding-left: @8pt;
-		color: @form-label-text-color;
+		color: @form_label_text_color;
 	}
 	
 	.form_label.heading {
@@ -42,7 +41,7 @@
 	.checkbox_header {
 		padding: 0;
 	}
-	.checkbox_cell {
+	.checkbox_column {
 		padding-top: @13pt;
 	}
 	.form_field {
@@ -82,7 +81,7 @@
 .form_header {
 	.form_label {
 		h3();
-		border-bottom: 1px solid @border-color;
+		border-bottom: 1px solid @border_color;
 		text-align: left;
 	}
 }
@@ -142,9 +141,9 @@
 }
 .form_controls {
 	padding: @15pt @20pt;
-	background-color: @background-color;
-	border-top: 1px solid @border-color;
-	border-bottom: 1px solid @border-color;
+	background-color: @background_color;
+	border-top: 1px solid @border_color;
+	border-bottom: 1px solid @border_color;
 	.warning_button {
 		margin-left: auto;
 	}

@@ -1,10 +1,10 @@
 <div class="submenu_block submenu_footer{if isset($className)} {$className}{/if}">
 	{if $element->popup}
 		<script>
-			/*<![CDATA[*/
+
 			window.subMenusInfo = window.subMenusInfo || {ldelim}{rdelim};
 			window.subMenusInfo['{$element->id}'] = {$element->getMenusInfo()|json_encode};
-			/*]]>*/
+
 		</script>
 	{/if}
 	<nav class='submenu_content'>

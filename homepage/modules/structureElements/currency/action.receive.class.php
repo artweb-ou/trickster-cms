@@ -28,6 +28,9 @@ class receiveCurrency extends structureElementAction
             "symbol",
             "rate",
             "title",
+            "decimals",
+            "decPoint",
+            "thousandsSep",
         ];
     }
 

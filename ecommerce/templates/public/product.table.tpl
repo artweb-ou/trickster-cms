@@ -63,7 +63,7 @@
 	{if $columns.discount}
 		<td class="category_products_table_discount_cell">
 			{if $element->getOldPrice()}
-				<span class="product_discount">-{$element->getDiscountPercent()|round}%</span>
+				<span class="product_discount">-{$element->getDiscountPercent(true, '%01.0f')}%</span>
 			{/if}
 		</td>
 	{/if}

@@ -1,16 +1,7 @@
 <?php
 
-class campaignsListDataResponseConverter extends dataResponseConverter
+class campaignsListDataResponseConverter extends StructuredDataResponseConverter
 {
-    public function convert($data)
-    {
-        $result = [];
-        foreach ($data as &$element) {
-            $info = [];
-            $info['id'] = $element->id;
-            $info['title'] = $element->title;
-            $result[] = $info;
-        }
-        return $result;
-    }
+    use SimpleDataResponseConverter;
+    protected $defaultPreset = 'api';
 }

@@ -2,9 +2,9 @@
 
 interface ImageUrlProviderInterface
 {
-    public function getImageId();
+    public function getImageId($mobile = false);
 
-    public function getImageName();
+    public function getImageName($mobile = false);
 
-    public function getImageUrl($preset = 'adminImage');
+    public function getImageUrl($preset = 'adminImage', $mobile = false);
 }

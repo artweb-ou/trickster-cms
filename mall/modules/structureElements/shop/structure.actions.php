@@ -1,13 +1,12 @@
 <?php
 $moduleActions = [];
 $moduleActions[] = 'delete';
-$moduleActions[] = 'deleteImage';
+$moduleActions[] = 'deleteFile';
 $moduleActions[] = 'receive';
 $moduleActions[] = 'show';
 $moduleActions[] = 'receivePrivileges';
 $moduleActions[] = 'showPrivileges';
 $moduleActions[] = 'showForm';
-$moduleActions[] = 'deleteElements';
 
 $moduleActions[] = 'showTextsForm';
 $moduleActions[] = 'receiveTexts';

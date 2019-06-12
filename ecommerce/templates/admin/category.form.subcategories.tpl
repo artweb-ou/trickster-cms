@@ -8,10 +8,10 @@
 			<input type="hidden" class="content_list_form_id" value="{$rootElement->id}" name="id" />
 			<input type="hidden" class="content_list_form_action" value="deleteElements" name="action" />
 
-			{include file=$theme->template("block.newelement.tpl") allowedTypes=$currentElement->getAllowedTypes() buttonId=123}
+			{include file=$theme->template("block.newelement.tpl") allowedTypes=$currentElement->getAllowedTypes()}
 			{if count($currentElement->getChildCategories()) && isset($rootPrivileges.deleteElements)}
 				<button type='submit' onclick='if (!confirm("{translations name='message.deleteselectedconfirm'}")) return false;'
-						class='button important'><span class="icon icon_delete"></span>{translations name='button.deleteselected'}</button>
+						class='button warning_button'><span class="icon icon_delete"></span>{translations name='button.deleteselected'}</button>
 			{/if}
 			{if isset($rootPrivileges.moveElements)}
 				<button class="button actions_form_move">{translations name="button.moveselected"}</button>

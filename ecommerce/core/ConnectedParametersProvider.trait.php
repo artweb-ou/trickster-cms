@@ -54,10 +54,16 @@ trait ConnectedParametersProviderTrait
 
     /**
      * @return mixed
+     * @var linksManager $linksManager
+     * @param
      */
     public function getConnectedParametersIds()
     {
-        return $this->getService('linksManager')->getConnectedIdList($this->id, $this->structureType . 'Parameter', 'parent');
+        /**
+         * @var linksManager $linksManager
+         */
+        $linksManager = $this->getService('linksManager');
+        return $linksManager->getConnectedIdList($this->id, $this->structureType . 'Parameter', 'parent');
     }
 
     /**

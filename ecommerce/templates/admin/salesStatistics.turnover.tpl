@@ -224,7 +224,7 @@
 		<div class="sales_statistics_chart panel_component">
 			<div class="sales_statistics_chart_content panel_content">
 				<canvas class="chart_component container_height_depends panel_content" data-chartid="1"{if $element->displayCurrencyInChart()} data-currency="{$symbol}"{/if}></canvas>
-				<script type="text/javascript">
+				<script>
 					window.chartsData = {$chartData};
 				</script>
 			</div>

@@ -11,5 +11,5 @@ class PollFormStructure extends ElementForm
         ],
     ];
 
-    protected $additionalContent = 'component.block.poll_extra_content';
+    protected $additionalContent = 'component.block.poll_extra_content.tpl';
 }
