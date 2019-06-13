@@ -40,12 +40,8 @@ class deploymentsElement extends structureElement
                 foreach ($installedDeployments as $deployment) {
                     $installedPlugins[$deployment['type']] = true;
                 }
-                var_dump($installedDeployments);
                 $types = array_keys($installedPlugins);
-                var_dump($installedPlugins);
                 $this->updatesDeployments = $updatesApi->getDeployments($types);
-                var_dump($this->updatesDeployments);
-                exit;
                 foreach ($this->updatesDeployments as $key => $update) {
                     if ($deploymentManager->isVersionInstalled($update->type, $update->version)) {
                         unset($this->updatesDeployments[$key]);
