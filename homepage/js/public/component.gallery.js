@@ -138,10 +138,7 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
                     }
                 }
             } else if (imageButtons) {
-                for (var i = 0; i < imageButtons.length; i++) {
-                    imageButtons[i].destroy();
-                }
-                imageButtons = [];
+                destroyImageButtons();
             }
 
             if (imagesPrevNextButtonsEnabled) {
@@ -172,9 +169,23 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
         } else if (buttonsContainerElement) {
             componentElement.removeChild(buttonsContainerElement);
             buttonsContainerElement = null;
-            imageButtons = [];
+            destroyImageButtons();
+            if (buttonPrevious) {
+                buttonPrevious.destroy();
+                buttonPrevious = null;
+            }
+            if (buttonNext) {
+                buttonNext.destroy();
+                buttonNext = null;
+            }
         }
 
+    };
+    var destroyImageButtons = function() {
+        for (var i = 0; i < imageButtons.length; i++) {
+            imageButtons[i].destroy();
+        }
+        imageButtons = [];
     };
     var create = function(className) {
         //we add new element to componentElement or to div.gallery_structure if it exists in html
@@ -215,19 +226,21 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
 
         if (imagesComponent) {
             imagesComponent.destroy();
+            imagesComponent = null;
         }
         if (buttonPrevious) {
             buttonPrevious.destroy();
+            buttonPrevious = null;
         }
         if (buttonNext) {
             buttonNext.destroy();
+            buttonNext = null;
         }
         if (descriptionComponent) {
             descriptionComponent.destroy();
+            descriptionComponent = null;
         }
-        for (var i = 0; i < imageButtons.length; i++) {
-            imageButtons[i].destroy();
-        }
+        destroyImageButtons();
     };
     this.getImagesComponent = function() {
         return imagesComponent;
