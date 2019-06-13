@@ -447,9 +447,10 @@ abstract class ProductsListElement extends menuStructureElement
         return $this->filterPriceString;
     }
 
-    public function getSelectedFiltersCount() {
+    public function getSelectedFiltersCount()
+    {
         $selectedFiltersCount = count($this->getFilterParameterValueIds());
-        if($this->getFilterPrice()) {
+        if ($this->getFilterPrice()) {
             $selectedFiltersCount++;
         }
         return $selectedFiltersCount;
@@ -954,5 +955,10 @@ abstract class ProductsListElement extends menuStructureElement
             $this->cacheKey .= $this->getFilterLimit();
         }
         return $this->cacheKey;
+    }
+
+    public function isFiltrationApplied()
+    {
+        return $this->getFilterPrice() || $this->getFilterDiscountIds() || $this->getFilterBrandIds() || $this->getFilterCategoryIds() || $this->getFilterParameterValueIds() || $this->getFilterAvailability();
     }
 }

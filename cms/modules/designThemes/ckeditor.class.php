@@ -27,6 +27,7 @@ class ckeditorDesignTheme extends DesignTheme
 
             $this->appendCssResourceFromTheme('all_mixins.less', 'default');
 
+            $this->appendCssResourceFromInheritedThemes('variables.less', $publicThemeName);
             $this->appendCssResourceFromInheritedThemes('all_variables.less', $publicThemeName);
             $this->appendCssResourceFromTheme('all_variables.less', 'default');
 

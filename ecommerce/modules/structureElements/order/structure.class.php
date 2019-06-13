@@ -86,8 +86,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $moduleStructure['invoiceSent'] = 'checkbox';
 
         $moduleStructure['userId'] = 'text';
-
-        $moduleStructure['payerLanguage'] = 'naturalNumber';
     }
 
     protected function getTabsList()
@@ -305,8 +303,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function getProductsPrice()
     {
+        $currencySelector = $this->getService('CurrencySelector');
         $this->recalculate();
-        return $this->productsPrice;
+        return $currencySelector->formatPrice($this->productsPrice);
     }
 
     public function getTotalAmount()
@@ -317,10 +316,11 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function getTotalPrice()
     {
+        $currencySelector = $this->getService('CurrencySelector');
         if ($this->totalPrice === null) {
             $this->recalculate();
         }
-        return $this->totalPrice;
+        return $currencySelector->formatPrice($this->totalPrice);
     }
 
     public function getOrderData()
@@ -418,13 +418,13 @@ class orderElement extends structureElement implements PaymentOrderInterface
             foreach ($this->getDiscountsList() as $discount) {
                 $this->orderData['discountsList'][] = [
                     'title' => $discount->title,
-                    'value' => $discount->value,
+                    'value' => $currencySelector->formatPrice($discount->value),
                 ];
             }
             foreach ($this->getServicesList() as $service) {
                 $this->orderData['servicesList'][] = [
                     'title' => $service->title,
-                    'price' => $service->price,
+                    'price' => $currencySelector->formatPrice($service->price),
                 ];
             }
         }
@@ -541,7 +541,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
     {
         $resultPdfPath = false;
         $languagesManager = $this->getService('languagesManager');
-        $languagesManager->setCurrentLanguageCode($structureElement->getPayerLanguageId());
+        $languagesManager->setCurrentLanguageCode($this->getPayerLanguage);
         $filePropertyName = $type . 'File';
         $pathsManager = $this->getService('PathsManager');
         $uploadsPath = $pathsManager->getPath('uploads');
@@ -911,7 +911,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                         $newData['price'] = $price - $product->discount;
                         $newData['oldPrice'] = $price;
                     } else {
-                        $newData['price'] = $product->getPrice(false, false);
+                        $newData['price'] = $price;
                         $newData['oldPrice'] = '';
                     }
                 }
@@ -1018,13 +1018,4 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $currencySelector = $this->getService('CurrencySelector');
         return $currencySelector->formatPrice($this->noVatAmount);
     }
-
-    public function getPayerLanguageId() : int {
-        if(empty($this->getPayerLanguageId)) {
-            $this->getPayerLanguageId = $this->payerlanguage;
-        }
-        return $this->getPayerLanguageId;
-    }
-
-
 }
