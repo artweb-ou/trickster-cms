@@ -37,6 +37,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
     protected $discountsList;
     protected $servicesList;
     protected $orderData;
+    protected $payerLanguageId;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -85,6 +86,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $moduleStructure['invoiceSent'] = 'checkbox';
 
         $moduleStructure['userId'] = 'text';
+
+        $moduleStructure['payerLanguage'] = 'naturalNumber';
     }
 
     protected function getTabsList()
@@ -107,7 +110,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         foreach ($this->getOrderProducts() as &$element) {
             $productsPrice += $element->getTotalFullPrice();
         }
-        $this->productsPrice = number_format($productsPrice, 2, '.', '');
+        $this->productsPrice = $productsPrice;
         $totalPrice = $productsPrice + $this->deliveryPrice;
 
         if ($services = $this->getServicesList()) {
@@ -126,16 +129,15 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $totalPrice = 0;
         }
         $currencySelector = $this->getService('CurrencySelector');
-        $totalPrice = $currencySelector->formatPrice($totalPrice);
 
         $this->totalAmount = count($this->orderProducts);
 
         $vatRateSetting = $this->getService('ConfigManager')->get('main.vatRate');
-        $this->vatAmount = round($totalPrice - $totalPrice / $vatRateSetting, 2);
-        $this->vatAmount = $currencySelector->formatPrice($this->vatAmount);
+        $this->vatAmount = $totalPrice - $totalPrice / $vatRateSetting;
+        $this->vatAmount = $this->vatAmount;
 
-        $this->noVatAmount = round($totalPrice / $vatRateSetting, 2);
-        $this->noVatAmount = $currencySelector->formatPrice($this->noVatAmount);
+        $this->noVatAmount = $totalPrice / $vatRateSetting;
+        $this->noVatAmount = $this->noVatAmount;
 
         if ($this->paymentElement) {
             if ($this->paymentElement->paymentStatus == 'success') {
@@ -304,8 +306,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
     public function getProductsPrice()
     {
         $this->recalculate();
-        $currencySelector = $this->getService('CurrencySelector');
-        return $currencySelector->formatPrice($this->productsPrice);
+        return $this->productsPrice;
     }
 
     public function getTotalAmount()
@@ -316,11 +317,10 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function getTotalPrice()
     {
-        $currencySelector = $this->getService('CurrencySelector');
         if ($this->totalPrice === null) {
             $this->recalculate();
         }
-        return $currencySelector->formatPrice($this->totalPrice);
+        return $this->totalPrice;
     }
 
     public function getOrderData()
@@ -540,7 +540,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
     public function getPdfPath($type)
     {
         $resultPdfPath = false;
-
+        $languagesManager = $this->getService('languagesManager');
+        $languagesManager->setCurrentLanguageCode($structureElement->getPayerLanguageId());
         $filePropertyName = $type . 'File';
         $pathsManager = $this->getService('PathsManager');
         $uploadsPath = $pathsManager->getPath('uploads');
@@ -905,12 +906,12 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 if ($product->emptyPrice) {
                     $newData['price'] = '';
                 } else {
-                    $price = $product->getPrice(true, false);
+                    $price = $product->getPrice(false, false);
                     if ($product->discount) {
-                        $newData['price'] = $currencySelector->formatPrice($price - $product->discount);
+                        $newData['price'] = $price - $product->discount;
                         $newData['oldPrice'] = $price;
                     } else {
-                        $newData['price'] = $product->getPrice(true, false);
+                        $newData['price'] = $product->getPrice(false, false);
                         $newData['oldPrice'] = '';
                     }
                 }
@@ -1016,6 +1017,13 @@ class orderElement extends structureElement implements PaymentOrderInterface
     {
         $currencySelector = $this->getService('CurrencySelector');
         return $currencySelector->formatPrice($this->noVatAmount);
+    }
+
+    public function getPayerLanguageId() : int {
+        if(empty($this->getPayerLanguageId)) {
+            $this->getPayerLanguageId = $this->payerlanguage;
+        }
+        return $this->getPayerLanguageId;
     }
 
 

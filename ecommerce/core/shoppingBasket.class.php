@@ -707,7 +707,7 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
     public function recalculate()
     {
         $currencySelector = $this->getService('CurrencySelector');
-        $this->amount = $this->storageData['amount'];
+        $this->amount = (int)$this->storageData['amount'];
         $this->price = $this->storageData['price'];
         $mainConfig = $this->getService('ConfigManager')->getConfig('main');
         if ($mainConfig->get('pricesContainVat') === false && $mainConfig->has('vatRate') && !$this->vatIncluded) {
@@ -726,14 +726,15 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
         return $currencySelector->convertPrice($this->price);
     }
 
-    public function getPrice($round = true, $useCurrency = true)
+    public function getPrice($formatted = true, $useCurrency = true)
     {
         $price = $this->price;
-        $currencySelector = $this->getService('CurrencySelector');
         if ($useCurrency) {
-            $price = $currencySelector->convertPrice($price, false);
+            $currencySelector = $this->getService('CurrencySelector');
+            $price = $currencySelector->convertPrice($price, $formatted);
         }
-        if ($round) {
+        elseif ($formatted) {
+            $currencySelector = $this->getService('CurrencySelector');
             $price = $currencySelector->formatPrice($price);
         }
         return $price;
