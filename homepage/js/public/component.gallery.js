@@ -172,6 +172,7 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
         } else if (buttonsContainerElement) {
             componentElement.removeChild(buttonsContainerElement);
             buttonsContainerElement = null;
+            imageButtons = [];
         }
 
     };
