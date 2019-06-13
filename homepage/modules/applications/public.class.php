@@ -11,7 +11,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
     protected $currentTheme;
     protected $themeCode = '';
     protected $requestsLogging = false;
-    protected $protocolRedirection = false;
+    protected $protocolRedirection = true;
     public $rendererName = 'smarty';
     /**
      * @var ConfigManager
