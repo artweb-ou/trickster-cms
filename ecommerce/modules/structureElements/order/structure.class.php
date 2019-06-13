@@ -86,8 +86,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $moduleStructure['invoiceSent'] = 'checkbox';
 
         $moduleStructure['userId'] = 'text';
-
-        $moduleStructure['payerLanguage'] = 'naturalNumber';
     }
 
     protected function getTabsList()
@@ -541,7 +539,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
     {
         $resultPdfPath = false;
         $languagesManager = $this->getService('languagesManager');
-        $languagesManager->setCurrentLanguageCode($structureElement->getPayerLanguageId());
+        $languagesManager->setCurrentLanguageCode($this->getPayerLanguage);
         $filePropertyName = $type . 'File';
         $pathsManager = $this->getService('PathsManager');
         $uploadsPath = $pathsManager->getPath('uploads');
@@ -1018,13 +1016,4 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $currencySelector = $this->getService('CurrencySelector');
         return $currencySelector->formatPrice($this->noVatAmount);
     }
-
-    public function getPayerLanguageId() : int {
-        if(empty($this->getPayerLanguageId)) {
-            $this->getPayerLanguageId = $this->payerlanguage;
-        }
-        return $this->getPayerLanguageId;
-    }
-
-
 }
