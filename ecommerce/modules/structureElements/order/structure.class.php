@@ -911,7 +911,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                         $newData['price'] = $price - $product->discount;
                         $newData['oldPrice'] = $price;
                     } else {
-                        $newData['price'] = $product->getPrice(false, false);
+                        $newData['price'] = $price;
                         $newData['oldPrice'] = '';
                     }
                 }
