@@ -118,14 +118,16 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             $controller = $this->getService('controller');
             $steps = $this->getSteps();
             foreach ($steps as $step) {
-                if ($controller->getParameter('step')) {
-                    if ($step->structureName == $controller->getParameter('step')) {
+                if ($step->structureType === 'shoppingBasketStep') {
+                    if ($controller->getParameter('step')) {
+                        if ($step->structureName == $controller->getParameter('step')) {
+                            $this->currentStep = $step;
+                            break;
+                        }
+                    } else {
                         $this->currentStep = $step;
                         break;
                     }
-                } else {
-                    $this->currentStep = $step;
-                    break;
                 }
             }
         }

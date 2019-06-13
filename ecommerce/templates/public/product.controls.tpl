@@ -7,10 +7,10 @@
 		{/if}
 		<div class="product_details_controls_buttons">
 			<div class="product_details_amount_block">
-				<span class="button product_details_amount_minus product_details_amount"><span class="button_text">-</span></span>
+				<span class="button product_details_amount_minus product_details_amount"><span class="button_icon"></span></span>
 				<!--suppress HtmlFormInputWithoutLabel -->
 				<input class='input_component product_details_amount_input' type="text" value="{if $element->minimumOrder>0}{$element->minimumOrder}{else}1{/if}" />
-				<span class="button product_details_amount_plus product_details_amount"><span class="button_text">+</span></span>
+				<span class="button product_details_amount_plus product_details_amount"><span class="button_icon"></span></span>
 			</div>
 			<span class="product_details_button button">
 				<span class="button_icon"></span>
