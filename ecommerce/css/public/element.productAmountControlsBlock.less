@@ -1,0 +1,101 @@
+[data-block-type="amount_control_block"] {
+	display: flex;
+
+	.button[data-amount-type] {
+		padding: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: inherit;
+
+
+		.button_icon {
+			//width: 3.4em;
+			//height: 2.5em; // .45em *2 + 2.5
+		//	line-height: 2.5;
+		//	height: 2.5em; // .45em *2 + 2.5
+
+			height: 100%;
+			width: 100%;
+			display: block;
+			overflow: hidden;
+			background-size: 22px 22px;
+			background-repeat: no-repeat;
+		}
+
+
+		&[data-amount-type="minus"] {
+			.button_icon {
+				background-position: 55% 49%; // visual efect for
+
+				//noinspection LessResolvedByNameOnly
+				.svg-bg(@trick_amount_minus, @trick_text_color_03, false);//'fill', arrows_minus
+			}
+			&:hover, &:focus {
+				.button_icon {
+					//noinspection LessResolvedByNameOnly
+					//	.button_icon_hover(@product_details_amount_minus, @theme_color1, false);
+				}
+			}
+		}
+		&[data-amount-type="plus"] {
+			.button_icon{
+				background-position: 45% 45%; // visual efect for
+
+				//noinspection LessResolvedByNameOnly
+				.svg-bg(@trick_amount_plus, @trick_text_color_03, false);//'fill', arrows_minus
+			}
+
+			&:hover, &:focus {
+				.button_icon {
+					//noinspection LessResolvedByNameOnly
+					//	.button_icon_hover(@product_details_amount_plus, @theme_color1, false);
+				}
+			}
+		}
+	}
+
+	[data-amount-type="input"] {
+		border: 0;
+		background: transparent;
+		font-size: inherit;
+		color: @trick_text_color_02;
+		line-height: 2.5;
+		height: 3.4em;
+		width: 3.4em;
+		font-weight: normal;
+		text-align: center;
+
+		&:hover, &:focus {
+			border: 0;
+		}
+	}
+
+
+}
+@media (max-width: @screen_breakpoint_md_max) {
+	.product_details_controls_buttons {
+		flex-wrap: wrap;
+	}
+
+	//.product_details_amount_block {
+	//	flex: 1 0 auto;
+	//}
+	//
+	//.product_details_amount_block .button,
+	//.product_details_amount_input,
+	//.product_details_button {
+	//	flex: 1 0 auto;
+	//}
+}
+
+@media (max-width: @screen_breakpoint_sm - 1) {
+	//.product_details_amount_block {
+	//	width: 100%;
+	//	margin-bottom: 0.3em;
+	//}
+	//
+	//.product_details_button {
+	//	margin-left: 0;
+	//}
+}

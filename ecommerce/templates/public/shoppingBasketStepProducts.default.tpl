@@ -3,4 +3,5 @@
     window.templates = window.templates || {ldelim}{rdelim};
     window.templates['shoppingBasketStepProducts.internal.tpl'] = {$theme->getTemplateSource('shoppingBasketStepProducts.internal.tpl', true)};
     window.templates['shoppingBasketStepProducts.product.tpl'] = {$theme->getTemplateSource('shoppingBasketStepProducts.product.tpl', true)};
+    window.templates['element.productAmountControlsBlock.tpl'] = {$theme->getTemplateSource('element.productAmountControlsBlock.tpl', true)};
 </script>
