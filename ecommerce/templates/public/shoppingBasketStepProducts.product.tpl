@@ -20,7 +20,7 @@
     <td class="shoppingbasket_table_amount">
         {if !$checkout}
         <div class="shoppingbasket_table_amount_container">
-            {include file='element.productAmountControlsBlock.tpl' element=$element inputAmount="{$element->getAmount()}"}
+            {include file='element.productAmountControlsBlock.tpl' assitionalClass='shoppingbasket_table' element=$element inputAmount="{$element->getAmount()}"}
         </div>
         {else}
             {$element->getAmount()}
