@@ -15,18 +15,20 @@ window.mobileLogics = new function() {
     };
     var resizeHandler = function() {
         var windowWidth = window.innerWidth;
-        currentBreakpoint = 'xxl';
+        var breakPoint = 'xxl';
         for (var key in breakpoints) {
             if (breakpoints.hasOwnProperty(key)) {
                 if (windowWidth < breakpoints[key]) {
-                    if (currentBreakpoint !== key) {
-                        currentBreakpoint = key;
-                        controller.fireEvent('mobileBreakpointChanged', currentBreakpoint);
-                    }
+                    breakPoint = key;
                     break;
                 }
             }
         }
+        if (currentBreakpoint !== breakPoint) {
+            currentBreakpoint = breakPoint;
+            controller.fireEvent('mobileBreakpointChanged', currentBreakpoint);
+        }
+        console.log(currentBreakpoint);
     };
 
     this.getCurrentBreakpoint = function() {

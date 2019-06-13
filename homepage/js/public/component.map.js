@@ -81,7 +81,7 @@ window.MapComponent = function(componentElement, id) {
         componentElement.style.height = '';
 
         var parentHeight = componentElement.parentNode.offsetHeight;
-        var minHeight = componentElement.offsetWidth * info.getHeight();
+        var minHeight = componentElement.offsetWidth * info.getGalleryHeight();
         if (minHeight > parentHeight) {
             componentHeight = minHeight;
         } else {
