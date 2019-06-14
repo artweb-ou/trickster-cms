@@ -50,6 +50,7 @@ class structureManager implements DependencyInjectionContextInterface
     protected $privilegeChecking = true;
     protected $deniedCopyLinkTypes = [];
     protected $elementPathRestrictionId;
+    protected $shortestChains = [];
 
     /**
      * @param languagesManager $languagesManager
@@ -1248,36 +1249,6 @@ class structureManager implements DependencyInjectionContextInterface
         return false;
     }
 
-    public function getReverseElementsChain($id, $parentId = null)
-    {
-        $result = [];
-        if ($shortestChain = $this->findShortestParentsChain($id, $parentId, false)) {
-            $shortestChain = array_reverse($shortestChain);
-            $parentId = array_shift($shortestChain);
-            if (isset($this->elementsList[$parentId])) {
-                $result[] = $this->elementsList[$parentId];
-                foreach ($shortestChain as &$id) {
-                    if (!isset($this->elementsList[$id])) {
-                        if ($this->loadElements([$id], $parentId)) {
-                            $parentId = $id;
-                        } else {
-                            break;
-                        }
-                    } else {
-                        //if there were not enough privileges, then $this->elementsList[$id]==false
-                        if ($this->elementsList[$id]) {
-                            $parentId = $id;
-                        } else {
-                            break;
-                        }
-                    }
-                    $result[] = $this->elementsList[$parentId];
-                }
-            }
-        }
-        return $result;
-    }
-
     /**
      * @param $id
      * @param int|null $parentId
@@ -1323,15 +1294,12 @@ class structureManager implements DependencyInjectionContextInterface
      * @param null $restrictByParentChain - if some parent id should strictly be in the chain, then it can be restricted with this parameter
      * @param int $points - current chain points: the smaller value == the shorter
      * @param array $chainElements - chain elements holder
-     * @param bool $nonLoadedOnly - setting to determine whether a full chain until root should be returned or only non-loaded elements
      * @return array|bool
      */
-    protected $shortestChains = [];
 
     protected function findShortestParentsChain(
         $id,
         $restrictByParentId = null,
-        $nonLoadedOnly = true,
         &$points = 0,
         $chainElements = []
     ) {
@@ -1344,11 +1312,11 @@ class structureManager implements DependencyInjectionContextInterface
         if ($cachedChain = $this->cache->get($id . ":" . $key)) {
             return $cachedChain;
         }
-        if ($nonLoadedOnly && !$restrictByParentId && isset($this->shortestChains[$id])) {
-            return $this->shortestChains[$id];
+        if (!$restrictByParentId && isset($this->shortestChains[$id][$restrictByParentId])) {
+            return $this->shortestChains[$id][$restrictByParentId];
         }
-        $this->shortestChains[$id] = false;
-
+        $this->shortestChains[$id][$restrictByParentId] = false;
+        $shortestChainPointer = &$this->shortestChains[$id][$restrictByParentId];
         $chainElements[$id] = true;
 
         if ($parentLinks = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child')) {
@@ -1370,16 +1338,16 @@ class structureManager implements DependencyInjectionContextInterface
             }
 
             if (isset($foundRestricted)) {
-                $this->shortestChains[$id] = [$id, $foundRestricted];
-                $this->setElementCacheKey($id, $key, $this->shortestChains[$id], $this->cacheLifeTime * 2);
+                $shortestChainPointer = [$id, $foundRestricted];
+                $this->setElementCacheKey($id, $key, $shortestChainPointer, $this->cacheLifeTime * 2);
 
-                return $this->shortestChains[$id];
+                return $shortestChainPointer;
             }
-            if ($nonLoadedOnly && isset($foundRequested)) {
-                $this->shortestChains[$id] = [$id, $foundRequested];
-            } elseif ($nonLoadedOnly && isset($foundLoaded)) {
+            if (isset($foundRequested)) {
+                $shortestChainPointer = [$id, $foundRequested];
+            } elseif (isset($foundLoaded)) {
                 $points++;
-                $this->shortestChains[$id] = [$id, $foundLoaded];
+                $shortestChainPointer = [$id, $foundLoaded];
             } else {
                 $bestPoints = false;
                 foreach ($parentLinks as &$parentLink) {
@@ -1389,35 +1357,28 @@ class structureManager implements DependencyInjectionContextInterface
                         if ($chain = $this->findShortestParentsChain(
                             $parentId,
                             $restrictByParentId,
-                            $nonLoadedOnly,
                             $newPoints,
                             $chainElements
                         )
                         ) {
-                            if ((is_array($chain) && !$restrictByParentId) ||
-                                ($restrictByParentId !== null && in_array($restrictByParentId, $chain))
-                            ) {
-                                if ($newPoints < $bestPoints || !$bestPoints) {
-                                    $bestPoints = $newPoints;
-                                    $this->shortestChains[$id] = $chain;
-                                }
+                            if ($newPoints < $bestPoints || !$bestPoints) {
+                                $bestPoints = $newPoints;
+                                $shortestChainPointer = $chain;
                             }
                         }
                     }
                 }
-                if ($this->shortestChains[$id]) {
+                if ($shortestChainPointer) {
                     $points = $bestPoints;
-                    if (reset($this->shortestChains[$id]) != $id) {
-                        array_unshift($this->shortestChains[$id], $id);
+                    if (reset($shortestChainPointer) != $id) {
+                        array_unshift($shortestChainPointer, $id);
                     }
                 }
             }
         }
-        $this->setElementCacheKey($id, $key, $this->shortestChains[$id], $this->cacheLifeTime * 2);
-        return $this->shortestChains[$id];
+        $this->setElementCacheKey($id, $key, $shortestChainPointer, $this->cacheLifeTime * 2);
+        return $shortestChainPointer;
     }
-
-    // TODO: refactoring this method
 
     /**
      * @param $idList
@@ -1425,6 +1386,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param bool $type
      * @return structureElement[]
      *
+     * TODO: refactor this method
      * @deprecated - PLEASE DONT USE WITHOUT HEAVY NEED
      */
     public function getElementsByIdList($idList, $elementId = false, $type = false)
