@@ -1291,7 +1291,7 @@ class structureManager implements DependencyInjectionContextInterface
      * This is recursive method to calculate the quickest/shortest way to load element within it's possible parent chains
      *
      * @param $id - target element id or current recursion level element id
-     * @param null $restrictByParentChain - if some parent id should strictly be in the chain, then it can be restricted with this parameter
+     * @param null $restrictByParentId - if some parent id should strictly be in the chain, then it can be restricted with this parameter
      * @param int $points - current chain points: the smaller value == the shorter
      * @param array $chainElements - chain elements holder
      * @return array|bool
@@ -1312,7 +1312,7 @@ class structureManager implements DependencyInjectionContextInterface
         if ($cachedChain = $this->cache->get($id . ":" . $key)) {
             return $cachedChain;
         }
-        if (!$restrictByParentId && isset($this->shortestChains[$id][$restrictByParentId])) {
+        if (isset($this->shortestChains[$id][$restrictByParentId])) {
             return $this->shortestChains[$id][$restrictByParentId];
         }
         $this->shortestChains[$id][$restrictByParentId] = false;
@@ -1322,7 +1322,9 @@ class structureManager implements DependencyInjectionContextInterface
         if ($parentLinks = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child')) {
             foreach ($parentLinks as &$parentLink) {
                 $parentId = $parentLink->parentStructureId;
-                if (!$restrictByParentId) {
+                if ($parentId == $restrictByParentId) {
+                    $foundRestricted = $parentId;
+                } else {
                     if (!empty($this->elementsList[$parentId])) {
                         $foundLoaded = $parentId;
                         if ($this->elementsList[$parentId]->requested) {
@@ -1332,18 +1334,12 @@ class structureManager implements DependencyInjectionContextInterface
                     } elseif ($parentId == $this->getRootElementId()) {
                         $foundRequested = $parentId;
                     }
-                } elseif ($parentId == $restrictByParentId) {
-                    $foundRestricted = $parentId;
                 }
             }
 
             if (isset($foundRestricted)) {
                 $shortestChainPointer = [$id, $foundRestricted];
-                $this->setElementCacheKey($id, $key, $shortestChainPointer, $this->cacheLifeTime * 2);
-
-                return $shortestChainPointer;
-            }
-            if (isset($foundRequested)) {
+            } elseif (isset($foundRequested)) {
                 $shortestChainPointer = [$id, $foundRequested];
             } elseif (isset($foundLoaded)) {
                 $points++;
