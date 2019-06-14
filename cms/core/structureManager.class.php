@@ -110,8 +110,7 @@ class structureManager implements DependencyInjectionContextInterface
         $restrictLinkTypes = false,
         &$flatTree = [],
         &$usedIds = []
-    )
-    {
+    ) {
         $treeLevel = $this->getElementsChildren($elementId, $roles, $linkType, null, $restrictLinkTypes);
         foreach ($treeLevel as &$element) {
             if (!in_array($element->id, $usedIds)) {
@@ -428,6 +427,11 @@ class structureManager implements DependencyInjectionContextInterface
                 $this->elementsList[$parentElementId] = $this->getElementById($parentElementId);
             }
             if (isset($this->elementsList[$parentElementId])) {
+                $cacheKey = $parentElementId . ':e:' . 'name' . $childElementName;
+                if ($id = $this->cache->get($cacheKey)) {
+                    return $this->getElementById($id);
+                }
+
                 $parentElement = $this->elementsList[$parentElementId];
                 foreach ($parentElement->childrenList as &$element) {
                     if ($element->structureName == $childElementName) {
@@ -436,31 +440,24 @@ class structureManager implements DependencyInjectionContextInterface
                     }
                 }
                 if (!$result) {
+                    //this shouldn't be switched to 'getConnectedIds' because of speed issues. benchmark first
                     $connectedLinks = $this->linksManager->getElementsLinks($parentElementId, $this->getPathSearchAllowedLinks(), 'parent');
                     $connectedIds = [];
                     foreach ($connectedLinks as $link) {
                         $connectedIds[] = $link->childStructureId;
                     }
+                    /**
+                     * @var \Illuminate\Database\Query\Builder $query
+                     */
+                    $query = $this->getService('db')->table('structure_elements');
+                    $query
+                        ->select('id')
+                        ->where('structureName', '=', $childElementName)
+                        ->whereIn('id', $connectedIds)
+                        ->limit(1);
 
-                    $dataCollection = persistableCollection::getInstance('structure_elements');
-                    $conditions = [];
-
-                    $condition = [];
-                    $condition['column'] = 'structureName';
-                    $condition['action'] = 'equals';
-                    $condition['argument'] = $childElementName;
-                    $conditions[] = $condition;
-
-                    $condition = [];
-                    $condition['column'] = 'id';
-                    $condition['action'] = 'in';
-                    $condition['argument'] = $connectedIds;
-                    $conditions[] = $condition;
-
-                    if ($rows = $dataCollection->conditionalLoad('id', $conditions, [], '1')) {
-                        $record = reset($rows);
+                    if ($record = $query->first()) {
                         $id = $record['id'];
-
                         $this->loadElements([$id], $parentElementId);
                         if (isset($this->elementsList[$id])) {
                             $result = $this->elementsList[$id];
@@ -475,6 +472,10 @@ class structureManager implements DependencyInjectionContextInterface
                         }
                     }
                 }
+                if ($result) {
+                    $this->cache->set($cacheKey, $result->id, 600);
+                }
+
             }
         }
 
@@ -752,8 +753,7 @@ class structureManager implements DependencyInjectionContextInterface
         $linkTypes = 'structure',
         $allowedTypes = null,
         $restrictLinkTypes = false
-    )
-    {
+    ) {
         $returnList = [];
         if ($parentElement = $this->getElementById($parentElementId)) {
             $requestedRoles = $this->getRequestedRoles($allowedRoles);
@@ -1334,8 +1334,7 @@ class structureManager implements DependencyInjectionContextInterface
         $nonLoadedOnly = true,
         &$points = 0,
         $chainElements = []
-    )
-    {
+    ) {
         //if we are searching parent within itself then we will get nothing. we should not restrict parent within itself
         if ($restrictByParentId == $id) {
             $restrictByParentId = null;
