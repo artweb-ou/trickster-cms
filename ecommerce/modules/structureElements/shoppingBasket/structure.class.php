@@ -219,7 +219,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
 
     public function getCustomFieldsList()
     {
-        if (is_null($this->customFieldsList)) {
+        if ($this->customFieldsList === null) {
             $this->customFieldsList = [];
             $shoppingBasket = $this->getService('shoppingBasket');
             $deliveryType = $shoppingBasket->getSelectedDeliveryType();
@@ -295,32 +295,40 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $data["productsList"] = [];
         $products = $this->shoppingBasket->getProductsList();
 
-        foreach ($products as &$product) {
+        foreach ($products as $shoppingBasketProduct) {
+            $categoryTitle = '';
+            /**
+             * @var productElement $productElement
+             */
+            if ($productElement = $structureManager->getElementById($shoppingBasketProduct->productId)) {
+                if ($category = $productElement->getRequestedParentCategory()) {
+                    $categoryTitle = $category->getValue('title', $defaultLanguage->id);
+                }
+            }
             $productData = [];
-            $productData["productId"] = $product->productId;
-            $productData["basketProductId"] = $product->basketProductId;
-            $productData["title"] = $product->title;
-            $productData["title_dl"] = $product->title_dl;
-            $productData["code"] = $product->code;
-            $productData["price"] = $product->getPrice();
-            $productData["totalPrice"] = $currencySelector->formatPrice($product->getPrice(false) * $product->amount);
-            $productData["emptyPrice"] = $product->emptyPrice;
-            $productData["unit"] = $product->unit;
-            $productData["category"] = $structureManager->getElementById($product->productId)
-                ->getCurrentParentElement()
-                ->getValue('title', $defaultLanguage->id);
-            $productData["brand"] = $this->getBrands($product->productId);
+            $productData["productId"] = $shoppingBasketProduct->productId;
+            $productData["basketProductId"] = $shoppingBasketProduct->basketProductId;
+            $productData["title"] = $shoppingBasketProduct->title;
+            $productData["title_dl"] = $shoppingBasketProduct->title_dl;
+            $productData["code"] = $shoppingBasketProduct->code;
+            $productData["price"] = $shoppingBasketProduct->getPrice();
+            $productData["totalPrice"] = $currencySelector->formatPrice($shoppingBasketProduct->getPrice(false) * $shoppingBasketProduct->amount);
+            $productData["emptyPrice"] = $shoppingBasketProduct->emptyPrice;
+            $productData["unit"] = $shoppingBasketProduct->unit;
+            $productData["category"] = $categoryTitle;
+
+            $productData["brand"] = $this->getBrands($shoppingBasketProduct->productId);
             //@todo refactor - move functionality to shoppingbasketdiscounts.class
-            $productData['salesPrice'] = $product->getPrice(false);
-            $productData["amount"] = $product->amount;
-            $productData['salesPrice'] -= $product->discount;
-            $productData['totalSalesPrice'] = $currencySelector->formatPrice($productData["salesPrice"] * $product->amount);
-            $productData["variation"] = $product->variation;
-            $productData["variation_dl"] = $product->variation_dl;
-            $productData["description"] = $product->description;
-            $productData["image"] = $product->image;
-            $productData["url"] = $product->URL;
-            $productData["minimumOrder"] = $product->minimumOrder;
+            $productData['salesPrice'] = $shoppingBasketProduct->getPrice(false);
+            $productData["amount"] = $shoppingBasketProduct->amount;
+            $productData['salesPrice'] -= $shoppingBasketProduct->discount;
+            $productData['totalSalesPrice'] = $currencySelector->formatPrice($productData["salesPrice"] * $shoppingBasketProduct->amount);
+            $productData["variation"] = $shoppingBasketProduct->variation;
+            $productData["variation_dl"] = $shoppingBasketProduct->variation_dl;
+            $productData["description"] = $shoppingBasketProduct->description;
+            $productData["image"] = $shoppingBasketProduct->image;
+            $productData["url"] = $shoppingBasketProduct->URL;
+            $productData["minimumOrder"] = $shoppingBasketProduct->minimumOrder;
             $data["productsSalesPrice"] += $productData['amount'] * $productData['salesPrice'];
             $productData['salesPrice'] = $currencySelector->formatPrice($productData['salesPrice']);
             $data["productsList"][] = $productData;
