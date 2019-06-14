@@ -28,7 +28,6 @@ window.mobileLogics = new function() {
             currentBreakpoint = breakPoint;
             controller.fireEvent('mobileBreakpointChanged', currentBreakpoint);
         }
-        console.log(currentBreakpoint);
     };
 
     this.getCurrentBreakpoint = function() {

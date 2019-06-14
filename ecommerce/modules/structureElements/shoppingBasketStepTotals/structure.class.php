@@ -16,4 +16,3 @@ class shoppingBasketStepTotalsElement extends structureElement
         $moduleStructure['layout'] = 'text';
     }
 }
-

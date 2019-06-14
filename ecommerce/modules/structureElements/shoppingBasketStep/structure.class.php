@@ -5,7 +5,7 @@ class shoppingBasketStepElement extends structureElement
     use ConfigurableLayoutsProviderTrait;
 
     public $languagesParentElementMarker = 'adminLanguages';
-    public $dataResourceName = 'module_generic';
+    public $dataResourceName = 'module_shoppingbasket_step';
     protected $allowedTypes = [
         'shoppingBasketStepAgreement',
         'shoppingBasketStepProducts',
