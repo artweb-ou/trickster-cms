@@ -1,4 +1,5 @@
 {if $element->getImagesList()}
+	<div class="side_separator"></div>
 	<div class="product_details_left">
 		{include file=$theme->template('product.details.gallery.tpl')}
 		{if !$noProductIcons} {
@@ -7,5 +8,5 @@
 			{/if}
 		{/if}
 	</div>
-	<div class="left_right_divider"></div>
+	<div class="side_separator"></div>
 {/if}
