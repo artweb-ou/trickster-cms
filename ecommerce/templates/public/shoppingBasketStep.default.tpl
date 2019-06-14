@@ -4,3 +4,4 @@
 {foreach $element->getStepElements() as $stepElement}
 	{include file=$theme->template($stepElement->getTemplate($stepElement->getCurrentLayout())) element=$stepElement shoppingBasketElement=$shoppingBasketElement}
 {/foreach}
+{include file=$theme->template('shoppingBasket.controls.tpl') element=$element}
