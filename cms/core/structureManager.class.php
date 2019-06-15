@@ -1296,7 +1296,6 @@ class structureManager implements DependencyInjectionContextInterface
      * @param array $chainElements - chain elements holder
      * @return array|bool
      */
-
     protected function findShortestParentsChain(
         $id,
         $restrictByParentId = null,
@@ -1319,12 +1318,11 @@ class structureManager implements DependencyInjectionContextInterface
         $shortestChainPointer = &$this->shortestChains[$id][$restrictByParentId];
         $chainElements[$id] = true;
 
-        if ($parentLinks = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child')) {
-            foreach ($parentLinks as &$parentLink) {
-                $parentId = $parentLink->parentStructureId;
+        if ($parentIds = $this->linksManager->getConnectedIdList($id, $this->getPathSearchAllowedLinks(), 'child')) {
+            foreach ($parentIds as $parentId) {
                 if ($parentId == $restrictByParentId) {
                     $foundRestricted = $parentId;
-                } else {
+                } elseif (!$restrictByParentId) {
                     if (!empty($this->elementsList[$parentId])) {
                         $foundLoaded = $parentId;
                         if ($this->elementsList[$parentId]->requested) {
@@ -1346,8 +1344,7 @@ class structureManager implements DependencyInjectionContextInterface
                 $shortestChainPointer = [$id, $foundLoaded];
             } else {
                 $bestPoints = false;
-                foreach ($parentLinks as &$parentLink) {
-                    $parentId = $parentLink->parentStructureId;
+                foreach ($parentIds as &$parentId) {
                     if (!isset($chainElements[$parentId])) {
                         $newPoints = $points + 2;
                         if ($chain = $this->findShortestParentsChain(
