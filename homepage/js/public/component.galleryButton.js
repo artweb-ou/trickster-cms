@@ -17,6 +17,9 @@ window.GalleryButtonComponent = function(imageInfo, galleryInfo) {
     this.destroy = function() {
         eventsManager.removeHandler(componentElement, 'click', onClick);
         controller.removeListener('galleryImageDisplay', galleryImageDisplayHandler);
+        if (componentElement.parentNode){
+            componentElement.parentNode.removeChild(componentElement);
+        }
     };
     var createDomStructure = function() {
         componentElement = self.makeElement('div', 'gallery_button');

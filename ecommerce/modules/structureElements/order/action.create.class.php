@@ -36,7 +36,7 @@ class createOrder extends structureElementAction
         $structureElement->dueDate = strtotime($structureElement->dateCreated) + $dueDays * 24 * 60 * 60;
 
         if ($deliveryInfo = $shoppingBasket->getSelectedDeliveryType()) {
-            $structureElement->deliveryPrice = $deliveryInfo->getPrice(true, false);
+            $structureElement->deliveryPrice = $deliveryInfo->getPrice(false, false);
             $structureElement->deliveryType = $deliveryInfo->id;
             $structureElement->deliveryTitle = $deliveryInfo->title;
         }
@@ -51,6 +51,9 @@ class createOrder extends structureElementAction
         $structureElement->payerCity = $formData['payerCity'];
         $structureElement->payerCountry = $formData['payerCountry'];
         $structureElement->currency = $currentCurrencyName;
+
+        $languagesManager = $this->getService('languagesManager');
+        $structureElement->payerLanguage = $languagesManager->getCurrentLanguageId();
 
         $structureElement->setOrderStatus('undefined');
 

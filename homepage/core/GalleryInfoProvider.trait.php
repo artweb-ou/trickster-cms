@@ -19,12 +19,16 @@ trait GalleryInfoProviderTrait
             'imagesPrevNextButtonsEnabled' => false,
             'fullScreenGalleryEnabled' => true,
             'fullScreenButtonEnabled' => false,
-            'mobileGalleryHeight' => false,
-            'mobileGalleryResizeType' => false,
-            'mobileImageResizeType' => false,
             'descriptionType' => 'overlay',
             'imagesPrevNextButtonsSeparated' => false,
             'videoAutoStart' => true,
+
+            'mobileGalleryHeight' => null,
+            'mobileGalleryResizeType' => null,
+            'mobileImageResizeType' => null,
+            'mobileThumbnailsSelectorEnabled' => null,
+            'mobileEnablePrevNextImagesButtons' => null,
+            'mobileImagesButtonsEnabled' => null,
         ];
         $galleryData = array_merge($galleryData, $galleryOptions);
 
@@ -42,13 +46,13 @@ trait GalleryInfoProviderTrait
                 'fileUrl' => $controller->baseURL . 'file/id:' . $imageElement->id . '/filename:' . $imageElement->originalName,
             ];
             if ($imageElement instanceof ImageUrlProviderInterface) {
-                $imageInfo['fullImageUrl'] = $imageElement->getImageUrl($imagePresetBase.'FullImage');
-                $imageInfo['bigImageUrl'] = $imageElement->getImageUrl($imagePresetBase.'Image');
-                $imageInfo['thumbnailImageUrl'] = $imageElement->getImageUrl($imagePresetBase.'SmallThumbnailImage');
+                $imageInfo['fullImageUrl'] = $imageElement->getImageUrl($imagePresetBase . 'FullImage');
+                $imageInfo['bigImageUrl'] = $imageElement->getImageUrl($imagePresetBase . 'Image');
+                $imageInfo['thumbnailImageUrl'] = $imageElement->getImageUrl($imagePresetBase . 'SmallThumbnailImage');
 
-                $imageInfo['mobileFullImageUrl'] = $imageElement->getImageUrl($imagePresetBase.'FullImageMobile', true);
-                $imageInfo['mobileBigImageUrl'] = $imageElement->getImageUrl($imagePresetBase.'ImageMobile', true);
-                $imageInfo['mobileThumbnailImageUrl'] = $imageElement->getImageUrl($imagePresetBase.'SmallThumbnailImageMobile', true);
+                $imageInfo['mobileFullImageUrl'] = $imageElement->getImageUrl($imagePresetBase . 'FullImageMobile', true);
+                $imageInfo['mobileBigImageUrl'] = $imageElement->getImageUrl($imagePresetBase . 'ImageMobile', true);
+                $imageInfo['mobileThumbnailImageUrl'] = $imageElement->getImageUrl($imagePresetBase . 'SmallThumbnailImageMobile', true);
             } else {
                 $imageId = $imageElement->image;
                 $imageName = $imageElement->originalName;
