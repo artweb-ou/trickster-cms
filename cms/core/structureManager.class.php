@@ -1291,65 +1291,61 @@ class structureManager implements DependencyInjectionContextInterface
      * This is recursive method to calculate the quickest/shortest way to load element within it's possible parent chains
      *
      * @param $id - target element id or current recursion level element id
-     * @param null $restrictByParentId - if some parent id should strictly be in the chain, then it can be restricted with this parameter
+     * @param null $withinParentId - if some parent id should strictly be in the chain, then it can be restricted with this parameter
      * @param int $points - current chain points: the smaller value == the shorter
      * @param array $chainElements - chain elements holder
      * @return array|bool
      */
     protected function findShortestParentsChain(
         $id,
-        $restrictByParentId = null,
+        $withinParentId = null,
         &$points = 0,
         $chainElements = []
     ) {
         //if we are searching parent within itself then we will get nothing. we should not restrict parent within itself
-        if ($restrictByParentId == $id) {
-            $restrictByParentId = null;
+        if ($withinParentId == $id) {
+            $withinParentId = null;
+        }
+        //in case we don't have root element loaded we should check it as well
+        if ($id == $this->rootElementId){
+            return [$id];
         }
 
-        $key = 'ch:' . $this->languagesManager->getCurrentLanguageId() . ':p' . $restrictByParentId;
+        $key = 'ch:' . $this->languagesManager->getCurrentLanguageId() . ':p' . $withinParentId;
         if ($cachedChain = $this->cache->get($id . ":" . $key)) {
             return $cachedChain;
         }
-        if (isset($this->shortestChains[$id][$restrictByParentId])) {
-            return $this->shortestChains[$id][$restrictByParentId];
+        if (isset($this->shortestChains[$id][$withinParentId])) {
+            return $this->shortestChains[$id][$withinParentId];
         }
-        $this->shortestChains[$id][$restrictByParentId] = false;
-        $shortestChainPointer = &$this->shortestChains[$id][$restrictByParentId];
+        $this->shortestChains[$id][$withinParentId] = false;
+        $shortestChainPointer = &$this->shortestChains[$id][$withinParentId];
         $chainElements[$id] = true;
 
-        if ($parentIds = $this->linksManager->getConnectedIdList($id, $this->getPathSearchAllowedLinks(), 'child')) {
-            foreach ($parentIds as $parentId) {
-                if ($parentId == $restrictByParentId) {
-                    $foundRestricted = $parentId;
-                } elseif (!$restrictByParentId) {
-                    if (!empty($this->elementsList[$parentId])) {
-                        $foundLoaded = $parentId;
-                        if ($this->elementsList[$parentId]->requested) {
-                            $foundRequested = $parentId;
-                            break;
-                        }
-                    } elseif ($parentId == $this->getRootElementId()) {
-                        $foundRequested = $parentId;
-                    }
-                }
+        if ($parentLinks = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child')) {
+            $parentIds = [];
+            foreach ($parentLinks as $parentLink){
+                $parentIds[] = $parentLink->parentStructureId;
             }
-
-            if (isset($foundRestricted)) {
-                $shortestChainPointer = [$id, $foundRestricted];
-            } elseif (isset($foundRequested)) {
-                $shortestChainPointer = [$id, $foundRequested];
-            } elseif (isset($foundLoaded)) {
-                $points++;
-                $shortestChainPointer = [$id, $foundLoaded];
+            //check if we already have the required route to parent
+            if (in_array($withinParentId, $parentIds)) {
+                $shortestChainPointer = [$id, $withinParentId];
             } else {
+                //else check all parent routes
                 $bestPoints = false;
-                foreach ($parentIds as &$parentId) {
+                foreach ($parentIds as $parentId) {
                     if (!isset($chainElements[$parentId])) {
-                        $newPoints = $points + 2;
+                        if (!empty($this->elementsList[$parentId])) {
+                            if (!$this->elementsList[$parentId]->requested) {
+                                $newPoints = $points + 1;
+                            }
+                        } else {
+                            $newPoints = $points + 2;
+                        }
+
                         if ($chain = $this->findShortestParentsChain(
                             $parentId,
-                            $restrictByParentId,
+                            $withinParentId,
                             $newPoints,
                             $chainElements
                         )
