@@ -17,7 +17,6 @@
                     {include file=$theme->template($currentStep->getTemplate($currentStep->getCurrentLayout())) element=$currentStep shoppingBasketElement=$element}
                 {/if}
             </div>
-            {include file=$theme->template('shoppingBasket.controls.tpl') element=$element}
         </form>
     </div>
 {/capture}

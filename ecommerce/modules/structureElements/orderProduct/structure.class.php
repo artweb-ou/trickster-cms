@@ -99,10 +99,14 @@ class orderProductElement extends structureElement
     /**
      * @return float
      */
-    public function getPrice()
+    public function getPrice($formatted = true)
     {
-        $currencySelector = $this->getService('CurrencySelector');
-        return $currencySelector->formatPrice($this->price);
+        if($formatted) {
+            $currencySelector = $this->getService('CurrencySelector');
+            return $currencySelector->formatPrice($this->price);
+        }
+        return $this->price;
+
     }
 
 

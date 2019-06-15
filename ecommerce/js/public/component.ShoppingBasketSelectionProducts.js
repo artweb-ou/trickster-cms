@@ -9,7 +9,7 @@ window.ShoppingBasketSelectionProducts = function(componentElement) {
         controller.addListener('shoppingBasketUpdated', updateData);
 
         checkout = false;
-        if (componentElement.className.indexOf('shoppingbasket_products_checkout') >= 0) {
+        if (componentElement.dataset.checkout) {
             checkout = true;
         }
     };
@@ -40,12 +40,13 @@ window.ShoppingBasketSelectionProducts = function(componentElement) {
     };
 
     var buildHtml = function() {
-        var compiled = new jSmart(window.templates['shoppingBasketStepProducts.internal.tpl']);
+        var templateInternal = componentElement.dataset.templateInternal;
+        var compiled = new jSmart(window.templates[templateInternal]);
 
         componentElement.innerHTML = compiled.fetch({
             'element': self,
             'selectedCurrencyItem': window.selectedCurrencyItem,
-            'checkout': checkout
+            'checkout': checkout,
         });
 
         if (rowsContainerElement = componentElement.querySelector('.shoppingbasket_table_rows')) {

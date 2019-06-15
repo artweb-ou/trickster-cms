@@ -11,7 +11,7 @@ class orderEmailDispatchmentType extends designThemeEmailDispatchmentType
             'default' => ['reset.less', 'all_variables.less'],
             'ecommercePublic' => ['module.order.less'],
             'homepage' => ['colors_variables.less'],
-            'project' => ['all_variables.less', 'colors_variables.less', 'shared.less', 'module.order.less'],
+            'project' => ['all_variables.less', 'variables.less', 'colors_variables.less', 'shared.less', 'module.order.less'],
             'email' => ['main.less', 'order.less'],
             'projectEmail' => ['main.less', 'order.less'],
             'projectDocument' => ['order.less'],

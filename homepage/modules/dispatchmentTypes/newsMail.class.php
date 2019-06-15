@@ -12,7 +12,7 @@ class newsMailEmailDispatchmentType extends designThemeEmailDispatchmentType
             'default' => ['all_variables.less'],
             'public' => ['reset.less', 'component.forms.less'],
             'mallPublic' => ['shared.less', 'newsmails.less'],
-            'project' => ['shared.less'],
+            'project' => ['all_variables.less', 'variables.less', 'colors_variables.less', 'shared.less'],
             'email' => ['main.less', 'newsmails.less'],
             'projectEmail' => ['main.less', 'newsmails.less'],
         ];

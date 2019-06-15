@@ -72,7 +72,9 @@ window.GalleryItem = function(info) {
     var mobileGalleryHeight = false;
     var mobileGalleryResizeType = false;
     var mobileImageResizeType = false;
-
+    var mobileThumbnailsSelectorEnabled;
+    var mobileEnablePrevNextImagesButtons;
+    var mobileImagesButtonsEnabled;
     var imagesIndex;
     var imagesList;
     var currentImage;
@@ -168,6 +170,15 @@ window.GalleryItem = function(info) {
         }
         if (typeof info.mobileImageResizeType !== 'undefined') {
             mobileImageResizeType = info.mobileImageResizeType;
+        }
+        if (typeof info.mobileThumbnailsSelectorEnabled !== 'undefined') {
+            mobileThumbnailsSelectorEnabled = info.mobileThumbnailsSelectorEnabled;
+        }
+        if (typeof info.mobileEnablePrevNextImagesButtons !== 'undefined') {
+            mobileEnablePrevNextImagesButtons = info.mobileEnablePrevNextImagesButtons;
+        }
+        if (typeof info.mobileImagesButtonsEnabled !== 'undefined') {
+            mobileImagesButtonsEnabled = info.mobileImagesButtonsEnabled;
         }
 
         if (info.images.length > 1) {
@@ -269,8 +280,13 @@ window.GalleryItem = function(info) {
         }
         return false;
     };
-    this.isThumbnailsSelectorEnabled = function() {
-        var result = thumbnailsSelectorEnabled;
+    this.isThumbnailsSelectorEnabled = function(mobile) {
+        var result = false;
+        if (mobile && mobileThumbnailsSelectorEnabled !== null) {
+            result = mobileThumbnailsSelectorEnabled;
+        } else {
+            result = thumbnailsSelectorEnabled;
+        }
         if (imagesList.length <= 1) {
             result = false;
         }
@@ -311,10 +327,16 @@ window.GalleryItem = function(info) {
         }
         return false;
     };
-    this.areImagesButtonsEnabled = function() {
+    this.areImagesButtonsEnabled = function(mobile) {
+        if (mobile && mobileImagesButtonsEnabled !== null) {
+            return mobileImagesButtonsEnabled;
+        }
         return imagesButtonsEnabled;
     };
-    this.areImagesPrevNextButtonsEnabled = function() {
+    this.areImagesPrevNextButtonsEnabled = function(mobile) {
+        if (mobile && mobileEnablePrevNextImagesButtons !== null) {
+            return mobileEnablePrevNextImagesButtons;
+        }
         return imagesPrevNextButtonsEnabled;
     };
     this.areImagesPrevNextButtonsSeparated = function() {
@@ -344,20 +366,6 @@ window.GalleryItem = function(info) {
         return slideShowActive;
     };
 
-    //todo: remove deprecated methods in 06.2017
-    this.getFullScreenGallery = function() {
-        return self.isFullScreenGalleryEnabled();
-    };
-    this.getDisplaySelector = function() {
-        return self.isThumbnailsSelectorEnabled();
-    };
-    this.getHeight = function() {
-        return self.getGalleryHeight();
-    };
-    this.getImageResizeLogics = function() {
-        return self.getImageResizeType();
-    };
-    //end of deprecated methods
     init();
 };
 /**
