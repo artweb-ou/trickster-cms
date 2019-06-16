@@ -1307,7 +1307,7 @@ class structureManager implements DependencyInjectionContextInterface
             $withinParentId = null;
         }
         //in case we don't have root element loaded we should check it as well
-        if ($id == $this->rootElementId){
+        if ($id == $this->rootElementId) {
             return [$id];
         }
 
@@ -1324,7 +1324,7 @@ class structureManager implements DependencyInjectionContextInterface
 
         if ($parentLinks = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child')) {
             $parentIds = [];
-            foreach ($parentLinks as $parentLink){
+            foreach ($parentLinks as $parentLink) {
                 $parentIds[] = $parentLink->parentStructureId;
             }
             //check if we already have the required route to parent
@@ -1335,12 +1335,13 @@ class structureManager implements DependencyInjectionContextInterface
                 $bestPoints = false;
                 foreach ($parentIds as $parentId) {
                     if (!isset($chainElements[$parentId])) {
+                        $newPoints = $points;
                         if (!empty($this->elementsList[$parentId])) {
                             if (!$this->elementsList[$parentId]->requested) {
-                                $newPoints = $points + 1;
+                                $newPoints += 1;
                             }
                         } else {
-                            $newPoints = $points + 2;
+                            $newPoints += 2;
                         }
 
                         if ($chain = $this->findShortestParentsChain(
