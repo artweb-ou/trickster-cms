@@ -1327,16 +1327,12 @@ class structureManager implements DependencyInjectionContextInterface
             foreach ($parentLinks as $parentLink) {
                 $parentIds[] = $parentLink->parentStructureId;
             }
-            //check if we already have the required route to parent
-//            if (in_array($withinParentId, $parentIds)) {
-//                $shortestChainPointer = $this->findShortestParentsChain($withinParentId);
-//                array_unshift($shortestChainPointer, $id);
-//            } else {
-                //else check all parent routes
-                $bestPoints = false;
-                foreach ($parentIds as $parentId) {
-                    if (!isset($chainElements[$parentId])) {
-                        $newPoints = $points;
+            //check all parent routes
+            $bestPoints = false;
+            foreach ($parentIds as $parentId) {
+                if (!isset($chainElements[$parentId])) {
+                    $newPoints = $points;
+                    if ($withinParentId != $parentIds) {
                         if (!empty($this->elementsList[$parentId])) {
                             if (!$this->elementsList[$parentId]->requested) {
                                 $newPoints += 2;
@@ -1346,23 +1342,23 @@ class structureManager implements DependencyInjectionContextInterface
                         } else {
                             $newPoints += 3;
                         }
+                    }
 
-                        if ($chain = $this->findShortestParentsChain(
-                            $parentId,
-                            $withinParentId,
-                            $newPoints,
-                            $chainElements
-                        )
-                        ) {
-                            if ($newPoints < $bestPoints || ($bestPoints === false)) {
-                                if (!$withinParentId || in_array($withinParentId, $chain)) {
-                                    $bestPoints = $newPoints;
-                                    $shortestChainPointer = $chain;
-                                }
+                    if ($chain = $this->findShortestParentsChain(
+                        $parentId,
+                        $withinParentId,
+                        $newPoints,
+                        $chainElements
+                    )
+                    ) {
+                        if ($newPoints < $bestPoints || ($bestPoints === false)) {
+                            if (!$withinParentId || in_array($withinParentId, $chain)) {
+                                $bestPoints = $newPoints;
+                                $shortestChainPointer = $chain;
                             }
                         }
                     }
-//                }
+                }
                 if ($shortestChainPointer) {
                     $points = $bestPoints;
                     if (reset($shortestChainPointer) != $id) {
