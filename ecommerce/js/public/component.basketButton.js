@@ -1,4 +1,4 @@
-window.BasketButtonComponent = function(componentElement, onClick, productId = null) {
+window.BasketButtonComponent = function(componentElement, onClick, productId) {
     var addToBasketButtonAction = window.addToBasketButtonAction;
     /*
         in settings in admin
@@ -89,7 +89,6 @@ window.BasketButtonComponent = function(componentElement, onClick, productId = n
         if (addToBasketButtonAction) {
             var message = [];
             var additionalContainerClassName = 'notice_box';
-            var additionalClassName = 'notice_basket';
             message['title'] = window.productDetailsData.name || window.productDetailsData.name_ga;
             message['content'] = window.translationsLogics.get(argument);
             message['footer'] = '';

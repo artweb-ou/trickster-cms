@@ -1837,7 +1837,7 @@ class productElement extends structureElement implements
                     if (!isset($inactiveDeliveriesRecords[$deliveryTypeElement->id])) {
                         $deliveryTypeInfo = [];
                         $deliveryTypeInfo["element"] = $deliveryTypeElement;
-                        $priceExtra = $this->getDeliveryPriceExtra($deliveryTypeElement->id);
+                        $priceExtra = (float)$this->getDeliveryPriceExtra($deliveryTypeElement->id);
                         $deliveryTypeInfo["minPrice"] = $currencySelector->convertPrice($deliveryTypeElement->getMinPrice() + $priceExtra);
                         $deliveryTypeInfo["maxPrice"] = $currencySelector->convertPrice($deliveryTypeElement->getMaxPrice() + $priceExtra);
                         $this->deliveryTypesInfo[] = $deliveryTypeInfo;

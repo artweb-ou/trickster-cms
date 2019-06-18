@@ -5,13 +5,12 @@ window.ShoppingBasketSelectionForm = function(componentElement, formElement) {
     var payerDataElement;
     var deliveryDataElement;
     var fieldsBaseName;
-
+    var controlsBlock;
     var init = function() {
-        if (payerCheckBoxElement = _('.shoppingbasket_payer_data_controls input', componentElement)[0]) {
-            if (payerDataElement = _('.shoppingbasket_payer_data', componentElement)[0]) {
-                eventsManager.addHandler(payerCheckBoxElement, 'change', checkBoxChangeHandler);
-                if (!payerCheckBoxElement.checked) {
-                    payerContainerDisplayed = false;
+        if (controlsBlock = componentElement.querySelector('.shoppingbasket_payer_data_controls')) {
+            if (payerCheckBoxElement = controlsBlock.querySelector('input.checkbox_placeholder')) {
+                if (payerDataElement = _('.shoppingbasket_payer_data', componentElement)[0]) {
+                    eventsManager.addHandler(payerCheckBoxElement, 'change', checkBoxChangeHandler);
                 }
             }
         }
@@ -40,11 +39,15 @@ window.ShoppingBasketSelectionForm = function(componentElement, formElement) {
         if (deliveryType.hasNeededReceiverFields) {
             payerCheckBoxElement.checked = true;
             eventsManager.fireEvent(payerCheckBoxElement, 'change');
-            _('.shoppingbasket_payer_data_controls')[0].style.display = '';
+            if (controlsBlock) {
+                controlsBlock.style.display = '';
+            }
         } else {
             payerCheckBoxElement.checked = false;
             eventsManager.fireEvent(payerCheckBoxElement, 'change');
-            _('.shoppingbasket_payer_data_controls')[0].style.display = 'none';
+            if (controlsBlock) {
+                controlsBlock.style.display = 'none';
+            }
         }
         if (deliveryType) {
             while (deliveryDataElement.firstChild) {
@@ -126,13 +129,9 @@ window.ShoppingBasketSelectionForm = function(componentElement, formElement) {
     var updatePayerData = function() {
         if (payerDataElement) {
             if (payerCheckBoxElement.checked) {
-                if (payerContainerDisplayed) {
-                    hidePayerData();
-                }
+                hidePayerData();
             } else {
-                if (!payerContainerDisplayed) {
-                    displayPayerData();
-                }
+                displayPayerData();
             }
         }
     };

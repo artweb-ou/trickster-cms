@@ -475,7 +475,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function sendOrderStatusNotificationEmail()
     {
-        if ($this->orderStatus !== 'undefined') {
+        if ($this->orderStatus !== 'undefined' && $this->orderStatus !== 'deleted') {
             $administratorEmail = $this->getAdministratorEmail();
             $data = $this->getOrderData();
             $data['documentType'] = 'Notification';
