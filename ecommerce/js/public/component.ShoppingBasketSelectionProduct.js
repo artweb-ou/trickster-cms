@@ -146,10 +146,10 @@ window.ShoppingBasketSelectionProduct = function(basketProductId, initData) {
             var variationHtml = [];
             variations.forEach(function(variation, i) {
                 var variationsArray = variation.split(':');
-                variationHtml[i] = '<span class="variation_name">' + variationsArray[0] + '</span><span class="variation_separator"></span><span class="variation_value">' + variationsArray[1] + '</span>';
+                variationHtml[i] = '<div class="variation_name variation_separator">' + variationsArray[0] + '</div><div class="variation_value">' + variationsArray[1] + '</div>';
             });
             variations = variationHtml;
-            text = '<p>' + variations.join('</p><p>') + '</p>';
+            text = '<div class="variation_container">' + variations.join('</div><div class="variation_container">') + '</div>';
         }
         return text;
     };

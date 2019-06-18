@@ -25,7 +25,6 @@ class mallPublicDesignTheme extends DesignTheme
             'component.floorMapControls.js',
             'component.selectedCampaignsScroll.js',
             'component.shopCatalogue.js',
-            'component.slideGallery.js',
         ];
     }
 }

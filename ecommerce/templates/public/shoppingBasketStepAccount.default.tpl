@@ -13,16 +13,3 @@
 	</div>
 	<div class="clearfix"></div>
 </div>
-
-{if $shoppingBasketElement->isAccountStepSkippable()}
-	{if $nextStep = $shoppingBasketElement->getNextStep()}
-		<div class='shoppingbasket_form_controls'>
-			<div class="shoppingbasket_form_controls_container">
-				<a class="button" href="{$shoppingBasketElement->URL}step:{$nextStep->structureName}/">
-					{translations name='shoppingbasket.skip_account'}
-				</a>
-			</div>
-		</div>
-	{/if}
-{/if}
-

@@ -30,8 +30,8 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
         if (element) {
             new ShoppingBasketSelectionProducts(element);
         }
-        totalsContainerElement = _('.shoppingbasket_total_products')[0];
-        productPriceElements = _('.shoppingbasket_total_products .shoppingbasket_total_value');
+        totalsContainerElement = componentElement.querySelector('.shoppingbasket_total_products');
+        productPriceElements = componentElement.querySelectorAll('.shoppingbasket_total_value');
 
         if (element = componentElement.querySelector('.shoppingbasket_services_component')) {
             new ShoppingBasketSelectionServices(element);
