@@ -259,7 +259,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
 
     public function recalculate()
     {
-        if (count($this->productsList) > 0) {
+        if ($this->productsList) {
             $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
             $this->countriesList = $shoppingBasketDeliveryTargets->getActiveCountriesList();
 
@@ -706,7 +706,6 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
 
     public function recalculate()
     {
-        $currencySelector = $this->getService('CurrencySelector');
         $this->amount = $this->storageData['amount'];
         $this->price = $this->storageData['price'];
         $mainConfig = $this->getService('ConfigManager')->getConfig('main');
