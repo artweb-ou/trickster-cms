@@ -8,10 +8,7 @@ window.ShoppingBasketSelectionProducts = function(componentElement) {
         controller.addListener('startApplication', updateData);
         controller.addListener('shoppingBasketUpdated', updateData);
 
-        checkout = false;
-        if (componentElement.className.indexOf('shoppingbasket_products_checkout') >= 0) {
-            checkout = true;
-        }
+        checkout = componentElement.className.indexOf('shoppingbasket_products_checkout') >= 0;
     };
     var updateData = function() {
         var products = window.shoppingBasketLogics.productsList;

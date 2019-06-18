@@ -92,13 +92,13 @@ window.ShoppingBasketStatusComponent = function(componentElement) {
 
     var updateData = function() {
         var productsAmount = window.shoppingBasketLogics.productsAmount;
+        var text;
         if (productsAmount > 0) {
             if (emptyTextElement) {
                 emptyTextElement.style.display = 'none';
             }
             if (priceElement) {
-                var productsPrice = window.shoppingBasketLogics.productsSalesPrice;
-                priceValueElement.innerHTML = productsPrice;
+                priceValueElement.innerHTML = window.shoppingBasketLogics.productsSalesPrice;
                 priceElement.style.display = 'block';
             }
             if (amountElement) {

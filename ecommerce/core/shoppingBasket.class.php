@@ -246,27 +246,17 @@ class shoppingBasket implements DependencyInjectionContextInterface
         $this->saveStorage();
     }
 
-    protected function getDisabledDeliveryTypesIds()
-    {
-        $result = [];
-        foreach ($this->productsList as &$product) {
-            if ($productDisabledIds = $product->getDisabledDeliveryTypesIds()) {
-                $result = array_merge($productDisabledIds, $result);
-            }
-        }
-        return array_unique($result);
-    }
-
     public function recalculate()
     {
         if ($this->productsList) {
             $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
             $this->countriesList = $shoppingBasketDeliveryTargets->getActiveCountriesList();
 
+            /**
+             * @var shoppingBasketDeliveryTypes $shoppingBasketDeliveryTypes
+             */
             $shoppingBasketDeliveryTypes = $this->getService('shoppingBasketDeliveryTypes');
-            $disabledDeliveryTypesIds = $this->getDisabledDeliveryTypesIds();
-
-            $this->deliveryTypesList = $shoppingBasketDeliveryTypes->getActiveDeliveryTypes($disabledDeliveryTypesIds);
+            $this->deliveryTypesList = $shoppingBasketDeliveryTypes->getActiveDeliveryTypes();
             /**
              * @var shoppingBasketServices $shoppingBasketServices
              */
@@ -741,7 +731,7 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
     /**
      * @return string
      */
-    public function getTotalPrice() : string
+    public function getTotalPrice(): string
     {
         $currencySelector = $this->getService('CurrencySelector');
         return $currencySelector->formatPrice($this->totalPrice);
@@ -1135,7 +1125,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                     foreach ($pricesIndex as &$record) {
                         $elementData['deliveryTargetsInfo'][] = [
                             'targetId' => $record->targetId,
-                            'price'    => $record->price,
+                            'price' => $record->price,
                         ];
                     }
                 }
@@ -1145,16 +1135,16 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                     foreach ($fieldsList as &$record) {
                         if ($fieldElement = $structureManager->getElementById($record->fieldId, $deliveryTypeElement->id)) {
                             $fieldInfo = [
-                                'id'           => $fieldElement->id,
-                                'title'        => $fieldElement->title,
-                                'fieldName'    => $fieldElement->fieldName,
-                                'fieldType'    => $fieldElement->fieldType,
-                                'dataChunk'    => $fieldElement->dataChunk,
-                                'required'     => (int)$record->required,
-                                'validator'    => $fieldElement->validator,
+                                'id' => $fieldElement->id,
+                                'title' => $fieldElement->title,
+                                'fieldName' => $fieldElement->fieldName,
+                                'fieldType' => $fieldElement->fieldType,
+                                'dataChunk' => $fieldElement->dataChunk,
+                                'required' => (int)$record->required,
+                                'validator' => $fieldElement->validator,
                                 'autocomplete' => $fieldElement->autocomplete,
-                                'error'        => false,
-                                'value'        => $fieldElement->getAutoCompleteValue(),
+                                'error' => false,
+                                'value' => $fieldElement->getAutoCompleteValue(),
                             ];
                             if ($fieldElement->fieldType == 'select') {
                                 $fieldInfo['options'] = [];
@@ -1162,7 +1152,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                                 foreach ($options as &$option) {
                                     $fieldInfo['options'][] = [
                                         'value' => $option->title,
-                                        'text'  => $option->title,
+                                        'text' => $option->title,
                                     ];
                                 }
                             } elseif ($fieldElement->fieldType == 'input') {
@@ -1223,10 +1213,25 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
         return $this->deliveryTypesIndex[$this->selectedDeliveryTypeId];
     }
 
-    public function getActiveDeliveryTypes($excludedDeliveriesIds = [])
+    public function getDisabledDeliveryTypesIds()
+    {
+        $result = [];
+        /**
+         * @var shoppingBasket $shoppingBasket
+         */
+        $shoppingBasket = $this->getService('shoppingBasket');
+        foreach ($shoppingBasket->getProductsList() as &$product) {
+            if ($productDisabledIds = $product->getDisabledDeliveryTypesIds()) {
+                $result = array_merge($productDisabledIds, $result);
+            }
+        }
+        return array_unique($result);
+    }
+
+    public function getActiveDeliveryTypes()
     {
         $this->activeDeliveryTypes = [];
-
+        $excludedDeliveriesIds = $this->getDisabledDeliveryTypesIds();
         $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
 
         foreach ($this->deliveryTypesList as &$deliveryType) {
