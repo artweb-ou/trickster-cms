@@ -93,7 +93,6 @@ window.BasketButtonComponent = function(componentElement, onClick, id) {
         if (addToBasketButtonAction) {
             var message = [];
             var additionalContainerClassName = 'notice_box';
-            var additionalClassName = 'notice_basket';
             message['title'] = window.productDetailsData.name || window.productDetailsData.name_ga;
             message['content'] = window.translationsLogics.get(argument);
             message['footer'] = '';
