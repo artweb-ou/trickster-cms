@@ -440,6 +440,16 @@ class shoppingBasket implements DependencyInjectionContextInterface
         return false;
     }
 
+    public function getPaymentMethodElement() {
+        $paymentMethodId = $this->getPaymentMethodId();
+        if($paymentMethodId) {
+            $structureManager = $this->getService('structureManager');
+            $paymentElement = $structureManager->getElementById($paymentMethodId);
+            return $paymentElement;
+        }
+        return false;
+    }
+
     public function getCountriesList()
     {
         return $this->countriesList;
@@ -491,14 +501,44 @@ class shoppingBasket implements DependencyInjectionContextInterface
         return $this->selectedCityId;
     }
 
+    public function getSelectedCityElement() {
+        $cityId = $this->getSelectedCityId();
+        if($cityId) {
+            $structureManager = $this->getService('structureManager');
+            $cityElement = $structureManager->getElementById($cityId);
+            return $cityElement;
+        }
+        return false;
+    }
+
     public function getSelectedCountryId()
     {
         return $this->selectedCountryId;
     }
 
+    public function getSelectedCountryElement() {
+        $countryId = $this->getSelectedCountryId();
+        if($countryId) {
+            $structureManager = $this->getService('structureManager');
+            $countryElement = $structureManager->getElementById($countryId);
+            return $countryElement;
+        }
+        return false;
+    }
+
     public function getSelectedDeliveryTypeId()
     {
         return $this->selectedDeliveryTypeId;
+    }
+
+    public function getSelectedDeliveryTypeElement() {
+        $deliveryId = $this->getSelectedDeliveryTypeId();
+        if($deliveryId) {
+            $structureManager = $this->getService('structureManager');
+            $deliveryElement = $structureManager->getElementById($deliveryId);
+            return $deliveryElement;
+        }
+        return false;
     }
 
     public function getTotalPrice()
