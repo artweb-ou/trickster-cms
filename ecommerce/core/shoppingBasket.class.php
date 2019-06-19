@@ -6,7 +6,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
     protected $formData = [];
     protected $clearOperationPlanned = false;
     /**
-     * @var shoppingBasketCountry[]
+     * @var ShoppingBasketCountry[]
      */
     protected $countriesList = [];
     /**
@@ -249,6 +249,9 @@ class shoppingBasket implements DependencyInjectionContextInterface
     public function recalculate()
     {
         if ($this->productsList) {
+            /**
+             * @var shoppingBasketDeliveryTargets $shoppingBasketDeliveryTargets
+             */
             $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
             $this->countriesList = $shoppingBasketDeliveryTargets->getActiveCountriesList();
 
@@ -287,7 +290,8 @@ class shoppingBasket implements DependencyInjectionContextInterface
             foreach ($this->productsIndex as &$product) {
                 $productsAmount += $product->amount;
                 $productsPrice += $product->totalPrice;
-                $productDeliveryPrices[$product->basketProductId] = $product->getDeliveryPrice($selectedDeliveryType, $regionId);
+                $productDeliveryPrices[$product->basketProductId] = $product->getDeliveryPrice($selectedDeliveryType,
+                    $regionId);
             }
 
             $deliveryPrice = 0;
@@ -300,7 +304,8 @@ class shoppingBasket implements DependencyInjectionContextInterface
             $totalPrice = $productsPrice + $deliveryPrice;
 
             $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
-            $shoppingBasketDiscounts->calculateProductsListDiscounts($this->productsList, $this->selectedDeliveryTypeId, $deliveryPrice, $productsPrice, $totalPrice);
+            $shoppingBasketDiscounts->calculateProductsListDiscounts($this->productsList, $this->selectedDeliveryTypeId,
+                $deliveryPrice, $productsPrice, $totalPrice);
             $totalPrice = $shoppingBasketDiscounts->getTotalPrice();
             $totalPrice += $servicesPrice;
             $this->discountsList = $shoppingBasketDiscounts->getAppliedDiscountsList();
@@ -440,9 +445,10 @@ class shoppingBasket implements DependencyInjectionContextInterface
         return false;
     }
 
-    public function getPaymentMethodElement() {
+    public function getPaymentMethodElement()
+    {
         $paymentMethodId = $this->getPaymentMethodId();
-        if($paymentMethodId) {
+        if ($paymentMethodId) {
             $structureManager = $this->getService('structureManager');
             $paymentElement = $structureManager->getElementById($paymentMethodId);
             return $paymentElement;
@@ -501,12 +507,14 @@ class shoppingBasket implements DependencyInjectionContextInterface
         return $this->selectedCityId;
     }
 
-    public function getSelectedCityElement() {
-        $cityId = $this->getSelectedCityId();
-        if($cityId) {
-            $structureManager = $this->getService('structureManager');
-            $cityElement = $structureManager->getElementById($cityId);
-            return $cityElement;
+    public function getSelectedCity()
+    {
+        if ($id = $this->getSelectedCityId()) {
+            /**
+             * @var shoppingBasketDeliveryTargets $shoppingBasketDeliveryTargets
+             */
+            $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
+            return $shoppingBasketDeliveryTargets->getCity($id);
         }
         return false;
     }
@@ -516,12 +524,14 @@ class shoppingBasket implements DependencyInjectionContextInterface
         return $this->selectedCountryId;
     }
 
-    public function getSelectedCountryElement() {
-        $countryId = $this->getSelectedCountryId();
-        if($countryId) {
-            $structureManager = $this->getService('structureManager');
-            $countryElement = $structureManager->getElementById($countryId);
-            return $countryElement;
+    public function getSelectedCountry()
+    {
+        if ($id = $this->getSelectedCountryId()) {
+            /**
+             * @var shoppingBasketDeliveryTargets $shoppingBasketDeliveryTargets
+             */
+            $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
+            return $shoppingBasketDeliveryTargets->getCountry($id);
         }
         return false;
     }
@@ -531,9 +541,10 @@ class shoppingBasket implements DependencyInjectionContextInterface
         return $this->selectedDeliveryTypeId;
     }
 
-    public function getSelectedDeliveryTypeElement() {
+    public function getSelectedDeliveryTypeElement()
+    {
         $deliveryId = $this->getSelectedDeliveryTypeId();
-        if($deliveryId) {
+        if ($deliveryId) {
             $structureManager = $this->getService('structureManager');
             $deliveryElement = $structureManager->getElementById($deliveryId);
             return $deliveryElement;
@@ -761,8 +772,7 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
         if ($useCurrency) {
             $currencySelector = $this->getService('CurrencySelector');
             $price = $currencySelector->convertPrice($price, $formatted);
-        }
-        elseif ($formatted) {
+        } elseif ($formatted) {
             $currencySelector = $this->getService('CurrencySelector');
             $price = $currencySelector->formatPrice($price);
         }
@@ -779,284 +789,7 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
     }
 }
 
-class shoppingBasketDeliveryTargets implements DependencyInjectionContextInterface
-{
-    use DependencyInjectionContextTrait;
-    /**
-     * @var shoppingBasketDeliveryTargets
-     */
-    protected static $instance = null;
-    /**
-     * @var shoppingBasketCountry[]
-     */
-    protected $countriesList = [];
-    /**
-     * @var shoppingBasketCountry[]
-     */
-    protected $countriesIndex = [];
-    protected $selectedCountryId = false;
-    public $selectedCityId = false;
-    protected $countriesData;
 
-    /**
-     * @return shoppingBasketDeliveryTargets
-     * @deprecated
-     */
-    public static function getInstance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-
-    public function __construct()
-    {
-        self::$instance = $this;
-        $this->loadStorage();
-        $this->recalculate();
-    }
-
-    protected function saveStorage()
-    {
-        $languagesManager = $this->getService('languagesManager');;
-        $currentLanguageId = $languagesManager->getCurrentLanguageId();
-
-        $data = [];
-        $data['countriesData'] = $this->countriesData;
-        $data['languageId'] = $currentLanguageId;
-        $data['selectedCountryId'] = $this->selectedCountryId;
-        $data['selectedCityId'] = $this->selectedCityId;
-
-        $user = $this->getService('user');
-        $user->setStorageAttribute('deliveryTargetsData', $data);
-    }
-
-    protected function loadStorage()
-    {
-        $user = $this->getService('user');
-
-        $languagesManager = $this->getService('languagesManager');;
-        $currentLanguageId = $languagesManager->getCurrentLanguageId();
-
-        if (!($data = $user->getStorageAttribute('deliveryTargetsData')) || $data['languageId'] != $currentLanguageId) {
-            $this->countriesData = $this->loadCountriesData();
-
-            $data = [];
-            $data['countriesData'] = $this->countriesData;
-            $data['selectedCountryId'] = null;
-            $data['selectedCityId'] = null;
-        }
-
-        $this->selectedCountryId = $data['selectedCountryId'];
-        $this->selectedCityId = $data['selectedCityId'];
-        $this->countriesData = $data['countriesData'];
-
-        foreach ($this->countriesData as &$storageData) {
-            $country = new shoppingBasketCountry($storageData);
-            $this->countriesList[] = $country;
-            $this->countriesIndex[$country->id] = $country;
-        }
-    }
-
-    protected function loadCountriesData()
-    {
-        $data = [];
-
-        $structureManager = $this->getService('structureManager');
-        $linksManager = $this->getService('linksManager');
-        if ($coutriesElementId = $structureManager->getElementIdByMarker('deliveryCountries')) {
-            $connectedIds = $linksManager->getConnectedIdList($coutriesElementId, 'structure', 'parent');
-            $countryElements = $structureManager->getElementsByIdList($connectedIds, false, true);
-            foreach ($countryElements as &$countryElement) {
-                $elementData = [];
-                $elementData['id'] = $countryElement->id;
-                $elementData['title'] = $countryElement->title;
-                $elementData['conditionsText'] = $countryElement->conditionsText;
-                $elementData['iso3166_1a2'] = $countryElement->iso3166_1a2;
-                $elementData['cities'] = [];
-                /**
-                 * @var deliveryCityElement[] $cities
-                 */
-                if ($cities = $structureManager->getElementsChildren($countryElement->id)) {
-                    foreach ($cities as &$cityElement) {
-                        $cityData = [];
-                        $cityData['id'] = $cityElement->id;
-                        $cityData['title'] = $cityElement->title;
-
-                        $elementData['cities'][] = $cityData;
-                    }
-                }
-                $data[] = $elementData;
-            }
-        }
-        return $data;
-    }
-
-    protected function recalculate()
-    {
-        //some delivery target should always be selected
-        if (!$this->selectedCountryId) {
-            if ($country = reset($this->countriesList)) {
-                $this->selectedCountryId = $country->id;
-
-                $citiesList = $country->getActiveCitiesList();
-                if (count($citiesList) > 0) {
-                    $city = reset($citiesList);
-                    $this->selectedCityId = $city->id;
-                }
-
-                $this->setSelectedDeliveryCountryId($this->selectedCountryId);
-                if (count($country->citiesList) > 0) {
-                    $city = reset($country->citiesList);
-                    $this->setSelectedDeliveryCityId($city->id);
-                }
-            }
-            $this->saveStorage();
-        } elseif (!$this->selectedCityId) {
-            $citiesList = $this->countriesIndex[$this->selectedCountryId]->getActiveCitiesList();
-            if (count($citiesList) > 0) {
-                $city = reset($citiesList);
-                $this->selectedCityId = $city->id;
-            }
-            $this->saveStorage();
-        }
-    }
-
-    public function checkDeliveryCountry($targetsIdList, $countryId = null)
-    {
-        if (is_null($countryId)) {
-            $countryId = $this->selectedCountryId;
-        }
-        $result = false;
-        foreach ($targetsIdList as &$targetId) {
-            if ($countryId == $targetId || isset($this->countriesIndex[$countryId]->citiesIndex[$targetId])) {
-                $result = true;
-                break;
-            }
-        }
-        return $result;
-    }
-
-    public function setSelectedDeliveryCityId($targetId)
-    {
-        //update selected city
-        foreach ($this->countriesList as &$country) {
-            foreach ($country->citiesList as &$city) {
-                if ($city->id == $targetId) {
-                    $this->selectedCountryId = $country->id;
-                    $this->selectedCityId = $city->id;
-                    break;
-                }
-            }
-        }
-        $this->saveStorage();
-        $shoppingBasketDeliveryTypes = $this->getService('shoppingBasketDeliveryTypes');
-        $shoppingBasketDeliveryTypes->resetDeliveryType();
-    }
-
-    public function setSelectedDeliveryCountryId($countryId)
-    {
-        if (isset($this->countriesIndex[$countryId])) {
-            $this->selectedCountryId = $countryId;
-            $this->selectedCityId = null;
-            $citiesList = $this->countriesIndex[$countryId]->getActiveCitiesList();
-            if (count($citiesList) > 0) {
-                $city = reset($citiesList);
-                $this->selectedCityId = $city->id;
-            }
-        }
-        $this->saveStorage();
-    }
-
-    public function resetDeliveryCity()
-    {
-        $this->selectedCityId = null;
-        $this->recalculate();
-    }
-
-    public function getActiveCountriesList()
-    {
-        $result = [];
-
-        $shoppingBasketDeliveryTypes = $this->getService('shoppingBasketDeliveryTypes');
-        $deliveryTypesList = $shoppingBasketDeliveryTypes->getDeliveryTypesList();
-        foreach ($this->countriesList as &$country) {
-            foreach ($deliveryTypesList as &$deliveryType) {
-                if ($this->checkDeliveryCountry($deliveryType->deliveryTargetsIdList, $country->id)) {
-                    $result[] = $country;
-                    break;
-                }
-            }
-        }
-        return $result;
-    }
-
-    public function getSelectedCountryId()
-    {
-        $this->recalculate();
-        return $this->selectedCountryId;
-    }
-
-    public function getSelectedCityId()
-    {
-        $this->recalculate();
-        return $this->selectedCityId;
-    }
-
-    public function getSelectedDeliveryTargetId()
-    {
-        $this->recalculate();
-        $result = false;
-        if ($this->selectedCityId) {
-            $result = $this->selectedCityId;
-        } elseif ($this->selectedCountryId) {
-            $result = $this->selectedCountryId;
-        }
-        return $result;
-    }
-}
-
-class shoppingBasketCountry
-{
-    public $id = null;
-    public $title = null;
-    public $iso3166_1a2 = null;
-    public $conditionsText = null;
-    public $citiesList = [];
-    public $citiesIndex = [];
-
-    public function __construct($countryData)
-    {
-        $this->id = $countryData['id'];
-        $this->title = $countryData['title'];
-        $this->iso3166_1a2 = $countryData['iso3166_1a2'];
-        $this->conditionsText = $countryData['conditionsText'];
-        foreach ($countryData['cities'] as &$cityData) {
-            $city = new shoppingBasketCity($cityData);
-            $this->citiesList[] = $city;
-            $this->citiesIndex[$city->id] = $city;
-        }
-    }
-
-    /* TODO: rename this method */
-    public function getActiveCitiesList()
-    {
-        return $this->citiesList;
-    }
-}
-
-class shoppingBasketCity
-{
-    public $id = null;
-    public $title = null;
-
-    public function __construct($cityData)
-    {
-        $this->id = $cityData['id'];
-        $this->title = $cityData['title'];
-    }
-}
 
 class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 {
@@ -1166,7 +899,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                     foreach ($pricesIndex as &$record) {
                         $elementData['deliveryTargetsInfo'][] = [
                             'targetId' => $record->targetId,
-                            'price' => $record->price,
+                            'price'    => $record->price,
                         ];
                     }
                 }
@@ -1174,18 +907,19 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                 $elementData['deliveryFormFields'] = [];
                 if ($fieldsList = $deliveryTypeElement->getFieldsList()) {
                     foreach ($fieldsList as &$record) {
-                        if ($fieldElement = $structureManager->getElementById($record->fieldId, $deliveryTypeElement->id)) {
+                        if ($fieldElement = $structureManager->getElementById($record->fieldId,
+                            $deliveryTypeElement->id)) {
                             $fieldInfo = [
-                                'id' => $fieldElement->id,
-                                'title' => $fieldElement->title,
-                                'fieldName' => $fieldElement->fieldName,
-                                'fieldType' => $fieldElement->fieldType,
-                                'dataChunk' => $fieldElement->dataChunk,
-                                'required' => (int)$record->required,
-                                'validator' => $fieldElement->validator,
+                                'id'           => $fieldElement->id,
+                                'title'        => $fieldElement->title,
+                                'fieldName'    => $fieldElement->fieldName,
+                                'fieldType'    => $fieldElement->fieldType,
+                                'dataChunk'    => $fieldElement->dataChunk,
+                                'required'     => (int)$record->required,
+                                'validator'    => $fieldElement->validator,
                                 'autocomplete' => $fieldElement->autocomplete,
-                                'error' => false,
-                                'value' => $fieldElement->getAutoCompleteValue(),
+                                'error'        => false,
+                                'value'        => $fieldElement->getAutoCompleteValue(),
                             ];
                             if ($fieldElement->fieldType == 'select') {
                                 $fieldInfo['options'] = [];
@@ -1193,7 +927,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                                 foreach ($options as &$option) {
                                     $fieldInfo['options'][] = [
                                         'value' => $option->title,
-                                        'text' => $option->title,
+                                        'text'  => $option->title,
                                     ];
                                 }
                             } elseif ($fieldElement->fieldType == 'input') {
@@ -1277,7 +1011,9 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 
         foreach ($this->deliveryTypesList as &$deliveryType) {
             if (!$excludedDeliveriesIds || !in_array($deliveryType->id, $excludedDeliveriesIds)) {
-                if (in_array($shoppingBasketDeliveryTargets->selectedCityId, $deliveryType->deliveryTargetsIdList) || in_array($shoppingBasketDeliveryTargets->getSelectedCountryId(), $deliveryType->deliveryTargetsIdList)
+                if (in_array($shoppingBasketDeliveryTargets->selectedCityId,
+                        $deliveryType->deliveryTargetsIdList) || in_array($shoppingBasketDeliveryTargets->getSelectedCountryId(),
+                        $deliveryType->deliveryTargetsIdList)
                 ) {
                     $this->activeDeliveryTypes[] = $deliveryType;
                 }
@@ -1466,8 +1202,8 @@ class shoppingBasketServices implements DependencyInjectionContextInterface
         $languagesManager = $this->getService('languagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
-        $data = [];
         $data['languageId'] = $currentLanguageId;
+        $data = [];
 
         $this->servicesData = [];
         foreach ($this->servicesList as &$service) {

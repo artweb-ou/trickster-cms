@@ -96,6 +96,20 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         return false;
     }
 
+    public function getPreviousStep()
+    {
+        $steps = $this->getSteps();
+        foreach ($steps as $key => $step) {
+            if ($this->getCurrentStepElement() == $step) {
+                $previousKey = $key - 1;
+                if (isset($steps[$previousKey])) {
+                    return $steps[$previousKey];
+                }
+            }
+        }
+        return false;
+    }
+
     public function isLastStep()
     {
         return !$this->getNextStep();

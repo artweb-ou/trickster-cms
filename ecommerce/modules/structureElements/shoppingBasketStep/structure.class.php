@@ -42,5 +42,15 @@ class shoppingBasketStepElement extends structureElement
         }
         return false;
     }
+
+    public function getStepUrl() {
+        $parentElement = $this->getCurrentParentElement();
+        if(!empty($parentElement)) {
+            $url = $parentElement->URL.'step:'.$this->structureName.'/';
+            return $url;
+        }
+        return false;
+
+    }
 }
 
