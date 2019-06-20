@@ -2,7 +2,7 @@
 <div class="shoppingbasket_promocode shoppingbasket_aside">
 	<div class='shoppingbasket_form_heading'>{translations name='shoppingbasket.promocode'}</div>
 	<table class='shoppingbasket_promocode_form form_table'>
-		<tr class=''>
+		<tr>
 			<td class='form_label'>
 				{translations name='shoppingbasket.form_promocode'}:
 			</td>
@@ -12,7 +12,7 @@
 			</td>
 			<td class='form_extra'></td>
 		</tr>
-		<tr class=''>
+		<tr>
 			<td class='form_label'></td>
 			<td class='form_star'></td>
 			<td class='form_field'>
