@@ -12,6 +12,7 @@
 						</div>
 					{/if}
 					<div class="product_details_option_control" data-elementid="{$selectionInfo.id}" data-influential="{$selectionInfo.influential}">
+					<div class="option_items_wrapper">
 						{if $selectionInfo.controlType == 'radios'}
 							{foreach from=$selectionInfo.productOptions key=valueKey item=value}
 								<div data-product-details="option_item" class="product_details_option_radio_item">
@@ -37,6 +38,7 @@
 							</select>
 						</div>
 						{/if}
+					</div>
 					</div>
 				</div>
 			{/foreach}
