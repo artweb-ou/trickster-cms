@@ -148,38 +148,46 @@ body {
 /********************************************************
 /*  MEDIA HIDDEN
 /********************************************************/
-.hidden_sm {
+.hidden_xs {
     @media (max-width: @screen_breakpoint_xs_max) {  //max 575
         &{
             display: none;
         }
     }
 }
+.hidden_sm{
+    @media (min-width: @screen_breakpoint_sm) and (max-width: @screen_breakpoint_sm_max) {  //576 - 767
+        &{
+            display: none;
+        }
+    }
+}
 .hidden_md{
-    @media (max-width: @screen_breakpoint_sm) and (max-width: @screen_breakpoint_sm_max) {  //max 767
+    @media (min-width: @screen_breakpoint_md) and (max-width: @screen_breakpoint_md_max) {  //768 - 991
         &{
             display: none;
         }
     }
 }
 .hidden_lg{
-    @media (max-width: @screen_breakpoint_lg) and (max-width: @screen_breakpoint_md_max) {  //max991
+    @media (min-width: @screen_breakpoint_lg) and (max-width: @screen_breakpoint_lg_max) {  //992 - 1199
         &{
             display: none;
         }
     }
 }
 .hidden_xl{
-    @media (max-width: @screen_breakpoint_xl) and (max-width: @screen_breakpoint_lg_max) {  //max 1199
+    @media (min-width: @screen_breakpoint_xl) and (max-width: @screen_breakpoint_xl_max) {  //1200 - 1599
         &{
             display: none;
         }
     }
 }
 .hidden_xxl{
-    @media (max-width: @screen_breakpoint_xxl) and (max-width: @screen_breakpoint_xl_max) {  //max 1599
+    @media (min-width: @screen_breakpoint_xxl)  {  //1600
         &{
             display: none;
         }
     }
 }
+
