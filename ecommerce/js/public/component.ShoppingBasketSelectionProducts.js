@@ -3,38 +3,24 @@ window.ShoppingBasketSelectionProducts = function(componentElement) {
     var checkout = false;
     var rowsContainerElement = false;
     var productComponentsList = [];
-    var productComponentsIndex = {};
     var init = function() {
         controller.addListener('startApplication', updateData);
         controller.addListener('shoppingBasketUpdated', updateData);
 
-        checkout = false;
-        if (componentElement.dataset.checkout) {
-            checkout = true;
-        }
+        checkout = componentElement.dataset.checkout;
     };
     var updateData = function() {
+        var i;
         var products = window.shoppingBasketLogics.productsList;
         var usedIdIndex = {};
-        for (var i = 0; i < products.length; i++) {
-            var basketProductId = products[i].basketProductId;
-            usedIdIndex[basketProductId] = true;
-
-            var product = false;
-            if (!productComponentsIndex[basketProductId]) {
-                product = new ShoppingBasketSelectionProduct(basketProductId, products[i]);
-                productComponentsIndex[basketProductId] = product;
-                productComponentsList.push(product);
-            } else {
-                product = productComponentsIndex[basketProductId];
-            }
+        for (i = 0; i < productComponentsList.length; i++) {
+            productComponentsList[i].destroy();
         }
-        for (var j = 0; j < productComponentsList.length; j++) {
-            var basketProductId2 = productComponentsList[j].getBasketProductId();
-            if (typeof usedIdIndex[basketProductId2] == 'undefined') {
-                delete productComponentsIndex[basketProductId2];
-                productComponentsList.splice(j, 1);
-            }
+        productComponentsList = [];
+        for (i = 0; i < products.length; i++) {
+            var basketProductId = products[i].basketProductId;
+            var product = new ShoppingBasketSelectionProduct(basketProductId, products[i]);
+            productComponentsList.push(product);
         }
         buildHtml();
     };
@@ -53,9 +39,8 @@ window.ShoppingBasketSelectionProducts = function(componentElement) {
             var productRows = rowsContainerElement.querySelectorAll('.shoppingbasket_table_product');
             if (productRows) {
                 for (var i = 0; i < productRows.length; i++) {
-                    var basketProductId = productRows[i].dataset.id;
-                    if (typeof productComponentsIndex[basketProductId] !== 'undefined') {
-                        productComponentsIndex[basketProductId].setComponentElement(productRows[i]);
+                    if (typeof productComponentsList[i] !== 'undefined') {
+                        productComponentsList[i].setComponentElement(productRows[i]);
                     }
                 }
             }

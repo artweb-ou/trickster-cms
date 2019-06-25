@@ -153,6 +153,21 @@ window.ShoppingBasketSelectionProduct = function(basketProductId, initData) {
         }
         return text;
     };
+    this.destroy = function() {
+        if (amountMinusButton) {
+            eventsManager.removeHandler(amountMinusButton, 'click', minusClickHandler);
+        }
+        if (amountInput) {
+            eventsManager.removeHandler(amountInput, 'keyup', amountKeyUpHandler);
+            eventsManager.removeHandler(amountInput, 'change', amountChangeHandler);
+        }
+        if (amountPlusButton) {
+            eventsManager.removeHandler(amountPlusButton, 'click', plusClickHandler);
+        }
+        if (removeButton) {
+            eventsManager.removeHandler(removeButton, 'click', removeClickHandler);
+        }
+    };
     init();
 };
 DomElementMakerMixin.call(ShoppingBasketSelectionProduct.prototype);
