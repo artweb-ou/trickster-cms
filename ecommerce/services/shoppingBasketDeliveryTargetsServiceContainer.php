@@ -1,10 +1,10 @@
 <?php
 
-class shoppingBasketDeliveryTargetsServiceContainer extends DependencyInjectionServiceContainer
+class ShoppingBasketDeliveryTargetsServiceContainer extends DependencyInjectionServiceContainer
 {
     public function makeInstance()
     {
-        return new shoppingBasketDeliveryTargets();
+        return new ShoppingBasketDeliveryTargets();
     }
 
     public function makeInjections($instance)
