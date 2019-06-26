@@ -1,35 +1,36 @@
 .shoppingbasket_paymentmethods {
-	margin-top: 1em;
-	margin-bottom: 2em;
+    margin-top: 1em;
+    margin-bottom: 2em;
 
-	&_title {
-		margin-bottom: 1rem;
-	}
+    &_title {
+        margin-bottom: 1rem;
+    }
 
-	&_error {
-		font-style: italic;
-		color: red;
-		margin-bottom: 2em;
-	}
+    &_error {
+        font-style: italic;
+        color: red;
+        margin-bottom: 2em;
+    }
 }
 
 .shoppingbasket_paymentmethod {
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 2em;
-	margin-bottom: 1rem;
+    display: inline-flex;
+    margin-right: 3rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
 
-	.radiobutton {
-		margin-right: 1em;
-		vertical-align: middle;
-	}
+    .radiobutton {
+        margin-right: 1em;
+        vertical-align: middle;
+    }
 
-	&_image {
-		display: inline-block;
-	}
+    .shoppingbasket_paymentmethod_image {
+        display: inline-block;
+        min-height: 1rem;
+    }
 
-	&_text {
-		display: inline-block;
-		vertical-align: middle;
-	}
+    .shoppingbasket_paymentmethod_text {
+        display: inline-block;
+        vertical-align: middle;
+    }
 }
