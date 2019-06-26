@@ -1,6 +1,6 @@
 <div class='shoppingbasket_form_controls'>
 	<div>
-		<input type="hidden" value="{$element->id}" name="id" />
+		<input type="hidden" value="{$shoppingBasketElement->id}" name="id" />
 		<input type="hidden" value="submit" name="action" />
 	</div>
 	<div class="shoppingbasket_form_controls_container">
