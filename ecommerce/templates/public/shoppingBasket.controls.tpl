@@ -5,7 +5,7 @@
 	</div>
 	<div class="shoppingbasket_form_controls_container">
 		<span class="button shoppingbasket_delivery_submit shoppingbasket_form_submit">
-			{if !$element->isLastStep()}
+			{if !$shoppingBasketElement->isLastStep()}
 				<span class='button_text'>{translations name='shoppingbasket.button_proceed'}</span>
 			{else}
 				<span class='button_text'>{translations name='shoppingbasket.button_checkout'}</span>

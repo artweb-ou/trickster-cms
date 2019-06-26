@@ -10,7 +10,6 @@
 			<td class='form_field'>
 				<input class="input_component shoppingbasket_promocode_input" type="text" value="" />
 			</td>
-			<td class='form_extra'></td>
 		</tr>
 		<tr>
 			<td class='form_label'></td>
@@ -18,7 +17,6 @@
 			<td class='form_field'>
 				<input class="button shoppingbasket_promocode_button" type="button" value="{translations name='shoppingbasket.form_promocode_submit'}"/>
 			</td>
-			<td class='form_extra'></td>
 		</tr>
 	</table>
 	<div class="shoppingbasket_promocode_status">
