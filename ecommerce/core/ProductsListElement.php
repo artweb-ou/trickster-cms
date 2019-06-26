@@ -167,13 +167,28 @@ abstract class ProductsListElement extends menuStructureElement
                 $filteredProductsQuery->whereIn('availability', $statuses);
             }
             if ($parameterValues = $this->getFilterParameterValueIds()) {
-                foreach ($parameterValues as $parameterValue) {
-                    $filteredProductsQuery->whereIn('baseproducts.id', function ($query) use ($parameterValue) {
-                        $query->from('module_product_parameter_value')
-                            ->select('productId')->distinct()
-                            ->where('value', '=', $parameterValue);
-                    });
+                //we can't send a single request here because it drops down database when we have >10 parameters in search
+                //instead we use php-based intersection
+                //todo: change logic to work with temporary table to avoid transferring IDs
+                $ids = null;
+                /**
+                 * @var Connection $db
+                 */
+                $db = $this->getService('db');
+                foreach ($parameterValues as $counter => $parameterValue) {
+                    $query = $db->table('module_product_parameter_value')
+                        ->select('productId')
+                        ->where('value', '=', $parameterValue);
+                    if ($ids !== null) {
+                        $query->whereIn('productId', $ids);
+                    }
+                    $records = $query->get();
+                    $ids = array_column($records, 'productId');
+                    if (!$ids) {
+                        break;
+                    }
                 }
+                $filteredProductsQuery->whereIn('baseproducts.id', $ids);
             }
 
             if ($price = $this->getFilterPrice()) {
@@ -192,7 +207,6 @@ abstract class ProductsListElement extends menuStructureElement
 
         return $this->filteredProductsQuery;
     }
-
 
     /**
      * @return productElement[]
@@ -447,9 +461,10 @@ abstract class ProductsListElement extends menuStructureElement
         return $this->filterPriceString;
     }
 
-    public function getSelectedFiltersCount() {
+    public function getSelectedFiltersCount()
+    {
         $selectedFiltersCount = count($this->getFilterParameterValueIds());
-        if($this->getFilterPrice()) {
+        if ($this->getFilterPrice()) {
             $selectedFiltersCount++;
         }
         return $selectedFiltersCount;
