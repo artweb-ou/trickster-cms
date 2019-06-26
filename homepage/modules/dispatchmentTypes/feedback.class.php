@@ -10,7 +10,7 @@ class feedbackEmailDispatchmentType extends designThemeEmailDispatchmentType
         $this->cssThemeFilesStructure = [
             'default' => ['all_variables.less'],
             'public' => ['reset.less', 'component.forms.less'],
-            'project' => ['shared.less'],
+            'project' => ['all_variables.less', 'variables.less', 'colors_variables.less', 'shared.less'],
             'email' => ['main.less', 'component.forms.less', 'feedback.less'],
             'projectEmail' => ['main.less', 'component.forms.less', 'feedback.less'],
         ];

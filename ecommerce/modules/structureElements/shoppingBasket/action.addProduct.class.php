@@ -61,7 +61,7 @@ class addProductShoppingBasket extends structureElementAction
                 }
             }
             $currencySelector = $this->getService('CurrencySelector');
-            $productPrice = !empty($parametersPrice) ?$currencySelector->formatPrice($parametersPrice): $productElement->price;
+            $productPrice = !empty($parametersPrice) ? $parametersPrice : $productElement->getPrice(false);
             if (is_numeric($productAmount) && is_numeric($productId) && ($everythingSelected || $controller->getParameter('productVariation'))) {
                 $finalAmount = $shoppingBasket->getProductOverallQuantity($productId) + $productAmount;
                 if ($productElement->isPurchasable($finalAmount)) {
@@ -79,7 +79,7 @@ class addProductShoppingBasket extends structureElementAction
                     $data['variation'] = $variations;
                     $data['variation_dl'] = $variations_dl;
 
-                    $data['amount'] = $productAmount;
+                    $data['amount'] = (int)$productAmount;
                     $data['minimumOrder'] = $productElement->minimumOrder;
                     $data['description'] = $productElement->description;
 

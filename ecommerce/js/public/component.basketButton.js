@@ -1,4 +1,5 @@
-window.BasketButtonComponent = function(componentElement, onClick, productId) {
+window.BasketButtonComponent = function(componentElement, onClick, id) {
+    var productId =null;
     var addToBasketButtonAction = window.addToBasketButtonAction;
     /*
         in settings in admin
@@ -9,6 +10,9 @@ window.BasketButtonComponent = function(componentElement, onClick, productId) {
     */
 
     var init = function() {
+        if(id !== undefined) {
+            productId = id;
+        }
         eventsManager.addHandler(componentElement, 'click', clickHandler);
     };
     var clickHandler = function(event) {

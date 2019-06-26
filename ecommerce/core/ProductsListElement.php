@@ -970,4 +970,9 @@ abstract class ProductsListElement extends menuStructureElement
         }
         return $this->cacheKey;
     }
+
+    public function isFiltrationApplied()
+    {
+        return $this->getFilterPrice() || $this->getFilterDiscountIds() || $this->getFilterBrandIds() || $this->getFilterCategoryIds() || $this->getFilterParameterValueIds() || $this->getFilterAvailability();
+    }
 }

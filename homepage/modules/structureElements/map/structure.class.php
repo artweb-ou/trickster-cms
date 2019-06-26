@@ -68,13 +68,13 @@ class mapElement extends menuDependantStructureElement implements ConfigurableLa
 
     public function getJsonMapInfo()
     {
-        $styles = $this->styles ? json_decode($this->styles) : [];
         return json_encode([
             'coordinates' => $this->coordinates,
             'title' => $this->title,
             'content' => $this->description,
+            'mapCode' => $this->mapCode,
             'heightAdjusted' => true,
-            'styles' => $styles,
+            'styles' => trim($this->styles),
             'zoomControlEnabled' => !!$this->zoomControlEnabled,
             'streetViewControlEnabled' => !!$this->streetViewControlEnabled,
             'mapTypeControlEnabled' => !!$this->mapTypeControlEnabled,

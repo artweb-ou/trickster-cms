@@ -227,13 +227,13 @@ window.OrdersListRowComponent = function(number, orderData) {
         numberCell.innerHTML = number + 1;
         orderLink.innerHTML = orderData.orderNumber;
         ordererCell.innerHTML = orderData.payerFirstName + ' ' + orderData.payerLastName;
-        payedPriceCell.innerHTML = domHelper.roundNumber(orderData.payedPrice, 2) + ' ' + orderData.currency;
+        payedPriceCell.innerHTML = orderData.payedPrice + ' ' + orderData.currency;
         if (orderData.deliveryPrice !== '') {
-            deliveryPriceCell.innerHTML = domHelper.roundNumber(orderData.deliveryPrice, 2) + ' ' + orderData.currency;
+            deliveryPriceCell.innerHTML = orderData.deliveryPrice + ' ' + orderData.currency;
         } else {
             deliveryPriceCell.innerHTML = '';
         }
-        totalPriceCell.innerHTML = domHelper.roundNumber(orderData.totalPrice, 2) + ' ' + orderData.currency;
+        totalPriceCell.innerHTML = orderData.totalPrice + ' ' + orderData.currency;
         statusCell.innerHTML = orderData.orderStatusText;
 
         dateCell.innerHTML = orderData.dateCreated;

@@ -8,6 +8,9 @@ window.GalleryPreviousButtonComponent = function(galleryObject) {
     };
     this.destroy = function() {
         eventsManager.removeHandler(componentElement, 'click', onClick);
+        if (componentElement.parentNode){
+            componentElement.parentNode.removeChild(componentElement);
+        }
     };
     var createDomStructure = function() {
         componentElement = self.makeElement('div', 'gallery_button_previous');

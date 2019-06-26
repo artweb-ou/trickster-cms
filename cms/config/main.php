@@ -30,6 +30,5 @@
     'pricesContainVat' => true,
     'templateTypeCategorySubCategory' => 'thumbnailsmall',
     'templateTypeCategoryProduct' => 'thumbnail',
-    'accLicenseTestKey' => '498ec72c-e8e7-48f2-b300-d95666aeb141',
     'redirectImagesWithDeprecatedParameters' => false,
 ];

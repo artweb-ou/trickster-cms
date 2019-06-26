@@ -8,7 +8,7 @@
  * @property string $logoImage
  * @property string $logoImageOriginalName
  */
-class languageElement extends structureElement implements MetadataProviderInterface
+class languageElement extends structureElement implements MetadataProviderInterface, BreadcrumbsInfoProvider
 {
     use MetadataProviderTrait;
     public $dataResourceName = 'module_language';
@@ -482,5 +482,23 @@ class languageElement extends structureElement implements MetadataProviderInterf
         }
 
         return $result;
+    }
+
+    public function getBreadcrumbsTitle()
+    {
+        $firstPageElement = $this->getFirstPageElement();
+        if($firstPageElement) {
+            return $firstPageElement->getTitle();
+        }
+        return $this->getTitle();
+    }
+
+    public function getBreadcrumbsUrl()
+    {
+        $firstPageElement = $this->getFirstPageElement();
+        if($firstPageElement) {
+            return $firstPageElement->getUrl();
+        }
+        return $this->getUrl();
     }
 }

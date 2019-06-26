@@ -36,30 +36,110 @@
 .map_details {
 	.contentmodule_content {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.map_map {
+		margin-bottom: 0;
 	}
 	.map_content {
-		order: 1;
+		//order: 1;
 	}
 }
 
-//@media (min-width: @screen_breakpoint_lg) {
-@media (min-width: 768px) {
+@media (min-width: @screen_breakpoint_lg) {
 	.map_details {
 		.clearfixin();
 
 		.contentmodule_content {
-			display: block;
+			//display: block;
 		}
 
 		.map_content {
-			float: left;
-			margin-right: 1em;
-			width: 33%;
+			//float: left;
+			//margin-right: 1em;
+			//width: 33%;
 		}
 
 		.map_address {
-			margin-top: 1em;
+		//	margin-top: 1em;
+		}
+
+		.map_embedded .map_map {
+		//	padding-bottom: 2em;
 		}
 	}
+}
+
+.contentmodule_content.content_text.content_map_map {
+	flex-direction:row;
+	flex-basis:100%;
+	justify-content: space-between;
+	justify-self: stretch;
+	justify-items: stretch;
+}
+
+.map_details .contentmodule_content.content_map_map .map_map {
+	flex-basis: 75%;
+	width: 75%;
+	margin: 0;
+	order: 1;
+	box-sizing: border-box;
+}
+
+.contentmodule_content.content_text.content_map_map .map_content {
+	flex-basis: 25%;
+	width: 25%;
+	margin: 0;
+	order: 0;
+	padding-right: 2em;
+
+	align-content: center;
+	align-self: center;
+	box-sizing: border-box;
+}
+
+@media (max-width: @screen_breakpoint_md_max) {
+	.contentmodule_content.content_text.content_map_map {
+		flex-direction:column;
+	}
+	.map_details .contentmodule_content.content_map_map .map_map {
+		flex-basis: 100%;
+		width: 100%;
+	}
+
+	.contentmodule_content.content_text.content_map_map .map_content {
+		flex-basis: 100%;
+		width: 100%;
+	}
+}
+@media (min-width: @screen_breakpoint_md) {
+	.contentmodule_content.content_text.content_map_map {
+		flex-direction:row;
+		}
+	.map_details .contentmodule_content.content_map_map .map_map {
+		flex-basis: 75%;
+		width: 75%;
+	}
+	.contentmodule_content.content_text.content_map_map .map_content {
+		flex-basis: 25%;
+		width: 25%;
+	}
+}
+.map_map {
+	&.googlemap_iframe {
+		min-height: 200px;
+		position: relative;
+		border: .75em solid transparent;
+		box-shadow: 0 0 0 1px @border_color;
+
+		iframe {
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			left: 0;
+			right: 0;
+			top: 0;
+	}
+}
 }

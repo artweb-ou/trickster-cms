@@ -298,6 +298,7 @@ class productElement extends structureElement implements
             if (!$vatIncluded) {
                 $this->calculatedPrice *= $vatRateSetting;
                 $this->calculatedOldPrice *= $vatRateSetting;
+                $this->vatIncluded = true;
             }
             $discountAmount = $discountsManager->getProductDiscount($this->id, $this->calculatedPrice);
             if ($discountAmount) {
@@ -1694,6 +1695,7 @@ class productElement extends structureElement implements
                 foreach ($selectionsPricings as $combo => &$price) {
                     if (!$vatIncluded) {
                         $price *= $vatRateSetting;
+                        $this->vatIncluded = true;
                     }
 
                     $selectionsOldPricings[$combo] = $currencySelector->formatPrice($price);

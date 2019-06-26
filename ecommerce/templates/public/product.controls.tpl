@@ -6,12 +6,7 @@
 			<div class="product_details_minimumorder">{translations name="product.minimumorder"}: <span class="product_minimumorder_value">{$element->minimumOrder}</span></div>
 		{/if}
 		<div class="product_details_controls_buttons">
-			<div class="product_details_amount_block">
-				<span class="button product_details_amount_minus product_details_amount"><span class="button_text">-</span></span>
-				<!--suppress HtmlFormInputWithoutLabel -->
-				<input class='input_component product_details_amount_input' type="text" value="{if $element->minimumOrder>0}{$element->minimumOrder}{else}1{/if}" />
-				<span class="button product_details_amount_plus product_details_amount"><span class="button_text">+</span></span>
-			</div>
+			{include file=$theme->template('element.productAmountControlsBlock.tpl') additionalClass='product_details' element=$element inputAmount="{if $element->minimumOrder>0}{$element->minimumOrder}{else}1{/if}"}
 			<span class="product_details_button button">
 				<span class="button_icon"></span>
 				<span class='button_text'>{translations name='product.addtobasket'}</span>

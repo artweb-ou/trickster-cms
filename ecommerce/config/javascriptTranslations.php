@@ -34,4 +34,5 @@
     'shoppingbasket.table_price_title' => true,
     'shoppingbasket.productstable_remove' => true,
     'shoppingbasket.summa' => true,
+    'shoppingbasket.product_edit' => true,
 ];

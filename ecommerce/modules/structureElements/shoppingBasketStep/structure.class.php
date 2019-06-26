@@ -5,7 +5,7 @@ class shoppingBasketStepElement extends structureElement
     use ConfigurableLayoutsProviderTrait;
 
     public $languagesParentElementMarker = 'adminLanguages';
-    public $dataResourceName = 'module_generic';
+    public $dataResourceName = 'module_shoppingbasket_step';
     protected $allowedTypes = [
         'shoppingBasketStepAgreement',
         'shoppingBasketStepProducts',
@@ -41,6 +41,16 @@ class shoppingBasketStepElement extends structureElement
             }
         }
         return false;
+    }
+
+    public function getStepUrl() {
+        $parentElement = $this->getCurrentParentElement();
+        if(!empty($parentElement)) {
+            $url = $parentElement->URL.'step:'.$this->structureName.'/';
+            return $url;
+        }
+        return false;
+
     }
 }
 

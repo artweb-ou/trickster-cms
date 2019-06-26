@@ -97,7 +97,6 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.galleryDescription.js',
             'component.galleryPlaybackButton.js',
             'component.staticGallery.js',
-            'component.subMenu.js',
             'component.hiddenFields.js',
             'component.scrollItems.js',
             'component.mobileMenu.js',
@@ -107,6 +106,9 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.modal.js',
             'component.FeedbackForm.js',
             'component.mobileCommonMenu.js',
+            'component.SubMenusPopupItemComponent.js',
+            'component.SubmenuItemPopupComponent.js',
+            'component.SubMenuItemComponent.js',
         ];
     }
 }

@@ -4,6 +4,8 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
     var imagesComponent;
     var descriptionComponent;
     var buttonsContainerElement;
+    var playBackButton;
+    var fullScreenButton;
     var buttonPrevious;
     var buttonNext;
     var preloadedStructureElement;
@@ -19,13 +21,17 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
         var imagesList = galleryInfo.getImagesList();
         if (imagesList) {
             makeDomStructure();
-            if (galleryInfo.isThumbnailsSelectorEnabled()) {
-                initGallerySelector();
-            }
+            mobileBreakpointCallback();
             self.recalculateSizes();
             window.addEventListener('resize', self.recalculateSizes);
             window.addEventListener('orientationchange', self.recalculateSizes);
+
+            controller.addListener('mobileBreakpointChanged', mobileBreakpointCallback);
         }
+    };
+    var mobileBreakpointCallback = function() {
+        createButtons();
+        createThumbnailsSelector();
     };
     var makeDomStructure = function() {
         while (componentElement.firstChild) {
@@ -51,67 +57,8 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
         } else {
             componentElement.appendChild(imagesComponent.getComponentElement());
         }
-        // add buttons
+        createButtons();
         var imagesInfosList = galleryInfo.getImagesList();
-        var imageNumber = 0;
-
-        var imagesPrevNextButtonsEnabled = galleryInfo.areImagesPrevNextButtonsEnabled();
-        var imagesPrevNextButtonsSeparated = galleryInfo.areImagesPrevNextButtonsSeparated();
-        var imagesButtonsEnabled = galleryInfo.areImagesButtonsEnabled();
-        var playbackButtonEnabled = galleryInfo.isPlaybackButtonEnabled();
-        var fullScreenButtonEnabled = galleryInfo.isFullScreenButtonEnabled();
-        var button;
-        if (playbackButtonEnabled || imagesButtonsEnabled || imagesPrevNextButtonsEnabled || fullScreenButtonEnabled) {
-
-            buttonsContainerElement = create('gallery_buttons');
-
-            if (imagesPrevNextButtonsSeparated && imagesPrevNextButtonsEnabled) {
-                var prevNextButtonsContainerElement = create('gallery_buttons_prevnext');
-            }
-
-            if (imagesPrevNextButtonsEnabled) {
-                buttonPrevious = new GalleryPreviousButtonComponent(galleryInfo);
-
-                if (imagesPrevNextButtonsSeparated) {
-                    prevNextButtonsContainerElement.appendChild(buttonPrevious.getComponentElement());
-                } else {
-                    buttonsContainerElement.appendChild(buttonPrevious.getComponentElement());
-                }
-            }
-
-            if (imagesButtonsEnabled) {
-                for (var i = 0; i <= imagesInfosList.length; i++) {
-                    if (imagesInfosList[i]) {
-                        button = new GalleryButtonComponent(imagesInfosList[i], galleryInfo);
-                        buttonsContainerElement.appendChild(button.getComponentElement());
-                        imageNumber++;
-                        imageButtons.push(button);
-                    }
-                }
-            }
-
-            if (imagesPrevNextButtonsEnabled) {
-                buttonNext = new GalleryNextButtonComponent(galleryInfo);
-
-                if (imagesPrevNextButtonsSeparated) {
-                    prevNextButtonsContainerElement.appendChild(buttonNext.getComponentElement());
-                } else {
-                    buttonsContainerElement.appendChild(buttonNext.getComponentElement());
-                }
-            }
-
-            if (playbackButtonEnabled) {
-                button = new GalleryPlaybackButtonComponent(galleryInfo);
-                buttonsContainerElement.appendChild(button.getComponentElement());
-                imageButtons.push(button);
-            }
-            if (fullScreenButtonEnabled) {
-                button = new GalleryFullScreenButtonComponent(galleryInfo, imagesComponent);
-                buttonsContainerElement.appendChild(button.getComponentElement());
-                imageButtons.push(button);
-            }
-        }
-
         if (galleryInfo.getDescriptionType() === 'static') {
             descriptionComponent = new GalleryDescriptionComponent(galleryInfo);
             if (preloadedStructureElement) {
@@ -122,9 +69,124 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
             }
             descriptionComponent.setDescription(imagesInfosList[0]);
         }
+        createThumbnailsSelector();
+    };
+    var createThumbnailsSelector = function() {
+        if (galleryInfo.isThumbnailsSelectorEnabled(window.mobileLogics.isPhoneActive())) {
+            if (!selectorComponent) {
+                if (typeof GallerySelectorComponent !== 'undefined') {
+                    selectorComponent = new GallerySelectorComponent(galleryInfo, imagesComponent);
+                    componentElement.appendChild(selectorComponent.getComponentElement());
+                }
+            }
+        } else if (selectorComponent) {
+            var element = selectorComponent.getComponentElement();
+            if (element) {
+                componentElement.removeChild(element);
+            }
+            selectorComponent = null;
+        }
+    };
+    var createButtons = function() {
+        // add buttons
+        var imagesInfosList = galleryInfo.getImagesList();
+        var imageNumber = 0;
+
+        var imagesPrevNextButtonsEnabled = galleryInfo.areImagesPrevNextButtonsEnabled(window.mobileLogics.isPhoneActive());
+        var imagesPrevNextButtonsSeparated = galleryInfo.areImagesPrevNextButtonsSeparated();
+        var imagesButtonsEnabled = galleryInfo.areImagesButtonsEnabled(window.mobileLogics.isPhoneActive());
+        var playbackButtonEnabled = galleryInfo.isPlaybackButtonEnabled();
+        var fullScreenButtonEnabled = galleryInfo.isFullScreenButtonEnabled();
+        var button;
+        if (playbackButtonEnabled || imagesButtonsEnabled || imagesPrevNextButtonsEnabled || fullScreenButtonEnabled) {
+            if (!buttonsContainerElement) {
+                buttonsContainerElement = create('gallery_buttons');
+            }
+
+            if (imagesPrevNextButtonsSeparated && imagesPrevNextButtonsEnabled) {
+                if (!prevNextButtonsContainerElement) {
+                    var prevNextButtonsContainerElement = create('gallery_buttons_prevnext');
+                }
+            } else if (prevNextButtonsContainerElement) {
+                componentElement.removeChild(prevNextButtonsContainerElement);
+            }
+
+            if (imagesPrevNextButtonsEnabled) {
+                if (!buttonPrevious) {
+                    buttonPrevious = new GalleryPreviousButtonComponent(galleryInfo);
+
+                    if (imagesPrevNextButtonsSeparated) {
+                        prevNextButtonsContainerElement.appendChild(buttonPrevious.getComponentElement());
+                    } else {
+                        buttonsContainerElement.appendChild(buttonPrevious.getComponentElement());
+                    }
+                }
+            } else if (buttonPrevious) {
+                buttonPrevious.destroy();
+                buttonPrevious = null;
+            }
+
+            if (imagesButtonsEnabled) {
+                if (imageButtons.length === 0) {
+                    for (var i = 0; i <= imagesInfosList.length; i++) {
+                        if (imagesInfosList[i]) {
+                            button = new GalleryButtonComponent(imagesInfosList[i], galleryInfo);
+                            buttonsContainerElement.appendChild(button.getComponentElement());
+                            imageNumber++;
+                            imageButtons.push(button);
+                        }
+                    }
+                }
+            } else if (imageButtons) {
+                destroyImageButtons();
+            }
+
+            if (imagesPrevNextButtonsEnabled) {
+                if (!buttonNext) {
+                    buttonNext = new GalleryNextButtonComponent(galleryInfo);
+
+                    if (imagesPrevNextButtonsSeparated) {
+                        prevNextButtonsContainerElement.appendChild(buttonNext.getComponentElement());
+                    } else {
+                        buttonsContainerElement.appendChild(buttonNext.getComponentElement());
+                    }
+                }
+            } else if (buttonNext) {
+                buttonNext.destroy();
+                buttonNext = null;
+            }
+
+            if (!playBackButton && playbackButtonEnabled) {
+                playBackButton = new GalleryPlaybackButtonComponent(galleryInfo);
+                buttonsContainerElement.appendChild(playBackButton.getComponentElement());
+                imageButtons.push(playBackButton);
+            }
+            if (!fullScreenButton && fullScreenButtonEnabled) {
+                fullScreenButton = new GalleryFullScreenButtonComponent(galleryInfo, imagesComponent);
+                buttonsContainerElement.appendChild(fullScreenButton.getComponentElement());
+                imageButtons.push(fullScreenButton);
+            }
+        } else if (buttonsContainerElement) {
+            componentElement.removeChild(buttonsContainerElement);
+            buttonsContainerElement = null;
+            destroyImageButtons();
+            if (buttonPrevious) {
+                buttonPrevious.destroy();
+                buttonPrevious = null;
+            }
+            if (buttonNext) {
+                buttonNext.destroy();
+                buttonNext = null;
+            }
+        }
 
     };
-
+    var destroyImageButtons = function() {
+        for (var i = 0; i < imageButtons.length; i++) {
+            imageButtons[i].destroy();
+        }
+        imageButtons = [];
+    };
     var create = function(className) {
         //we add new element to componentElement or to div.gallery_structure if it exists in html
         //if element with className already defined in html(as div.gallery_structure child or sub child) return him
@@ -164,19 +226,21 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
 
         if (imagesComponent) {
             imagesComponent.destroy();
+            imagesComponent = null;
         }
         if (buttonPrevious) {
             buttonPrevious.destroy();
+            buttonPrevious = null;
         }
         if (buttonNext) {
             buttonNext.destroy();
+            buttonNext = null;
         }
         if (descriptionComponent) {
             descriptionComponent.destroy();
+            descriptionComponent = null;
         }
-        for (var i = 0; i < imageButtons.length; i++) {
-            imageButtons[i].destroy();
-        }
+        destroyImageButtons();
     };
     this.getImagesComponent = function() {
         return imagesComponent;
@@ -242,12 +306,6 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
     };
     this.getButtonPreviousComponent = function() {
         return buttonPrevious;
-    };
-    var initGallerySelector = function() {
-        if (typeof GallerySelectorComponent !== 'undefined') {
-            selectorComponent = new GallerySelectorComponent(galleryInfo, imagesComponent);
-            componentElement.appendChild(selectorComponent.getComponentElement());
-        }
     };
     construct();
 };
