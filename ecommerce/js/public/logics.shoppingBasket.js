@@ -45,11 +45,13 @@ window.shoppingBasketLogics = new function() {
     var initData = function() {
         if (window.jsonData && window.jsonData.shoppingBasketData) {
             importData(window.jsonData.shoppingBasketData);
+            self.trackCheckout();
         }
         if (window.orders != undefined) {
             paymentStatus = window.orders[0].orderStatus;
+            self.trackingPurchase();
         }
-        self.trackingPurchase();
+
     };
 
     var importData = function(basketData) {
@@ -186,14 +188,17 @@ window.shoppingBasketLogics = new function() {
         }
     };
     this.trackingPurchase = function() {
-        console.log(paymentStatus, orderId);
         if ((paymentStatus || paymentStatus == 'undefined') && orderId) {
             tracking.buyTracking(orderId);
         }
     };
     this.trackCheckout = function() {
-        if (!paymentStatus && self.productsList) {
-            tracking.checkoutTracking(self.productsList);
+        if (!paymentStatus && self.productsList && orderId == null) {
+            if(self.currentStep == 1) {
+                tracking.checkoutTracking(self.productsList);
+            } else {
+                tracking.checkoutProgressTracking(self.currentStep, self.productsList);
+            }
         }
     };
     this.addProduct = function(productId, productAmount, options) {

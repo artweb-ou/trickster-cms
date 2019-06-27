@@ -63,7 +63,6 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
         controller.addListener('shoppingBasketUpdated', updateData);
     };
     var startApplication = function() {
-        window.shoppingBasketLogics.trackCheckout();
         updateData();
     };
     var updateData = function() {
