@@ -32,8 +32,8 @@ window.ShoppingBasketSelectionProducts = function(componentElement) {
         for (var j = 0; j < productComponentsList.length; j++) {
             var basketProductId2 = productComponentsList[j].getBasketProductId();
             if (typeof usedIdIndex[basketProductId2] == 'undefined') {
+                //productComponentsIndex[basketProductId2].destroy();
                 delete productComponentsIndex[basketProductId2];
-                productComponentsIndex[basketProductId2].destroy();
                 productComponentsList.splice(j, 1);
             }
         }

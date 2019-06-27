@@ -4,7 +4,7 @@ class ShoppingBasketDeliveryTargets implements DependencyInjectionContextInterfa
 {
     use DependencyInjectionContextTrait;
     /**
-     * @var shoppingBasketDeliveryTargets
+     * @var ShoppingBasketDeliveryTargets
      */
     protected static $instance = null;
     /**
@@ -24,7 +24,7 @@ class ShoppingBasketDeliveryTargets implements DependencyInjectionContextInterfa
     protected $countriesData;
 
     /**
-     * @return shoppingBasketDeliveryTargets
+     * @return ShoppingBasketDeliveryTargets
      * @deprecated
      */
     public static function getInstance()

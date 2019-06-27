@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class shoppingBasketCity
+ * Class ShoppingBasketCity
  */
 
 class ShoppingBasketCity

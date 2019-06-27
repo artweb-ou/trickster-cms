@@ -25,9 +25,10 @@ window.SelectedProductsScrollComponent = function(componentElement) {
             }
             reset();
             window.addEventListener('resize', resize);
-            window.touchManager.addEventListener(componentElement, 'start', touchStart);
-            window.touchManager.addEventListener(componentElement, 'end', touchEnd);
-            window.touchManager.addEventListener(componentElement, 'cancel', touchCancel);
+            // temporarily turned off because of iphones
+            // window.touchManager.addEventListener(componentElement, 'start', touchStart);
+            // window.touchManager.addEventListener(componentElement, 'end', touchEnd);
+            // window.touchManager.addEventListener(componentElement, 'cancel', touchCancel);
         }
     };
     var touchStartX = 0;

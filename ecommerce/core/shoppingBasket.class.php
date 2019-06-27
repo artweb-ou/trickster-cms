@@ -184,7 +184,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
 
     public function selectDeliveryCity($targetId)
     {
-        $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
+        $shoppingBasketDeliveryTargets = $this->getService('ShoppingBasketDeliveryTargets');
         $shoppingBasketDeliveryTargets->setSelectedDeliveryCityId($targetId);
 
         $this->recalculate();
@@ -192,7 +192,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
 
     public function selectDeliveryCountry($countryId)
     {
-        $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
+        $shoppingBasketDeliveryTargets = $this->getService('ShoppingBasketDeliveryTargets');
         $shoppingBasketDeliveryTargets->setSelectedDeliveryCountryId($countryId);
 
         $this->recalculate();
@@ -250,9 +250,9 @@ class shoppingBasket implements DependencyInjectionContextInterface
     {
         if ($this->productsList) {
             /**
-             * @var shoppingBasketDeliveryTargets $shoppingBasketDeliveryTargets
+             * @var ShoppingBasketDeliveryTargets $shoppingBasketDeliveryTargets
              */
-            $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
+            $shoppingBasketDeliveryTargets = $this->getService('ShoppingBasketDeliveryTargets');
             $this->countriesList = $shoppingBasketDeliveryTargets->getActiveCountriesList();
 
             /**
@@ -511,9 +511,9 @@ class shoppingBasket implements DependencyInjectionContextInterface
     {
         if ($id = $this->getSelectedCityId()) {
             /**
-             * @var shoppingBasketDeliveryTargets $shoppingBasketDeliveryTargets
+             * @var ShoppingBasketDeliveryTargets $shoppingBasketDeliveryTargets
              */
-            $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
+            $shoppingBasketDeliveryTargets = $this->getService('ShoppingBasketDeliveryTargets');
             return $shoppingBasketDeliveryTargets->getCity($id);
         }
         return false;
@@ -528,9 +528,9 @@ class shoppingBasket implements DependencyInjectionContextInterface
     {
         if ($id = $this->getSelectedCountryId()) {
             /**
-             * @var shoppingBasketDeliveryTargets $shoppingBasketDeliveryTargets
+             * @var ShoppingBasketDeliveryTargets $shoppingBasketDeliveryTargets
              */
-            $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
+            $shoppingBasketDeliveryTargets = $this->getService('ShoppingBasketDeliveryTargets');
             return $shoppingBasketDeliveryTargets->getCountry($id);
         }
         return false;
@@ -1007,7 +1007,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
     {
         $this->activeDeliveryTypes = [];
         $excludedDeliveriesIds = $this->getDisabledDeliveryTypesIds();
-        $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
+        $shoppingBasketDeliveryTargets = $this->getService('ShoppingBasketDeliveryTargets');
 
         foreach ($this->deliveryTypesList as &$deliveryType) {
             if (!$excludedDeliveriesIds || !in_array($deliveryType->id, $excludedDeliveriesIds)) {
@@ -1066,7 +1066,7 @@ class shoppingBasketDeliveryType implements DependencyInjectionContextInterface
 
     public function getBasePrice()
     {
-        $shoppingBasketDeliveryTargets = $this->getService('shoppingBasketDeliveryTargets');
+        $shoppingBasketDeliveryTargets = $this->getService('ShoppingBasketDeliveryTargets');
         $selectedTargetId = $shoppingBasketDeliveryTargets->getSelectedDeliveryTargetId();
 
         $basePrice = 0;

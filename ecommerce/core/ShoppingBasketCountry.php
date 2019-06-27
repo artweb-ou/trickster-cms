@@ -19,7 +19,7 @@ class ShoppingBasketCountry
         $this->iso3166_1a2 = $countryData['iso3166_1a2'];
         $this->conditionsText = $countryData['conditionsText'];
         foreach ($countryData['cities'] as &$cityData) {
-            $city = new shoppingBasketCity($cityData);
+            $city = new ShoppingBasketCity($cityData);
             $this->citiesList[] = $city;
             $this->citiesIndex[$city->id] = $city;
         }
