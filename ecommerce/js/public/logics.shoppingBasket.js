@@ -39,6 +39,7 @@ window.shoppingBasketLogics = new function() {
 
     this.displayVat = true;
     this.displayTotals = true;
+    this.currentStep;
     var orderId;
     var paymentStatus = false;
     var initData = function() {
@@ -70,7 +71,7 @@ window.shoppingBasketLogics = new function() {
         self.totalPrice = basketData.totalPrice;
         self.vatAmount = basketData.vatAmount;
         self.vatLessTotalPrice = basketData.vatLessTotalPrice;
-
+        self.currentStep = basketData.currentStep;
         self.productsSalesPrice = basketData.productsSalesPrice;
 
         self.message = basketData.message;
@@ -185,6 +186,7 @@ window.shoppingBasketLogics = new function() {
         }
     };
     this.trackingPurchase = function() {
+        console.log(paymentStatus, orderId);
         if ((paymentStatus || paymentStatus == 'undefined') && orderId) {
             tracking.buyTracking(orderId);
         }
@@ -192,7 +194,6 @@ window.shoppingBasketLogics = new function() {
     this.trackCheckout = function() {
         if (!paymentStatus && self.productsList) {
             tracking.checkoutTracking(self.productsList);
-            tracking.checkoutOptionsTracking(1, self.selectedDeliveryTypeTitle);
         }
     };
     this.addProduct = function(productId, productAmount, options) {
@@ -359,9 +360,6 @@ window.shoppingBasketLogics = new function() {
         if (responseStatus == 'success') {
             if (typeof parsedData.shoppingBasketData != 'undefined') {
                 importData(parsedData.shoppingBasketData);
-                if (requestName == 'selectDelivery') {
-                    tracking.checkoutOptionsTracking(1, parsedData.shoppingBasketData.selectedDeliveryTypeTitleDl);
-                }
             }
             if (requestName == 'addProduct') {
                 controller.fireEvent('shoppingBasketProductAdded');

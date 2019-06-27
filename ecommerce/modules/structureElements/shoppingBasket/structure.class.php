@@ -124,6 +124,16 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         return [];
     }
 
+    public function getCurrentStepNumber() {
+        $steps = $this->getSteps();
+        foreach ($steps as $key => $step) {
+            if ($this->getCurrentStepElement() == $step) {
+                return $key+1;
+            }
+        }
+        return false;
+    }
+
     public function getCurrentStepElement()
     {
         if ($this->currentStep === null) {
@@ -290,6 +300,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $configManager = $this->getService('ConfigManager');
         $configManager->get('main.defaultSessionLifeTime');
         $currentOrder = $this->getCurrentOrder();
+        $data['currentStep'] = $this->getCurrentStepNumber();
         $data['orderId'] = $currentOrder ? $currentOrder->id : null;
         $data['displayVat'] = $configManager->get('main.displayVat');
         $data['displayTotals'] = $this->displayTotals();
