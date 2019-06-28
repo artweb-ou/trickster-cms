@@ -1,5 +1,5 @@
 {
-    "name": "artweb_ou/trickster-cms",
+    "name": "artweb-ou/trickster-cms",
     "description": "Trickster CMS packages",
     "license": "proprietary",
     "require": {    
