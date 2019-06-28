@@ -15,7 +15,7 @@
 	<div class="submenu_item submenu_item_level_{$level}{if $subMenu->requested} submenu_item_active{/if}">
 		<a href="{$subMenu->URL}"{$menuItemHasChild} class="submenu_item_link{if !empty($usePopup) && ($levels == $level)}{if $subMenu->getSubMenuList()} submenu_item_haspopup{/if}{/if} menuid_{$subMenu->id}{if !empty($verticalPopup)} vertical_popup{/if}">
 			<span class="submenu_item_icon"></span>
-			<span class="submenu_item_text" role="menuitem">{$subMenu->title}</span>
+			<span class="submenu_item_text" role="menuitem">{$subMenu->title|ucfirst}</span>
 		</a>{$submenuSignature}
 		{if $level < $levels || ($subMenu->requested && $level < $element->maxLevels)}
 			{if $subMenu->getSubMenuList()}
