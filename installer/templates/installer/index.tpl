@@ -43,7 +43,7 @@
 						{/foreach}
 					</fieldset>
 					<fieldset class="form_fieldset">
-						<legend>Licence</legend>
+						<legend>API key</legend>
 						{foreach $licenceFields as $field}
 							<div class="form_field form_field_text">
 								<label for="form_control_{$field}">
