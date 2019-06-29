@@ -127,4 +127,8 @@
 	background-image: url("@{svgContent}");
 }
 
-
+.visible(@el_type){ // like block, flex, inline etc....
+	opacity: 1;
+	visibility: visible;
+	display: @el_type;
+}
