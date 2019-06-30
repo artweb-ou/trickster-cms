@@ -4,6 +4,7 @@ function SubscriptionFormComponent(formElement) {
     var actionField;
     var submitButton;
     var messageElement;
+    var classSufix = '';
 
     var init = function() {
         if (emailField = formElement.querySelector('.news_mailform_input')) {
@@ -41,7 +42,11 @@ function SubscriptionFormComponent(formElement) {
         if (responseStatus == 'success') {
             if (typeof responseData.newsMailForm !== 'undefined') {
                 emailField.value = '';
-                messageElement.classList.add("message_" + responseData.newsMailForm.subscriptionStatus);
+                if (classSufix !=='') {
+                    messageElement.classList.remove("message_" + classSufix);
+                }
+                classSufix = responseData.newsMailForm.subscriptionStatus;
+                messageElement.classList.add("message_" + classSufix);
                 messageElement.innerHTML = responseData.newsMailForm.message;
                 messageElement.style.display = 'block';
             }
