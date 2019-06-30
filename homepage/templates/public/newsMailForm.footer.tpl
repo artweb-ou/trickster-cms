@@ -17,8 +17,14 @@
 			<input type="hidden" value="subscribe" name="action" />
 			<div class="news_mailform_input_wrap">
 				<input type="text" class='input_component news_mailform_input' value="" name="{$formNames.email}" placeholder="{if $element->subscribed}{translations name='subscribe.thanksforsubscribing'}{else}{translations name='subscribe.enteryouremail'}{/if}"/>
-				{if $icon = $theme->getImageUrl("icon_mail.png", false, false)}
-					<img class="news_mailform_input_icon" src="{$icon}" />
+				{if !empty($inputIcon)}
+					{$inputIcon}
+				{else}
+					{if $icon = $theme->getImageUrl("icon_mail.svg", false, false)}
+						<img class="news_mailform_input_icon hidden" src="{$icon}" />
+					{elseif $icon = $theme->getImageUrl("icon_mail.png", false, false)}
+						<img class="news_mailform_input_icon" src="{$icon}" />
+					{/if}
 				{/if}
 			</div>
 			<div class="news_mailform_controls">

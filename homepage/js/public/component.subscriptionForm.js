@@ -41,6 +41,7 @@ function SubscriptionFormComponent(formElement) {
         if (responseStatus == 'success') {
             if (typeof responseData.newsMailForm !== 'undefined') {
                 emailField.value = '';
+                messageElement.classList.add("message_" + responseData.newsMailForm.subscriptionStatus);
                 messageElement.innerHTML = responseData.newsMailForm.message;
                 messageElement.style.display = 'block';
             }
