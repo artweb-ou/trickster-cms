@@ -122,8 +122,8 @@
 
 // SVG background-image,
 // todo: need additional code clean in CssUniter
-.svg-bg(@svgFile,@fill,@stroke) {
-	@svgContent: encodeSvgContent(@svgFile, @fill, @stroke); // file name, fill color, stroke color
+.svg-bg(@svgFile,@fill,@stroke,@subfolder:false) {
+	@svgContent: encodeSvgContent(@svgFile, @fill, @stroke, @subfolder); // file name, fill color, stroke color
 	background-image: url("@{svgContent}");
 }
 
