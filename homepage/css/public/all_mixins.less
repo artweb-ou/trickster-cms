@@ -132,3 +132,14 @@
 	visibility: visible;
 	display: @el_type;
 }
+.bg_params(@repeat,@width,@height,@posX,@posY) {
+	background-repeat: @repeat;
+	background-size: @width @height;
+	background-position: @posX @posY;
+}
+.max_width(@max_width) {
+	max-width: @max_width;
+	width: 100%;
+	margin-right: auto;
+	margin-left: auto;
+}
