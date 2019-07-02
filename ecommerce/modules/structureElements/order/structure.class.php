@@ -447,6 +447,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $translationsManager = $this->getService('translationsManager');
 
             $settings = $this->getService('settingsManager')->getSettingsList();
+            /**
+             * @var EmailDispatcher $emailDispatcher
+             */
             $emailDispatcher = $this->getService('EmailDispatcher');
             $newDispatchment = $emailDispatcher->getEmptyDispatchment();
             $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
@@ -460,6 +463,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 'public_translations');
             $subject .= ' (' . $this->getInvoiceNumber($emailType) . ')';
             $newDispatchment->setSubject($subject);
+            $data['displayInvoiceLogo'] = false;
             $newDispatchment->setData($data);
             $newDispatchment->setReferenceId($this->id);
             $newDispatchment->setType('order');
@@ -468,6 +472,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $attachmentName = $this->{$emailType . 'Number'} . '.pdf';
                 $newDispatchment->registerAttachment($filePath, $attachmentName);
             }
+
             if ($emailDispatcher->startDispatchment($newDispatchment)) {
                 $this->$sentPropertyName = '1';
             } else {
@@ -554,6 +559,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $this->$filePropertyName = $this->id . '_' . $type;
 
         $data = $this->getOrderData();
+        $data['displayInvoiceLogo'] = true;
         $data['documentType'] = $type;
         if ($pdfContents = $this->makePdf($data, $type)) {
             $filePath = $uploadsPath . $this->$filePropertyName;
@@ -600,7 +606,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
         } catch (exception $ex) {
             $this->logError('emogrifier error: ' . $ex->getMessage());
         }
-
         $prevErrorReportingSettings = error_reporting();
         error_reporting(0);
         $mpdf = new \Mpdf\Mpdf();
