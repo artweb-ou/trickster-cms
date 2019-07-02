@@ -50,7 +50,6 @@ class shoppingBasketStepElement extends structureElement
             return $url;
         }
         return false;
-
     }
 }
 
