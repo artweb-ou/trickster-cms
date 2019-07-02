@@ -211,3 +211,21 @@ body {
     }
 }
 
+/********************************************************
+/*  PLACEHOLDERS
+/********************************************************/
+input {
+    &.input_component {
+        &::-webkit-input-placeholder { transition: opacity 0.35s ease-in-out; }
+        &:-ms-input-placeholder { transition: opacity 0.35s ease-in-out; }
+        &::-ms-input-placeholder {  transition: opacity 0.35s ease-in-out; }
+        &::placeholder { transition: opacity 0.35s ease-in-out; }
+
+        &:focus{
+            &::-webkit-input-placeholder { opacity: 0!important; }
+            &:-ms-input-placeholder { opacity: 0!important; }
+            &::-ms-input-placeholder {  opacity: 0!important; }
+            &::placeholder { opacity: 0!important; }
+        }
+    }
+}
