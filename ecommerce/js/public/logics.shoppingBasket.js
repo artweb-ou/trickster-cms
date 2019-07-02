@@ -45,7 +45,6 @@ window.shoppingBasketLogics = new function() {
     var initData = function() {
         if (window.jsonData && window.jsonData.shoppingBasketData) {
             importData(window.jsonData.shoppingBasketData);
-            self.trackCheckout();
         }
         if (window.orders != undefined) {
             paymentStatus = window.orders[0].orderStatus;
