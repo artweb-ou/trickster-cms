@@ -13,6 +13,18 @@ class receiveLinkListItem extends structureElementAction
                 $structureElement->image = $structureElement->id;
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
             }
+            $additionalImages = [
+                'secondaryImage',
+                'tertiaryImage',
+                'quaternaryImage',
+            ];
+            foreach($additionalImages as $imageCode) {
+                if (!is_null($structureElement->getDataChunk($imageCode)->originalName)) {
+                    $structureElement->$imageCode = $structureElement->id . "_$imageCode";
+                    $field = $imageCode . 'OriginalName';
+                    $structureElement->$field = $structureElement->getDataChunk($imageCode)->originalName;
+                }
+            }
             $structureElement->persistElementData();
         }
         if ($controller->getApplicationName() != 'adminAjax') {
@@ -24,6 +36,9 @@ class receiveLinkListItem extends structureElementAction
     {
         $expectedFields = [
             'image',
+            'secondaryImage',
+            'tertiaryImage',
+            'quaternaryImage',
             'link',
             'linkText',
             'content',
