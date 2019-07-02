@@ -24,7 +24,6 @@
         'catalogue',
         'commentTarget',
         'connectedFile',
-        'dashboard',
         'deliveryTypeField',
         'deliveryTypePaymentMethod',
         'discountsList',
