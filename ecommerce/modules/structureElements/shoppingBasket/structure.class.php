@@ -264,22 +264,19 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
              */
             $structureManager = $this->getService('structureManager');
 
-            if ($deliveryType && ($elements = $structureManager->getElementsByIdList([$deliveryType->id], false, true))
+            if ($deliveryType && ($deliveryTypeElement = $structureManager->getElementById($deliveryType->id, $this->id, true))
             ) {
-                if ($deliveryTypeElement = reset($elements)) {
                     $fieldsList = $deliveryTypeElement->getFieldsList();
 
                     foreach ($fieldsList as &$record) {
                         //if element is not "preloaded" this way, then we have problems with cache,
                         //because its location could be previously cached within other delivery type,
                         //which is not available currently
-                        $structureManager->getElementsByIdList([$record->fieldId], false, true);
-                        if ($fieldElement = $structureManager->getElementById($record->fieldId)) {
+                        if ($fieldElement = $structureManager->getElementById($record->fieldId, $this->id, true)) {
                             $this->customFieldsList[] = $fieldElement;
                             $fieldElement->required = $record->required;
                         }
                     }
-                }
             }
         }
         return $this->customFieldsList;

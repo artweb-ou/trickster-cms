@@ -390,7 +390,7 @@ class structureManager implements DependencyInjectionContextInterface
         $element = false;
 
         //load element from the storage
-        if ($elementsList = $this->loadElements([$elementId])) {
+        if ($elementsList = $this->loadElementsToParent([$elementId])) {
             $element = array_shift($elementsList);
         }
 
@@ -459,7 +459,7 @@ class structureManager implements DependencyInjectionContextInterface
 
                     if ($record = $query->first()) {
                         $id = $record['id'];
-                        $this->loadElements([$id], $parentElementId);
+                        $this->loadElementsToParent([$id], $parentElementId);
                         if (isset($this->elementsList[$id])) {
                             $result = $this->elementsList[$id];
                         }
@@ -807,7 +807,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
 
                 //load the children elements from the storage and return them
-                $this->loadElements($idListToLoad, $parentElementId, $allowedElements, $rolesToLoad);
+                $this->loadElementsToParent($idListToLoad, $parentElementId, $allowedElements, $rolesToLoad);
             }
 
             foreach ($idListToReturn as &$childElementId) {
@@ -852,7 +852,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param array $allowedRoles
      * @return array|bool
      */
-    protected function loadElements($idList = [], $parentElementId = 0, $allowedElements = [], $allowedRoles = [])
+    protected function loadElementsToParent($idList = [], $parentElementId = 0, $allowedElements = [], $allowedRoles = [])
     {
         $loadedElements = [];
         foreach ($idList as $key => $id) {
@@ -1193,18 +1193,20 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @param int $id
      * @param int|null $parentId
+     * @param bool $directlyToParent
      * @return bool|structureElement
      */
-    public function getElementById($id, $parentId = null)
+    public function getElementById($id, $parentId = null, $directlyToParent = false)
     {
         if ($id) {
             if (isset($this->elementsList[$id])) {
                 return $this->elementsList[$id];
             }
-            if (!$parentId) {
-                $parentId = $this->elementPathRestrictionId;
+            if ($directlyToParent) {
+                $this->loadElementsToParent([$id], $parentId);
+            } else {
+                $this->loadFromShortestPath($id, $parentId);
             }
-            $this->ensureElementAvailability($id, $parentId);
             if (!empty($this->elementsList[$id])) {
                 return $this->elementsList[$id];
             }
@@ -1253,10 +1255,13 @@ class structureManager implements DependencyInjectionContextInterface
      * @param $id
      * @param int|null $parentId
      */
-    protected function ensureElementAvailability($id, $parentId = null)
+    protected function loadFromShortestPath($id, $parentId = null)
     {
         if ($id == $this->getRootElementId()) {
             $this->loadRootElement($id);
+        }
+        if (!$parentId) {
+            $parentId = $this->elementPathRestrictionId;
         }
         if ($shortestChain = $this->findShortestParentsChain($id, $parentId)) {
             $parentId = end($shortestChain);
@@ -1267,7 +1272,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
                 if (isset($this->elementsList[$parentId])) {
                     if (!isset($this->elementsList[$id])) {
-                        if ($this->loadElements([$id], $parentId)) {
+                        if ($this->loadElementsToParent([$id], $parentId)) {
                             $parentId = $id;
                         } else {
                             break;
@@ -1377,11 +1382,11 @@ class structureManager implements DependencyInjectionContextInterface
      * @param bool $type
      * @return structureElement[]
      *
-     * TODO: refactor this method
-     * @deprecated - PLEASE DONT USE WITHOUT HEAVY NEED
+     * @deprecated
      */
     public function getElementsByIdList($idList, $elementId = false, $type = false)
     {
+        $this->logError('Deprecated method has been used getElementsByIdList');
         if (!$elementId) {
             $elementId = $this->getRootElementId();
         }
@@ -1401,7 +1406,7 @@ class structureManager implements DependencyInjectionContextInterface
             }
 
             // load the children elements from the storage and return them
-            if ($elementsList = $this->loadElements($idList, $elementId, $allowedElements, $rolesToLoad)) {
+            if ($elementsList = $this->loadElementsToParent($idList, $elementId, $allowedElements, $rolesToLoad)) {
                 if ($type && ($type !== 'idlist')) {
                     if (is_bool($type)) {
                         $type = "structure";
