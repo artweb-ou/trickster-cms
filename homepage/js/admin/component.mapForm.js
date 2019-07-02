@@ -51,7 +51,7 @@ window.MapFormComponent = function(componentElement) {
 
     var sendRequest = function(address) {
         var result = false;
-        var url = 'https://maps.google.com/maps/api/geocode/json?address=' + encodeURI(address) + '&sensor=false&key=AIzaSyD6IK7At5KLa_vYFFxGcE6ml9VC2WQTWHw';
+        var url = 'https://maps.google.com/maps/api/geocode/json?address=' + encodeURI(address) + '&sensor=false&key=AIzaSyB1oHRRkXybd1LpmJS0IUpItkvup1KXzGg';
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open('GET', url, false);
         xmlHttp.send(null);
