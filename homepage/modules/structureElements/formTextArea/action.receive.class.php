@@ -29,6 +29,7 @@ class receiveFormTextArea extends structureElementAction
             'required',
             'validator',
             'autocomplete',
+            'placeholder',
         ];
     }
 

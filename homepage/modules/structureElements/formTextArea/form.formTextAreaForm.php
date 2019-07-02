@@ -6,6 +6,9 @@ class FormTextAreaFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'placeholder' => [
+            'type' => 'input.text',
+        ],
         'required' => [
             'type' => 'input.checkbox',
         ],
