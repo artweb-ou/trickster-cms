@@ -5,12 +5,16 @@ window.googleAnalyticsLogics = new function() {
     var timeoutInterval = 250;
 
     var init = function() {
+        checkEcommerce();
+    };
+
+    var checkEcommerce = function() {
         if (typeof window.google !== 'undefined') {
             if (typeof window.google.ecommerce !== 'undefined') {
                 ecommerceEnabled = window.google.ecommerce.enabled;
             }
         }
-    };
+    }
 
     var gaCallbackCaller = function() {
         clearTimeout(callbackTimeout);
@@ -161,7 +165,8 @@ window.googleAnalyticsLogics = new function() {
     };
 
     this.checkoutOptionsEvent = function(step, value) {
-        if (ecommerceEnabled && value) {
+        checkEcommerce();
+        if (ecommerceEnabled && value && step) {
             gtag('event', 'set_checkout_option', {
                 'checkout_step': step,
                 'checkout_option': value,
@@ -169,7 +174,7 @@ window.googleAnalyticsLogics = new function() {
         }
     };
 
-    this.checkProgressEvent = function(parameters) {
+    this.checkProgressEvent = function(step, parameters) {
         var products = Array();
         if (ecommerceEnabled && parameters) {
             for (var i = 0; i < parameters.products.length; i++) {
@@ -184,7 +189,7 @@ window.googleAnalyticsLogics = new function() {
             }
             gtag('event', 'checkout_progress', {
                 'items': products,
-                'checkout_step': '2',
+                'checkout_step': step,
             });
         }
     };

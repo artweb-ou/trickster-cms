@@ -38,8 +38,8 @@
 				<td></td>
 				<td></td>
 				<td class="shoppingbasket_payer_data_controls form_field">
-					<input type='checkbox' class='checkbox_placeholder' name='{$formNames.receiverIsPayer}' id="shoppingbasket_payer_data_checkbox" value='1' {if $formData.receiverIsPayer != '0'}checked='checked'{/if}/><!--
-						--><label for="shoppingbasket_payer_data_checkbox">{translations name='shoppingbasket.receiverispayer'}</label>
+					<input type='checkbox' class='checkbox_placeholder' name='{$formNames.receiverIsPayer}' id="shoppingbasket_payer_data_checkbox" value='1' {if $formData.receiverIsPayer}checked='checked'{/if}/>
+					<label for="shoppingbasket_payer_data_checkbox">{translations name='shoppingbasket.receiverispayer'}</label>
 				</td>
 			</tr>
 			</tbody>

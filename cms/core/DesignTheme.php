@@ -42,7 +42,7 @@ abstract class DesignTheme extends errorLogger
     }
 
     /**
-     * This method is called after the creation of designTheme object.
+     * This method is called after the creation of DesignTheme object.
      * Method's purpose is to define all required paths and file lists for the design theme.
      * @abstract
      * @return

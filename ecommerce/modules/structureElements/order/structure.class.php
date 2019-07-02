@@ -4,6 +4,7 @@
  * Class orderElement
  *
  * @property string $orderStatus
+ * @property string $payerLanguage
  * @property mixed paymentStatus
  * @property float $deliveryPrice
  */
@@ -37,7 +38,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
     protected $discountsList;
     protected $servicesList;
     protected $orderData;
-    protected $payerLanguageId;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -72,6 +72,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $moduleStructure['payerAddress'] = 'text';
         $moduleStructure['payerPostIndex'] = 'text';
         $moduleStructure['payerCountry'] = 'text';
+        $moduleStructure['payerLanguage'] = 'text';
         $moduleStructure['dueDate'] = 'date';
 
         $moduleStructure['orderConfirmationFile'] = 'file';
@@ -262,7 +263,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         }
         if ($this->orderStatusText === null) {
             $this->orderStatusText = $this->getService('translationsManager')
-                ->getTranslationByName('order.status_' . $fromStatus, 'adminTranslations');
+                ->getTranslationByName('order_status.status_' . $fromStatus);
         }
         return $this->orderStatusText;
     }
@@ -436,6 +437,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
     {
         $sentPropertyName = $emailType . 'Sent';
         if (!$this->$sentPropertyName || $forceSending) {
+            $languagesManager = $this->getService('languagesManager');
+            $languagesManager->setCurrentLanguageCode($this->payerLanguage);
+
             $administratorEmail = $this->getAdministratorEmail();
             $data = $this->getOrderData();
             $data['documentType'] = $emailType;
@@ -443,6 +447,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $translationsManager = $this->getService('translationsManager');
 
             $settings = $this->getService('settingsManager')->getSettingsList();
+            /**
+             * @var EmailDispatcher $emailDispatcher
+             */
             $emailDispatcher = $this->getService('EmailDispatcher');
             $newDispatchment = $emailDispatcher->getEmptyDispatchment();
             $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
@@ -456,6 +463,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 'public_translations');
             $subject .= ' (' . $this->getInvoiceNumber($emailType) . ')';
             $newDispatchment->setSubject($subject);
+            $data['displayInvoiceLogo'] = false;
             $newDispatchment->setData($data);
             $newDispatchment->setReferenceId($this->id);
             $newDispatchment->setType('order');
@@ -464,6 +472,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $attachmentName = $this->{$emailType . 'Number'} . '.pdf';
                 $newDispatchment->registerAttachment($filePath, $attachmentName);
             }
+
             if ($emailDispatcher->startDispatchment($newDispatchment)) {
                 $this->$sentPropertyName = '1';
             } else {
@@ -475,7 +484,11 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function sendOrderStatusNotificationEmail()
     {
-        if ($this->orderStatus !== 'undefined') {
+        if ($this->orderStatus !== 'undefined' && $this->orderStatus !== 'deleted') {
+
+            $languagesManager = $this->getService('languagesManager');
+            $languagesManager->setCurrentLanguageCode($this->payerLanguage);
+
             $administratorEmail = $this->getAdministratorEmail();
             $data = $this->getOrderData();
             $data['documentType'] = 'Notification';
@@ -540,14 +553,13 @@ class orderElement extends structureElement implements PaymentOrderInterface
     public function getPdfPath($type)
     {
         $resultPdfPath = false;
-        $languagesManager = $this->getService('languagesManager');
-        $languagesManager->setCurrentLanguageCode($this->getPayerLanguage);
         $filePropertyName = $type . 'File';
         $pathsManager = $this->getService('PathsManager');
         $uploadsPath = $pathsManager->getPath('uploads');
         $this->$filePropertyName = $this->id . '_' . $type;
 
         $data = $this->getOrderData();
+        $data['displayInvoiceLogo'] = true;
         $data['documentType'] = $type;
         if ($pdfContents = $this->makePdf($data, $type)) {
             $filePath = $uploadsPath . $this->$filePropertyName;
@@ -594,7 +606,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
         } catch (exception $ex) {
             $this->logError('emogrifier error: ' . $ex->getMessage());
         }
-
         $prevErrorReportingSettings = error_reporting();
         error_reporting(0);
         $mpdf = new \Mpdf\Mpdf();

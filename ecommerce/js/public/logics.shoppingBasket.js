@@ -39,16 +39,19 @@ window.shoppingBasketLogics = new function() {
 
     this.displayVat = true;
     this.displayTotals = true;
+    this.currentStep;
     var orderId;
     var paymentStatus = false;
     var initData = function() {
         if (window.jsonData && window.jsonData.shoppingBasketData) {
             importData(window.jsonData.shoppingBasketData);
+            self.trackCheckout();
         }
         if (window.orders != undefined) {
             paymentStatus = window.orders[0].orderStatus;
+            self.trackingPurchase();
         }
-        self.trackingPurchase();
+
     };
 
     var importData = function(basketData) {
@@ -70,7 +73,7 @@ window.shoppingBasketLogics = new function() {
         self.totalPrice = basketData.totalPrice;
         self.vatAmount = basketData.vatAmount;
         self.vatLessTotalPrice = basketData.vatLessTotalPrice;
-
+        self.currentStep = basketData.currentStep;
         self.productsSalesPrice = basketData.productsSalesPrice;
 
         self.message = basketData.message;
@@ -190,9 +193,12 @@ window.shoppingBasketLogics = new function() {
         }
     };
     this.trackCheckout = function() {
-        if (!paymentStatus && self.productsList) {
-            tracking.checkoutTracking(self.productsList);
-            tracking.checkoutOptionsTracking(1, self.selectedDeliveryTypeTitle);
+        if (!paymentStatus && self.productsList && orderId == null) {
+            if(self.currentStep == 1) {
+                tracking.checkoutTracking(self.productsList);
+            } else {
+                tracking.checkoutProgressTracking(self.currentStep, self.productsList);
+            }
         }
     };
     this.addProduct = function(productId, productAmount, options) {
@@ -359,9 +365,6 @@ window.shoppingBasketLogics = new function() {
         if (responseStatus == 'success') {
             if (typeof parsedData.shoppingBasketData != 'undefined') {
                 importData(parsedData.shoppingBasketData);
-                if (requestName == 'selectDelivery') {
-                    tracking.checkoutOptionsTracking(1, parsedData.shoppingBasketData.selectedDeliveryTypeTitleDl);
-                }
             }
             if (requestName == 'addProduct') {
                 controller.fireEvent('shoppingBasketProductAdded');

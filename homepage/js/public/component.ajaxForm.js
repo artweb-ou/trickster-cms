@@ -96,7 +96,7 @@ function AjaxFormComponent(formElement, callCallback) {
                         }
                     }
 
-                    if (typeof response.error_message !== 'undefined') {
+                    if (typeof response.error_message !== 'undefined' && response.error_message !== null) { // IE NULL fix
                         errorMessageElement.innerHTML = response.error_message;
                         errorMessageElement.style.display = 'block';
                     }

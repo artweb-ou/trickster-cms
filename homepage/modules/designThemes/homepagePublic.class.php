@@ -50,11 +50,13 @@ class homepagePublicDesignTheme extends DesignTheme
             'logics.scrollItems.js',
             'logics.mobileMenu.js',
             'logics.mobileCommonMenu.js',
+            'logics.smoothScrollTo.js',
             'mixin.LazyLoading.js',
             'mixin.slides.js',
             'mixin.scrollPages.js',
             'mixin.carouselGallery.js',
             'mixin.slideOverlay.js',
+            'component.smoothScrollTo.js',
             'component.input.js',
             'component.contentToggler.js',
             'component.gallery.js',
@@ -97,7 +99,6 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.galleryDescription.js',
             'component.galleryPlaybackButton.js',
             'component.staticGallery.js',
-            'component.subMenu.js',
             'component.hiddenFields.js',
             'component.scrollItems.js',
             'component.mobileMenu.js',
@@ -107,6 +108,9 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.modal.js',
             'component.FeedbackForm.js',
             'component.mobileCommonMenu.js',
+            'component.SubMenusPopupItemComponent.js',
+            'component.SubmenuItemPopupComponent.js',
+            'component.SubMenuItemComponent.js',
         ];
     }
 }

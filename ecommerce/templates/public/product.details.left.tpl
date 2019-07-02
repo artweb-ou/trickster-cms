@@ -7,10 +7,6 @@
 				{include file=$theme->template('product.icons.tpl') class='product_details_icons'}
 			{/if}
 		{/if}
-
-		{if $priceLeftBottom}
-			{include file=$theme->template($priceLeftBottom)}
-		{/if}
 	</div>
 	<div class="side_separator left_after"></div>
 {/if}

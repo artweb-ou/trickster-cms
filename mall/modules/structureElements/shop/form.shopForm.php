@@ -5,6 +5,7 @@ class ShopFormStructure extends ElementForm
     protected $structure = [
         'title' => [
             'type' => 'input.multi_language_text',
+            'translationGroup' => 'seo',
         ],
         'structureName' => [
             'type' => 'input.text',

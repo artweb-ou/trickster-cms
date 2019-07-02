@@ -8,8 +8,9 @@ class receiveNews extends structureElementAction
     {
         if ($this->validated) {
             $structureElement->prepareActualData();
-
-            $structureElement->structureName = $structureElement->title;
+            if (!$structureElement->structureName) {
+                $structureElement->structureName = $structureElement->title;
+            }
 
             if (!is_null($structureElement->getDataChunk("image")->originalName)) {
                 $structureElement->image = $structureElement->id;

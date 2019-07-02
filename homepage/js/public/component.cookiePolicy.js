@@ -20,12 +20,15 @@ window.CookiePolicy = function() {
             domHelper.addClass(cookieTextElement, 'cookie_policy_text');
             cookieContainerElement.appendChild(cookieTextElement);
         }
+        var cookieControlsElement = document.createElement('span');
+        domHelper.addClass(cookieControlsElement, 'cookie_policy_controls');
+        cookieContainerElement.appendChild(cookieControlsElement);
 
         if (window.translationsLogics.get('cookiepolicy.buttonText') != '') {
             cookieButtonElement = document.createElement('span');
             cookieButtonElement.innerHTML = window.translationsLogics.get('cookiepolicy.buttonText');
             domHelper.addClass(cookieButtonElement, 'cookie_policy_button button');
-            cookieContainerElement.appendChild(cookieButtonElement);
+            cookieControlsElement.appendChild(cookieButtonElement);
             eventsManager.addHandler(cookieButtonElement, 'click', cookieButtonClickHandler);
         }
 
@@ -35,7 +38,7 @@ window.CookiePolicy = function() {
             cookieInfoElement.target = '_blank';
             cookieInfoElement.innerHTML = window.translationsLogics.get('cookiepolicy.infoLinkText');
             domHelper.addClass(cookieInfoElement, 'cookie_policy_link');
-            cookieContainerElement.appendChild(cookieInfoElement);
+            cookieControlsElement.appendChild(cookieInfoElement);
         }
         var body = _('body')[0];
         body.appendChild(cookieContainerElement);

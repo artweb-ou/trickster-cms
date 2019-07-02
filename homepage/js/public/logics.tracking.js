@@ -89,12 +89,12 @@ window.tracking = {
         googleAnalyticsLogics.checkoutEvent(parameters);
     },
 
-    checkoutProgressTracking: function(products) {
+    checkoutProgressTracking: function(step, products) {
         var parameters = {};
         if (products) {
             parameters.products = products;
         }
-        googleAnalyticsLogics.checkProgressEvent(parameters);
+        googleAnalyticsLogics.checkProgressEvent(step, parameters);
     },
 
     removeFromBasket: function(product) {

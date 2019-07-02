@@ -8,7 +8,7 @@
             {$element->getTitle()}
         </a>
         <div class="shoppingbasket_table_category_title">{$element->getCategory()}</div>
-        <div class="shoppingbasket_table_code">{translation name='shoppingbasket.productstable_productcode'}
+        <div class="shoppingbasket_table_code">{translations name='shoppingbasket.productstable_productcode'}
             : {$element->getCode()}</div>
         <div class="shoppingbasket_table_description">{$element->getVariationsText()}</div>
     </td>
@@ -20,7 +20,7 @@
     <td class="shoppingbasket_table_amount">
         {if !$checkout}
         <div class="shoppingbasket_table_amount_container">
-            {include file='element.productAmountControlsBlock.tpl' assitionalClass='shoppingbasket_table' element=$element inputAmount="{$element->getAmount()}"}
+            {include file='element.productAmountControlsBlock.tpl' additionalClass='shoppingbasket_table' element=$element inputAmount="{$element->getAmount()}"}
         </div>
         {else}
             {$element->getAmount()}
