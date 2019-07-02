@@ -45,7 +45,6 @@ window.shoppingBasketLogics = new function() {
     var initData = function() {
         if (window.jsonData && window.jsonData.shoppingBasketData) {
             importData(window.jsonData.shoppingBasketData);
-            self.trackCheckout();
         }
         if (window.orders != undefined) {
             paymentStatus = window.orders[0].orderStatus;
@@ -55,7 +54,7 @@ window.shoppingBasketLogics = new function() {
     };
 
     var importData = function(basketData) {
-        orderId = parseInt(basketData.orderId, 10);
+        orderId = basketData.orderId;
         self.displayVat = basketData.displayVat;
         self.displayTotals = basketData.displayTotals;
         self.selectedCountryId = parseInt(basketData.selectedCountryId, 10);

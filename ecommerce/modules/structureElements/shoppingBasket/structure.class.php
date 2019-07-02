@@ -165,6 +165,16 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         return $structureManager->getElementsChildren($this->id, null, 'structure', ['shoppingBasketStep']);
     }
 
+    public function selectStepElement($number) {
+        if(!empty($number)) {
+            $steps = $this->getSteps();
+            if(!empty($steps)) {
+                return $steps[$number];
+            }
+        }
+        return false;
+    }
+
     public function getFormActionURL($type = null)
     {
         $controller = controller::getInstance();

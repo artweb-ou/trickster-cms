@@ -7,7 +7,7 @@
 				<div class="mobileheader_drawer_inner">
 					{if $searchElement}
 						<div class="mobileheader_drawer_content" data-drawersection="search">
-							{include file=$theme->template('search.header.tpl') element=$searchElement}
+							{include file=$theme->template('search.header.tpl') element=$searchElement referral='mobile'}
 						</div>
 					{/if}
 					{if $loginElement}

@@ -16,5 +16,6 @@ class formTextAreaElement extends formFieldStructureElement
         $moduleStructure['required'] = 'checkbox';
         $moduleStructure['validator'] = 'text';
         $moduleStructure['autocomplete'] = 'text';
+        $moduleStructure['placeholder'] = 'text';
     }
 }

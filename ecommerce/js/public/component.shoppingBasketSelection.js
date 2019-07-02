@@ -58,7 +58,7 @@ window.ShoppingBasketSelectionComponent = function(componentElement) {
         conditionsCheckboxInput = componentElement.querySelector('#shoppingbasket_form_conditions_checkbox');
 
         showInBasketDiscountsComponent = _('.shoppingbasket_discounts', componentElement)[0];
-
+        shoppingBasketLogics.trackCheckout();
         controller.addListener('startApplication', startApplication);
         controller.addListener('shoppingBasketUpdated', updateData);
     };

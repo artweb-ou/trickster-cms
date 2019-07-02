@@ -58,7 +58,7 @@
 						{/if}
 					</div>
 				{if $currentLanguage->getElementFromHeader('search')}
-					{include file=$theme->template('search.header.tpl') element=$currentLanguage->getElementFromHeader('search')}
+					{include file=$theme->template('search.header.tpl') element=$currentLanguage->getElementFromHeader('search') referral='mall'}
 				{/if}
 				{/stripdomspaces}
 			</div>

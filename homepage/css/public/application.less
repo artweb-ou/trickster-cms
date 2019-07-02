@@ -146,6 +146,26 @@ body {
 }
 
 /********************************************************
+/*  HELPERS
+/********************************************************/
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+}
+.hidden_fake {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    transform: scale(0);
+    overflow: hidden;
+}
+.visible {
+    opacity: 1;
+    visibility: visible;
+    display: block;
+}
+/********************************************************
 /*  MEDIA HIDDEN
 /********************************************************/
 .hidden_xs {
