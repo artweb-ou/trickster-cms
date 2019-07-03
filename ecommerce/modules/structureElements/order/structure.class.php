@@ -155,7 +155,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
             if ($connectedIds = $linksManager->getConnectedIdList($this->id, 'orderPayment', 'parent')) {
                 $structureManager = $this->getService('structureManager');
                 $paymentId = reset($connectedIds);
-                $this->paymentElement = $structureManager->getElementById($paymentId);
+                $this->paymentElement = $structureManager->getElementById($paymentId, $this->id, true);
             }
         }
         return $this->paymentElement;
@@ -572,7 +572,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $resultPdfPath;
     }
 
-    public function makeWaybillPdf() {
+    public function makeWaybillPdf()
+    {
         $data = $this->getOrderData();
         if ($pdfContents = $this->makePdf($data, 'waybill.tpl')) {
             return $pdfContents;
