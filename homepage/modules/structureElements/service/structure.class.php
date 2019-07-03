@@ -36,6 +36,7 @@ class serviceElement extends menuStructureElement implements ConfigurableLayouts
             'showLayoutForm',
             'showPositions',
             'showPrivileges',
+            'showLanguageForm',
         ];
     }
 

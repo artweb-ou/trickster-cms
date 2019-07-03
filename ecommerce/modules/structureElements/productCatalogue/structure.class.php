@@ -52,6 +52,7 @@ class productCatalogueElement extends categoryStructureElement implements Config
             'showSettingsForm',
             'showPositions',
             'showPrivileges',
+            'showLanguageForm',
         ];
     }
 
