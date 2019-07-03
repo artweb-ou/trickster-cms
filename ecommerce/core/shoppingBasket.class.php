@@ -887,7 +887,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
              * @var deliveryTypeElement[] $deliveryTypeElements
              */
             $deliveryTypeElements = $structureManager->getElementsByIdList($connectedIds);
-            foreach ($deliveryTypeElements as &$deliveryTypeElement) {
+            foreach ($deliveryTypeElements as $deliveryTypeElement) {
                 $elementData = [];
                 $elementData['id'] = $deliveryTypeElement->id;
                 $elementData['code'] = $deliveryTypeElement->code;
@@ -906,9 +906,8 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 
                 $elementData['deliveryFormFields'] = [];
                 if ($fieldsList = $deliveryTypeElement->getFieldsList()) {
-                    foreach ($fieldsList as &$record) {
-                        if ($fieldElement = $structureManager->getElementById($record->fieldId,
-                            $deliveryTypeElement->id)) {
+                    foreach ($fieldsList as $record) {
+                        if ($fieldElement = $structureManager->getElementById($record->fieldId, $deliveryTypeElement->id, true)) {
                             $fieldInfo = [
                                 'id'           => $fieldElement->id,
                                 'title'        => $fieldElement->title,
