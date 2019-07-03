@@ -305,7 +305,7 @@ class catalogueElement extends structureElement
                     foreach ($records as &$record) {
                         $productBrandIdIndex[$record['childStructureId']] = $record['parentStructureId'];
                     }
-                    $this->productsPageList = $structureManager->getElementsByIdList($productsIds, $this->id, 'idlist');
+                    $this->productsPageList = $structureManager->getElementsByIdList($productsIds, $this->id);
                     foreach ($this->productsPageList as $product) {
                         $productId = $product->id;
                         $product->setXmlSourcesCodeNames(isset($productsOriginsIndex[$productId])

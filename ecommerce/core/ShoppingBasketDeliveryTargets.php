@@ -94,9 +94,9 @@ class ShoppingBasketDeliveryTargets implements DependencyInjectionContextInterfa
 
         $structureManager = $this->getService('structureManager');
         $linksManager = $this->getService('linksManager');
-        if ($coutriesElementId = $structureManager->getElementIdByMarker('deliveryCountries')) {
-            $connectedIds = $linksManager->getConnectedIdList($coutriesElementId, 'structure', 'parent');
-            $countryElements = $structureManager->getElementsByIdList($connectedIds, false, true);
+        if ($countriesElementId = $structureManager->getElementIdByMarker('deliveryCountries')) {
+            $connectedIds = $linksManager->getConnectedIdList($countriesElementId, 'structure', 'parent');
+            $countryElements = $structureManager->getElementsByIdList($connectedIds);
             foreach ($countryElements as &$countryElement) {
                 $elementData = [];
                 $elementData['id'] = $countryElement->id;

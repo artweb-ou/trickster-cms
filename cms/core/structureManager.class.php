@@ -883,7 +883,7 @@ class structureManager implements DependencyInjectionContextInterface
 
         //load elements from storage
         $loadedModuleTables = [];
-        if ($dataObjects = $this->elementsDataCollection->load($searchFields, ['id' => '1'])) {
+        if ($dataObjects = $this->elementsDataCollection->load($searchFields, ['id' => $idList])) {
             foreach ($dataObjects as &$dataObject) {
                 $elementId = $dataObject->id;
                 if ($loadedElement = $this->manufactureElement($dataObject, $parentElementId)) {
@@ -1378,39 +1378,22 @@ class structureManager implements DependencyInjectionContextInterface
 
     /**
      * @param $idList
-     * @param bool $elementId
+     * @param bool $parentElementId
      * @param bool $type
      * @return structureElement[]
      *
-     * @deprecated
      */
-    public function getElementsByIdList($idList, $elementId = false, $type = false)
+    public function getElementsByIdList($idList, $parentElementId = false, $type = false)
     {
-        $this->logError('Deprecated method has been used getElementsByIdList');
-        if (!$elementId) {
-            $elementId = $this->getRootElementId();
-        }
         $elementsList = [];
-        if (!is_array($idList)) {
-            $idList = [$idList];
-        }
-
-        if (count($idList) > 0) {
-            $requestedRoles = $this->getRequestedRoles(null);
-            $rolesToLoad = $requestedRoles;
-
-            // get allowed children elements types list according to the privilegies
-            $allowedElements = [];
-            if ($this->privilegeChecking) {
-                $allowedElements = $this->privilegesManager->getAllowedElements($elementId, $idList);
+        if ($idList) {
+            if (!$parentElementId) {
+                $parentElementId = $this->getRootElementId();
             }
-
-            // load the children elements from the storage and return them
-            if ($elementsList = $this->loadElementsToParent($idList, $elementId, $allowedElements, $rolesToLoad)) {
-                if ($type && ($type !== 'idlist')) {
-                    if (is_bool($type)) {
-                        $type = "structure";
-                    }
+            if ($allowedElements = $this->privilegesManager->getAllowedElements($parentElementId, $idList)) {
+                // load the children elements from the storage and return them
+                $elementsList = $this->loadElementsToParent($idList, $parentElementId, $allowedElements);
+                if ($type) {
                     $positions = [];
                     foreach ($elementsList as &$element) {
                         if ($elementLinks = $this->linksManager->getElementsLinks($element->id, $type, 'child')) {
@@ -1422,14 +1405,6 @@ class structureManager implements DependencyInjectionContextInterface
                         }
                     }
                     array_multisort($positions, SORT_ASC, $elementsList);
-                } elseif ($type === 'idlist') {
-                    $result = [];
-                    foreach ($idList as &$id) {
-                        if (isset($elementsList[$id])) {
-                            $result[] = $elementsList[$id];
-                        }
-                    }
-                    $elementsList = $result;
                 }
             }
         }

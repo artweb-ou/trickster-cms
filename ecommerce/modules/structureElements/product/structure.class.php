@@ -1829,7 +1829,7 @@ class productElement extends structureElement implements
             $deliveryTypeElementsIds = $this->getService('linksManager')
                 ->getConnectedIdList($deliveryTypesElementId, 'structure', 'parent');
 
-            if ($deliveryTypeElementsIds && $deliveryTypeElements = $structureManager->getElementsByIdList($deliveryTypeElementsIds, false, true)) {
+            if ($deliveryTypeElementsIds && $deliveryTypeElements = $structureManager->getElementsByIdList($deliveryTypeElementsIds)) {
                 $inactiveDeliveriesRecords = $this->getDisabledDeliveryTypesRecords();
                 $currencySelector = $this->getService('CurrencySelector');
 

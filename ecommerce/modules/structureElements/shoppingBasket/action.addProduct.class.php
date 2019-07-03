@@ -39,7 +39,7 @@ class addProductShoppingBasket extends structureElementAction
             $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
             foreach ($selections as $selection) {
                 $selectedOption = '';
-                $structureManager->getElementsByIdList([$selection['id']], false, true);
+                $structureManager->getElementsByIdList([$selection['id']]);
                 $select = $structureManager->getElementById($selection['id']);
                 foreach ($selection['productOptions'] as $option) {
                     if (in_array($option['id'], $options)) {

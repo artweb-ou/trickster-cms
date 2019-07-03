@@ -248,7 +248,6 @@ class emailsApplication extends controllerApplication
     protected function unsubscribeEmail($email)
     {
         $structureManager = $this->getService('structureManager');
-        $rootElement = $structureManager->getRootElement();
         $collection = persistableCollection::getInstance('module_newsmailaddress');
         $columns = ['id'];
 
@@ -266,7 +265,7 @@ class emailsApplication extends controllerApplication
             }
             if (count($idList)) {
                 $newsMailsAddressesElementId = $structureManager->getElementIdByMarker("newsMailsAddresses");
-                $structureManager->getElementsByIdList([$newsMailsAddressesElementId], $rootElement->id);
+                $structureManager->getElementsByIdList([$newsMailsAddressesElementId]);
                 if ($mailsElement = $structureManager->getElementById($newsMailsAddressesElementId)) {
                     if ($elements = $structureManager->getElementsByIdList($idList, $mailsElement->id)) {
                         foreach ($elements as &$element) {

@@ -35,7 +35,7 @@ class banklinkApplication extends controllerApplication
         $paymentMethod = false;
         $processingResult = false;
 
-        $structureManager->getElementsByIdList($paymentMethodElementId, $structureManager->rootElementId);
+        $structureManager->getElementsByIdList($paymentMethodElementId);
         if ($paymentMethodElementId && $paymentMethodElement = $structureManager->getElementById($paymentMethodElementId)
         ) {
             if ($paymentMethod = $paymentsManager->getPaymentMethod($paymentMethodElement->getName())) {
@@ -77,7 +77,7 @@ class banklinkApplication extends controllerApplication
                     $bankLog = $this->getService('bankLog');
                     $bankLog->saveRecord($logRecord);
                 }
-                $structureManager->getElementsByIdList($transactionCode, $structureManager->rootElementId);
+                $structureManager->getElementsByIdList($transactionCode);
                 if ($paymentElement = $structureManager->getElementById($transactionCode)) {
                     $paymentElement->executeAction('receive');
                     $processingResult = true;

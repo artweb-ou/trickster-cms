@@ -69,9 +69,7 @@ class newsListElement extends menuDependantStructureElement implements ColumnsTy
                         foreach ($records as &$record) {
                             $newsIds[] = $record['id'];
                         }
-                        if ($this->newsList = $this->getService('structureManager')
-                            ->getElementsByIdList($newsIds, $this->id)
-                        ) {
+                        if ($this->newsList = $this->getService('structureManager')->getElementsByIdList($newsIds, $this->id)) {
                             $sort = [];
                             foreach ($this->newsList as &$element) {
                                 $sort[] = strtotime($element->date);
@@ -114,9 +112,7 @@ class newsListElement extends menuDependantStructureElement implements ColumnsTy
                         foreach ($records as &$record) {
                             $newsIds[] = $record['id'];
                         }
-                        if ($archiveNewsList = $this->getService('structureManager')
-                            ->getElementsByIdList($newsIds, $this->id)
-                        ) {
+                        if ($archiveNewsList = $this->getService('structureManager')->getElementsByIdList($newsIds, $this->id)) {
                             $sort = [];
                             foreach ($archiveNewsList as &$element) {
                                 $sort[] = strtotime($element->date);

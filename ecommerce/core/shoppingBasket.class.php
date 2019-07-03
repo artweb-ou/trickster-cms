@@ -886,7 +886,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
             /**
              * @var deliveryTypeElement[] $deliveryTypeElements
              */
-            $deliveryTypeElements = $structureManager->getElementsByIdList($connectedIds, false, true);
+            $deliveryTypeElements = $structureManager->getElementsByIdList($connectedIds);
             foreach ($deliveryTypeElements as &$deliveryTypeElement) {
                 $elementData = [];
                 $elementData['id'] = $deliveryTypeElement->id;
@@ -1252,7 +1252,7 @@ class shoppingBasketServices implements DependencyInjectionContextInterface
         $data = [];
         if ($servicesElementId = $structureManager->getElementIdByMarker('shoppingBasketServices')) {
             $connectedIds = $linksManager->getConnectedIdList($servicesElementId, 'structure', 'parent');
-            $serviceElements = $structureManager->getElementsByIdList($connectedIds, false, true);
+            $serviceElements = $structureManager->getElementsByIdList($connectedIds);
             foreach ($serviceElements as &$serviceElement) {
                 $elementData = [];
                 $elementData['id'] = $serviceElement->id;

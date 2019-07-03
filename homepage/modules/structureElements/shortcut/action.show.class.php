@@ -6,13 +6,13 @@ class showShortcut extends structureElementAction
     {
         $structureElement->setViewName('common');
         $linksManager = $this->getService('linksManager');
-        $childrenIDList = false;
+        $childrenIdList = false;
         if ($idList = $linksManager->getConnectedIdList($structureElement->id, 'shortcut', 'parent')) {
             $targetId = reset($idList);
-            $childrenIDList = $linksManager->getConnectedIdList($targetId, '', 'parent');
+            $childrenIdList = $linksManager->getConnectedIdList($targetId, '', 'parent');
         }
         $parentElements = $structureManager->getElementsParents($structureElement->id);
-        if (count($parentElements) && $childrenIDList) {
+        if (count($parentElements) && $childrenIdList) {
             $firstParent = reset($parentElements);
 
             $firstParentChildren = $firstParent->getChildrenList();
@@ -22,7 +22,7 @@ class showShortcut extends structureElementAction
                 }
             }
 
-            if ($elements = $structureManager->getElementsByIdList($childrenIDList, $firstParent->id, 'structure')) {
+            if ($elements = $structureManager->getElementsByIdList($childrenIdList, $firstParent->id)) {
                 $structureElement->setReplacementElements($elements);
             }
         }
