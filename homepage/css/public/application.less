@@ -226,6 +226,7 @@ input {
             &:-ms-input-placeholder { opacity: 0!important; }
             &::-ms-input-placeholder {  opacity: 0!important; }
             &::placeholder { opacity: 0!important; }
+            &:placeholder-shown { color: transparent!important; } // for FF, which doesnt support normal transition on placeholder
         }
     }
 }
