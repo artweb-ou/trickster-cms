@@ -55,6 +55,7 @@ class folderElement extends menuDependantStructureElement implements Configurabl
             'showLayoutForm',
             'showPositions',
             'showPrivileges',
+            'showLanguageForm',
         ];
     }
 
