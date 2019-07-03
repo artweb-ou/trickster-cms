@@ -10,7 +10,7 @@ class receiveLayoutFolder extends structureElementAction
             $structureElement->prepareActualData();
 
             $structureElement->persistElementData();
-            $controller->redirect($structureElement->URL);
+            $controller->redirect($structureElement->getUrl("showLayoutForm"));
         }
         $structureElement->executeAction("showLayoutForm");
     }

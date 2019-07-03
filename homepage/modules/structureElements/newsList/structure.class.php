@@ -31,6 +31,16 @@ class newsListElement extends menuDependantStructureElement implements ColumnsTy
         $moduleStructure['layout'] = 'text';
     }
 
+    protected function getTabsList()
+    {
+        return [
+            'showFullList',
+            'showForm',
+            'showLayoutForm',
+            'showLanguageForm',
+        ];
+    }
+
     public function getNewsList()
     {
         if (is_null($this->newsList)) {
