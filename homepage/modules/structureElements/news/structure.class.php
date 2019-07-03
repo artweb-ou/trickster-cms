@@ -46,6 +46,7 @@ class newsElement extends structureElement implements MetadataProviderInterface,
             'showLayoutForm',
             'showPositions',
             'showPrivileges',
+            'showLanguageForm',
         ];
     }
 
