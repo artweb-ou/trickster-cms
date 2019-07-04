@@ -121,4 +121,9 @@
         'wide',
         'short',
     ],
+
+    'folder.layouts' => [
+        'colorLayout',
+    ],
+
 ];

@@ -60,6 +60,9 @@ trait ConfigurableLayoutsProviderTrait
                 $result = $options[0];
             }
         }
+        if ($result == 'none') {
+            return '';
+        }
         return (string)$result;
     }
 
