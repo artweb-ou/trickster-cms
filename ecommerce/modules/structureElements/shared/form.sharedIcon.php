@@ -5,15 +5,19 @@ class SharedIconStructure extends ElementForm
     protected $containerClass = 'gallery_form';
     protected $formClass = 'gallery_form_upload';
     protected $preset = '';
-    protected $controlsLayout = null;
     protected $structure = [
+        'connectedIcons' => [
+            'type' => 'select.universal_options_multiple',
+            'property' => 'iconsList',
+        ],
+        'addIcon'  => [
+            'type'             => 'show.heading',
+            'translationGrupp' => 'shared'
+        ],
         'image' => [
             'type' => 'input.dragAndDropImage'
         ]
     ];
-    protected $controls = false;
-    protected $additionalContent = 'shared.contentlist.tpl';
-    protected $additionalContentTable = 'shared.contenlistGalleryImage.tpl';
 
     public function getTranslationGroup()
     {

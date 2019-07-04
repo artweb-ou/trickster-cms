@@ -1,29 +1,38 @@
 <?php
-
+/**
+ * @var $genericIcon genericIconElement
+ * @var $form ElementForm
+ */
 class showIconFormShared extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->final) {
-            $structureElement->newForm = $structureManager->createElement('galleryImage', 'showForm', $structureElement->id);
+            $genericIconElement = $structureManager->createElement('genericIcon', 'showForm',
+                $structureElement->id);
         }
         $form = $structureElement->getForm('icon');
-        $form->setFormAction($structureElement->newForm->URL);
+        $form->setFormAction($genericIconElement->URL);
+        $form->setElement($genericIconElement);
 
-        $contentList = [];
-        $linksManager = $this->getService('linksManager');
-        $connectedFieldsIds = $linksManager->getConnectedIdList($structureElement->id, $structureElement->structureType . 'Icon');
-        foreach ($connectedFieldsIds as $id) {
-            if ($element = $structureManager->getElementById($id)){
-                $contentList[] = $element;
+        $genericIcons = $structureManager->getElementsByType('genericIcon');
+        if (!empty($genericIcons)) {
+            $iconsList = [];
+            $linksManager = $this->getService('linksManager');
+            $connectedIconsIds = $linksManager->getConnectedIdList($structureElement->id, 'genericIconProduct');
+            foreach ($genericIcons as $genericIcon) {
+                $item = [];
+                $item['id'] = $genericIcon->id;
+                $item['title'] = $genericIcon->getTitle();
+                $item['select'] = in_array($genericIcon->id, $connectedIconsIds);
+                $iconsList[] = $item;
             }
         }
-
+        $structureElement->iconsList = $iconsList;
         $structureElement->setTemplate('shared.content.tpl');
         $renderer = $this->getService('renderer');
         $renderer->assign('contentSubTemplate', 'component.form.tpl');
-        $renderer->assign('linkType', $structureElement->structureType . 'Icon');
-        $renderer->assign('contentList', $contentList);
+        $renderer->assign('linkType', 'genericIcon'.$structureElement->structureType);
         $renderer->assign('form', $form);
     }
 }
