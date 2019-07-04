@@ -9,8 +9,13 @@ class receiveCurrency extends structureElementAction
         if ($this->validated) {
             $structureElement->prepareActualData();
             $structureElement->structureName = $structureElement->title;
-            $structureElement->persistElementData();
 
+            $maxDecimalsAmount = '3.00';
+            if($structureElement->decimals > $maxDecimalsAmount) {
+                $structureElement->decimals = $maxDecimalsAmount;
+            }
+
+            $structureElement->persistElementData();
             $parent = $structureManager->getElementsFirstParent($structureElement->id);
             if ($parent) {
                 $parent->executeAction("generate");
@@ -42,4 +47,3 @@ class receiveCurrency extends structureElementAction
         $validators["rate"][] = "notEmpty";
     }
 }
-
