@@ -18,4 +18,3 @@ class currencyElement extends structureElement
         $moduleStructure['thousandsSep'] = 'text';
     }
 }
-

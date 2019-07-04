@@ -122,9 +122,9 @@ class languageElement extends structureElement implements MetadataProviderInterf
         $moduleStructure['patternBackground'] = 'checkbox';
     }
 
-    public function getElementFromMobileMenu($structureType)
+    public function getElementFromMobileMenu($structureType, $number = 0)
     {
-        return $this->getElementFromContextByType('mobileMenu', $structureType);
+        return $this->getElementFromContextByType('mobileMenu', $structureType, $number);
     }
 
     public function getElementsFromMobileMenu($structureType)

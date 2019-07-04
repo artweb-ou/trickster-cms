@@ -149,12 +149,12 @@ body {
 /*  HELPERS
 /********************************************************/
 .hidden {
-    opacity: 0;
+    color: transparent;
     visibility: hidden;
     display: none;
 }
 .hidden_fake {
-    opacity: 0;
+    color: transparent;
     visibility: hidden;
     height: 0;
     transform: scale(0);
@@ -211,3 +211,27 @@ body {
     }
 }
 
+/********************************************************
+/*  PLACEHOLDERS
+/********************************************************/
+input {
+    &.input_component {
+        &:-moz-placeholder { transition: color .6s ease-in-out; }
+        &::-moz-placeholder { transition: color .6s ease-in-out; }
+        &::-webkit-input-placeholder { transition: color .6s ease-in-out; }
+        &:-ms-input-placeholder { transition: color .6s ease-in-out; }
+        &::-ms-input-placeholder {  transition: color .6s ease-in-out; }
+        &::placeholder { transition: color .6s ease-in-out; }
+        &:placeholder-shown { color: inherit; transition: color .6s ease-in-out !important; }// for FF, which doesnt support normal transition on placeholder
+
+        &:focus{
+            &:-moz-placeholder { color: transparent !important; }
+            &::-moz-placeholder { color: transparent !important; }
+            &::-webkit-input-placeholder { color: transparent !important; }
+            &:-ms-input-placeholder { color: transparent !important; }
+            &::-ms-input-placeholder {  color: transparent !important; }
+            &::placeholder { color: transparent !important; }
+            &:placeholder-shown { color: transparent !important; } // for FF, which doesnt support normal transition on placeholder
+        }
+    }
+}

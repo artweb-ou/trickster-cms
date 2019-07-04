@@ -561,7 +561,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $data = $this->getOrderData();
         $data['displayInvoiceLogo'] = true;
         $data['documentType'] = $type;
-        if ($pdfContents = $this->makePdf($data, $type)) {
+        if ($pdfContents = $this->makePdf($data)) {
             $filePath = $uploadsPath . $this->$filePropertyName;
 
             file_put_contents($filePath, $pdfContents);
@@ -571,7 +571,15 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $resultPdfPath;
     }
 
-    protected function makePdf($data)
+    public function makeWaybillPdf() {
+        $data = $this->getOrderData();
+        if ($pdfContents = $this->makePdf($data, 'waybill.tpl')) {
+            return $pdfContents;
+        }
+        return false;
+    }
+
+    protected function makePdf($data, $contentType = 'invoice.tpl')
     {
         $controller = controller::getInstance();
 
@@ -592,7 +600,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
             ->getCurrentLanguageElement()
             ->getLogoImageUrl());
         $htmlRenderer->assign('data', $data);
-        $htmlRenderer->assign('contentType', 'invoice.tpl');
+        $htmlRenderer->assign('contentType', $contentType);
         $htmlRenderer->assign('theme', $theme);
         $htmlRenderer->setTemplate($theme->template('layout.tpl'));
         $pdfHtml = $htmlRenderer->fetch();
@@ -612,6 +620,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $mpdf->WriteHTML($pdfHtml);
         $pdf = $mpdf->Output("", 'S');
         error_reporting($prevErrorReportingSettings);
+
         return $pdf;
     }
 
