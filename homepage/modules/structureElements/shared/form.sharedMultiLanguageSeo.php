@@ -5,6 +5,7 @@ class SharedMultiLanguageSeoStructure extends ElementForm
     protected $structure = [
         'structureName' => [
             'type' => 'input.text',
+            'translationGroup' => 'seo',
         ],
         'metaTitle' => [
             'type' => 'input.multi_language_text',
@@ -17,6 +18,7 @@ class SharedMultiLanguageSeoStructure extends ElementForm
         ],
         'canonicalUrl' => [
             'type' => 'input.text',
+            'translationGroup' => 'seo',
         ],
         'metaDenyIndex' => [
             'type' => 'input.checkbox',

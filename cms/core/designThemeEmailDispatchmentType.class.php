@@ -83,6 +83,9 @@ class designThemeEmailDispatchmentType extends EmailDispatchmentType
     public function getCurrentLanguageElement()
     {
         $controller = controller::getInstance();
+        /**
+         * @var languagesManager $languagesManager
+         */
         $languagesManager = $controller->getApplication()->getLanguagesManager();
 
         return $languagesManager->getCurrentLanguageElement();
