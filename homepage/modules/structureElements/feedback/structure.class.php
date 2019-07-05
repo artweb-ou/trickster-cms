@@ -19,14 +19,17 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
 
         $moduleStructure['colorLayout'] = 'text';
     }
+
     protected function getTabsList()
     {
         return [
             'showForm',
             'showPositions',
-            'showAnswers'
+            'showAnswers',
+            'showLayoutForm',
         ];
     }
+
     // workaround
     // this disables date validation in mobile so that input type="date" could be used,
     // (value from date input is in format YYYY-MM-DD, validDateValidator expects DD.MM.YYYY)
