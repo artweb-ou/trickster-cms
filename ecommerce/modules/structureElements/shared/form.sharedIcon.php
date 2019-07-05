@@ -2,11 +2,9 @@
 
 class SharedIconStructure extends ElementForm
 {
-    protected $containerClass = 'gallery_form';
-    protected $formClass = 'gallery_form_upload';
     protected $preset = '';
     protected $structure = [
-        'connectedIcons' => [
+        'connectedIconIds' => [
             'type' => 'select.universal_options_multiple',
             'property' => 'iconsList',
         ],
@@ -14,13 +12,8 @@ class SharedIconStructure extends ElementForm
             'type'             => 'show.heading',
             'translationGrupp' => 'shared'
         ],
-        'image' => [
-            'type' => 'input.dragAndDropImage'
+        'newIcon' => [
+            'type' => 'button.createNewElement'
         ]
     ];
-
-    public function getTranslationGroup()
-    {
-        return 'gallery';
-    }
 }

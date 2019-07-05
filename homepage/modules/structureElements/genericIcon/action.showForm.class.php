@@ -11,6 +11,7 @@ class showFormGenericIcon extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->final) {
+            $structureElement->productIconId = $controller->getParameter('productId');
             $structureElement->setTemplate('shared.content.tpl');
             $renderer = $this->getService('renderer');
             $firstParent = $structureManager->getElementsFirstParent($structureElement->id);
