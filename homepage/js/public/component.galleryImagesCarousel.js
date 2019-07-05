@@ -57,6 +57,12 @@ window.GalleryImagesCarouselComponent = function(galleryInfo, parentComponent) {
     };
     this.startApplication = function() {
         parentComponent.recalculateSizes();
+
+        var aspectRatio = galleryInfo.getImageAspectRatio();
+        if (!aspectRatio) {
+            aspectRatio = componentElement.offsetWidth / componentElement.offsetHeight;
+        }
+
         self.initCarouselGallery({
             'componentElement': componentElement,
             'pageElements': imageComponentElements,
@@ -65,7 +71,7 @@ window.GalleryImagesCarouselComponent = function(galleryInfo, parentComponent) {
             'rotateDelay': galleryInfo.getChangeDelay(),
             'rotateSpeed': 2.7,
             'autoStart': false,
-            'imageAspectRatio': galleryInfo.getImageAspectRatio(),
+            'imageAspectRatio': aspectRatio,
             'preloadCallBack': preloadCallBack,
             'touchStartCallBack': touchStartCallBack,
             'touchDisplayNextImageCallback': touchDisplayNextImageCallback,
@@ -130,7 +136,10 @@ window.GalleryImagesCarouselComponent = function(galleryInfo, parentComponent) {
         height = newHeight;
         componentElement.style.width = width + 'px';
         componentElement.style.height = height + 'px';
-        width = height * galleryInfo.getImageAspectRatio();
+        if (galleryInfo.getImageAspectRatio()) {
+            width = height * galleryInfo.getImageAspectRatio();
+        }
+
         if (fixedImagesWidth) {
             width = fixedImagesWidth;
         }

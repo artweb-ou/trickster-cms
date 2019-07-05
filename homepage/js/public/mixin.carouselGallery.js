@@ -309,6 +309,7 @@ window.CarouselPagesMixin = function() {
         this.cpm_moveLength = 0;
         touchManager.removeEventListener(this.cpm_componentElement, 'start', this.cpm_touchStartCaller);
         touchManager.addEventListener(this.cpm_componentElement, 'end', this.cpm_touchEndCaller);
+        touchManager.addEventListener(this.cpm_componentElement, 'cancel', this.cpm_touchEndCaller);
         touchManager.addEventListener(this.cpm_componentElement, 'move', this.cpm_touchMoveCaller);
     };
 
@@ -328,6 +329,7 @@ window.CarouselPagesMixin = function() {
         }
 
         touchManager.removeEventListener(this.cpm_componentElement, 'end', this.cpm_touchEndCaller);
+        touchManager.removeEventListener(this.cpm_componentElement, 'cancel', this.cpm_touchEndCaller);
         touchManager.removeEventListener(this.cpm_componentElement, 'move', this.cpm_touchMoveCaller);
         touchManager.addEventListener(this.cpm_componentElement, 'start', this.cpm_touchStartCaller);
     };

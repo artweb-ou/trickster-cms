@@ -11,7 +11,7 @@ trait GalleryInfoProviderTrait
             'galleryHeight' => false,
             'imageResizeType' => 'resize',
             'changeDelay' => 6000,
-            'imageAspectRatio' => 0.8,
+            'imageAspectRatio' => false,
             'thumbnailsSelectorEnabled' => true,
             'thumbnailsSelectorHeight' => '15%',
             'imagesButtonsEnabled' => false,
