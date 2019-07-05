@@ -20,6 +20,7 @@
     'personnelList.layout.options' => [
         'short',
         'details',
+        'table',
     ],
     'personnelList.layout.default' => 'short',
 
