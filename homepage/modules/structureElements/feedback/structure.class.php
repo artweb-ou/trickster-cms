@@ -2,6 +2,7 @@
 
 class feedbackElement extends dynamicGroupFieldsStructureElement
 {
+    use ConfigurableLayoutsProviderTrait;
     public $dataResourceName = 'module_feedback';
     protected $allowedTypes = ['formFieldsGroup'];
     public $defaultActionName = 'show';
@@ -15,6 +16,8 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
         $moduleStructure['content'] = 'html';
         $moduleStructure['buttonTitle'] = 'text';
         $moduleStructure['role'] = 'text';
+
+        $moduleStructure['colorLayout'] = 'text';
     }
     protected function getTabsList()
     {

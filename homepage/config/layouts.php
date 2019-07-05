@@ -121,8 +121,10 @@
         'wide',
         'short',
     ],
-
     'folder.layouts' => [
+        'colorLayout',
+    ],
+    'feedback.layouts' => [
         'colorLayout',
     ],
 
