@@ -145,7 +145,7 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
                 if (!buttonNext) {
                     if (imagesPrevNextButtonsSeparated) {
                         if (!nextButtonContainerElement) {
-                            nextButtonContainerElement = create('gallery_button_previous_container');
+                            nextButtonContainerElement = create('gallery_button_next_container');
                         }
                         buttonNext = new GalleryNextButtonComponent(galleryInfo);
                         nextButtonContainerElement.appendChild(buttonNext.getComponentElement());
