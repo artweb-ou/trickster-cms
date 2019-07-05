@@ -22,13 +22,11 @@
                             {$personnel->position}
                         </td>
                         <td>
-                            {$personnel->title}
+                            {if $element->email != ''}<a href="mailto:{$element->email}">{/if}{$personnel->title}{if $element->email != ''}</a>{/if}
                         </td>
                         <td>
-                            {if $personnel->phone}
-                                <div>{$personnel->phone}</div>{/if}
-                            {if $personnel->mobilePhone}
-                                <div>{$personnel->mobilePhone}</div>{/if}
+                            {if $personnel->phone}<a href="tel:{$personnel->phone}">{$personnel->phone}</a>{/if}
+                            {if $personnel->mobilePhone}<a href="tel:{$personnel->mobilePhone}">{$personnel->mobilePhone}</a>{/if}
                         </td>
                     </tr>
                 {/foreach}
