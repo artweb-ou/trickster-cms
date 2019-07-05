@@ -1,27 +1,27 @@
 {
-    "name": "artweb-ou/trickster-cms",
-    "description": "Trickster CMS packages",
-    "license": "proprietary",
-    "require": {    
-	    "illuminate/database": "5.2.*",
-	    "mk-j/php_xlsxwriter": "^0.36",
-	    "phpmailer/phpmailer": "~5.2",
-	    "google/apiclient": "^1.0",
-	    "facebook/graph-sdk": "^5.7",
-	    "mpdf/mpdf": "7.*",
-	    "leafo/lessphp": "0.5.0",
-	    "moroz1999/image-process": "^2.0",
-	    "jaybizzle/crawler-detect": "1.2.*",
-	    "tubalmartin/cssmin": "4.x",
-	    "nnnick/chartjs": "^2.8",
-	    "ckeditor/ckeditor": "4.*",
-	    "moroz1999/ckeditor-texttransform-plugin": "1.*",
-	    "moroz1999/ckeditor-mediaembed": "1.*",
-	    "moroz1999/ckeditor-html5-video": "1.*",
-	    "moroz1999/cache": "1.*",
-	    "smarty/smarty": "3.x",
-	    "pelago/emogrifier": "^2.0",
-	    "tedivm/jshrink": "~1.0"
-    }
-    
+  "name": "artweb-ou/trickster-cms",
+  "description": "Trickster CMS packages",
+  "license": "proprietary",
+  "require": {
+    "illuminate/database": "5.2.*",
+    "mk-j/php_xlsxwriter": "^0.36",
+    "phpmailer/phpmailer": "~5.2",
+    "google/apiclient": "^1.0",
+    "facebook/graph-sdk": "^5.7",
+    "mpdf/mpdf": "7.*",
+    "leafo/lessphp": "0.5.0",
+    "moroz1999/image-process": "^2.0",
+    "jaybizzle/crawler-detect": "1.2.*",
+    "tubalmartin/cssmin": "4.x",
+    "nnnick/chartjs": "^2.8",
+    "ckeditor/ckeditor": "4.*",
+    "moroz1999/ckeditor-texttransform-plugin": "1.*",
+    "moroz1999/ckeditor-mediaembed": "1.*",
+    "moroz1999/ckeditor-html5-video": "1.*",
+    "moroz1999/cache": "1.*",
+    "smarty/smarty": "3.x",
+    "pelago/emogrifier": "^2.0",
+    "tedivm/jshrink": "~1.0",
+    "ext-dom": "*"
+  }
 }
