@@ -33,7 +33,7 @@ window.touchManager = new function() {
             startEventName = 'pointerdown';
             moveEventName = 'pointermove';
             endEventName = 'pointerup';
-            cancelEventName = 'pointercancel';
+            cancelEventName = 'pointerout';
         } else if (eventsSet == 'mspointer') {
             compileEventInfo = compileEventInfo_mouse;
             startEventName = 'mspointerdown';
@@ -75,26 +75,21 @@ window.touchManager = new function() {
         return eventsSet;
     };
     var captureStartEvent = function(event) {
-        var eventType = 'start';
-        fireCallback(eventType, event);
+        fireCallback('start', event);
     };
     var captureStartEvent_mouse = function(event) {
         if (event.button == 0) {
-            var eventType = 'start';
-            fireCallback(eventType, event);
+            fireCallback('start', event);
         }
     };
     var captureMoveEvent = function(event) {
-        var eventType = 'move';
-        fireCallback(eventType, event);
+        fireCallback('move', event);
     };
     var captureEndEvent = function(event) {
-        var eventType = 'end';
-        fireCallback(eventType, event);
+        fireCallback('end', event);
     };
     var captureCancelEvent = function(event) {
-        var eventType = 'cancel';
-        fireCallback(eventType, event);
+        fireCallback('cancel', event);
     };
     var captureEndEvent_mouse = function(event) {
         if (event.button == 0) {
@@ -104,7 +99,6 @@ window.touchManager = new function() {
     };
     var fireCallback = function(eventType, event) {
         var eventInfo = compileEventInfo(event);
-
         for (var i = 0; i < handlers[eventType].length; i++) {
             if (handlers[eventType][i]['element'] == eventInfo['currentTarget']) {
                 handlers[eventType][i]['callback'](event, eventInfo);
@@ -160,7 +154,7 @@ window.touchManager = new function() {
         };
     };
     var cachePointerEvent = function(event) {
-        if (event.pointerId) {
+        if (typeof event.pointerId !== undefined) {
             pointerCache[event.pointerId] = {
                 'clientX': event.clientX,
                 'clientY': event.clientY,
