@@ -312,7 +312,7 @@ window.CarouselPagesMixin = function() {
         touchManager.addEventListener(this.cpm_componentElement, 'cancel', this.cpm_touchEndCaller);
         touchManager.addEventListener(this.cpm_componentElement, 'move', this.cpm_touchMoveCaller);
     };
-    
+
     this.cpm_touchMove = function(event, touchInfo) {
         eventsManager.preventDefaultAction(event);
 

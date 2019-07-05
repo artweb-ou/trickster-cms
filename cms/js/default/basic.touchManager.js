@@ -33,7 +33,7 @@ window.touchManager = new function() {
             startEventName = 'pointerdown';
             moveEventName = 'pointermove';
             endEventName = 'pointerup';
-            cancelEventName = 'pointerout';
+            cancelEventName = 'pointerleave';
         } else if (eventsSet == 'mspointer') {
             compileEventInfo = compileEventInfo_mouse;
             startEventName = 'mspointerdown';
