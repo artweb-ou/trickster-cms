@@ -103,7 +103,7 @@ window.GalleryImagesCarouselComponent = function(galleryInfo, parentComponent) {
 
         var imagesInfoList = galleryInfo.getImagesList();
         for (var i = 0; i < imagesInfoList.length; i++) {
-            var imageComponent = new GalleryImageComponent(imagesInfoList[i], self, galleryInfo.getDescriptionType());
+            var imageComponent = new GalleryImageComponent(imagesInfoList[i], self, galleryInfo);
             imageComponents.push(imageComponent);
         }
         return imageComponents;

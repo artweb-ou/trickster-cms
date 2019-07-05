@@ -20,6 +20,7 @@ trait GalleryInfoProviderTrait
             'fullScreenGalleryEnabled' => true,
             'fullScreenButtonEnabled' => false,
             'descriptionType' => 'overlay',
+            'descriptionEffect' => 'none',
             'imagesPrevNextButtonsSeparated' => false,
             'videoAutoStart' => true,
 

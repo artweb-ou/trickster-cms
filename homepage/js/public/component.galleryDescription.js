@@ -10,7 +10,7 @@ window.GalleryDescriptionComponent = function(galleryInfo) {
         controller.removeListener('galleryImageDisplay', onImageDisplay);
     };
     var createDomStructure = function() {
-        componentElement = self.makeElement('div', 'gallery_description html_content');
+        componentElement = self.makeElement('div', 'gallery_description html_content gallery_description html_content');
         titleElement = self.makeElement('div', 'gallery_description_title', componentElement);
         descriptionElement = self.makeElement('div', 'gallery_descripion_description', componentElement);
     };

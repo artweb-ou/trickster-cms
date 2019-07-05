@@ -63,7 +63,7 @@ window.GalleryItem = function(info) {
     var imagesButtonsEnabled = false;
     var playbackButtonEnabled = false;
     var descriptionType = 'none';
-    var descriptionEffect = false;
+    var descriptionEffect = 'none';
     var imagesPrevNextButtonsEnabled = false;
     var imagesPrevNextButtonsSeparated = false;
     var fullScreenButtonEnabled = false;
@@ -209,7 +209,7 @@ window.GalleryItem = function(info) {
         return descriptionType;
     };
     this.getDescriptionEffect = function() {
-        return descriptionType;
+        return descriptionEffect;
     };
     this.getChangeDelay = function() {
         return changeDelay;

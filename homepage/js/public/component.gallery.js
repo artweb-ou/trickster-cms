@@ -4,6 +4,8 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
     var imagesComponent;
     var descriptionComponent;
     var buttonsContainerElement;
+    var prevButtonContainerElement;
+    var nextButtonContainerElement;
     var playBackButton;
     var fullScreenButton;
     var buttonPrevious;
@@ -103,25 +105,23 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
                 buttonsContainerElement = create('gallery_buttons');
             }
 
-            if (imagesPrevNextButtonsSeparated && imagesPrevNextButtonsEnabled) {
-                if (!prevNextButtonsContainerElement) {
-                    var prevNextButtonsContainerElement = create('gallery_buttons_prevnext');
-                }
-            } else if (prevNextButtonsContainerElement) {
-                componentElement.removeChild(prevNextButtonsContainerElement);
-            }
-
             if (imagesPrevNextButtonsEnabled) {
                 if (!buttonPrevious) {
-                    buttonPrevious = new GalleryPreviousButtonComponent(galleryInfo);
-
                     if (imagesPrevNextButtonsSeparated) {
-                        prevNextButtonsContainerElement.appendChild(buttonPrevious.getComponentElement());
+                        if (!prevButtonContainerElement) {
+                            prevButtonContainerElement = create('gallery_button_previous_container');
+                        }
+                        buttonPrevious = new GalleryPreviousButtonComponent(galleryInfo);
+                        prevButtonContainerElement.appendChild(buttonPrevious.getComponentElement());
                     } else {
+                        buttonPrevious = new GalleryPreviousButtonComponent(galleryInfo);
                         buttonsContainerElement.appendChild(buttonPrevious.getComponentElement());
                     }
                 }
             } else if (buttonPrevious) {
+                if (prevButtonContainerElement) {
+                    componentElement.removeChild(prevButtonContainerElement);
+                }
                 buttonPrevious.destroy();
                 buttonPrevious = null;
             }
@@ -143,15 +143,21 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
 
             if (imagesPrevNextButtonsEnabled) {
                 if (!buttonNext) {
-                    buttonNext = new GalleryNextButtonComponent(galleryInfo);
-
                     if (imagesPrevNextButtonsSeparated) {
-                        prevNextButtonsContainerElement.appendChild(buttonNext.getComponentElement());
+                        if (!nextButtonContainerElement) {
+                            nextButtonContainerElement = create('gallery_button_previous_container');
+                        }
+                        buttonNext = new GalleryNextButtonComponent(galleryInfo);
+                        nextButtonContainerElement.appendChild(buttonNext.getComponentElement());
                     } else {
+                        buttonNext = new GalleryNextButtonComponent(galleryInfo);
                         buttonsContainerElement.appendChild(buttonNext.getComponentElement());
                     }
                 }
             } else if (buttonNext) {
+                if (nextButtonContainerElement) {
+                    componentElement.removeChild(nextButtonContainerElement);
+                }
                 buttonNext.destroy();
                 buttonNext = null;
             }
