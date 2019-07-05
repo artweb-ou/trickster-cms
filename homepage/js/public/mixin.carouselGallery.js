@@ -80,13 +80,13 @@ window.CarouselPagesMixin = function() {
                         function() {
                             return scope.cpm_performAutoRotate.call(scope);
                         },
-                        this.cpm_rotateDelay
+                        this.cpm_rotateDelay,
                     );
                 }
                 eventsManager.addHandler(window, 'resize',
                     function(event) {
                         return scope.cpm_scrollToCurrent.call(scope, event);
-                    }
+                    },
                 );
 
                 if (this.cpm_originalPageElements.length > 1) {
@@ -312,8 +312,20 @@ window.CarouselPagesMixin = function() {
         touchManager.addEventListener(this.cpm_componentElement, 'cancel', this.cpm_touchEndCaller);
         touchManager.addEventListener(this.cpm_componentElement, 'move', this.cpm_touchMoveCaller);
     };
+    
+    this.cpm_touchMove = function(event, touchInfo) {
+        eventsManager.preventDefaultAction(event);
+
+        var diff = this.cpm_touchX - touchInfo.clientX;
+        this.cpm_touchX = touchInfo.clientX;
+        this.cpm_moveLength += diff;
+
+        this.cpm_componentElement.scrollBy(diff, 0);
+    };
 
     this.cpm_touchEnd = function(event, touchInfo) {
+        eventsManager.preventDefaultAction(event);
+
         this.cpm_touchX = false;
 
         var speedCoefficient = 1 - (Math.abs(this.cpm_moveLength) / this.imageWidth);
@@ -332,16 +344,6 @@ window.CarouselPagesMixin = function() {
         touchManager.removeEventListener(this.cpm_componentElement, 'cancel', this.cpm_touchEndCaller);
         touchManager.removeEventListener(this.cpm_componentElement, 'move', this.cpm_touchMoveCaller);
         touchManager.addEventListener(this.cpm_componentElement, 'start', this.cpm_touchStartCaller);
-    };
-
-    this.cpm_touchMove = function(event, touchInfo) {
-        eventsManager.preventDefaultAction(event);
-
-        var diff = this.cpm_touchX - touchInfo.clientX;
-        this.cpm_touchX = touchInfo.clientX;
-        this.cpm_moveLength += diff;
-
-        this.cpm_componentElement.scrollBy(diff, 0);
     };
 
     this.cpm_parseOptions = function(options) {
