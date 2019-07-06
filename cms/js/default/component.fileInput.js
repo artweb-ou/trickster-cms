@@ -46,7 +46,7 @@ function FileInputComponent(inputElement) {
         inputElement.style.position = 'absolute';
         inputElement.style.visibility = 'hidden';
         inputElement.style.left = 0;
-        inputElement.style.left = '-1000px';
+        inputElement.style.left = '-10000px';
         // inputElement.style.top = 0;
 
         eventsManager.addHandler(inputElement, 'change', synchronizeContent);

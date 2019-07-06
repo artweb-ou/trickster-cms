@@ -336,9 +336,14 @@ window.DropDownComponentList = function(parentObject, initOptionsData) {
     var init = function() {
         prepareDomStructure();
     };
+    var referralClass = "";
     var prepareDomStructure = function() {
         self.componentElement = document.createElement('div');
-        self.componentElement.className = 'dropdown_list';
+        if (parentObject.selectorElement.dataset.referral) {
+            referralClass = " " + parentObject.selectorElement.dataset.referral;
+        }
+
+        self.componentElement.className = 'dropdown_list' + referralClass;
         self.componentElement.style.display = 'none';
         window.eventsManager.addHandler(self.componentElement, 'mousewheel', mouseWheelHandler);
 
