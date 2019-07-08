@@ -42,6 +42,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
     protected $vatAmount = 0;
     protected $selectedServicesPrice = 0;
     protected $message = '';
+    protected $vatRate = 0;
 
     /**
      * @deprecated - architecture should be changed to avoid heavy initializing and to use calculations on demand
@@ -182,6 +183,20 @@ class shoppingBasket implements DependencyInjectionContextInterface
         $this->recalculate();
     }
 
+    public function setVatRate($vatRate)
+    {
+        $user = $this->getService('user');
+        $user->setStorageAttribute('vatRate', $vatRate);
+    }
+
+    protected function getVatRate()
+    {
+        $user = $this->getService('user');
+        $vatRate = $user->getStorageAttribute('vatRate');
+
+        return $vatRate;
+    }
+
     public function selectDeliveryCity($targetId)
     {
         $shoppingBasketDeliveryTargets = $this->getService('ShoppingBasketDeliveryTargets');
@@ -313,7 +328,13 @@ class shoppingBasket implements DependencyInjectionContextInterface
             $vatRateSetting = $this->getService('ConfigManager')->get('main.vatRate');
             if ($vatRateSetting) {
                 $this->vatAmount = $totalPrice - $totalPrice / $vatRateSetting;;
-                $this->vatLessTotalPrice = $totalPrice / $vatRateSetting;
+                $this->vatLessTotalPrice = $totalPrice - $this->vatAmount;
+            }
+
+            $vatRate = $this->getVatRate();
+            if (!empty($vatRate) && $vatRate !== $vatRateSetting) {
+                $this->vatAmount = $this->vatLessTotalPrice * $vatRate - $this->vatLessTotalPrice;
+                $totalPrice = $this->vatLessTotalPrice * $vatRate;
             }
 
             $currencySelector = $this->getService('CurrencySelector');
@@ -324,6 +345,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
             } else {
                 $this->deliveryPrice = $deliveryPrice;
             }
+
             $this->selectedServicesPrice = $currencySelector->convertPrice($servicesPrice, false);
             $this->totalPrice = $currencySelector->convertPrice($totalPrice, false);
             $this->vatLessTotalPrice = $currencySelector->convertPrice($this->vatLessTotalPrice, false);
@@ -790,7 +812,6 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
 }
 
 
-
 class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -899,7 +920,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                     foreach ($pricesIndex as &$record) {
                         $elementData['deliveryTargetsInfo'][] = [
                             'targetId' => $record->targetId,
-                            'price'    => $record->price,
+                            'price' => $record->price,
                         ];
                     }
                 }
@@ -910,16 +931,16 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                         if ($fieldElement = $structureManager->getElementById($record->fieldId,
                             $deliveryTypeElement->id)) {
                             $fieldInfo = [
-                                'id'           => $fieldElement->id,
-                                'title'        => $fieldElement->title,
-                                'fieldName'    => $fieldElement->fieldName,
-                                'fieldType'    => $fieldElement->fieldType,
-                                'dataChunk'    => $fieldElement->dataChunk,
-                                'required'     => (int)$record->required,
-                                'validator'    => $fieldElement->validator,
+                                'id' => $fieldElement->id,
+                                'title' => $fieldElement->title,
+                                'fieldName' => $fieldElement->fieldName,
+                                'fieldType' => $fieldElement->fieldType,
+                                'dataChunk' => $fieldElement->dataChunk,
+                                'required' => (int)$record->required,
+                                'validator' => $fieldElement->validator,
                                 'autocomplete' => $fieldElement->autocomplete,
-                                'error'        => false,
-                                'value'        => $fieldElement->getAutoCompleteValue(),
+                                'error' => false,
+                                'value' => $fieldElement->getAutoCompleteValue(),
                             ];
                             if ($fieldElement->fieldType == 'select') {
                                 $fieldInfo['options'] = [];
@@ -927,7 +948,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                                 foreach ($options as &$option) {
                                     $fieldInfo['options'][] = [
                                         'value' => $option->title,
-                                        'text'  => $option->title,
+                                        'text' => $option->title,
                                     ];
                                 }
                             } elseif ($fieldElement->fieldType == 'input') {

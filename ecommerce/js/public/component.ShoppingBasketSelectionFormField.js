@@ -4,11 +4,12 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
     var componentElement;
     var labelElement;
     var starElement;
-    var fieldElement;
     var fieldComponent;
     var textareaElement;
 
     var init = function() {
+        var fieldElement;
+
         componentElement = document.createElement('tr');
         if (info.error != '0' && info.error) {
             componentElement.className = 'form_error';
@@ -45,18 +46,23 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
                 fieldElement.appendChild(helper.getComponentElement());
             }
         } else {
-            fieldComponent = new InputComponent({
+            var parameters = {
                 'name': fieldsBaseName + '[' + info.fieldName + ']',
                 'value': info.value,
-            });
+            };
+            if (info.autocomplete === 'vatNumber') {
+                parameters.inputClass = 'check_vat_number_input';
+                fieldElement.classList.add('shoppingbasket_delivery_vatnumber');
+            }
+            fieldComponent = new InputComponent(parameters);
             fieldElement.appendChild(fieldComponent.componentElement);
             if (info.autocomplete === 'vatNumber') {
                 var checkButton = document.createElement('input');
                 checkButton.type = 'button';
                 checkButton.value = window.translationsLogics.get('shoppingbasket.checkvat');
                 checkButton.className = 'button check_vat_button';
-                fieldComponent.componentElement.className = 'input_component check_vat_number_input';
                 fieldElement.appendChild(checkButton);
+                eventsManager.addHandler(checkButton, 'click', checkVatHandler);
             }
             eventsManager.addHandler(fieldComponent.inputElement, 'keydown', checkKey);
             if (info.helpLinkUrl && info.helpLinkText) {
@@ -64,6 +70,9 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
                 fieldElement.appendChild(helper.getComponentElement());
             }
         }
+    };
+    var checkVatHandler = function() {
+        shoppingBasketLogics.checkVatNumber(fieldComponent.componentElement.value);
     };
     this.getComponentElement = function() {
         return componentElement;

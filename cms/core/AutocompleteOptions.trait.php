@@ -24,6 +24,7 @@ trait AutocompleteOptionsTrait
             'smartPostAutomate',
             'comment',
             'product',
+            'vatNumber',
         ];
         $options = [];
         foreach ($values as $value) {
