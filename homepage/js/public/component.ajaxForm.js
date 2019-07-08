@@ -59,10 +59,12 @@ function AjaxFormComponent(formElement, callCallback) {
             if (typeof response !== 'undefined') {
                 //remove errors
                 for (i = 0; i < formElement.elements.length; i++) {
-                    errorElementName = formElement.elements[i].name;
-                    errorElementParent = formElement.querySelector('[data-fieldname="' + errorElementName + '"]')
-                    if(errorElementParent) {
-                        domHelper.removeClass(errorElementParent, 'form_error');
+                    if (errorElementName = formElement.elements[i].dataset.name || formElement.elements[i].name) {
+                        errorElementParent = formElement.querySelector('[data-fieldname="' + errorElementName + '"]');
+                        console.log(errorElementName)
+                        if(errorElementParent) {
+                            domHelper.removeClass(errorElementParent, 'form_error');
+                        }
                     }
                     else {
                         domHelper.removeClass(formElement.elements[i].parentNode.parentNode, 'form_error');
@@ -94,7 +96,11 @@ function AjaxFormComponent(formElement, callCallback) {
                         for (i = 0; i < response.errors.length; i++) {
                             errorElementName = 'formData[' + formId + '][' + response.errors[i] + ']';
                             errorElement = formElement.elements[errorElementName];
-                            errorElementParent = formElement.querySelector('[data-fieldname="' + errorElementName + '"]')
+                            if (!errorElement) {
+                                errorElement = formElement.querySelector('[data-name="' + errorElementName + '"]');
+                            }
+                            errorElementParent = formElement.querySelector('[data-fieldname="' + errorElementName + '"]');
+
                             if(errorElementParent) {
                                 domHelper.addClass(errorElementParent, 'form_error');
                             }
