@@ -67,6 +67,7 @@ class folderElement extends menuDependantStructureElement implements Configurabl
         $moduleStructure['formRelativesInput'] = 'array';
         $moduleStructure['hidden'] = 'checkbox';
 
+        $moduleStructure['layout'] = 'text';
         $moduleStructure['colorLayout'] = 'text';
     }
 

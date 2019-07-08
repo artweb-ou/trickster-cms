@@ -123,6 +123,7 @@
         'short',
     ],
     'folder.layouts' => [
+        'layout',
         'colorLayout',
     ],
     'feedback.layouts' => [
