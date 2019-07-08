@@ -681,26 +681,29 @@ abstract class ProductsListElement extends menuStructureElement
 
             if ($selectionsIds = $this->getSelectionIdsForFiltering()) {
                 $activeSelectionsIds = [];
-//                if ($parameterValues = $this->getFilterParameterValueIds()) {
-//                    /**
-//                     * @var Connection $db
-//                     */
-//                    $db = $this->getService('db');
-//                    $query = $db->table('module_product_parameter_value')
-//                        ->whereIn('value', $parameterValues);
-//                    $query->select(['parameterId'])->distinct();
-//                    if ($records = $query->get()) {
-//                        $activeSelectionsIds = array_column($records, 'parameterId');
-//                    }
-//                }
+                if ($parameterValues = $this->getFilterParameterValueIds()) {
+                    /**
+                     * @var Connection $db
+                     */
+                    $db = $this->getService('db');
+                    $query = $db->table('module_product_parameter_value')
+                        ->whereIn('value', $parameterValues);
+                    $query->select(['parameterId'])->distinct();
+                    if ($records = $query->get()) {
+                        $activeSelectionsIds = array_column($records, 'parameterId');
+                    }
+                }
 
                 if ($activeSelectionsIds) {
+                    $productIdsQuery = clone $this->getProductsListBaseOptimizedQuery();
+
                     /**
                      * @var Connection $db
                      */
                     $db = $this->getService('db');
                     $query = $db->table('module_product_parameter_value')
                         ->whereIn('parameterId', $activeSelectionsIds);
+                    $query->whereIn('productId', $productIdsQuery);
                     $query->select(['parameterId', 'value'])->distinct();
                     if ($records = $query->get()) {
                         foreach ($records as &$record) {
