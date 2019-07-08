@@ -10,10 +10,11 @@ class showIconFormShared extends structureElementAction
     {
         if ($structureElement->final) {
             $genericIcons = $structureManager->getElementsByType('genericIcon');
+            $linkType = 'genericIcon'.ucfirst($structureElement->structureType);
             if (!empty($genericIcons)) {
                 $iconsList = [];
                 $linksManager = $this->getService('linksManager');
-                $connectedIconsIds = $linksManager->getConnectedIdList($structureElement->id, 'genericIconProduct');
+                $connectedIconsIds = $linksManager->getConnectedIdList($structureElement->id, $linkType);
                 foreach ($genericIcons as $genericIcon) {
                     $item = [];
                     $item['id'] = $genericIcon->id;

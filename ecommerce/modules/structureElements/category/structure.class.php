@@ -918,7 +918,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         if ($currentAction == 'showProductsForm') {
             $this->allowedTypes = ['product'];
         } elseif ($currentAction == 'showIconForm') {
-            $this->allowedTypes = [];
+            $this->allowedTypes = ['genericIcon'];
         }
         return parent::getAllowedTypes($currentAction);
     }

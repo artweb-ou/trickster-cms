@@ -14,6 +14,7 @@ $moduleActions[] = 'saveMisc';
 $moduleActions[] = 'showIconForm';
 $moduleActions[] = 'showImportForm';
 $moduleActions[] = 'receiveImportForm';
+$moduleActions[] = 'receiveIcon';
 
 $moduleActions[] = 'showSettingsForm';
 $moduleActions[] = 'receiveSettings';
