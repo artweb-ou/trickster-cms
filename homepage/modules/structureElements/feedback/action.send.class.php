@@ -53,7 +53,7 @@ class sendFeedback extends structureElementAction
                                     'originalName' => $dataChunk->originalName,
                                     'storageName' => $storageName,
                                 ];
-                                if ($dataChunk instanceof StorageValueHolderInterface) {
+                                if ($dataChunk instanceof ElementStorageValueHolderInterface) {
                                     $dataChunk->setStorageValue($storageName);
                                 }
                                 if ($dataChunk instanceof ExtraDataHolderDataChunkInterface) {
@@ -108,21 +108,21 @@ class sendFeedback extends structureElementAction
                 $data['groups'][] = $groupInfo;
             }
             $visitorManager = $this->getService('VisitorsManager');
-            $visitor = $visitorManager->getCurrentVisitor();
-            if ($firstName && $lastName) {
-                $visitor->firstName = $firstName;
-                $visitor->lastName = $lastName;
-                $fromName = $firstName . ' ' . $lastName;
-            } elseif ($fullName) {
-                $visitor->firstName = $fullName;
-                $fromName = $fullName;
-            } elseif ($company) {
-                $fromName = $company;
+            if ($visitor = $visitorManager->getCurrentVisitor()) {
+                if ($firstName && $lastName) {
+                    $visitor->firstName = $firstName;
+                    $visitor->lastName = $lastName;
+                    $fromName = $firstName . ' ' . $lastName;
+                } elseif ($fullName) {
+                    $visitor->firstName = $fullName;
+                    $fromName = $fullName;
+                } elseif ($company) {
+                    $fromName = $company;
+                }
+                $visitor->email = $fromEmail;
+                $visitor->phone = $phone;
+                $visitorManager->updateVisitor($visitor);
             }
-            $visitor->email = $fromEmail;
-            $visitor->phone = $phone;
-            $visitorManager->updateVisitor($visitor);
-
             $spamChecker = $this->getService('SpamChecker');
             if ($emailToCheck && !$spamChecker->checkEmail($emailToCheck)) {
                 $structureElement->errorMessage = $translationsManager->getTranslationByName('feedback.emailsendingfailed');
@@ -148,12 +148,14 @@ class sendFeedback extends structureElementAction
                     $answerElement->prepareActualData();
                     $answerElement->title = $answerElementTitle;
                     $answerElement->persistElementData();
-                    $event = new Event();
-                    $event->setType('feedback');
-                    $event->setVisitorId($visitor->id);
-                    $event->setElementId($answerElement->id);
-                    $eventLogger = $this->getService('eventsLog');
-                    $eventLogger->saveEvent($event);
+                    if ($visitor) {
+                        $event = new Event();
+                        $event->setType('feedback');
+                        $event->setVisitorId($visitor->id);
+                        $event->setElementId($answerElement->id);
+                        $eventLogger = $this->getService('eventsLog');
+                        $eventLogger->saveEvent($event);
+                    }
                     foreach ($answerFieldValues as $fieldId => $fieldValue) {
                         if (is_array($fieldValue)) {
                             foreach ($fieldValue as $value) {
