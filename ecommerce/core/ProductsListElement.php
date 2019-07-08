@@ -680,6 +680,38 @@ abstract class ProductsListElement extends menuStructureElement
             $this->selectionsValuesIndex = [];
 
             if ($selectionsIds = $this->getSelectionIdsForFiltering()) {
+                $activeSelectionsIds = [];
+//                if ($parameterValues = $this->getFilterParameterValueIds()) {
+//                    /**
+//                     * @var Connection $db
+//                     */
+//                    $db = $this->getService('db');
+//                    $query = $db->table('module_product_parameter_value')
+//                        ->whereIn('value', $parameterValues);
+//                    $query->select(['parameterId'])->distinct();
+//                    if ($records = $query->get()) {
+//                        $activeSelectionsIds = array_column($records, 'parameterId');
+//                    }
+//                }
+
+                if ($activeSelectionsIds) {
+                    /**
+                     * @var Connection $db
+                     */
+                    $db = $this->getService('db');
+                    $query = $db->table('module_product_parameter_value')
+                        ->whereIn('parameterId', $activeSelectionsIds);
+                    $query->select(['parameterId', 'value'])->distinct();
+                    if ($records = $query->get()) {
+                        foreach ($records as &$record) {
+                            if (!isset($this->selectionsValuesIndex[$record['parameterId']])) {
+                                $this->selectionsValuesIndex[$record['parameterId']] = [];
+                            }
+                            $this->selectionsValuesIndex[$record['parameterId']][] = $record['value'];
+                        }
+                    }
+                }
+
                 $productIdsQuery = clone $this->getFilteredProductsQuery();
                 /**
                  * @var Connection $db
@@ -687,6 +719,9 @@ abstract class ProductsListElement extends menuStructureElement
                 $db = $this->getService('db');
                 $query = $db->table('module_product_parameter_value')
                     ->whereIn('parameterId', $selectionsIds);
+                if ($activeSelectionsIds) {
+                    $query->whereNotIn('parameterId', $activeSelectionsIds);
+                }
                 $query->whereIn('productId', $productIdsQuery);
                 $query->select(['parameterId', 'value'])->distinct();
                 if ($records = $query->get()) {
