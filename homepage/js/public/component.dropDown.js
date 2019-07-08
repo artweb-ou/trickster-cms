@@ -336,9 +336,19 @@ window.DropDownComponentList = function(parentObject, initOptionsData) {
     var init = function() {
         prepareDomStructure();
     };
+    var referralClass = "";
+    var requiredClass = "";
     var prepareDomStructure = function() {
         self.componentElement = document.createElement('div');
-        self.componentElement.className = 'dropdown_list';
+        if (parentObject.selectorElement.dataset.referral) {
+            referralClass = " " + parentObject.selectorElement.dataset.referral;
+        }
+
+        if (parentObject.selectorElement.dataset.required) {
+            requiredClass = " " + parentObject.selectorElement.dataset.required;
+        }
+
+        self.componentElement.className = 'dropdown_list' + referralClass + requiredClass;
         self.componentElement.style.display = 'none';
         window.eventsManager.addHandler(self.componentElement, 'mousewheel', mouseWheelHandler);
 
@@ -444,19 +454,24 @@ window.DropDownComponentList = function(parentObject, initOptionsData) {
         var elementLeft = 0;
         var elementTop = 0;
 
-        if (domElement.offsetParent) {
-            elementLeft = domElement.offsetLeft;
-            elementTop = domElement.offsetTop;
-            while (domElement = domElement.offsetParent) {
-                if (domElement.tagName.toLowerCase() != 'body' && domElement.tagName.toLowerCase() != 'html') {
-                    elementLeft += domElement.offsetLeft - domElement.scrollLeft;
-                    elementTop += domElement.offsetTop - domElement.scrollTop;
-                } else {
-                    elementLeft += domElement.offsetLeft;
-                    elementTop += domElement.offsetTop;
+        var positions = domElement.getBoundingClientRect();
+        elementLeft = positions.left;
+        elementTop = positions.top + (window.pageYOffset || document.documentElement.scrollTop);
+        /*
+            if (domElement.offsetParent) {
+                elementLeft = domElement.offsetLeft;
+                elementTop = domElement.offsetTop;
+                while (domElement = domElement.offsetParent) {
+                    if (domElement.tagName.toLowerCase() != 'body' && domElement.tagName.toLowerCase() != 'html') {
+                        elementLeft += domElement.offsetLeft - domElement.scrollLeft;
+                        elementTop += domElement.offsetTop - domElement.scrollTop;
+                    } else {
+                        elementLeft += domElement.offsetLeft;
+                        elementTop += domElement.offsetTop;
+             }
                 }
             }
-        }
+        */
         return {x: elementLeft, y: elementTop};
     };
     this.updateInfo = function(updateOptionsData) {
