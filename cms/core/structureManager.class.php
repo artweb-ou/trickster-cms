@@ -1344,10 +1344,11 @@ class structureManager implements DependencyInjectionContextInterface
         if ($cachedChain = $this->cache->get($id . ":" . $key)) {
             return $cachedChain;
         }
-        if ($nonLoadedOnly && !$restrictByParentId && isset($this->shortestChains[$id])) {
-            return $this->shortestChains[$id];
+        $key = $restrictByParentId . '_' . $id;
+        if ($nonLoadedOnly && !$restrictByParentId && isset($this->shortestChains[$key])) {
+            return $this->shortestChains[$key];
         }
-        $this->shortestChains[$id] = false;
+        $this->shortestChains[$key] = false;
 
         $chainElements[$id] = true;
 
@@ -1370,16 +1371,16 @@ class structureManager implements DependencyInjectionContextInterface
             }
 
             if (isset($foundRestricted)) {
-                $this->shortestChains[$id] = [$id, $foundRestricted];
-                $this->setElementCacheKey($id, $key, $this->shortestChains[$id], $this->cacheLifeTime * 2);
+                $this->shortestChains[$key] = [$id, $foundRestricted];
+                $this->setElementCacheKey($id, $key, $this->shortestChains[$key], $this->cacheLifeTime * 2);
 
-                return $this->shortestChains[$id];
+                return $this->shortestChains[$key];
             }
             if ($nonLoadedOnly && isset($foundRequested)) {
-                $this->shortestChains[$id] = [$id, $foundRequested];
+                $this->shortestChains[$key] = [$id, $foundRequested];
             } elseif ($nonLoadedOnly && isset($foundLoaded)) {
                 $points++;
-                $this->shortestChains[$id] = [$id, $foundLoaded];
+                $this->shortestChains[$key] = [$id, $foundLoaded];
             } else {
                 $bestPoints = false;
                 foreach ($parentLinks as &$parentLink) {
@@ -1399,22 +1400,22 @@ class structureManager implements DependencyInjectionContextInterface
                             ) {
                                 if ($newPoints < $bestPoints || !$bestPoints) {
                                     $bestPoints = $newPoints;
-                                    $this->shortestChains[$id] = $chain;
+                                    $this->shortestChains[$key] = $chain;
                                 }
                             }
                         }
                     }
                 }
-                if ($this->shortestChains[$id]) {
+                if ($this->shortestChains[$key]) {
                     $points = $bestPoints;
-                    if (reset($this->shortestChains[$id]) != $id) {
-                        array_unshift($this->shortestChains[$id], $id);
+                    if (reset($this->shortestChains[$key]) != $id) {
+                        array_unshift($this->shortestChains[$key], $id);
                     }
                 }
             }
         }
-        $this->setElementCacheKey($id, $key, $this->shortestChains[$id], $this->cacheLifeTime * 2);
-        return $this->shortestChains[$id];
+        $this->setElementCacheKey($id, $key, $this->shortestChains[$key], $this->cacheLifeTime * 2);
+        return $this->shortestChains[$key];
     }
 
     // TODO: refactoring this method
