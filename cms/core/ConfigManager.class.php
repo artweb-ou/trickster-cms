@@ -9,13 +9,32 @@ class ConfigManager
 
     /**
      * @param $name
+     * @param bool $forceProjectPath
      * @return Config|boolean
-     * @throws Exception
      */
-    public function getConfig($name)
+    public function getConfig($name, $forceProjectPath = false)
     {
         if (!isset($this->configs[$name])) {
-            if ($this->paths) {
+            if ($forceProjectPath) {
+                if ($path = $this->projectPath) {
+                    $configPath = $path . $name . '.php';
+                    if ($config = $this->getConfigFromPath($configPath, true)) {
+                        $this->configs[$name] = $config;
+                        foreach ($this->paths as $path) {
+                            if ($path !== $this->projectPath) {
+                                $configPath = $path . $name . '.php';
+                                if ($config = $this->getConfigFromPath($configPath, true)) {
+                                    if (isset($this->configs[$name])) {
+                                        $this->configs[$name]->linkConfig($config);
+                                    } else {
+                                        $this->configs[$name] = $config;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } elseif ($this->paths) {
                 foreach ($this->paths as $path) {
                     $configPath = $path . $name . '.php';
                     if ($config = $this->getConfigFromPath($configPath, true)) {
@@ -28,7 +47,7 @@ class ConfigManager
                 }
             }
             if (!isset($this->configs[$name])) {
-                $this->configs[$name] = new Config($this, [], $this->projectPath);
+                $this->configs[$name] = new Config($this, [], $this->projectPath . $name . '.php');
             }
         }
         return $this->configs[$name];
