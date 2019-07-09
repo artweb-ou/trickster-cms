@@ -123,26 +123,14 @@ window.OrdersListTableComponent = function(componentElement) {
             rowsElement.removeChild(rowsElement.firstChild);
         }
 
-        var payedTotal = 0;
-        var deliveryTotal = 0;
-        var totalPricesTotal = 0;
-
         for (var i = 0; i < ordersList.length; i++) {
             var row = new OrdersListRowComponent(i, ordersList[i]);
             rowsElement.appendChild(row.componentElement);
-
-            payedTotal += ordersList[i].payedPrice;
-            deliveryTotal += ordersList[i].deliveryPrice;
-            totalPricesTotal += ordersList[i].totalPrice;
         }
 
-        payedTotalElement.innerHTML = domHelper.roundNumber(payedTotal, 2) + ' €';
-        if (deliveryTotal !== '') {
-            deliveryTotalElement.innerHTML = domHelper.roundNumber(deliveryTotal, 2) + ' €';
-        } else {
-            deliveryTotalElement.innerHTML = '';
-        }
-        totalPriceElement.innerHTML = domHelper.roundNumber(totalPricesTotal, 2) + ' €';
+        payedTotalElement.innerHTML = ordersLogics.getPayedTotal() + ' €';
+        deliveryTotalElement.innerHTML = ordersLogics.getDeliveryTotal() + ' €';
+        totalPriceElement.innerHTML = ordersLogics.getTotalPricesTotal() + ' €';
     };
 
     init();

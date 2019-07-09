@@ -160,7 +160,7 @@
 				<tr class="orders_list_row orders_list_row_{$order->getOrderStatus()}">
 					<td class="orders_list_row_number">{$smarty.foreach.orders.iteration}</td>
 					<td class="orders_list_row_ordernumber">{$order->invoiceNumber}</td>
-					<td class="orders_list_row_payedprice">{$order->getPayedPrice()|round:"2"} {$order->currency}</td>
+					<td class="orders_list_row_payedprice">{$order->getPayedPrice()} {$order->currency}</td>
 					{if $order->deliveryPrice !== ""}<td class="orders_list_row_deliveryprice">{$order->deliveryPrice|round:"2"} {$order->currency}</td>{/if}
 					<td class="orders_list_row_status">{$order->getOrderStatusText()}</td>
 					<td class="orders_list_row_date">{$order->dateCreated}</td>

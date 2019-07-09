@@ -43,6 +43,7 @@ class paymentElement extends structureElement
         $moduleStructure['methodId'] = 'text';
         $moduleStructure['currency'] = 'text';
     }
+
     protected function getTabsList()
     {
         return [
@@ -50,6 +51,7 @@ class paymentElement extends structureElement
             'showLog',
         ];
     }
+
     /**
      * @return bool|PaymentOrderInterface
      */
@@ -128,7 +130,7 @@ class paymentElement extends structureElement
         if ($orderElement = $this->getOrderElement()) {
             if ($this->paymentStatus == 'success') {
                 $amountPaid = $this->amount;
-                $orderPrice = $orderElement->getTotalPrice();
+                $orderPrice = $orderElement->getTotalPrice(false);
                 $partlyPaid = $amountPaid != $orderPrice;
                 if ($partlyPaid) {
                     $orderElement->setOrderStatus('paid_partial');
@@ -144,5 +146,9 @@ class paymentElement extends structureElement
             }
         }
     }
-}
 
+    public function getAmount($formatted = true)
+    {
+        return $this->getValue('amount');
+    }
+}

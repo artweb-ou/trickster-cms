@@ -14,10 +14,6 @@ class banklinkApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $logFilePath = $this->getService('PathsManager')->getPath('logs') . 'banklog.txt';
-        $postcontents = serialize($_REQUEST) . "\n";
-        file_put_contents($logFilePath, $postcontents, FILE_APPEND);
-
         $structureManager = $this->getService('structureManager', [
             'rootUrl' => $controller->rootURL,
             'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
