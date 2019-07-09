@@ -106,7 +106,7 @@ class ordersElement extends structureElement
                 $deliveryTotal = $deliveryTotal + $element->deliveryPrice;
 
                 $payedTotal = $payedTotal + $element->getPayedPrice(false);
-                $totalPricesTotal = $totalPricesTotal + $element->getTotalAmount();
+                $totalPricesTotal = $totalPricesTotal + $element->getTotalPrice(false);
 
                 if ($element->getOrderStatus() == 'new') {
                     $newOrdersAmount++;
