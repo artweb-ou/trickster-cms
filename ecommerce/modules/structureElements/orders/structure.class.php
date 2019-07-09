@@ -97,7 +97,7 @@ class ordersElement extends structureElement
         /**
          * @var orderElement[] $contentList
          */
-        $contentList = $structureManager->getElementsByIdList($idList, $this->id);
+        $contentList = $structureManager->getElementsByIdList($idList, $this->id, true);
         $sortParameter = [];
         $filteredArray = [];
 

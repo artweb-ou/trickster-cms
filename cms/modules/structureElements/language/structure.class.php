@@ -331,7 +331,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         }
 
         if ($resultIdList = array_intersect(array_merge($languageEnabledElementsIdList, $currentMenuEnabledElementsIdList), $enabledElementsIdList)) {
-            $result = $structureManager->getElementsByIdList($resultIdList, $this->id, $type);
+            $result = $structureManager->getElementsByIdList($resultIdList, $this->id, true);
         }
         return $result;
     }
@@ -350,7 +350,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
             $contentType = $controller->getParameter('view') ? $controller->getParameter('view') : 'structure';
 
             $idList = $linksManager->getConnectedIdList($this->id, $contentType, 'parent');
-            $childrenList = $structureManager->getElementsByIdList($idList, $this->id, $contentType);
+            $childrenList = $structureManager->getElementsByIdList($idList, $this->id, true);
             if ($contentType != 'structure') {
                 $urlString = 'view:' . $contentType . '/';
                 foreach ($childrenList as &$element) {

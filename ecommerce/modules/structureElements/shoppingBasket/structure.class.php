@@ -539,7 +539,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             if ($selectedDeliveryTypeId = $this->shoppingBasket->getSelectedDeliveryTypeId()) {
                 $paymentMethodsIds = $this->getService('linksManager')->getConnectedIdList($selectedDeliveryTypeId, "deliveryTypePaymentMethod", "parent");
                 if ($paymentMethodsIds) {
-                    $result = $this->getService('structureManager')->getElementsByIdList($paymentMethodsIds, $this->id);
+                    $result = $this->getService('structureManager')->getElementsByIdList($paymentMethodsIds, $this->id, true);
                 }
             }
         }

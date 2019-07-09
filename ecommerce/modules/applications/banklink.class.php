@@ -14,6 +14,9 @@ class banklinkApplication extends controllerApplication
 
     public function execute($controller)
     {
+        /**
+         * @var structureManager $structureManager
+         */
         $structureManager = $this->getService('structureManager', [
             'rootUrl' => $controller->rootURL,
             'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
@@ -27,8 +30,7 @@ class banklinkApplication extends controllerApplication
         $paymentMethod = false;
         $processingResult = false;
 
-        $structureManager->getElementsByIdList($paymentMethodElementId);
-        if ($paymentMethodElementId && $paymentMethodElement = $structureManager->getElementById($paymentMethodElementId)
+        if ($paymentMethodElementId && $paymentMethodElement = $structureManager->getElementById($paymentMethodElementId, null, true)
         ) {
             if ($paymentMethod = $paymentsManager->getPaymentMethod($paymentMethodElement->getName())) {
                 $paymentMethod->setAttributes($paymentMethodElement->getSpecialData($this->getService('languagesManager')
@@ -69,8 +71,7 @@ class banklinkApplication extends controllerApplication
                     $bankLog = $this->getService('bankLog');
                     $bankLog->saveRecord($logRecord);
                 }
-                $structureManager->getElementsByIdList($transactionCode);
-                if ($paymentElement = $structureManager->getElementById($transactionCode)) {
+                if ($paymentElement = $structureManager->getElementById($transactionCode, null, true)) {
                     $paymentElement->executeAction('receive');
                     $processingResult = true;
                 }

@@ -25,7 +25,7 @@ class purchaseHistoryElement extends structureElement
 
         if ($user->userName != 'anonymous') {
             $connectedOrdersIds = $linksManager->getConnectedIdList($user->id, 'userOrder', 'parent');
-            if ($orders = $structureManager->getElementsByIdList($connectedOrdersIds, $this->id)) {
+            if ($orders = $structureManager->getElementsByIdList($connectedOrdersIds, $this->id, true)) {
                 $ordersTitles = [];
                 foreach ($orders as &$order) {
                     if ($payment = $order->getPaymentElement()) {

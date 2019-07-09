@@ -22,7 +22,7 @@ class showShortcut extends structureElementAction
                 }
             }
 
-            if ($elements = $structureManager->getElementsByIdList($childrenIdList, $firstParent->id)) {
+            if ($elements = $structureManager->getElementsByIdList($childrenIdList, $firstParent->id, true)) {
                 $structureElement->setReplacementElements($elements);
             }
         }

@@ -1379,32 +1379,26 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @param $idList
      * @param bool $parentElementId
-     * @param bool $type
+     * @param bool $directlyToParent
      * @return structureElement[]
-     *
      */
-    public function getElementsByIdList($idList, $parentElementId = false, $type = false)
+    public function getElementsByIdList($idList, $parentElementId = false, $directlyToParent = false)
     {
         $elementsList = [];
         if ($idList) {
             if (!$parentElementId) {
                 $parentElementId = $this->getRootElementId();
             }
-            if ($allowedElements = $this->privilegesManager->getAllowedElements($parentElementId, $idList)) {
-                // load the children elements from the storage and return them
-                $elementsList = $this->loadElementsToParent($idList, $parentElementId, $allowedElements);
-                if ($type) {
-                    $positions = [];
-                    foreach ($elementsList as &$element) {
-                        if ($elementLinks = $this->linksManager->getElementsLinks($element->id, $type, 'child')) {
-                            if ($firstLink = reset($elementLinks)) {
-                                $positions[] = $firstLink->position;
-                            } else {
-                                $positions[] = 0;
-                            }
-                        }
+            if ($directlyToParent) {
+                if ($allowedElements = $this->privilegesManager->getAllowedElements($parentElementId, $idList)) {
+                    // load the children elements from the storage and return them
+                    $elementsList = $this->loadElementsToParent($idList, $parentElementId, $allowedElements);
+                }
+            } else {
+                foreach ($idList as $id) {
+                    if ($element = $this->getElementById($id, $parentElementId)) {
+                        $elementsList[] = $element;
                     }
-                    array_multisort($positions, SORT_ASC, $elementsList);
                 }
             }
         }

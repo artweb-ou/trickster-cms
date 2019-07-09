@@ -40,7 +40,7 @@ class IconsManager
         if ($this->iconElements === null) {
             $allIconsIds = $this->db->table('module_generic_icon')->select('id')->distinct('id')->get();
             $allIconsIds = array_column($allIconsIds, 'id');
-            if ($iconElements = $this->structureManager->getElementsByIdList($allIconsIds)) {
+            if ($iconElements = $this->structureManager->getElementsByIdList($allIconsIds, null, true)) {
                 $this->iconElements = $iconElements;
             }
         }

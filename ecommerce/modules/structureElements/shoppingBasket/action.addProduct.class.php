@@ -38,18 +38,16 @@ class addProductShoppingBasket extends structureElementAction
             $languageManager = $this->getService('languagesManager');
             $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
             foreach ($selections as $selection) {
-                $selectedOption = '';
-                $structureManager->getElementsByIdList([$selection['id']]);
-                $select = $structureManager->getElementById($selection['id']);
+                $select = $structureManager->getElementById($selection['id'], null, true);
                 foreach ($selection['productOptions'] as $option) {
                     if (in_array($option['id'], $options)) {
                         $variant = $structureManager->getElementById($option['id']);
                         $selectedOption = $option['id'];
                         $variations[] = $selection['title'] . ': ' . $option['title'];
 
-                        $variations_dl[] = ($select?
-                            $select->getValue('title',$defaultLanguage->id) : '' ). ': '
-                            . ($variant? $variant->getValue('title', $defaultLanguage->id): '');
+                        $variations_dl[] = ($select ?
+                                $select->getValue('title', $defaultLanguage->id) : '') . ': '
+                            . ($variant ? $variant->getValue('title', $defaultLanguage->id) : '');
                         if ($selection['influential']) {
                             $influentialOptions[] = $selectedOption;
                         }
@@ -60,7 +58,6 @@ class addProductShoppingBasket extends structureElementAction
                     $parametersPrice = $productElement->getPriceBySelectedOptions($influentialOptions);
                 }
             }
-            $currencySelector = $this->getService('CurrencySelector');
             $productPrice = !empty($parametersPrice) ? $parametersPrice : $productElement->getPrice(false);
             if (is_numeric($productAmount) && is_numeric($productId) && ($everythingSelected || $controller->getParameter('productVariation'))) {
                 $finalAmount = $shoppingBasket->getProductOverallQuantity($productId) + $productAmount;

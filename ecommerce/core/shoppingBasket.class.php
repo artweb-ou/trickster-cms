@@ -899,6 +899,9 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 
     protected function loadDeliveryTypesData()
     {
+        /**
+         * @var structureManager $structureManager
+         */
         $structureManager = $this->getService('structureManager');
         $linksManager = $this->getService('linksManager');
         $data = [];
@@ -907,7 +910,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
             /**
              * @var deliveryTypeElement[] $deliveryTypeElements
              */
-            $deliveryTypeElements = $structureManager->getElementsByIdList($connectedIds);
+            $deliveryTypeElements = $structureManager->getElementsByIdList($connectedIds, null, true);
             foreach ($deliveryTypeElements as $deliveryTypeElement) {
                 $elementData = [];
                 $elementData['id'] = $deliveryTypeElement->id;
@@ -1267,12 +1270,15 @@ class shoppingBasketServices implements DependencyInjectionContextInterface
 
     protected function loadServicesData()
     {
+        /**
+         * @var structureManager $structureManager
+         */
         $structureManager = $this->getService('structureManager');
         $linksManager = $this->getService('linksManager');
         $data = [];
         if ($servicesElementId = $structureManager->getElementIdByMarker('shoppingBasketServices')) {
             $connectedIds = $linksManager->getConnectedIdList($servicesElementId, 'structure', 'parent');
-            $serviceElements = $structureManager->getElementsByIdList($connectedIds);
+            $serviceElements = $structureManager->getElementsByIdList($connectedIds, null, true);
             foreach ($serviceElements as &$serviceElement) {
                 $elementData = [];
                 $elementData['id'] = $serviceElement->id;
