@@ -28,6 +28,7 @@ class receiveOrderProduct extends structureElementAction
             'amount',
             'unit',
             'variation_dl',
+            'variation',
         ];
     }
 

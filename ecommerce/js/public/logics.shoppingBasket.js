@@ -193,7 +193,7 @@ window.shoppingBasketLogics = new function() {
     };
     this.trackCheckout = function() {
         if (!paymentStatus && self.productsList && orderId == null) {
-            if(self.currentStep == 1) {
+            if (self.currentStep == 1) {
                 tracking.checkoutTracking(self.productsList);
             } else {
                 tracking.checkoutProgressTracking(self.currentStep, self.productsList);
@@ -224,6 +224,14 @@ window.shoppingBasketLogics = new function() {
             fbq('track', 'AddToCart');
         }
     };
+
+    this.checkVatNumber = function(vatNumber) {
+        var requestParameters = [];
+        requestParameters['vatNumber'] = vatNumber;
+        var actionName = 'checkVat';
+        sendData(actionName, requestParameters);
+    };
+
     this.changeAmount = function(basketProductId, productAmount) {
         if (typeof productAmount == 'undefined') {
             productAmount = 1;

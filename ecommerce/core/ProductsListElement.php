@@ -660,14 +660,11 @@ abstract class ProductsListElement extends menuStructureElement
                  * @var structureManager $structureManager
                  */
                 $structureManager = $this->getService('structureManager');
-                $sort = [];
                 foreach ($selectionsValuesIndex[$selectionId] as $selectionValuesId) {
                     if ($valueElement = $structureManager->getElementById($selectionValuesId)) {
                         $valueElements[] = $valueElement;
-                        $sort[] = $valueElement->getTitle();
                     }
                 }
-                array_multisort($sort, SORT_ASC, $valueElements);
             }
         }
 
@@ -678,17 +675,59 @@ abstract class ProductsListElement extends menuStructureElement
     {
         if ($this->selectionsValuesIndex === null) {
             $this->selectionsValuesIndex = [];
+            /**
+             * @var Connection $db
+             */
+            $db = $this->getService('db');
 
             if ($selectionsIds = $this->getSelectionIdsForFiltering()) {
+                $activeSelectionsIds = [];
+                if ($parameterValues = $this->getFilterParameterValueIds()) {
+                    $query = $db->table('module_product_parameter_value')
+                        ->whereIn('value', $parameterValues)
+                        ->select(['parameterId'])->distinct();
+                    if ($records = $query->get()) {
+                        $activeSelectionsIds = array_column($records, 'parameterId');
+                    }
+                }
+
+                if ($activeSelectionsIds) {
+                    $productIdsQuery = clone $this->getProductsListBaseOptimizedQuery();
+
+                    $query = $db->table('module_product_parameter_value')
+                        ->select(['parameterId', 'value'])->distinct()
+                        ->whereIn('parameterId', $activeSelectionsIds)
+                        ->whereIn('productId', $productIdsQuery)
+                        ->leftJoin('structure_links', function ($query) {
+                            $query->on('module_product_parameter_value.value', '=', 'structure_links.childStructureId')
+                                ->where('structure_links.type', '=', 'structure');
+                        })
+                        ->orderBy('structure_links.position', 'asc');
+
+                    if ($records = $query->get()) {
+                        foreach ($records as &$record) {
+                            if (!isset($this->selectionsValuesIndex[$record['parameterId']])) {
+                                $this->selectionsValuesIndex[$record['parameterId']] = [];
+                            }
+                            $this->selectionsValuesIndex[$record['parameterId']][] = $record['value'];
+                        }
+                    }
+                }
+
                 $productIdsQuery = clone $this->getFilteredProductsQuery();
-                /**
-                 * @var Connection $db
-                 */
-                $db = $this->getService('db');
                 $query = $db->table('module_product_parameter_value')
-                    ->whereIn('parameterId', $selectionsIds);
-                $query->whereIn('productId', $productIdsQuery);
-                $query->select(['parameterId', 'value'])->distinct();
+                    ->select(['parameterId', 'value'])->distinct()
+                    ->whereIn('parameterId', $selectionsIds)
+                    ->whereIn('productId', $productIdsQuery)
+                    ->leftJoin('structure_links', function ($query) {
+                        $query->on('module_product_parameter_value.value', '=', 'structure_links.childStructureId')
+                            ->where('structure_links.type', '=', 'structure');
+                    })
+                    ->orderBy('structure_links.position', 'asc');
+
+                if ($activeSelectionsIds) {
+                    $query->whereNotIn('parameterId', $activeSelectionsIds);
+                }
                 if ($records = $query->get()) {
                     foreach ($records as &$record) {
                         if (!isset($this->selectionsValuesIndex[$record['parameterId']])) {

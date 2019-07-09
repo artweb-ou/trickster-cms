@@ -4,16 +4,28 @@ class receiveCurrency extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param currencyElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
-            $structureElement->prepareActualData();
             $structureElement->structureName = $structureElement->title;
-            $structureElement->persistElementData();
 
-            $parent = $structureManager->getElementsFirstParent($structureElement->id);
-            if ($parent) {
-                $parent->executeAction("generate");
+            $maxDecimalsAmount = 3;
+            if ($structureElement->decimals > $maxDecimalsAmount) {
+                $structureElement->decimals = $maxDecimalsAmount;
+            }
+
+            $structureElement->persistElementData();
+            /**
+             * @var currenciesElement $parent
+             */
+            if ($parent = $structureManager->getElementsFirstParent($structureElement->id)) {
+                $parent->generateConfigs();
             }
 
             $controller->redirect($structureElement->URL);
@@ -42,4 +54,3 @@ class receiveCurrency extends structureElementAction
         $validators["rate"][] = "notEmpty";
     }
 }
-

@@ -127,20 +127,15 @@ class orderElement extends structureElement implements PaymentOrderInterface
         if ($totalPrice < 0) {
             $totalPrice = 0;
         }
-        $currencySelector = $this->getService('CurrencySelector');
-
         $this->totalAmount = count($this->orderProducts);
 
         $vatRateSetting = $this->getService('ConfigManager')->get('main.vatRate');
         $this->vatAmount = $totalPrice - $totalPrice / $vatRateSetting;
-        $this->vatAmount = $this->vatAmount;
-
         $this->noVatAmount = $totalPrice / $vatRateSetting;
-        $this->noVatAmount = $this->noVatAmount;
 
         if ($this->paymentElement) {
             if ($this->paymentElement->paymentStatus == 'success') {
-                $this->payedPrice = $this->paymentElement->amount;
+                $this->payedPrice = $this->paymentElement->getAmount();
             }
         }
         $this->totalPrice = $totalPrice;
@@ -288,11 +283,15 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $this->orderProducts;
     }
 
-    public function getPayedPrice()
+    public function getPayedPrice($formatted = true)
     {
         $this->recalculate();
-        $currencySelector = $this->getService('CurrencySelector');
-        return $this->payedPrice ? $currencySelector->formatPrice($this->payedPrice) : 0;
+        if ($formatted){
+            $currencySelector = $this->getService('CurrencySelector');
+            return $this->payedPrice ? $currencySelector->formatPrice($this->payedPrice) : 0;
+        } else {
+            return $this->payedPrice;
+        }
     }
 
     public function getVatAmount()
@@ -315,13 +314,17 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $this->totalAmount;
     }
 
-    public function getTotalPrice()
+    public function getTotalPrice($formatted = true)
     {
         $currencySelector = $this->getService('CurrencySelector');
         if ($this->totalPrice === null) {
             $this->recalculate();
         }
-        return $currencySelector->formatPrice($this->totalPrice);
+        if ($formatted){
+            return $currencySelector->formatPrice($this->totalPrice);
+        } else {
+            return $this->totalPrice;
+        }
     }
 
     public function getOrderData()
@@ -369,7 +372,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $this->orderData['payment'] = [
                     'date' => $paymentElement->date,
                     'paymentStatus' => $paymentElement->paymentStatus,
-                    'amount' => $paymentElement->amount,
+                    'amount' => $paymentElement->getAmount(),
                     'currency' => $paymentElement->currency,
                 ];
             }

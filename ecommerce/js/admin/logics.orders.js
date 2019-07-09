@@ -13,7 +13,9 @@ window.ordersLogics = new function() {
     var filterEndDate = false;
     var filterRequestURL = false;
     var filterTypes = false;
-
+    var deliveryTotal;
+    var payedTotal;
+    var totalPricesTotal;
     var initComponents = function() {
         var elements = _('.orders_list');
         for (var i = 0; i < elements.length; i++) {
@@ -63,6 +65,16 @@ window.ordersLogics = new function() {
     this.getNewOrdersAmount = function() {
         return newOrdersAmount;
     };
+    this.getDeliveryTotal = function() {
+        return deliveryTotal;
+    };
+    this.getPayedTotal = function() {
+        return payedTotal;
+    };
+    this.getTotalPricesTotal = function() {
+        return totalPricesTotal;
+    };
+
     var receiveData = function(responseStatus, responseName, responseData) {
         var i;
         if (responseStatus === 'success') {
@@ -86,10 +98,15 @@ window.ordersLogics = new function() {
                         ordersList.push(order);
                         ordersIndex[order.id] = order;
                     }
+
+                    deliveryTotal = responseData.orders.deliveryTotal;
+                    payedTotal = responseData.orders.payedTotal;
+                    totalPricesTotal = responseData.orders.totalPricesTotal;
                     listStartDate = responseData.orders.startDate;
                     listEndDate = responseData.orders.endDate;
                     PDFDisplayURL = responseData.orders.PDFDisplayURL;
                     PDFDownloadURL = responseData.orders.PDFDownloadURL;
+                    XLSXDownloadURL = responseData.orders.XLSXDownloadURL;
                     XLSXDownloadURL = responseData.orders.XLSXDownloadURL;
 
                     newOrdersAmount = parseInt(responseData.orders.newOrdersAmount, 10);
@@ -154,13 +171,13 @@ window.OrderData = function(data) {
         self.advancePaymentInvoiceNumber = importedData.advancePaymentInvoiceNumber;
         self.orderConfirmationNumber = importedData.orderConfirmationNumber;
         self.totalAmount = parseInt(importedData.totalAmount, 10);
-        self.totalPrice = parseFloat(importedData.totalPrice, 10);
+        self.totalPrice = importedData.totalPrice;
         self.dateCreated = importedData.dateCreated;
         self.currency = importedData.currency;
 
-        self.payedPrice = parseFloat(importedData.payedPrice, 10);
+        self.payedPrice = importedData.payedPrice;
         if (importedData.deliveryPrice !== '') {
-            self.deliveryPrice = parseFloat(importedData.deliveryPrice, 10);
+            self.deliveryPrice = importedData.deliveryPrice;
         } else {
             self.deliveryPrice = '';
         }

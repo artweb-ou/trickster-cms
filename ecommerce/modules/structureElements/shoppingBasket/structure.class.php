@@ -648,6 +648,26 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $this->currentOrder = $currentOrder;
     }
 
+    public function validateVatNumber($vatNumber) {
+        $endpoint = 'validate';
+        $access_key = $this->getService('configManager')->get('main.vatlayerKey');
+
+        // set VAT number
+        $vat_number = $vatNumber;
+
+        // Initialize CURL:
+        $ch = curl_init('http://apilayer.net/api/'.$endpoint.'?access_key='.$access_key.'&vat_number='.$vat_number.'');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Store the data:
+        $json = curl_exec($ch);
+        curl_close($ch);
+
+        // Decode JSON response:
+        $validationResult = json_decode($json, true);
+
+        return $validationResult;
+    }
     public function hasPromoDiscounts()
     {
         return $this->getService('shoppingBasketDiscounts')->hasPromoDiscounts();
