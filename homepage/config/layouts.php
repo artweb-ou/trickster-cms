@@ -63,7 +63,7 @@
     ],
     'linkList.layout.options' => [
         'thumbnails',
-        'details',
+        'detailed',
         'list',
         'tabbed',
         'buttons',
