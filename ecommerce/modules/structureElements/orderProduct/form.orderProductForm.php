@@ -13,11 +13,14 @@ class OrderProductFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'title_dl' => [
+            'type' => 'input.text',
+        ],
         'variation' => [
-            'type' => 'input.text'
+            'type' => 'input.textarea'
         ],
         'variation_dl' => [
-            'type' => 'input.text'
+            'type' => 'input.textarea'
         ],
         'description' => [
             'type' => 'input.textarea',
