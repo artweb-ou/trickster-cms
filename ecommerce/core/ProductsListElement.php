@@ -690,55 +690,48 @@ abstract class ProductsListElement extends menuStructureElement
                         $activeSelectionsIds = array_column($records, 'parameterId');
                     }
                 }
-
                 if ($activeSelectionsIds) {
-                    $productIdsQuery = clone $this->getProductsListBaseOptimizedQuery();
-
-                    $query = $db->table('module_product_parameter_value')
-                        ->select(['parameterId', 'value'])->distinct()
-                        ->whereIn('parameterId', $activeSelectionsIds)
-                        ->whereIn('productId', $productIdsQuery)
-                        ->leftJoin('structure_links', function ($query) {
-                            $query->on('module_product_parameter_value.value', '=', 'structure_links.childStructureId')
-                                ->where('structure_links.type', '=', 'structure');
-                        })
-                        ->orderBy('structure_links.position', 'asc');
-
-                    if ($records = $query->get()) {
-                        foreach ($records as &$record) {
-                            if (!isset($this->selectionsValuesIndex[$record['parameterId']])) {
-                                $this->selectionsValuesIndex[$record['parameterId']] = [];
-                            }
-                            $this->selectionsValuesIndex[$record['parameterId']][] = $record['value'];
-                        }
-                    }
+                    $this->loadSelectionsValuesIndex($activeSelectionsIds);
                 }
-
-                $productIdsQuery = clone $this->getFilteredProductsQuery();
-                $query = $db->table('module_product_parameter_value')
-                    ->select(['parameterId', 'value'])->distinct()
-                    ->whereIn('parameterId', $selectionsIds)
-                    ->whereIn('productId', $productIdsQuery)
-                    ->leftJoin('structure_links', function ($query) {
-                        $query->on('module_product_parameter_value.value', '=', 'structure_links.childStructureId')
-                            ->where('structure_links.type', '=', 'structure');
-                    })
-                    ->orderBy('structure_links.position', 'asc');
-
-                if ($activeSelectionsIds) {
-                    $query->whereNotIn('parameterId', $activeSelectionsIds);
-                }
-                if ($records = $query->get()) {
-                    foreach ($records as &$record) {
-                        if (!isset($this->selectionsValuesIndex[$record['parameterId']])) {
-                            $this->selectionsValuesIndex[$record['parameterId']] = [];
-                        }
-                        $this->selectionsValuesIndex[$record['parameterId']][] = $record['value'];
-                    }
-                }
+                $this->loadSelectionsValuesIndex($selectionsIds, $activeSelectionsIds);
             }
         }
         return $this->selectionsValuesIndex;
+    }
+
+    protected function loadSelectionsValuesIndex($selectionsIds, $excludeSelectionsIds = null)
+    {
+        /**
+         * @var Connection $db
+         */
+        $db = $this->getService('db');
+
+        $productIdsQuery = clone $this->getFilteredProductsQuery();
+        $query = $db->table('module_product_parameter_value')
+            ->select(['parameterId', 'value'])->distinct()
+            ->whereIn('parameterId', $selectionsIds)
+            ->whereIn('productId', $productIdsQuery);
+        if ($excludeSelectionsIds) {
+            $query->whereNotIn('parameterId', $excludeSelectionsIds);
+        }
+        if ($records = $query->get()) {
+            if ($idList = array_column($records, 'value')) {
+                if ($positions = $db->table('structure_links')
+                    ->select('childStructureId')
+                    ->where('type', '=', 'structure')
+                    ->whereIn('childStructureId', $idList)
+                    ->orderBy('position', 'asc')
+                    ->get()) {
+                    $positions = array_flip(array_column($positions, 'childStructureId'));
+                }
+            }
+            foreach ($records as $record) {
+                if (!isset($this->selectionsValuesIndex[$record['parameterId']])) {
+                    $this->selectionsValuesIndex[$record['parameterId']] = [];
+                }
+                $this->selectionsValuesIndex[$record['parameterId']][$positions[$record['value']]] = $record['value'];
+            }
+        }
     }
 
     public function getCanonicalUrl()
