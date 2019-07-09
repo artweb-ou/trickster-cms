@@ -183,7 +183,7 @@ class ParametersManager extends errorLogger
 
         $optionsInfoIndex = [];
         if ($parametersInfo['parameterIds']) {
-            //load all values for all requested products and all primary parameters.
+            //load all values for all requested products and all primary parameters
             $query = $this->db->table('module_product_parameter_value')
                 ->select([
                     'module_product_parameter_value.productId',
@@ -193,13 +193,20 @@ class ParametersManager extends errorLogger
                 ->whereIn('module_product_parameter_value.productId', $productIdList)
                 ->whereIn('module_product_parameter_value.languageId', [$currentLanguageId, '0'])
                 ->whereIn('module_product_parameter_value.parameterId', $parametersInfo['parameterIds'])
+                //sorted by position of parameters
                 ->leftJoin('structure_links', 'module_product_parameter_value.parameterId', '=', 'structure_links.childStructureId')
+                //then sorted by position of values inside parameters.
+                ->leftJoin('structure_links as links2', function ($query) {
+                    $query->on('module_product_parameter_value.value', '=', 'links2.childStructureId')
+                        ->where('links2.type', '=', 'structure');
+                })
                 ->groupBy(
                     'module_product_parameter_value.productId',
                     'module_product_parameter_value.parameterId',
                     'module_product_parameter_value.value'
                 )
-                ->orderBy('structure_links.position', 'asc');
+                ->orderBy('structure_links.position', 'asc')
+                ->orderBy('links2.position', 'asc');
             if ($valuesList = $query->get()
             ) {
                 //load all options (product selection values) for all primary product selections
