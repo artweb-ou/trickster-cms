@@ -43,7 +43,13 @@ class paymentElement extends structureElement
         $moduleStructure['methodId'] = 'text';
         $moduleStructure['currency'] = 'text';
     }
-
+    protected function getTabsList()
+    {
+        return [
+            'showForm',
+            'showLog',
+        ];
+    }
     /**
      * @return bool|PaymentOrderInterface
      */
