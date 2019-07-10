@@ -10,8 +10,8 @@ class checkVatShoppingBasket extends structureElementAction
         $structureElement->shoppingBasket = $shoppingBasket;
         if (!empty($vatNumber)) {
             $result = $structureElement->validateVatNumber($vatNumber);
-//            if($result['country_code'] != 'EE' && $result['valid']) {
-            if ($result['valid']) {
+            if($result['country_code'] != 'EE' && $result['valid']) {
+//            if (true) {
                 $vatRate = 1;
             }
             $shoppingBasket->setVatRate($vatRate);
