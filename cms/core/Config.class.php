@@ -46,6 +46,7 @@ class Config
         if ($this->linkedConfig !== null) {
             if ($linkedValue = $this->linkedConfig->getMerged($key)) {
                 $value = array_merge($value, $linkedValue);
+                $value = array_unique($value);
             }
         }
 
