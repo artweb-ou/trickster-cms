@@ -81,6 +81,7 @@
     'selectedEvents.layouts' => [
         'layout',
         'listLayout',
+        'colorLayout',
     ],
     'selectedEvents.layout.options' => [
         'short',
