@@ -31,6 +31,8 @@ class orderProductElement extends structureElement
         $moduleStructure['title_dl'] = 'text';
         $moduleStructure['variation_dl'] = 'text';
         $moduleStructure['unit'] = 'text';
+        $moduleStructure['vatRate'] = 'text';
+        $moduleStructure['vatLessPrice'] = 'text';
     }
 
     public function isEmptyPrice()
@@ -72,7 +74,7 @@ class orderProductElement extends structureElement
 
     public function getTotalPrice($formatted = false)
     {
-        $this->totalPrice = $this->price * $this->amount;
+        $this->totalPrice = $this->getPrice(false) * $this->amount;
         if ($formatted) {
             $currencySelector = $this->getService('CurrencySelector');
             return $currencySelector->formatPrice($this->totalPrice);
@@ -86,7 +88,7 @@ class orderProductElement extends structureElement
         if ($this->oldPrice > $this->price) {
             $this->totalPrice = $this->oldPrice * $this->amount;
         } else {
-            $this->totalPrice = $this->price * $this->amount;
+            $this->totalPrice = $this->getPrice(false) * $this->amount;
         }
         if ($formatted) {
             $currencySelector = $this->getService('CurrencySelector');
@@ -101,6 +103,9 @@ class orderProductElement extends structureElement
      */
     public function getPrice($formatted = true)
     {
+        if(!empty($this->vatRate) && !empty($this->vatLessPrice)) {
+            $this->price = $this->vatRate * $this->vatLessPrice;
+        }
         if($formatted) {
             $currencySelector = $this->getService('CurrencySelector');
             return $currencySelector->formatPrice($this->price);
@@ -108,6 +113,4 @@ class orderProductElement extends structureElement
         return $this->price;
 
     }
-
-
 }

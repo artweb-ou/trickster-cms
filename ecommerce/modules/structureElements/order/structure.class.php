@@ -106,8 +106,13 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $this->totalPrice = 0;
 
         $productsPrice = 0;
+        $this->vatAmount = 0;
+        $this->vatAmount = 0;
         foreach ($this->getOrderProducts() as &$element) {
+            $vatAmount = $element->getPrice(false) / $element->vatRate;
             $productsPrice += $element->getTotalFullPrice();
+            $this->vatAmount += $vatAmount == $element->getPrice(false)? 0 : $vatAmount;
+            $this->noVatAmount += $element->getPrice(false) -$element->getPrice(false) / $element->vatRate;
         }
         $this->productsPrice = $productsPrice;
         $totalPrice = $productsPrice + $this->deliveryPrice;
@@ -128,11 +133,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $totalPrice = 0;
         }
         $this->totalAmount = count($this->orderProducts);
-
-        $vatRateSetting = $this->getService('ConfigManager')->get('main.vatRate');
-        $this->vatAmount = $totalPrice - $totalPrice / $vatRateSetting;
-        $this->noVatAmount = $totalPrice / $vatRateSetting;
-
         if ($this->paymentElement) {
             if ($this->paymentElement->paymentStatus == 'success') {
                 $this->payedPrice = $this->paymentElement->getAmount();
@@ -914,6 +914,10 @@ class orderElement extends structureElement implements PaymentOrderInterface
     {
         $currencySelector = $this->getService('CurrencySelector');
         $structureManager = $this->getService('structureManager');
+        /**
+         * @var $shoppingBasket shoppingBasket
+         */
+        $shoppingBasket = $this->getService('shoppingBasket');
         $this->orderProducts = [];
         foreach ($products as &$product) {
             /**
@@ -941,6 +945,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $newData['title'] = $product->title;
                 $newData['title_dl'] = $product->title_dl;
                 $newData['unit'] = $product->unit;
+                $newData['vatRate'] = $shoppingBasket->getVatRate();
+                $newData['vatLessPrice'] = $price /  $this->getService('ConfigManager')->getConfig('main')->get('vatRate');
                 if ($product->variation) {
                     $variation = is_array($product->variation)
                         ? implode(', ', $product->variation)
@@ -1038,6 +1044,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
      */
     public function getNoVatAmount()
     {
+        $this->recalculate();
         $currencySelector = $this->getService('CurrencySelector');
         return $currencySelector->formatPrice($this->noVatAmount);
     }

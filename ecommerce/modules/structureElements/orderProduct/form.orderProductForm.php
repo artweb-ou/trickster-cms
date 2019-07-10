@@ -28,6 +28,12 @@ class OrderProductFormStructure extends ElementForm
         'price' => [
             'type' => 'input.text',
         ],
+        'vatRate' => [
+            'type' => 'input.text',
+        ],
+        'vatLessPrice' => [
+            'type' => 'input.text',
+        ],
         'amount' => [
             'type' => 'input.text',
         ],

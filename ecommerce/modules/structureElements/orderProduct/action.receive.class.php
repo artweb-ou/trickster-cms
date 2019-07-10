@@ -29,6 +29,8 @@ class receiveOrderProduct extends structureElementAction
             'unit',
             'variation_dl',
             'variation',
+            'vatRate',
+            'vatLessPrice',
         ];
     }
 
