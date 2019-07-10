@@ -29,6 +29,8 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
 
         $moduleStructure['receivedEventsIds'] = 'array'; // temporary
         $moduleStructure['receivedEventsListsIds'] = 'array'; // temporary
+        
+        $moduleStructure['colorLayout'] = 'text';
     }
 
     protected function getTabsList()
