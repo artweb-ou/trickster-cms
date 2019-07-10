@@ -189,7 +189,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
         $user->setStorageAttribute('vatRate', $vatRate);
     }
 
-    protected function getVatRate()
+    public function getVatRate()
     {
         $user = $this->getService('user');
         $vatRate = $user->getStorageAttribute('vatRate');

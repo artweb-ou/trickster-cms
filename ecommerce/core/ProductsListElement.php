@@ -565,7 +565,7 @@ abstract class ProductsListElement extends menuStructureElement
         $controller = controller::getInstance();
         $url = $controller->pathURL;
         foreach ($controller->getParameters() as $key => $value) {
-            if (!is_array($value) && $key !== 'sort' && $value !== '') {
+            if (!is_array($value) && $key !== 'sort' && $key !== 'page' && $value !== '') {
                 $url .= $key . ':' . $value . '/';
             }
         }
@@ -999,6 +999,7 @@ abstract class ProductsListElement extends menuStructureElement
             $this->cacheKey .= $this->getFilterOrder();
             $this->cacheKey .= $this->getFilterSort();
             $this->cacheKey .= $this->getFilterLimit();
+            $this->cacheKey .= (int)controller::getInstance()->getParameter('page');
         }
         return $this->cacheKey;
     }
