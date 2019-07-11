@@ -37,6 +37,8 @@ class eventsListElement extends menuDependantStructureElement implements Configu
         $moduleStructure['date_from'] = 'date';
         $moduleStructure['date_to'] = 'date';
         $moduleStructure['sort'] = 'text';
+
+        $moduleStructure['colorLayout'] = 'text';
     }
 
     protected function getTabsList()
