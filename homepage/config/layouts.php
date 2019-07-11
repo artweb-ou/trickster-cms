@@ -27,6 +27,7 @@
     'eventsList.layouts' => [
         'layout',
         'listLayout',
+        'colorLayout',
     ],
     'eventsList.layout.options' => [
         'short',
