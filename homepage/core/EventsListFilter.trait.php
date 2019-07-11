@@ -256,7 +256,7 @@ trait EventsListFilterTrait
         return false;
     }
 
-    protected function getCurrentEventsIdList()
+    public function getCurrentEventsIdList()
     {
         if ($this->t_eventsIdList === null) {
             $this->t_eventsIdList = [];
