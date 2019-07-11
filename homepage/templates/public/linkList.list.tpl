@@ -17,7 +17,7 @@
 		</span>
 	{/if}
 
-	{if count($element->linkItems)}
+	{if $element->linkItems}
 		<div class='linklist_items'>
 			{stripdomspaces}
 				{foreach $element->linkItems as $linkItem}
