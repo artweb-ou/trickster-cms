@@ -79,13 +79,14 @@
 
 		top: 50%;
 		transform: translateY(-50%);
+		transition: all .5s ease;
 	}
 	.fullscreen_gallery_button_next {
 		.svg-bg(@trick_fullscreen_next, @white, @white, gallery);
 		right: 1.875rem;
 
 		&:hover, &:focus {
-			transform:  translateY(-50%), scale(1.2);
+			transform:  translateY(-50%) scale(1.2);
 		}
 	}
 	.fullscreen_gallery_button_prev {
@@ -93,7 +94,7 @@
 		left: 1.875rem;
 
 		&:hover, &:focus {
-			transform:  translateY(-50%), scale(1.2);
+			transform:  translateY(-50%) scale(1.2);
 		}
 	}
 }
