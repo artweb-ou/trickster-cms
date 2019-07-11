@@ -102,6 +102,19 @@ class eventsListElement extends menuDependantStructureElement implements Configu
         }
         return $title;
     }
+
+    public function getConnectedEventsInfo()
+    {
+        $info = [];
+        foreach ($this->getConnectedEvents() as $element) {
+            $item['title'] = $element->getTitle();
+            $item['select'] = true;
+            $item['id'] = $element->id;
+
+            $info [] = $item;
+        }
+        return $info;
+    }
 }
 
 

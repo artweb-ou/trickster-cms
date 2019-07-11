@@ -4,7 +4,7 @@ window.EventsListComponent = function(componentElement) {
 
     var init = function() {
         var element;
-        if (element = _('select.eventslist_filter_select', componentElement)[0]) {
+        if (element = componentElement.querySelector('select.eventslist_filter_select')) {
             filterer = new EventsListFilterComponent(element, self);
         }
     };
