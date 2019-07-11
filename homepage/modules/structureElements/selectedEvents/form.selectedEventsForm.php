@@ -9,6 +9,7 @@ class SelectedEventsFormStructure extends ElementForm
         ],
         'mode' => [
             'type' => 'select.index',
+            'class' => 'selectedevents_mode_select',
             'options' => [
                 'auto' => 'mode_auto',
                 'custom' => 'mode_custom',
@@ -16,13 +17,15 @@ class SelectedEventsFormStructure extends ElementForm
         ],
         'receivedEventsListsIds' => [
             'type' => 'select.universal_options_multiple',
+            'trClass' => 'selectedevents_manual_setting',
             'class' => 'selectedevents_connected_eventslists_select',
-            'method' => 'getConnectedEventsLists',
+            'method' => 'getConnectedEventsListsInfo',
         ],
         'receivedEventsIds' => [
             'type' => 'select.universal_options_multiple',
+            'trClass' => 'selectedevents_manual_setting',
             'class' => 'selectedevents_connected_events_select',
-            'method' => 'getConnectedEvents',
+            'method' => 'getConnectedEventsInfo',
         ],
         'dates_type' => [
             'type' => 'select.index',

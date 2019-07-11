@@ -15,16 +15,12 @@ trait ConnectedEventsProviderTrait
     public function getConnectedEvents()
     {
         if (is_null($this->connectedEvents)) {
-            $this->connectedEvents = [];
+            $this->connectedEvents = array();
             if ($eventsIds = $this->getConnectedEventsIds()) {
                 $structureManager = $this->getService('structureManager');
                 foreach ($eventsIds as &$eventId) {
                     if ($eventId && $eventElement = $structureManager->getElementById($eventId)) {
-                        $item = [];
-                        $item['id'] = $eventElement->id;
-                        $item['title'] = $eventElement->getTitle();
-                        $item['select'] = true;
-                        $this->connectedEvents[] = $item;
+                        $this->connectedEvents[] = $eventElement;
                     }
                 }
             }

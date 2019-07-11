@@ -93,52 +93,16 @@ class eventsListElement extends menuDependantStructureElement implements Configu
         return $this->baseEventsIdList;
     }
 
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getEvents()
+    public function getSearchTitle()
     {
-        $this->logError('deprecated method getEventsElements used');
-        return $this->getEventsElements();
-    }
+        $title = $this->getTitle();
 
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getEventsToDisplay()
-    {
-        $this->logError('deprecated method getEventsToDisplay used');
-        return $this->getEventsElements();
-    }
-
-    /**
-     * @param $monthStartStamp
-     * @return array
-     *
-     * @deprecated
-     */
-    public function getFilteredEvents($monthStartStamp)
-    {
-        $this->logError('deprecated method getFilteredEvents used');
-        if (is_null($this->filteredEvents)) {
-            $this->filteredEvents = [];
-            if ($events = $this->getEvents()) {
-                $selectedMonth = date('n', $monthStartStamp);
-                $selectedYear = date('Y', $monthStartStamp);
-                foreach ($events as $key => &$event) {
-                    $eventStartStamp = strtotime('first day of this month ' . $event->startDate);
-                    if (date('n', $eventStartStamp) != $selectedMonth || date('Y', $eventStartStamp) != $selectedYear
-                    ) {
-                        unset($events[$key]);
-                    }
-                }
-                $this->filteredEvents = $events;
-            }
+        if ($parentGroup = $this->getCurrentParentElement()) {
+            $title = $parentGroup->getTitle() . ' / ' . $title;
         }
-        return $this->filteredEvents;
+        return $title;
     }
 }
+
 
 

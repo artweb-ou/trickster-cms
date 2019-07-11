@@ -29,7 +29,7 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
 
         $moduleStructure['receivedEventsIds'] = 'array'; // temporary
         $moduleStructure['receivedEventsListsIds'] = 'array'; // temporary
-        
+
         $moduleStructure['colorLayout'] = 'text';
     }
 
@@ -86,15 +86,6 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         return $this->baseEventsIdList;
     }
 
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getEventsToDisplay()
-    {
-        $this->logError('deprecated method getEventsToDisplay used');
-        return $this->getEventsElements();
-    }
 
     public function getEventsListsEventsIds()
     {
@@ -108,4 +99,31 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         }
         return $eventIds;
     }
+
+    public function getConnectedEventsListsInfo()
+    {
+        $info = [];
+        foreach ($this->getConnectedEventsLists() as $element) {
+            $item['title'] = $element->getTitle();
+            $item['select'] = true;
+            $item['id'] = $element->id;
+
+            $info [] = $item;
+        }
+        return $info;
+    }
+
+    public function getConnectedEventsInfo()
+    {
+        $info = [];
+        foreach ($this->getConnectedEvents() as $element) {
+            $item['title'] = $element->getTitle();
+            $item['select'] = true;
+            $item['id'] = $element->id;
+
+            $info [] = $item;
+        }
+        return $info;
+    }
+
 }
