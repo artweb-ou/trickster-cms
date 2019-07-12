@@ -256,6 +256,56 @@ trait EventsListFilterTrait
         return false;
     }
 
+    public function getSelectedEventsPreset()
+    {
+        if ($preset = controller::getInstance()->getParameter("preset")) {
+            if (in_array($preset, $this->getAllowedPresets())) {
+                return $preset;
+            }
+        }
+        return false;
+    }
+
+    public function getAllowedPresets()
+    {
+        return ['thisweek', 'thismonth', 'thisyear', 'past'];
+
+    }
+
+    public function getSelectedPresetStamps()
+    {
+        switch ($this->getSelectedEventsPreset()) {
+            case "thisweek":
+                $result = [
+                    strtotime('today'),
+                    strtotime('Monday next week'),
+                ];
+                break;
+            case "thismonth":
+                $result = [
+                    strtotime('today'),
+                    strtotime('last day of this month'),
+                ];
+                break;
+            case "thisyear":
+                $result = [
+                    strtotime('today'),
+                    strtotime('last day of this year'),
+                ];
+                break;
+            case "past":
+                $result = [
+                    0,
+                    strtotime('today'),
+                ];
+                break;
+            default:
+                $result = false;
+                break;
+        }
+        return $result;
+    }
+
     public function getCurrentEventsIdList()
     {
         if ($this->t_eventsIdList === null) {
@@ -275,6 +325,12 @@ trait EventsListFilterTrait
                     $query->where('startDate', '<=', $filterMonthEndStamp)
                         ->where('endDate', '>=', $filter)
                         ->orWhereBetween('startDate', [$filter, $filterMonthEndStamp]);
+                });
+            } elseif ($stamps = $this->getSelectedPresetStamps()) {
+                $query->where(function ($query) use ($stamps) {
+                    $query->where('startDate', '<=', $stamps[1])
+                        ->where('endDate', '>=', $stamps[0])
+                        ->orWhereBetween('startDate', [$stamps[0], $stamps[1]]);
                 });
             }
 
