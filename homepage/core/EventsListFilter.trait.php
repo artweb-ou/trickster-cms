@@ -327,11 +327,15 @@ trait EventsListFilterTrait
                         ->orWhereBetween('startDate', [$filter, $filterMonthEndStamp]);
                 });
             } elseif ($stamps = $this->getSelectedPresetStamps()) {
-                $query->where(function ($query) use ($stamps) {
-                    $query->where('startDate', '<=', $stamps[1])
-                        ->where('endDate', '>=', $stamps[0])
-                        ->orWhereBetween('startDate', [$stamps[0], $stamps[1]]);
-                });
+                if ($this->getSelectedEventsPreset() === 'past'){
+                    $query->where('startDate', '<=', $stamps[1]);
+                } else {
+                    $query->where(function ($query) use ($stamps) {
+                        $query->where('startDate', '<=', $stamps[1])
+                            ->where('endDate', '>=', $stamps[0])
+                            ->orWhereBetween('startDate', [$stamps[0], $stamps[1]]);
+                    });
+                }
             }
 
             if ($this->sort == 'asc') {
