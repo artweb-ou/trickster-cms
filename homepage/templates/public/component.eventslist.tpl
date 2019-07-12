@@ -1,3 +1,4 @@
+{*this subtemplate is used by eventsList an selectedEvents*}
 {$listLayout = $element->getCurrentLayout('listLayout')}
 {$currentLayout = $element->getCurrentLayout()}
 {if $currentLayout == 'listaggregated'}
