@@ -29,6 +29,6 @@
 		</div>
 	{/if}
 {/capture}
-{assign moduleClass "linklist linklist_{$element->getCurrentLayout()}"}F
+{assign moduleClass "linklist linklist_{$element->getCurrentLayout()}"}
 {assign moduleTitleClass "linklist_title"}
 {include file=$theme->template("component.contentmodule.tpl")}
