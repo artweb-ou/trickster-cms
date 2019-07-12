@@ -22,7 +22,7 @@
                             {$personnel->position}
                         </td>
                         <td>
-                            {if $personnel->email != ''}<a href="mailto:{$element->email}">{/if}{$personnel->title}{if $personnel->email != ''}</a>{/if}
+                            {if $personnel->email != ''}<a href="mailto:{$personnel->email}">{/if}{$personnel->title}{if $personnel->email != ''}</a>{/if}
                         </td>
                         <td>
                             {if $personnel->phone}<a href="tel:{$personnel->phone}">{$personnel->phone}</a>{/if}
