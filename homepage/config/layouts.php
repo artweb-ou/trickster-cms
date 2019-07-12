@@ -34,7 +34,7 @@
         'calendar',
         'list',
         'listaggregated',
-        'details',
+        'detailed',
     ],
     'eventsList.layout.default' => 'short',
     'eventsList.listLayout.options' => [
@@ -89,7 +89,7 @@
         'calendar',
         'list',
         'listaggregated',
-        'details',
+        'detailed',
     ],
     'selectedEvents.layout.default' => 'short',
     'selectedEvents.listLayout.options' => [

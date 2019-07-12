@@ -1,4 +1,3 @@
-
 <table class="eventslist_table table_component">
 	<thead>
 	<tr>
