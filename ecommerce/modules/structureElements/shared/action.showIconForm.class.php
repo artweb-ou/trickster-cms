@@ -9,24 +9,8 @@ class showIconFormShared extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->final) {
-            $genericIcons = $structureManager->getElementsByType('genericIcon');
-            $linkType = 'genericIcon'.ucfirst($structureElement->structureType);
-            if (!empty($genericIcons)) {
-                $iconsList = [];
-                $linksManager = $this->getService('linksManager');
-                $connectedIconsIds = $linksManager->getConnectedIdList($structureElement->id, $linkType);
-                foreach ($genericIcons as $genericIcon) {
-                    $item = [];
-                    $item['id'] = $genericIcon->id;
-                    $item['title'] = $genericIcon->getTitle();
-                    $item['select'] = in_array($genericIcon->id, $connectedIconsIds);
-                    $iconsList[] = $item;
-                }
-            }
 
-            $structureElement->iconsList = $iconsList;
             $structureElement->setTemplate('shared.content.tpl');
-
             $renderer = $this->getService('renderer');
             $renderer->assign('contentSubTemplate', 'component.form.tpl');
             $renderer->assign('action', 'receiveIcon');
