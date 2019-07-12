@@ -37,11 +37,7 @@ window.EventsListFilterComponent = function(componentElement, eventsListObject) 
         }
     };
     this.getValue = function() {
-        if (typeof componentElement.options[componentElement.selectedIndex] !== 'undefined'){
-            return componentElement.options[componentElement.selectedIndex].value;
-        } else {
-            return '';
-        }
+        return componentElement.value;
     };
     init();
 };
