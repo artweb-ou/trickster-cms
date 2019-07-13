@@ -1,16 +1,10 @@
 <?php
 
-class showArticle extends structureElementAction
+class showSubArticle extends structureElementAction
 {
-    /**
-     * @param structureManager $structureManager
-     * @param controller $controller
-     * @param articleElement $structureElement
-     * @return mixed|void
-     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $structureElement->setViewName($structureElement->getCurrentLayout('layout'));
+        $structureElement->setViewName('show');
         if ($structureElement->final) {
             if ($parent = $structureManager->getElementsFirstParent($structureElement->id)) {
                 $controller->restart($parent->URL);

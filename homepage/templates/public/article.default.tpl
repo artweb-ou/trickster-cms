@@ -16,6 +16,15 @@
 			{$element->content}
 		</div>
 	{/if}
+	{if $subArticles = $element->getSubArticles()}
+		{$layout = $element->getCurrentLayout('subLayout')}
+		<div class="article_subarticles article_subarticles_{$layout}">
+			{foreach $subArticles as $subArticle}
+				{include file=$theme->template($subArticle->getTemplate($layout)) element=$subArticle}
+			{/foreach}
+		</div>
+
+	{/if}
 	{include $theme->template('component.comments.tpl')}
 {/capture}
 {assign moduleClass "article_block article_layout_{$element->getCurrentLayout()}"}
