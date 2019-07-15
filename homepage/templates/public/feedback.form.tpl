@@ -53,7 +53,7 @@
 </div>
 {/capture}
 
-{assign moduleClass "{if $referral}referral_{$referral} {/if}feedback_block_container{if $element->getCurrentLayout('colorLayout')} bg_color_{$element->getCurrentLayout('colorLayout')}{/if}{if $element->getCurrentLayout('layout')} bg_img_{$element->getCurrentLayout('layout')}{/if}"}
+{assign moduleClass "{if $referral}referral_{$referral} {/if}feedback_block_container{if $element->getCurrentLayout('colorLayout')} bg_color bg_color_{$element->getCurrentLayout('colorLayout')}{/if}{if $element->getCurrentLayout('layout')} bg_img bg_img_{$element->getCurrentLayout('layout')}{/if}"}
 {assign moduleTitleClass "feedback_heading"}
 {assign moduleAttributes "id=\"feedback-form-{$element->id}\""}
 {include file=$theme->template("component.contentmodule.tpl")}
