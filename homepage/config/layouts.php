@@ -136,6 +136,7 @@
         'colorLayout',
     ],
     'feedback.layouts' => [
+        'layout',
         'colorLayout',
     ],
 

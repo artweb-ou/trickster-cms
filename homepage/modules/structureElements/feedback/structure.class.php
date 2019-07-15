@@ -17,6 +17,7 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
         $moduleStructure['buttonTitle'] = 'text';
         $moduleStructure['role'] = 'text';
 
+        $moduleStructure['layout'] = 'text';
         $moduleStructure['colorLayout'] = 'text';
     }
 
