@@ -53,7 +53,7 @@
 </div>
 {/capture}
 
-{assign moduleClass "feedback_block_container{if $element->getCurrentLayout('colorLayout')} colorlayout_bg_color_{$element->getCurrentLayout('colorLayout')}{/if}"}
+{assign moduleClass "feedback_block_container{if $element->getCurrentLayout('colorLayout')} bg_color_{$element->getCurrentLayout('colorLayout')}{/if}"}
 {assign moduleTitleClass "feedback_heading"}
 {assign moduleAttributes "id=\"feedback-form-{$element->id}\""}
 {include file=$theme->template("component.contentmodule.tpl")}

@@ -12,7 +12,7 @@
         </a>{if $subMenuList && !empty($submenuSignatureSelector)}{$submenuSignatureSelector}{/if}
         {if $level < $levels || ($subMenu->requested && $level < $element->maxLevels)}
             {if $subMenuList}
-                <div class="submenu_item_submenus{if $subMenu->getCurrentLayout('colorLayout')} submenu_bg_color_{$subMenu->getCurrentLayout('colorLayout')}" {/if}role="menu">
+                <div class="submenu_item_submenus{if $subMenu->getCurrentLayout('colorLayout')} bg_color_{$subMenu->getCurrentLayout('colorLayout')}" {/if}role="menu">
                     {if !empty($submenuWrapperClass)}
                     <div class='{$submenuWrapperClass}'>
                         {/if}

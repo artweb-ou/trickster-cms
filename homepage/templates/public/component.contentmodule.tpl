@@ -1,3 +1,4 @@
+{stripdomspaces}
 {if !empty($contentOnly)}{if isset($moduleContent)}
 	<section class="contentmodule_content{if isset($moduleContentClass)} {$moduleContentClass}{/if}">{$moduleContent}</section>
 {/if}{else}
@@ -8,3 +9,4 @@
 			<div class="contentmodule_content{if isset($moduleContentClass)} {$moduleContentClass}{/if}">{$moduleContent}</div>{/if}
 	</section>
 {/if}
+{/stripdomspaces}

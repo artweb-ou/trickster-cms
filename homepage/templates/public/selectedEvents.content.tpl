@@ -16,7 +16,7 @@
 
 {assign colorLayoutStyle ''}
 {if $element->getCurrentLayout('colorLayout')}
-	{$colorLayoutStyle = "colorlayout_bg_color_{$element->getCurrentLayout('colorLayout')}"}
+	{$colorLayoutStyle = "bg_color_{$element->getCurrentLayout('colorLayout')}"}
 	{assign moduleAttributes "data-color='colorlayout_bg_color'"}
 {/if}
 
