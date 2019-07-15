@@ -17,6 +17,7 @@ class orderProductElement extends structureElement
     protected $allowedTypes = [];
     public $role = 'content';
     protected $totalPrice;
+    protected $vatAmount;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -49,15 +50,15 @@ class orderProductElement extends structureElement
         $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
         $structureManager = $this->getService('structureManager');
         $data = [
-            'id' => $this->productId,
-            'title' => $this->title,
-            'variation' => $this->variation,
-            'amount' => $this->amount,
-            'oldPrice' => $this->oldPrice,
-            'price' => $this->price,
-            'category' => '',
-            'category_ga' => '',
-            'title_ga' => $this->title_dl,
+            'id'           => $this->productId,
+            'title'        => $this->title,
+            'variation'    => $this->variation,
+            'amount'       => $this->amount,
+            'oldPrice'     => $this->oldPrice,
+            'price'        => $this->price,
+            'category'     => '',
+            'category_ga'  => '',
+            'title_ga'     => $this->title_dl,
             'variation_ga' => $this->variation_dl,
         ];
         /**
@@ -74,7 +75,7 @@ class orderProductElement extends structureElement
 
     public function getTotalPrice($formatted = false)
     {
-        $this->totalPrice = $this->getPrice(false) * $this->amount;
+        $this->totalPrice = $this->getPrice() * $this->amount;
         if ($formatted) {
             $currencySelector = $this->getService('CurrencySelector');
             return $currencySelector->formatPrice($this->totalPrice);
@@ -103,14 +104,72 @@ class orderProductElement extends structureElement
      */
     public function getPrice($formatted = true)
     {
-        if(!empty($this->vatRate) && !empty($this->vatLessPrice)) {
-            $this->price = $this->vatRate * $this->vatLessPrice;
+        if (!empty($this->vatRate) && !empty($this->vatLessPrice)) {
+            return $this->vatRate * $this->vatLessPrice;
         }
-        if($formatted) {
+        if ($formatted) {
             $currencySelector = $this->getService('CurrencySelector');
             return $currencySelector->formatPrice($this->price);
         }
         return $this->price;
 
+    }
+
+    protected function getDefaultVatRate()
+    {
+        /**
+         * @var $mainConfig ConfigManager
+         */
+        if (empty($this->vatRate)) {
+            $mainConfig = $this->getService('ConfigManager')->getConfig('main');
+            $vatRate = $mainConfig->get('vatRate');
+            if (!empty($vatRate)) {
+                $this->vatRate = $vatRate;
+            } else {
+                return false;
+            }
+        }
+        return $this->vatRate;
+    }
+
+    public function getVatAmout()
+    {
+        if(!empty($this->vatLessPrice)) {
+            $totalPrice = $this->getTotalPrice();
+            $this->vatAmount = $totalPrice - $this->getVatLessPrice();
+            return $this->vatAmount;
+        } else {
+            $totalPrice = $this->getTotalPrice();
+            if (empty($this->vatRate)) {
+                $this->getDefaultVatRate();
+            }
+            return $this->vatAmount = $totalPrice - $totalPrice / $this->vatRate;
+        }
+    }
+
+    public function getVatLessPrice()
+    {
+        if (empty($this->vatLessPrice)) {
+            $totalPrice = $this->getTotalPrice();
+            if (empty($this->vatRate)) {
+                $this->getDefaultVatRate();
+            }
+            return $this->vatLessPrice = $totalPrice - $totalPrice / $this->vatRate;
+        }
+        return $this->vatLessPrice;
+    }
+
+    public function getFullPrice($formatted = false) {
+        $fullPrice = 0;
+        if ($this->oldPrice > $this->price) {
+            $fullPrice = $this->oldPrice;
+        } else {
+            $fullPrice = $this->price;
+        }
+        if ($formatted) {
+            $currencySelector = $this->getService('CurrencySelector');
+            return $currencySelector->formatPrice($fullPrice);
+        }
+        return $fullPrice;
     }
 }
