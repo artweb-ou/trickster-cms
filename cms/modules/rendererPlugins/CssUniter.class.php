@@ -86,6 +86,7 @@ class cssUniterRendererPlugin extends rendererPlugin
             // trimColorHash for colors css keys
             $this->lessCompiler->registerFunction('trimColorHash', function ($arg) {
                 list($type, $color) = $arg;
+                
                 if ($type == 'raw_color') {
                     return ltrim($color, "#");
                 }
