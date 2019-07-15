@@ -15,6 +15,18 @@ class ServiceFormStructure extends ElementForm
         'image' => [
             'type' => 'input.image',
         ],
+        'link_text_1' => [
+            'type' => 'input.text',
+        ],
+        'link_1' => [
+            'type' => 'input.text',
+        ],
+        'link_text_2' => [
+            'type' => 'input.text',
+        ],
+        'link_2' => [
+            'type' => 'input.text',
+        ],
         'galleries' => [
             'type' => 'select.universal_options_multiple',
             'property' => 'galleries',

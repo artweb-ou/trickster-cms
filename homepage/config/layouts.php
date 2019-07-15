@@ -117,7 +117,13 @@
 
     'service.layouts' => [
         'galleries',
+        'layout',
+        'colorLayout',
     ],
+    'service.layout.options' => [
+        'short',
+    ],
+    'service.layout.default' => 'short',
     'service.galleries.options' => [
         'short',
     ],
