@@ -1,13 +1,13 @@
 <?php
 
-class receiveArticle extends structureElementAction
+class receiveSubArticle extends structureElementAction
 {
     protected $loggable = true;
 
     /**
      * @param structureManager $structureManager
      * @param controller $controller
-     * @param articleElement $structureElement
+     * @param subArticleElement $structureElement
      * @return mixed|void
      */
     public function execute(&$structureManager, &$controller, &$structureElement)
@@ -20,8 +20,6 @@ class receiveArticle extends structureElementAction
             $structureElement->structureName = $structureElement->title;
             $structureElement->persistElementData();
 
-            $structureElement->persistDisplayMenusLinks();
-
             $controller->redirect($structureElement->URL);
         }
         $structureElement->setViewName('form');
@@ -32,8 +30,6 @@ class receiveArticle extends structureElementAction
         $expectedFields = [
             'title',
             'content',
-            'displayMenus',
-            'allowComments',
             'image',
         ];
     }

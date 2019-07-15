@@ -12,6 +12,7 @@
     'selectedNews' => 'showForm',
     'shortcut' => 'showForm',
     'article' => 'showForm',
+    'subArticle' => 'showForm',
     'news' => 'showForm',
     'widget' => 'showForm',
     'banner' => 'showForm',

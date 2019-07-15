@@ -100,6 +100,7 @@
 
     'article.layouts' => [
         'layout',
+        'subLayout',
     ],
     'article.layout.options' => [
         'default',
@@ -107,6 +108,12 @@
         'image_right',
     ],
     'article.layout.default' => 'default',
+    'article.subLayout.options' => [
+        'simple',
+        'faq',
+        'accordeon',
+    ],
+    'article.subLayout.default' => 'simple',
 
     'service.layouts' => [
         'galleries',
