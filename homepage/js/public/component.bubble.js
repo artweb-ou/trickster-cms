@@ -84,13 +84,13 @@ window.BubbleComponent = function(referralElement, message, additionalContainerC
 		bubbleHeightDigit = parseFloat(bubbleHeight);
 
 		startY = positionedY + htmlScroll;
+		var marginBottom = 20;
 		//	componentElement.style.right = '-'+bubbleWidth;
 		//	componentElement.style.transform = "translateX(-"+ startX + "px)";
-
 		bubbleLeft = positionedX + 'px';
-		bubbleTopStart = Math.ceil(startY + positionedH - bubbleHeightDigit) + 'px';
-		bubbleTopStop = Math.ceil(startY + positionedH - bubbleHeightDigit - positionedH - 10) + 'px';
-		bubbleTopFinish = Math.ceil(startY + positionedH - (bubbleHeightDigit * 2) - positionedH) + 'px';
+		bubbleTopStart = startY + 'px';
+		bubbleTopStop = Math.ceil(startY - bubbleHeightDigit - marginBottom) + 'px';
+		bubbleTopFinish = Math.ceil(startY - positionedH - (bubbleHeightDigit * 2) - positionedH) + 'px';
 		componentElement.style.top = bubbleTopStart;
 		componentElement.style.left = bubbleLeft;
 		componentElement.style.width = bubbleWidth;

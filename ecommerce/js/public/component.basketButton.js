@@ -70,7 +70,7 @@ window.BasketButtonComponent = function(componentElement, onClick, id) {
                     message['content'] = bubbleText.outerHTML;
                     message['footer'] = seeBasket.outerHTML + continueShopping.outerHTML;
 
-                    var bubbleComponent = new BubbleComponent(componentElement, message, additionalContainerClassName, additionalClassName, 'notice_continue_shopping', 1300);
+                    var bubbleComponent = new BubbleComponent(componentElement, message, additionalContainerClassName, additionalClassName, 'notice_continue_shopping', 2000);
                     bubbleComponent.start();
                     break;
 
