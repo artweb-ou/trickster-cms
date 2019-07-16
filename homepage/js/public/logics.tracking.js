@@ -67,7 +67,7 @@ window.tracking = {
         if (product) {
             parameters.id = product.productId;
             parameters.name = product.title_dl;
-            parameters.category = product.category;
+            parameters.category = product.category_dl;
             parameters.brand = product.brand;
             parameters.variant = '';
             for (var i = 0; i < product.variation_dl.length; i++) {

@@ -415,6 +415,7 @@ window.ShoppingBasketProduct = function() {
         self.title = data.title;
         self.title_dl = data.title_dl;
         self.category = data.category;
+        self.category_dl = data.category_dl;
         self.description = data.description;
         self.variation = data.variation;
         self.variation_dl = '';
