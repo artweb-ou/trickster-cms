@@ -654,7 +654,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
 
     public function validateVatNumber($vatNumber) {
         $endpoint = 'validate';
-        $access_key = $this->getService('configManager')->get('main.vatlayerKey');
+        $access_key = $this->getService('ConfigManager')->get('main.vatlayerKey');
 
         // set VAT number
         $vat_number = $vatNumber;

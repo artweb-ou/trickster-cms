@@ -6,7 +6,7 @@ class checkVatShoppingBasket extends structureElementAction
     {
         $vatNumber = $controller->getParameter('vatNumber');
         $shoppingBasket = $this->getService('shoppingBasket');
-        $vatRate = $this->getService('configManager')->get('main.vatRate');
+        $vatRate = $this->getService('ConfigManager')->get('main.vatRate');
         $structureElement->shoppingBasket = $shoppingBasket;
         if (!empty($vatNumber)) {
             $result = $structureElement->validateVatNumber($vatNumber);
