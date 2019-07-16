@@ -11,7 +11,7 @@
 			</td>
 			<td class="invoice_header_invoice_info">
 				<div class="invoice_header_order_date">
-                    {translations name='invoice.orderdate'}: {$data.dateCreated}
+                    {date("d.m.y")}
 				</div>
 			</td>
 		</tr>

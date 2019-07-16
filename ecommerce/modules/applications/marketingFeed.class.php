@@ -15,7 +15,7 @@ class marketingFeedApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $configManager = $this->getService('configManager');
+        $configManager = $this->getService('ConfigManager');
         $structureManager = $this->getService('structureManager', [
             'rootUrl' => $controller->baseURL,
             'rootMarker'  => $configManager->get('main.rootMarkerPublic')

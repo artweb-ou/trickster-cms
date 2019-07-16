@@ -337,16 +337,21 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $products = $this->shoppingBasket->getProductsList();
 
         foreach ($products as $shoppingBasketProduct) {
-            $categoryTitle = '';
+            $productData = [];
+            $productData["category"] = '';
+            $productData["category_dl"] = '';
+
             /**
              * @var productElement $productElement
              */
             if ($productElement = $structureManager->getElementById($shoppingBasketProduct->productId)) {
                 if ($category = $productElement->getRequestedParentCategory()) {
                     $categoryTitle = $category->getValue('title', $defaultLanguage->id);
+                    $productData["category"] = $category->getTitle();
+                    $productData["category_dl"] = $category->getValue('title', $defaultLanguage->id);
                 }
             }
-            $productData = [];
+
             $productData["productId"] = $shoppingBasketProduct->productId;
             $productData["basketProductId"] = $shoppingBasketProduct->basketProductId;
             $productData["title"] = $shoppingBasketProduct->title;
@@ -356,7 +361,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             $productData["totalPrice"] = $currencySelector->formatPrice($shoppingBasketProduct->getPrice(false) * $shoppingBasketProduct->amount);
             $productData["emptyPrice"] = $shoppingBasketProduct->emptyPrice;
             $productData["unit"] = $shoppingBasketProduct->unit;
-            $productData["category"] = $categoryTitle;
+
 
             $productData["brand"] = $this->getBrands($shoppingBasketProduct->productId);
             //@todo refactor - move functionality to shoppingbasketdiscounts.class
@@ -650,7 +655,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
 
     public function validateVatNumber($vatNumber) {
         $endpoint = 'validate';
-        $access_key = $this->getService('configManager')->get('main.vatlayerKey');
+        $access_key = $this->getService('ConfigManager')->get('main.vatlayerKey');
 
         // set VAT number
         $vat_number = $vatNumber;
