@@ -50,15 +50,20 @@ window.SelectedProductsScrollComponent = function(componentElement) {
         eventsManager.preventDefaultAction(event);
     };
     var touchEnd = function(event, touchInfo) {
-        eventsManager.preventDefaultAction(event);
-        if (Math.abs(touchStartX - touchCurrentX) > Math.abs(touchStartY - touchCurrentY)) {
-            var difference = touchStartX - touchCurrentX;
-            clearInterval(interval);
+        var limit = 5;
+        var xOffset = Math.abs(touchStartX - touchCurrentX);
+        var yOffset = Math.abs(touchStartY - touchCurrentY);
+        if ((xOffset > limit) && (yOffset > limit)) {
+            eventsManager.preventDefaultAction(event);
+            if (xOffset > yOffset) {
+                var difference = touchStartX - touchCurrentX;
+                clearInterval(interval);
 
-            if (difference > 0) {
-                showNextPage(1);
-            } else {
-                showPreviousPage(1);
+                if (difference > 0) {
+                    showNextPage(1);
+                } else {
+                    showPreviousPage(1);
+                }
             }
         }
         window.touchManager.removeEventListener(componentElement, 'move', touchMove);
