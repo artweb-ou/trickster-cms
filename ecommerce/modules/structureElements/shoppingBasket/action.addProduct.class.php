@@ -47,9 +47,9 @@ class addProductShoppingBasket extends structureElementAction
                         $selectedOption = $option['id'];
                         $variations[] = $selection['title'] . ': ' . $option['title'];
 
-                        $variations_dl[] = ($select?
-                            $select->getValue('title',$defaultLanguage->id) : '' ). ': '
-                            . ($variant? $variant->getValue('title', $defaultLanguage->id): '');
+                        $variations_dl[] = ($select ?
+                                $select->getValue('title', $defaultLanguage->id) : '') . ': '
+                            . ($variant ? $variant->getValue('title', $defaultLanguage->id) : '');
                         if ($selection['influential']) {
                             $influentialOptions[] = $selectedOption;
                         }
@@ -126,14 +126,15 @@ class addProductShoppingBasket extends structureElementAction
 
                     $shoppingBasket->addProduct($data);
                     $responseStatus = "success";
-                    $eventLogger = $this->getService('eventsLog');
-                    $event = new Event();
                     $visitorManager = $this->getService('VisitorsManager');
-                    $visitor = $visitorManager->getCurrentVisitor();
-                    $event->setType('shoppingbasket_addition');
-                    $event->setElementId($productElement->id);
-                    $event->setVisitorId($visitor->id);
-                    $eventLogger->saveEvent($event);
+                    if ($visitor = $visitorManager->getCurrentVisitor()) {
+                        $eventLogger = $this->getService('eventsLog');
+                        $event = new Event();
+                        $event->setType('shoppingbasket_addition');
+                        $event->setElementId($productElement->id);
+                        $event->setVisitorId($visitor->id);
+                        $eventLogger->saveEvent($event);
+                    }
                 }
             }
         }

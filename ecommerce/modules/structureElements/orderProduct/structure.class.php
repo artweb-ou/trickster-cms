@@ -6,6 +6,8 @@
  * @property string $title
  * @property float $price
  * @property float $oldPrice
+ * @property float $vatRate
+ * @property float $vatLessPrice
  * @property int $amount
  * @property int $productId
  */
@@ -18,6 +20,7 @@ class orderProductElement extends structureElement
     public $role = 'content';
     protected $totalPrice;
     protected $vatAmount;
+    protected $vatLessTotalPrice;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -50,15 +53,15 @@ class orderProductElement extends structureElement
         $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
         $structureManager = $this->getService('structureManager');
         $data = [
-            'id'           => $this->productId,
-            'title'        => $this->title,
-            'variation'    => $this->variation,
-            'amount'       => $this->amount,
-            'oldPrice'     => $this->oldPrice,
-            'price'        => $this->price,
-            'category'     => '',
-            'category_ga'  => '',
-            'title_ga'     => $this->title_dl,
+            'id' => $this->productId,
+            'title' => $this->title,
+            'variation' => $this->variation,
+            'amount' => $this->amount,
+            'oldPrice' => $this->oldPrice,
+            'price' => $this->price,
+            'category' => '',
+            'category_ga' => '',
+            'title_ga' => $this->title_dl,
             'variation_ga' => $this->variation_dl,
         ];
         /**
@@ -75,7 +78,7 @@ class orderProductElement extends structureElement
 
     public function getTotalPrice($formatted = false)
     {
-        $this->totalPrice = $this->getPrice() * $this->amount;
+        $this->totalPrice = $this->getPrice(false) * $this->amount;
         if ($formatted) {
             $currencySelector = $this->getService('CurrencySelector');
             return $currencySelector->formatPrice($this->totalPrice);
@@ -104,63 +107,59 @@ class orderProductElement extends structureElement
      */
     public function getPrice($formatted = true)
     {
-        if (!empty($this->vatRate) && !empty($this->vatLessPrice)) {
-            return $this->vatRate * $this->vatLessPrice;
-        }
         if ($formatted) {
             $currencySelector = $this->getService('CurrencySelector');
             return $currencySelector->formatPrice($this->price);
         }
         return $this->price;
-
     }
 
-    protected function getDefaultVatRate()
+    protected function getVatRate()
     {
-        /**
-         * @var $mainConfig ConfigManager
-         */
         if (empty($this->vatRate)) {
+            /**
+             * @var $mainConfig ConfigManager
+             */
             $mainConfig = $this->getService('ConfigManager')->getConfig('main');
             $vatRate = $mainConfig->get('vatRate');
             if (!empty($vatRate)) {
                 $this->vatRate = $vatRate;
             } else {
-                return false;
+                $this->vatRate = false;
             }
         }
         return $this->vatRate;
     }
 
-    public function getVatAmout()
+    public function getVatAmount()
     {
-        if(!empty($this->vatLessPrice)) {
-            $totalPrice = $this->getTotalPrice();
-            $this->vatAmount = $totalPrice - $this->getVatLessPrice();
-            return $this->vatAmount;
-        } else {
-            $totalPrice = $this->getTotalPrice();
-            if (empty($this->vatRate)) {
-                $this->getDefaultVatRate();
-            }
-            return $this->vatAmount = $totalPrice - $totalPrice / $this->vatRate;
+        if (empty($this->vatAmount)) {
+            $this->vatAmount = $this->getTotalPrice() - $this->getVatLessTotalPrice();
         }
+        return $this->vatAmount;
+    }
+
+    public function getVatLessTotalPrice()
+    {
+        $totalPrice = $this->getTotalPrice();
+        $this->vatLessTotalPrice = $totalPrice / $this->getVatRate();
+
+        return $this->vatLessTotalPrice;
     }
 
     public function getVatLessPrice()
     {
-        if (empty($this->vatLessPrice)) {
-            $totalPrice = $this->getTotalPrice();
-            if (empty($this->vatRate)) {
-                $this->getDefaultVatRate();
-            }
-            return $this->vatLessPrice = $totalPrice - $totalPrice / $this->vatRate;
+        if ($this->price !== '') {
+            $this->vatLessPrice = $this->getPrice(false) / $this->getVatRate();
+        } else {
+            $this->vatLessPrice = '';
         }
+
         return $this->vatLessPrice;
     }
 
-    public function getFullPrice($formatted = false) {
-        $fullPrice = 0;
+    public function getFullPrice($formatted = false)
+    {
         if ($this->oldPrice > $this->price) {
             $fullPrice = $this->oldPrice;
         } else {
