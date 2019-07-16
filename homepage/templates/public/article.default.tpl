@@ -2,8 +2,6 @@
     {capture assign="moduleTitle"}
         {$h1}
     {/capture}
-{elseif $element->title}
-    {capture assign="moduleTitle"}{$element->title}{/capture}
 {/if}
 {capture assign="moduleContent"}
     {if $element->originalName != ''}
