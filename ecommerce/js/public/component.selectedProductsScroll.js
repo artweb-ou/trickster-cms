@@ -32,10 +32,10 @@ window.SelectedProductsScrollComponent = function(componentElement) {
             reset();
             window.addEventListener('resize', resize);
             // temporarily turned off because of iphones
-            window.touchManager.setTouchAction(componentElement, 'pan-y');
-            window.touchManager.addEventListener(componentElement, 'start', touchStart);
-            window.touchManager.addEventListener(componentElement, 'end', touchEnd);
-            window.touchManager.addEventListener(componentElement, 'cancel', touchCancel);
+            window.touchManager.setTouchAction(containerElement, 'pan-y');
+            window.touchManager.addEventListener(containerElement, 'start', touchStart);
+            window.touchManager.addEventListener(containerElement, 'end', touchEnd);
+            window.touchManager.addEventListener(containerElement, 'cancel', touchCancel);
         }
     };
     var touchStart = function(event, touchInfo) {
