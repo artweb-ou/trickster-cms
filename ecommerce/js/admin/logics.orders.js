@@ -151,6 +151,8 @@ window.OrderData = function(data) {
 
     this.payedPrice = false;
     this.deliveryPrice = false;
+    this.productsPrice = false;
+    this.discountAmount = false;
 
     this.URL = false;
     this.formURL = false;
@@ -172,6 +174,8 @@ window.OrderData = function(data) {
         self.orderConfirmationNumber = importedData.orderConfirmationNumber;
         self.totalAmount = parseInt(importedData.totalAmount, 10);
         self.totalPrice = importedData.totalPrice;
+        self.productsPrice = importedData.productsPrice;
+        self.discountAmount = importedData.discountAmount;
         self.dateCreated = importedData.dateCreated;
         self.currency = importedData.currency;
 

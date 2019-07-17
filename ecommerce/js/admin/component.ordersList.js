@@ -146,6 +146,8 @@ window.OrdersListRowComponent = function(number, orderData) {
     var payedPriceCell;
     var totalPriceCell;
     var deliveryPriceCell;
+    var discountCell;
+    var productsPriceCell;
     var statusCell;
     var statusChangeCell;
     var statusChangeButton;
@@ -185,6 +187,14 @@ window.OrdersListRowComponent = function(number, orderData) {
         deliveryPriceCell.className = 'orders_list_row_deliveryprice';
         self.componentElement.appendChild(deliveryPriceCell);
 
+        discountCell = document.createElement('td');
+        discountCell.className = 'orders_list_row_discount';
+        self.componentElement.appendChild(discountCell);
+
+        productsPriceCell = document.createElement('td');
+        productsPriceCell.className = 'orders_list_row_productsprice';
+        self.componentElement.appendChild(productsPriceCell);
+
         totalPriceCell = document.createElement('td');
         totalPriceCell.className = 'orders_list_row_totalprice';
         self.componentElement.appendChild(totalPriceCell);
@@ -221,6 +231,8 @@ window.OrdersListRowComponent = function(number, orderData) {
         } else {
             deliveryPriceCell.innerHTML = '';
         }
+        discountCell.innerHTML = orderData.discountAmount + ' ' + orderData.currency;
+        productsPriceCell.innerHTML = orderData.productsPrice + ' ' + orderData.currency;
         totalPriceCell.innerHTML = orderData.totalPrice + ' ' + orderData.currency;
         statusCell.innerHTML = orderData.orderStatusText;
 

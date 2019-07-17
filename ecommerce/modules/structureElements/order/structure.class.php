@@ -40,6 +40,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
     protected $orderData;
     protected $totalFullPrice;
     protected $vatRate;
+    protected $discountAmount;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -107,7 +108,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $this->productsPrice = 0;
         $this->totalPrice = 0;
 
-        $discountValue = 0;
+        $this->discountAmount = 0;
         $productsPrice = 0;
         $this->vatAmount = 0;
         $this->noVatAmount = 0;
@@ -120,7 +121,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $this->totalFullPrice += $element->getFullPrice();
         }
         $this->productsPrice = $productsPrice;
-        $totalPrice = $productsPrice + $this->deliveryPrice;
+        $totalPrice = $this->totalFullPrice + $this->deliveryPrice;
         if ($services = $this->getServicesList()) {
             foreach ($services as &$service) {
                 $totalPrice += $service->price;
@@ -129,11 +130,11 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
         if ($discounts = $this->getDiscountsList()) {
             foreach ($discounts as &$discount) {
-                $discountValue += $discount->value;
+                $this->discountAmount += $discount->value;
             }
         }
-        $priceWithDiscount = $this->totalFullPrice - $discountValue;
-        $this->vatAmount = $priceWithDiscount - (($priceWithDiscount) / $this->getDefaultVatRate());
+        $totalPrice = $totalPrice - $this->discountAmount;
+        $this->vatAmount = $totalPrice - (($totalPrice) / $this->getVatRate());
         if ($totalPrice < 0) {
             $totalPrice = 0;
         }
@@ -168,8 +169,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $collection = persistableCollection::getInstance('module_payment');
             $conditions = [];
             $conditions[] = [
-                'column'   => 'orderId',
-                'action'   => '=',
+                'column' => 'orderId',
+                'action' => '=',
                 'argument' => $this->id,
             ];
 
@@ -341,47 +342,47 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $currencySelector = $this->getService('CurrencySelector');
             $pricesIncludeVat = !$this->getService('ConfigManager')->get('main.displayVat');
             $this->orderData = [
-                "paymentBank"                 => $this->getPaymentBank(),
-                "orderNumber"                 => $this->orderNumber,
-                "orderStatus"                 => $this->orderStatus,
-                "orderStatusText"             => $this->getOrderStatusText(),
-                "dateCreated"                 => $this->dateCreated,
-                "dueDate"                     => $this->dueDate,
-                "receiverIsPayer"             => $this->receiverIsPayer,
-                "payerCompany"                => $this->payerCompany,
-                "payerFirstName"              => $this->payerFirstName,
-                "payerLastName"               => $this->payerLastName,
-                "payerAddress"                => $this->payerAddress,
-                "payerCity"                   => $this->payerCity,
-                "payerPostIndex"              => $this->payerPostIndex,
-                "payerCountry"                => $this->payerCountry,
-                "payerEmail"                  => $this->payerEmail,
-                "payerPhone"                  => $this->payerPhone,
-                "currency"                    => $this->currency,
-                "productsPrice"               => $this->getTotalFullPrice(),
-                "deliveryType"                => $this->deliveryType,
-                "deliveryPrice"               => $currencySelector->formatPrice($this->deliveryPrice),
-                "deliveryTitle"               => $this->deliveryTitle,
-                "noVatAmount"                 => $this->getNoVatAmount(),
-                "vatAmount"                   => $this->getVatAmount(),
-                "totalPrice"                  => $this->getTotalPrice(),
-                "invoiceNumber"               => $this->invoiceNumber,
+                "paymentBank" => $this->getPaymentBank(),
+                "orderNumber" => $this->orderNumber,
+                "orderStatus" => $this->orderStatus,
+                "orderStatusText" => $this->getOrderStatusText(),
+                "dateCreated" => $this->dateCreated,
+                "dueDate" => $this->dueDate,
+                "receiverIsPayer" => $this->receiverIsPayer,
+                "payerCompany" => $this->payerCompany,
+                "payerFirstName" => $this->payerFirstName,
+                "payerLastName" => $this->payerLastName,
+                "payerAddress" => $this->payerAddress,
+                "payerCity" => $this->payerCity,
+                "payerPostIndex" => $this->payerPostIndex,
+                "payerCountry" => $this->payerCountry,
+                "payerEmail" => $this->payerEmail,
+                "payerPhone" => $this->payerPhone,
+                "currency" => $this->currency,
+                "productsPrice" => $this->getTotalFullPrice(),
+                "deliveryType" => $this->deliveryType,
+                "deliveryPrice" => $currencySelector->formatPrice($this->deliveryPrice),
+                "deliveryTitle" => $this->deliveryTitle,
+                "noVatAmount" => $this->getNoVatAmount(),
+                "vatAmount" => $this->getVatAmount(),
+                "totalPrice" => $this->getTotalPrice(),
+                "invoiceNumber" => $this->invoiceNumber,
                 "advancePaymentInvoiceNumber" => $this->advancePaymentInvoiceNumber,
-                "orderConfirmationNumber"     => $this->orderConfirmationNumber,
-                "receiverFields"              => [],
-                "addedProducts"               => [],
-                "discountsList"               => [],
-                "servicesList"                => [],
-                'payment'                     => [],
-                'pricesIncludeVat'            => $pricesIncludeVat,
+                "orderConfirmationNumber" => $this->orderConfirmationNumber,
+                "receiverFields" => [],
+                "addedProducts" => [],
+                "discountsList" => [],
+                "servicesList" => [],
+                'payment' => [],
+                'pricesIncludeVat' => $pricesIncludeVat,
             ];
 
             if ($paymentElement = $this->getPaymentElement()) {
                 $this->orderData['payment'] = [
-                    'date'          => $paymentElement->date,
+                    'date' => $paymentElement->date,
                     'paymentStatus' => $paymentElement->paymentStatus,
-                    'amount'        => $paymentElement->getAmount(),
-                    'currency'      => $paymentElement->currency,
+                    'amount' => $paymentElement->getAmount(),
+                    'currency' => $paymentElement->currency,
                 ];
             }
 
@@ -417,14 +418,14 @@ class orderElement extends structureElement implements PaymentOrderInterface
             }
             foreach ($this->getOrderProducts() as $product) {
                 $this->orderData['addedProducts'][] = [
-                    'code'       => $product->code,
-                    'title'      => $product->title,
-                    'price'      => $product->getFullPrice(),
-                    'variation'  => $product->variation,
+                    'code' => $product->code,
+                    'title' => $product->title,
+                    'price' => $product->getFullPrice(),
+                    'variation' => $product->variation,
                     'emptyPrice' => $product->isEmptyPrice(),
-                    'amount'     => $product->amount,
+                    'amount' => $product->amount,
                     'totalPrice' => $product->getTotalFullPrice(true),
-                    'unit'       => $product->unit,
+                    'unit' => $product->unit,
                 ];
             }
             foreach ($this->getDiscountsList() as $discount) {
@@ -671,32 +672,33 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $products[] = $product->getElementData();
         }
         $data = [
-            'id'                          => $this->id,
-            'orderNumber'                 => $this->orderNumber,
-            'orderStatus'                 => $this->orderStatus,
-            'orderStatusText'             => $this->getOrderStatusText(),
-            'invoiceNumber'               => $this->getInvoiceNumber('invoice'),
+            'id' => $this->id,
+            'orderNumber' => $this->orderNumber,
+            'orderStatus' => $this->orderStatus,
+            'orderStatusText' => $this->getOrderStatusText(),
+            'invoiceNumber' => $this->getInvoiceNumber('invoice'),
             'advancePaymentInvoiceNumber' => $this->getInvoiceNumber('advancePaymentInvoice'),
-            'orderConfirmationNumber'     => $this->getInvoiceNumber('orderConfirmation'),
-            'totalAmount'                 => $this->getTotalAmount(),
-            'totalPrice'                  => $this->getTotalPrice(),
-            'vatAmount'                   => $this->getVatAmount(),
-            'revenue'                     => $this->getTotalPrice() - $this->getVatAmount(),
-            'dateCreated'                 => $this->dateCreated,
-            'currency'                    => $this->currency,
-            'payedPrice'                  => $this->getPayedPrice(),
-            'deliveryPrice'               => $this->deliveryPrice,
-            'deliveryTitle'               => $this->deliveryTitle,
-            'deliveryType'                => $this->deliveryType,
-            'ourPrice'                    => $this->ourPrice,
-            'URL'                         => $this->URL,
-            'formURL'                     => $this->URL . 'id:' . $this->id . '/action:showForm/',
-            'deleteURL'                   => $this->URL . 'id:' . $this->id . '/action:delete/',
-            'payerName'                   => $this->payerName,
-            'payerFirstName'              => $this->payerFirstName,
-            'payerLastName'               => $this->payerLastName,
-            'products'                    => $products,
-            'discounts'                   => $this->getDiscounts(),
+            'orderConfirmationNumber' => $this->getInvoiceNumber('orderConfirmation'),
+            'totalAmount' => $this->getTotalAmount(),
+            'totalPrice' => $this->getTotalPrice(),
+            'productsPrice' => $this->getProductsPrice(),
+            'discountAmount' => $this->getDiscountAmount(),
+            'vatAmount' => $this->getVatAmount(),
+            'revenue' => $this->getTotalPrice() - $this->getVatAmount(),
+            'dateCreated' => $this->dateCreated,
+            'currency' => $this->currency,
+            'payedPrice' => $this->getPayedPrice(),
+            'deliveryPrice' => $this->deliveryPrice,
+            'deliveryTitle' => $this->deliveryTitle,
+            'deliveryType' => $this->deliveryType,
+            'URL' => $this->URL,
+            'formURL' => $this->URL . 'id:' . $this->id . '/action:showForm/',
+            'deleteURL' => $this->URL . 'id:' . $this->id . '/action:delete/',
+            'payerName' => $this->payerName,
+            'payerFirstName' => $this->payerFirstName,
+            'payerLastName' => $this->payerLastName,
+            'products' => $products,
+            'discounts' => $this->getDiscounts(),
         ];
 
         return $data;
@@ -709,7 +711,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         foreach ($orderDiscountElements as $element) {
             $data = $element->getFormData();
             $discounts[] = [
-                'id'    => $data['id'],
+                'id' => $data['id'],
                 'value' => $data['value'],
                 'title' => $element->getTitle(),
             ];
@@ -822,13 +824,13 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $ordersCount = 0;
         $conditions = [];
         $conditions[] = [
-            'column'   => 'structureType',
-            'action'   => '=',
+            'column' => 'structureType',
+            'action' => '=',
             'argument' => 'order',
         ];
         $conditions[] = [
-            'column'   => 'dateCreated',
-            'action'   => '>=',
+            'column' => 'dateCreated',
+            'action' => '>=',
             'argument' => strtotime('01.01.' . date('Y') . '00:00:00'),
         ];
         $records = persistableCollection::getInstance('structure_elements')
@@ -844,8 +846,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $ordersCount = 0;
         $conditions = [];
         $conditions[] = [
-            'column'   => 'structureType',
-            'action'   => '=',
+            'column' => 'structureType',
+            'action' => '=',
             'argument' => 'order',
         ];
         $records = persistableCollection::getInstance('structure_elements')
@@ -1072,8 +1074,15 @@ class orderElement extends structureElement implements PaymentOrderInterface
         }
         return $this->totalFullPrice;
     }
+    public function getDiscountAmount()
+    {
+        if (empty($this->discountAmount)) {
+            $this->recalculate();
+        }
+        return $this->discountAmount;
+    }
 
-    protected function getDefaultVatRate()
+    protected function getVatRate()
     {
         /**
          * @var $mainConfig ConfigManager

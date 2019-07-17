@@ -71,6 +71,12 @@
 						{translations name='orderslist.deliveryprice'}
 					</th>
 					<th>
+						{translations name='orderslist.discount'}
+					</th>
+					<th>
+						{translations name='orderslist.productsprice'}
+					</th>
+					<th>
 						{translations name='orderslist.totalprice'}
 					</th>
 					<th>
