@@ -173,7 +173,9 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
                 imageButtons.push(fullScreenButton);
             }
         } else if (buttonsContainerElement) {
-            componentElement.removeChild(buttonsContainerElement);
+            if (buttonsContainerElement.parentNode){
+                buttonsContainerElement.parentNode.removeChild(buttonsContainerElement);
+            }
             buttonsContainerElement = null;
             destroyImageButtons();
             if (buttonPrevious) {
