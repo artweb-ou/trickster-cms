@@ -38,5 +38,10 @@ class articleElement extends menuDependantStructureElement
         $subArticles = $structureManager->getElementsChildren($this->id);
         return $subArticles;
     }
+
+    public function getAllowedTypes($currentAction = 'showForm')
+    {
+        return $this->allowedTypes;
+    }
 }
 
