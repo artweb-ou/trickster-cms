@@ -17,8 +17,9 @@ window.CarouselPagesMixin = function() {
     this.cpm_imageAspectRatio = 1;
     this.cpm_autoStart = true;
     this.cpm_touchX = false;
-    this.cpm_moveLength = 0;
-    this.imageWidth = 0;
+    this.cpm_touchY = false;
+    this.cpm_touchStartX = false;
+    this.cpm_touchStartY = false;
 
     this.cpm_preloadCallBack = false;
     this.cpm_touchStartCallBack = false;
@@ -302,46 +303,53 @@ window.CarouselPagesMixin = function() {
     };
 
     this.cpm_touchStart = function(event, touchInfo) {
-        eventsManager.preventDefaultAction(event);
+        this.cpm_touchStartX = touchInfo.clientX;
+        this.cpm_touchStartY = touchInfo.clientY;
+        this.cpm_touchX = this.cpm_touchStartX;
+        this.cpm_touchY = this.cpm_touchStartY;
 
         this.cpm_touchStartCallBack();
-        this.cpm_touchX = touchInfo.clientX;
-        this.cpm_moveLength = 0;
+
         touchManager.removeEventListener(this.cpm_componentElement, 'start', this.cpm_touchStartCaller);
         touchManager.addEventListener(this.cpm_componentElement, 'end', this.cpm_touchEndCaller);
         touchManager.addEventListener(this.cpm_componentElement, 'cancel', this.cpm_touchEndCaller);
         touchManager.addEventListener(this.cpm_componentElement, 'move', this.cpm_touchMoveCaller);
     };
+    this.cpm_touchMove = function(event, touchInfo) {
+        var difference = this.cpm_touchX - touchInfo.clientX;
+        this.cpm_touchX = touchInfo.clientX;
+        this.cpm_touchY = touchInfo.clientY;
 
+        if (Math.abs(this.cpm_touchStartX - this.cpm_touchX) > Math.abs(this.cpm_touchStartY - this.cpm_touchY)) {
+            eventsManager.preventDefaultAction(event);
+            this.cpm_componentElement.scrollBy(difference, 0);
+        }
+    };
     this.cpm_touchEnd = function(event, touchInfo) {
-        this.cpm_touchX = false;
+        var limit = 5;
+        var xOffset = Math.abs(this.cpm_touchStartX - this.cpm_touchX);
+        var yOffset = Math.abs(this.cpm_touchStartY - this.cpm_touchY);
+        if ((xOffset > limit) || (yOffset > limit)) {
+            eventsManager.preventDefaultAction(event);
+            if (xOffset > yOffset) {
+                var difference = this.cpm_touchStartX - this.cpm_touchX;
+                var speedCoefficient = 1 - (Math.abs(difference) / this.imageWidth);
 
-        var speedCoefficient = 1 - (Math.abs(this.cpm_moveLength) / this.imageWidth);
-
-        if (this.cpm_moveLength > 1) {
-            this.showNextPage(speedCoefficient);
-            this.cpm_touchDisplayNextImageCallback();
-        } else if (this.cpm_moveLength < -1) {
-            this.showPreviousPage(speedCoefficient);
-            this.cpm_touchDisplayPreviousImageCallback();
+                if (difference > 0) {
+                    this.showNextPage(speedCoefficient);
+                    this.cpm_touchDisplayNextImageCallback();
+                } else {
+                    this.showPreviousPage(speedCoefficient);
+                    this.cpm_touchDisplayPreviousImageCallback();
+                }
+            }
         } else {
             this.cpm_touchImageClick();
         }
-
         touchManager.removeEventListener(this.cpm_componentElement, 'end', this.cpm_touchEndCaller);
         touchManager.removeEventListener(this.cpm_componentElement, 'cancel', this.cpm_touchEndCaller);
         touchManager.removeEventListener(this.cpm_componentElement, 'move', this.cpm_touchMoveCaller);
         touchManager.addEventListener(this.cpm_componentElement, 'start', this.cpm_touchStartCaller);
-    };
-
-    this.cpm_touchMove = function(event, touchInfo) {
-        eventsManager.preventDefaultAction(event);
-
-        var diff = this.cpm_touchX - touchInfo.clientX;
-        this.cpm_touchX = touchInfo.clientX;
-        this.cpm_moveLength += diff;
-
-        this.cpm_componentElement.scrollBy(diff, 0);
     };
 
     this.cpm_parseOptions = function(options) {

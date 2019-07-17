@@ -46,14 +46,22 @@ window.SelectedProductsScrollComponent = function(componentElement) {
         touchCurrentY = touchStartY;
         window.touchManager.addEventListener(componentElement, 'move', touchMove);
     };
-    var touchCancel = function(event, touchInfo) {
-        eventsManager.preventDefaultAction(event);
+    var touchMove = function(event, touchInfo) {
+        var difference = touchCurrentX - touchInfo.clientX;
+
+        touchCurrentX = touchInfo.clientX;
+        touchCurrentY = touchInfo.clientY;
+
+        if (Math.abs(touchStartX - touchCurrentX) > Math.abs(touchStartY - touchCurrentY)) {
+            eventsManager.preventDefaultAction(event);
+            containerElement.scrollTo(containerElement.scrollLeft + difference, 0);
+        }
     };
     var touchEnd = function(event, touchInfo) {
         var limit = 5;
         var xOffset = Math.abs(touchStartX - touchCurrentX);
         var yOffset = Math.abs(touchStartY - touchCurrentY);
-        if ((xOffset > limit) && (yOffset > limit)) {
+        if ((xOffset > limit) || (yOffset > limit)) {
             eventsManager.preventDefaultAction(event);
             if (xOffset > yOffset) {
                 var difference = touchStartX - touchCurrentX;
@@ -68,18 +76,9 @@ window.SelectedProductsScrollComponent = function(componentElement) {
         }
         window.touchManager.removeEventListener(componentElement, 'move', touchMove);
     };
-    var touchMove = function(event, touchInfo) {
-        var difference = touchCurrentX - touchInfo.clientX;
-
-        touchCurrentX = touchInfo.clientX;
-        touchCurrentY = touchInfo.clientY;
-
-        if (Math.abs(touchStartX - touchCurrentX) > Math.abs(touchStartY - touchCurrentY)) {
-            eventsManager.preventDefaultAction(event);
-            containerElement.scrollTo(containerElement.scrollLeft + difference, 0);
-        }
+    var touchCancel = function(event, touchInfo) {
+        eventsManager.preventDefaultAction(event);
     };
-
     var showNextPage = function(withoutRedirectToEnd) {
         if (typeof withoutRedirectToEnd == 'undefined') {
             withoutRedirectToEnd = useInactiveButtons;
