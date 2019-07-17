@@ -23,5 +23,5 @@ class ArticleFormStructure extends ElementForm
             'condition' => 'checkDisplayMenus',
         ],
     ];
-
+    protected $additionalContent = 'shared.contentlist.tpl';
 }
