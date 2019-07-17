@@ -29,9 +29,11 @@ window.AccordeonItem = function(componentElement, parentComponent, mode) {
 	var contentElement = false;
 	var opened = false;
 	var self = this;
+	var wrapperComponent;
 
 	var init = function() {
 		if (titleElement = componentElement.querySelector('.accordeon_item_title')) {
+			wrapperComponent = componentElement.querySelector('.subarticle_accordeon_content_wrapper');
 			if (contentElement = componentElement.querySelector('.accordeon_item_content')) {
 				if (mode === 'hover') {
 					eventsManager.addHandler(componentElement, 'mouseenter', interactionHandler);
@@ -55,20 +57,23 @@ window.AccordeonItem = function(componentElement, parentComponent, mode) {
 	this.open = function(instant) {
 		if (!opened) {
 			opened = true;
+			var height = contentElement.scrollHeight;
 			if (instant) {
 				componentElement.classList.add(activeClassName);
-				contentElement.style.height = contentElement.scrollHeight + 'px';
+				wrapperComponent.style.height = height + 'px';
 			} else {
 				componentElement.classList.add(activeClassName);
-				TweenLite.to(contentElement, 0.5, {'css': {'height': contentElement.scrollHeight}});
+				TweenLite.to(wrapperComponent, 0.5, {'css': {
+					'height': height}});
 			}
 		}
 	};
 	this.close = function() {
 		if (opened) {
 			opened = false;
-			TweenLite.to(contentElement, 0.3, {'css': {'height': 0}});
+			TweenLite.to(wrapperComponent, 0.3, {'css': {'height': 0}});
 			componentElement.classList.remove(activeClassName);
+
 		}
 	};
 	init();
