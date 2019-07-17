@@ -1,7 +1,9 @@
-{if $h1 = $element->getH1()}
-    {capture assign="moduleTitle"}
-        {$h1}
-    {/capture}
+{if $element->hideTitle==0}
+    {if $h1 = $element->getH1()}
+        {capture assign="moduleTitle"}
+            {$h1}
+        {/capture}
+    {/if}
 {/if}
 {capture assign="moduleContent"}
     {if $element->originalName != ''}

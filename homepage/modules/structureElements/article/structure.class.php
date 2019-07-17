@@ -12,6 +12,7 @@ class articleElement extends menuDependantStructureElement
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['hideTitle'] = 'checkbox';
         $moduleStructure['content'] = 'html';
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['image'] = 'image';
@@ -44,4 +45,3 @@ class articleElement extends menuDependantStructureElement
         return $this->allowedTypes;
     }
 }
-
