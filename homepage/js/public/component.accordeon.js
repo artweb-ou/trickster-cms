@@ -46,10 +46,13 @@ window.AccordeonItem = function(componentElement, parentComponent, mode) {
 		}
 	};
 	var interactionHandler = function() {
-		parentComponent.openItem(self);
+		if(opened) {
+			self.close();
+		} else {
+			parentComponent.openItem(self);
+		}
 	};
 	this.open = function(instant) {
-
 		if (!opened) {
 			opened = true;
 			if (instant) {
