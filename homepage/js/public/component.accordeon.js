@@ -10,6 +10,7 @@ window.Accordeon = function(componentElement) {
 		for (var i = 0; i < elements.length; i++) {
 			items.push(new AccordeonItem(elements[i], self, mode));
 		}
+		items[0].open();
 	};
 	this.openItem = function(newItem) {
 		for (var i = 0; i < items.length; i++) {
