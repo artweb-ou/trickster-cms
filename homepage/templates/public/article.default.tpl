@@ -34,7 +34,7 @@
     {/if}
     {include $theme->template('component.comments.tpl')}
 {/capture}
-{assign moduleClass "article_block article_layout_{$element->getCurrentLayout()}"}
+{assign moduleClass "article_block article_layout_{$element->getCurrentLayout()} article_sublayout_{$layout}"}
 {assign moduleTitleClass "article_heading"}
 {assign moduleContentClass "article_content"}
 {include file=$theme->template("component.contentmodule.tpl")}
