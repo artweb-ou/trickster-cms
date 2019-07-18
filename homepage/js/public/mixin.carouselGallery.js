@@ -80,13 +80,13 @@ window.CarouselPagesMixin = function() {
                         function() {
                             return scope.cpm_performAutoRotate.call(scope);
                         },
-                        this.cpm_rotateDelay,
+                        this.cpm_rotateDelay
                     );
                 }
                 eventsManager.addHandler(window, 'resize',
                     function(event) {
                         return scope.cpm_scrollToCurrent.call(scope, event);
-                    },
+                    }
                 );
 
                 if (this.cpm_originalPageElements.length > 1) {
