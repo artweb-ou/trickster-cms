@@ -115,7 +115,22 @@ class eventsListElement extends menuDependantStructureElement implements Configu
         }
         return $info;
     }
+
+    public function getEventsElements()
+    {
+        if ($this->t_events === null) {
+            if ($eventIds = $this->getCurrentEventsIdList()) {
+                /**
+                 * @var structureManager
+                 */
+                $structureManager = $this->getService('structureManager');
+                foreach ($eventIds as $eventId) {
+                    if ($element = $structureManager->getElementById($eventId, $this->id)) {
+                        $this->t_events[] = $element;
+                    }
+                }
+            }
+        }
+        return $this->t_events;
+    }
 }
-
-
-

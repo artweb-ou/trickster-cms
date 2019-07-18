@@ -10,25 +10,6 @@ trait EventsListFilterTrait
     protected $monthsInfo;
     protected $monthsInfoIndex;
 
-    public function getEventsElements()
-    {
-        if ($this->t_events === null) {
-            if ($eventIds = $this->getCurrentEventsIdList()) {
-                //todo: refactor. workaround to load events from connected lists first, not from anywhere in language
-                $this->getConnectedEventsLists();
-                //workaround end
-
-                $structureManager = $this->getService('structureManager');
-                foreach ($eventIds as $eventId) {
-                    if ($element = $structureManager->getElementById($eventId)) {
-                        $this->t_events[] = $element;
-                    }
-                }
-            }
-        }
-        return $this->t_events;
-    }
-
     /**
      * returns the value of manually selected months filter dropdown in public
      * @return bool|int
@@ -327,7 +308,7 @@ trait EventsListFilterTrait
                         ->orWhereBetween('startDate', [$filter, $filterMonthEndStamp]);
                 });
             } elseif ($stamps = $this->getSelectedPresetStamps()) {
-                if ($this->getSelectedEventsPreset() === 'past'){
+                if ($this->getSelectedEventsPreset() === 'past') {
                     $query->where('endDate', '<=', $stamps[1]);
                 } else {
                     $query->where(function ($query) use ($stamps) {
@@ -358,4 +339,7 @@ trait EventsListFilterTrait
     abstract protected function getBaseEventsIdList();
 
     abstract public function getConnectedEventsLists();
+
+    abstract public function getEventsElements();
+
 }

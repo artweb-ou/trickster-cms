@@ -126,4 +126,25 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         return $info;
     }
 
+    public function getEventsElements()
+    {
+        if ($this->t_events === null) {
+            if ($eventIds = $this->getCurrentEventsIdList()) {
+                //we need to ensure all connected events lists are loaded.
+                //Then events will be taken through the right events list, not from anywhere in language
+                $this->getConnectedEventsLists();
+                /**
+                 * @var structureManager
+                 */
+                $structureManager = $this->getService('structureManager');
+                foreach ($eventIds as $eventId) {
+                    if ($element = $structureManager->getElementById($eventId)) {
+                        $this->t_events[] = $element;
+                    }
+                }
+            }
+        }
+        return $this->t_events;
+    }
+
 }
