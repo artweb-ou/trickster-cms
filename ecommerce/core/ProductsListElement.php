@@ -195,6 +195,21 @@ abstract class ProductsListElement extends menuStructureElement
                 $filteredProductsQuery->where('baseproducts.price', '>=', $price[0]);
                 $filteredProductsQuery->where('baseproducts.price', '<=', $price[1]);
             }
+
+            $sort = $this->getFilterSort();
+            $order = $this->getFilterOrder();
+            if ($sort && $sort == 'manual') {
+                $this->applyManualSorting($filteredProductsQuery, $filteredProductsQuery);
+            } elseif ($sort == 'date') {
+                $filteredProductsQuery->join('structure_elements', 'filteredproducts.id', '=', 'structure_elements.id', 'left');
+                $filteredProductsQuery->orderBy('structure_elements.dateCreated', $order);
+            } elseif ($sort == 'brand') {
+                $filteredProductsQuery->join('module_brand', 'filteredproducts.brandId', '=', 'module_brand.id', 'left');
+                $filteredProductsQuery->orderBy('module_brand.title', $order);
+            } else {
+                $filteredProductsQuery->orderBy($sort, $order);
+            }
+
             $filteredProductsQuery->select('*');
             /**
              * @var Connection $db
@@ -224,23 +239,9 @@ abstract class ProductsListElement extends menuStructureElement
 
         $this->productsList = [];
         if ($filteredProductsQuery = clone $this->getFilteredProductsQuery()) {
-            $sort = $this->getFilterSort();
-            $order = $this->getFilterOrder();
-            if ($sort && $sort == 'manual') {
-                $this->applyManualSorting($filteredProductsQuery, $filteredProductsQuery);
-            } elseif ($sort == 'date') {
-                $filteredProductsQuery->join('structure_elements', 'filteredproducts.id', '=', 'structure_elements.id', 'left');
-                $filteredProductsQuery->orderBy('structure_elements.dateCreated', $order);
-            } elseif ($sort == 'brand') {
-                $filteredProductsQuery->join('module_brand', 'filteredproducts.brandId', '=', 'module_brand.id', 'left');
-                $filteredProductsQuery->orderBy('module_brand.title', $order);
-            } else {
-                $filteredProductsQuery->orderBy($sort, $order);
-            }
-
             $pager = $this->getProductsPager();
 
-            $filteredProductsQuery->skip($pager->startElement)->take($this->getFilterLimit())->groupBy('id');
+            $filteredProductsQuery->skip($pager->startElement)->take($this->getFilterLimit());
             if ($records = $filteredProductsQuery->get()) {
                 $productIds = array_column($records, 'id');
                 $parentRestrictionId = $this->getProductsListParentRestrictionId();
@@ -269,7 +270,7 @@ abstract class ProductsListElement extends menuStructureElement
             $cache = $this->getService('Cache');
             $key = $this->getProductsListElement()->getCacheKey();
             if (($this->filteredProductsAmount = $cache->get($this->id . ':famount:' . $key)) === false) {
-                if ($query = $this->getFilteredProductsQuery()) {
+                if ($query = clone $this->getFilteredProductsQuery()) {
                     $this->filteredProductsAmount = $query->count('filteredproducts.id');
                     $cache->set($this->id . ':famount:' . $key, $this->filteredProductsAmount);
                 }
@@ -756,7 +757,7 @@ abstract class ProductsListElement extends menuStructureElement
     {
         $result = ['previous' => false, 'next' => false];
         $structureManager = $this->getService('structureManager');
-        $query = $this->getProductsListBaseOptimizedQuery();
+        $query = clone $this->getFilteredProductsQuery();
         $productsIds = [];
         if ($records = $query->get('id')) {
             $productsIds = array_column($records, 'id');
