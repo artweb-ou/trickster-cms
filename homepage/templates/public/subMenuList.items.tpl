@@ -5,7 +5,7 @@
     <div class="submenu_item submenu_item_level_{$level}{if $subMenu->requested} submenu_item_active{/if}">
         <a href="{$subMenu->URL}"
             {if $subMenuList}data-childs="has_childs"{/if}
-            class="submenu_item_link{if !empty($usePopup) && ($levels == $level)}{if $subMenuList} submenu_item_haspopup{/if}{/if} menuid_{$subMenu->id}{if !empty($verticalPopup)} vertical_popup{/if}">
+            class="submenu_item_link submenu_item_link_level_{$level}{if !empty($usePopup) && ($levels == $level)}{if $subMenuList} submenu_item_haspopup{/if}{/if} menuid_{$subMenu->id}{if !empty($verticalPopup)} vertical_popup{/if}">
             <span class="submenu_item_icon"></span>
             <span class="submenu_item_text"
                   role="menuitem">{$subMenu->title}</span>

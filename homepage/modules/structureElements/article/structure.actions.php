@@ -4,7 +4,6 @@ $moduleActions[] = 'delete';
 $moduleActions[] = 'receive';
 $moduleActions[] = 'show';
 $moduleActions[] = 'showForm';
-$moduleActions[] = 'showFullList';
 $moduleActions[] = 'comment';
 $moduleActions[] = 'showPositions';
 $moduleActions[] = 'receivePositions';

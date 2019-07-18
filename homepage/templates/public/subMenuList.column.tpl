@@ -2,7 +2,7 @@
     {if $element->displayHeadingAutomatically}
         {capture assign="moduleTitle"}{$currentMainMenu->title}{/capture}
     {else}
-        {if $element->title}
+        {if $element->title && !$noTitle}
             {capture assign="moduleTitle"}{$element->title}{/capture}
         {/if}
     {/if}
