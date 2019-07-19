@@ -5,7 +5,7 @@
  *
  * @property string $columns
  */
-class newsListElement extends menuDependantStructureElement implements ColumnsTypeProvider
+class newsListElement extends menuDependantStructureElement implements ColumnsTypeProvider, ConfigurableLayoutsProviderInterface
 {
     use ConfigurableLayoutsProviderTrait;
     public $dataResourceName = 'module_newslist';
@@ -29,6 +29,8 @@ class newsListElement extends menuDependantStructureElement implements ColumnsTy
         $moduleStructure['hidden'] = 'checkbox';
         $moduleStructure['formRelativesInput'] = 'array';
         $moduleStructure['layout'] = 'text';
+        $moduleStructure['cols'] = 'naturalNumber';
+        $moduleStructure['captionLayout'] = 'text';
     }
 
     protected function getTabsList()

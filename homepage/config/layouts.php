@@ -136,7 +136,10 @@
         'details',
         'wide',
         'short',
+        'cards',
     ],
+    'newsList.layout.default' => 'short',
+    
     'folder.layouts' => [
         'layout',
         'colorLayout',

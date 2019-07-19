@@ -10,3 +10,10 @@ $moduleActions[] = 'showLanguageForm';
 $moduleActions[] = 'receiveLanguageForm';
 $moduleActions[] = 'showLayoutForm';
 $moduleActions[] = 'receiveLayout';
+
+//$moduleActions[] = 'showLayoutForm';
+//$moduleActions[] = 'receiveLayout';
+//$moduleActions[] = 'showPositions';
+//$moduleActions[] = 'receivePositions';
+
+
