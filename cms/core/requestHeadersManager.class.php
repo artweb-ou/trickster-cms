@@ -87,12 +87,14 @@ class requestHeadersManager
         return $this->acceptedCharsets;
     }
 
+    /**
+     * @return string
+     *
+     * @deprecated
+     */
     public function getUserAgent()
     {
-        if (is_null($this->browserType)) {
-            $this->parseUserAgent();
-        }
-        return $this->browserType;
+        return $this->getBrowserType();
     }
 
     public function getBrowserEngineType()
@@ -378,4 +380,16 @@ class requestHeadersManager
             }
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getBrowserType()
+    {
+        if (is_null($this->browserType)) {
+            $this->parseUserAgent();
+        }
+        return $this->browserType;
+    }
+
 }
