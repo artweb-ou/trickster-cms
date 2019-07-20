@@ -31,7 +31,17 @@ class newsListElement extends menuDependantStructureElement implements ColumnsTy
         $moduleStructure['layout'] = 'text';
         $moduleStructure['cols'] = 'naturalNumber';
         $moduleStructure['captionLayout'] = 'text';
-    }
+
+        $moduleStructure['generalOwnerAvatar'] = 'image';
+        $moduleStructure['generalOwnerAvatarOriginalName'] = 'fileName';
+        $moduleStructure['generalOwnerName'] = 'text';
+
+        $moduleStructure['socMedia_1_Name'] = 'text';
+        $moduleStructure['socMedia_1_Icon'] = 'image';
+        $moduleStructure['socMedia_1_IconOriginalName'] = 'fileName';
+//        $moduleStructure['socMedia_1_Link'] = 'text';
+
+   }
 
     protected function getTabsList()
     {
@@ -41,6 +51,11 @@ class newsListElement extends menuDependantStructureElement implements ColumnsTy
             'showLayoutForm',
             'showLanguageForm',
         ];
+    }
+
+    public function getUrlEncoded($url)
+    {
+        return urlencode($url);
     }
 
     public function getNewsList()

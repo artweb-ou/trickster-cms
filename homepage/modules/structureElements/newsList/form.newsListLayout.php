@@ -6,10 +6,37 @@ class NewsListLayoutStructure extends ElementForm
         'cols' => [
             'type' => 'input.text',
             'inputType' => 'number',
-//            'minValue'  => '2',
-//            'maxValue'  => '4',
-//            'stepValue' => '1',
+            'minValue'  => '2',
+            'maxValue'  => '4',
+            'stepValue' => '1',
         ],
+        'generalOwnerName' => [
+            'type' => 'input.text',
+        ],
+        'generalOwnerAvatar' => [
+            'type' => 'input.image',
+            'preset' => 'adminImage',
+            'fileName' => 'generalOwnerAvatarOriginalName',
+        ],
+        'socMedia_1_Name' => [
+            'type' => 'select.index',
+            'options' => [
+                'fb' => 'fb', //'Facebook',
+                'tw' => 'tw', //'Twitter',
+                'gl' => 'gl', //'Google+',
+                'li' => 'li', //'LinkedIn',
+            ],
+        ],
+
+        'socMedia_1_Icon' => [
+            'type' => 'input.image',
+            'preset' => 'adminImage',
+            'fileName' => 'socMedia_1_IconOriginalName',
+        ],
+//        'socMedia_1_Link' => [
+//            'type' => 'input.text',
+//        ],
+
         'captionLayout' => [
             'type' => 'select.index',
             'options' => [

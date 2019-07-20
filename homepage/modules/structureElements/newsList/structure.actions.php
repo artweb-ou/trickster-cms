@@ -1,6 +1,7 @@
 <?php
 $moduleActions = [];
 $moduleActions[] = 'delete';
+$moduleActions[] = 'deleteFile';
 $moduleActions[] = 'receive';
 $moduleActions[] = 'show';
 $moduleActions[] = 'showForm';
@@ -10,10 +11,3 @@ $moduleActions[] = 'showLanguageForm';
 $moduleActions[] = 'receiveLanguageForm';
 $moduleActions[] = 'showLayoutForm';
 $moduleActions[] = 'receiveLayout';
-
-//$moduleActions[] = 'showLayoutForm';
-//$moduleActions[] = 'receiveLayout';
-//$moduleActions[] = 'showPositions';
-//$moduleActions[] = 'receivePositions';
-
-

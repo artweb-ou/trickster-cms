@@ -111,6 +111,7 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.SubMenusPopupItemComponent.js',
             'component.SubmenuItemPopupComponent.js',
             'component.SubMenuItemComponent.js',
+            'component.socialMediaShare.js',
         ];
     }
 }

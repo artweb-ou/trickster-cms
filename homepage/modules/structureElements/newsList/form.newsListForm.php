@@ -30,22 +30,22 @@ class NewsListFormStructure extends ElementForm
             'type' => 'input.checkbox',
         ],
 
-        'cols' => [
-            'type' => 'input.text',
-            'inputType' => 'number',
-//            'minValue'  => '2',
-//            'maxValue'  => '4',
-//            'stepValue' => '1',
-        ],
-        'captionLayout' => [
-            'type' => 'select.index',
-            'options' => [
-                'hidden' => 'captionlayout_hidden',
-                'above' => 'captionlayout_above',
-                'below' => 'captionlayout_below',
-                'over' => 'captionlayout_over',
-            ],
-        ],
+//        'cols' => [
+//            'type' => 'input.text',
+//            'inputType' => 'number',
+////            'minValue'  => '2',
+////            'maxValue'  => '4',
+////            'stepValue' => '1',
+//        ],
+//        'captionLayout' => [
+//            'type' => 'select.index',
+//            'options' => [
+//                'hidden' => 'captionlayout_hidden',
+//                'above' => 'captionlayout_above',
+//                'below' => 'captionlayout_below',
+//                'over' => 'captionlayout_over',
+//            ],
+//        ],
 
 ];
 

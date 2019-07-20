@@ -545,4 +545,17 @@
             80,
         ],
     ],
+    'newsItemIcon' => [
+        'filters' => [
+            [
+                'reduce',
+                'width=50,height=50',
+            ],
+        ],
+        'format' => [
+            null,
+            null,
+        ],
+    ],
+
 ];
