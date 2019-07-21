@@ -55,6 +55,23 @@ class newsElement extends structureElement implements MetadataProviderInterface,
         return mb_substr($text, $start, $limit, 'UTF-8') . $suffix;
     }
 
+    public function clearTextTags($text, $allowedTags = '') // $allowedTags like '<p><a>'
+    {
+        if (!empty($allowedTags)) {
+            return strip_tags($text, $allowedTags);
+        }
+        else {
+            return strip_tags($text);
+        }
+    }
+
+    public function getCleanedText($text, $start, $limit, $suffix, $allowedTags = '')
+    {
+        $clenedText = $this->clearTextTags($text, $allowedTags);
+        $clenedText = $this->getTruncatedText($clenedText, $start, $limit, $suffix);
+        return $clenedText;
+    }
+
     public function getParent()
     {
         return $this->getService('structureManager')->getElementsFirstParent($this->id);
