@@ -65,8 +65,10 @@
 	{/if}
 
 	{if $socMedia_1}
-		<span class="news_card_info_element news_icon_wrapper news_sm">
+		<span class="news_card_info_element news_icons">
+		<span class="news_icon_wrapper news_sm">
 		{$socMedia_1}
+		</span>
 		</span>
 	{/if}
 
