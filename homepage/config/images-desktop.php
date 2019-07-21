@@ -387,6 +387,18 @@
             'png',
         ],
     ],
+    'newsCardImage' => [
+        'filters' => [
+            [
+                'reduce',
+                'width=610, height=671',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+        ],
+    ],
     'personnelImage' => [
         'filters' => [
             [
@@ -549,7 +561,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=50,height=50',
+                'width=42, height=42',
+            ],
+            [
+                'crop',
+                'width=42, height=42',
             ],
         ],
         'format' => [

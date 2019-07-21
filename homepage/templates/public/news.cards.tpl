@@ -40,7 +40,7 @@
 
 	{capture assign="socMedia_1"}
 		<a href="{$href}" class="sm_share {$smTarget}" data-sm-target="{$smTarget}" title="{$currentElement->getTranslationSprintf("news.share_on, $shareTitle")}">
-			{include file=$theme->template('component.elementimage.tpl') class='news_icon' src=$socMedia_1_Icon}
+			{include file=$theme->template('component.elementimage.tpl') class="news_icon sm_target sm_$smTarget" src=$socMedia_1_Icon}
 		</a>
 	{/capture}
 
@@ -51,51 +51,56 @@
 {$currentElement->cols}
 {$currentElement->captionLayout}
 *}
-
-
+<div class="news_card_info">
 	{if $currentElement->generalOwnerAvatar}
 		{assign var="iconAvatar" value="{$controller->baseURL}image/type:newsItemIcon/id:{$currentElement->generalOwnerAvatar}/filename:{$currentElement->generalOwnerAvatarOriginalName}"}
-		<span class="news_top news_ownwer_avatar">
+		<span class="news_card_info_element news_icon_wrapper news_ownwer_avatar">
 			{include file=$theme->template('component.elementimage.tpl') type='newsItemIcon' class='news_icon avatar' src=$iconAvatar lazy=true}
 		</span>
 	{/if}
 
 	{if $currentElement->generalOwnerName}
-		<span class="news_top news_ownwer_name">{$currentElement->generalOwnerName}</span>
+		<span class="news_card_info_element news_ownwer_name">{$currentElement->generalOwnerName}</span>
 	{/if}
 
 	{if $socMedia_1}
-		<span class="news_top news_sm">
+		<span class="news_card_info_element news_icon_wrapper news_sm">
 		{$socMedia_1}
 		</span>
 	{/if}
 
-	<div class='news_top news_date'>
+	<span class='news_card_info_element news_date'>
 		{$element->date|date_format:"%e. %B %Y"}
-	</div>
-
+	</span>
+</div>
+<div class="news_card_about">
 	{if $element->introduction}
-		<div class='news_short_content html_content'>
+		<div class='news_card_content html_content'>
 			{$element->introduction}
 		</div>
 	{/if}
-
-	{if $element->originalName}
-		{include file=$theme->template('component.elementimage.tpl') type='newsShortImage' class='news_short_image' lazy=true}
-	{/if}
-	{*{capture assign="moduleSideContent"}*}
-	{*{/capture}*}
-
-{/capture}
-{if $element->content}
-	{capture assign="moduleControls"}
-		<a href="{$element->URL}" class='news_short_readmore button'>
+</div>
+<div class="news_card_readmore_wrapper">
+	{if $element->content}
+		<a href="{$element->URL}" class='news_card_readmore'>
 			<span class='button_text'>{translations name='news.news_short_readmore'}</span>
 		</a>
-	{/capture}
-{/if}
+	{/if}
+</div>
+{/capture}
+
+{capture assign="moduleImageBlock"}
+	<div class="news_card_image">
+		{if $element->originalName}
+			{include file=$theme->template('component.elementimage.tpl') type='newsCardImage' class='news_card_image' lazy=true}
+		{/if}
+		{*{capture assign="moduleSideContent"}*}
+		{*{/capture}*}
+	</div>
+{/capture}
 
 {assign moduleClass "news_card"}
 {assign moduleTitleClass "news_card_title"}
-{assign moduleSideContentClass "news_short_image_block"}
+{assign moduleContentClass "news_card_content"}
+{assign moduleImageBlockClass "news_card_image_container"}
 {include file=$theme->template("component.subcontentmodule_set_cols.tpl") moduleTitle=false colsOnRow={$currentElement->cols}}
