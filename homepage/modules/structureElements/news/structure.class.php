@@ -50,6 +50,11 @@ class newsElement extends structureElement implements MetadataProviderInterface,
         ];
     }
 
+    public function getTruncatedText($text, $start, $limit, $suffix)
+    {
+        return mb_substr($text, $start, $limit, 'UTF-8') . $suffix;
+    }
+
     public function getParent()
     {
         return $this->getService('structureManager')->getElementsFirstParent($this->id);

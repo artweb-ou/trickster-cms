@@ -51,7 +51,8 @@
 {$currentElement->cols}
 {$currentElement->captionLayout}
 *}
-<div class="news_card_info">
+
+	<div class="news_card_info">
 	{if $currentElement->generalOwnerAvatar}
 		{assign var="iconAvatar" value="{$controller->baseURL}image/type:newsItemIcon/id:{$currentElement->generalOwnerAvatar}/filename:{$currentElement->generalOwnerAvatarOriginalName}"}
 		<span class="news_card_info_element news_icon_wrapper news_ownwer_avatar">
@@ -76,7 +77,10 @@
 <div class="news_card_about">
 	{if $element->introduction}
 		<div class='news_card_content html_content'>
-			{$element->introduction}
+			{* $text, $start, $limit, $suffix *}
+			<a href="{$element->URL}" class='content_readmore'>
+				{$element->getTruncatedText($element->introduction, 0, 180, '&hellip;')}
+			</a>
 		</div>
 	{/if}
 </div>
@@ -92,7 +96,9 @@
 {capture assign="moduleImageBlock"}
 	<div class="news_card_image">
 		{if $element->originalName}
+		<a href="{$element->URL}" class='content_readmore'>
 			{include file=$theme->template('component.elementimage.tpl') type='newsCardImage' class='news_card_image' lazy=true}
+		</a>
 		{/if}
 		{*{capture assign="moduleSideContent"}*}
 		{*{/capture}*}
@@ -101,6 +107,6 @@
 
 {assign moduleClass "news_card"}
 {assign moduleTitleClass "news_card_title"}
-{assign moduleContentClass "news_card_content"}
+{assign moduleContentClass "news_card_content_container"}
 {assign moduleImageBlockClass "news_card_image_container"}
 {include file=$theme->template("component.subcontentmodule_set_cols.tpl") moduleTitle=false colsOnRow={$currentElement->cols}}

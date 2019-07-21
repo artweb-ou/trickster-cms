@@ -561,11 +561,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=42, height=42',
+                'width=64, height=64',
             ],
             [
                 'crop',
-                'width=42, height=42',
+                'width=64, height=64',
             ],
         ],
         'format' => [
