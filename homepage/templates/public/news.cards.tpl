@@ -18,6 +18,7 @@
 	//'LinkedIn',
 *}
 
+	{$shareTitle = ''}
 	{if $currentElement->socMedia_1_Name == 'fb'}
 		{$href = "https://www.facebook.com/sharer/sharer.php?u={$sharedUrl}&t={$sharedName}"}
 		{$shareTitle = 'Facebook'}
@@ -38,7 +39,7 @@
 	{$socMedia_1_Icon = "{$controller->baseURL}image/type:newsItemIcon/id:{$currentElement->socMedia_1_Icon}/filename:{$currentElement->socMedia_1_IconOriginalName}"}
 
 	{capture assign="socMedia_1"}
-		<a href="{$href}" class="sm_share {$smTarget}" data-sm-target="{$smTarget}" title="{translations name='news.share_on'} {$shareTitle}">
+		<a href="{$href}" class="sm_share {$smTarget}" data-sm-target="{$smTarget}" title="{$currentElement->getTranslationSprintf("news.share_on, $shareTitle")}">
 			{include file=$theme->template('component.elementimage.tpl') class='news_icon' src=$socMedia_1_Icon}
 		</a>
 	{/capture}

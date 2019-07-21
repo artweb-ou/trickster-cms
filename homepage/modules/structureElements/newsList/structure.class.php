@@ -58,6 +58,22 @@ class newsListElement extends menuDependantStructureElement implements ColumnsTy
         return urlencode($url);
     }
 
+    public function getTranslationSprintf($string_comma) // getTranslationSprintf('news.share_on', $shareTitle)
+    {
+/*
+Jaga %s's
+*/
+        $final_translation = '';
+        $translation_array = explode(',', $string_comma);
+        if (count($translation_array)==2) {
+            $translationsManager = $this->getService('translationsManager');
+            if ($translation_string_format = $translationsManager->getTranslationByName($translation_array[0])) {
+                $final_translation = sprintf($translation_string_format, $translation_array[1]);
+            }
+        }
+        return $final_translation;
+    }
+
     public function getNewsList()
     {
         if (is_null($this->newsList)) {
