@@ -30,6 +30,8 @@ class newsElement extends structureElement implements MetadataProviderInterface,
         $moduleStructure['content'] = 'html';
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'fileName';
+        $moduleStructure['thumbImage'] = 'image';
+        $moduleStructure['thumbImageOriginalName'] = 'fileName';
         $moduleStructure['metaTitle'] = 'text';
         $moduleStructure['h1'] = 'text';
         $moduleStructure['metaDescription'] = 'text';

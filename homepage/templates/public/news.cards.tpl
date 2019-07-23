@@ -99,9 +99,16 @@
 
 {capture assign="moduleImageBlock"}
 	<div class="news_card_image">
-		{if $element->originalName}
+		{if $element->thumbImageOriginalName}
+			{$elementThumbImagePath = "{$element->thumbImage}/filename:{$element->thumbImageOriginalName}"}
+		{elseif $element->originalName}
+			{$elementThumbImagePath = "{$element->image}/filename:{$element->originalName}"}
+		{/if}
+
+		{if !empty($elementThumbImagePath)}
 		<a href="{$element->URL}" class='content_readmore'>
-			{include file=$theme->template('component.elementimage.tpl') type='newsCardImage' class='news_card_image' lazy=true}
+			{assign var="src" value="{$controller->baseURL}image/type:newsCardImage/id:{$elementThumbImagePath}"}
+			{include file=$theme->template('component.elementimage.tpl') src=$src class='news_card_image' alt="{$element->title}" lazy=true}
 		</a>
 		{/if}
 		{*{capture assign="moduleSideContent"}*}

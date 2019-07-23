@@ -408,13 +408,19 @@
     'newsCardImage' => [
         'filters' => [
             [
-                'reduce',
+                'fit',
+                'width=610, height=671',
+            ],
+            [
+                'crop',
                 'width=610, height=671',
             ],
         ],
         'format' => [
             null,
             'jpg',
+            '',
+            80,
         ],
     ],
     'personnelImage' => [
