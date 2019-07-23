@@ -8,7 +8,7 @@
     width: 100%;
     height: 100%;
     z-index: 200;
-    padding-right: 2.5em;
+    padding-right: 2.5rem;
     box-sizing: border-box;
 }
 
@@ -25,22 +25,83 @@
     color: @mobilemenu_text_color;
     max-width: 32em;
     margin-right: auto;
-    box-shadow: 0 0 0.5em fade(@trick_shadow_02, 25);
+    box-shadow: 0 0 0.5rem fade(@trick_shadow_02, 25);
+
+    padding: 1.5rem;
 }
 
 .mobilemenu_closeicon {
     position: absolute;
-    right: 0.5em;
-    top: 0.5em;
-    width: 1.8em;
-    height: 1.8em;
+    right: 1.5rem;
+    top: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
     .svg-bg(mobileheader_close, @mobilemenu_text_color, @mobilemenu_text_color);
-    background-repeat: no-repeat;
-    background-size: contain;
+    .bg_params(no-repeat, 1.2rem, 1.2rem, 50%, 50%); // @repeat,@width,@height,@posX,@posY
 }
+
+.languages_selection {
+    display: block;
+    width: 100%;
+    padding-right: 4em;
+}
+
+.languages_items {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+
+    .languages_item_container {
+        display: inline-flex;
+        align-content: center;
+        align-items: center;
+
+        &:nth-of-type(n+2) {
+            padding-left: 1rem;
+        }
+
+        .languages_item_link {
+            display: block;
+
+            .languages_item {
+                display: block;
+                font-size: 1rem;
+                line-height: 1rem;
+                height: auto;
+                padding: 0.25rem .5rem;
+                text-transform: uppercase;
+                position: relative;
+                font-weight: 600;
+            }
+
+            &.active {
+                .languages_item {
+                    &:after {
+                        border-bottom: 1px solid currentColor;
+                        content: '';
+                        display: block;
+                        position: absolute;
+                        left: .5rem;
+                        right: .5rem;
+                        bottom: .25rem;
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+
+
+
+
+
 
 .mobilemenu_module {
     margin-bottom: 3em;
+    margin-top: 2em;
 }
 
 .mobilemenu_module_title {
