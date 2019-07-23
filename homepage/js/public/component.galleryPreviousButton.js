@@ -13,7 +13,7 @@ window.GalleryPreviousButtonComponent = function(galleryObject) {
         }
     };
     var createDomStructure = function() {
-        componentElement = self.makeElement('div', 'gallery_button_previous');
+        componentElement = self.makeElement('div', 'gallery_button_navigation gallery_button_previous');
         componentElement.innerHTML = '<span class="gallery_button_text">' + window.translationsLogics.get('gallery.previous') + '</span>';
     };
     var onClick = function(event) {

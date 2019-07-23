@@ -1,8 +1,8 @@
 {if $element->getSubMenuList()}
-    {if $element->displayHeadingAutomatically}
+    {if $element->displayHeadingAutomatically && $noTitle!=true}
         {capture assign="moduleTitle"}{$currentMainMenu->title}{/capture}
     {else}
-        {if $element->title}
+        {if $element->title && $noTitle!=true}
             {capture assign="moduleTitle"}{$element->title}{/capture}
         {/if}
     {/if}

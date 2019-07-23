@@ -49,6 +49,8 @@ function AjaxFormComponent(formElement, callCallback) {
     };
     var receiveData = function(responseStatus, requestName, responseData) {
         var i, errorElement;
+        var errorElementName;
+        var errorElementParent;
         if (responseStatus == 'success') {
             var response = responseData['form' + formId + formAction];
             if (callCallback) {
@@ -57,7 +59,16 @@ function AjaxFormComponent(formElement, callCallback) {
             if (typeof response !== 'undefined') {
                 //remove errors
                 for (i = 0; i < formElement.elements.length; i++) {
-                    domHelper.removeClass(formElement.elements[i].parentNode.parentNode, 'form_error');
+                    if (errorElementName = formElement.elements[i].dataset.name || formElement.elements[i].name) {
+                        errorElementParent = formElement.querySelector('[data-fieldname="' + errorElementName + '"]');
+                        console.log(errorElementName)
+                        if(errorElementParent) {
+                            domHelper.removeClass(errorElementParent, 'form_error');
+                        }
+                    }
+                    else {
+                        domHelper.removeClass(formElement.elements[i].parentNode.parentNode, 'form_error');
+                    }
                 }
 
                 if (typeof response.success_message !== 'undefined') {
@@ -83,16 +94,33 @@ function AjaxFormComponent(formElement, callCallback) {
                     //add errors
                     if (typeof response.errors !== 'undefined') {
                         for (i = 0; i < response.errors.length; i++) {
-                            errorElement = formElement.elements['formData[' + formId + '][' + response.errors[i] + ']'];
-                            domHelper.addClass(errorElement.parentNode.parentNode, 'form_error');
+                            errorElementName = 'formData[' + formId + '][' + response.errors[i] + ']';
+                            errorElement = formElement.elements[errorElementName];
+                            if (!errorElement) {
+                                errorElement = formElement.querySelector('[data-name="' + errorElementName + '"]');
+                            }
+                            errorElementParent = formElement.querySelector('[data-fieldname="' + errorElementName + '"]');
+
+                            if(errorElementParent) {
+                                domHelper.addClass(errorElementParent, 'form_error');
+                            }
+                            else {
+                                 domHelper.addClass(errorElement.parentNode.parentNode, 'form_error');
+                            }
                         }
                     }
 
                     if (typeof response.dynamicErrors !== 'undefined') {
                         for (i = 0; i < response.dynamicErrors.length; i++) {
-                            errorElement = formElement.elements['formData[' + formId + '][dynamicFieldsData][' + response.dynamicErrors[i] + ']'];
-
-                            domHelper.addClass(errorElement.parentNode.parentNode, 'form_error');
+                            errorElementName = 'formData[' + formId + '][dynamicFieldsData][' + response.dynamicErrors[i] + ']';
+                            errorElement = formElement.elements[errorElementName];
+                            errorElementParent = formElement.querySelector('[data-fieldname="' + errorElementName + '"]')
+                            if(errorElementParent) {
+                                domHelper.addClass(errorElementParent, 'form_error');
+                            }
+                            else {
+                                domHelper.addClass(errorElement.parentNode.parentNode, 'form_error');
+                            }
                         }
                     }
 

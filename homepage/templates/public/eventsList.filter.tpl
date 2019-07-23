@@ -2,7 +2,7 @@
 	{assign "monthsInfo" $element->getMonthsInfo()}
 	{if $monthsInfo && count($monthsInfo)>1 || $element->getSelectedMonthStamp()}
 		<div class="eventslist_filter">
-			<select class="dropdown_placeholder eventslist_filter_select">
+			<select class="dropdown_placeholder eventslist_filter_select" autocomplete="off">
 				<option value="none">
 					{translations name='events.monthfiltertitle'}
 				</option>

@@ -277,8 +277,8 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
         if (galleryResizeType === 'imagesHeight') {
             imagesComponentHeight = galleryHeightSetting;
         } else if (galleryResizeType === 'aspected') {
-            var aspect = galleryHeightSetting;
-            imagesComponentHeight = galleryWidth * aspect;
+            //galleryHeightSetting here contains aspect ratio
+            imagesComponentHeight = galleryWidth * galleryHeightSetting;
         } else if (galleryResizeType === 'viewport') {
             var viewPortHeight = window.innerHeight ? window.innerHeight : document.documentElement.offsetHeight;
             galleryHeight = galleryHeightSetting;

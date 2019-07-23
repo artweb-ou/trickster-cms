@@ -15,6 +15,10 @@ class receiveEvent extends structureElementAction
                 $structureElement->image = $structureElement->id;
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
             }
+            if ($chunk = $structureElement->getDataChunk("image2")->originalName) {
+                $structureElement->image2 = $structureElement->id.'_2';
+                $structureElement->image2Name = $chunk->originalName;
+            }
 
             // Connect event to selected eventsLists
             $linksManager = $this->getService('linksManager');
@@ -50,6 +54,7 @@ class receiveEvent extends structureElementAction
             'description',
             'introduction',
             'image',
+            'image2',
             'startDate',
             'endDate',
             'startTime',
@@ -59,6 +64,7 @@ class receiveEvent extends structureElementAction
             'city',
             'address',
             'mapCode',
+            'mapUrl',
             'link',
             'connectedEventsLists',
         ];

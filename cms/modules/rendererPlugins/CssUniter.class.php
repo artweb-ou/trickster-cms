@@ -83,6 +83,18 @@ class cssUniterRendererPlugin extends rendererPlugin
                 return self::getSVGContent(end($arg1), end($arg2), end($arg3), end($arg4));
             });
 
+            // trimColorHash for colors css keys
+            $this->lessCompiler->registerFunction('trimColorHash', function ($arg) {
+                list($type, $color) = $arg;
+                
+                if ($type == 'raw_color') {
+                    return ltrim($color, "#");
+                }
+                else {
+                    $this->logError("Wrong arguments and type:  type is $type, argument is $color");
+                }
+            });
+
             // min max are Less features not supported by this compiler
             $this->lessCompiler->registerFunction('min', function ($arg) {
                 list($type, $delimiter, $values) = $arg;

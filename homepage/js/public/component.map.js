@@ -52,11 +52,13 @@ window.MapComponent = function(componentElement, id) {
                     });
                     google.maps.event.addListener(marker, 'click', onMarkerClick);
                 } else {
-                    var title = info.getTitle() ? '&q=+(' + info.getTitle() + ')' : '';
+                    // var title = info.getTitle() ? '&q=+(' + info.getTitle() + ')' : '';
+                    var title = info.getTitle() ? '&q=+' + info.getTitle() + '' : '';
 
                     var iframe = document.createElement('iframe');
                     componentElement.classList.add('googlemap_iframe');
-                    var src = 'https://maps.google.com/?q=' + coordinates + title + '&hl=' + window.mapsLogics.getShortLanguageCode() + '&z=' + 14 + '&output=embed';
+                    // var src = 'https://maps.google.com/?q=' + coordinates + title + '&hl=' + window.mapsLogics.getShortLanguageCode() + '&z=' + 14 + '&output=embed';
+                    var src = 'https://maps.google.com/?q=' + title + '&ll='+ coordinates + '&hl=' + window.mapsLogics.getShortLanguageCode() + '&z=' + 14 + '&output=embed';
                     iframe.setAttribute('src', src);
                     iframe.setAttribute('allowfullscreen', true);
                     componentElement.appendChild(iframe);

@@ -39,6 +39,10 @@ class receiveService extends structureElementAction
         $expectedFields = [
             'title',
             'image',
+            'link_1',
+            'link_2',
+            'link_text_1',
+            'link_text_2',
             'introduction',
             'content',
             'galleries',

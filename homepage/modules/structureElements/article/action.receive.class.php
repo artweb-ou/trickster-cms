@@ -30,8 +30,8 @@ class receiveArticle extends structureElementAction
     public function setExpectedFields(&$expectedFields)
     {
         $expectedFields = [
-            'structureName',
             'title',
+            'hideTitle',
             'content',
             'displayMenus',
             'allowComments',

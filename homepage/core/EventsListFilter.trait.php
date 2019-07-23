@@ -10,25 +10,6 @@ trait EventsListFilterTrait
     protected $monthsInfo;
     protected $monthsInfoIndex;
 
-    public function getEventsElements()
-    {
-        if ($this->t_events === null) {
-            if ($eventIds = $this->getCurrentEventsIdList()) {
-                //todo: refactor. workaround to load events from connected lists first, not from anywhere in language
-                $this->getConnectedEventsLists();
-                //workaround end
-
-                $structureManager = $this->getService('structureManager');
-                foreach ($eventIds as $eventId) {
-                    if ($element = $structureManager->getElementById($eventId)) {
-                        $this->t_events[] = $element;
-                    }
-                }
-            }
-        }
-        return $this->t_events;
-    }
-
     /**
      * returns the value of manually selected months filter dropdown in public
      * @return bool|int
@@ -256,7 +237,57 @@ trait EventsListFilterTrait
         return false;
     }
 
-    protected function getCurrentEventsIdList()
+    public function getSelectedEventsPreset()
+    {
+        if ($preset = controller::getInstance()->getParameter("preset")) {
+            if (in_array($preset, $this->getAllowedPresets())) {
+                return $preset;
+            }
+        }
+        return false;
+    }
+
+    public function getAllowedPresets()
+    {
+        return ['thisweek', 'thismonth', 'thisyear', 'past'];
+
+    }
+
+    public function getSelectedPresetStamps()
+    {
+        switch ($this->getSelectedEventsPreset()) {
+            case "thisweek":
+                $result = [
+                    strtotime('today'),
+                    strtotime('Monday next week'),
+                ];
+                break;
+            case "thismonth":
+                $result = [
+                    strtotime('today'),
+                    strtotime('last day of this month'),
+                ];
+                break;
+            case "thisyear":
+                $result = [
+                    strtotime('today'),
+                    strtotime('last day of this year'),
+                ];
+                break;
+            case "past":
+                $result = [
+                    0,
+                    strtotime('today'),
+                ];
+                break;
+            default:
+                $result = false;
+                break;
+        }
+        return $result;
+    }
+
+    public function getCurrentEventsIdList()
     {
         if ($this->t_eventsIdList === null) {
             $this->t_eventsIdList = [];
@@ -276,6 +307,16 @@ trait EventsListFilterTrait
                         ->where('endDate', '>=', $filter)
                         ->orWhereBetween('startDate', [$filter, $filterMonthEndStamp]);
                 });
+            } elseif ($stamps = $this->getSelectedPresetStamps()) {
+                if ($this->getSelectedEventsPreset() === 'past') {
+                    $query->where('endDate', '<=', $stamps[1]);
+                } else {
+                    $query->where(function ($query) use ($stamps) {
+                        $query->where('startDate', '<=', $stamps[1])
+                            ->where('endDate', '>=', $stamps[0])
+                            ->orWhereBetween('startDate', [$stamps[0], $stamps[1]]);
+                    });
+                }
             }
 
             if ($this->sort == 'asc') {
@@ -298,4 +339,7 @@ trait EventsListFilterTrait
     abstract protected function getBaseEventsIdList();
 
     abstract public function getConnectedEventsLists();
+
+    abstract public function getEventsElements();
+
 }

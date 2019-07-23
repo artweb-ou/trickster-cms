@@ -1,8 +1,8 @@
-window.accordeonMenuLogics = new function() {
+window.accordeonLogics = new function() {
     var initComponents = function() {
-        var elements = _('.accordeon_menu');
+        var elements = _('.accordeon');
         for (var i = 0; i < elements.length; i++) {
-            new AccordeonMenu(elements[i]);
+            new Accordeon(elements[i]);
         }
     };
     controller.addListener('initDom', initComponents);

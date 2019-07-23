@@ -7,14 +7,18 @@
  * @property string $startTime
  * @property string $endDate
  * @property string $endTime
+ * @property string $image
+ * @property string $image2
  */
 class eventElement extends structureElement implements MetadataProviderInterface, ImageUrlProviderInterface
 {
     use MetadataProviderTrait;
     use ImageUrlProviderTrait;
-
+    use GalleryInfoProviderTrait;
+    use ImagesElementTrait;
+    use CacheOperatingElement;
     public $dataResourceName = 'module_event';
-    protected $allowedTypes = [];
+    protected $allowedTypes = ['galleryImage'];
     public $defaultActionName = 'show';
     public $role = 'content';
     protected $startDayStamp;
@@ -37,7 +41,10 @@ class eventElement extends structureElement implements MetadataProviderInterface
         $moduleStructure['address'] = 'text';
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'text';
+        $moduleStructure['image2'] = 'image';
+        $moduleStructure['image2Name'] = 'text';
         $moduleStructure['mapCode'] = 'code';
+        $moduleStructure['mapUrl'] = 'url';
         $moduleStructure['link'] = 'url';
         $moduleStructure['metaTitle'] = 'text';
         $moduleStructure['h1'] = 'text';
@@ -70,6 +77,7 @@ class eventElement extends structureElement implements MetadataProviderInterface
             'showLayoutForm',
             'showPositions',
             'showPrivileges',
+            'showImages',
         ];
     }
 
@@ -139,19 +147,74 @@ class eventElement extends structureElement implements MetadataProviderInterface
         return gmdate('Y-m-d\TH:i\Z', strtotime($date . " " . $time));
     }
 
+    /**
+     * @return eventsListElement[]
+     */
     public function getConnectedEventsLists()
     {
-        $connectedEventsLists = [];
         $structureManager = $this->getService('structureManager');
-        if ($eventElements = $structureManager->getElementsParents($this->id, 'eventsListEvent', false)) {
+        $connectedEventsLists = $structureManager->getElementsParents($this->id, 'eventsListEvent', false);
+        return $connectedEventsLists;
+    }
+
+    /**
+     * @return eventsListElement[]
+     */
+    public function getConnectedEventsListsInfo()
+    {
+        $connectedEventsLists = [];
+        if ($eventElements = $this->getConnectedEventsLists()) {
             foreach ($eventElements as $eventElement) {
-                $elem = $structureManager->getElementById($eventElement->id);
-                $item['id'] = $elem->id;
-                $item['title'] = $elem->getTitle();
+                $item['id'] = $eventElement->id;
+                $item['title'] = $eventElement->getTitle();
                 $item['select'] = true;
                 $connectedEventsLists[] = $item;
             }
         }
         return $connectedEventsLists;
+    }
+
+    public function getImagesLinkType()
+    {
+        //legacy-support, use trait's method instead
+        return 'structure';
+    }
+
+    public function getJsonInfo($galleryOptions = [], $imagePresetBase = 'gallery')
+    {
+        return $this->getGalleryJsonInfo($galleryOptions, $imagePresetBase);
+    }
+
+    public function getImageId($mobile = false)
+    {
+        if ($this->image2) {
+            return $this->image2;
+        }
+        return $this->image;
+    }
+
+    public function getSameEventsListsEvents($amount = 4)
+    {
+        $result = [];
+        if ($eventsLists = $this->getConnectedEventsLists()) {
+            $idList = [];
+            foreach ($eventsLists as $eventsList) {
+                $idList = array_merge($idList, $eventsList->getCurrentEventsIdList());
+            }
+            /**
+             * @var structureManager $structureManager
+             */
+            $structureManager = $this->getService('structureManager');
+            shuffle($idList);
+            while ($amount) {
+                if ($id = array_pop($idList)) {
+                    if ($element = $structureManager->getElementById($id)) {
+                        $result[] = $element;
+                        $amount--;
+                    }
+                }
+            }
+        }
+        return $result;
     }
 }

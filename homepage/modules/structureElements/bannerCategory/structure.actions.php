@@ -6,4 +6,3 @@ $moduleActions[] = 'show';
 $moduleActions[] = 'showForm';
 $moduleActions[] = 'receivePositions';
 $moduleActions[] = 'showPositions';
-$moduleActions[] = 'showPrivileges';
