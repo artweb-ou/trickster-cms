@@ -47,7 +47,7 @@ class IconsManager
                 ->orderBy('structure_links.position', 'asc')
                 ->get();
             $allIconsIds = array_column($allIconsIds, 'id');
-            if ($iconElements = $this->structureManager->getElementsByIdList($allIconsIds)) {
+            if ($iconElements = $this->structureManager->getElementsByIdList($allIconsIds, null, true)) {
                 $this->iconElements = $iconElements;
             }
         }

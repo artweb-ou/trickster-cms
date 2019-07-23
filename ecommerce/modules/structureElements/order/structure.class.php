@@ -156,7 +156,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
             if ($connectedIds = $linksManager->getConnectedIdList($this->id, 'orderPayment', 'parent')) {
                 $structureManager = $this->getService('structureManager');
                 $paymentId = reset($connectedIds);
-                $this->paymentElement = $structureManager->getElementById($paymentId);
+                $this->paymentElement = $structureManager->getElementById($paymentId, $this->id, true);
             }
         }
         return $this->paymentElement;
@@ -385,11 +385,12 @@ class orderElement extends structureElement implements PaymentOrderInterface
                     'currency' => $paymentElement->currency,
                 ];
             }
-
+            /**
+             * @var structureManager $structureManager
+             */
+            $structureManager = $this->getService('structureManager');
             foreach ($this->getOrderFields() as $fieldElement) {
-                $structureManager = $this->getService('structureManager');
-                $structureManager->getElementsByIdList([$fieldElement->fieldId]);
-                if ($fieldPrototypeElement = $structureManager->getElementById($fieldElement->fieldId)) {
+                if ($fieldPrototypeElement = $structureManager->getElementById($fieldElement->fieldId, null, true)) {
                     $roles = [
                         'company',
                         'firstName',

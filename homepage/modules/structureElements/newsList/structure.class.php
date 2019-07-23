@@ -112,9 +112,7 @@ Jaga %s's
                         foreach ($records as &$record) {
                             $newsIds[] = $record['id'];
                         }
-                        if ($this->newsList = $this->getService('structureManager')
-                            ->getElementsByIdList($newsIds, $this->id)
-                        ) {
+                        if ($this->newsList = $this->getService('structureManager')->getElementsByIdList($newsIds, $this->id, true)) {
                             $sort = [];
                             foreach ($this->newsList as &$element) {
                                 $sort[] = strtotime($element->date);
@@ -157,9 +155,7 @@ Jaga %s's
                         foreach ($records as &$record) {
                             $newsIds[] = $record['id'];
                         }
-                        if ($archiveNewsList = $this->getService('structureManager')
-                            ->getElementsByIdList($newsIds, $this->id)
-                        ) {
+                        if ($archiveNewsList = $this->getService('structureManager')->getElementsByIdList($newsIds, $this->id, true)) {
                             $sort = [];
                             foreach ($archiveNewsList as &$element) {
                                 $sort[] = strtotime($element->date);

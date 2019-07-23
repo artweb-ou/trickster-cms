@@ -383,8 +383,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         if ($this->connectedParameters === null) {
             $this->connectedParameters = [];
             if ($connectedParametersIds = $this->getConnectedParametersIds()) {
-                $this->connectedParameters = $this->getService('structureManager')
-                    ->getElementsByIdList($connectedParametersIds, $this->id);
+                $this->connectedParameters = $this->getService('structureManager')->getElementsByIdList($connectedParametersIds, $this->id, true);
             }
         }
         return $this->connectedParameters;
