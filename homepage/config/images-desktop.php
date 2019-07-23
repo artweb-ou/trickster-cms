@@ -255,6 +255,24 @@
             80,
         ],
     ],
+    'linklistItemThumbnailLong' => [
+        'filters' => [
+            [
+                'fill',
+                'width=600,height=720',
+            ],
+            [
+                'crop',
+                'width=600,height=720',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            '',
+            80,
+        ],
+    ],
     'linklistItemButton' => [
         'filters' => [
             [

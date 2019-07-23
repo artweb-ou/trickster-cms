@@ -68,6 +68,7 @@
         'list',
         'tabbed',
         'buttons',
+        'thumbnails_custom_cols',
     ],
     'linkList.layout.default' => 'thumbnails',
 
