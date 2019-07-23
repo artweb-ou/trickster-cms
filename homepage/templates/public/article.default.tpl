@@ -18,23 +18,25 @@
     {/if}
     {if $subArticles = $element->getSubArticles()}
         {$layout = $element->getCurrentLayout('subLayout')}
-        {if $layout == 'accordeon'}
-            <div class="article_subarticles article_subarticles_{$layout} accordeon" data-accordeon-mode="click">
-                {foreach $subArticles as $subArticle}
-                    {include file=$theme->template($subArticle->getTemplate($layout)) element=$subArticle}
-                {/foreach}
-            </div>
-        {else}
-            <div class="article_subarticles article_subarticles_{$layout}">
-                {foreach $subArticles as $subArticle}
-                    {include file=$theme->template($subArticle->getTemplate($layout)) element=$subArticle}
-                {/foreach}
-            </div>
+        {if !empty($layout)}
+            {if $layout == 'accordeon'}
+                <div class="article_subarticles article_subarticles_{$layout} accordeon" data-accordeon-mode="click">
+                    {foreach $subArticles as $subArticle}
+                        {include file=$theme->template($subArticle->getTemplate($layout)) element=$subArticle}
+                    {/foreach}
+                </div>
+            {else}
+                <div class="article_subarticles article_subarticles_{$layout}">
+                    {foreach $subArticles as $subArticle}
+                        {include file=$theme->template($subArticle->getTemplate($layout)) element=$subArticle}
+                    {/foreach}
+                </div>
+            {/if}
         {/if}
     {/if}
     {include $theme->template('component.comments.tpl')}
 {/capture}
-{assign moduleClass "article_block article_layout_{$element->getCurrentLayout()}{if $layout} article_sublayout_{$layout}{/if}"}
+{assign moduleClass "article_block article_layout_{$element->getCurrentLayout()}{if !empty($layout)} article_sublayout_{$layout}{/if}"}
 {assign moduleTitleClass "article_heading"}
 {assign moduleContentClass "article_content"}
 {include file=$theme->template("component.contentmodule.tpl")}
