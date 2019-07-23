@@ -11,10 +11,9 @@
 
 	<script src="{$controller->baseURL}vendor/ckeditor/ckeditor/ckeditor.js"></script>
 	<script src="{$controller->baseURL}libs/ckfinder/ckfinder.js"></script>
-	{*<script src="{$controller->baseURL}vendor/artweb/trickster/cms/js/jscolor/jscolor.js"></script>*}
+	{*<script src="{$controller->baseURL}vendor/artweb-ou/trickster-cms/cms/js/jscolor/jscolor.js"></script>*}
 	<script src="{$controller->baseURL}vendor/nnnick/chartjs/dist/Chart.js"></script>
-{*	<script src="{$controller->baseURL}trickster/cms/js/jscolor/color.all.min.js"></script>*}
-	<script src="{$controller->baseURL}vendor/artweb/trickster/cms/js/jscolor/jsColorPicker.min.js"></script>
+	<script src="{$controller->baseURL}vendor/artweb-ou/trickster-cms/cms/js/jscolor/jsColorPicker.min.js"></script>
 </head>
 <body>
 {if isset($loginForm) && $loginForm->displayForm()}

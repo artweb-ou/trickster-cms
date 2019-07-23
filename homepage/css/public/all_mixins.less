@@ -122,9 +122,31 @@
 
 // SVG background-image,
 // todo: need additional code clean in CssUniter
-.svg-bg(@svgFile,@fill,@stroke) {
-	@svgContent: encodeSvgContent(@svgFile, @fill, @stroke); // file name, fill color, stroke color
+.svg-bg(@svgFile,@fill,@stroke,@subfolder:false) {
+	@svgContent: encodeSvgContent(@svgFile, @fill, @stroke, @subfolder); // file name, fill color, stroke color
 	background-image: url("@{svgContent}");
 }
 
+.visible(@el_type){ // like block, flex, inline etc....
+	opacity: 1;
+	visibility: visible;
+	display: @el_type;
+}
+.bg_params(@repeat,@width,@height,@posX,@posY) {
+	background-repeat: @repeat;
+	background-position: @posX @posY;
+	.bg_params_size(@width; @height);
+}
+	.bg_params_size(@width; @height) when (@height = false) {
+		background-size: @width;
+	}
+	.bg_params_size(@width; @height) when not (@height = false) {
+		background-size: @width @height;
+	}
 
+.max_width(@max_width) {
+	max-width: @max_width;
+	width: 100%;
+	margin-right: auto;
+	margin-left: auto;
+}

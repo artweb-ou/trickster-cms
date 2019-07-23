@@ -133,30 +133,29 @@ class pdoTransport extends errorLogger implements transportObject
     public function setOrderFields($orderLines, $literal = false)
     {
         if (is_array($orderLines)) {
-            $count = count($orderLines);
-            if ($count > 0) {
+            if ($orderLines) {
                 $orderString = ' ORDER BY ';
-                foreach ($orderLines as $key => &$line) {
-                    if ($line == '2' || $line === 'rand' || $line === 'RAND') {
-                        $orderString .= ' RAND()';
-                    } elseif ($line == '1' || $line === 'asc' || $line === 'ASC') {
+                $strings = [];
+                foreach ($orderLines as $column => $order) {
+                    if (is_array($order)) {
+                        $strings[] = ' FIELD(`' . $column . '`,' . implode(',', $order) . ')';
+                    } elseif ($order == '2' || $order === 'rand' || $order === 'RAND') {
+                        $strings[] = ' RAND()';
+                    } elseif ($order == '1' || $order === 'asc' || $order === 'ASC') {
                         if ($literal) {
-                            $orderString .= $key . ' ASC';
+                            $strings[] = $column . ' ASC';
                         } else {
-                            $orderString .= $this->escape($key) . ' ASC';
+                            $strings[] = $this->escape($column) . ' ASC';
                         }
                     } else {
                         if ($literal) {
-                            $orderString .= $key . ' DESC';
+                            $strings[] = $column . ' DESC';
                         } else {
-                            $orderString .= $this->escape($key) . ' DESC';
+                            $strings[] = $this->escape($column) . ' DESC';
                         }
                     }
-                    $count--;
-                    if ($count != 0) {
-                        $orderString .= ',';
-                    }
                 }
+                $orderString .= implode(',', $strings);
             } else {
                 $orderString = '';
             }

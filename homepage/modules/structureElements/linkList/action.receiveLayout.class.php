@@ -8,15 +8,16 @@ class receiveLayoutLinkList extends structureElementAction
     {
         if ($this->validated) {
             $structureElement->persistElementData();
-            $controller->redirect($structureElement->URL);
+            $controller->redirect($structureElement->getUrl('showLayoutForm'));
         }
-        $structureElement->executeAction("showForm");
+        $structureElement->executeAction("showLayoutForm");
     }
 
     public function setExpectedFields(&$expectedFields)
     {
         $expectedFields = [
             'layout',
+            'cols',
         ];
     }
 

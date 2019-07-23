@@ -37,6 +37,7 @@ class productionElement extends menuStructureElement
             'showLayoutForm',
             'showPositions',
             'showPrivileges',
+            'showlanguageForm',
         ];
     }
 }

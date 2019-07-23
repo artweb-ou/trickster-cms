@@ -17,11 +17,16 @@ window.ShoppingBasketDeliveriesSelector = function(componentElement) {
             singleOptionElement = self.makeElement('span', 'shoppingbasket_delivery_form_sole_option', fieldCell);
             controller.addListener('startApplication', updateData);
             controller.addListener('shoppingBasketUpdated', updateData);
+
         }
     };
     var deliveryDropDownChange = function() {
-        tracking.checkoutOptionsTracking(2, deliveryDropDown.text);
         window.shoppingBasketLogics.selectDelivery(deliveryDropDown.value);
+    };
+    var deliveryTypeTracking = function() {
+        if (window.jsonData && window.jsonData.shoppingBasketData) {
+            tracking.checkoutOptionsTracking(window.jsonData.shoppingBasketData.currentStep, deliveryDropDown.text);
+        }
     };
     var updateData = function() {
         deliveriesList = window.shoppingBasketLogics.deliveryTypesList;
@@ -49,6 +54,7 @@ window.ShoppingBasketDeliveriesSelector = function(componentElement) {
         } else {
             componentElement.style.display = 'none';
         }
+        deliveryTypeTracking();
     };
 
     init();

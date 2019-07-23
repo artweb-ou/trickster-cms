@@ -1829,7 +1829,7 @@ class productElement extends structureElement implements
             $deliveryTypeElementsIds = $this->getService('linksManager')
                 ->getConnectedIdList($deliveryTypesElementId, 'structure', 'parent');
 
-            if ($deliveryTypeElementsIds && $deliveryTypeElements = $structureManager->getElementsByIdList($deliveryTypeElementsIds, false, true)) {
+            if ($deliveryTypeElementsIds && $deliveryTypeElements = $structureManager->getElementsByIdList($deliveryTypeElementsIds, null, true)) {
                 $inactiveDeliveriesRecords = $this->getDisabledDeliveryTypesRecords();
                 $currencySelector = $this->getService('CurrencySelector');
 
@@ -1837,7 +1837,7 @@ class productElement extends structureElement implements
                     if (!isset($inactiveDeliveriesRecords[$deliveryTypeElement->id])) {
                         $deliveryTypeInfo = [];
                         $deliveryTypeInfo["element"] = $deliveryTypeElement;
-                        $priceExtra = $this->getDeliveryPriceExtra($deliveryTypeElement->id);
+                        $priceExtra = (float)$this->getDeliveryPriceExtra($deliveryTypeElement->id);
                         $deliveryTypeInfo["minPrice"] = $currencySelector->convertPrice($deliveryTypeElement->getMinPrice() + $priceExtra);
                         $deliveryTypeInfo["maxPrice"] = $currencySelector->convertPrice($deliveryTypeElement->getMaxPrice() + $priceExtra);
                         $this->deliveryTypesInfo[] = $deliveryTypeInfo;

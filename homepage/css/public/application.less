@@ -48,8 +48,7 @@ body {
 }
 
 .center_column {
-    flex-grow: 1;
-    max-width: 100%;
+    width: 100%;
     position: relative;
     min-width: 0; //required to prevent overlapping
     box-sizing: border-box;
@@ -139,9 +138,107 @@ body {
     display: inline-block !important;
 }
 .display_flex{
-    display: flex !important;
+    display: flex;
 }
 .display_inline_flex{
     display: inline-flex !important;
 }
 
+/********************************************************
+/*  HELPERS
+/********************************************************/
+.hidden {
+    color: transparent;
+    visibility: hidden;
+    display: none;
+}
+.hidden_fake {
+    color: transparent;
+    visibility: hidden;
+    height: 0;
+    transform: scale(0);
+    overflow: hidden;
+}
+.visible {
+    opacity: 1;
+    visibility: visible;
+    display: block;
+}
+/********************************************************
+/*  MEDIA HIDDEN
+/********************************************************/
+.hidden_xs {
+    @media (max-width: @screen_breakpoint_xs_max) {  //max 575
+        &{
+            display: none;
+        }
+    }
+}
+.hidden_sm{
+    @media (min-width: @screen_breakpoint_sm) and (max-width: @screen_breakpoint_sm_max) {  //576 - 767
+        &{
+            display: none;
+        }
+    }
+}
+.hidden_md{
+    @media (min-width: @screen_breakpoint_md) and (max-width: @screen_breakpoint_md_max) {  //768 - 991
+        &{
+            display: none;
+        }
+    }
+}
+.hidden_lg{
+    @media (min-width: @screen_breakpoint_lg) and (max-width: @screen_breakpoint_lg_max) {  //992 - 1199
+        &{
+            display: none;
+        }
+    }
+}
+.hidden_xl{
+    @media (min-width: @screen_breakpoint_xl) and (max-width: @screen_breakpoint_xl_max) {  //1200 - 1599
+        &{
+            display: none;
+        }
+    }
+}
+.hidden_xxl{
+    @media (min-width: @screen_breakpoint_xxl)  {  //1600
+        &{
+            display: none;
+        }
+    }
+}
+
+/********************************************************
+/*  PLACEHOLDERS
+/********************************************************/
+@placeholders() {
+    &:-moz-placeholder { transition: color .6s ease-in-out; opacity: .6;; }
+    &::-moz-placeholder { transition: color .6s ease-in-out; opacity: .6;; }
+    &::-webkit-input-placeholder { transition: color .6s ease-in-out; opacity: .6;; }
+    &:-ms-input-placeholder { transition: color .6s ease-in-out; opacity: .6;; }
+    &::-ms-input-placeholder {  transition: color .6s ease-in-out; opacity: .6;; }
+    &::placeholder { transition: color .6s ease-in-out; opacity: .6;; }
+    &:placeholder-shown { color: inherit; transition: color .6s ease-in-out !important; }// for FF, which doesnt support normal transition on placeholder
+
+    &:focus{
+        &:-moz-placeholder { color: transparent !important; }
+        &::-moz-placeholder { color: transparent !important; }
+        &::-webkit-input-placeholder { color: transparent !important; }
+        &:-ms-input-placeholder { color: transparent !important; }
+        &::-ms-input-placeholder {  color: transparent !important; }
+        &::placeholder { color: transparent !important; }
+        &:placeholder-shown { color: transparent !important; } // for FF, which doesnt support normal transition on placeholder
+    }
+}
+input {
+    &.input_component {
+        @placeholders();
+    }
+}
+textarea {
+    &.textarea_component {
+        @placeholders();
+    }
+}

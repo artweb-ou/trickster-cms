@@ -120,19 +120,17 @@ class VisitorsManager extends errorLogger
 
     protected function findVisitor(callable $conditions)
     {
-        $result = null;
-        $dummy = $this->currentVisitor;
         $query = $this->createVisitorQuery();
-        if (!empty($dummy)) {
-            $query->select(array_keys($dummy->getDataArray()));
+        if (!empty($this->currentVisitor)) {
+            $query->select(array_keys($this->currentVisitor->getDataArray()));
         }
         $conditions($query);
-        $data = $query->first();
-        if ($data) {
+        if ($data = $query->first()) {
             $visitor = new Visitor();
             $visitor->setData($data);
+            return $visitor;
         }
-        return $visitor;
+        return null;
     }
 
     protected function findSimilarVisitors($data, $excludeId = false)

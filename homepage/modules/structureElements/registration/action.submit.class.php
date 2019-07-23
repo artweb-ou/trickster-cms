@@ -95,8 +95,7 @@ class submitRegistration extends structureElementAction
                 $mainData['structureName'] = $mainData['userName'];
 
                 $usersElementId = $structureManager->getElementIdByMarker("users");
-                $structureManager->getElementsByIdList([$usersElementId], $structureElement->id);
-                if ($usersElement = $structureManager->getElementById($usersElementId)) {
+                if ($usersElement = $structureManager->getElementById($usersElementId, $structureElement->id, true)) {
                     /**
                      * @var userElement $userElement
                      */

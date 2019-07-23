@@ -39,6 +39,7 @@ window.shoppingBasketLogics = new function() {
 
     this.displayVat = true;
     this.displayTotals = true;
+    this.currentStep;
     var orderId;
     var paymentStatus = false;
     var initData = function() {
@@ -47,12 +48,13 @@ window.shoppingBasketLogics = new function() {
         }
         if (window.orders != undefined) {
             paymentStatus = window.orders[0].orderStatus;
+            self.trackingPurchase();
         }
-        self.trackingPurchase();
+
     };
 
     var importData = function(basketData) {
-        orderId = parseInt(basketData.orderId, 10);
+        orderId = basketData.orderId;
         self.displayVat = basketData.displayVat;
         self.displayTotals = basketData.displayTotals;
         self.selectedCountryId = parseInt(basketData.selectedCountryId, 10);
@@ -70,7 +72,7 @@ window.shoppingBasketLogics = new function() {
         self.totalPrice = basketData.totalPrice;
         self.vatAmount = basketData.vatAmount;
         self.vatLessTotalPrice = basketData.vatLessTotalPrice;
-
+        self.currentStep = basketData.currentStep;
         self.productsSalesPrice = basketData.productsSalesPrice;
 
         self.message = basketData.message;
@@ -190,9 +192,12 @@ window.shoppingBasketLogics = new function() {
         }
     };
     this.trackCheckout = function() {
-        if (!paymentStatus && self.productsList) {
-            tracking.checkoutTracking(self.productsList);
-            tracking.checkoutOptionsTracking(1, self.selectedDeliveryTypeTitle);
+        if (!paymentStatus && self.productsList && orderId == null) {
+            if (self.currentStep == 1) {
+                tracking.checkoutTracking(self.productsList);
+            } else {
+                tracking.checkoutProgressTracking(self.currentStep, self.productsList);
+            }
         }
     };
     this.addProduct = function(productId, productAmount, options) {
@@ -219,6 +224,14 @@ window.shoppingBasketLogics = new function() {
             fbq('track', 'AddToCart');
         }
     };
+
+    this.checkVatNumber = function(vatNumber) {
+        var requestParameters = [];
+        requestParameters['vatNumber'] = vatNumber;
+        var actionName = 'checkVat';
+        sendData(actionName, requestParameters);
+    };
+
     this.changeAmount = function(basketProductId, productAmount) {
         if (typeof productAmount == 'undefined') {
             productAmount = 1;
@@ -359,9 +372,6 @@ window.shoppingBasketLogics = new function() {
         if (responseStatus == 'success') {
             if (typeof parsedData.shoppingBasketData != 'undefined') {
                 importData(parsedData.shoppingBasketData);
-                if (requestName == 'selectDelivery') {
-                    tracking.checkoutOptionsTracking(1, parsedData.shoppingBasketData.selectedDeliveryTypeTitleDl);
-                }
             }
             if (requestName == 'addProduct') {
                 controller.fireEvent('shoppingBasketProductAdded');
@@ -405,6 +415,7 @@ window.ShoppingBasketProduct = function() {
         self.title = data.title;
         self.title_dl = data.title_dl;
         self.category = data.category;
+        self.category_dl = data.category_dl;
         self.description = data.description;
         self.variation = data.variation;
         self.variation_dl = '';

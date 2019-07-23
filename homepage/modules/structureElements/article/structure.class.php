@@ -5,18 +5,19 @@ class articleElement extends menuDependantStructureElement
     use CommentsTrait;
     use ConfigurableLayoutsProviderTrait;
     public $dataResourceName = 'module_article';
-    protected $allowedTypes = [];
+    protected $allowedTypes = ['subArticle'];
     public $defaultActionName = 'show';
     public $role = 'content';
 
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['hideTitle'] = 'checkbox';
         $moduleStructure['content'] = 'html';
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['image'] = 'image';
         $moduleStructure['layout'] = 'text';
-        $moduleStructure['mobileLayout'] = 'text';
+        $moduleStructure['subLayout'] = 'text';
         $moduleStructure['allowComments'] = 'checkbox';
     }
 
@@ -28,5 +29,19 @@ class articleElement extends menuDependantStructureElement
         }
         return false;
     }
-}
 
+    public function getSubArticles()
+    {
+        /**
+         * @var structureManager $structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        $subArticles = $structureManager->getElementsChildren($this->id);
+        return $subArticles;
+    }
+
+    public function getAllowedTypes($currentAction = 'showForm')
+    {
+        return $this->allowedTypes;
+    }
+}

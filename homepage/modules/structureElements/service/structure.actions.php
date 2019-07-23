@@ -10,3 +10,5 @@ $moduleActions[] = 'showForm';
 $moduleActions[] = 'showFullList';
 $moduleActions[] = 'showLanguageForm';
 $moduleActions[] = 'receiveLanguageForm';
+$moduleActions[] = 'showLayoutForm';
+$moduleActions[] = 'receiveLayout';

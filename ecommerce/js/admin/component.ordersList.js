@@ -123,26 +123,14 @@ window.OrdersListTableComponent = function(componentElement) {
             rowsElement.removeChild(rowsElement.firstChild);
         }
 
-        var payedTotal = 0;
-        var deliveryTotal = 0;
-        var totalPricesTotal = 0;
-
         for (var i = 0; i < ordersList.length; i++) {
             var row = new OrdersListRowComponent(i, ordersList[i]);
             rowsElement.appendChild(row.componentElement);
-
-            payedTotal += ordersList[i].payedPrice;
-            deliveryTotal += ordersList[i].deliveryPrice;
-            totalPricesTotal += ordersList[i].totalPrice;
         }
 
-        payedTotalElement.innerHTML = domHelper.roundNumber(payedTotal, 2) + ' €';
-        if (deliveryTotal !== '') {
-            deliveryTotalElement.innerHTML = domHelper.roundNumber(deliveryTotal, 2) + ' €';
-        } else {
-            deliveryTotalElement.innerHTML = '';
-        }
-        totalPriceElement.innerHTML = domHelper.roundNumber(totalPricesTotal, 2) + ' €';
+        payedTotalElement.innerHTML = ordersLogics.getPayedTotal() + ' €';
+        deliveryTotalElement.innerHTML = ordersLogics.getDeliveryTotal() + ' €';
+        totalPriceElement.innerHTML = ordersLogics.getTotalPricesTotal() + ' €';
     };
 
     init();
@@ -158,6 +146,8 @@ window.OrdersListRowComponent = function(number, orderData) {
     var payedPriceCell;
     var totalPriceCell;
     var deliveryPriceCell;
+    var discountCell;
+    var productsPriceCell;
     var statusCell;
     var statusChangeCell;
     var statusChangeButton;
@@ -197,6 +187,14 @@ window.OrdersListRowComponent = function(number, orderData) {
         deliveryPriceCell.className = 'orders_list_row_deliveryprice';
         self.componentElement.appendChild(deliveryPriceCell);
 
+        discountCell = document.createElement('td');
+        discountCell.className = 'orders_list_row_discount';
+        self.componentElement.appendChild(discountCell);
+
+        productsPriceCell = document.createElement('td');
+        productsPriceCell.className = 'orders_list_row_productsprice';
+        self.componentElement.appendChild(productsPriceCell);
+
         totalPriceCell = document.createElement('td');
         totalPriceCell.className = 'orders_list_row_totalprice';
         self.componentElement.appendChild(totalPriceCell);
@@ -233,6 +231,8 @@ window.OrdersListRowComponent = function(number, orderData) {
         } else {
             deliveryPriceCell.innerHTML = '';
         }
+        discountCell.innerHTML = orderData.discountAmount + ' ' + orderData.currency;
+        productsPriceCell.innerHTML = orderData.productsPrice + ' ' + orderData.currency;
         totalPriceCell.innerHTML = orderData.totalPrice + ' ' + orderData.currency;
         statusCell.innerHTML = orderData.orderStatusText;
 

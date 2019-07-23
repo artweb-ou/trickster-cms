@@ -70,29 +70,34 @@ class settingsManager implements DependencyInjectionContextInterface
          */
         $allData = [];
 
-        /**
-         * Get data and push to $allData array
-         */
-        $db = $this->getService('db');
-        $query = $db->table('module_simplesetting')
-            ->leftJoin('structure_elements', 'module_simplesetting.id', '=', 'structure_elements.id')
-            ->leftJoin('module_language', 'module_simplesetting.id', '=', 'module_language.id')
-            ->select('structureName', 'value');
+        //needed for installer app's CSS generation.
+        try {
+            /**
+             * Get data and push to $allData array
+             */
+            $db = $this->getService('db');
+            $query = $db->table('module_simplesetting')
+                ->leftJoin('structure_elements', 'module_simplesetting.id', '=', 'structure_elements.id')
+                ->leftJoin('module_language', 'module_simplesetting.id', '=', 'module_language.id')
+                ->select('structureName', 'value');
 
-        if ($querySettings = $query->get()) {
-            foreach ($querySettings as $setting) {
-                $allData[$setting['structureName']] = $setting['value'];
+            if ($querySettings = $query->get()) {
+                foreach ($querySettings as $setting) {
+                    $allData[$setting['structureName']] = $setting['value'];
+                }
+                $this->settingsList = $allData;
             }
-            $this->settingsList = $allData;
-        }
-        $this->getService('PathsManager')->ensureDirectory($this->cachePath);
+            $this->getService('PathsManager')->ensureDirectory($this->cachePath);
 
-        /**
-         * Create cache files with settings data
-         */
-        $filePath = $this->cachePath . $this->fileName;
-        $text = $this->generateSettingsText($allData);
-        file_put_contents($filePath, $text);
+            /**
+             * Create cache files with settings data
+             */
+            $filePath = $this->cachePath . $this->fileName;
+            $text = $this->generateSettingsText($allData);
+            file_put_contents($filePath, $text);
+        } catch (Exception $exception) {
+
+        }
     }
 
     protected function generateSettingsText($languageData)

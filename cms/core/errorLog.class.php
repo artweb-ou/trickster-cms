@@ -56,11 +56,16 @@ class errorLog
             if (!empty($_SERVER['HTTP_REFERER'])) {
                 $referer = $_SERVER['HTTP_REFERER'];
             }
+            $ip = "";
+            if (!empty($_SERVER['REMOTE_ADDR'])) {
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
 
             foreach ($this->messageLogArray as &$item) {
                 $contents .= $item['date'] . "\n\r"
                     . "- " . $item['locationName'] . ': ' . $item['errorText'] . "\n\r"
                     . "- REQUEST_URI: " . $myUrl . "\n\r"
+                    . "- IP: " . $ip. "\n\r"
                     . "- HTTP_REFERER: " . $referer . "\n\r\n\r";
             }
             $pathsManager = controller::getInstance()->getPathsManager();

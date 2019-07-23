@@ -49,8 +49,12 @@ class imageApplication extends controllerApplication
                 }
 
                 if (!empty($imagePreset['format'])) {
-                    if ($contentTypes = $this->getService('requestHeadersManager')->getAcceptedTypes()) {
-                        if (isset ($contentTypes['image/webp'])) {
+                    /**
+                     * @var requestHeadersManager $requestHeadersManager
+                     */
+                    $requestHeadersManager = $this->getService('requestHeadersManager');
+                    if ($contentTypes = $requestHeadersManager->getAcceptedTypes()) {
+                        if (isset ($contentTypes['image/webp']) && $requestHeadersManager->getBrowserType() !== 'Safari') {
                             $imagePreset['format'][1] = 'webp';
                         }
                     }

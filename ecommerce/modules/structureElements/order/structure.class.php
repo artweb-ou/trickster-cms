@@ -4,6 +4,7 @@
  * Class orderElement
  *
  * @property string $orderStatus
+ * @property string $payerLanguage
  * @property mixed paymentStatus
  * @property float $deliveryPrice
  */
@@ -37,7 +38,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
     protected $discountsList;
     protected $servicesList;
     protected $orderData;
-    protected $payerLanguageId;
+    protected $totalFullPrice;
+    protected $vatRate;
+    protected $discountAmount;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -72,6 +75,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $moduleStructure['payerAddress'] = 'text';
         $moduleStructure['payerPostIndex'] = 'text';
         $moduleStructure['payerCountry'] = 'text';
+        $moduleStructure['payerLanguage'] = 'text';
         $moduleStructure['dueDate'] = 'date';
 
         $moduleStructure['orderConfirmationFile'] = 'file';
@@ -104,13 +108,20 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $this->productsPrice = 0;
         $this->totalPrice = 0;
 
+        $this->discountAmount = 0;
         $productsPrice = 0;
+        $this->vatAmount = 0;
+        $this->noVatAmount = 0;
+        $this->totalFullPrice = 0;
+
+
         foreach ($this->getOrderProducts() as &$element) {
-            $productsPrice += $element->getTotalFullPrice();
+            $productsPrice += $element->getTotalPrice(false);
+            $this->noVatAmount += $element->getVatLessTotalPrice();
+            $this->totalFullPrice += $element->getTotalFullPrice();
         }
         $this->productsPrice = $productsPrice;
-        $totalPrice = $productsPrice + $this->deliveryPrice;
-
+        $totalPrice = $this->totalFullPrice + $this->deliveryPrice;
         if ($services = $this->getServicesList()) {
             foreach ($services as &$service) {
                 $totalPrice += $service->price;
@@ -119,27 +130,18 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
         if ($discounts = $this->getDiscountsList()) {
             foreach ($discounts as &$discount) {
-                $totalPrice -= $discount->value;
+                $this->discountAmount += $discount->value;
             }
         }
-
+        $totalPrice = $totalPrice - $this->discountAmount;
+        $this->vatAmount = $totalPrice - (($totalPrice) / $this->getVatRate());
         if ($totalPrice < 0) {
             $totalPrice = 0;
         }
-        $currencySelector = $this->getService('CurrencySelector');
-
         $this->totalAmount = count($this->orderProducts);
-
-        $vatRateSetting = $this->getService('ConfigManager')->get('main.vatRate');
-        $this->vatAmount = $totalPrice - $totalPrice / $vatRateSetting;
-        $this->vatAmount = $this->vatAmount;
-
-        $this->noVatAmount = $totalPrice / $vatRateSetting;
-        $this->noVatAmount = $this->noVatAmount;
-
         if ($this->paymentElement) {
             if ($this->paymentElement->paymentStatus == 'success') {
-                $this->payedPrice = $this->paymentElement->amount;
+                $this->payedPrice = $this->paymentElement->getAmount();
             }
         }
         $this->totalPrice = $totalPrice;
@@ -154,7 +156,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
             if ($connectedIds = $linksManager->getConnectedIdList($this->id, 'orderPayment', 'parent')) {
                 $structureManager = $this->getService('structureManager');
                 $paymentId = reset($connectedIds);
-                $this->paymentElement = $structureManager->getElementById($paymentId);
+                $this->paymentElement = $structureManager->getElementById($paymentId, $this->id, true);
             }
         }
         return $this->paymentElement;
@@ -262,11 +264,14 @@ class orderElement extends structureElement implements PaymentOrderInterface
         }
         if ($this->orderStatusText === null) {
             $this->orderStatusText = $this->getService('translationsManager')
-                ->getTranslationByName('order.status_' . $fromStatus, 'adminTranslations');
+                ->getTranslationByName('order_status.status_' . $fromStatus);
         }
         return $this->orderStatusText;
     }
 
+    /**
+     * @return orderProductElement[]
+     */
     public function getOrderProducts()
     {
         if ($this->orderProducts === null) {
@@ -287,11 +292,15 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $this->orderProducts;
     }
 
-    public function getPayedPrice()
+    public function getPayedPrice($formatted = true)
     {
         $this->recalculate();
-        $currencySelector = $this->getService('CurrencySelector');
-        return $this->payedPrice ? $currencySelector->formatPrice($this->payedPrice) : 0;
+        if ($formatted) {
+            $currencySelector = $this->getService('CurrencySelector');
+            return $this->payedPrice ? $currencySelector->formatPrice($this->payedPrice) : 0;
+        } else {
+            return $this->payedPrice;
+        }
     }
 
     public function getVatAmount()
@@ -314,13 +323,17 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $this->totalAmount;
     }
 
-    public function getTotalPrice()
+    public function getTotalPrice($formatted = true)
     {
         $currencySelector = $this->getService('CurrencySelector');
         if ($this->totalPrice === null) {
             $this->recalculate();
         }
-        return $currencySelector->formatPrice($this->totalPrice);
+        if ($formatted) {
+            return $currencySelector->formatPrice($this->totalPrice);
+        } else {
+            return $this->totalPrice;
+        }
     }
 
     public function getOrderData()
@@ -346,7 +359,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 "payerEmail" => $this->payerEmail,
                 "payerPhone" => $this->payerPhone,
                 "currency" => $this->currency,
-                "productsPrice" => $this->getProductsPrice(),
+                "productsPrice" => $this->getTotalFullPrice(),
                 "deliveryType" => $this->deliveryType,
                 "deliveryPrice" => $currencySelector->formatPrice($this->deliveryPrice),
                 "deliveryTitle" => $this->deliveryTitle,
@@ -368,15 +381,16 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $this->orderData['payment'] = [
                     'date' => $paymentElement->date,
                     'paymentStatus' => $paymentElement->paymentStatus,
-                    'amount' => $paymentElement->amount,
+                    'amount' => $paymentElement->getAmount(),
                     'currency' => $paymentElement->currency,
                 ];
             }
-
+            /**
+             * @var structureManager $structureManager
+             */
+            $structureManager = $this->getService('structureManager');
             foreach ($this->getOrderFields() as $fieldElement) {
-                $structureManager = $this->getService('structureManager');
-                $structureManager->getElementsByIdList([$fieldElement->fieldId]);
-                if ($fieldPrototypeElement = $structureManager->getElementById($fieldElement->fieldId)) {
+                if ($fieldPrototypeElement = $structureManager->getElementById($fieldElement->fieldId, null, true)) {
                     $roles = [
                         'company',
                         'firstName',
@@ -407,11 +421,11 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $this->orderData['addedProducts'][] = [
                     'code' => $product->code,
                     'title' => $product->title,
-                    'price' => $product->getPrice(),
+                    'price' => $product->getFullPrice(),
                     'variation' => $product->variation,
                     'emptyPrice' => $product->isEmptyPrice(),
                     'amount' => $product->amount,
-                    'totalPrice' => $product->getTotalPrice(true),
+                    'totalPrice' => $product->getTotalFullPrice(true),
                     'unit' => $product->unit,
                 ];
             }
@@ -436,6 +450,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
     {
         $sentPropertyName = $emailType . 'Sent';
         if (!$this->$sentPropertyName || $forceSending) {
+            $languagesManager = $this->getService('languagesManager');
+            $languagesManager->setCurrentLanguageCode($this->payerLanguage);
+
             $administratorEmail = $this->getAdministratorEmail();
             $data = $this->getOrderData();
             $data['documentType'] = $emailType;
@@ -443,6 +460,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $translationsManager = $this->getService('translationsManager');
 
             $settings = $this->getService('settingsManager')->getSettingsList();
+            /**
+             * @var EmailDispatcher $emailDispatcher
+             */
             $emailDispatcher = $this->getService('EmailDispatcher');
             $newDispatchment = $emailDispatcher->getEmptyDispatchment();
             $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
@@ -456,6 +476,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 'public_translations');
             $subject .= ' (' . $this->getInvoiceNumber($emailType) . ')';
             $newDispatchment->setSubject($subject);
+            $data['displayInvoiceLogo'] = false;
             $newDispatchment->setData($data);
             $newDispatchment->setReferenceId($this->id);
             $newDispatchment->setType('order');
@@ -464,6 +485,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $attachmentName = $this->{$emailType . 'Number'} . '.pdf';
                 $newDispatchment->registerAttachment($filePath, $attachmentName);
             }
+
             if ($emailDispatcher->startDispatchment($newDispatchment)) {
                 $this->$sentPropertyName = '1';
             } else {
@@ -475,7 +497,11 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function sendOrderStatusNotificationEmail()
     {
-        if ($this->orderStatus !== 'undefined') {
+        if ($this->orderStatus !== 'undefined' && $this->orderStatus !== 'deleted') {
+
+            $languagesManager = $this->getService('languagesManager');
+            $languagesManager->setCurrentLanguageCode($this->payerLanguage);
+
             $administratorEmail = $this->getAdministratorEmail();
             $data = $this->getOrderData();
             $data['documentType'] = 'Notification';
@@ -499,9 +525,11 @@ class orderElement extends structureElement implements PaymentOrderInterface
             // if !shop_title in translation, try check default_sender_name in settings, else display shop_title field name
             $shopTitle =
                 $translationsManager->getTranslationByName('company.shop_title', 'public_translations') ?:
-                    !empty($settings['default_sender_name']) ? $settings['default_sender_name'] : $translationsManager->getTranslationByName('company.shop_title', 'public_translations');
+                    !empty($settings['default_sender_name']) ? $settings['default_sender_name'] : $translationsManager->getTranslationByName('company.shop_title',
+                        'public_translations');
 
-            $notification = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification', 'public_translations');
+            $notification = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification',
+                'public_translations');
             $orderNumberText = $translationsManager->getTranslationByName('invoice.order_nr', 'public_translations');
             $orderNumber = $this->getInvoiceNumber();
             $statusText = $this->getOrderStatusText($this->orderStatus);
@@ -540,16 +568,16 @@ class orderElement extends structureElement implements PaymentOrderInterface
     public function getPdfPath($type)
     {
         $resultPdfPath = false;
-        $languagesManager = $this->getService('languagesManager');
-        $languagesManager->setCurrentLanguageCode($this->getPayerLanguage);
         $filePropertyName = $type . 'File';
         $pathsManager = $this->getService('PathsManager');
         $uploadsPath = $pathsManager->getPath('uploads');
         $this->$filePropertyName = $this->id . '_' . $type;
 
         $data = $this->getOrderData();
+        $data['displayInvoiceLogo'] = true;
         $data['documentType'] = $type;
-        if ($pdfContents = $this->makePdf($data, $type)) {
+
+        if ($pdfContents = $this->makePdf($data)) {
             $filePath = $uploadsPath . $this->$filePropertyName;
 
             file_put_contents($filePath, $pdfContents);
@@ -559,7 +587,16 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $resultPdfPath;
     }
 
-    protected function makePdf($data)
+    public function makeWaybillPdf()
+    {
+        $data = $this->getOrderData();
+        if ($pdfContents = $this->makePdf($data, 'waybill.tpl')) {
+            return $pdfContents;
+        }
+        return false;
+    }
+
+    protected function makePdf($data, $contentType = 'invoice.tpl')
     {
         $controller = controller::getInstance();
 
@@ -580,7 +617,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
             ->getCurrentLanguageElement()
             ->getLogoImageUrl());
         $htmlRenderer->assign('data', $data);
-        $htmlRenderer->assign('contentType', 'invoice.tpl');
+        $htmlRenderer->assign('contentType', $contentType);
         $htmlRenderer->assign('theme', $theme);
         $htmlRenderer->setTemplate($theme->template('layout.tpl'));
         $pdfHtml = $htmlRenderer->fetch();
@@ -591,16 +628,18 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $emogrifier->setHTML($pdfHtml);
             $emogrifier->disableInvisibleNodeRemoval();
             $pdfHtml = $emogrifier->emogrify();
+//            echo $pdfHtml;
+//            exit;
         } catch (exception $ex) {
             $this->logError('emogrifier error: ' . $ex->getMessage());
         }
-
         $prevErrorReportingSettings = error_reporting();
         error_reporting(0);
         $mpdf = new \Mpdf\Mpdf();
         $mpdf->WriteHTML($pdfHtml);
         $pdf = $mpdf->Output("", 'S');
         error_reporting($prevErrorReportingSettings);
+
         return $pdf;
     }
 
@@ -643,15 +682,15 @@ class orderElement extends structureElement implements PaymentOrderInterface
             'orderConfirmationNumber' => $this->getInvoiceNumber('orderConfirmation'),
             'totalAmount' => $this->getTotalAmount(),
             'totalPrice' => $this->getTotalPrice(),
+            'productsPrice' => $this->getProductsPrice(),
+            'discountAmount' => $this->getDiscountAmount(),
             'vatAmount' => $this->getVatAmount(),
-            'revenue' => $this->getTotalPrice() - $this->getVatAmount(),
             'dateCreated' => $this->dateCreated,
             'currency' => $this->currency,
             'payedPrice' => $this->getPayedPrice(),
             'deliveryPrice' => $this->deliveryPrice,
             'deliveryTitle' => $this->deliveryTitle,
             'deliveryType' => $this->deliveryType,
-            'ourPrice' => $this->ourPrice,
             'URL' => $this->URL,
             'formURL' => $this->URL . 'id:' . $this->id . '/action:showForm/',
             'deleteURL' => $this->URL . 'id:' . $this->id . '/action:delete/',
@@ -891,6 +930,10 @@ class orderElement extends structureElement implements PaymentOrderInterface
     {
         $currencySelector = $this->getService('CurrencySelector');
         $structureManager = $this->getService('structureManager');
+        /**
+         * @var $shoppingBasket shoppingBasket
+         */
+        $shoppingBasket = $this->getService('shoppingBasket');
         $this->orderProducts = [];
         foreach ($products as &$product) {
             /**
@@ -918,6 +961,10 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $newData['title'] = $product->title;
                 $newData['title_dl'] = $product->title_dl;
                 $newData['unit'] = $product->unit;
+                $newData['vatRate'] = $shoppingBasket->getVatRate();
+                $newData['vatLessPrice'] = $newData['price'] / $this->getService('ConfigManager')
+                        ->getConfig('main')
+                        ->get('vatRate');
                 if ($product->variation) {
                     $variation = is_array($product->variation)
                         ? implode(', ', $product->variation)
@@ -980,7 +1027,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $newData['title'] = $discount->title;
                 $newData['discountId'] = $discount->id;
                 $newData['discountCode'] = $discount->code;
-                $newData['value'] = $discount->getAllDiscountsAmount();
+                $newData['value'] = $discount->getAllDiscountsAmount(false);
 
                 if ($newOrderDiscount->importExternalData($newData)) {
                     $newOrderDiscount->persistElementData();
@@ -1015,7 +1062,40 @@ class orderElement extends structureElement implements PaymentOrderInterface
      */
     public function getNoVatAmount()
     {
+        $this->recalculate();
         $currencySelector = $this->getService('CurrencySelector');
         return $currencySelector->formatPrice($this->noVatAmount);
+    }
+
+    public function getTotalFullPrice()
+    {
+        if (empty($this->totalFullPrice)) {
+            $this->recalculate();
+        }
+        return $this->totalFullPrice;
+    }
+    public function getDiscountAmount()
+    {
+        if (empty($this->discountAmount)) {
+            $this->recalculate();
+        }
+        return $this->discountAmount;
+    }
+
+    protected function getVatRate()
+    {
+        /**
+         * @var $mainConfig ConfigManager
+         */
+        if (empty($this->vatRate)) {
+            $mainConfig = $this->getService('ConfigManager')->getConfig('main');
+            $vatRate = $mainConfig->get('vatRate');
+            if (!empty($vatRate)) {
+                $this->vatRate = $vatRate;
+            } else {
+                return false;
+            }
+        }
+        return $this->vatRate;
     }
 }

@@ -5,7 +5,7 @@
  *
  * @property string $columns
  */
-class newsListElement extends menuDependantStructureElement implements ColumnsTypeProvider
+class newsListElement extends menuDependantStructureElement implements ColumnsTypeProvider, ConfigurableLayoutsProviderInterface
 {
     use ConfigurableLayoutsProviderTrait;
     public $dataResourceName = 'module_newslist';
@@ -29,6 +29,49 @@ class newsListElement extends menuDependantStructureElement implements ColumnsTy
         $moduleStructure['hidden'] = 'checkbox';
         $moduleStructure['formRelativesInput'] = 'array';
         $moduleStructure['layout'] = 'text';
+        $moduleStructure['cols'] = 'naturalNumber';
+        $moduleStructure['captionLayout'] = 'text';
+
+        $moduleStructure['generalOwnerAvatar'] = 'image';
+        $moduleStructure['generalOwnerAvatarOriginalName'] = 'fileName';
+        $moduleStructure['generalOwnerName'] = 'text';
+
+        $moduleStructure['socMedia_1_Name'] = 'text';
+        $moduleStructure['socMedia_1_Icon'] = 'image';
+        $moduleStructure['socMedia_1_IconOriginalName'] = 'fileName';
+//        $moduleStructure['socMedia_1_Link'] = 'text';
+
+   }
+
+    protected function getTabsList()
+    {
+        return [
+            'showFullList',
+            'showForm',
+            'showLayoutForm',
+            'showLanguageForm',
+        ];
+    }
+
+    public function getUrlEncoded($url)
+    {
+        return urlencode($url);
+    }
+
+    public function getTranslationSprintf($string_comma) // getTranslationSprintf('news.share_on', $shareTitle)
+    {
+/*
+Jaga %s's
+*/
+        $final_translation = '';
+        $translation_array = explode(',', $string_comma);
+        if (count($translation_array)==2) {
+            $translationsManager = $this->getService('translationsManager');
+            if ($translation_string_format = $translationsManager->getTranslationByName($translation_array[0])) {
+                $final_translation = sprintf($translation_string_format, $translation_array[1]);
+            }
+        }
+        return $final_translation;
     }
 
     public function getNewsList()
@@ -69,9 +112,7 @@ class newsListElement extends menuDependantStructureElement implements ColumnsTy
                         foreach ($records as &$record) {
                             $newsIds[] = $record['id'];
                         }
-                        if ($this->newsList = $this->getService('structureManager')
-                            ->getElementsByIdList($newsIds, $this->id)
-                        ) {
+                        if ($this->newsList = $this->getService('structureManager')->getElementsByIdList($newsIds, $this->id, true)) {
                             $sort = [];
                             foreach ($this->newsList as &$element) {
                                 $sort[] = strtotime($element->date);
@@ -114,9 +155,7 @@ class newsListElement extends menuDependantStructureElement implements ColumnsTy
                         foreach ($records as &$record) {
                             $newsIds[] = $record['id'];
                         }
-                        if ($archiveNewsList = $this->getService('structureManager')
-                            ->getElementsByIdList($newsIds, $this->id)
-                        ) {
+                        if ($archiveNewsList = $this->getService('structureManager')->getElementsByIdList($newsIds, $this->id, true)) {
                             $sort = [];
                             foreach ($archiveNewsList as &$element) {
                                 $sort[] = strtotime($element->date);

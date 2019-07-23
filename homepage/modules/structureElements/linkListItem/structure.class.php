@@ -20,6 +20,12 @@ class linkListItemElement extends structureElement implements ConfigurableLayout
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['fixedId'] = 'text';
         $moduleStructure['highlighted'] = 'checkbox';
+        $moduleStructure['secondaryImage'] = 'image';
+        $moduleStructure['secondaryImageOriginalName'] = 'fileName';
+        $moduleStructure['tertiaryImage'] = 'image';
+        $moduleStructure['tertiaryImageOriginalName'] = 'fileName';
+        $moduleStructure['quaternaryImage'] = 'image';
+        $moduleStructure['quaternaryImageOriginalName'] = 'fileName';
     }
 
     public function isLinkInternal()

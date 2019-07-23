@@ -13,6 +13,9 @@ class OrderFormStructure extends ElementForm
         'invoice' => [
             'type' => 'block.invoice',
         ],
+        'waybill' => [
+            'type' => 'block.waybill',
+        ],
         'orderNumber' => [
             'type' => 'input.text',
         ],

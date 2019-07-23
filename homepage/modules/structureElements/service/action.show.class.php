@@ -4,7 +4,8 @@ class showService extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $structureElement->setViewName('short');
+//        $structureElement->setViewName('short');
+        $structureElement->setViewName($structureElement->getCurrentLayout());
         if ($structureElement->final) {
             $structureElement->setViewName('details');
 
@@ -18,4 +19,5 @@ class showService extends structureElementAction
             }
         }
     }
+
 }

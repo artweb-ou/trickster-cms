@@ -14,6 +14,21 @@ class LinkListItemFormStructure extends ElementForm
             'preset' => 'adminImage',
             'imageClass' => 'linklistitem_form_search_image',
         ],
+        'secondaryImage' => [
+            'type' => 'input.image',
+            'preset' => 'adminImage',
+            'imageClass' => 'linklistitem_form_search_image',
+        ],
+        'tertiaryImage' => [
+            'type' => 'input.image',
+            'preset' => 'adminImage',
+            'imageClass' => 'linklistitem_form_search_image',
+        ],
+        'quaternaryImage' => [
+            'type' => 'input.image',
+            'preset' => 'adminImage',
+            'imageClass' => 'linklistitem_form_search_image',
+        ],
         'content' => [
             'type' => 'input.html',
             'class' => 'linklistitem_form_search_content',

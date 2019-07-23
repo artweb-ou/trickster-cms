@@ -2,16 +2,16 @@
 /*  SUBMENU
 /********************************************************/
 .submenu_block {
-	position: relative;
+    position: relative;
 }
 
 .submenu_content {
-	position: relative;
+    position: relative;
 }
 
 .submenu_item {
-	display: block;
-	position: relative;
+    display: block;
+    position: relative;
 }
 
 .submenu_item_center {
@@ -28,60 +28,61 @@
 }
 
 .submenu_item_link {
-	display: block;
-	color: inherit;
-	text-decoration: none;
+    display: block;
+    color: inherit;
+    text-decoration: none;
 }
 
 .submenu_item_submenus .submenu_item {
-	padding-left: 1em;
+    padding-left: 1em;
 }
 
 /********************************************************
 /*  SUBMENU HEADER
 /********************************************************/
 .submenu_header {
-	.submenu_items_block {
-		display: flex;
-		flex-wrap: wrap;
-	}
-	.submenu_item {
-		display: inline-block;
-	}
+    .submenu_items_block {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .submenu_item {
+        display: inline-block;
+    }
 }
 
 /********************************************************
 /*  SUBMENU POPUP
 /********************************************************/
 .submenuitem_popup_block {
-	position: absolute;
-	display: none;
-	background-color: @trick_bg_color_01;
-	min-width: 15em;
-	z-index: 15;
+    position: absolute;
+    display: none;
+    background-color: @trick_bg_color_01;
+    min-width: 15em;
+    z-index: 15;
 }
 
 .submenuitem_popup_item {
-	padding: 0.5em 1em;
-	display: block;
-	text-decoration: none;
+    padding: 0.5em 1em;
+    display: block;
+    text-decoration: none;
 }
 
 /********************************************************
 /*  submenulist dropdown
 /********************************************************/
 .submenulist_dropdown {
-	display: block;
-	position: relative;
+    display: block;
+    position: relative;
 
-	@media (min-width: @screen_breakpoint_md) {
-		display: none;
-	}
+    @media (min-width: @screen_breakpoint_md) {
+        display: none;
+    }
 }
 
 .submenulist_dropdown_select.dropdown_block {
-	display: block;
-	width: auto;
+    display: block;
+    width: auto;
 }
 
 /********************************************************
@@ -89,56 +90,72 @@
 /********************************************************/
 
 .sub_menu_list_mobile_menu_item {
-	width: 80%;
+	width: 90%;
 	list-style: none;
 	margin: 0;
 	padding-left: 1em;
 	li {
 		background: none;
 		padding-left: 0;
+		margin: 0;
 	}
 }
 
 .sub_menu_list_mobile_menu_item_level_1 {
-	padding: 0;
+    padding: 0;
 }
 
 .sub_menu_list_mobile_menu_item_level_2 {
-	padding: 0;
+	//padding: 0;
 }
 
 .sub_menu_list_mobile_menu_link {
 	color: @mobileheader_text_color;
-	display: block;
+	display: inline-block;
 	text-decoration: none;
-	padding: .6em 1em .5em 1.6em;
+	padding: .6em 1em .5em 2em;
 	text-overflow: ellipsis;
 	position: relative;
+
+
+	.sub_menu_list_mobile_menu_text {
+		display: inline-block;
+		&:first-letter {
+			text-transform: uppercase;
+		}
+	}
+
 }
 
 .sub_menu_list_mobile_menu_item_level_2 > li > .sub_menu_list_mobile_menu_link {
-	padding: .8em 1em .6em 2em;
-	border-top: none;
-	border-bottom: none;
+    padding: .8em 1em .6em 2em;
+    border-top: none;
+    border-bottom: none;
 }
 
 .sub_menu_list_mobile_menu_item_level_1 > li > .sub_menu_list_mobile_menu_link:before {
 	content: '';
-	display: inline-block;
+	display: block;
 	position: absolute;
-	top: 0.8em;
-	left: 0.5em;
-	width: 0.4em;
-	height: 0.7em;
+	top: 0.3em;
+	left: 0;
+	width: 1.6rem;
+	height: 1.6rem;
 	vertical-align: middle;
-	background: url(getImageUrl('mobile_menu_arrow_left.png')) no-repeat center;
-	background-size: 100% auto;
+	.svg-bg(@trick_mobile_menu_marker,  @white, @white);
+
+	.bg_params(no-repeat, 1.6rem, 1.6rem, 50%, 50%); // @repeat,@width,@height,@posX,@posY
+	//background: url(getImageUrl('mobile_menu_arrow_left.png')) no-repeat center;
+	//background-size: 100% auto;
 }
 
 .sub_menu_list_mobile_menu_item li:last-child .sub_menu_list_mobile_menu_link {
-	border-bottom: 0;
+    border-bottom: 0;
 }
 
 .sub_menu_list_mobile_menu_active  {
-	text-decoration: underline;
+	.sub_menu_list_mobile_menu_text  {
+		line-height: 1.2;
+		border-bottom: 1px solid currentColor;
+	}
 }

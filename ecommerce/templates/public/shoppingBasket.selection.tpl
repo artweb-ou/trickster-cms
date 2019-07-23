@@ -25,3 +25,10 @@
 {assign moduleTitleClass "shopping_basket_heading heading_1"}
 {assign moduleTitleTag "div"}
 {include file=$theme->template("component.contentmodule.tpl")}
+
+{if isset($currentOrder)}
+    <script>
+        window.orders = window.orders ? window.orders: [] ;
+        window.orders.push({$currentOrder->getElementData()|json_encode});
+    </script>
+{/if}

@@ -79,8 +79,20 @@ class cssUniterRendererPlugin extends rendererPlugin
             // SVG parameters
             $this->lessCompiler->registerFunction('encodeSvgContent', function ($arg) {
                 list($type, $delimiter, $values) = $arg;
-                list($arg1, $arg2, $arg3) = $values;
-                return self::getSVGContent(end($arg1), end($arg2), end($arg3));
+                list($arg1, $arg2, $arg3, $arg4) = $values;
+                return self::getSVGContent(end($arg1), end($arg2), end($arg3), end($arg4));
+            });
+
+            // trimColorHash for colors css keys
+            $this->lessCompiler->registerFunction('trimColorHash', function ($arg) {
+                list($type, $color) = $arg;
+                
+                if ($type == 'raw_color') {
+                    return ltrim($color, "#");
+                }
+                else {
+                    $this->logError("Wrong arguments and type:  type is $type, argument is $color");
+                }
             });
 
             // min max are Less features not supported by this compiler
@@ -215,13 +227,17 @@ class cssUniterRendererPlugin extends rendererPlugin
         $this->cacheFileName = md5($fileString);
     }
 
-    protected function getSVGContent($svgFile, $fill = false, $stroke = false)
+    protected function getSVGContent($svgFile, $fill = false, $stroke = false, $subfolder = false)
     {
         $svgFileContent = '';
         /**
          * @var DesignThemesManager $designThemesManager
          */
+
         $designThemesManager = $this->getService('DesignThemesManager');
+        if($subfolder != "false") {
+            $svgFile = $subfolder . "/" . $svgFile;
+        }
         if ($svgFileURL = $designThemesManager->getCurrentTheme()->getImageUrl($svgFile . '.svg', false, false)) {
             $baseURL = controller::getInstance()->baseURL;
 

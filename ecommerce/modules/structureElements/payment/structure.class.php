@@ -44,6 +44,14 @@ class paymentElement extends structureElement
         $moduleStructure['currency'] = 'text';
     }
 
+    protected function getTabsList()
+    {
+        return [
+            'showForm',
+            'showLog',
+        ];
+    }
+
     /**
      * @return bool|PaymentOrderInterface
      */
@@ -58,8 +66,7 @@ class paymentElement extends structureElement
             }
             //workaround for public?
             if (!$orderElement) {
-                $structureManager->getElementsByIdList($this->orderId, $this->id);
-                $orderElement = $structureManager->getElementById($this->orderId);
+                $orderElement = $structureManager->getElementById($this->orderId, $this->id, true);
             }
             if ($orderElement instanceof PaymentOrderInterface) {
                 $this->orderElement = $orderElement;
@@ -92,11 +99,7 @@ class paymentElement extends structureElement
     {
         $paymentMethodElement = false;
         if ($this->methodId) {
-            if ($elements = $this->getService('structureManager')
-                ->getElementsByIdList((array)$this->methodId, $this->id)
-            ) {
-                $paymentMethodElement = reset($elements);
-            }
+            $paymentMethodElement = $this->getService('structureManager')->getElementById($this->methodId, $this->id, true);
         }
         return $paymentMethodElement;
     }
@@ -122,7 +125,7 @@ class paymentElement extends structureElement
         if ($orderElement = $this->getOrderElement()) {
             if ($this->paymentStatus == 'success') {
                 $amountPaid = $this->amount;
-                $orderPrice = $orderElement->getTotalPrice();
+                $orderPrice = $orderElement->getTotalPrice(false);
                 $partlyPaid = $amountPaid != $orderPrice;
                 if ($partlyPaid) {
                     $orderElement->setOrderStatus('paid_partial');
@@ -138,5 +141,9 @@ class paymentElement extends structureElement
             }
         }
     }
-}
 
+    public function getAmount($formatted = true)
+    {
+        return $this->getValue('amount');
+    }
+}

@@ -96,6 +96,20 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         return false;
     }
 
+    public function getPreviousStep()
+    {
+        $steps = $this->getSteps();
+        foreach ($steps as $key => $step) {
+            if ($this->getCurrentStepElement() == $step) {
+                $previousKey = $key - 1;
+                if (isset($steps[$previousKey])) {
+                    return $steps[$previousKey];
+                }
+            }
+        }
+        return false;
+    }
+
     public function isLastStep()
     {
         return !$this->getNextStep();
@@ -108,6 +122,17 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         }
 
         return [];
+    }
+
+    public function getCurrentStepNumber()
+    {
+        $steps = $this->getSteps();
+        foreach ($steps as $key => $step) {
+            if ($this->getCurrentStepElement() == $step) {
+                return $key + 1;
+            }
+        }
+        return false;
     }
 
     public function getCurrentStepElement()
@@ -139,6 +164,17 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
     {
         $structureManager = $this->getService('structureManager');
         return $structureManager->getElementsChildren($this->id, null, 'structure', ['shoppingBasketStep']);
+    }
+
+    public function selectStepElement($number)
+    {
+        if (!empty($number)) {
+            $steps = $this->getSteps();
+            if (!empty($steps)) {
+                return $steps[$number];
+            }
+        }
+        return false;
     }
 
     public function getFormActionURL($type = null)
@@ -221,23 +257,26 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
 
     public function getCustomFieldsList()
     {
-        if (is_null($this->customFieldsList)) {
+        if ($this->customFieldsList === null) {
             $this->customFieldsList = [];
             $shoppingBasket = $this->getService('shoppingBasket');
             $deliveryType = $shoppingBasket->getSelectedDeliveryType();
-
+            /**
+             * @var structureManager $structureManager
+             */
             $structureManager = $this->getService('structureManager');
 
-            if ($deliveryType && ($elements = $structureManager->getElementsByIdList([$deliveryType->id], false, true))
+            if ($deliveryType && ($deliveryTypeElement = $structureManager->getElementById($deliveryType->id, $this->id, true))
             ) {
-                if ($deliveryTypeElement = reset($elements)) {
-                    $fieldsList = $deliveryTypeElement->getFieldsList();
+                $fieldsList = $deliveryTypeElement->getFieldsList();
 
-                    foreach ($fieldsList as &$record) {
-                        if ($fieldElement = $structureManager->getElementById($record->fieldId)) {
-                            $this->customFieldsList[] = $fieldElement;
-                            $fieldElement->required = $record->required;
-                        }
+                foreach ($fieldsList as &$record) {
+                    //if element is not "preloaded" this way, then we have problems with cache,
+                    //because its location could be previously cached within other delivery type,
+                    //which is not available currently
+                    if ($fieldElement = $structureManager->getElementById($record->fieldId, $this->id, true)) {
+                        $this->customFieldsList[] = $fieldElement;
+                        $fieldElement->required = $record->required;
                     }
                 }
             }
@@ -270,12 +309,12 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $languageManager = $this->getService('languagesManager');
         $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
         $deliveryTypeid = $this->shoppingBasket->getSelectedDeliveryTypeId();
-        $structureManager->getElementsByIdList([$deliveryTypeid], false, true);
-        $deliveryTypeElement = $structureManager->getElementById($deliveryTypeid);
+        $deliveryTypeElement = $structureManager->getElementById($deliveryTypeid, null, true);
         // generic
         $configManager = $this->getService('ConfigManager');
         $configManager->get('main.defaultSessionLifeTime');
         $currentOrder = $this->getCurrentOrder();
+        $data['currentStep'] = $this->getCurrentStepNumber();
         $data['orderId'] = $currentOrder ? $currentOrder->id : null;
         $data['displayVat'] = $configManager->get('main.displayVat');
         $data['displayTotals'] = $this->displayTotals();
@@ -297,32 +336,45 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $data["productsList"] = [];
         $products = $this->shoppingBasket->getProductsList();
 
-        foreach ($products as &$product) {
+        foreach ($products as $shoppingBasketProduct) {
             $productData = [];
-            $productData["productId"] = $product->productId;
-            $productData["basketProductId"] = $product->basketProductId;
-            $productData["title"] = $product->title;
-            $productData["title_dl"] = $product->title_dl;
-            $productData["code"] = $product->code;
-            $productData["price"] = $product->getPrice();
-            $productData["totalPrice"] = $currencySelector->formatPrice($product->getPrice(false) * $product->amount);
-            $productData["emptyPrice"] = $product->emptyPrice;
-            $productData["unit"] = $product->unit;
-            $productData["category"] = $structureManager->getElementById($product->productId)
-                ->getCurrentParentElement()
-                ->getValue('title', $defaultLanguage->id);
-            $productData["brand"] = $this->getBrands($product->productId);
+            $productData["category"] = '';
+            $productData["category_dl"] = '';
+
+            /**
+             * @var productElement $productElement
+             */
+            if ($productElement = $structureManager->getElementById($shoppingBasketProduct->productId)) {
+                if ($category = $productElement->getRequestedParentCategory()) {
+                    $categoryTitle = $category->getValue('title', $defaultLanguage->id);
+                    $productData["category"] = $category->getTitle();
+                    $productData["category_dl"] = $category->getValue('title', $defaultLanguage->id);
+                }
+            }
+
+            $productData["productId"] = $shoppingBasketProduct->productId;
+            $productData["basketProductId"] = $shoppingBasketProduct->basketProductId;
+            $productData["title"] = $shoppingBasketProduct->title;
+            $productData["title_dl"] = $shoppingBasketProduct->title_dl;
+            $productData["code"] = $shoppingBasketProduct->code;
+            $productData["price"] = $shoppingBasketProduct->getPrice();
+            $productData["totalPrice"] = $currencySelector->formatPrice($shoppingBasketProduct->getPrice(false) * $shoppingBasketProduct->amount);
+            $productData["emptyPrice"] = $shoppingBasketProduct->emptyPrice;
+            $productData["unit"] = $shoppingBasketProduct->unit;
+
+
+            $productData["brand"] = $this->getBrands($shoppingBasketProduct->productId);
             //@todo refactor - move functionality to shoppingbasketdiscounts.class
-            $productData['salesPrice'] = $product->getPrice(false);
-            $productData["amount"] = $product->amount;
-            $productData['salesPrice'] -= $product->discount;
-            $productData['totalSalesPrice'] = $currencySelector->formatPrice($productData["salesPrice"] * $product->amount);
-            $productData["variation"] = $product->variation;
-            $productData["variation_dl"] = $product->variation_dl;
-            $productData["description"] = $product->description;
-            $productData["image"] = $product->image;
-            $productData["url"] = $product->URL;
-            $productData["minimumOrder"] = $product->minimumOrder;
+            $productData['salesPrice'] = $shoppingBasketProduct->getPrice(false);
+            $productData["amount"] = $shoppingBasketProduct->amount;
+            $productData['salesPrice'] -= $shoppingBasketProduct->discount;
+            $productData['totalSalesPrice'] = $currencySelector->formatPrice($productData["salesPrice"] * $shoppingBasketProduct->amount);
+            $productData["variation"] = $shoppingBasketProduct->variation;
+            $productData["variation_dl"] = $shoppingBasketProduct->variation_dl;
+            $productData["description"] = $shoppingBasketProduct->description;
+            $productData["image"] = $shoppingBasketProduct->image;
+            $productData["url"] = $shoppingBasketProduct->URL;
+            $productData["minimumOrder"] = $shoppingBasketProduct->minimumOrder;
             $data["productsSalesPrice"] += $productData['amount'] * $productData['salesPrice'];
             $productData['salesPrice'] = $currencySelector->formatPrice($productData['salesPrice']);
             $data["productsList"][] = $productData;
@@ -490,11 +542,9 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         if ($result === null) {
             $result = [];
             if ($selectedDeliveryTypeId = $this->shoppingBasket->getSelectedDeliveryTypeId()) {
-                $paymentMethodsIds = $this->getService('linksManager')
-                    ->getConnectedIdList($selectedDeliveryTypeId, "deliveryTypePaymentMethod", "parent");
+                $paymentMethodsIds = $this->getService('linksManager')->getConnectedIdList($selectedDeliveryTypeId, "deliveryTypePaymentMethod", "parent");
                 if ($paymentMethodsIds) {
-                    $result = $this->getService('structureManager')
-                        ->getElementsByIdList($paymentMethodsIds, $this->id);
+                    $result = $this->getService('structureManager')->getElementsByIdList($paymentMethodsIds, $this->id, true);
                 }
             }
         }
@@ -584,11 +634,10 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             if ($controller->getParameter('order')) {
                 $orderId = $controller->getParameter('order');
                 $structureManager = $this->getService('structureManager');
-                $structureManager->getElementsByIdList($orderId, $this->id);
                 /**
                  * @var orderElement $orderElement
                  */
-                if ($orderElement = $structureManager->getElementById($orderId)) {
+                if ($orderElement = $structureManager->getElementById($orderId, $this->id, true)) {
                     $this->currentOrder = $orderElement;
                 }
             }
@@ -604,6 +653,26 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $this->currentOrder = $currentOrder;
     }
 
+    public function validateVatNumber($vatNumber) {
+        $endpoint = 'validate';
+        $access_key = $this->getService('ConfigManager')->get('main.vatlayerKey');
+
+        // set VAT number
+        $vat_number = $vatNumber;
+
+        // Initialize CURL:
+        $ch = curl_init('http://apilayer.net/api/'.$endpoint.'?access_key='.$access_key.'&vat_number='.$vat_number.'');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Store the data:
+        $json = curl_exec($ch);
+        curl_close($ch);
+
+        // Decode JSON response:
+        $validationResult = json_decode($json, true);
+
+        return $validationResult;
+    }
     public function hasPromoDiscounts()
     {
         return $this->getService('shoppingBasketDiscounts')->hasPromoDiscounts();

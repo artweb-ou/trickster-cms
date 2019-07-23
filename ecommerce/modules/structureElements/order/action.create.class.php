@@ -8,6 +8,7 @@ class createOrder extends structureElementAction
      * @param structureManager $structureManager
      * @param controller $controller
      * @param orderElement $structureElement
+     * @param string $payerLanguage
      * @return mixed|void
      */
     public function execute(&$structureManager, &$controller, &$structureElement)
@@ -52,8 +53,11 @@ class createOrder extends structureElementAction
         $structureElement->payerCountry = $formData['payerCountry'];
         $structureElement->currency = $currentCurrencyName;
 
+        /**
+         * @var languagesManager $languagesManager
+         */
         $languagesManager = $this->getService('languagesManager');
-        $structureElement->payerLanguage = $languagesManager->getCurrentLanguageId();
+        $structureElement->payerLanguage = $languagesManager->getCurrentLanguageCode();
 
         $structureElement->setOrderStatus('undefined');
 
@@ -77,6 +81,8 @@ class createOrder extends structureElementAction
                 }
             }
         }
+        $vatRate = $this->getService('ConfigManager')->get('main.vatRate');
+        $shoppingBasket->setVatRate($vatRate);
     }
 }
 

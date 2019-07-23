@@ -255,6 +255,24 @@
             80,
         ],
     ],
+    'linklistItemThumbnailLong' => [
+        'filters' => [
+            [
+                'fill',
+                'width=600,height=720',
+            ],
+            [
+                'crop',
+                'width=600,height=720',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            '',
+            80,
+        ],
+    ],
     'linklistItemButton' => [
         'filters' => [
             [
@@ -385,6 +403,24 @@
         'format' => [
             null,
             'png',
+        ],
+    ],
+    'newsCardImage' => [
+        'filters' => [
+            [
+                'fit',
+                'width=610, height=671',
+            ],
+            [
+                'crop',
+                'width=610, height=671',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            '',
+            80,
         ],
     ],
     'personnelImage' => [
@@ -545,4 +581,21 @@
             80,
         ],
     ],
+    'newsItemIcon' => [
+        'filters' => [
+            [
+                'reduce',
+                'width=64, height=64',
+            ],
+            [
+                'crop',
+                'width=64, height=64',
+            ],
+        ],
+        'format' => [
+            null,
+            null,
+        ],
+    ],
+
 ];

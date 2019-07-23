@@ -22,9 +22,9 @@ class CurrencySelectorItem
         $this->title = $info['title'];
 
         $LocaleInfo = localeconv();
-        $this->decimals = !empty($info['decimals']) ? $info['decimals'] : 2;
+        $this->decimals = isset($info['decimals']) ? $info['decimals'] : 2;
         $this->decPoint = !empty($info['decPoint']) ? $info['decPoint'] : $LocaleInfo["mon_decimal_point"];
-        $this->thousandsSep = !empty($info['thousandsSep']) ? $info['thousandsSep'] :  $LocaleInfo["mon_thousands_sep"];
+        $this->thousandsSep = !empty($info['thousandsSep']) ? $info['thousandsSep'] : $LocaleInfo["mon_thousands_sep"];
 
         $this->prepareURL($currentURL);
 

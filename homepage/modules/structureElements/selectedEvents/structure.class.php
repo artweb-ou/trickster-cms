@@ -29,6 +29,8 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
 
         $moduleStructure['receivedEventsIds'] = 'array'; // temporary
         $moduleStructure['receivedEventsListsIds'] = 'array'; // temporary
+
+        $moduleStructure['colorLayout'] = 'text';
     }
 
     protected function getTabsList()
@@ -84,15 +86,6 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         return $this->baseEventsIdList;
     }
 
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getEventsToDisplay()
-    {
-        $this->logError('deprecated method getEventsToDisplay used');
-        return $this->getEventsElements();
-    }
 
     public function getEventsListsEventsIds()
     {
@@ -106,4 +99,52 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         }
         return $eventIds;
     }
+
+    public function getConnectedEventsListsInfo()
+    {
+        $info = [];
+        foreach ($this->getConnectedEventsLists() as $element) {
+            $item['title'] = $element->getTitle();
+            $item['select'] = true;
+            $item['id'] = $element->id;
+
+            $info [] = $item;
+        }
+        return $info;
+    }
+
+    public function getConnectedEventsInfo()
+    {
+        $info = [];
+        foreach ($this->getConnectedEvents() as $element) {
+            $item['title'] = $element->getTitle();
+            $item['select'] = true;
+            $item['id'] = $element->id;
+
+            $info [] = $item;
+        }
+        return $info;
+    }
+
+    public function getEventsElements()
+    {
+        if ($this->t_events === null) {
+            if ($eventIds = $this->getCurrentEventsIdList()) {
+                //we need to ensure all connected events lists are loaded.
+                //Then events will be taken through the right events list, not from anywhere in language
+                $this->getConnectedEventsLists();
+                /**
+                 * @var structureManager
+                 */
+                $structureManager = $this->getService('structureManager');
+                foreach ($eventIds as $eventId) {
+                    if ($element = $structureManager->getElementById($eventId)) {
+                        $this->t_events[] = $element;
+                    }
+                }
+            }
+        }
+        return $this->t_events;
+    }
+
 }

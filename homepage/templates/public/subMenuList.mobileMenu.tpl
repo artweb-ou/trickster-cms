@@ -4,7 +4,7 @@
 			{if $subMenu->title}
 				<li>
 					<a href="{$subMenu->URL}" class="sub_menu_list_mobile_menu_link{if $subMenu->requested} sub_menu_list_mobile_menu_active{/if} menuid_{$subMenu->id}" role="menuitem">
-						{$subMenu->title}
+						<span class="sub_menu_list_mobile_menu_text">{$subMenu->title}</span>
 					</a>
 				</li>
 			{/if}
@@ -18,10 +18,12 @@
 {/function}
 {if $element->getSubMenuList()}
 	<div class="mobilemenu_module mobilemenu_module_submenulist">
+		{if $element->displayHeadingAutomatically && empty($noTitle)}
 		{if $element->title}
 			<div class="mobilemenu_module_title">
 				{$element->title}
 			</div>
+		{/if}
 		{/if}
 		<div class="mobilemenu_module_content">
 			{call name=printMenus items=$element->getSubMenuList()}

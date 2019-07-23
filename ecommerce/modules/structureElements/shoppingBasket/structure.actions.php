@@ -18,3 +18,4 @@ $moduleActions[] = 'pay';
 $moduleActions[] = 'paymentResult';
 $moduleActions[] = 'showPositions';
 $moduleActions[] = 'receivePositions';
+$moduleActions[] = 'checkVat';

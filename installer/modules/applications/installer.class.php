@@ -20,10 +20,6 @@ class installerApplication extends controllerApplication
      * @var controller
      */
     protected $controller;
-    /**
-     * @var structureManager
-     */
-    protected $structureManager;
     protected static $formDefaults = [
         'db_user' => 'root',
         'db_password' => 'test',
@@ -51,8 +47,6 @@ class installerApplication extends controllerApplication
         set_time_limit(60 * 60);
         $this->createRenderer();
         $this->deploymentManager = $this->getService('DeploymentManager');
-        $this->structureManager = $this->getService('structureManager');
-        $this->structureManager->setPrivilegeChecking(false);
         $this->controller = $this->getService('controller');
     }
 
@@ -86,17 +80,11 @@ class installerApplication extends controllerApplication
         $this->renderer->assign('theme', $this->theme);
         $this->renderer->assign('deploymentManager', $this->deploymentManager);
         $this->renderer->assign('plugins', [
-            'cms',
             'cms_db',
-            'homepage',
             'homepage_db',
-            'ecommerce',
             'ecommerce_db',
-            'mall',
             'mall_db',
             'mall_demo_db',
-            'standardDesign',
-            'test',
         ]);
         $this->renderer->assign('dbFields', [
             'db_user',
@@ -139,10 +127,6 @@ class installerApplication extends controllerApplication
         $error = '';
         $input = isset($_POST) ? $_POST : [];
 
-        // generate configs, download packages
-        if (!is_dir(ROOT_PATH . 'project/config/dev/')) {
-            mkdir(ROOT_PATH . 'project/config/dev/', 0777, true);
-        }
         foreach (self::$expectedFields as $field) {
             if (!isset($input[$field])) {
                 $input[$field] = '';
@@ -159,22 +143,7 @@ class installerApplication extends controllerApplication
         }
         if ($error === '') {
             $plugins = array_keys((array)$input['plugin']);
-            $pluginsSettings = [];
-            $pluginsSettings['cms'] = 'trickster/cms/';
-            foreach ($plugins as $plugin) {
-                if (strpos($plugin, '_db') !== false) {
-                    continue;
-                }
-                $pluginsSettings[$plugin] = "trickster/$plugin/";
-            }
-            $pluginsSettings['installer'] = 'trickster/installer/';
-            $pluginsSettings['project'] = 'project/';
-            $data = [
-                    'enabledPlugins' => $pluginsSettings,
-                    'licenceKey' => $input['licence_key']
-                ] + $mainConfig->getData();
-            $projectConfig->setData($data);
-            $projectConfig->save();
+
             $dbSettings = [
                 'mysqlUser'               => $input['db_user'],
                 'mysqlPassword'           => $input['db_password'],
@@ -187,9 +156,6 @@ class installerApplication extends controllerApplication
             $config->setData($dbSettings);
             $configManager->saveConfig($config);
             $config = $configManager->getConfigFromPath(ROOT_PATH . 'project/config/statstransport.php');
-            $config->setData($dbSettings);
-            $configManager->saveConfig($config);
-            $config = $configManager->getConfigFromPath(ROOT_PATH . 'project/config/dev/transport.php');
             $config->setData($dbSettings);
             $configManager->saveConfig($config);
 

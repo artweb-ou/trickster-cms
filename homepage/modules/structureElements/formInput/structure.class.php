@@ -17,6 +17,7 @@ class formInputElement extends formFieldStructureElement
         $moduleStructure['hidden'] = 'checkbox';
         $moduleStructure['validator'] = 'text';
         $moduleStructure['autocomplete'] = 'text';
+        $moduleStructure['placeholder'] = 'text';
     }
 
     public function getTitle()

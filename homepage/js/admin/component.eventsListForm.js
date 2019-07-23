@@ -6,30 +6,31 @@ window.EventsListFormComponent = function(componentElement) {
     var modeAutomaticSettingElements, modeManualSettingElements;
 
     var init = function() {
-        if (modeSelectElement = _('select.eventslist_mode_select', componentElement)[0]) {
-            modeAutomaticSettingElements = _('.eventslist_mode_auto_setting', componentElement);
-            modeManualSettingElements = _('.eventslist_mode_manual_setting', componentElement);
+        if (modeSelectElement = componentElement.querySelector('select.eventslist_mode_select')) {
+            modeAutomaticSettingElements = componentElement.querySelectorAll('.eventslist_mode_auto_setting');
+            modeManualSettingElements = componentElement.querySelectorAll('.eventslist_mode_manual_setting');
             eventsManager.addHandler(modeSelectElement, 'change', checkDisplay);
             checkDisplay();
         }
-        if (ajaxSelectElement = _('select.eventslist_connected_events_select', componentElement)[0]) {
+        if (ajaxSelectElement = componentElement.querySelector('select.eventslist_connected_events_select', componentElement)) {
             new AjaxSelectComponent(ajaxSelectElement, 'event', 'admin');
         }
 
     };
     var checkDisplay = function() {
-        if (modeSelectElement.value == 'auto') {
-            for (var i = modeAutomaticSettingElements.length; i--;) {
+        var i;
+        if (modeSelectElement.value === 'auto') {
+            for (i = modeAutomaticSettingElements.length; i--;) {
                 modeAutomaticSettingElements[i].style.display = '';
             }
-            for (var i = modeManualSettingElements.length; i--;) {
+            for (i = modeManualSettingElements.length; i--;) {
                 modeManualSettingElements[i].style.display = 'none';
             }
         } else {
-            for (var i = modeAutomaticSettingElements.length; i--;) {
+            for (i = modeAutomaticSettingElements.length; i--;) {
                 modeAutomaticSettingElements[i].style.display = 'none';
             }
-            for (var i = modeManualSettingElements.length; i--;) {
+            for (i = modeManualSettingElements.length; i--;) {
                 modeManualSettingElements[i].style.display = '';
             }
         }

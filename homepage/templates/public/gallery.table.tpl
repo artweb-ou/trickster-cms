@@ -2,10 +2,6 @@
 	{capture assign="moduleTitle"}
 		{$h1}
 	{/capture}
-{elseif $element->title}
-	{capture assign='moduleTitle'}
-		{$element->title}
-	{/capture}
 {/if}
 {capture assign="moduleContent"}
 	{if $element->content!=''}
@@ -14,31 +10,13 @@
 	</div>
 	{/if}
 
-	{if count($element->images)}
+	{if $element->images}
 	{stripdomspaces}
-		{if $element->layout == "slide"}
-			<div class="gallery_details_images gallery_slide galleryid_{$element->id}">
-				{foreach from=$element->images item=image name=gallery}
-					{include file=$theme->template($image->getTemplate()) element=$image captionLayout=$element->captionLayout columnWidth=$element->getColumnWidth()}
-				{/foreach}
-			</div>
-		{elseif $element->layout == "autoheight"}
-			<div class="gallery_details_images gallery_static galleryid_{$element->id}">
-				{$imagesInRow=0}
-				{foreach $element->images as $image}
-					{if $imagesInRow == 0}<div class="blocks_autoheight_component">{/if}
-					{include file=$theme->template($image->getTemplate()) element=$image captionLayout=$element->captionLayout thumbnailPreset="galleryThumbnailUnevenImage"}
-					{$imagesInRow = $imagesInRow + 1}
-					{if $imagesInRow == $element->getColumns() || $image@last}</div>{$imagesInRow=0}{/if}
-				{/foreach}
-			</div>
-		{else}
 			<div class="gallery_details_images gallery_static galleryid_{$element->id}">
 				{foreach from=$element->images item=image name=gallery}
 					{include file=$theme->template($image->getTemplate()) element=$image captionLayout=$element->captionLayout columnWidth=$element->getColumnWidth()}
 				{/foreach}
 			</div>
-		{/if}
 	{/stripdomspaces}
 	{/if}
 

@@ -3,27 +3,28 @@ window.SelectedEventsComponent = function(componentElement) {
     var automaticSettingElements, manualSettingElements;
 
     var init = function() {
-        modeSelectElement = _('select.selectedevents_mode_select', componentElement)[0];
-        automaticSettingElements = _('.selectedevents_auto_setting', componentElement);
-        manualSettingElements = _('.selectedevents_manual_setting', componentElement);
+        modeSelectElement = componentElement.querySelector('select.selectedevents_mode_select');
+        automaticSettingElements = componentElement.querySelectorAll('.selectedevents_auto_setting');
+        manualSettingElements = componentElement.querySelectorAll('.selectedevents_manual_setting');
         checkMode();
         eventsManager.addHandler(modeSelectElement, 'change', checkMode);
-        new AjaxSelectComponent(_('select.selectedevents_connected_events_select', componentElement)[0], 'event', 'admin');
-        new AjaxSelectComponent(_('select.selectedevents_connected_eventslists_select', componentElement)[0], 'eventsList', 'admin');
+        new AjaxSelectComponent(componentElement.querySelector('select.selectedevents_connected_events_select'), 'event', 'admin');
+        new AjaxSelectComponent(componentElement.querySelector('select.selectedevents_connected_eventslists_select'), 'eventsList', 'admin');
     };
     var checkMode = function() {
-        if (modeSelectElement.options[modeSelectElement.selectedIndex].value == 'auto') {
-            for (var i = automaticSettingElements.length; i--;) {
+        var i;
+        if (modeSelectElement.options[modeSelectElement.selectedIndex].value === 'auto') {
+            for (i = automaticSettingElements.length; i--;) {
                 automaticSettingElements[i].style.display = '';
             }
-            for (var i = manualSettingElements.length; i--;) {
+            for (i = manualSettingElements.length; i--;) {
                 manualSettingElements[i].style.display = 'none';
             }
         } else {
-            for (var i = automaticSettingElements.length; i--;) {
+            for (i = automaticSettingElements.length; i--;) {
                 automaticSettingElements[i].style.display = 'none';
             }
-            for (var i = manualSettingElements.length; i--;) {
+            for (i = manualSettingElements.length; i--;) {
                 manualSettingElements[i].style.display = '';
             }
         }

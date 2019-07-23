@@ -278,6 +278,12 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
             componentElement.style.display = 'block';
             componentElement.style.position = position;
             componentElement.style.visibility = 'visible';
+
+            if(parentObject.inputElement.dataset.view !==''){
+                domHelper.addClass(componentElement, parentObject.inputElement.dataset.view );
+            }
+            domHelper.addClass(componentElement, 'active');
+
             window.searchBoxView = 1;
         }
         updateSizes();
@@ -288,6 +294,8 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
             self.displayed = false;
             self.reset();
             componentElement.style.visibility = 'hidden';
+
+            domHelper.removeClass(componentElement, 'active');
             window.searchBoxView = 0;
         }
         updateView();
@@ -381,7 +389,7 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
 
             componentElement.style.left = leftPosition + 'px';
             componentElement.style.top = topPosition + 'px';
-            componentElement.style.height = height + 'px';
+            componentElement.style.height = height +5 + 'px';
         }
     };
     var clickHandler = function(event) {

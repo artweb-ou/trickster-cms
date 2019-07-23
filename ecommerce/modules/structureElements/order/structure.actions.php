@@ -11,5 +11,6 @@ $moduleActions[] = 'view';
 $moduleActions[] = 'changeStatus';
 $moduleActions[] = 'sendInvoice';
 $moduleActions[] = 'generateInvoice';
+$moduleActions[] = 'generateWaybill';
 $moduleActions[] = 'sendStatusNotification';
 $moduleActions[] = 'showOrderFields';

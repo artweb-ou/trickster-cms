@@ -19,9 +19,11 @@
 									{if $language = $dispatchmentType->getCurrentLanguageElement()}
 										{$logo = $language->getLogoImageUrl()}
 									{/if}
-									<img class="logo_image" src="{$logo}" alt=""/>
+									<img class="logo_image" src="{$logo}" alt="" />
 								</a>
-								<img src="{$dispatchmentType->getTrackedBlankImage()}" alt="" />
+								{if $trackerUrl = $dispatchmentType->getTrackedBlankImage()}
+									<img src="{$trackerUrl}" alt="" />
+								{/if}
 							</td>
 							<td class="header_right">
 								{translations name="email.header"}

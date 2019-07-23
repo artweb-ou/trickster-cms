@@ -32,10 +32,14 @@ class receiveOrder extends structureElementAction
             $linksManager = $this->getService('linksManager');
 
             $structureElement->prepareActualData();
-
             if (!$structureElement->orderNumber) {
                 $structureElement->orderNumber = $structureElement->countOrders();
             }
+
+            $structureElement->invoiceNumber = $structureElement->generateOrderNumber('invoice_number_format');
+            $structureElement->advancePaymentInvoiceNumber = $structureElement->generateOrderNumber('advance_invoice_number_number_format');
+            $structureElement->orderConfirmationNumber = $structureElement->generateOrderNumber('confirmation_invoice_number_format');
+
             if (!$structureElement->yearOrderNumber) {
                 $structureElement->yearOrderNumber = $structureElement->countOrdersThisYear();
             }

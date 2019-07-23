@@ -8,7 +8,7 @@
  * @property string $logoImage
  * @property string $logoImageOriginalName
  */
-class languageElement extends structureElement implements MetadataProviderInterface
+class languageElement extends structureElement implements MetadataProviderInterface, BreadcrumbsInfoProvider
 {
     use MetadataProviderTrait;
     public $dataResourceName = 'module_language';
@@ -122,9 +122,9 @@ class languageElement extends structureElement implements MetadataProviderInterf
         $moduleStructure['patternBackground'] = 'checkbox';
     }
 
-    public function getElementFromMobileMenu($structureType)
+    public function getElementFromMobileMenu($structureType, $number = 0)
     {
-        return $this->getElementFromContextByType('mobileMenu', $structureType);
+        return $this->getElementFromContextByType('mobileMenu', $structureType, $number);
     }
 
     public function getElementsFromMobileMenu($structureType)
@@ -331,7 +331,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         }
 
         if ($resultIdList = array_intersect(array_merge($languageEnabledElementsIdList, $currentMenuEnabledElementsIdList), $enabledElementsIdList)) {
-            $result = $structureManager->getElementsByIdList($resultIdList, $this->id, $type);
+            $result = $structureManager->getElementsByIdList($resultIdList, $this->id, true);
         }
         return $result;
     }
@@ -350,7 +350,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
             $contentType = $controller->getParameter('view') ? $controller->getParameter('view') : 'structure';
 
             $idList = $linksManager->getConnectedIdList($this->id, $contentType, 'parent');
-            $childrenList = $structureManager->getElementsByIdList($idList, $this->id, $contentType);
+            $childrenList = $structureManager->getElementsByIdList($idList, $this->id, true);
             if ($contentType != 'structure') {
                 $urlString = 'view:' . $contentType . '/';
                 foreach ($childrenList as &$element) {
@@ -477,10 +477,35 @@ class languageElement extends structureElement implements MetadataProviderInterf
         }
 
         if (!$result) {
+            /**
+             * @var DesignThemesManager $designThemesManager
+             */
             $designThemesManager = $this->getService('DesignThemesManager');
-            $result = $designThemesManager->getCurrentTheme()->getImageUrl('logo.png', false, false);
+            $configManager = $this->getService('ConfigManager');
+
+            if ($theme = $designThemesManager->getTheme($configManager->get('main.publicTheme'))) {
+                $result = $theme->getImageUrl('logo.png', false, false);
+            }
         }
 
         return $result;
+    }
+
+    public function getBreadcrumbsTitle()
+    {
+        $firstPageElement = $this->getFirstPageElement();
+        if ($firstPageElement) {
+            return $firstPageElement->getTitle();
+        }
+        return $this->getTitle();
+    }
+
+    public function getBreadcrumbsUrl()
+    {
+        $firstPageElement = $this->getFirstPageElement();
+        if ($firstPageElement) {
+            return $firstPageElement->getUrl();
+        }
+        return $this->getUrl();
     }
 }

@@ -18,6 +18,10 @@ class serviceElement extends menuStructureElement implements ConfigurableLayouts
         $moduleStructure['content'] = 'html';
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['image'] = 'image';
+        $moduleStructure['link_1'] = 'text';
+        $moduleStructure['link_2'] = 'text';
+        $moduleStructure['link_text_1'] = 'text';
+        $moduleStructure['link_text_2'] = 'text';
         $moduleStructure['galleries'] = 'array';
         $moduleStructure['feedbackId'] = 'text';
         $moduleStructure['metaTitle'] = 'text';
@@ -26,6 +30,9 @@ class serviceElement extends menuStructureElement implements ConfigurableLayouts
         $moduleStructure['canonicalUrl'] = 'url';
         $moduleStructure['metaDenyIndex'] = 'checkbox';
         $moduleStructure['formRelativesInput'] = 'array';
+
+        $moduleStructure['layout'] = 'text';
+        $moduleStructure['colorLayout'] = 'text';
     }
 
     protected function getTabsList()
@@ -36,6 +43,7 @@ class serviceElement extends menuStructureElement implements ConfigurableLayouts
             'showLayoutForm',
             'showPositions',
             'showPrivileges',
+            'showLanguageForm',
         ];
     }
 

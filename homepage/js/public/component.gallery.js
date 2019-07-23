@@ -4,6 +4,8 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
     var imagesComponent;
     var descriptionComponent;
     var buttonsContainerElement;
+    var prevButtonContainerElement;
+    var nextButtonContainerElement;
     var playBackButton;
     var fullScreenButton;
     var buttonPrevious;
@@ -103,25 +105,23 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
                 buttonsContainerElement = create('gallery_buttons');
             }
 
-            if (imagesPrevNextButtonsSeparated && imagesPrevNextButtonsEnabled) {
-                if (!prevNextButtonsContainerElement) {
-                    var prevNextButtonsContainerElement = create('gallery_buttons_prevnext');
-                }
-            } else if (prevNextButtonsContainerElement) {
-                componentElement.removeChild(prevNextButtonsContainerElement);
-            }
-
             if (imagesPrevNextButtonsEnabled) {
                 if (!buttonPrevious) {
-                    buttonPrevious = new GalleryPreviousButtonComponent(galleryInfo);
-
                     if (imagesPrevNextButtonsSeparated) {
-                        prevNextButtonsContainerElement.appendChild(buttonPrevious.getComponentElement());
+                        if (!prevButtonContainerElement) {
+                            prevButtonContainerElement = create('gallery_button_previous_container');
+                        }
+                        buttonPrevious = new GalleryPreviousButtonComponent(galleryInfo);
+                        prevButtonContainerElement.appendChild(buttonPrevious.getComponentElement());
                     } else {
+                        buttonPrevious = new GalleryPreviousButtonComponent(galleryInfo);
                         buttonsContainerElement.appendChild(buttonPrevious.getComponentElement());
                     }
                 }
             } else if (buttonPrevious) {
+                if (prevButtonContainerElement) {
+                    componentElement.removeChild(prevButtonContainerElement);
+                }
                 buttonPrevious.destroy();
                 buttonPrevious = null;
             }
@@ -143,15 +143,21 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
 
             if (imagesPrevNextButtonsEnabled) {
                 if (!buttonNext) {
-                    buttonNext = new GalleryNextButtonComponent(galleryInfo);
-
                     if (imagesPrevNextButtonsSeparated) {
-                        prevNextButtonsContainerElement.appendChild(buttonNext.getComponentElement());
+                        if (!nextButtonContainerElement) {
+                            nextButtonContainerElement = create('gallery_button_next_container');
+                        }
+                        buttonNext = new GalleryNextButtonComponent(galleryInfo);
+                        nextButtonContainerElement.appendChild(buttonNext.getComponentElement());
                     } else {
+                        buttonNext = new GalleryNextButtonComponent(galleryInfo);
                         buttonsContainerElement.appendChild(buttonNext.getComponentElement());
                     }
                 }
             } else if (buttonNext) {
+                if (nextButtonContainerElement) {
+                    componentElement.removeChild(nextButtonContainerElement);
+                }
                 buttonNext.destroy();
                 buttonNext = null;
             }
@@ -167,7 +173,9 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
                 imageButtons.push(fullScreenButton);
             }
         } else if (buttonsContainerElement) {
-            componentElement.removeChild(buttonsContainerElement);
+            if (buttonsContainerElement.parentNode){
+                buttonsContainerElement.parentNode.removeChild(buttonsContainerElement);
+            }
             buttonsContainerElement = null;
             destroyImageButtons();
             if (buttonPrevious) {
@@ -269,8 +277,8 @@ window.GalleryComponent = function(componentElement, galleryInfo, type) {
         if (galleryResizeType === 'imagesHeight') {
             imagesComponentHeight = galleryHeightSetting;
         } else if (galleryResizeType === 'aspected') {
-            var aspect = galleryHeightSetting;
-            imagesComponentHeight = galleryWidth * aspect;
+            //galleryHeightSetting here contains aspect ratio
+            imagesComponentHeight = galleryWidth * galleryHeightSetting;
         } else if (galleryResizeType === 'viewport') {
             var viewPortHeight = window.innerHeight ? window.innerHeight : document.documentElement.offsetHeight;
             galleryHeight = galleryHeightSetting;

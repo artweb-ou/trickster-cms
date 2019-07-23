@@ -8,12 +8,23 @@ class receiveNews extends structureElementAction
     {
         if ($this->validated) {
             $structureElement->prepareActualData();
-
-            $structureElement->structureName = $structureElement->title;
+            if (!$structureElement->structureName) {
+                $structureElement->structureName = $structureElement->title;
+            }
 
             if (!is_null($structureElement->getDataChunk("image")->originalName)) {
                 $structureElement->image = $structureElement->id;
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
+            }
+            $additionalImages = [
+                'thumbImage',
+            ];
+            foreach($additionalImages as $imageCode) {
+                if (!is_null($structureElement->getDataChunk($imageCode)->originalName)) {
+                    $structureElement->$imageCode = $structureElement->id . "_$imageCode";
+                    $field = $imageCode . 'OriginalName';
+                    $structureElement->$field = $structureElement->getDataChunk($imageCode)->originalName;
+                }
             }
 
             $structureElement->persistElementData();
@@ -31,6 +42,7 @@ class receiveNews extends structureElementAction
             'introduction',
             'content',
             'image',
+            'thumbImage',
         ];
     }
 

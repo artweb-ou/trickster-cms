@@ -30,6 +30,7 @@ class receiveFormInput extends structureElementAction
             'hidden',
             'validator',
             'autocomplete',
+            'placeholder',
         ];
     }
 
