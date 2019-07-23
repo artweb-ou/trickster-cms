@@ -854,6 +854,9 @@ class structureManager implements DependencyInjectionContextInterface
      */
     protected function loadElementsToParent($idList = [], $parentElementId = 0, $allowedElements = [], $allowedRoles = [])
     {
+        if (!$parentElementId) {
+            $parentElementId = $this->getRootElementId();
+        }
         $loadedElements = [];
         foreach ($idList as $key => $id) {
             if (isset($this->elementsList[$id]) && ($element = $this->elementsList[$id])) {
