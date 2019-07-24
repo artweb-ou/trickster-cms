@@ -969,4 +969,14 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         }
         return $productCataloguesIds;
     }
+
+    public function getExpectedField($type) {
+        if($type === 'texts') {
+            return [
+                'title',
+                'content',
+                'introduction',
+            ];
+        }
+    }
 }

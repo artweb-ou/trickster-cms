@@ -1962,4 +1962,13 @@ class productElement extends structureElement implements
         }
         return parent::getAllowedTypes($currentAction);
     }
+
+    public function getExpectedField($type) {
+        if($type === 'texts') {
+            return [
+                'content',
+                'introduction',
+            ];
+        }
+    }
 }
