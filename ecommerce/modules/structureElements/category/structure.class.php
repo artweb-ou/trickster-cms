@@ -114,7 +114,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return [
             'showForm',
             'showTexts',
-            'showSettingsForm',
             'showSortingFilter',
             'showLayoutForm',
             'showSubCategoriesForm',
@@ -923,5 +922,51 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             $this->allowedTypes = [];
         }
         return parent::getAllowedTypes($currentAction);
+    }
+
+    public function getFeedbackFormList() {
+        $structureManager = $this->getService('structureManager');
+        $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        $publicRoot = $structureManager->getElementByMarker($marker);
+        $languages = $structureManager->getElementsChildren($publicRoot->id);
+        $feedbackFormsList = array();
+        foreach ($languages as &$languageElement) {
+            $selectedId = $this->getValue('feedbackId', $languageElement->id);
+            $feedbackFormsList[$languageElement->id] = [];
+            $elementsList = $structureManager->getElementsByType("feedback", $languageElement->id);
+            foreach ($elementsList as &$element) {
+                if ($element->structureType == 'feedback') {
+                    $field = [];
+                    $field['id'] = $element->id;
+                    $field['title'] = $element->getTitle();
+                    $field['select'] = $selectedId;
+
+                    $feedbackFormsList[$languageElement->id][] = $field;
+                }
+            }
+        }
+        return $feedbackFormsList;
+    }
+
+    public function getProductCataloguesIds() {
+        $structureManager = $this->getService('structureManager');
+        $productCataloguesIds = [];
+        $connectedFoldersIds = $this->getConnectedCatalogueFoldersIds();
+        $allCatalogues = $structureManager->getElementsByType('productCatalogue');
+        if ($allCatalogues) {
+            foreach ($allCatalogues as &$catalogueElement) {
+                if ($catalogueElement->categorized && !$catalogueElement->connectAllCategories) {
+                    if ($parentElement = $catalogueElement->getContainerElement()) {
+                        $field = [];
+                        $field['id'] = $catalogueElement->id;
+                        $field['title'] = $catalogueElement->getTitle();
+                        $field['select'] = in_array($parentElement->id, $connectedFoldersIds);
+
+                        $productCataloguesIds[] = $field;
+                    }
+                }
+            }
+        }
+        return $productCataloguesIds;
     }
 }

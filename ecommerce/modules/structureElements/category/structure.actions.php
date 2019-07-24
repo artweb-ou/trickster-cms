@@ -17,8 +17,6 @@ $moduleActions[] = 'showIconForm';
 $moduleActions[] = 'showImportForm';
 $moduleActions[] = 'receiveImportForm';
 
-$moduleActions[] = 'showSettingsForm';
-$moduleActions[] = 'receiveSettings';
 $moduleActions[] = 'showSubCategoriesForm';
 $moduleActions[] = 'showLayoutForm';
 $moduleActions[] = 'showProductsForm';
