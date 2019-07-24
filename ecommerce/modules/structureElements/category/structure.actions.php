@@ -5,6 +5,7 @@ $moduleActions[] = 'show';
 $moduleActions[] = 'delete';
 $moduleActions[] = 'clone';
 $moduleActions[] = 'showForm';
+$moduleActions[] = 'showTexts';
 $moduleActions[] = 'showPositions';
 $moduleActions[] = 'receivePositions';
 $moduleActions[] = 'deleteFile';

@@ -113,6 +113,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     {
         return [
             'showForm',
+            'showTexts',
             'showSettingsForm',
             'showLayoutForm',
             'showSubCategoriesForm',
