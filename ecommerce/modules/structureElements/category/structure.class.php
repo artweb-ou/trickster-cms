@@ -115,6 +115,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             'showForm',
             'showTexts',
             'showSettingsForm',
+            'showSortingFilter',
             'showLayoutForm',
             'showSubCategoriesForm',
             'showProductsForm',
