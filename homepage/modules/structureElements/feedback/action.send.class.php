@@ -170,7 +170,7 @@ class sendFeedback extends structureElementAction
                     $newDispatchment->setData($data);
                     if ($files) {
                         foreach ($files as $file) {
-                            $newDispatchment->registerAttachment($file->getDownloadUrl(), $file->getFileName());
+                            $newDispatchment->registerAttachment($uploadsPath . $file->id, $file->getFileName());
                         }
                     }
                     $newDispatchment->setReferenceId($structureElement->id);
