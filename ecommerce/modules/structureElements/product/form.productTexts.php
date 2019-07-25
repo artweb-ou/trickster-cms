@@ -11,5 +11,5 @@ class ProductTextsStructure extends ElementForm
             'type' => 'input.multi_language_content',
         ]
     ];
-
+    protected $additionalContent = 'shared.contentlist.tpl';
 }

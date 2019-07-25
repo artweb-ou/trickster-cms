@@ -1957,6 +1957,8 @@ class productElement extends structureElement implements
     {
         if ($currentAction == 'showImages') {
             $this->allowedTypes = ['galleryImage'];
+        } elseif($currentAction == 'showTexts'){
+            $this->allowedTypes = ['subArticle'];
         } else {
             $this->allowedTypes = [];
         }
