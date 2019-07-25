@@ -42,5 +42,4 @@
 		{/foreach}
 	{/foreach}
 	</table>
-	{debug}
 </div>
