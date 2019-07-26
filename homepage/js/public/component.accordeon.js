@@ -39,7 +39,7 @@ window.AccordeonItem = function(componentElement, parentComponent, mode) {
 				if (mode === 'hover') {
 					eventsManager.addHandler(componentElement, 'mouseenter', interactionHandler);
 				} else if (mode === 'click') {
-					eventsManager.addHandler(componentElement, 'click', interactionHandler);
+					eventsManager.addHandler(titleElement, 'click', interactionHandler);
 				}
 			}
 		}

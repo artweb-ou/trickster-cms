@@ -32,11 +32,15 @@ function FileInputComponent(inputElement) {
         var content = document.createTextNode(buttonText);
         fakeButtonText.appendChild(content);
 
-        var inputParent = (inputElement.dataset.parent)?inputElement.form.querySelector(inputElement.dataset.parent):inputElement.parentNode;
+        var inputParent = (inputElement.dataset.parent)?
+            inputElement.form.querySelector(inputElement.dataset.parent):
+            inputElement.parentNode;
 
         componentElement.appendChild(inputElement);
 
-        var submit = (inputElement.dataset.firstChild)?inputParent.querySelector(inputElement.dataset.firstChild):inputParent.firstChild;
+        var submit = (inputElement.dataset.firstChild)?
+            inputParent.querySelector(inputElement.dataset.firstChild):
+            inputParent.firstChild;
         inputParent.insertBefore(fakeField, submit);
         inputParent.insertBefore(componentElement, submit);
 
@@ -54,15 +58,18 @@ function FileInputComponent(inputElement) {
         synchronizeContent();
     };
     var synchronizeContent = function() {
-        let manusSuurus = '';
-        let manusNimi = '';
-        let manus = '';
+        let fileSize = '';
+        let fileName = '';
+        let file = '';
+        var fileDescription = '';
         if (inputElement.value != '') {
-            manusSuurus = (this.files[0].size / 1024 / 1024).toFixed(4);// + " MB"
-            manusNimi = this.files[0].name;
-            manus = manusNimi + ' (' + manusSuurus + '  MB)';
+            for(var i = 0; i < this.files.length; i++) {
+                fileSize = (this.files[i].size / 1024 / 1024).toFixed(4);// + " MB"
+                fileName = this.files[i].name;
+                fileDescription += fileName + ' (' + fileSize + '  MB)</br>';
+            }
+            fakeField.innerHTML = fileDescription;
         }
-        fakeField.innerHTML = manus;
     };
     var clickHandler = function() {
         if (typeof inputElement.click !== 'undefined') {

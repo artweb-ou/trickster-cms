@@ -32,8 +32,10 @@
                         {else}
                             {$field.value}
                         {/if}
-					{elseif $field.originalName}
-						<a target="_blank" href="{$field.link}">{$field.originalName}</a>
+					{elseif $field.fileInput }
+						{foreach $field.fileInput  as $file}
+							<a target="_blank" href="{$file.link}">{$file.originalName}</a>
+						{/foreach}
 					{/if}
 				</td>
 			</tr>
