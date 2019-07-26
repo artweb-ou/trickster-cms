@@ -228,7 +228,11 @@ class user
 
     protected function writeStorage()
     {
-        $this->serverSessionManager->set('storage', $this->storage);
+        if ($this->storage){
+            $this->serverSessionManager->set('storage', $this->storage);
+        } else {
+            $this->serverSessionManager->delete('storage', $this->storage);
+        }
     }
 
     public function logout()

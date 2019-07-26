@@ -63,7 +63,6 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
         if ($lifeTime) {
             $sessionManager->setSessionLifeTime($lifeTime);
         }
-        $sessionManager->startSession();
     }
 
     /**
