@@ -1,5 +1,7 @@
 <?php
 
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
+
 class ServerSessionManager
 {
     protected $sessionId;
@@ -102,7 +104,9 @@ class ServerSessionManager
      */
     public function setEnabled($enabled)
     {
-        $this->enabled = $enabled;
+        $crawler = (new CrawlerDetect())->isCrawler();
+
+        $this->enabled = $enabled && !$crawler;
     }
 
     public function set($key, $value)
