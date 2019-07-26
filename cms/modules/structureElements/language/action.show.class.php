@@ -17,7 +17,6 @@ class showLanguage extends structureElementAction
 
             $renderer = $this->getService('renderer');
             $renderer->assign('currentLanguage', $structureElement);
-            $user->setStorageAttribute('currentLanguage', $structureElement->id);
             $currentMainMenu = $structureElement->getCurrentMainMenu();
             $renderer->assign('currentMainMenu', $currentMainMenu);
 

@@ -101,18 +101,17 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
         $data['discountsData'] = $this->discountsData;
         $data['currentPromoCode'] = $this->currentPromoCode;
 
-        $user = $this->getService('user');
-        $user->setStorageAttribute('discountsData', $data);
+        $cache = $this->getService('cache');
+        $cache->set('discountsData' . $currentLanguageId, $data, 600);
     }
 
     protected function loadStorage()
     {
-        $user = $this->getService('user');
-
+        $cache = $this->getService('cache');
         $languagesManager = $this->getService('LanguagesManager');
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
-        if (($data = $user->getStorageAttribute('discountsData')) && $data['languageId'] == $currentLanguageId) {
+        if ($data = $cache->get('discountsData' . $currentLanguageId)) {
             $this->discountsData = $data['discountsData'];
         } else {
             $this->discountsData = $this->loadDiscountsData();

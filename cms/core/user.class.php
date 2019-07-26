@@ -188,7 +188,7 @@ class user
                     $this->privileges[$elementId][$elementType][$actionName] = $type;
                 }
             }
-            if ($this->userName !== 'anonymous'){
+            if ($this->userName !== 'anonymous') {
                 $this->storePrivileges();
             }
         }
@@ -196,7 +196,7 @@ class user
 
     private function checkStoredPrivileges()
     {
-        if (isset($this->storage['userPrivileges']) && is_array($this->storage['userPrivileges'])) {
+        if (!empty($this->storage['userPrivileges'])) {
             $this->privileges = $this->storage['userPrivileges'];
             return true;
         }
@@ -368,7 +368,6 @@ class user
             }
         }
         if (!$userId && $anonymousId = $this->checkUser('anonymous', null, true)) {
-            $this->storage['currentUserId'] = $anonymousId;
             $userId = $anonymousId;
         }
         return $userId;
@@ -400,7 +399,9 @@ class user
                         $this->groupsIdList[] = $row['parentStructureId'];
                     }
                 }
-                $this->setStorageAttribute('userGroupsIdList', $this->groupsIdList);
+                if ($this->userName !== 'anonymous') {
+                    $this->setStorageAttribute('userGroupsIdList', $this->groupsIdList);
+                }
             }
         }
 
