@@ -69,6 +69,7 @@ class ServerSessionManager
     public function startSession()
     {
         if ($this->enabled && !$this->started) {
+            $this->started = true;
             session_name($this->sessionName);
             if ($this->sessionId !== null) {
                 session_id($this->sessionId);
