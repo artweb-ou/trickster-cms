@@ -19,7 +19,7 @@ class addProductShoppingBasket extends structureElementAction
         $productAmount = $controller->getParameter('productAmount');
         $productId = $controller->getParameter('productId');
         $responseStatus = "fail";
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         /**
          * @var productElement $productElement
          */
@@ -35,7 +35,7 @@ class addProductShoppingBasket extends structureElementAction
             $variations = [];
             $variations_dl = [];
             $influentialOptions = [];
-            $languageManager = $this->getService('languagesManager');
+            $languageManager = $this->getService('LanguagesManager');
             $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
             foreach ($selections as $selection) {
                 $selectedOption = '';

@@ -31,7 +31,7 @@ class banklinkApplication extends controllerApplication
         if ($paymentMethodElementId && $paymentMethodElement = $structureManager->getElementById($paymentMethodElementId)
         ) {
             if ($paymentMethod = $paymentsManager->getPaymentMethod($paymentMethodElement->getName())) {
-                $paymentMethod->setAttributes($paymentMethodElement->getSpecialData($this->getService('languagesManager')
+                $paymentMethod->setAttributes($paymentMethodElement->getSpecialData($this->getService('LanguagesManager')
                     ->getCurrentLanguageId()));
                 $pathsManager = $this->getService('PathsManager');
                 $paymentMethod->setCertificatesPath($pathsManager->getPath('uploads'));

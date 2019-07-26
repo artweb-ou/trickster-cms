@@ -31,7 +31,7 @@ class ajaxApplication extends controllerApplication
 
             $this->processRequestParameters();
 
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $elementId = $controller->getParameter('id');
 
             if (is_numeric($elementId)) {

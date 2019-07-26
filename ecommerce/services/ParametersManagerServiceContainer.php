@@ -14,7 +14,7 @@ class ParametersManagerServiceContainer extends DependencyInjectionServiceContai
     public function makeInjections($instance)
     {
         $instance->setDb($this->registry->getService('db'));
-        $instance->setLanguagesManager($this->registry->getService('languagesManager'));
+        $instance->setLanguagesManager($this->registry->getService('LanguagesManager'));
         return $instance;
     }
 }

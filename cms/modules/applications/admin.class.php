@@ -25,16 +25,16 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $cache->enable(false, false, true);
 
         /**
-         * @var $redirectionManager redirectionManager
+         * @var $redirectionManager RedirectionManager
          */
-        $redirectionManager = $this->getService('redirectionManager');
+        $redirectionManager = $this->getService('RedirectionManager');
         $redirectionManager->checkProtocolRedirection();
         $redirectionManager->checkDomainRedirection();
 
         $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
 
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         if ($controller->getParameter('lang')) {
             $languagesManager->setCurrentLanguageCode($controller->getParameter('lang'), 'adminLanguages');
             //change the public language as well, so all public-languages dependent data in admin would be displayed in a same language where possible

@@ -58,7 +58,7 @@ abstract class structureElementAction extends errorLogger implements DependencyI
     {
         $translations = false;
         if (!$languageId) {
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $languageId = $languagesManager->getCurrentLanguageId();
         }
         if ($languageId) {

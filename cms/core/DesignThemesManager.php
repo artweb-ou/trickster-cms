@@ -5,9 +5,17 @@ class DesignThemesManager
     protected $currentThemeCode;
     protected $themesDirectoryPathList = [];
     protected $themesIndex = [];
+    /**
+     * @var ServerSessionManager
+     */
+    protected $serverSessionManager;
 
-    public function __construct()
+    /**
+     * @param ServerSessionManager $serverSessionManager
+     */
+    public function setServerSessionManager($serverSessionManager)
     {
+        $this->serverSessionManager = $serverSessionManager;
     }
 
     /**
@@ -35,10 +43,10 @@ class DesignThemesManager
 
     public function getCurrentThemeCode()
     {
-        if (is_null($this->currentThemeCode)) {
-            if (isset($_SESSION['DesignTheme'])) {
-                if ($this->getTheme($_SESSION['DesignTheme'])) {
-                    $this->currentThemeCode = $_SESSION['DesignTheme'];
+        if ($this->currentThemeCode === null) {
+            if ($code = $this->serverSessionManager->get('DesignTheme')) {
+                if ($this->getTheme($code)) {
+                    $this->currentThemeCode = $code;
                 }
             }
         }
@@ -53,7 +61,7 @@ class DesignThemesManager
     public function setCurrentThemeCode($currentThemeCode)
     {
         if ($theme = $this->getTheme($currentThemeCode)) {
-            $_SESSION['DesignTheme'] = $currentThemeCode;
+            $this->serverSessionManager->set('DesignTheme', $currentThemeCode);
             $this->currentThemeCode = $currentThemeCode;
         }
         return $theme;

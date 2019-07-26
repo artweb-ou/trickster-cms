@@ -1,9 +1,11 @@
 <?php
 
-class languagesManager extends errorLogger implements DependencyInjectionContextInterface
+class LanguagesManager extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
-    protected $currentLanguageInfo = null;
+
+    protected $sessionStorageEnabled = false;
+    protected $currentLanguageInfo;
     protected $languagesList = [];
     protected $languagesIdList = [];
     protected $map = [];
@@ -17,29 +19,17 @@ class languagesManager extends errorLogger implements DependencyInjectionContext
         'fi' => 'fin',
         'be' => 'bel',
     ];
-    /** @var languagesManager */
-    public static $instance = false;
-
-    public function __construct()
-    {
-        self::$instance = $this;
-    }
+    /**
+     * @var ServerSessionManager
+     */
+    protected $serverSessionManager;
 
     /**
-     * @return languagesManager
-     * @deprecated
+     * @param ServerSessionManager $serverSessionManager
      */
-    public static function getInstance()
+    public function setServerSessionManager($serverSessionManager)
     {
-        if (!self::$instance) {
-            self::$instance = new languagesManager();
-        }
-        return self::$instance;
-    }
-
-    public static function resetInstance()
-    {
-        self::$instance = null;
+        $this->serverSessionManager = $serverSessionManager;
     }
 
     public function reset()
@@ -228,10 +218,9 @@ class languagesManager extends errorLogger implements DependencyInjectionContext
     protected function getCodeFromSession($groupName)
     {
         $code = false;
-        if (isset($_SESSION['currentLanguage' . $groupName])) {
-            $code = $_SESSION['currentLanguage' . $groupName];
+        if ($this->sessionStorageEnabled) {
+            $code = $this->serverSessionManager->get('currentLanguage' . $groupName);
         }
-
         return $code;
     }
 
@@ -297,7 +286,9 @@ class languagesManager extends errorLogger implements DependencyInjectionContext
         if (!isset($this->currentLanguageInfo[$groupName]) || $this->currentLanguageInfo[$groupName]->iso6393 != $code) {
             if ($info = $this->checkLanguageCode($code, $groupName)) {
                 $this->currentLanguageInfo[$groupName] = $info;
-                $_SESSION['currentLanguage' . $groupName] = $code;
+                if ($this->sessionStorageEnabled) {
+                    $this->serverSessionManager->set('currentLanguage' . $groupName, $code);
+                }
                 setcookie('cl_' . $groupName, $code, time() + 30 * 24 * 60 * 60, '/');
             }
         }

@@ -30,7 +30,7 @@ class shopCatalogueElement extends structureElement implements ColumnsTypeProvid
 
     public function performSearch($phrase)
     {
-        $languagesManager = languagesManager::getInstance();
+        $languagesManager = $this->getService('LanguagesManager');
         $currentLanguage = $languagesManager->getCurrentLanguageId();
 
         $foundElements = [];
@@ -133,7 +133,7 @@ class shopCatalogueElement extends structureElement implements ColumnsTypeProvid
     public function getAllShops()
     {
         $structureManager = $this->getService('structureManager');
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         return $structureManager->getElementsByType('shop', $languagesManager->getCurrentLanguageId());
     }
 

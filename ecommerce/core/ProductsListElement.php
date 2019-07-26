@@ -67,7 +67,7 @@ abstract class ProductsListElement extends menuStructureElement
          * @var Connection $db
          */
         $db = $this->getService('db');
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
 
         //basic query to get all non-hidden products available in stock
         $query = $db->table('module_product');
@@ -324,7 +324,7 @@ abstract class ProductsListElement extends menuStructureElement
 
     protected function getProductsListParentRestrictionId()
     {
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         return $languagesManager->getCurrentLanguageId();
     }
 

@@ -7,7 +7,7 @@ class showImportFormProductImport extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->final) {
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $renderer = $this->getService('renderer');
             $x = $structureElement->categoryId;
             if ($structureElement->categoryId) {

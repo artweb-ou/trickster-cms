@@ -31,7 +31,7 @@ class directoSyncApplication extends controllerApplication
             ], true);
 
             $structureManager->setPrivilegeChecking(false);
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
 
             $renderer = renderer::getInstance();
             $renderer->endOutputBuffering();

@@ -31,7 +31,7 @@ class brandsWidgetElement extends menuDependantStructureElement
         $data = [];
 
         $structureManager = $this->getService('structureManager');
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         /**
          * @var brandsListElement[] $brandsListElements
          */

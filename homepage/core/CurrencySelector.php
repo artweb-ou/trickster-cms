@@ -2,6 +2,7 @@
 
 class CurrencySelector implements DependencyInjectionContextInterface
 {
+    const cookieName = 'selectedCurrencyCode';
     use DependencyInjectionContextTrait;
     protected $currenciesInformationList;
     protected $currenciesInformationIndex;
@@ -23,8 +24,7 @@ class CurrencySelector implements DependencyInjectionContextInterface
         if ($currenciesInformationIndex = $this->getCurrenciesInformationIndex()) {
             if (isset($currenciesInformationIndex[strtolower($selectedCurrencyCode)])) {
                 $this->selectedCurrencyCode = $selectedCurrencyCode;
-                $_SESSION['selectedCurrencyCode'] = $this->selectedCurrencyCode;
-                setcookie("selectedCurrencyCode", $this->selectedCurrencyCode, time() + 366 * 24 * 60 * 60, '/');
+                setcookie(self::cookieName, $this->selectedCurrencyCode, time() + 366 * 24 * 60 * 60, '/');
             }
         }
     }
@@ -190,16 +190,19 @@ class CurrencySelector implements DependencyInjectionContextInterface
     protected function detectSelectedCurrency()
     {
         $controller = $this->getService('controller');
+        /**
+         * @var ServerSessionManager $serverSessionManager
+         */
+        $serverSessionManager = $this->getService('ServerSessionManager');
+
         if ($controller->getParameter('currency')) {
             if ($currenciesInformationIndex = $this->getCurrenciesInformationIndex()) {
                 if (isset($currenciesInformationIndex[strtolower($controller->getParameter('currency'))])) {
                     $this->selectedCurrencyCode = strtolower($controller->getParameter('currency'));
                 }
             }
-        } elseif (isset($_SESSION['selectedCurrencyCode'])) {
-            $this->selectedCurrencyCode = strtolower($_SESSION['selectedCurrencyCode']);
-        } elseif (isset($_COOKIE['selectedCurrencyCode'])) {
-            $this->selectedCurrencyCode = strtolower($_COOKIE['selectedCurrencyCode']);
+        } elseif (isset($_COOKIE[self::cookieName])) {
+            $this->selectedCurrencyCode = strtolower($_COOKIE[self::cookieName]);
         } else {
             if ($currenciesInformationList = $this->getCurrenciesInformationList()) {
                 if ($firstCurrency = reset($currenciesInformationList)) {

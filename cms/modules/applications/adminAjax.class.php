@@ -31,7 +31,7 @@ class adminAjaxApplication extends controllerApplication
             ], true);
             $this->processRequestParameters();
 
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             if ($controller->requestedPath) {
                 $structureManager->setRequestedPath($controller->requestedPath);
             } else {

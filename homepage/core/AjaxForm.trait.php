@@ -36,7 +36,11 @@ trait AjaxFormTrait
         }
         if ($this->ajaxFormSuccessReload || !empty($controller->getParameter('reload'))) {
             $response['reload'] = true;
-            $_SESSION['showSuccessMessage' . $structureElement->id] = true;
+            /**
+             * @var ServerSessionManager $serverSessionManager
+             */
+            $serverSessionManager = $this->getService('ServerSessionManager');
+            $serverSessionManager->set('showSuccessMessage' . $structureElement->id, true);
         }
         $renderer = $this->getService('renderer');
         if ($renderer instanceof rendererPluginAppendInterface) {

@@ -20,7 +20,6 @@ class user
     public $userType;
     public $subscribe;
     protected $groupsIdList;
-    protected $storageEnabled = true;
     protected $userDataObject;
     /** @var \Illuminate\Database\Connection */
     protected $db;
@@ -38,7 +37,7 @@ class user
     }
 
     /**
-     * @param serverSessionManager $serverSessionManager
+     * @param ServerSessionManager $serverSessionManager
      */
     public function setServerSessionManager($serverSessionManager)
     {
@@ -51,7 +50,7 @@ class user
     }
 
     /**
-     * @var serverSessionManager
+     * @var ServerSessionManager
      */
     protected $serverSessionManager;
     protected $userResourceName = "module_user";
@@ -221,16 +220,14 @@ class user
 
     protected function readStorage()
     {
-        if (isset($_SESSION['storage']) && $this->storageEnabled) {
-            $this->storage = $_SESSION['storage'];
+        if ($storage = $this->serverSessionManager->get('storage')) {
+            $this->storage = $storage;
         }
     }
 
     protected function writeStorage()
     {
-        if ($this->storageEnabled) {
-            $_SESSION['storage'] = $this->storage;
-        }
+        $this->serverSessionManager->set('storage', $this->storage);
     }
 
     public function logout()

@@ -20,7 +20,7 @@ class marketingFeedApplication extends controllerApplication
             'rootUrl' => $controller->baseURL,
             'rootMarker'  => $configManager->get('main.rootMarkerPublic')
         ], true);
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         if ($language = $controller->getParameter('language')) {
             $languagesManager->setCurrentLanguageCode($language);
         }

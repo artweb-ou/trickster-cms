@@ -301,7 +301,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             }
 
             if ($filteredIds) {
-                $languagesManager = $this->getService('languagesManager');
+                $languagesManager = $this->getService('LanguagesManager');
                 $languageId = $languagesManager->getCurrentLanguageId();
                 $conditions = [
                     [
@@ -411,7 +411,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             }
 
             if ($filteredIds) {
-                $languagesManager = $this->getService('languagesManager');
+                $languagesManager = $this->getService('LanguagesManager');
                 $languageId = $languagesManager->getCurrentLanguageId();
                 $conditions = [
                     [
@@ -529,7 +529,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         if (is_null($this->discountsList)) {
             $structureManager = $this->getService('structureManager');
 
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $this->discountsList = $structureManager->getElementsByType("discount",
                 $languagesManager->getCurrentLanguageId());
         }
@@ -735,7 +735,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 $this->productsPager = $pager;
 
                 $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
-                $publicLanguageId = $this->getService('languagesManager')->getCurrentLanguageId($marker);
+                $publicLanguageId = $this->getService('LanguagesManager')->getCurrentLanguageId($marker);
                 $query = $db->table('module_product');
 
                 if ($arguments['order']['field'] != 'dateModified' && $arguments['order']['field'] != 'dateCreated') {

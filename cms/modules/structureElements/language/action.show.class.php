@@ -10,7 +10,7 @@ class showLanguage extends structureElementAction
      */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
         if (($structureElement->requested || $structureElement->id == $currentLanguageId) && ($controller->getApplication() instanceof publicApplication)) {
             $user = $this->getService('user');

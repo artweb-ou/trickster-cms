@@ -36,7 +36,7 @@ class showProduct extends structureElementAction
             $structureElement->parentCategory = $structureElement->getRequestedParentCategory();
             $structureElement->setViewName('details');
 
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
             $structureElement->questionLink = '';

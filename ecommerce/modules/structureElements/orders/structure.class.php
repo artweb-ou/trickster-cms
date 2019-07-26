@@ -32,7 +32,7 @@ class ordersElement extends structureElement
     {
         $structureManager = $this->getService('structureManager');
         $settingsManager = $this->getService('settingsManager');
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $languageId = $languagesManager->getCurrentLanguageId('adminLanguages');
         $settings = $settingsManager->getSettingsList($languageId);
     }

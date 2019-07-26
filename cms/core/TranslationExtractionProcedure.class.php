@@ -61,7 +61,7 @@ class TranslationExtractionProcedure extends ExtractionProcedure
                 $languageMarker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
                 $translationType = 'translation';
             }
-            $languagesList = $this->getService('languagesManager')->getLanguagesList($languageMarker);
+            $languagesList = $this->getService('LanguagesManager')->getLanguagesList($languageMarker);
 
             if ($translationGroups = $structureManager->getElementsChildren($translationsElement->id)) {
                 foreach ($translationGroups as $translationGroup) {

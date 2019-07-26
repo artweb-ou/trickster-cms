@@ -93,7 +93,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
 
     public function saveStorage()
     {
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data = [];
@@ -109,7 +109,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
     {
         $user = $this->getService('user');
 
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         if (($data = $user->getStorageAttribute('discountsData')) && $data['languageId'] == $currentLanguageId) {

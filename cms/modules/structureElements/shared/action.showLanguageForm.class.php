@@ -10,7 +10,7 @@ class showLanguageFormShared extends structureElementAction
 
             $languagesIndex = [];
             $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
-            $languages = $this->getService('languagesManager')->getLanguagesList($marker);
+            $languages = $this->getService('LanguagesManager')->getLanguagesList($marker);
             foreach ($languages as $i => &$language) {
                 if ($languageElement = $structureManager->getElementById($language->id)) {
                     if ($languageElement->requested) {
@@ -43,7 +43,7 @@ class showLanguageFormShared extends structureElementAction
         $structureManager = $this->getService('structureManager');
 
         // TODO: somehow get elements in their real language without this workaround
-        foreach ($this->getService('languagesManager')->getLanguagesIdList() as $languageId) {
+        foreach ($this->getService('LanguagesManager')->getLanguagesIdList() as $languageId) {
             $structureManager->getElementsFlatTree($languageId);
         }
         $relatives = [];

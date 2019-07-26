@@ -14,7 +14,7 @@ class simpleSettingElement extends structureElement
 
     public function getSettingData()
     {
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $settingData = [];
         $languages = $languagesManager->getLanguagesIdList();
         foreach ($languages as &$languageId) {

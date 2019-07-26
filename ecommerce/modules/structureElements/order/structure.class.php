@@ -449,7 +449,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
     {
         $sentPropertyName = $emailType . 'Sent';
         if (!$this->$sentPropertyName || $forceSending) {
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $languagesManager->setCurrentLanguageCode($this->payerLanguage);
 
             $administratorEmail = $this->getAdministratorEmail();
@@ -498,7 +498,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
     {
         if ($this->orderStatus !== 'undefined' && $this->orderStatus !== 'deleted') {
 
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $languagesManager->setCurrentLanguageCode($this->payerLanguage);
 
             $administratorEmail = $this->getAdministratorEmail();
@@ -545,7 +545,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
     protected function getAdministratorEmail()
     {
         $structureManager = $this->getService('structureManager');
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $currentLanguage = $languagesManager->getCurrentLanguageId();
 
         $administratorEmail = false;
@@ -612,7 +612,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
         $htmlRenderer = renderer::getPlugin('smarty');
         $htmlRenderer->assign('controller', $controller);
-        $htmlRenderer->assign('logo', $this->getService('languagesManager')
+        $htmlRenderer->assign('logo', $this->getService('LanguagesManager')
             ->getCurrentLanguageElement()
             ->getLogoImageUrl());
         $htmlRenderer->assign('data', $data);

@@ -30,10 +30,10 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
             $structureManager->setLinksManager($this->registry->getService('linksManager'));
         }
 
-        if ($languagesManager = $this->getOption('languagesManager')) {
+        if ($languagesManager = $this->getOption('LanguagesManager')) {
             $structureManager->setLanguagesManager($languagesManager);
         } else {
-            $languagesManager = $this->registry->getService('languagesManager');
+            $languagesManager = $this->registry->getService('LanguagesManager');
             $structureManager->setLanguagesManager($languagesManager);
         }
 

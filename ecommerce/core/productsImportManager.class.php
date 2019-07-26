@@ -49,7 +49,7 @@ class productsImportManager implements DependencyInjectionContextInterface
     public function setImportLanguageCode($code)
     {
         $this->languageCode = $code;
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $languagesManager->setCurrentLanguageCode($code);
     }
 
@@ -486,7 +486,7 @@ class productsImportManager implements DependencyInjectionContextInterface
                     $valueRecord->value = $value;
                     $valueRecord->persist();
                 } else {
-                    $languagesManager = $this->getService('languagesManager');
+                    $languagesManager = $this->getService('LanguagesManager');
                     $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
                     foreach ($languagesManager->getLanguagesIdList($marker) as $languageId) {
                         $valueRecord = $valuesCollection->getEmptyObject();
@@ -871,7 +871,7 @@ class productsImportManager implements DependencyInjectionContextInterface
         $result = false;
 
         if ($element = $this->getProductElement($info['importId'], $info['importOrigin'])) {
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             if ($this->languageCode) {
                 $languageIdList = [$languagesManager->getCurrentLanguageId()];
             } else {
@@ -1101,7 +1101,7 @@ class productsImportManager implements DependencyInjectionContextInterface
     public function getImportCategoriesInfo()
     {
         if ($this->importCategoriesInfo === null) {
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $languageId = $languagesManager->getCurrentLanguageId();
 
             $importedElementsIds = $this->getAllImportElementsIds();
@@ -1175,7 +1175,7 @@ class productsImportManager implements DependencyInjectionContextInterface
 
     public function getCategoryElementIdByTitle($categoryTitle, $parentCategoryId = null)
     {
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $languageId = $languagesManager->getCurrentLanguageId();
 
         $db = $this->getService('db');

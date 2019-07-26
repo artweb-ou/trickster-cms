@@ -94,9 +94,9 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             $this->processRequestParameters();
             if ($currentElement = $structureManager->getCurrentElement()) {
                 /**
-                 * @var $redirectionManager redirectionManager
+                 * @var $redirectionManager RedirectionManager
                  */
-                $redirectionManager = $this->getService('redirectionManager');
+                $redirectionManager = $this->getService('RedirectionManager');
                 if ($this->protocolRedirection) {
                     $redirectionManager->checkProtocolRedirection();
                 }
@@ -104,7 +104,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
 
                 //check if we need to redirect user to display firstpage
                 if ($currentElement->structureType == 'root' || $currentElement->structureType == 'language') {
-                    if ($currentLanguageId = $this->getService('languagesManager')->getCurrentLanguageId()) {
+                    if ($currentLanguageId = $this->getService('LanguagesManager')->getCurrentLanguageId()) {
                         /**
                          * @var $currentLanguageElement languageElement
                          */
@@ -170,7 +170,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                 $this->renderer->assign('currentCanonicalUrl', $currentCanonicalUrl);
                 $this->renderer->assign('currentElement', $currentElement);
                 $this->renderer->assign('structureManager', $structureManager);
-                $this->renderer->assign('languagesManager', $this->getService('languagesManager'));
+                $this->renderer->assign('LanguagesManager', $this->getService('LanguagesManager'));
                 $requestHeadersManager = $this->getService('requestHeadersManager');
                 $this->renderer->assign('userAgent', $requestHeadersManager->getUserAgent());
                 $this->renderer->setCacheControl('no-cache');
@@ -189,9 +189,9 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
     protected function handle404()
     {
         /**
-         * @var redirectionManager $redirectionManager
+         * @var RedirectionManager $redirectionManager
          */
-        $redirectionManager = $this->getService('redirectionManager');
+        $redirectionManager = $this->getService('RedirectionManager');
         /**
          * @var requestHeadersManager $requestHeadersManager
          */
@@ -212,7 +212,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                 'rootMarker' => $this->configManager->get('main.rootMarkerPublic'),
             ], true);
 
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $languageId = $languagesManager->getCurrentLanguageId();
             if ($languageElement = $structureManager->getElementById($languageId)) {
                 if ($currentElement = $this->getErrorPageElement()) {
@@ -307,7 +307,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             }
 
             $structureManager = $this->getService('structureManager');
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
 
             $currentLanguageElementId = $languagesManager->getCurrentLanguageId();
 
