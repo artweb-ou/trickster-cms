@@ -92,8 +92,7 @@ class NewsMailSubscription
     {
         if ($this->mailsElement === null) {
             if ($mailsElementId = $this->structureManager->getElementIdByMarker('newsMailsAddresses')) {
-                $this->structureManager->getElementsByIdList([$mailsElementId]);
-                if ($this->mailsElement = $this->structureManager->getElementById($mailsElementId)) {
+                if ($this->mailsElement = $this->structureManager->getElementById($mailsElementId, null, true)) {
                     return $this->mailsElement;
                 }
             }

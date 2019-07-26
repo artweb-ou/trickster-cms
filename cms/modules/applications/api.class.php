@@ -2,7 +2,8 @@
 
 class apiApplication extends controllerApplication
 {
-    use CrawlerFilterTrait;
+    use DbLoggableApplication;
+
     protected $applicationName = 'api';
     protected $mode = 'public';
     public $rendererName = 'json';
@@ -21,15 +22,15 @@ class apiApplication extends controllerApplication
         $configManager = $controller->getConfigManager();
         if ($this->mode == 'admin') {
             $this->startSession($this->mode, $configManager->get('main.adminSessionLifeTime'));
-        } else {
-            $this->startSession($this->mode, $configManager->get('main.publicSessionLifeTime'));
         }
         $this->createRenderer();
-        return !$this->isCrawlerDetected();
+        return true;
     }
 
     public function execute($controller)
     {
+        $this->startDbLogging();
+
         /**
          * @var Cache $cache
          */
@@ -84,6 +85,7 @@ class apiApplication extends controllerApplication
 
         $this->renderer->setCacheControl('no-cache');
         $this->renderer->display();
+        $this->saveDbLog();
     }
 
     public function getUrlName()

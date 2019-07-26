@@ -285,9 +285,7 @@ class shopElement extends structureElement implements MetadataProviderInterface
         $structureManager = $this->getService('structureManager');
         $openingHoursGroupId = $this->getConnectedOpeningHoursGroupId();
         if ($openingHoursGroupId) {
-            foreach ($structureManager->getElementsByIdList($openingHoursGroupId, $this->id) as $result) {
-                break;
-            }
+            $result = $structureManager->getElementById($openingHoursGroupId, $this->id, true);
         }
         return $result;
     }

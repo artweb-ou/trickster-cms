@@ -32,9 +32,7 @@ class showRegistration extends structureElementAction
             if ($structureElement->requested) {
                 if ($structureElement->type == 'userdata' && $user->userName != 'anonymous') {
                     $dynamicFieldsData = [];
-                    $elements = $structureManager->getElementsByIdList($user->id);
-                    $userElement = reset($elements);
-                    if ($userElement) {
+                    if ($userElement = $structureManager->getElementById($user->id, null, true)) {
                         $additionalDataRecords = $userElement->getAdditionalData();
                         foreach ($structureElement->getConnectedFields() as $field) {
                             if (isset($additionalDataRecords[$field->id])) {

@@ -59,9 +59,7 @@ class newsMailsAddressesElement extends structureElement
                     foreach ($records as &$record) {
                         $eventsIds[] = $record['id'];
                     }
-                    if ($this->contentList = $this->getService('structureManager')
-                        ->getElementsByIdList($eventsIds, $this->id)
-                    ) {
+                    if ($this->contentList = $this->getService('structureManager')->getElementsByIdList($eventsIds, $this->id, true)) {
                         $sort = [];
                         foreach ($this->contentList as &$element) {
                             $sort[] = strtolower($element->email);

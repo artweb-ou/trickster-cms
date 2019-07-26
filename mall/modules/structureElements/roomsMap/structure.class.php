@@ -172,13 +172,16 @@ class roomsMapElement extends structureElement
     {
         if ($this->icons === null) {
             $this->icons = [];
+            /**
+             * @var structureManager $structureManager
+             */
             $structureManager = $this->getService('structureManager');
             $iconsElementId = $structureManager->getElementIdByMarker('icons');
             if ($iconsElementId) {
                 $iconsElementsIds = $this->getService('linksManager')
                     ->getConnectedIdList($iconsElementId, 'structure', 'parent');
                 if ($iconsElementsIds) {
-                    $structureManager->getElementsByIdList($iconsElementsIds, $this->id);
+                    $structureManager->getElementsByIdList($iconsElementsIds, $this->id, true);
                     foreach ($iconsElementsIds as $iconElementId) {
                         if ($element = $structureManager->getElementById($iconElementId)) {
                             $this->icons[] = $element;

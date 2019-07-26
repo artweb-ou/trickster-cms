@@ -290,30 +290,12 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
     public function getErrorPageElement()
     {
         $errorPageElement = false;
-        $collection = persistableCollection::getInstance('module_errorpage');
-        $conditions = [];
-        $conditions[] = [
-            'column' => 'id',
-            'action' => '<>',
-            'argument' => '0',
-        ];
-        $columns = [
-            'id',
-        ];
-        if ($records = $collection->conditionalLoad($columns, $conditions)) {
-            $idList = [];
-            foreach ($records as &$record) {
-                $idList[] = reset($record);
-            }
-
+        $db = $this->getService('db');
+        if ($errorPageElementId = $db->table('module_errorpage')->select('id')->limit(1)->value('id')) {
             $structureManager = $this->getService('structureManager');
             $languagesManager = $this->getService('LanguagesManager');
-
             $currentLanguageElementId = $languagesManager->getCurrentLanguageId();
-
-            if ($elements = $structureManager->getElementsByIdList($idList, $currentLanguageElementId)) {
-                $errorPageElement = reset($elements);
-            }
+            $errorPageElement = $structureManager->getElementById($errorPageElementId, $currentLanguageElementId, true);
         }
         return $errorPageElement;
     }

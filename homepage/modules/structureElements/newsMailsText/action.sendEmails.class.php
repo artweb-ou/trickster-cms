@@ -20,8 +20,7 @@ class sendEmailsNewsMailsText extends structureElementAction
             }
             if ($selectedAddressesIds) {
                 $addressesElement = $structureManager->getElementByMarker('newsMailsAddresses');
-                $addresses = $structureManager->getElementsByIdList($selectedAddressesIds, $addressesElement->id);
-                if (count($addresses) > 0) {
+                if ($addresses = $structureManager->getElementsByIdList($selectedAddressesIds, $addressesElement->id, true)) {
                     $emailDispatcher = $this->getService('EmailDispatcher');
                     $newDispatchment = $emailDispatcher->getEmptyDispatchment();
                     $settings = $this->getService('settingsManager')->getSettingsList();

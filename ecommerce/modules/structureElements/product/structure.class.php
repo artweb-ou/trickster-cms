@@ -127,6 +127,8 @@ class productElement extends structureElement implements
 
     protected $iconsInfo;
 
+    protected $allowedTypes = ['subArticle'];
+
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
@@ -1829,7 +1831,7 @@ class productElement extends structureElement implements
             $deliveryTypeElementsIds = $this->getService('linksManager')
                 ->getConnectedIdList($deliveryTypesElementId, 'structure', 'parent');
 
-            if ($deliveryTypeElementsIds && $deliveryTypeElements = $structureManager->getElementsByIdList($deliveryTypeElementsIds, false, true)) {
+            if ($deliveryTypeElementsIds && $deliveryTypeElements = $structureManager->getElementsByIdList($deliveryTypeElementsIds, null, true)) {
                 $inactiveDeliveriesRecords = $this->getDisabledDeliveryTypesRecords();
                 $currencySelector = $this->getService('CurrencySelector');
 
@@ -1957,9 +1959,25 @@ class productElement extends structureElement implements
     {
         if ($currentAction == 'showImages') {
             $this->allowedTypes = ['galleryImage'];
+        } elseif($currentAction == 'showTexts'){
+            $this->allowedTypes = ['subArticle'];
         } else {
             $this->allowedTypes = [];
         }
-        return parent::getAllowedTypes($currentAction);
+        return $this->allowedTypes;
+    }
+
+    public function getNewElementAction() {
+        return 'showForm';
+    }
+
+    public function getSubArticles()
+    {
+        /**
+         * @var structureManager $structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        $subArticles = $structureManager->getElementsChildren($this->id);
+        return $subArticles;
     }
 }

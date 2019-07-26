@@ -17,7 +17,7 @@ class ajaxApplication extends controllerApplication
          * @var Cache $cache
          */
         $cache = $this->getService('Cache');
-        $cache->enable(true, false, true);
+        $cache->enable();
 
         $currentElement = false;
         $this->renderer->assign('responseData', []);

@@ -106,6 +106,8 @@ class DBValueSetDataChunk extends DataChunk implements ElementHolderInterface, E
                 $db->table($this->tableName)->whereIn($this->idField, $deleteIds)->delete();
             }
         }
+        //if we save it two times in a row, then we need to empty the rows
+        $this->rows = null;
     }
 
     public function deleteExtraData()

@@ -238,7 +238,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
 
         $productIdFilter = array_intersect(array_keys($productIdIndex), $idList);
 
-        $productsList = $structureManager->getElementsByIdList($productIdFilter, $this->id);
+        $productsList = $structureManager->getElementsByIdList($productIdFilter, $this->id, true);
         foreach ($productsList as &$product) {
             if (isset($productIdIndex[$product->id])) {
                 unset($productIdIndex[$product->id]);
@@ -350,7 +350,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                         }
                     }
                 }
-                $this->featuredProducts = $structureManager->getElementsByIdList($productIdFilter, $this->id);
+                $this->featuredProducts = $structureManager->getElementsByIdList($productIdFilter, $this->id, true);
             }
         }
         return $this->featuredProducts;
@@ -457,7 +457,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                         }
                     }
                 }
-                $this->topProductsList = $structureManager->getElementsByIdList($productIdFilter, $this->id);
+                $this->topProductsList = $structureManager->getElementsByIdList($productIdFilter, $this->id, true);
             }
         }
         return $this->topProductsList;

@@ -3,6 +3,7 @@
 class feedbackElement extends dynamicGroupFieldsStructureElement
 {
     use ConfigurableLayoutsProviderTrait;
+
     public $dataResourceName = 'module_feedback';
     protected $allowedTypes = ['formFieldsGroup'];
     public $defaultActionName = 'show';
@@ -234,18 +235,17 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
                     'type' => $field->fieldType,
                 ];
                 if ($field->fieldType == 'fileinput') {
-                    if (!empty($answerFiles[$fieldId]) && !empty($answerFiles[$field->id]['originalName'])) {
-                        $fileName = $answerFiles[$field->id]['originalName'];
-                        $fieldInfo['originalName'] = $fileName;
-                        $controller = controller::getInstance();
-                        $fieldInfo['link'] = $controller->baseURL
-                            . 'file/id:' . $answerFiles[$field->id]['storageName']
-                            . '/filename:' . urlencode($fileName) . '/';
-                    } else {
-                        $fieldInfo['originalName'] = '';
-                        $fieldInfo['link'] = '';
+                    if (!empty($answerFiles)) {
+                        $fieldInfoArray = [];
+                        foreach ($answerFiles as $file) {
+                            $filesInfo['originalName'] = $file['originalName'];
+                            $filesInfo['link'] = $file['link'];
+                            $fieldInfo['files'][] = $filesInfo;
+                        }
+
                     }
-                } else {
+                }
+                else {
                     if (!empty($answerValues[$field->id])) {
                         $fieldInfo['value'] = $answerValues[$field->id];
                     } else {
