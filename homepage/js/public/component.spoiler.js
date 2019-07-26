@@ -28,11 +28,11 @@
 // };
 
 window.SpoilerComponent = function(componentElement) {
-	var titleElement;
-	var contentElement;
-	var contentWrapperElement;
-	var buttonElement;
-	var gradientComponent;
+	var titleElement = false;
+	var contentElement = false;
+	var contentWrapperElement = false;
+	var buttonElement = false;
+	var gradientComponent = false;
 
 	var maxHeight;
 	var minHeight;
@@ -42,8 +42,8 @@ window.SpoilerComponent = function(componentElement) {
 
 	var init = function() {
 		titleElement = componentElement.querySelector('.spoiler_component_title');
-		contentElement = componentElement.querySelector('.spoiler_component_content');
 		contentWrapperElement = componentElement.querySelector('.spoiler_component_content_wrapper');
+		contentElement = contentWrapperElement.querySelector('.spoiler_component_content');
 		gradientComponent = componentElement.querySelector('.partly_hidden_gradient');
 
 		if (titleElement && contentElement) {
@@ -58,7 +58,7 @@ window.SpoilerComponent = function(componentElement) {
 			maxHeight = computedStyles.height;
 			contentElement.style.height = maxHeight;
 			contentElement.classList.add('partly_hidden_content_hidden');
-			showMoreText = buttonElement.innerHTML;
+			// showMoreText = buttonElement.innerHTML;
 			addHandlers();
 		}
 	};
@@ -81,46 +81,55 @@ window.SpoilerComponent = function(componentElement) {
 	};
 
 	var hideElement = function() {
-		var height = contentElement.scrollHeight;
+		// var height = contentElement.scrollHeight;
 		TweenLite.to(contentElement, 0.5,
 			{
 				'css': {
-					'height': height
+					'height': '0px'
 				},
 				onStart: function() {
-					TweenLite.to(gradientComponent, 0.5, {
-						'css': {
-							'background': 'transparent'
-						}
-					});
-					buttonElement.innerHTML = showLessText;
+					if(gradientComponent) {
+						TweenLite.to(gradientComponent, 0.5, {
+							'css': {
+								'background': 'transparent'
+							}
+						});
+					}
+				},
+				onComplete: function() {
+					if(buttonElement) {
+						buttonElement.innerHTML = showLessText;
+					}
 				}
 			}
 		);
+		contentElement.style.height = '0px';
 	};
 
 	var showElement = function() {
 		TweenLite.to(contentElement, 0.5, {
 			'css': {
-				'height': maxHeight
+				'height': '130px'
 			},
 			onStart: function() {
-				TweenLite.to(gradientComponent, 0.5, {
-					'css': {
-						'background': 'linear-gradient(transparent, #fff)'
-					}
-				});
-				buttonElement.innerHTML = showMoreText;
+				if(gradientComponent) {
+					TweenLite.to(gradientComponent, 0.5, {
+						'css': {
+							'background': 'linear-gradient(transparent, #fff)'
+						}
+					});
+				}
+			},
+			onComplete: function() {
+				if(buttonElement) {
+					buttonElement.innerHTML = showMoreText;
+				}
 			}
 		});
 	};
 
 	var isShow = function() {
-		if (contentElement.style.height == maxHeight) {
-			return true;
-		} else {
-			return false;
-		}
+		return contentElement.style.height === maxHeight;
 	};
 
 	var initGradientElement = function() {

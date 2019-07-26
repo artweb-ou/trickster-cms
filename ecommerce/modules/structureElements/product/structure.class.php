@@ -127,6 +127,8 @@ class productElement extends structureElement implements
 
     protected $iconsInfo;
 
+    protected $allowedTypes = ['subArticle'];
+
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
@@ -1962,6 +1964,20 @@ class productElement extends structureElement implements
         } else {
             $this->allowedTypes = [];
         }
-        return parent::getAllowedTypes($currentAction);
+        return $this->allowedTypes;
+    }
+
+    public function getNewElementAction() {
+        return 'showForm';
+    }
+
+    public function getSubArticles()
+    {
+        /**
+         * @var structureManager $structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        $subArticles = $structureManager->getElementsChildren($this->id);
+        return $subArticles;
     }
 }

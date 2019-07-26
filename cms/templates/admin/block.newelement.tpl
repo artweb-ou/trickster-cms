@@ -2,15 +2,16 @@
 	{if !isset($newElementUrl)}
 		{assign "newElementUrl" $currentElement->getNewElementUrl()}
 	{/if}
-
 	{if !isset($action)}
 		{assign var="action" value="showForm"}
+	{/if}
+	{if method_exists($element, 'getNewElementAction')}
+        {$action = $element->getNewElementAction()}
 	{/if}
 	{if !isset($buttonId)}
 		{assign var="buttonId" value="addnewelement1"}
 	{/if}
 	<script>
-
 		addNewElementInfo = [];
 		{foreach from=$allowedTypes item=type}
 		{assign var='typeLowered' value=$type|strtolower}
