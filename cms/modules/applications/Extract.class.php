@@ -9,7 +9,6 @@ class ExtractApplication extends controllerApplication
     {
         // TODO something, if no renderer is created, creation of new root element fails
         set_time_limit(60 * 60);
-        $this->startSession('crontab');
         $this->createRenderer();
     }
 

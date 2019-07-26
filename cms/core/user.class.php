@@ -188,8 +188,9 @@ class user
                     $this->privileges[$elementId][$elementType][$actionName] = $type;
                 }
             }
-
-            $this->storePrivileges();
+            if ($this->userName !== 'anonymous'){
+                $this->storePrivileges();
+            }
         }
     }
 
