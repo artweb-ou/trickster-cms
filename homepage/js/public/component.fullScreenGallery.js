@@ -254,7 +254,6 @@ window.FullScreenGalleryImageComponent = function(
 
         componentElement = document.createElement('div');
         componentElement.style.display = 'none';
-        componentElement.style.visibility = 'hidden';
         componentElement.className = 'fullscreen_gallery_image';
 
         if (imageInfo.isVideo()) {
