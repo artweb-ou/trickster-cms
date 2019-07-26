@@ -12,6 +12,7 @@
 class fileElement extends structureElement implements StructureElementUploadedFilesPathInterface, ImageUrlProviderInterface
 {
     use ImageUrlProviderTrait;
+
     public $dataResourceName = 'module_file';
     public $defaultActionName = 'show';
     public $role = 'content';

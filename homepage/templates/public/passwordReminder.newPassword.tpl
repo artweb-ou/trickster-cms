@@ -60,7 +60,7 @@
 			</div>
 			{/if}
 			<input type="hidden" value="{$element->id}" name="id" />
-			<input type="hidden" value="submit" name="action" />
+			<input type="hidden" value="newPassword" name="action" />
 		</div>
 	</form>
 {/capture}

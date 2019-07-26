@@ -707,13 +707,14 @@ abstract class ProductsListElement extends menuStructureElement
          */
         $db = $this->getService('db');
 
-        $productIdsQuery = clone $this->getFilteredProductsQuery();
         $query = $db->table('module_product_parameter_value')
             ->select(['parameterId', 'value'])->distinct()
-            ->whereIn('parameterId', $selectionsIds)
-            ->whereIn('productId', $productIdsQuery);
+            ->whereIn('parameterId', $selectionsIds);
         if ($excludeSelectionsIds) {
+            $query->whereIn('productId', clone $this->getFilteredProductsQuery());
             $query->whereNotIn('parameterId', $excludeSelectionsIds);
+        } else {
+            $query->whereIn('productId', clone $this->getProductsListBaseOptimizedQuery());
         }
         if ($records = $query->get()) {
             if ($idList = array_column($records, 'value')) {

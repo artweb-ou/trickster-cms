@@ -62,9 +62,12 @@
                                             {else}
                                                 <a href="{$answer.element->URL}">{$fieldInfo.value}</a>
                                             {/if}
-
 										{else}
-											<a target="_blank" href="{$fieldInfo.link}">{$fieldInfo.originalName}</a>
+											{if !empty($fieldInfo.files)}
+												{foreach $fieldInfo.files as $file}
+													<a target="_blank" href="{$file.link}">{$file.originalName}</a>
+												{/foreach}
+											{/if}
 										{/if}
 									</td>
 								{/foreach}
@@ -83,8 +86,6 @@
 						{/foreach}
 						</tbody>
 					</table>
-
-
 			</form>
 
 		</div>
