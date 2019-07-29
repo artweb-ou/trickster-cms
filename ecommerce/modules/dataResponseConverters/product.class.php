@@ -20,6 +20,12 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'languageId'                => 'languageId',
             'price'                     => 'price',
             'oldPrice'                  => 'oldPrice',
+            'discount'                  =>  function ($element) {
+                if ($discountElement = $element->getOldPrice()) {
+                    return (int)$element->getDiscountPercent() . '%';
+                }
+                return '';
+            },
             'showincategory'            => 'showincategory',
             'brandId'                   => 'brandId',
             'brandTitle'                => function ($element) {
@@ -34,8 +40,6 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'deliveryStatus'            => 'deliveryStatus',
             'availabilityStatus'        => 'availabilityStatus',
             'importCode'                => 'importCode',
-            'productPriceMultiplier'    => 'productPriceMultiplier',
-            'productPriceAddition'      => 'productPriceAddition',
             'deliveryPriceType'         => 'deliveryPriceType',
             'importOrigin'              => 'importOrigin',
             'importId'                  => 'importId',
@@ -106,6 +110,7 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'languageId',
                 'price',
                 'oldPrice',
+                'discount',
                 'showincategory',
                 'brandId',
                 'brandTitle',
@@ -115,8 +120,6 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'deliveryStatus',
                 'availabilityStatus',
                 'importCode',
-                'productPriceMultiplier',
-                'productPriceAddition',
                 'deliveryPriceType',
                 'importOrigin',
                 'importId',

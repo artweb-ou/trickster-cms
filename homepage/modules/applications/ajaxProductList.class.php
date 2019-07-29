@@ -63,6 +63,7 @@ class ajaxProductListApplication extends controllerApplication
         //        $products = $structureManager->getProductsByCategory($category);
         //
                             $response->setResponseData("product", $products);
+                            $response->setResponseData("listInfo", $products);
 
         $status = 'success';
         $this->renderer->assign('responseStatus', $status);
