@@ -62,7 +62,7 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
         if ($result === null) {
             $result = [];
             $structureManager = $this->getService('structureManager');
-            $currentLanguageId = $this->getService('languagesManager')->getCurrentLanguageId();
+            $currentLanguageId = $this->getService('LanguagesManager')->getCurrentLanguageId();
             $newsListsInLanguage = $structureManager->getElementsByType('newsList', $currentLanguageId);
             if ($newsListsInLanguage) {
                 $linksManager = $this->getService('linksManager');

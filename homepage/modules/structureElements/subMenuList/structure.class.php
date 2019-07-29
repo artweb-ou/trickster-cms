@@ -62,7 +62,7 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
                 /**
                  * @var structureManager $structureManager
                  */
-                $languagesManager = $this->getService('languagesManager');
+                $languagesManager = $this->getService('LanguagesManager');
                 $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
                 if ($this->type == 'select') {

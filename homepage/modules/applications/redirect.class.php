@@ -14,7 +14,7 @@ class redirectApplication extends controllerApplication
     public function execute($controller)
     {
         if ($type = $controller->getParameter('type')) {
-            $redirectionManager = $this->getService('redirectionManager');
+            $redirectionManager = $this->getService('RedirectionManager');
             if ($type == 'language') {
                 if (!($application = $controller->getParameter('application'))){
                     $application = 'public';

@@ -23,7 +23,7 @@ class selectedDiscountsElement extends menuDependantStructureElement
             $this->discountsToDisplay = [];
             $structureManager = $this->getService('structureManager');
 
-            if ($discountsListElements = $structureManager->getElementsByType("discountsList", $this->getService('languagesManager')
+            if ($discountsListElements = $structureManager->getElementsByType("discountsList", $this->getService('LanguagesManager')
                 ->getCurrentLanguageId())
             ) {
                 $allApplicableDiscounts = [];

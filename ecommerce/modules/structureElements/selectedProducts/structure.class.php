@@ -392,13 +392,13 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
     public function getDiscounts()
     {
         return $this->getService('structureManager')
-            ->getElementsByType('discount', $this->getService('languagesManager')
+            ->getElementsByType('discount', $this->getService('LanguagesManager')
                 ->getCurrentLanguageId());
     }
 
     public function getBrands()
     {
-        return $this->getService('structureManager')->getElementsByType('brand', $this->getService('languagesManager')
+        return $this->getService('structureManager')->getElementsByType('brand', $this->getService('LanguagesManager')
             ->getCurrentLanguageId());
     }
 

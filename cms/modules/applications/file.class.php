@@ -48,8 +48,7 @@ class fileApplication extends controllerApplication
         }
     }
 
-    public function deprecatedParametersRedirection()
-    {
+    public function deprecatedParametersRedirection() {
         return true;
     }
 }

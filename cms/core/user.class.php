@@ -20,7 +20,6 @@ class user
     public $userType;
     public $subscribe;
     protected $groupsIdList;
-    protected $storageEnabled = true;
     protected $userDataObject;
     /** @var \Illuminate\Database\Connection */
     protected $db;
@@ -38,7 +37,7 @@ class user
     }
 
     /**
-     * @param serverSessionManager $serverSessionManager
+     * @param ServerSessionManager $serverSessionManager
      */
     public function setServerSessionManager($serverSessionManager)
     {
@@ -51,7 +50,7 @@ class user
     }
 
     /**
-     * @var serverSessionManager
+     * @var ServerSessionManager
      */
     protected $serverSessionManager;
     protected $userResourceName = "module_user";
@@ -189,14 +188,15 @@ class user
                     $this->privileges[$elementId][$elementType][$actionName] = $type;
                 }
             }
-
-            $this->storePrivileges();
+            if ($this->userName !== 'anonymous') {
+                $this->storePrivileges();
+            }
         }
     }
 
     private function checkStoredPrivileges()
     {
-        if (isset($this->storage['userPrivileges']) && is_array($this->storage['userPrivileges'])) {
+        if (!empty($this->storage['userPrivileges'])) {
             $this->privileges = $this->storage['userPrivileges'];
             return true;
         }
@@ -221,15 +221,17 @@ class user
 
     protected function readStorage()
     {
-        if (isset($_SESSION['storage']) && $this->storageEnabled) {
-            $this->storage = $_SESSION['storage'];
+        if ($storage = $this->serverSessionManager->get('storage')) {
+            $this->storage = $storage;
         }
     }
 
     protected function writeStorage()
     {
-        if ($this->storageEnabled) {
-            $_SESSION['storage'] = $this->storage;
+        if ($this->storage){
+            $this->serverSessionManager->set('storage', $this->storage);
+        } else {
+            $this->serverSessionManager->delete('storage', $this->storage);
         }
     }
 
@@ -370,7 +372,6 @@ class user
             }
         }
         if (!$userId && $anonymousId = $this->checkUser('anonymous', null, true)) {
-            $this->storage['currentUserId'] = $anonymousId;
             $userId = $anonymousId;
         }
         return $userId;
@@ -402,7 +403,9 @@ class user
                         $this->groupsIdList[] = $row['parentStructureId'];
                     }
                 }
-                $this->setStorageAttribute('userGroupsIdList', $this->groupsIdList);
+                if ($this->userName !== 'anonymous') {
+                    $this->setStorageAttribute('userGroupsIdList', $this->groupsIdList);
+                }
             }
         }
 

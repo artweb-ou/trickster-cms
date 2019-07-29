@@ -8,7 +8,6 @@ class VisitorRemoveApplication extends controllerApplication
     public function initialize()
     {
         set_time_limit(60 * 60);
-        $this->startSession('crontab');
         $this->createRenderer();
     }
 

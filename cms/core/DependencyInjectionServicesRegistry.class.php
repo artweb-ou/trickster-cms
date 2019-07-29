@@ -34,8 +34,13 @@ class DependencyInjectionServicesRegistry implements DependencyInjectionServices
         if (!class_exists($className, false)) {
             foreach ($this->paths as &$path) {
                 $filePath = $path . $className . '.php';
+                $filePathLegacy = $path . lcfirst($className) . '.php';
                 if (is_file($filePath)) {
                     include_once($filePath);
+                    break;
+                }
+                if (is_file($filePathLegacy)) {
+                    include_once($filePathLegacy);
                     break;
                 }
             }

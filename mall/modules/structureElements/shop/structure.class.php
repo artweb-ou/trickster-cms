@@ -238,7 +238,7 @@ class shopElement extends structureElement implements MetadataProviderInterface
     public function getMapUrl()
     {
         $result = '';
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $structureManager = $this->getService('structureManager');
 
         $roomsIds = $this->getConnectedRoomsIds();

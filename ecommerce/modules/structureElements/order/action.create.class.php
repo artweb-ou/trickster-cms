@@ -54,9 +54,9 @@ class createOrder extends structureElementAction
         $structureElement->currency = $currentCurrencyName;
 
         /**
-         * @var languagesManager $languagesManager
+         * @var LanguagesManager $languagesManager
          */
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $structureElement->payerLanguage = $languagesManager->getCurrentLanguageCode();
 
         $structureElement->setOrderStatus('undefined');

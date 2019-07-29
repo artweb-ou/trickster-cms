@@ -55,11 +55,14 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
      */
     protected function startSession($sessionName = 'default', $lifeTime = false)
     {
-        $sessionManager = $this->getService('serverSessionManager', ['sessionName' => $sessionName]);
+        /**
+         * @var $sessionManager ServerSessionManager
+         */
+        $sessionManager = $this->getService('ServerSessionManager', ['sessionName' => $sessionName]);
+        $sessionManager->setEnabled(true);
         if ($lifeTime) {
             $sessionManager->setSessionLifeTime($lifeTime);
         }
-        $sessionManager->startSession();
     }
 
     /**
@@ -140,6 +143,6 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
 
     public function getLanguagesManager()
     {
-        return $this->getService('languagesManager');
+        return $this->getService('LanguagesManager');
     }
 }
