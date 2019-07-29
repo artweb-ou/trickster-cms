@@ -49,23 +49,30 @@ class ajaxProductListApplication extends controllerApplication
             'configActions' => false,
         ], true);
         $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
+        $status = 'fail';
 
         $productsValue = [];
         if ($elementId = $controller->getParameter('elementId')) {
             if ($element = $structureManager->getElementById($elementId)) {
-//                if ($controller->getParameter('limit')) {
-//                    
-//                }
-                $products = $element->getProductsList();
+                if ($element instanceof ProductsListElement) {
+                    $status = 'success';
+
+                    //                if ($controller->getParameter('limit')) {
+                    //
+                    //                }
+                    $products = $element->getProductsList();
+                    $categoryFilters = $element->getFilters();
+                    //                $categoryFilters = $element->getFiltersByType('parameter');
+                }
             }
+
         }
 
         //        $products = $structureManager->getProductsByCategory($category);
         //
-                            $response->setResponseData("product", $products);
-                            $response->setResponseData("listInfo", $products);
+        $response->setResponseData("product", $products);
+        $response->setResponseData("listInfo", $categoryFilters);
 
-        $status = 'success';
         $this->renderer->assign('responseStatus', $status);
         $this->renderer->assign('responseData', $response->responseData);
 
