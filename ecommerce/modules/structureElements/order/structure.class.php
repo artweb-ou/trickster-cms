@@ -117,7 +117,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
         foreach ($this->getOrderProducts() as &$element) {
             $productsPrice += $element->getTotalPrice(false);
-            $this->noVatAmount += $element->getVatLessTotalPrice();
             $this->totalFullPrice += $element->getTotalFullPrice();
         }
         $this->productsPrice = $productsPrice;
@@ -134,7 +133,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
             }
         }
         $totalPrice = $totalPrice - $this->discountAmount;
-        $this->vatAmount = $totalPrice - (($totalPrice) / $this->getVatRate());
+        $this->noVatAmount = ($totalPrice) / $this->getVatRate();
+        $this->vatAmount = $totalPrice - $this->noVatAmount;
         if ($totalPrice < 0) {
             $totalPrice = 0;
         }
