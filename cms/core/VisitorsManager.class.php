@@ -7,12 +7,14 @@ class VisitorsManager extends errorLogger
     const TABLE_VISIT = 'visit';
     const TABLE_VISITOR = 'visitor';
     const TABLE_ORDER = 'visitor_order';
+    const TRACKING_CODE_COOKIE = 'tc';
+    const VISIT_RECORDED_COOKIE = 'vr';
     protected $trackingCode = '';
     /**
      * @var Connection
      */
     protected $statsDb;
-    protected $user;
+
     protected $currentVisitorLoaded = false;
     protected $currentVisitor;
     protected $visitationRecorded;
@@ -23,13 +25,8 @@ class VisitorsManager extends errorLogger
 
     public function __construct()
     {
-        if (!empty($_COOKIE['tc'])) {
-            $this->trackingCode = $_COOKIE['tc'];
-        } elseif (!empty($_COOKIE['trackingCookie'])) {
-            //deprecated
-            //todo: remove 06.2018
-            $this->trackingCode = $_COOKIE['trackingCookie'];
-            setcookie('trackingCookie', null, -1, '/');
+        if (!empty($_COOKIE[self::TRACKING_CODE_COOKIE])) {
+            $this->trackingCode = $_COOKIE[self::TRACKING_CODE_COOKIE];
         }
     }
 
@@ -39,14 +36,6 @@ class VisitorsManager extends errorLogger
     public function setStatsDb($statsDb)
     {
         $this->statsDb = $statsDb;
-    }
-
-    /**
-     * @param mixed $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
     }
 
     /**
@@ -94,7 +83,7 @@ class VisitorsManager extends errorLogger
             'referer' => $referrer,
         ]);
         $this->visitationRecorded = true;
-        $this->user->setStorageAttribute('visit_recorded', true);
+        setcookie(self::VISIT_RECORDED_COOKIE, 1, 0, '/');
     }
 
     public function saveVisitor(Visitor $visitor)
@@ -252,8 +241,9 @@ class VisitorsManager extends errorLogger
     public function isVisitationRecorded()
     {
         if ($this->visitationRecorded === null) {
-            $this->visitationRecorded = $this->user->getStorageAttribute('visit_recorded')
-                && $this->trackingCode;
+            if (!empty($_COOKIE[self::VISIT_RECORDED_COOKIE])) {
+                $this->visitationRecorded = $_COOKIE[self::VISIT_RECORDED_COOKIE] && $this->trackingCode;
+            }
         }
         return $this->visitationRecorded;
     }
@@ -290,7 +280,7 @@ class VisitorsManager extends errorLogger
         //update tracking code in remaining visitor object
         $to->trackingCode = $from->trackingCode;
 
-        //now save all data to remaining visiotr object
+        //now save all data to remaining visitor object
         $this->createVisitorQuery()
             ->where('id', $to->id)
             ->update($data);
@@ -327,7 +317,7 @@ class VisitorsManager extends errorLogger
     public function setTrackingCode($trackingCode)
     {
         $this->trackingCode = $trackingCode;
-        setcookie('tc', $this->trackingCode, time() + 365 * 24 * 60 * 60, '/');
+        setcookie(self::TRACKING_CODE_COOKIE, $this->trackingCode, time() + 365 * 24 * 60 * 60, '/');
     }
 
     public function setCurrentVisitor(Visitor $visitor)

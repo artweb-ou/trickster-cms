@@ -1010,7 +1010,7 @@ class AddElementDeploymentProcedure extends DeploymentProcedure
             }
             if ($element) {
                 $element->prepareActualData();
-                $languagesManager = $this->getService('languagesManager');
+                $languagesManager = $this->getService('LanguagesManager');
                 $languages = $languagesManager->getLanguagesMap($element->languagesParentElementMarker);
                 $fieldsInfoToImport = [];
                 foreach ($elementInfo->fieldsData as $key => $value) {
@@ -1049,7 +1049,7 @@ class AddElementDeploymentProcedure extends DeploymentProcedure
                 $element->importExternalData($fieldsInfoToImport, $elementInfo->fieldNames);
                 $element->persistElementData();
                 if ($elementInfo->type == 'language' || $elementInfo->type == 'root') {
-                    $languagesManager = $this->getService('languagesManager');
+                    $languagesManager = $this->getService('LanguagesManager');
                     $languagesManager->reset();
                 }
                 $linksManager = $this->getService('linksManager');
@@ -1416,7 +1416,7 @@ class ModifyElementDeploymentProcedure extends DeploymentProcedure
         $targetElement = $structureManager->getElementById($targetId);
         if ($targetElement) {
             $targetElement->prepareActualData();
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $languages = $languagesManager->getLanguagesMap($targetElement->languagesParentElementMarker);
             $fieldsInfoToImport = [];
             foreach ($this->fieldsData as $key => $value) {
@@ -1782,7 +1782,7 @@ class AddTranslationDeploymentProcedure extends DeploymentProcedure
             $languagesGroupName = $this->type == 'adminTranslation'
                 ? 'adminLanguages'
                 : $this->getService('ConfigManager')->get('main.rootMarkerPublic');
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
 
             foreach ($this->values as $languageCode => &$value) {
                 if ($languageObject = $languagesManager->checkLanguageCode($languageCode, $languagesGroupName)) {

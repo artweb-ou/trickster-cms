@@ -84,7 +84,7 @@ class designThemeEmailDispatchmentType extends EmailDispatchmentType
     {
         $controller = controller::getInstance();
         /**
-         * @var languagesManager $languagesManager
+         * @var LanguagesManager $languagesManager
          */
         $languagesManager = $controller->getApplication()->getLanguagesManager();
 

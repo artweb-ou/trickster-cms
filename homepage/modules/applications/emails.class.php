@@ -36,7 +36,7 @@ class emailsApplication extends controllerApplication
              * @var settingsManager $settingsManager
              */
             $settingsManager = $this->getService('settingsManager');
-            $settings = $settingsManager->getSettingsList($this->getService('languagesManager')
+            $settings = $settingsManager->getSettingsList($this->getService('LanguagesManager')
                 ->getCurrentLanguageId());
             $this->renderer->assign('settings', $settings);
             $this->renderer->assign('theme', $currentTheme);

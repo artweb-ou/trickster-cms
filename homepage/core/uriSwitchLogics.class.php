@@ -10,7 +10,7 @@ class uriSwitchLogics implements DependencyInjectionContextInterface
      */
     protected $controller;
     /**
-     * @var languagesManager
+     * @var LanguagesManager
      */
     protected $languagesManager;
     /**
@@ -25,7 +25,7 @@ class uriSwitchLogics implements DependencyInjectionContextInterface
     public function __construct()
     {
         $this->controller = $this->getService('controller');
-        $this->languagesManager = $this->getService('languagesManager');
+        $this->languagesManager = $this->getService('LanguagesManager');
         $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
         $this->structureManager = $this->getService('structureManager', ['rootMarker' => $marker], true);
         $this->linksManager = $this->getService('linksManager');

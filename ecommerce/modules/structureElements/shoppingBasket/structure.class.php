@@ -290,7 +290,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             ->getConnectedIdList($id, 'product', 'parent');
         $connectedBrands = "";
         if (!empty($brandIds)) {
-            $languageManager = $this->getService('languagesManager');
+            $languageManager = $this->getService('LanguagesManager');
             $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
             $structureManager = $this->getService('structureManager');
             foreach ($brandIds as &$brandId) {
@@ -306,7 +306,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
     {
         $currencySelector = $this->getService('CurrencySelector');
         $structureManager = $this->getService('structureManager');
-        $languageManager = $this->getService('languagesManager');
+        $languageManager = $this->getService('LanguagesManager');
         $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
         $deliveryTypeid = $this->shoppingBasket->getSelectedDeliveryTypeId();
         $deliveryTypeElement = $structureManager->getElementById($deliveryTypeid, null, true);

@@ -12,12 +12,12 @@ class ParametersManager extends errorLogger
      */
     protected $db;
     /**
-     * @var languagesManager
+     * @var LanguagesManager
      */
     protected $languagesManager;
 
     /**
-     * @param languagesManager $languagesManager
+     * @param LanguagesManager $languagesManager
      */
     public function setLanguagesManager($languagesManager)
     {

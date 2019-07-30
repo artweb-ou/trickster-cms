@@ -1669,7 +1669,7 @@ class productElement extends structureElement implements
      */
     public function getElementData($detailed = false)
     {
-        $languageManager = $this->getService('languagesManager');
+        $languageManager = $this->getService('LanguagesManager');
         $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
         $brandElement = $this->getBrandElement();
         $categoryElement = $this->getRequestedParentCategory();

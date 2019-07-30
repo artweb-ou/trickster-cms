@@ -15,7 +15,7 @@ class exportAdminTranslations extends structureElementAction
 
         // language id to code
         $languageCodes = [0];
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $languagesList = $languagesManager->getLanguagesList('adminLanguages');
         foreach ($languagesList as $languagesItem) {
             $languageCodes[$languagesItem->id] = $languagesItem->iso6393;

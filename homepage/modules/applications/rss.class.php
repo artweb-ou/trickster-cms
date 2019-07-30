@@ -36,7 +36,7 @@ class rssApplication extends controllerApplication
             'rootMarker' => $configManager->get('main.rootMarkerPublic'),
         ], true);
 
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $languageId = $languagesManager->getCurrentLanguageId();
 
         $structureManager->getElementById($languageId);
@@ -70,7 +70,7 @@ class rssApplication extends controllerApplication
         $currentTheme = $designThemesManager->getCurrentTheme();
 
         $settingsManager = $this->getService('settingsManager');
-        $settings = $settingsManager->getSettingsList($this->getService('languagesManager')->getCurrentLanguageId());
+        $settings = $settingsManager->getSettingsList($this->getService('LanguagesManager')->getCurrentLanguageId());
         $this->renderer->assign('settings', $settings);
         $this->renderer->assign('controller', $controller);
         $this->renderer->assign('rssItems', $rssItems);

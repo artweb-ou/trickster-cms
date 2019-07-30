@@ -16,7 +16,7 @@ class accImportPluginElement extends importPluginElement
     {
         if ($this->warehouse === null) {
             $licenseKey = '';
-            $specialData = $this->getSpecialData($this->getService('languagesManager')->getCurrentLanguageId());
+            $specialData = $this->getSpecialData($this->getService('LanguagesManager')->getCurrentLanguageId());
             if ($specialData && !empty($specialData['LicenseKey'])) {
                 $licenseKey = $specialData['LicenseKey'];
             }

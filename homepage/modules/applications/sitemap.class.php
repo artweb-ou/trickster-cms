@@ -22,7 +22,7 @@ class sitemapApplication extends controllerApplication
         $cache = $this->getService('Cache');
         $cache->enable(true, false, false);
 
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
 
         $mapItems = [];
         $languages = $languagesManager->getLanguagesList();

@@ -36,7 +36,7 @@ class shopCatalogueControlsElement extends menuDependantStructureElement
         if ($result === null) {
             $result = false;
             $structureManager = $this->getService('structureManager');
-            $languageId = $this->getService('languagesManager')->getCurrentLanguageId();
+            $languageId = $this->getService('LanguagesManager')->getCurrentLanguageId();
             foreach ($structureManager->getElementsByType('shopCatalogue', $languageId) as $shopCatalogue) {
                 $result = $shopCatalogue;
                 break;

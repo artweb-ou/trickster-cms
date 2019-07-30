@@ -35,7 +35,7 @@ class structureManager implements DependencyInjectionContextInterface
      */
     protected $linksManager;
     /**
-     * @var languagesManager
+     * @var LanguagesManager
      */
     protected $languagesManager;
     protected $defaultRoles = [];
@@ -53,7 +53,7 @@ class structureManager implements DependencyInjectionContextInterface
     protected $shortestChains = [];
 
     /**
-     * @param languagesManager $languagesManager
+     * @param LanguagesManager $languagesManager
      */
     public function setLanguagesManager($languagesManager)
     {

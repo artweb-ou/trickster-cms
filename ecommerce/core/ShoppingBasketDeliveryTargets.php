@@ -44,7 +44,7 @@ class ShoppingBasketDeliveryTargets implements DependencyInjectionContextInterfa
 
     protected function saveStorage()
     {
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data = [];
@@ -61,7 +61,7 @@ class ShoppingBasketDeliveryTargets implements DependencyInjectionContextInterfa
     {
         $user = $this->getService('user');
 
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         if (!($data = $user->getStorageAttribute('deliveryTargetsData')) || $data['languageId'] != $currentLanguageId) {

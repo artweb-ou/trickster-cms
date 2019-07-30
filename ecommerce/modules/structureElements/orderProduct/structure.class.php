@@ -49,7 +49,7 @@ class orderProductElement extends structureElement
      */
     public function getElementData()
     {
-        $languageManager = $this->getService('languagesManager');
+        $languageManager = $this->getService('LanguagesManager');
         $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
         $structureManager = $this->getService('structureManager');
         $data = [

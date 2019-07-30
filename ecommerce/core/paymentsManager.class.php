@@ -35,7 +35,7 @@ class paymentsManager extends errorLogger implements DependencyInjectionContextI
     public function getPaymentMethodElement($id)
     {
         $structureManager = $this->getService('structureManager');
-        $paymentMethodElement = $structureManager->getElementById([$id], $this->getService('languagesManager')->getCurrentLanguageId(), true);
+        $paymentMethodElement = $structureManager->getElementById([$id], $this->getService('LanguagesManager')->getCurrentLanguageId(), true);
 
         return $paymentMethodElement;
     }
