@@ -185,10 +185,8 @@ class sendFeedback extends structureElementAction
                     }
                 }
             }
-
-            $this->sendAjaxFormResponse($structureElement);
-            //        $structureElement->setViewName('form');
         }
+        $this->sendAjaxFormResponse($structureElement);
     }
 
     public function getExtraModuleFields()
