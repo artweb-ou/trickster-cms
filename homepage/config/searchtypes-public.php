@@ -2,7 +2,7 @@
     'search' => [
         'article',
         'news',
-        'gallery',
+        'event',
         'production',
     ],
     'redirect' => [
