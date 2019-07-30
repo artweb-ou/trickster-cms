@@ -10,6 +10,9 @@ class ProductFormStructure extends ElementForm
         'title' => [
             'type' => 'input.multi_language_text',
         ],
+        'subTitle' => [
+            'type' => 'input.multi_language_text',
+        ],
         'code' => [
             'type' => 'input.text',
         ],

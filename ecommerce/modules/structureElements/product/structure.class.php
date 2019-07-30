@@ -182,6 +182,7 @@ class productElement extends structureElement implements
         $moduleStructure['importInfo'] = 'array';
 
         $moduleStructure['unit'] = 'text';
+        $moduleStructure['subTitle'] = 'text';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -194,6 +195,7 @@ class productElement extends structureElement implements
         $multiLanguageFields[] = 'h1';
         $multiLanguageFields[] = 'metaDescription';
         $multiLanguageFields[] = 'unit';
+        $multiLanguageFields[] = 'subTitle';
     }
 
     protected function getTabsList()
@@ -1979,5 +1981,13 @@ class productElement extends structureElement implements
         $structureManager = $this->getService('structureManager');
         $subArticles = $structureManager->getElementsChildren($this->id, null, 'structure', 'subArticle');
         return $subArticles;
+    }
+
+    public function getSubTitle() {
+        $x = $this->subTitle;
+        if(!empty($this->subTitle)) {
+            return $this->subTitle;
+        }
+        return $this->getParentCategory()->getTitle();
     }
 }
