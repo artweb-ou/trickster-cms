@@ -89,6 +89,8 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
 
         $moduleStructure['metaDescriptionTemplate'] = 'text';
         $moduleStructure['metaTitleTemplate'] = 'text';
+        $moduleStructure['metaSubTitleTemplate'] = 'text';
+
         $moduleStructure['metaH1Template'] = 'text';
         $moduleStructure['h1'] = 'text';
     }
@@ -107,6 +109,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $multiLanguageFields[] = 'metaTitleTemplate';
         $multiLanguageFields[] = 'metaH1Template';
         $multiLanguageFields[] = 'h1';
+        $multiLanguageFields[] = 'metaSubTitleTemplate';
     }
 
     protected function getTabsList()

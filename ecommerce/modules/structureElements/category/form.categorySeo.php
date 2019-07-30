@@ -32,6 +32,9 @@ class CategorySeoStructure extends ElementForm
         'metaH1Template' => [
             'type' => 'input.multi_language_text',
         ],
+        'metaSubTitleTemplate' => [
+            'type' => 'input.multi_language_text',
+        ],
         'metaDescriptionTemplate' => [
             'type' => 'input.multi_language_textarea',
         ],
