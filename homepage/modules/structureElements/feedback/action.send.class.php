@@ -14,7 +14,7 @@ class sendFeedback extends structureElementAction
             $subject = $structureElement->title;
 
             $data = [
-                'groups'  => [],
+                'groups' => [],
                 'heading' => $subject,
             ];
 
@@ -41,7 +41,7 @@ class sendFeedback extends structureElementAction
 
             foreach ($structureElement->getCustomFieldsGroups() as $groupElement) {
                 $groupInfo = [
-                    'title'      => $groupElement->title,
+                    'title' => $groupElement->title,
                     'formFields' => [],
                 ];
                 foreach ($groupElement->getFormFields() as $formField) {
@@ -53,7 +53,7 @@ class sendFeedback extends structureElementAction
                                 foreach ($formFiles as $file) {
                                     $answerFiles[$formField->id][] = [
                                         'originalName' => $file['name'],
-                                        'tmp_name'     => $file['tmp_name'],
+                                        'tmp_name' => $file['tmp_name'],
                                     ];
                                 }
                             }
@@ -70,9 +70,9 @@ class sendFeedback extends structureElementAction
                             }
                         }
                         $fieldInfo = [
-                            'fieldName'  => $fieldName,
+                            'fieldName' => $fieldName,
                             'fieldTitle' => $formField->title,
-                            'fieldType'  => $formField->fieldType,
+                            'fieldType' => $formField->fieldType,
                             'fieldValue' => $value,
                         ];
                         $groupInfo['formFields'][] = $fieldInfo;
@@ -185,10 +185,9 @@ class sendFeedback extends structureElementAction
                     }
                 }
             }
-
-            $this->sendAjaxFormResponse($structureElement);
-            //        $structureElement->setViewName('form');
         }
+
+        $this->sendAjaxFormResponse($structureElement);
     }
 
     public function getExtraModuleFields()
@@ -196,15 +195,13 @@ class sendFeedback extends structureElementAction
         return $this->structureElement->getCustomModuleFields();
     }
 
-    public function setValidators(
-        &$validators
-    ) {
+    public function setValidators(&$validators)
+    {
         $validators = $this->structureElement->getCustomValidators();
     }
 
-    public function setExpectedFields(
-        &$expectedFields
-    ) {
+    public function setExpectedFields(&$expectedFields)
+    {
         $expectedFields = array_merge($expectedFields, $this->structureElement->getCustomExpectedFields());
     }
 }
