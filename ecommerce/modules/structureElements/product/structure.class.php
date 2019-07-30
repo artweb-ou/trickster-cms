@@ -1537,7 +1537,6 @@ class productElement extends structureElement implements
         return $this->productUnit;
     }
 
-
     public function getTemplatedMetaTitle()
     {
         if ($categoryMetaTitleTemplate = $this->getFirstDataFromParents('metaTitleTemplate')) {
@@ -1550,6 +1549,14 @@ class productElement extends structureElement implements
     {
         if ($categoryH1Template = $this->getFirstDataFromParents('metaH1Template')) {
             return $this->populateSeoTemplate($categoryH1Template);
+        }
+        return '';
+    }
+
+    public function getTemplatedSubTitle()
+    {
+        if ($categoryMetaTitleTemplate = $this->getFirstDataFromParents('metaSubTitleTemplate')) {
+            return $this->populateSeoTemplate($categoryMetaTitleTemplate);
         }
         return '';
     }
@@ -1973,16 +1980,29 @@ class productElement extends structureElement implements
         /**
          * @var structureManager $structureManager
          */
+
         $structureManager = $this->getService('structureManager');
-        $subArticles = $structureManager->getElementsChildren($this->id, null, 'structure', 'subArticle');
+        $subArticles = $structureManager->getElementsChildren($this->id, null, 'subArticle');
+//
         return $subArticles;
     }
 
-    public function getSubTitle() {
-        $x = $this->subTitle;
-        if(!empty($this->subTitle)) {
+    public function getSubTitle()
+    {
+        if (!empty($this->subTitle)) {
             return $this->subTitle;
         }
-        return $this->getParentCategory()->getTitle();
+        if (method_exists($this, 'getTemplatedSubTitle')) {
+            if ($templatedSubTitle = $this->getTemplatedSubTitle()) {
+                return $templatedSubTitle;
+            }
+            return $this->getParentCategory()->getTitle();
+
+        }
+    }
+
+    public function getNewElementUrl()
+    {
+        return parent::getNewElementUrl().'linkType:subArticle/';
     }
 }

@@ -1166,6 +1166,13 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
      */
     public function getFormActionURL($type = null)
     {
+        /**
+         * @var $controller controller
+         */
+        $controller = $this->getService('controller');
+        if($linkType = $controller->getParameter('linkType')){
+            return $this->URL.'linkType:'.$linkType.'/';
+        }
         return $this->URL;
     }
 
