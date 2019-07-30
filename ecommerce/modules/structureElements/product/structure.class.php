@@ -1977,7 +1977,7 @@ class productElement extends structureElement implements
          * @var structureManager $structureManager
          */
         $structureManager = $this->getService('structureManager');
-        $subArticles = $structureManager->getElementsChildren($this->id);
+        $subArticles = $structureManager->getElementsChildren($this->id, null, 'structure', 'subArticle');
         return $subArticles;
     }
 }

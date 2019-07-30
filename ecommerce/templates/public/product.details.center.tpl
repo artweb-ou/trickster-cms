@@ -4,12 +4,7 @@
 	{if !empty($subArticles)}
 		<div class="article_subarticles">
             {foreach $subArticles as $subArticle}
-				<div class="subarticle spoiler_component">
-					<div class="subarticle_title spoiler_component_title">{$element->title}</div>
-					<div class="subarticle__content_wrapper spoiler_component_content_wrapper">
-						<div class='subarticle_content html_content spoiler_component_content'>{$element->content}</div>
-					</div>
-				</div>
+                {include file=$theme->template($subArticle->getTemplate('simple')) element=$subArticle}
             {/foreach}
 		</div>
 	{/if}
