@@ -50,30 +50,29 @@ abstract class categoryStructureElement extends ProductsListElement
 
     public function isFilterableByType($filterType)
     {
-        if ($this->role == 'content' || $this->requested) {
-            switch ($filterType) {
-                case 'category':
-                    $result = $this->isSettingEnabled('categoryFilterEnabled');
-                    break;
-                case 'brand':
-                    $result = $this->isSettingEnabled('brandFilterEnabled');
-                    break;
-                case 'discount':
-                    $result = $this->isSettingEnabled('discountFilterEnabled');
-                    break;
-                case 'parameter':
-                    $result = $this->isSettingEnabled('parameterFilterEnabled');
-                    break;
-                case 'price':
-                    $result = $this->isSettingEnabled('priceFilterEnabled');
-                    break;
-                case 'availability':
-                    $result = $this->isSettingEnabled('availabilityFilterEnabled');
-                    break;
-                default:
-                    $result = true;
-            }
+        switch ($filterType) {
+            case 'category':
+                $result = $this->isSettingEnabled('categoryFilterEnabled');
+                break;
+            case 'brand':
+                $result = $this->isSettingEnabled('brandFilterEnabled');
+                break;
+            case 'discount':
+                $result = $this->isSettingEnabled('discountFilterEnabled');
+                break;
+            case 'parameter':
+                $result = $this->isSettingEnabled('parameterFilterEnabled');
+                break;
+            case 'price':
+                $result = $this->isSettingEnabled('priceFilterEnabled');
+                break;
+            case 'availability':
+                $result = $this->isSettingEnabled('availabilityFilterEnabled');
+                break;
+            default:
+                $result = true;
         }
+
         return $result;
     }
 

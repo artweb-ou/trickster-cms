@@ -9,31 +9,14 @@ class ajaxProductListApplication extends controllerApplication
     public function initialize()
     {
         $controller = controller::getInstance();
-        if ($controller->getParameter('mode')) {
-            $mode = $controller->getParameter('mode');
-            if ($mode == 'admin') {
-                $this->mode = 'admin';
-            } else {
-                $this->mode = 'public';
-            }
-        }
         $configManager = $controller->getConfigManager();
-        if ($this->mode == 'admin') {
-            $this->startSession($this->mode, $configManager->get('main.adminSessionLifeTime'));
-        } else {
-            $this->startSession($this->mode, $configManager->get('main.publicSessionLifeTime'));
-        }
+        $this->startSession($this->mode, $configManager->get('main.publicSessionLifeTime'));
 
         $this->createRenderer();
     }
 
     public function execute($controller)
     {
-        /**
-         * @var Cache $cache
-         */
-        //        $cache = $this->getService('Cache');
-        //        $cache->enable();
 
         $response = new ajaxResponse();
         $languagesManager = $this->getService('languagesManager');
@@ -51,25 +34,26 @@ class ajaxProductListApplication extends controllerApplication
         $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
         $status = 'fail';
 
-        $productsValue = [];
+        $categoryFilters = [];
         if ($elementId = $controller->getParameter('elementId')) {
             if ($element = $structureManager->getElementById($elementId)) {
                 if ($element instanceof ProductsListElement) {
                     $status = 'success';
 
-                    //                if ($controller->getParameter('limit')) {
-                    //
-                    //                }
                     $products = $element->getProductsList();
-                    $categoryFilters = $element->getFilters();
-                    //                $categoryFilters = $element->getFiltersByType('parameter');
+                    $filters = $element->getFilters();
+
+                    foreach ($filters as $nr => $filter) {
+                        $categoryFilters['filters'][] = [
+                            'type'      => $filter->getType(),
+                            'title'     => $filter->getTitle(),
+                            'options'    => $filter->getOptionsInfo(),
+                        ];
+                    }
                 }
             }
-
         }
 
-        //        $products = $structureManager->getProductsByCategory($category);
-        //
         $response->setResponseData("product", $products);
         $response->setResponseData("listInfo", $categoryFilters);
 
@@ -82,11 +66,7 @@ class ajaxProductListApplication extends controllerApplication
 
     public function getUrlName()
     {
-        if ($this->mode == 'admin') {
-            return 'admin';
-        } else {
-            return '';
-        }
+        return '';
     }
 }
 
