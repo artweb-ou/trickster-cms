@@ -442,7 +442,7 @@ class productElement extends structureElement implements
 
             //brand and parameters should be loaded only if the element is final
             if ($this->final) {
-                if ($categoryMetaDescriptionTemplate = $this->getCategoryMetaDescriptionTemplate()) {
+                if ($categoryMetaDescriptionTemplate = $this->getFirstDataFromParents('metaDescriptionTemplate')) {
                     $this->textContent = $this->populateSeoTemplate($categoryMetaDescriptionTemplate);
                 } else {
                     if ($brandElement = $this->getBrandElement()) {
@@ -1537,25 +1537,19 @@ class productElement extends structureElement implements
         return $this->productUnit;
     }
 
-    private function getCategoryMetaDescriptionTemplate()
-    {
-        return $this->getFirstDataFromParents('metaDescriptionTemplate');
-    }
-
-    private function getCategoryMetaTitleTemplate()
-    {
-        return $this->getFirstDataFromParents('metaTitleTemplate');
-    }
-
-    private function getCategoryMetaH1Template()
-    {
-        return $this->getFirstDataFromParents('metaH1Template');
-    }
 
     public function getTemplatedMetaTitle()
     {
-        if ($categoryMetaTitleTemplate = $this->getCategoryMetaTitleTemplate()) {
+        if ($categoryMetaTitleTemplate = $this->getFirstDataFromParents('metaTitleTemplate')) {
             return $this->populateSeoTemplate($categoryMetaTitleTemplate);
+        }
+        return '';
+    }
+
+    public function getTemplatedH1()
+    {
+        if ($categoryH1Template = $this->getFirstDataFromParents('metaH1Template')) {
+            return $this->populateSeoTemplate($categoryH1Template);
         }
         return '';
     }
@@ -1961,7 +1955,7 @@ class productElement extends structureElement implements
     {
         if ($currentAction == 'showImages') {
             $this->allowedTypes = ['galleryImage'];
-        } elseif($currentAction == 'showTexts'){
+        } elseif ($currentAction == 'showTexts') {
             $this->allowedTypes = ['subArticle'];
         } else {
             $this->allowedTypes = [];
@@ -1969,7 +1963,8 @@ class productElement extends structureElement implements
         return $this->allowedTypes;
     }
 
-    public function getNewElementAction() {
+    public function getNewElementAction()
+    {
         return 'showForm';
     }
 
