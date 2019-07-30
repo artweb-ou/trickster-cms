@@ -193,6 +193,14 @@ class eventElement extends structureElement implements MetadataProviderInterface
         return $this->image;
     }
 
+    public function getEventById($id) {
+        $structureManager = $this->getService('structureManager');
+        if ($event = $structureManager->getElementById($id)) {
+            return $event;
+        }
+        return false;
+    }
+
     public function getSameEventsListsEvents($amount = 4)
     {
         $result = [];
@@ -201,6 +209,22 @@ class eventElement extends structureElement implements MetadataProviderInterface
             foreach ($eventsLists as $eventsList) {
                 $idList = array_merge($idList, $eventsList->getCurrentEventsIdList());
             }
+            $idList = array_unique($idList);
+            $eventExcludeIds = [];
+
+            $currentDate = date_create();
+            $currentTimestamp =  date_timestamp_get($currentDate);
+
+            foreach ($idList as $eventKey => $eventId) {
+                $event = $this->getEventById($eventId);
+
+                if ($currentTimestamp > $event->getEndDayStamp()) {
+                    $eventExcludeIds[] = $eventId;
+                }
+            }
+
+            $idList = array_diff($idList, $eventExcludeIds);
+
             /**
              * @var structureManager $structureManager
              */
