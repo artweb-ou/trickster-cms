@@ -42,6 +42,8 @@ class fileApplication extends controllerApplication
         }
         if ($controller->getParameter('filename')) {
             $this->fileName = $controller->getParameter('filename');
+        } elseif (!empty($controller->requestedPath)) {
+            $this->fileName = last($controller->requestedPath);
         }
         if ($controller->getParameter('mode')) {
             $this->mode = $controller->getParameter('mode');
