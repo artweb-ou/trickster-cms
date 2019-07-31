@@ -48,11 +48,15 @@ class redirectionManager implements DependencyInjectionContextInterface
 
     public function switchLanguage($newLanguageCode, $referrerElementId = 0, $application = '')
     {
+        /**
+         * @var uriSwitchLogics $uriSwitchLogics
+         */
         $uriSwitchLogics = $this->getService('uriSwitchLogics');
         $uriSwitchLogics->setLanguageCode($newLanguageCode);
         $uriSwitchLogics->setApplication($application);
-
-        $this->redirect($uriSwitchLogics->findForeignRelativeUrl($referrerElementId), '301');
+        $httpStatus = '302';
+        $url = $uriSwitchLogics->findForeignRelativeUrl($referrerElementId, $httpStatus);
+        $this->redirect($url, $httpStatus);
     }
 
     public function redirectToMobile($uri, $uriType = 'desktop', $newLanguage = null)
