@@ -87,7 +87,6 @@ window.googleAnalyticsLogics = new function() {
 
     this.checkoutEvent = function(parameters) {
         var products = [];
-        console.log(parameters);
         if (ecommerceEnabled && parameters) {
             for (var i = 0; i < parameters.products.length; i++) {
                 products.push({
