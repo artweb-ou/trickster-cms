@@ -2,6 +2,7 @@
 
 class productDataResponseConverter extends StructuredDataResponseConverter
 {
+
     protected $defaultPreset = 'api';
 
     protected function getRelationStructure()
@@ -21,6 +22,9 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'price'                     => 'price',
             'oldPrice'                  => 'oldPrice',
             'discount'                  =>  function ($element) {
+                /**
+                 * @var productElement $element
+                 */
                 if ($discountElement = $element->getOldPrice()) {
                     return (int)$element->getDiscountPercent() . '%';
                 }
@@ -28,9 +32,12 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             },
             'showincategory'            => 'showincategory',
             'brandId'                   => 'brandId',
-            'brandTitle'                => function ($element) {
+            'brand'                => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
                 if ($brandElement = $element->getBrandElement()) {
-                    return $brandElement->title;
+                    return $brandElement->getTitle();
                 }
                 return '';
             },
@@ -55,20 +62,65 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'h1'                        => 'h1',
             'qtFromConnectedCategories' => 'qtFromConnectedCategories',
 
+
+// new new
+            'name_ga' =>function ($element) {
+                /**
+                 * @var productElement $element
+                 */
+                return $element->getDefaultLanguageProperty('title');
+                //return $categoryElement->getValue('title', $element->getLanguageByMarker('publicLanguages')->id);
+            },
+            'category_ga' => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
+                //   return $element->getDLCategoryTitle();
+                return $element->getDefaultLanguageCustomProperty('title', 'category');
+//                $categoryElement = $element->getRequestedParentCategory();
+//                return $categoryElement->getValue('title', $element->getLanguageByMarker('publicLanguages')->id);
+            },
+            'brand_ga' => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
+                return $element->getDefaultLanguageCustomProperty('title', 'brand');
+            },
+
+            'category' => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
+                $categoryElement = $element->getRequestedParentCategory();
+                return $categoryElement->title;
+            },
+
             // new END
 
 
             'introduction'     => 'introduction',
             'dateCreated'      => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
                 return $element->getValue('dateCreated');
             },
             'dateModified'     => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
                 return $element->getValue('dateModified');
             },
             'introductionText' => function ($element, $scope) {
+                /**
+                 * @var dataResponseConverter $scope
+                 */
                 return $scope->htmlToPlainText($element->introduction);
             },
             'contentText'      => function ($element, $scope) {
+                /**
+                 * @var dataResponseConverter $scope
+                 */
                 return $scope->htmlToPlainText($element->content);
             },
         ];
@@ -113,7 +165,15 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'discount',
                 'showincategory',
                 'brandId',
-                'brandTitle',
+                'brand',
+
+
+                'name_ga',
+                'category_ga',
+                'brand_ga',
+                'category',
+
+
                 'purchaseCount',
                 'inactive',
                 'color',

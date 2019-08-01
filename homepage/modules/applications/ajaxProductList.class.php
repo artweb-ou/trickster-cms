@@ -44,13 +44,11 @@ class ajaxProductListApplication extends controllerApplication
                     $filters = $element->getFilters();
 
                     foreach ($filters as $nr => $filter) {
-                        if ($filter instanceof ProductFilter) {
-                            $categoryFilters['filters'][] = [
-                                'type'      => $filter->getType(),
-                                'title'     => $filter->getTitle(),
-                                'options'    => $filter->getOptionsInfo(),
-                            ];
-                        }
+                        $categoryFilters['filters'][] = [
+                            'type'      => $filter->getType(),
+                            'title'     => $filter->getTitle(),
+                            'options'    => $filter->getOptionsInfo(),
+                        ];
                     }
                 }
             }

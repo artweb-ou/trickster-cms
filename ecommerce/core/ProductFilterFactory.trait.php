@@ -28,6 +28,9 @@ trait ProductFilterFactoryTrait
         return $filter;
     }
 
+    /**
+     * @return ProductFilter[]
+     */
     public function getFilters()
     {
         if ($this->filters === null) {
