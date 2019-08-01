@@ -542,10 +542,24 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         if ($result === null) {
             $result = [];
             if ($selectedDeliveryTypeId = $this->shoppingBasket->getSelectedDeliveryTypeId()) {
-                $paymentMethodsIds = $this->getService('linksManager')->getConnectedIdList($selectedDeliveryTypeId, "deliveryTypePaymentMethod", "parent");
-                if ($paymentMethodsIds) {
-                    $result = $this->getService('structureManager')->getElementsByIdList($paymentMethodsIds, $this->id, true);
+                /**
+                 * @var structureManager $structureManager
+                 */
+                $structureManager = $this->getService('structureManager');
+                /**
+                 * @var linksManager $linksManager
+                 */
+                $linksManager = $this->getService('linksManager');
+
+                if ($paymentMethodsElementId = $structureManager->getElementIdByMarker('paymentMethods')) {
+                    if ($allMethodsIds = $linksManager->getConnectedIdList($paymentMethodsElementId, "structure", "parent")) {
+                        $connectedMethodsIds = $linksManager->getConnectedIdList($selectedDeliveryTypeId, "deliveryTypePaymentMethod", "parent");
+                        if ($loadIdList = array_intersect($allMethodsIds, $connectedMethodsIds)) {
+                            $result = $structureManager->getElementsByIdList($loadIdList, $this->id, true);
+                        }
+                    }
                 }
+
             }
         }
         return $result;
@@ -653,7 +667,8 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $this->currentOrder = $currentOrder;
     }
 
-    public function validateVatNumber($vatNumber) {
+    public function validateVatNumber($vatNumber)
+    {
         $endpoint = 'validate';
         $access_key = $this->getService('ConfigManager')->get('main.vatlayerKey');
 
@@ -661,7 +676,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
         $vat_number = $vatNumber;
 
         // Initialize CURL:
-        $ch = curl_init('http://apilayer.net/api/'.$endpoint.'?access_key='.$access_key.'&vat_number='.$vat_number.'');
+        $ch = curl_init('http://apilayer.net/api/' . $endpoint . '?access_key=' . $access_key . '&vat_number=' . $vat_number . '');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         // Store the data:
@@ -673,6 +688,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
 
         return $validationResult;
     }
+
     public function hasPromoDiscounts()
     {
         return $this->getService('shoppingBasketDiscounts')->hasPromoDiscounts();
