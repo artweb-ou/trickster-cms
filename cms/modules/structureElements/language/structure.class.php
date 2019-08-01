@@ -313,24 +313,25 @@ class languageElement extends structureElement implements MetadataProviderInterf
         $linksManager = $this->getService('linksManager');
         $structureManager = $this->getService('structureManager');
 
-        $enabledElementsIdList = $linksManager->getConnectedIdList($this->id, $type, 'parent');
-        $languageEnabledElementsIdList = $linksManager->getConnectedIdList($this->id, $linkType, 'parent');
-        $currentMenuEnabledElementsIdList = $linksManager->getConnectedIdList($menuId, $linkType, 'parent');
+        $allElementsIdList = $linksManager->getConnectedIdList($this->id, $type, 'parent');
+        $shownInLanguageIdList = $linksManager->getConnectedIdList($this->id, $linkType, 'parent');
+        $shownInMenuIdList = $linksManager->getConnectedIdList($menuId, $linkType, 'parent');
 
         // todo: this now only supports the direct children of current menu. We should somehow allow any level to be used
         if ($currentMainPage = $this->getCurrentMainMenu()) {
             if (!$currentMainPage->final) {
-                $subPages = $currentMainPage->getChildrenList();
-                foreach ((array)$subPages as $subPage) {
-                    if ($subPage->requested) {
-                        $currentMenuEnabledElementsIdList = array_merge($currentMenuEnabledElementsIdList, (array)($linksManager->getConnectedIdList($subPage->id, $linkType, 'parent')));
-                        break;
+                if ($subPages = $currentMainPage->getChildrenList()){
+                    foreach ($subPages as $subPage) {
+                        if ($subPage->requested) {
+                            $shownInMenuIdList = array_merge($shownInMenuIdList, (array)($linksManager->getConnectedIdList($subPage->id, $linkType, 'parent')));
+                            break;
+                        }
                     }
                 }
             }
         }
 
-        if ($resultIdList = array_intersect(array_merge($languageEnabledElementsIdList, $currentMenuEnabledElementsIdList), $enabledElementsIdList)) {
+        if ($resultIdList = array_intersect($allElementsIdList, array_merge($shownInLanguageIdList, $shownInMenuIdList))) {
             $result = $structureManager->getElementsByIdList($resultIdList, $this->id, true);
         }
         return $result;

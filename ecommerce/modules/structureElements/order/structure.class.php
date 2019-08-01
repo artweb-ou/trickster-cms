@@ -497,6 +497,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function sendOrderStatusNotificationEmail()
     {
+	//todo: make configurable?
+	return;
         if ($this->orderStatus !== 'undefined' && $this->orderStatus !== 'deleted') {
 
             $languagesManager = $this->getService('LanguagesManager');
