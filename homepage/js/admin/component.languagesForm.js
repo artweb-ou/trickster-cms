@@ -4,7 +4,7 @@ window.LanguagesFormComponent = function(componentElement) {
         for (var i = searchInputElements.length; i--;) {
             new AjaxSelectComponent(searchInputElements[i],
                 'folder,news,production,service,newsList,productCatalogue',
-                'public'
+                'admin'
             );
         }
     };

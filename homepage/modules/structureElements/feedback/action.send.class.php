@@ -186,7 +186,6 @@ class sendFeedback extends structureElementAction
                 }
             }
         }
-
         $this->sendAjaxFormResponse($structureElement);
     }
 

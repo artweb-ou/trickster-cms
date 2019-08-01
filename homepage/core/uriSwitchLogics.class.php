@@ -36,7 +36,7 @@ class uriSwitchLogics implements DependencyInjectionContextInterface
         return '//' . $this->controller->domainURL . 'mobile/';
     }
 
-    public function findForeignRelativeUrl($elementId)
+    public function findForeignRelativeUrl($elementId, &$httpStatus)
     {
         $url = '';
         if ($this->languageCode) {
@@ -58,14 +58,30 @@ class uriSwitchLogics implements DependencyInjectionContextInterface
             }
 
             if ($element) {
+                $httpStatus = "301";
                 $url = $element->getUrl();
             }
 
             if (!$url) {
+                $httpStatus = "302";
                 $url = $baseUrl . $this->languageCode . '/';
             }
         }
         return $url;
+    }
+
+    protected function findForeignConnectedElement($id, $languageId)
+    {
+        $relative = false;
+        if ($connectedIds = $this->linksManager->getConnectedIdList($id, 'foreignRelative', 'parent')) {
+            foreach ($connectedIds as $connectedId) {
+                if ($element = $this->structureManager->getElementById($connectedId, $languageId)) {
+                    $relative = $element;
+                    break;
+                }
+            }
+        }
+        return $relative;
     }
 
     public function setLanguageCode($languageCode)
@@ -76,19 +92,5 @@ class uriSwitchLogics implements DependencyInjectionContextInterface
     public function setApplication($application)
     {
         $this->application = $application;
-    }
-
-    protected function findForeignConnectedElement($id, $languageId)
-    {
-        $relative = false;
-        if ($connectedIds = $this->linksManager->getConnectedIdList($id, 'foreignRelative', 'parent')) {
-            foreach ($connectedIds as &$connectedId) {
-                if ($element = $this->structureManager->getElementById($connectedId, $languageId)) {
-                    $relative = $element;
-                    break;
-                }
-            }
-        }
-        return $relative;
     }
 }

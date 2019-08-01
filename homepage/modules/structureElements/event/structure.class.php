@@ -196,7 +196,7 @@ class eventElement extends structureElement implements MetadataProviderInterface
     public function getEventById($id) {
         $structureManager = $this->getService('structureManager');
         if ($event = $structureManager->getElementById($id)) {
-           return $event;
+            return $event;
         }
         return false;
     }
@@ -219,7 +219,7 @@ class eventElement extends structureElement implements MetadataProviderInterface
                 $event = $this->getEventById($eventId);
 
                 if ($currentTimestamp > $event->getEndDayStamp()) {
-                       $eventExcludeIds[] = $eventId;
+                    $eventExcludeIds[] = $eventId;
                 }
             }
 

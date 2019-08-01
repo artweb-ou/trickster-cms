@@ -44,7 +44,7 @@ trait GalleryInfoProviderTrait
                 'externalLink' => $imageElement->externalLink,
                 'id' => $imageElement->id,
                 'filename' => $imageElement->originalName,
-                'fileUrl' => $controller->baseURL . 'file/id:' . $imageElement->id . '/filename:' . $imageElement->originalName,
+                'fileUrl' => $controller->baseURL . 'file/id:' . $imageElement->id . '/' . $imageElement->originalName,
             ];
             if ($imageElement instanceof ImageUrlProviderInterface) {
                 $imageInfo['fullImageUrl'] = $imageElement->getImageUrl($imagePresetBase . 'FullImage');
