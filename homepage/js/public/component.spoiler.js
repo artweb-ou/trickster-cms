@@ -4,6 +4,7 @@ window.SpoilerComponent = function(componentElement) {
 	var contentWrapperElement = false;
 	var buttonElement = false;
 	var gradientComponent = false;
+	var plusComponent = false;
 
 	var maxHeight;
 	var minHeight = 0;
@@ -18,6 +19,7 @@ window.SpoilerComponent = function(componentElement) {
 		contentWrapperElement = componentElement.querySelector('.spoiler_component_content_wrapper');
 		contentElement = contentWrapperElement.querySelector('.spoiler_component_content');
 		gradientComponent = componentElement.querySelector('.partly_hidden_gradient');
+		plusComponent = componentElement.querySelector('.spoiler_component_plus');
 
 		if (titleElement && contentElement) {
 			maxHeight = contentElement.scrollHeight + 'px';
@@ -54,6 +56,9 @@ window.SpoilerComponent = function(componentElement) {
 		} else {
 			titleElement.addEventListener('click', onClick);
 		}
+		if(plusComponent) {
+			plusComponent.addEventListener('click', onClick);
+		}
 		eventsManager.addHandler(window, 'resize', resize);
 
 	};
@@ -80,6 +85,10 @@ window.SpoilerComponent = function(componentElement) {
 							}
 						});
 					}
+					if(plusComponent) {
+						plusComponent.classList.remove('show');
+						plusComponent.classList.add('hide');
+					}
 				},
 				onComplete: function() {
 					if(buttonElement) {
@@ -103,6 +112,10 @@ window.SpoilerComponent = function(componentElement) {
 							'background': 'transparent'
 						}
 					});
+				}
+				if(plusComponent) {
+					plusComponent.classList.add('show');
+					plusComponent.classList.remove('hide');
 				}
 			},
 			onComplete: function() {

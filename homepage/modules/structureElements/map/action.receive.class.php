@@ -40,6 +40,7 @@ class receiveMap extends structureElementAction
             'image',
             'styles',
             'zoomControlEnabled',
+            'zoomLevel',
             'streetViewControlEnabled',
             'mapTypeControlEnabled',
         ];
