@@ -72,6 +72,7 @@ class mapElement extends menuDependantStructureElement implements ConfigurableLa
         return json_encode([
             'coordinates' => $this->coordinates,
             'title' => $this->title,
+            'zoomLevel' => $this->zoomLevel,
             'content' => $this->description,
             'mapCode' => $this->mapCode,
             'heightAdjusted' => true,

@@ -55,7 +55,7 @@ window.MapComponent = function(componentElement, id) {
                 } else {
                     // var title = info.getTitle() ? '&q=+(' + info.getTitle() + ')' : '';
                     var title = info.getTitle() ? '&q=+' + info.getTitle() + '' : '';
-console.log(info.getZoomLevel())
+
                     var iframe = document.createElement('iframe');
                     componentElement.classList.add('googlemap_iframe');
                     // var src = 'https://maps.google.com/?q=' + coordinates + title + '&hl=' + window.mapsLogics.getShortLanguageCode() + '&z=' + 14 + '&output=embed';
