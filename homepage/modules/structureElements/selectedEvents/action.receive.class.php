@@ -37,6 +37,7 @@ class receiveSelectedEvents extends structureElementAction
             'date_from',
             'date_to',
             'sort',
+            'fixedId',
         ];
     }
 

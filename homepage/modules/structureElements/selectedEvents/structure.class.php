@@ -8,6 +8,8 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
     public $role = 'content';
     protected $eventsToDisplay;
     protected $baseEventsIdList;
+    public $linkItems = [];
+    protected $fixedElement;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -31,6 +33,7 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         $moduleStructure['receivedEventsListsIds'] = 'array'; // temporary
 
         $moduleStructure['colorLayout'] = 'text';
+        $moduleStructure['fixedId'] = 'text';
     }
 
     protected function getTabsList()
@@ -147,4 +150,13 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         return $this->t_events;
     }
 
+
+    public function getFixedElement()
+    {
+        if ($this->fixedElement === null && $this->fixedId) {
+            $structureManager = $this->getService('structureManager');
+            $this->fixedElement = $structureManager->getElementById($this->fixedId);
+        }
+        return $this->fixedElement;
+    }
 }
