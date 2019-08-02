@@ -26,6 +26,7 @@ class fileApplication extends controllerApplication
                 $this->renderer->setContentDisposition('attachment');
             }
             $this->renderer->setContentType("application/octet-stream");
+            $this->renderer->setAcceptRanges('bytes');
             $this->renderer->assign('filePath', $filePath);
             $this->renderer->assign('fileName', $this->fileName);
             $this->renderer->display();
