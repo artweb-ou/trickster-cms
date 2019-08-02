@@ -39,7 +39,7 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 if ($brandElement = $element->getBrandElement()) {
                     return $brandElement->getTitle();
                 }
-                return 'no';
+                return '';
             },
             'purchaseCount'             => 'purchaseCount',
             'inactive'                  => 'inactive',
@@ -176,6 +176,8 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'category_ga',
                 'brand_ga',
                 'category',
+
+                'selectionsImages',
 
 
                 'purchaseCount',
