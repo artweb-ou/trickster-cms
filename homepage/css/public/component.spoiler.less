@@ -1,9 +1,18 @@
+.spoiler_component {
+	position: relative
+}
+
 .spoiler_component_content_wrapper {
 	overflow: hidden;
 	position: relative;
 	min-height: 1.5rem;
 	height: 0;
 }
+
+.spoiler_component_title {
+	cursor: pointer;
+}
+
 .spoiler_component_content {
 	padding-top: @16pt;
 }
@@ -14,4 +23,65 @@
 	left: 0;
 	right: 0;
 	top: 0;
+}
+
+.spoiler_component_plus {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	top: 0;
+	right: 0;
+
+	&:before,
+	&:after {
+		content: "";
+		position: absolute;
+		background-color: black;
+		border-radius: 2px;
+		transition: transform 0.5s ease-out;
+	}
+
+	/* Vertical line */
+
+	&:before {
+		top: 0;
+		left: 50%;
+		width: 4px;
+		height: 100%;
+		margin-left: -2px;
+	}
+
+	/* horizontal line */
+
+	&:after {
+		top: 50%;
+		left: 0;
+		width: 100%;
+		height: 4px;
+		margin-top: -2px;
+	}
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	&.show {
+		&:before {
+			transform: rotate(45deg);
+		}
+
+		&:after {
+			transform: rotate(45deg);
+		}
+	}
+
+	&.hide {
+		&:before {
+			transform: rotate(90deg);
+		}
+
+		&:after {
+			transform: rotate(90deg);
+		}
+	}
 }
