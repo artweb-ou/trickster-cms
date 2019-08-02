@@ -39,6 +39,13 @@ class MapFormStructure extends ElementForm
         'coordinates' => [
             'type' => 'input.coordinates'
         ],
+        'zoomLevel' => [
+            'type' => 'input.text',
+            'inputType' => 'number',
+            'minValue'  => '2',
+            'maxValue'  => '22',
+            'stepValue' => '1',
+        ],
         'styles' => [
             'type' => 'input.textarea'
         ],
