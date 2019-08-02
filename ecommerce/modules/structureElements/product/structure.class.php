@@ -1654,49 +1654,24 @@ class productElement extends structureElement implements
         }
         return $result;
     }
-    public function getLanguageByMarker($marker = 'adminLanguages')
-    {
-        $languageManager = $this->getService('LanguagesManager');
-        return $languageManager->getDefaultLanguage($marker);
-    }
 
+    // return property value for default lang in public
     public function getDefaultLanguageCustomProperty($property, $structureName = false)
     {
         $languageManager = $this->getService('LanguagesManager');
 
         switch ($structureName) {
             case 'category':
-                if ($structureElement = $this->getRequestedParentCategory()) {
-                    return $structureElement->getValue($property, $languageManager->getDefaultLanguage('publicLanguages'));
-                }
-                return '';
+                return ($structureElement = $this->getRequestedParentCategory()) ? $structureElement->getValue($property, $languageManager->getDefaultLanguage('public_root')->id) : "";
 
             case 'brand':
-                if ($structureElement = $this->getBrandElement()) {
-                    return $structureElement->getValue($property, $languageManager->getDefaultLanguage('publicLanguages'));
-                }
-                return '';
+                return ($structureElement = $this->getBrandElement()) ? $structureElement->getValue($property, $languageManager->getDefaultLanguage('public_root')->id) : "";
 
             default:
-                return $this->getValue($property, $languageManager->getDefaultLanguage('publicLanguages'));
+                return $this->getValue($property, $languageManager->getDefaultLanguage('public_root')->id);
         }
     }
 
-    public function getDefaultLanguageProperty($property)
-    {
-        $languageManager = $this->getService('LanguagesManager');
-        return $this->getValue($property, $languageManager->getDefaultLanguage('publicLanguages'));
-    }
-
-    public function getDLCategoryTitle()
-    {
-        $languageManager = $this->getService('LanguagesManager');
-        if ($categoryElement = $this->getRequestedParentCategory()) {
-            return $categoryElement->getValue('title', $languageManager->getDefaultLanguage('publicLanguages'));
-        }
-
-        return false;
-    }
 
     /**
      * @deprecated - use getElementData() instead
@@ -1713,7 +1688,7 @@ class productElement extends structureElement implements
     public function getElementData($detailed = false)
     {
         $languageManager = $this->getService('LanguagesManager');
-        $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
+        $defaultLanguage = $languageManager->getDefaultLanguage('public_root');
         $brandElement = $this->getBrandElement();
         $categoryElement = $this->getRequestedParentCategory();
 

@@ -39,7 +39,7 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 if ($brandElement = $element->getBrandElement()) {
                     return $brandElement->getTitle();
                 }
-                return '';
+                return 'no';
             },
             'purchaseCount'             => 'purchaseCount',
             'inactive'                  => 'inactive',
@@ -68,8 +68,7 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 /**
                  * @var productElement $element
                  */
-                return $element->getDefaultLanguageProperty('title');
-                //return $categoryElement->getValue('title', $element->getLanguageByMarker('publicLanguages')->id);
+                return $element->getDefaultLanguageCustomProperty('title');
             },
             'category_ga' => function ($element) {
                 /**
@@ -77,8 +76,6 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                  */
                 //   return $element->getDLCategoryTitle();
                 return $element->getDefaultLanguageCustomProperty('title', 'category');
-//                $categoryElement = $element->getRequestedParentCategory();
-//                return $categoryElement->getValue('title', $element->getLanguageByMarker('publicLanguages')->id);
             },
             'brand_ga' => function ($element) {
                 /**
