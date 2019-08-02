@@ -1673,6 +1673,33 @@ class productElement extends structureElement implements
     }
 
 
+    public function selectionsPricingsProperties()
+    {
+        $selectionsPricings = $this->getSelectionsPricingsMap();
+        $selectionsOldPricings = [];
+        if ($selectionsPricings) {
+            $discountsManager = $this->getService('shoppingBasketDiscounts');
+            $mainConfig = $this->getService('ConfigManager')->getConfig('main');
+            $vatRateSetting = $mainConfig->get('vatRate');
+            $vatIncluded = $this->vatIncluded || $mainConfig->get('pricesContainVat') === true;
+            $currencySelector = $this->getService('CurrencySelector');
+            foreach ($selectionsPricings as $combo => &$price) {
+                if (!$vatIncluded) {
+                    $price *= $vatRateSetting;
+                    $this->vatIncluded = true;
+                }
+
+                $selectionsOldPricings[$combo] = $currencySelector->formatPrice($price);
+
+                $discountAmount = $discountsManager->getProductDiscount($this->id, $price);
+                if ($discountAmount) {
+                    $price -= $discountAmount;
+                }
+                $selectionsPricings[$combo] = $currencySelector->formatPrice($price);
+            }
+        }
+    }
+
     /**
      * @deprecated - use getElementData() instead
      */

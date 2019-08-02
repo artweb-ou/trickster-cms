@@ -92,6 +92,13 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 return $categoryElement->title;
             },
 
+            'selectionsImages' => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
+                return $element->getOptionsImagesInfo();
+            },
+
             // new END
 
 
