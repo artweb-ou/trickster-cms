@@ -64,7 +64,7 @@ class productDataResponseConverter extends StructuredDataResponseConverter
 
 
 // new new
-            'name_ga' =>function ($element) {
+            'title_ga' =>function ($element) {
                 /**
                  * @var productElement $element
                  */
@@ -165,7 +165,7 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'brand',
 
 
-                'name_ga',
+                'title_ga',
                 'category_ga',
                 'brand_ga',
                 'category',

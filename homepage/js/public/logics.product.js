@@ -46,8 +46,8 @@ window.Product = function() {
     };
 
     this.getName = function() {
-        if (legacyApproachData.name_ga) {
-            return legacyApproachData.name_ga;
+        if (legacyApproachData.title_ga) {
+            return legacyApproachData.title_ga;
         }
         return false;
     };

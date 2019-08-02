@@ -1697,7 +1697,7 @@ class productElement extends structureElement implements
             'price' => $this->getPrice(),
             'name' => $this->getTitle(),
             'oldPrice' => $this->getOldPrice(),
-            'name_ga' => $this->getValue('title', $defaultLanguage->id),
+            'title_ga' => $this->getValue('title', $defaultLanguage->id),
             'category_ga' => $categoryElement->getValue('title', $defaultLanguage->id),
             'brand_ga' => $brandElement ? $brandElement->getValue('title', $defaultLanguage->id) : '',
             'category' => $categoryElement->getTitle(),
