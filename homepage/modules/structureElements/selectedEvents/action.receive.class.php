@@ -17,6 +17,10 @@ class receiveSelectedEvents extends structureElementAction
 
             $controller->redirect($structureElement->URL);
         }
+        if ($controller->getApplicationName() != 'adminAjax') {
+            $controller->redirect($structureElement->URL);
+            //$structureElement->executeAction("showForm");
+        }
         $structureElement->executeAction("showForm");
     }
 

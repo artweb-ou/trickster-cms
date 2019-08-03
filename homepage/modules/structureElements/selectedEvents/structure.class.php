@@ -2,7 +2,7 @@
 
 class selectedEventsElement extends menuDependantStructureElement implements ConfigurableLayoutsProviderInterface, EventsListFilterInterface
 {
-    use ConfigurableLayoutsProviderTrait, ConnectedEventsProviderTrait, EventsListFilterTrait;
+    use ConfigurableLayoutsProviderTrait, ConnectedEventsProviderTrait, EventsListFilterTrait, SearchTypesProviderTrait;
     public $dataResourceName = 'module_selectedevents';
     public $defaultActionName = 'show';
     public $role = 'content';
@@ -10,6 +10,10 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
     protected $baseEventsIdList;
     public $linkItems = [];
     protected $fixedElement;
+
+//    protected $allowedTypes = ['linkListItem'];
+    public $connectedMenu;
+
 
     protected function setModuleStructure(&$moduleStructure)
     {

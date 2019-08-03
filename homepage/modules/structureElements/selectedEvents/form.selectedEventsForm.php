@@ -70,7 +70,6 @@ class SelectedEventsFormStructure extends ElementForm
         return $this->element->getSearchTypesString('admin');
     }
 
-
     public function getFormComponents()
     {
         $structure = [];
@@ -80,7 +79,7 @@ class SelectedEventsFormStructure extends ElementForm
             'property' => 'connectedMenu',
             'types' => $this->getSearchTypes(),
         ];
-        return $structure + $this->structure;
+        return  $this->structure + $structure;
     }
 
 }
