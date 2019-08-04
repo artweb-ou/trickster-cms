@@ -37,7 +37,7 @@ CKEDITOR.editorConfig = function(config) {
 
     config.enterMode = CKEDITOR.ENTER_P;
     config.shiftEnterMode = CKEDITOR.ENTER_BR;
-    config.stylesSet = 'my_styles:/../../../project/js/ckeditor/project.styles.js';
+    config.stylesSet = 'my_styles:/project/js/ckeditor/project.styles.js';
     config.fontSize_sizes = '0.7/0.7em;0.8/0.8em;0.9/0.9em;1/1em;1.1/1.1em;1.2/1.2em;1.3/1.3em;1.4/1.4em;1.5/1.5em;1.6/1.6em;1.7/1.7em;1.8/1.8em;1.9/1.9em;2/2em;2.5/2.5em;3/3em';
     config.htmlEncodeOutput = false;
     config.entities = false;

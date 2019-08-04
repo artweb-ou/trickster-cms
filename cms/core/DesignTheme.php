@@ -25,6 +25,7 @@ abstract class DesignTheme extends errorLogger
     protected $extraFolder;
     protected $imagesPaths;
     protected $fontsPaths;
+    protected $tricksterUrl;
     /**
      * @var DesignThemesManager
      */
@@ -694,4 +695,15 @@ abstract class DesignTheme extends errorLogger
             //            return $this->getImageUrl("icons/favicon.ico");
         }
     }
+
+
+    public function tricksterUrl()
+    {
+        $controller = controller::getInstance();
+        $pathsManager = $controller->getPathsManager();
+        $this->tricksterUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster');
+
+        return $this->tricksterUrl;
+    }
+
 }
