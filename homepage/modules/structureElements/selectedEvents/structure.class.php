@@ -2,17 +2,20 @@
 
 class selectedEventsElement extends menuDependantStructureElement implements ConfigurableLayoutsProviderInterface, EventsListFilterInterface
 {
-    use ConfigurableLayoutsProviderTrait, ConnectedEventsProviderTrait, EventsListFilterTrait, SearchTypesProviderTrait;
+    use ConfigurableLayoutsProviderTrait;
+    use ConnectedEventsProviderTrait;
+    use EventsListFilterTrait;
+    use SearchTypesProviderTrait;
+
     public $dataResourceName = 'module_selectedevents';
     public $defaultActionName = 'show';
     public $role = 'content';
     protected $eventsToDisplay;
     protected $baseEventsIdList;
-    public $linkItems = [];
+    public $connectedMenu;
     protected $fixedElement;
 
 //    protected $allowedTypes = ['linkListItem'];
-    public $connectedMenu;
 
 
     protected function setModuleStructure(&$moduleStructure)
@@ -27,6 +30,7 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         $moduleStructure['layout'] = 'text';
         $moduleStructure['listLayout'] = 'text';
         $moduleStructure['enableFilter'] = 'checkbox';
+        $moduleStructure['fixedId'] = 'text';
 
         $moduleStructure['dates_type'] = 'text';
         $moduleStructure['date_from'] = 'date';
@@ -37,7 +41,6 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         $moduleStructure['receivedEventsListsIds'] = 'array'; // temporary
 
         $moduleStructure['colorLayout'] = 'text';
-        $moduleStructure['fixedId'] = 'text';
     }
 
     protected function getTabsList()
@@ -154,6 +157,15 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         return $this->t_events;
     }
 
+
+
+    public function getFixedElementTitle()
+    {
+        if ($fixedElement = $this->getFixedElement()) {
+            return $fixedElement->getTitle();
+        }
+        return parent::getTitle();
+    }
 
     public function getFixedElement()
     {

@@ -163,7 +163,7 @@ window.AjaxSelectItemComponent = function(ajaxSelectComponent, optionElement, mu
         descriptionElement.innerHTML = optionElement.text;
         removalElement = document.createElement('div');
         if (!multiple) {
-            componentElement.className = 'ajaxitemsearch_result';
+            componentElement.className = 'ajaxitemsearch_result ajaxitemsearch_result_single';
             descriptionElement.className = 'ajaxitemsearch_result_text';
             removalElement.className = 'ajaxitemsearch_result_remover';
         } else {

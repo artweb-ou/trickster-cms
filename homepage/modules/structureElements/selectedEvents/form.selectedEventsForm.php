@@ -67,7 +67,8 @@ class SelectedEventsFormStructure extends ElementForm
 
     protected function getSearchTypes()
     {
-        return $this->element->getSearchTypesString('admin');
+//        return $this->element->getSearchTypesString('admin');
+        return "folder,news,gallery,newsList,production,service,Event,EventsList";
     }
 
     public function getFormComponents()
@@ -75,7 +76,7 @@ class SelectedEventsFormStructure extends ElementForm
         $structure = [];
         $structure['fixedId'] = [
             'type' => 'ajaxsearch',
-            'class' => 'linklist_form_search',
+            'class' => 'selectedevents_form_search',
             'property' => 'connectedMenu',
             'types' => $this->getSearchTypes(),
         ];
