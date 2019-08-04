@@ -9,7 +9,7 @@ class ckeditorDesignTheme extends DesignTheme
         $this->cssPath = $tricksterPath . 'cms/css/';
         $this->cssFiles = [];
         $this->imagesFolder = 'images/';
-        $this->imagesPath = ROOT_PATH . 'trickster/cms/' . $this->imagesFolder;
+        $this->imagesPath = $tricksterPath . 'cms/' . $this->imagesFolder;
         $this->imagesPaths = [
             $this->imagesPath,
             ROOT_PATH . 'project/' . $this->imagesFolder . 'public/',
