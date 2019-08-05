@@ -74,6 +74,10 @@ class SelectedEventsFormStructure extends ElementForm
     public function getFormComponents()
     {
         $structure = [];
+        $structure['gotoButtonTitle'] = [
+            'type' => 'input.text',
+        ];
+
         $structure['fixedId'] = [
             'type' => 'ajaxsearch',
             'class' => 'selectedevents_form_search',
