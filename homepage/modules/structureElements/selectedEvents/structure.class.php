@@ -15,8 +15,6 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
     public $connectedMenu;
     protected $fixedElement;
 
-//    protected $allowedTypes = ['linkListItem'];
-
 
     protected function setModuleStructure(&$moduleStructure)
     {

@@ -74,6 +74,11 @@ class SelectedEventsFormStructure extends ElementForm
     public function getFormComponents()
     {
         $structure = [];
+        $structure['gotoHeading'] = [
+            'type' => 'block.heading',
+            'class' => 'block_heading',
+        ];
+
         $structure['gotoButtonTitle'] = [
             'type' => 'input.text',
         ];
