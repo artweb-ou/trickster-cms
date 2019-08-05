@@ -14,6 +14,7 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
     protected $baseEventsIdList;
     public $connectedMenu;
     protected $fixedElement;
+    protected $allowedTypes = [];
 
 
     protected function setModuleStructure(&$moduleStructure)
@@ -185,4 +186,10 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
             return $translationsManager->getTranslationByName('events.look_calendar');
         }
     }
+
+    public function getAllowedTypes($currentAction = 'showForm')
+    {
+        return $this->allowedTypes;
+    }
+
 }
