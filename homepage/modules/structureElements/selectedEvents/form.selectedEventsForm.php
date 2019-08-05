@@ -54,11 +54,37 @@ class SelectedEventsFormStructure extends ElementForm
         'enableFilter' => [
             'type' => 'input.checkbox',
         ],
+
+
         'displayMenus' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getDisplayMenusInfo',
             'condition' => 'checkDisplayMenus',
         ],
     ];
+
+    protected $additionalContent = 'shared.contentlist.tpl';
+
+    protected function getSearchTypes()
+    {
+//        return $this->element->getSearchTypesString('admin');
+        return "folder,news,gallery,newsList,production,service,Event,EventsList";
+    }
+
+    public function getFormComponents()
+    {
+        $structure = [];
+        $structure['gotoButtonTitle'] = [
+            'type' => 'input.text',
+        ];
+
+        $structure['fixedId'] = [
+            'type' => 'ajaxsearch',
+            'class' => 'selectedevents_form_search',
+            'property' => 'connectedMenu',
+            'types' => $this->getSearchTypes(),
+        ];
+        return  $this->structure + $structure;
+    }
 
 }
