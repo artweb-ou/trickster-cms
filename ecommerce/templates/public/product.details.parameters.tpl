@@ -4,7 +4,7 @@
 		{foreach from=$parametersGroupsInfo item=parametersGroupInfo}
 			<div class="product_details_parameter_group{if $parametersGroupInfo.title} spoiler_component_title{/if}">
 				{if $parametersGroupInfo.title}
-					<div class="product_details_parameter_group_header toggleable_component_trigger">
+					<div class="product_details_parameter_group_header">
 						{$parametersGroupInfo.title}
 						<div class="spoiler_component_plus"></div>
 					</div>
