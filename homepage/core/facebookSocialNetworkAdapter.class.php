@@ -8,6 +8,8 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
     protected $userId;
     protected $session;
     protected $api;
+    protected $appOwnerId;
+    protected $appToken;
 
     public function setCredentials(array $credentials)
     {
@@ -86,9 +88,9 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
     {
         if ($this->api === null) {
             $this->api = new Facebook\Facebook([
-                'app_id' => $this->appId,
-                'app_secret' => $this->secret,
-                'default_graph_version' => 'v2.5',
+                'app_id'                => $this->appId,
+                'app_secret'            => $this->secret,
+                'default_graph_version' => 'v4.0',
             ]);
         }
         return $this->api;
@@ -108,6 +110,61 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
             $this->logError($e->getCode(), $e->getMessage());
         }
         return $result;
+    }
+
+    public function getOwnerId()
+    {
+        if (is_null($this->appOwnerId)) {
+            if ($response = $this->getApi()->get('/' . $this->appId . '?fields=creator_uid', $this->getAppToken())) {
+                if($result = $response->getGraphNode()) {
+                    $this->appOwnerId = $result->getField('creator_uid');
+                }
+            }
+        }
+
+        return $this->appOwnerId;
+    }
+
+    public function getAppToken()
+    {
+        if (is_null($this->appToken)) {
+            $this->appToken = $this->getApi()->getApp()->getAccessToken();
+        }
+
+        return $this->appToken;
+    }
+
+    public function getPages()
+    {
+        if ($currentUserData = $this->getAuthorizedUserData()) {
+            if ($currentUserData->id == $this->getOwnerId()) {
+                $result = [];
+                try {
+                    $response = $this->getApi()->get('/me/accounts?type=page');
+                    if($pages = $response->getGraphEdge()) {
+                        foreach($pages as $page) {
+                            $result[] = [
+                                'socialId' => $page->getField('id'),
+                                'title'     => $page->getField('name'),
+                            ];
+                        }
+                    }
+                } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                    // When Graph returns an error
+                    $this->logError($e->getCode(), $e->getMessage());
+                    return false;
+                } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                    // When validation fails or other local issues
+                    $this->logError($e->getCode(), $e->getMessage());
+                    return false;
+                }
+                return $result;
+            } else {
+                return new SocialErrorMessage('1');
+            }
+        } else {
+            return new SocialErrorMessage('2');
+        }
     }
 }
 

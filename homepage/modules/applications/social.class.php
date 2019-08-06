@@ -154,6 +154,21 @@ class socialApplication extends controllerApplication
         }
     }
 
+    protected function action_updatePages()
+    {
+        $this->performAuthorization();//???
+        $pages = $this->pluginApi->getPages();
+        if($pages !== false) {
+            if($pages instanceof SocialErrorMessage) {
+                $this->redirect($this->returnUrl . (strpos($this->returnUrl, '?') !== false ? '&' : '?') . 'social_error=' . $pages->messageCode);
+            }else {
+                $this->redirect($this->returnUrl . (strpos($this->returnUrl, '?') !== false ? '&' : '?') . 'pagesdata=' . urlencode(serialize($pages)));
+            }
+        }else {
+            //???
+        }
+    }
+
     protected function performAuthorization()
     {
         $this->accessToken = $this->getAccessTokenFromSession();
@@ -165,6 +180,7 @@ class socialApplication extends controllerApplication
                 errorLog::getInstance()
                     ->logMessage("", "Attempt to login with zero facebook user id \r\n"
                         . "\r\n\$_REQUEST = " . var_export($_REQUEST, true) . ';'
+                        . "\r\n\$_SESSION = " . var_export($_SESSION, true) . ';'
                         . "\r\n\$_COOKIE = " . var_export($_COOKIE, true) . ';');
                 $user = $this->getService('user');
                 $user->setStorageAttribute('lastSocialAction', $this->action);

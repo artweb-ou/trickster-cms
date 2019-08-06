@@ -57,4 +57,5 @@
     'newsMailTextSubContent' => 'showForm',
     'file' => 'showForm',
     'genericIcon' => 'showForm',
+    'socialPage' => 'showForm',
 ];
