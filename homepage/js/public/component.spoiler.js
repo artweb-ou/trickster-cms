@@ -1,20 +1,22 @@
 window.SpoilerComponent = function(componentElement) {
-	var titleElement = false;
-	var contentElement = false;
-	var contentWrapperElement = false;
-	var buttonElement = false;
-	var gradientComponent = false;
-	var plusComponent = false;
+	let titleElement = false;
+	let contentElement = false;
+	let contentWrapperElement = false;
+	let buttonElement = false;
+	let gradientComponent = false;
+	let plusComponent = false;
 
-	var maxHeight;
-	var minHeight = 0;
+	let maxHeight;
+	let minHeight = 0;
 
-	var showMoreText;
-	var showLessText;
+	let showMoreText;
+	let showLessText;
 
-	var visible;
+	let visible;
 
-	var init = function() {
+	let self = this;
+
+	let init = function() {
 		titleElement = componentElement.querySelector('.spoiler_component_title');
 		contentWrapperElement = componentElement.querySelector('.spoiler_component_content_wrapper');
 		contentElement = contentWrapperElement.querySelector('.spoiler_component_content');
@@ -23,7 +25,7 @@ window.SpoilerComponent = function(componentElement) {
 
 		if (titleElement && contentElement) {
 			maxHeight = contentElement.scrollHeight + 'px';
-			var computedStyles = getComputedStyle(contentWrapperElement);
+			let computedStyles = getComputedStyle(contentWrapperElement);
 			if (componentElement.classList.contains('spoiler_partly_hidden')) {
 				initGradientElement();
 				contentElement.classList.add('partly_hidden_content_hidden');
@@ -35,22 +37,18 @@ window.SpoilerComponent = function(componentElement) {
 				showMoreText = buttonElement.innerHTML;
 			}
 
-			contentWrapperElement.style.height = maxHeight;
-			contentWrapperElement.style.minHeight = minHeight;
-
-			hideElement();
 			addHandlers();
 		}
 	};
 
-	var resize = function() {
+	let resize = function() {
 		maxHeight = contentElement.scrollHeight + 'px';
 		if(visible) {
-			showElement();
+			self.showElement();
 		}
 	};
 
-	var addHandlers = function() {
+	let addHandlers = function() {
 		if (buttonElement) {
 			buttonElement.addEventListener('click', onClick);
 		} else {
@@ -63,15 +61,17 @@ window.SpoilerComponent = function(componentElement) {
 
 	};
 
-	var onClick = function() {
+	let onClick = function() {
 		if (isShow()) {
-			hideElement();
+			self.hideElement();
 		} else {
-			showElement();
+			self.showElement();
 		}
 	};
 
-	var hideElement = function() {
+	this.hideElement = function() {
+		contentWrapperElement.classList.add('hide_content');
+		contentWrapperElement.classList.remove('show_content');
 		TweenLite.to(contentWrapperElement, 0.5,
 			{
 				'css': {
@@ -100,7 +100,9 @@ window.SpoilerComponent = function(componentElement) {
 		);
 	};
 
-	var showElement = function() {
+	this.showElement = function() {
+		contentWrapperElement.classList.remove('hide_content');
+		contentWrapperElement.classList.add('show_content');
 		TweenLite.to(contentWrapperElement, 0.5, {
 			'css': {
 				'height': maxHeight
@@ -127,11 +129,11 @@ window.SpoilerComponent = function(componentElement) {
 		});
 	};
 
-	var isShow = function() {
+	let isShow = function() {
 		return contentWrapperElement.style.height == maxHeight;
 	};
 
-	var initGradientElement = function() {
+	let initGradientElement = function() {
 		gradientComponent = componentElement.querySelector('.spoiler_partly_hidden_gradient');
 		if (!gradientComponent) {
 			gradientComponent = document.createElement('div');
@@ -143,7 +145,7 @@ window.SpoilerComponent = function(componentElement) {
 		}
 	};
 
-	var initButtonElement = function(className) {
+	let initButtonElement = function(className) {
 		buttonElement = componentElement.querySelector('.' + className);
 		if (!buttonElement) {
 			buttonElement = document.createElement('button');
