@@ -1030,6 +1030,7 @@ class productElement extends structureElement implements
                             'image' => $icon->image,
                             'width' => $icon->iconWidth,
                             'fileName' => $icon->originalName,
+                            'iconRole' => '',
                             'iconLocation' => $this->productIconLocationTypes[0],
                         ];
                         if ($icon->structureType == 'genericIcon') {
@@ -1056,6 +1057,7 @@ class productElement extends structureElement implements
                                 'image' => $discount->icon,
                                 'width' => $discount->iconWidth,
                                 'fileName' => $discount->iconOriginalName,
+                                'iconRole' => '',
                                 'iconLocation' => $this->productIconLocationTypes[0],
                             ];
                         }
