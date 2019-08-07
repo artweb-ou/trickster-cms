@@ -104,12 +104,12 @@ class shopElement extends structureElement implements MetadataProviderInterface
         return $this->getService('linksManager')->getConnectedIdList($this->id, self::LINK_TYPE_ROOM, 'parent');
     }
 
-    public function getConnectedCategories($forceUpdate = false)
+    public function getConnectedCategories()
     {
         $structureManager = $this->getService('structureManager');
 
         $categories = [];
-        if ($parentsList = $structureManager->getElementsParents($this->id, $forceUpdate, 'shopCategory')) {
+        if ($parentsList = $structureManager->getElementsParents($this->id, 'shopCategory')) {
             foreach ($parentsList as &$parentElement) {
                 if ($parentElement->structureType == 'shopCategory') {
                     $categories[] = $parentElement;

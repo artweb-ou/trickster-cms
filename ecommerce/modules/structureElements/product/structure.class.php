@@ -543,22 +543,17 @@ class productElement extends structureElement implements
     /**
      * returns list of all parent categories
      *
-     * @param bool $forceUpdate - ignore cache when set
      * @return categoryElement[]
      */
-    public function getConnectedCategories($forceUpdate = false)
+    public function getConnectedCategories()
     {
-        if ($forceUpdate) {
-            $this->logError('Deprecated workaround is used in productElement::getConnectedCategories()');
-        }
-
         if ($this->connectedCategories === null) {
             $cache = $this->getElementsListCache('cCats', 3600);
             if (($this->connectedCategories = $cache->load()) === false) {
                 $structureManager = $this->getService('structureManager');
 
                 $this->connectedCategories = [];
-                if ($parentsList = $structureManager->getElementsParents($this->id, $forceUpdate, 'catalogue', false)) {
+                if ($parentsList = $structureManager->getElementsParents($this->id, 'catalogue', false)) {
                     foreach ($parentsList as &$parentElement) {
                         if ($parentElement->structureType == 'category') {
                             $this->connectedCategories[] = $parentElement;
@@ -588,7 +583,7 @@ class productElement extends structureElement implements
             if ($deepCategories = $this->getConnectedCategories()) {
                 foreach ($deepCategories as &$category) {
                     $this->deepParentCategories[] = $category;
-                    $parentsList = $structureManager->getElementsParents($category->id, false, '', false);
+                    $parentsList = $structureManager->getElementsParents($category->id, '', false);
                     foreach ($parentsList as &$parentsListItem) {
                         if ($parentsListItem->structureType == 'category') {
                             $this->deepParentCategories[] = $parentsListItem;
@@ -624,12 +619,12 @@ class productElement extends structureElement implements
         return $brands;
     }
 
-    public function getConnectedCatalogues($forceUpdate = false)
+    public function getConnectedCatalogues()
     {
         $structureManager = $this->getService('structureManager');
 
         $catalogues = [];
-        $parentsList = $structureManager->getElementsParents($this->id, $forceUpdate, 'productCatalogueProduct');
+        $parentsList = $structureManager->getElementsParents($this->id, 'productCatalogueProduct');
         if ($parentsList) {
             foreach ($parentsList as &$parentElement) {
                 if ($parentElement instanceof categoryElement) {
@@ -698,9 +693,9 @@ class productElement extends structureElement implements
         if ($this->parametersGroupsInfo === null) {
             $this->parametersGroupsInfo = [];
 
-            $groupsParentElements = $this->getDeepParentCategories(); //+$this->getConnectedCatalogues(true) +$this->getDeepParentCategories()
+            $groupsParentElements = $this->getDeepParentCategories(); //+$this->getConnectedCatalogues() +$this->getDeepParentCategories()
             if (!$groupsParentElements) {
-                $groupsParentElements = $this->getConnectedCatalogues(true);
+                $groupsParentElements = $this->getConnectedCatalogues();
             }
 
             $groupsList = [];
@@ -1942,7 +1937,7 @@ class productElement extends structureElement implements
              * @var structureManager $structureManager
              */
             $structureManager = $this->getService('structureManager');
-            if ($parentsList = $structureManager->getElementsParents($this->id, false, 'catalogue')) {
+            if ($parentsList = $structureManager->getElementsParents($this->id, 'catalogue')) {
                 $this->parentCategory = reset($parentsList);
             }
         }
