@@ -73,10 +73,5 @@ class cssApplication extends controllerApplication
         }
         return $filesList;
     }
-
-    public function deprecatedParametersRedirection()
-    {
-        return true;
-    }
 }
 

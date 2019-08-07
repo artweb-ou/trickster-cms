@@ -131,11 +131,6 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
      */
     abstract public function execute($controller);
 
-    public function deprecatedParametersRedirection()
-    {
-        return false;
-    }
-
     public function getDesignThemesManager()
     {
         return $this->getService('DesignThemesManager');
