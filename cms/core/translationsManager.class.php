@@ -165,7 +165,7 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
             } else {
                 if ($required) {
                     if ($loggable) {
-                        $this->logError('Missing translation ' . $name);
+                        $this->logError('Missing translation ' . $name, E_NOTICE, false);
                     }
                     return '#' . $name . '#';
                 } else {

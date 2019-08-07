@@ -65,7 +65,7 @@ class errorLog
                 $contents .= $item['date'] . "\n\r"
                     . "- " . $item['locationName'] . ': ' . $item['errorText'] . "\n\r"
                     . "- REQUEST_URI: " . $myUrl . "\n\r"
-                    . "- IP: " . $ip. "\n\r"
+                    . "- IP: " . $ip . "\n\r"
                     . "- HTTP_REFERER: " . $referer . "\n\r\n\r";
             }
             $pathsManager = controller::getInstance()->getPathsManager();
@@ -98,7 +98,7 @@ class errorLog
         return $this->messageLogArray;
     }
 
-    public function logMessage($locationName, $errorText, $level = null)
+    public function logMessage($locationName, $errorText, $level = null, $throwException = true)
     {
         $newMessage = [];
 
@@ -116,6 +116,8 @@ class errorLog
             //__destruct is not guaranteed to happen after E_ERROR
             $this->writeLogContents();
         }
+        if ($throwException && controller::getInstance()->getDebugMode()) {
+            throw new Exception($errorText);
+        }
     }
 }
-
