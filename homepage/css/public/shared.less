@@ -1,18 +1,21 @@
 .html_content {
     video {
-        width: 100%;
+        max-width: 100%;
     }
-    div.embed-content.responsive {
+
+    .embed-content.responsive {
         position: relative;
+        iframe {
+            position: absolute;
+            height: 100% !important;
+            width: 100% !important;
+            top: 0;
+        }
     }
-    iframe {
-        position: absolute;
-        height: 100%;
-        width: 100% !important;
-        top: 0;
-    }
+
     img {
-        width: 100%;
-        height: auto;
+        max-width: 100%;
+        width: auto !important;
+        height: auto !important;
     }
 }

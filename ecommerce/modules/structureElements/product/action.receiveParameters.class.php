@@ -4,6 +4,12 @@ class receiveParametersProduct extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param productElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
@@ -12,10 +18,10 @@ class receiveParametersProduct extends structureElementAction
             //persist parameters values
             //prepare parameters elements index
             $parametersIndex = [];
-            $groupsParentElements = $structureElement->getConnectedCategories(true);
+            $groupsParentElements = $structureElement->getConnectedCategories();
             if (!$groupsParentElements) // TODO: do something about this workaround
             {
-                $groupsParentElements = $structureElement->getConnectedCatalogues(true);
+                $groupsParentElements = $structureElement->getConnectedCatalogues();
             }
 
             foreach ($groupsParentElements as &$groupsParentElement) {

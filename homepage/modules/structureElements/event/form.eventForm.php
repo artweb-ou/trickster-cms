@@ -58,7 +58,6 @@ class EventFormStructure extends ElementForm
         ],
         'connectedEventsLists' => [
             'type' => 'select.universal_options_multiple',
-            'class' => 'event_connected_eventslists_select',
             'method' => 'getConnectedEventsListsInfo',
         ],
     ];

@@ -46,7 +46,7 @@ trait deprecatedProductElementTrait
             $this->parametersGroups = [];
             $groupsParentElements = $this->getConnectedCategories();
             if (!$groupsParentElements) {
-                $groupsParentElements = $this->getConnectedCatalogues(true);
+                $groupsParentElements = $this->getConnectedCatalogues();
             }
 
             $groupsList = [];
