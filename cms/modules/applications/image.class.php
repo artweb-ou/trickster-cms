@@ -96,6 +96,9 @@ class imageApplication extends controllerApplication
             $this->angle = $controller->getParameter('angle');
         }
         $this->multiplier = (float)$controller->getParameter('multiplier');
+        if ($this->multiplier > 3) {
+            $this->multiplier = 3;
+        }
         if ($controller->getParameter('filename')) {
             $this->fileName = $controller->getParameter('filename');
         } elseif (!empty($controller->requestedPath)) {
