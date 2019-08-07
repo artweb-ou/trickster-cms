@@ -3,7 +3,11 @@
 class NewsListLayoutStructure extends ElementForm
 {
     protected $structure = [
-        'cols' => [
+        'newsAttributes' => [
+        'type' => 'block.heading',
+        'class' => 'block_heading',
+        ],
+       'cols' => [
             'type' => 'input.text',
             'inputType' => 'number',
             'minValue'  => '2',
