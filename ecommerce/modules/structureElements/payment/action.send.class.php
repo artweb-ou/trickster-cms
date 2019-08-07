@@ -12,7 +12,7 @@ class sendPayment extends structureElementAction
      */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $currentLanguageElementId = $languagesManager->getCurrentLanguageId();
 
         $currencySelector = $this->getService('CurrencySelector');

@@ -18,7 +18,7 @@ class emailsApplication extends controllerApplication
             $user->switchUser($userId);
 
             $structureManager = $this->getService('structureManager', [
-                'rootUrl'    => $controller->rootURL,
+                'rootUrl' => $controller->rootURL,
                 'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerAdmin'),
             ]);
 
@@ -36,7 +36,7 @@ class emailsApplication extends controllerApplication
              * @var settingsManager $settingsManager
              */
             $settingsManager = $this->getService('settingsManager');
-            $settings = $settingsManager->getSettingsList($this->getService('languagesManager')
+            $settings = $settingsManager->getSettingsList($this->getService('LanguagesManager')
                 ->getCurrentLanguageId());
             $this->renderer->assign('settings', $settings);
             $this->renderer->assign('theme', $currentTheme);
@@ -65,7 +65,7 @@ class emailsApplication extends controllerApplication
             if ($email && $key) {
                 if ($this->checkEmailKey($email, $key)) {
                     $collection = persistableCollection::getInstance('email_dispatchments_history');
-                    if ($records = $collection->load(array('id' => $controller->getParameter('id')))) {
+                    if ($records = $collection->load(['id' => $controller->getParameter('id')])) {
                         $record = reset($records);
                         $emailDispatcher = $this->getService('EmailDispatcher');
                         if ($emailDispatcher->getDispatchment($record->dispatchmentId)) {
@@ -116,7 +116,7 @@ class emailsApplication extends controllerApplication
             $this->logNewsMailEvents('newsMail_emailOpened');
             $imagefullurl = $_SERVER['REQUEST_URI'];
             $repls = [
-                '/email:' => '/email/'
+                '/email:' => '/email/',
             ];
             $imagefullurl = strtr($imagefullurl, $repls);
             $imagefullurlParts = explode('/', $imagefullurl);
@@ -166,7 +166,7 @@ class emailsApplication extends controllerApplication
             $targetId = $newsmailId;
             if (!$external) {
                 $structureManager = $this->getService('structureManager', [
-                    'rootUrl'    => $controller->rootURL,
+                    'rootUrl' => $controller->rootURL,
                     'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
                 ], true);
                 $urlComponents = parse_url($url) ?: [];
@@ -189,12 +189,13 @@ class emailsApplication extends controllerApplication
         if ($newsmailId) {
             $this->eventId = $eventLogger->saveEvent($event);
         }
-        if($type === 'newsMail_linkClicked' || $type === 'newsMail_externalLinkClicked') {
+        if ($type === 'newsMail_linkClicked' || $type === 'newsMail_externalLinkClicked') {
             $this->makeLinkUriEvent($url);
         }
     }
 
-    protected function makeLinkUriEvent($uri) {
+    protected function makeLinkUriEvent($uri)
+    {
         $db = $this->getService('db');
         if (!empty($this->eventId)) {
             $uriId = $db->table('visitor_uri')
@@ -248,14 +249,13 @@ class emailsApplication extends controllerApplication
     protected function unsubscribeEmail($email)
     {
         $structureManager = $this->getService('structureManager');
-        $rootElement = $structureManager->getRootElement();
         $collection = persistableCollection::getInstance('module_newsmailaddress');
         $columns = ['id'];
 
         $conditions = [];
         $conditions[] = [
-            'column'   => 'email',
-            'action'   => '=',
+            'column' => 'email',
+            'action' => '=',
             'argument' => $email,
         ];
 
@@ -266,9 +266,8 @@ class emailsApplication extends controllerApplication
             }
             if (count($idList)) {
                 $newsMailsAddressesElementId = $structureManager->getElementIdByMarker("newsMailsAddresses");
-                $structureManager->getElementsByIdList([$newsMailsAddressesElementId], $rootElement->id);
-                if ($mailsElement = $structureManager->getElementById($newsMailsAddressesElementId)) {
-                    if ($elements = $structureManager->getElementsByIdList($idList, $mailsElement->id)) {
+                if ($mailsElement = $structureManager->getElementById($newsMailsAddressesElementId, null, true)) {
+                    if ($elements = $structureManager->getElementsByIdList($idList, $mailsElement->id, true)) {
                         foreach ($elements as &$element) {
                             $element->deleteElementData();
                         }

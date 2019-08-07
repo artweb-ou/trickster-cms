@@ -12,10 +12,11 @@ trait UserElementProviderTrait
         if ($this->userElement === null) {
             $this->userElement = false;
             if ($userId = $this->getUserId()) {
+                /**
+                 * @var structureManager $structureManager
+                 */
                 $structureManager = $this->getService('structureManager');
-                if ($users = $structureManager->getElementsByIdList($userId)) {
-                    $this->userElement = reset($users);
-                }
+                $this->userElement = $structureManager->getElementById($userId, null, true);
             }
         }
         return $this->userElement;

@@ -37,7 +37,7 @@ class importApplication extends controllerApplication
                 $pluginElementsIds = $this->getService('linksManager')
                     ->getConnectedIdList($pluginsElementId, 'structure', 'parent');
                 if ($pluginElementsIds) {
-                    $importPlugins = $structureManager->getElementsByIdList($pluginElementsIds);
+                    $importPlugins = $structureManager->getElementsByIdList($pluginElementsIds, null, true);
                 }
             }
             $quickImport = (bool)$controller->getParameter('quick');

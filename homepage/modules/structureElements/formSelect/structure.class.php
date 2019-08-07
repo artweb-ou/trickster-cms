@@ -34,7 +34,7 @@ class formSelectElement extends formFieldStructureElement
         if (is_null($this->optionsList)) {
             $structureManager = $this->getService('structureManager');
             if ($this->autocomplete == 'service') {
-                $languagesManager = $this->getService('languagesManager');
+                $languagesManager = $this->getService('LanguagesManager');
                 $this->optionsList = [];
                 if ($servicesList = $structureManager->getElementsByType('service', $languagesManager->getCurrentLanguageId())
                 ) {

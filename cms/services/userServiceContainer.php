@@ -13,8 +13,8 @@ class userServiceContainer extends DependencyInjectionServiceContainer
         $service = $this->getOption('privilegesManager')
             ?: $this->registry->getService('privilegesManager');
         $user->setPrivilegesManager($service);
-        $service = $this->getOption('serverSessionManager')
-            ?: $this->registry->getService('serverSessionManager');
+        $service = $this->getOption('ServerSessionManager')
+            ?: $this->registry->getService('ServerSessionManager');
         $user->setServerSessionManager($service);
         $service = $this->getOption('db')
             ?: $this->registry->getService('db');

@@ -159,6 +159,7 @@ class receiveProduct extends structureElementAction
     {
         $expectedFields = [
             'title',
+            'subTitle',
             'inactive',
             'showincategory',
             'categories',

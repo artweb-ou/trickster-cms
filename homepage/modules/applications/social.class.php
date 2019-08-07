@@ -165,7 +165,6 @@ class socialApplication extends controllerApplication
                 errorLog::getInstance()
                     ->logMessage("", "Attempt to login with zero facebook user id \r\n"
                         . "\r\n\$_REQUEST = " . var_export($_REQUEST, true) . ';'
-                        . "\r\n\$_SESSION = " . var_export($_SESSION, true) . ';'
                         . "\r\n\$_COOKIE = " . var_export($_COOKIE, true) . ';');
                 $user = $this->getService('user');
                 $user->setStorageAttribute('lastSocialAction', $this->action);

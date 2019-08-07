@@ -28,6 +28,7 @@ class receiveSeoCategory extends structureElementAction
             'metaDenyIndex',
             'metaDescriptionTemplate',
             'metaTitleTemplate',
+            'metaSubTitleTemplate',
             'metaH1Template',
         ];
     }

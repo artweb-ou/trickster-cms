@@ -148,16 +148,19 @@
 	background-color: @white;
 	border-radius: 3px;
 	position: absolute;
-	top: -@43pt;
-	left: -@16pt;
+	top: -@42pt;
+	left: -@8pt;
 	height: @42pt;
-	border-bottom: 1px solid #dadada;
 	font-size: @15pt;
 	padding: 0 @5pt 0 @28pt;
-	width: e('calc(100% - 1.2rem)');
+	width: e('calc(100% - 2rem)');
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+
+	&:not(.ajaxitemsearch_result_single) {
+		border-bottom: 1px solid #dadada;
+	}
 	
 	&:hover {
 		overflow: visible;

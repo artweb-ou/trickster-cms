@@ -30,8 +30,14 @@ class imageApplication extends controllerApplication
         if (is_file($originalFilePath)) {
             if (substr(strtolower($this->fileName), -4) === '.svg') {
                 $result = true;
-                header('Content-Type: image/svg+xml');
-                echo file_get_contents($originalFilePath);
+                $this->renderer->assign('registerImage', [
+                    'source',
+                    $originalFilePath,
+                ]);
+                $this->renderer->assign('registerExport', [null, 'svg']);
+
+                $this->renderer->setContentDisposition('inline');
+                $this->renderer->display();
             } else {
                 $this->renderer->assign('registerImage', [
                     'source',

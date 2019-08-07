@@ -64,7 +64,7 @@ class receiveProductSelection extends structureElementAction
                             $productsRecordsIndex[$record->productId][$record->languageId] = $record;
                         }
 
-                        $languagesIds = $this->getService('languagesManager')->getLanguagesIdList();
+                        $languagesIds = $this->getService('LanguagesManager')->getLanguagesIdList();
                         $firstLanguageId = reset($languagesIds);
 
                         $elementsIndex = [];

@@ -21,7 +21,7 @@ class elkoImportPluginElement extends importPluginElement
         if ($this->warehouse === null) {
             $username = '';
             $password = '';
-            $specialData = $this->getSpecialData($this->getService('languagesManager')->getCurrentLanguageId());
+            $specialData = $this->getSpecialData($this->getService('LanguagesManager')->getCurrentLanguageId());
             if ($specialData) {
                 $username = $specialData['username'];
                 $password = $specialData['password'];

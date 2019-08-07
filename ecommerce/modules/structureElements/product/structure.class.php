@@ -127,6 +127,8 @@ class productElement extends structureElement implements
 
     protected $iconsInfo;
 
+    protected $allowedTypes = ['subArticle'];
+
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
@@ -180,6 +182,7 @@ class productElement extends structureElement implements
         $moduleStructure['importInfo'] = 'array';
 
         $moduleStructure['unit'] = 'text';
+        $moduleStructure['subTitle'] = 'text';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -192,6 +195,7 @@ class productElement extends structureElement implements
         $multiLanguageFields[] = 'h1';
         $multiLanguageFields[] = 'metaDescription';
         $multiLanguageFields[] = 'unit';
+        $multiLanguageFields[] = 'subTitle';
     }
 
     protected function getTabsList()
@@ -438,7 +442,7 @@ class productElement extends structureElement implements
 
             //brand and parameters should be loaded only if the element is final
             if ($this->final) {
-                if ($categoryMetaDescriptionTemplate = $this->getCategoryMetaDescriptionTemplate()) {
+                if ($categoryMetaDescriptionTemplate = $this->getFirstDataFromParents('metaDescriptionTemplate')) {
                     $this->textContent = $this->populateSeoTemplate($categoryMetaDescriptionTemplate);
                 } else {
                     if ($brandElement = $this->getBrandElement()) {
@@ -1533,24 +1537,25 @@ class productElement extends structureElement implements
         return $this->productUnit;
     }
 
-    private function getCategoryMetaDescriptionTemplate()
-    {
-        return $this->getFirstDataFromParents('metaDescriptionTemplate');
-    }
-
-    private function getCategoryMetaTitleTemplate()
-    {
-        return $this->getFirstDataFromParents('metaTitleTemplate');
-    }
-
-    private function getCategoryMetaH1Template()
-    {
-        return $this->getFirstDataFromParents('metaH1Template');
-    }
-
     public function getTemplatedMetaTitle()
     {
-        if ($categoryMetaTitleTemplate = $this->getCategoryMetaTitleTemplate()) {
+        if ($categoryMetaTitleTemplate = $this->getFirstDataFromParents('metaTitleTemplate')) {
+            return $this->populateSeoTemplate($categoryMetaTitleTemplate);
+        }
+        return '';
+    }
+
+    public function getTemplatedH1()
+    {
+        if ($categoryH1Template = $this->getFirstDataFromParents('metaH1Template')) {
+            return $this->populateSeoTemplate($categoryH1Template);
+        }
+        return '';
+    }
+
+    public function getTemplatedSubTitle()
+    {
+        if ($categoryMetaTitleTemplate = $this->getFirstDataFromParents('metaSubTitleTemplate')) {
             return $this->populateSeoTemplate($categoryMetaTitleTemplate);
         }
         return '';
@@ -1667,7 +1672,7 @@ class productElement extends structureElement implements
      */
     public function getElementData($detailed = false)
     {
-        $languageManager = $this->getService('languagesManager');
+        $languageManager = $this->getService('LanguagesManager');
         $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
         $brandElement = $this->getBrandElement();
         $categoryElement = $this->getRequestedParentCategory();
@@ -1829,7 +1834,7 @@ class productElement extends structureElement implements
             $deliveryTypeElementsIds = $this->getService('linksManager')
                 ->getConnectedIdList($deliveryTypesElementId, 'structure', 'parent');
 
-            if ($deliveryTypeElementsIds && $deliveryTypeElements = $structureManager->getElementsByIdList($deliveryTypeElementsIds, false, true)) {
+            if ($deliveryTypeElementsIds && $deliveryTypeElements = $structureManager->getElementsByIdList($deliveryTypeElementsIds, null, true)) {
                 $inactiveDeliveriesRecords = $this->getDisabledDeliveryTypesRecords();
                 $currencySelector = $this->getService('CurrencySelector');
 
@@ -1957,9 +1962,47 @@ class productElement extends structureElement implements
     {
         if ($currentAction == 'showImages') {
             $this->allowedTypes = ['galleryImage'];
+        } elseif ($currentAction == 'showTexts') {
+            $this->allowedTypes = ['subArticle'];
         } else {
             $this->allowedTypes = [];
         }
-        return parent::getAllowedTypes($currentAction);
+        return $this->allowedTypes;
+    }
+
+    public function getNewElementAction()
+    {
+        return 'showForm';
+    }
+
+    public function getSubArticles()
+    {
+        /**
+         * @var structureManager $structureManager
+         */
+
+        $structureManager = $this->getService('structureManager');
+        $subArticles = $structureManager->getElementsChildren($this->id, null, 'subArticle');
+//
+        return $subArticles;
+    }
+
+    public function getSubTitle()
+    {
+        if (!empty($this->subTitle)) {
+            return $this->subTitle;
+        }
+        if (method_exists($this, 'getTemplatedSubTitle')) {
+            if ($templatedSubTitle = $this->getTemplatedSubTitle()) {
+                return $templatedSubTitle;
+            }
+            return $this->getParentCategory()->getTitle();
+
+        }
+    }
+
+    public function getNewElementUrl()
+    {
+        return parent::getNewElementUrl().'linkType:subArticle/';
     }
 }

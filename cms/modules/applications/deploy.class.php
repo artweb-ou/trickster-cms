@@ -226,7 +226,7 @@ class deployApplication extends controllerApplication
         }
         $languagesMarker = $admin ? 'adminLanguages' : $this->getService('ConfigManager')->get('main.rootMarkerPublic');
         $type = $admin ? 'adminTranslation' : 'translation';
-        $languagesList = $this->getService('languagesManager')->getLanguagesList($languagesMarker);
+        $languagesList = $this->getService('LanguagesManager')->getLanguagesList($languagesMarker);
         foreach ($groupNames as $groupName) {
             if (!isset($groupsIndex[$groupName])) {
                 continue;
@@ -262,7 +262,7 @@ class deployApplication extends controllerApplication
 
         $moduleData = $element->getModuleData();
         $multiLanguageFields = $element->getMultiLanguageFields();
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $languagesIndex = [];
         $languagesList = $languagesManager->getLanguagesList($this->getService('ConfigManager')
             ->get('main.rootMarkerPublic'));

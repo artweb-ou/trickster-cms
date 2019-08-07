@@ -9,6 +9,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
 
     public function setFormValue($value)
     {
+        $value = (array)$value;
         $this->formValue = $this->loadElements($value);
     }
 

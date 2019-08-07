@@ -89,6 +89,8 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
 
         $moduleStructure['metaDescriptionTemplate'] = 'text';
         $moduleStructure['metaTitleTemplate'] = 'text';
+        $moduleStructure['metaSubTitleTemplate'] = 'text';
+
         $moduleStructure['metaH1Template'] = 'text';
         $moduleStructure['h1'] = 'text';
     }
@@ -107,6 +109,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $multiLanguageFields[] = 'metaTitleTemplate';
         $multiLanguageFields[] = 'metaH1Template';
         $multiLanguageFields[] = 'h1';
+        $multiLanguageFields[] = 'metaSubTitleTemplate';
     }
 
     protected function getTabsList()
@@ -238,7 +241,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
 
         $productIdFilter = array_intersect(array_keys($productIdIndex), $idList);
 
-        $productsList = $structureManager->getElementsByIdList($productIdFilter, $this->id);
+        $productsList = $structureManager->getElementsByIdList($productIdFilter, $this->id, true);
         foreach ($productsList as &$product) {
             if (isset($productIdIndex[$product->id])) {
                 unset($productIdIndex[$product->id]);
@@ -301,7 +304,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             }
 
             if ($filteredIds) {
-                $languagesManager = $this->getService('languagesManager');
+                $languagesManager = $this->getService('LanguagesManager');
                 $languageId = $languagesManager->getCurrentLanguageId();
                 $conditions = [
                     [
@@ -350,7 +353,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                         }
                     }
                 }
-                $this->featuredProducts = $structureManager->getElementsByIdList($productIdFilter, $this->id);
+                $this->featuredProducts = $structureManager->getElementsByIdList($productIdFilter, $this->id, true);
             }
         }
         return $this->featuredProducts;
@@ -411,7 +414,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             }
 
             if ($filteredIds) {
-                $languagesManager = $this->getService('languagesManager');
+                $languagesManager = $this->getService('LanguagesManager');
                 $languageId = $languagesManager->getCurrentLanguageId();
                 $conditions = [
                     [
@@ -457,7 +460,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                         }
                     }
                 }
-                $this->topProductsList = $structureManager->getElementsByIdList($productIdFilter, $this->id);
+                $this->topProductsList = $structureManager->getElementsByIdList($productIdFilter, $this->id, true);
             }
         }
         return $this->topProductsList;
@@ -529,7 +532,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         if (is_null($this->discountsList)) {
             $structureManager = $this->getService('structureManager');
 
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $this->discountsList = $structureManager->getElementsByType("discount",
                 $languagesManager->getCurrentLanguageId());
         }
@@ -735,7 +738,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 $this->productsPager = $pager;
 
                 $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
-                $publicLanguageId = $this->getService('languagesManager')->getCurrentLanguageId($marker);
+                $publicLanguageId = $this->getService('LanguagesManager')->getCurrentLanguageId($marker);
                 $query = $db->table('module_product');
 
                 if ($arguments['order']['field'] != 'dateModified' && $arguments['order']['field'] != 'dateCreated') {

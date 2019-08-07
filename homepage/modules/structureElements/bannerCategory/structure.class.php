@@ -64,8 +64,11 @@ class bannerCategoryElement extends menuDependantStructureElement
                     foreach ($queryResult as &$row) {
                         $idList[] = $row['id'];
                     }
+                    /**
+                     * @var structureManager $structureManager
+                     */
                     $structureManager = $this->getService('structureManager');
-                    if ($bannerElements = $structureManager->getElementsByIdList($idList, $this->id, "bannerCategoryBanner")
+                    if ($bannerElements = $structureManager->getElementsByIdList($idList, $this->id, true)
                     ) {
                         $positions = [];
                         $position = 0;

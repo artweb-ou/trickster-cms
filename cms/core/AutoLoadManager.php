@@ -7,7 +7,7 @@ class AutoLoadManager
         spl_autoload_register('AutoLoadManager::handler', true, true);
     }
 
-    public static function handler($className)
+    public static function handler($className, $wrongCaseTried = false)
     {
         if ($controller = controller::getInstance()) {
             $pathsManager = $controller->getPathsManager();
@@ -61,6 +61,9 @@ class AutoLoadManager
                     }
                 }
             }
+        }
+        if (!$wrongCaseTried && !class_exists($className)) {
+            self::handler(ucfirst($className), true);
         }
     }
 }

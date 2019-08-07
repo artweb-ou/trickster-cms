@@ -66,8 +66,7 @@ class paymentElement extends structureElement
             }
             //workaround for public?
             if (!$orderElement) {
-                $structureManager->getElementsByIdList($this->orderId, $this->id);
-                $orderElement = $structureManager->getElementById($this->orderId);
+                $orderElement = $structureManager->getElementById($this->orderId, $this->id, true);
             }
             if ($orderElement instanceof PaymentOrderInterface) {
                 $this->orderElement = $orderElement;
@@ -100,11 +99,7 @@ class paymentElement extends structureElement
     {
         $paymentMethodElement = false;
         if ($this->methodId) {
-            if ($elements = $this->getService('structureManager')
-                ->getElementsByIdList((array)$this->methodId, $this->id)
-            ) {
-                $paymentMethodElement = reset($elements);
-            }
+            $paymentMethodElement = $this->getService('structureManager')->getElementById($this->methodId, $this->id, true);
         }
         return $paymentMethodElement;
     }

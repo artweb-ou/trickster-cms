@@ -218,7 +218,7 @@ class eventElement extends structureElement implements MetadataProviderInterface
             foreach ($idList as $eventKey => $eventId) {
                 $event = $this->getEventById($eventId);
 
-                if ($currentTimestamp > $event->getEndDayStamp()) {
+                if ($currentTimestamp > $event->getEndDayStamp() || $this->id === $eventId) {
                     $eventExcludeIds[] = $eventId;
                 }
             }

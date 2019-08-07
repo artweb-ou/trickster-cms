@@ -851,7 +851,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 
     public function saveStorage()
     {
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data = [];
@@ -873,7 +873,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
     {
         $user = $this->getService('user');
 
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data = $user->getStorageAttribute('deliveryTypesData');
@@ -899,6 +899,9 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 
     protected function loadDeliveryTypesData()
     {
+        /**
+         * @var structureManager $structureManager
+         */
         $structureManager = $this->getService('structureManager');
         $linksManager = $this->getService('linksManager');
         $data = [];
@@ -907,8 +910,8 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
             /**
              * @var deliveryTypeElement[] $deliveryTypeElements
              */
-            $deliveryTypeElements = $structureManager->getElementsByIdList($connectedIds, false, true);
-            foreach ($deliveryTypeElements as &$deliveryTypeElement) {
+            $deliveryTypeElements = $structureManager->getElementsByIdList($connectedIds, null, true);
+            foreach ($deliveryTypeElements as $deliveryTypeElement) {
                 $elementData = [];
                 $elementData['id'] = $deliveryTypeElement->id;
                 $elementData['code'] = $deliveryTypeElement->code;
@@ -927,9 +930,8 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 
                 $elementData['deliveryFormFields'] = [];
                 if ($fieldsList = $deliveryTypeElement->getFieldsList()) {
-                    foreach ($fieldsList as &$record) {
-                        if ($fieldElement = $structureManager->getElementById($record->fieldId,
-                            $deliveryTypeElement->id)) {
+                    foreach ($fieldsList as $record) {
+                        if ($fieldElement = $structureManager->getElementById($record->fieldId, $deliveryTypeElement->id, true)) {
                             $fieldInfo = [
                                 'id' => $fieldElement->id,
                                 'title' => $fieldElement->title,
@@ -1220,7 +1222,7 @@ class shoppingBasketServices implements DependencyInjectionContextInterface
 
     public function saveStorage()
     {
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data['languageId'] = $currentLanguageId;
@@ -1242,7 +1244,7 @@ class shoppingBasketServices implements DependencyInjectionContextInterface
     {
         $user = $this->getService('user');
 
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data = $user->getStorageAttribute('servicesData');
@@ -1268,12 +1270,15 @@ class shoppingBasketServices implements DependencyInjectionContextInterface
 
     protected function loadServicesData()
     {
+        /**
+         * @var structureManager $structureManager
+         */
         $structureManager = $this->getService('structureManager');
         $linksManager = $this->getService('linksManager');
         $data = [];
         if ($servicesElementId = $structureManager->getElementIdByMarker('shoppingBasketServices')) {
             $connectedIds = $linksManager->getConnectedIdList($servicesElementId, 'structure', 'parent');
-            $serviceElements = $structureManager->getElementsByIdList($connectedIds, false, true);
+            $serviceElements = $structureManager->getElementsByIdList($connectedIds, null, true);
             foreach ($serviceElements as &$serviceElement) {
                 $elementData = [];
                 $elementData['id'] = $serviceElement->id;

@@ -35,7 +35,7 @@ class structureManager implements DependencyInjectionContextInterface
      */
     protected $linksManager;
     /**
-     * @var languagesManager
+     * @var LanguagesManager
      */
     protected $languagesManager;
     protected $defaultRoles = [];
@@ -50,9 +50,10 @@ class structureManager implements DependencyInjectionContextInterface
     protected $privilegeChecking = true;
     protected $deniedCopyLinkTypes = [];
     protected $elementPathRestrictionId;
+    protected $shortestChains = [];
 
     /**
-     * @param languagesManager $languagesManager
+     * @param LanguagesManager $languagesManager
      */
     public function setLanguagesManager($languagesManager)
     {
@@ -389,7 +390,7 @@ class structureManager implements DependencyInjectionContextInterface
         $element = false;
 
         //load element from the storage
-        if ($elementsList = $this->loadElements([$elementId])) {
+        if ($elementsList = $this->loadElementsToParent([$elementId])) {
             $element = array_shift($elementsList);
         }
 
@@ -458,7 +459,7 @@ class structureManager implements DependencyInjectionContextInterface
 
                     if ($record = $query->first()) {
                         $id = $record['id'];
-                        $this->loadElements([$id], $parentElementId);
+                        $this->loadElementsToParent([$id], $parentElementId);
                         if (isset($this->elementsList[$id])) {
                             $result = $this->elementsList[$id];
                         }
@@ -806,7 +807,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
 
                 //load the children elements from the storage and return them
-                $this->loadElements($idListToLoad, $parentElementId, $allowedElements, $rolesToLoad);
+                $this->loadElementsToParent($idListToLoad, $parentElementId, $allowedElements, $rolesToLoad);
             }
 
             foreach ($idListToReturn as &$childElementId) {
@@ -851,8 +852,11 @@ class structureManager implements DependencyInjectionContextInterface
      * @param array $allowedRoles
      * @return array|bool
      */
-    protected function loadElements($idList = [], $parentElementId = 0, $allowedElements = [], $allowedRoles = [])
+    protected function loadElementsToParent($idList = [], $parentElementId = 0, $allowedElements = [], $allowedRoles = [])
     {
+        if (!$parentElementId) {
+            $parentElementId = $this->getRootElementId();
+        }
         $loadedElements = [];
         foreach ($idList as $key => $id) {
             if (isset($this->elementsList[$id]) && ($element = $this->elementsList[$id])) {
@@ -882,7 +886,7 @@ class structureManager implements DependencyInjectionContextInterface
 
         //load elements from storage
         $loadedModuleTables = [];
-        if ($dataObjects = $this->elementsDataCollection->load($searchFields, ['id' => '1'])) {
+        if ($dataObjects = $this->elementsDataCollection->load($searchFields, ['id' => $idList])) {
             foreach ($dataObjects as &$dataObject) {
                 $elementId = $dataObject->id;
                 if ($loadedElement = $this->manufactureElement($dataObject, $parentElementId)) {
@@ -1152,7 +1156,7 @@ class structureManager implements DependencyInjectionContextInterface
             $dataCollection = $this->elementsDataCollection->load($searchFields);
             foreach ($dataCollection as &$dataElement) {
                 if (!$parentElementId || $this->checkElementInParent($dataElement->id, $parentElementId)) {
-                    $this->cachedMarkers[$cacheParentElementId][$marker] = $this->getElementById($dataElement->id);
+                    $this->cachedMarkers[$cacheParentElementId][$marker] = $this->getElementById($dataElement->id, $parentElementId);
                     break;
                 }
             }
@@ -1192,18 +1196,20 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @param int $id
      * @param int|null $parentId
+     * @param bool $directlyToParent
      * @return bool|structureElement
      */
-    public function getElementById($id, $parentId = null)
+    public function getElementById($id, $parentId = null, $directlyToParent = false)
     {
         if ($id) {
             if (isset($this->elementsList[$id])) {
                 return $this->elementsList[$id];
             }
-            if (!$parentId) {
-                $parentId = $this->elementPathRestrictionId;
+            if ($directlyToParent) {
+                $this->loadElementsToParent([$id], $parentId);
+            } else {
+                $this->loadFromShortestPath($id, $parentId);
             }
-            $this->ensureElementAvailability($id, $parentId);
             if (!empty($this->elementsList[$id])) {
                 return $this->elementsList[$id];
             }
@@ -1248,44 +1254,17 @@ class structureManager implements DependencyInjectionContextInterface
         return false;
     }
 
-    public function getReverseElementsChain($id, $parentId = null)
-    {
-        $result = [];
-        if ($shortestChain = $this->findShortestParentsChain($id, $parentId, false)) {
-            $shortestChain = array_reverse($shortestChain);
-            $parentId = array_shift($shortestChain);
-            if (isset($this->elementsList[$parentId])) {
-                $result[] = $this->elementsList[$parentId];
-                foreach ($shortestChain as &$id) {
-                    if (!isset($this->elementsList[$id])) {
-                        if ($this->loadElements([$id], $parentId)) {
-                            $parentId = $id;
-                        } else {
-                            break;
-                        }
-                    } else {
-                        //if there were not enough privileges, then $this->elementsList[$id]==false
-                        if ($this->elementsList[$id]) {
-                            $parentId = $id;
-                        } else {
-                            break;
-                        }
-                    }
-                    $result[] = $this->elementsList[$parentId];
-                }
-            }
-        }
-        return $result;
-    }
-
     /**
      * @param $id
      * @param int|null $parentId
      */
-    protected function ensureElementAvailability($id, $parentId = null)
+    protected function loadFromShortestPath($id, $parentId = null)
     {
         if ($id == $this->getRootElementId()) {
             $this->loadRootElement($id);
+        }
+        if (!$parentId) {
+            $parentId = $this->elementPathRestrictionId;
         }
         if ($shortestChain = $this->findShortestParentsChain($id, $parentId)) {
             $parentId = end($shortestChain);
@@ -1296,7 +1275,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
                 if (isset($this->elementsList[$parentId])) {
                     if (!isset($this->elementsList[$id])) {
-                        if ($this->loadElements([$id], $parentId)) {
+                        if ($this->loadElementsToParent([$id], $parentId)) {
                             $parentId = $id;
                         } else {
                             break;
@@ -1320,159 +1299,109 @@ class structureManager implements DependencyInjectionContextInterface
      * This is recursive method to calculate the quickest/shortest way to load element within it's possible parent chains
      *
      * @param $id - target element id or current recursion level element id
-     * @param null $restrictByParentChain - if some parent id should strictly be in the chain, then it can be restricted with this parameter
+     * @param null $withinParentId - if some parent id should strictly be in the chain, then it can be restricted with this parameter
      * @param int $points - current chain points: the smaller value == the shorter
      * @param array $chainElements - chain elements holder
-     * @param bool $nonLoadedOnly - setting to determine whether a full chain until root should be returned or only non-loaded elements
      * @return array|bool
      */
-    protected $shortestChains = [];
-
     protected function findShortestParentsChain(
         $id,
-        $restrictByParentId = null,
-        $nonLoadedOnly = true,
+        $withinParentId = null,
         &$points = 0,
         $chainElements = []
     ) {
         //if we are searching parent within itself then we will get nothing. we should not restrict parent within itself
-        if ($restrictByParentId == $id) {
-            $restrictByParentId = null;
+        if ($withinParentId == $id) {
+            $withinParentId = null;
+        }
+        //in case we don't have root element loaded we should check it as well
+        if ($id == $this->rootElementId) {
+            return [$id];
         }
 
-        $key = 'ch:' . $this->languagesManager->getCurrentLanguageId() . ':p' . $restrictByParentId;
+        $key = 'ch:' . $this->languagesManager->getCurrentLanguageId() . ':p' . $withinParentId;
         if ($cachedChain = $this->cache->get($id . ":" . $key)) {
             return $cachedChain;
         }
-        $key = $restrictByParentId . '_' . $id;
-        if ($nonLoadedOnly && !$restrictByParentId && isset($this->shortestChains[$key])) {
-            return $this->shortestChains[$key];
+        if (isset($this->shortestChains[$id][$withinParentId])) {
+            return $this->shortestChains[$id][$withinParentId];
         }
-        $this->shortestChains[$key] = false;
-
+        $this->shortestChains[$id][$withinParentId] = false;
+        $shortestChainPointer = &$this->shortestChains[$id][$withinParentId];
         $chainElements[$id] = true;
 
         if ($parentLinks = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child')) {
-            foreach ($parentLinks as &$parentLink) {
-                $parentId = $parentLink->parentStructureId;
-                if (!$restrictByParentId) {
-                    if (!empty($this->elementsList[$parentId])) {
-                        $foundLoaded = $parentId;
-                        if ($this->elementsList[$parentId]->requested) {
-                            $foundRequested = $parentId;
-                            break;
+            $parentIds = [];
+            foreach ($parentLinks as $parentLink) {
+                $parentIds[] = $parentLink->parentStructureId;
+            }
+            //check all parent routes
+            $bestPoints = false;
+            foreach ($parentIds as $parentId) {
+                if (!isset($chainElements[$parentId])) {
+                    $newPoints = $points;
+                    if ($withinParentId != $parentIds) {
+                        if (!empty($this->elementsList[$parentId])) {
+                            if (!$this->elementsList[$parentId]->requested) {
+                                $newPoints += 2;
+                            } else {
+                                $newPoints += 1;
+                            }
+                        } else {
+                            $newPoints += 3;
                         }
-                    } elseif ($parentId == $this->getRootElementId()) {
-                        $foundRequested = $parentId;
                     }
-                } elseif ($parentId == $restrictByParentId) {
-                    $foundRestricted = $parentId;
-                }
-            }
 
-            if (isset($foundRestricted)) {
-                $this->shortestChains[$key] = [$id, $foundRestricted];
-                $this->setElementCacheKey($id, $key, $this->shortestChains[$key], $this->cacheLifeTime * 2);
-
-                return $this->shortestChains[$key];
-            }
-            if ($nonLoadedOnly && isset($foundRequested)) {
-                $this->shortestChains[$key] = [$id, $foundRequested];
-            } elseif ($nonLoadedOnly && isset($foundLoaded)) {
-                $points++;
-                $this->shortestChains[$key] = [$id, $foundLoaded];
-            } else {
-                $bestPoints = false;
-                foreach ($parentLinks as &$parentLink) {
-                    $parentId = $parentLink->parentStructureId;
-                    if (!isset($chainElements[$parentId])) {
-                        $newPoints = $points + 2;
-                        if ($chain = $this->findShortestParentsChain(
-                            $parentId,
-                            $restrictByParentId,
-                            $nonLoadedOnly,
-                            $newPoints,
-                            $chainElements
-                        )
-                        ) {
-                            if ((is_array($chain) && !$restrictByParentId) ||
-                                ($restrictByParentId !== null && in_array($restrictByParentId, $chain))
-                            ) {
-                                if ($newPoints < $bestPoints || !$bestPoints) {
-                                    $bestPoints = $newPoints;
-                                    $this->shortestChains[$key] = $chain;
-                                }
+                    if ($chain = $this->findShortestParentsChain(
+                        $parentId,
+                        $withinParentId,
+                        $newPoints,
+                        $chainElements
+                    )
+                    ) {
+                        if ($newPoints < $bestPoints || ($bestPoints === false)) {
+                            if (!$withinParentId || in_array($withinParentId, $chain)) {
+                                $bestPoints = $newPoints;
+                                $shortestChainPointer = $chain;
                             }
                         }
                     }
                 }
-                if ($this->shortestChains[$key]) {
+                if ($shortestChainPointer) {
                     $points = $bestPoints;
-                    if (reset($this->shortestChains[$key]) != $id) {
-                        array_unshift($this->shortestChains[$key], $id);
+                    if (reset($shortestChainPointer) != $id) {
+                        array_unshift($shortestChainPointer, $id);
                     }
                 }
             }
         }
-        $this->setElementCacheKey($id, $key, $this->shortestChains[$key], $this->cacheLifeTime * 2);
-        return $this->shortestChains[$key];
+        $this->setElementCacheKey($id, $key, $shortestChainPointer, $this->cacheLifeTime * 2);
+        return $shortestChainPointer;
     }
-
-    // TODO: refactoring this method
 
     /**
      * @param $idList
-     * @param bool $elementId
-     * @param bool $type
+     * @param bool $parentElementId
+     * @param bool $directlyToParent
      * @return structureElement[]
-     *
-     * @deprecated - PLEASE DONT USE WITHOUT HEAVY NEED
      */
-    public function getElementsByIdList($idList, $elementId = false, $type = false)
+    public function getElementsByIdList($idList, $parentElementId = false, $directlyToParent = false)
     {
-        if (!$elementId) {
-            $elementId = $this->getRootElementId();
-        }
         $elementsList = [];
-        if (!is_array($idList)) {
-            $idList = [$idList];
-        }
-
-        if (count($idList) > 0) {
-            $requestedRoles = $this->getRequestedRoles(null);
-            $rolesToLoad = $requestedRoles;
-
-            // get allowed children elements types list according to the privilegies
-            $allowedElements = [];
-            if ($this->privilegeChecking) {
-                $allowedElements = $this->privilegesManager->getAllowedElements($elementId, $idList);
+        if ($idList) {
+            if (!$parentElementId) {
+                $parentElementId = $this->getRootElementId();
             }
-
-            // load the children elements from the storage and return them
-            if ($elementsList = $this->loadElements($idList, $elementId, $allowedElements, $rolesToLoad)) {
-                if ($type && ($type !== 'idlist')) {
-                    if (is_bool($type)) {
-                        $type = "structure";
+            if ($directlyToParent) {
+                if ($allowedElements = $this->privilegesManager->getAllowedElements($parentElementId, $idList)) {
+                    // load the children elements from the storage and return them
+                    $elementsList = $this->loadElementsToParent($idList, $parentElementId, $allowedElements);
+                }
+            } else {
+                foreach ($idList as $id) {
+                    if ($element = $this->getElementById($id, $parentElementId)) {
+                        $elementsList[] = $element;
                     }
-                    $positions = [];
-                    foreach ($elementsList as &$element) {
-                        if ($elementLinks = $this->linksManager->getElementsLinks($element->id, $type, 'child')) {
-                            if ($firstLink = reset($elementLinks)) {
-                                $positions[] = $firstLink->position;
-                            } else {
-                                $positions[] = 0;
-                            }
-                        }
-                    }
-                    array_multisort($positions, SORT_ASC, $elementsList);
-                } elseif ($type === 'idlist') {
-                    $result = [];
-                    foreach ($idList as &$id) {
-                        if (isset($elementsList[$id])) {
-                            $result[] = $elementsList[$id];
-                        }
-                    }
-                    $elementsList = $result;
                 }
             }
         }

@@ -285,7 +285,7 @@ class deliveryTypeElement extends structureElement
             /**
              * @var structureElement[] $methods
              */
-            $methods = $this->getService('structureManager')->getElementsByIdList($paymentMethodsIds);
+            $methods = $this->getService('structureManager')->getElementsByIdList($paymentMethodsIds, null, true);
             foreach ($methods as &$method) {
                 $paymentMethods[] =
                     [

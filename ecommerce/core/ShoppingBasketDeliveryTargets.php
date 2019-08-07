@@ -44,7 +44,7 @@ class ShoppingBasketDeliveryTargets implements DependencyInjectionContextInterfa
 
     protected function saveStorage()
     {
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data = [];
@@ -61,7 +61,7 @@ class ShoppingBasketDeliveryTargets implements DependencyInjectionContextInterfa
     {
         $user = $this->getService('user');
 
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         if (!($data = $user->getStorageAttribute('deliveryTargetsData')) || $data['languageId'] != $currentLanguageId) {
@@ -94,9 +94,9 @@ class ShoppingBasketDeliveryTargets implements DependencyInjectionContextInterfa
 
         $structureManager = $this->getService('structureManager');
         $linksManager = $this->getService('linksManager');
-        if ($coutriesElementId = $structureManager->getElementIdByMarker('deliveryCountries')) {
-            $connectedIds = $linksManager->getConnectedIdList($coutriesElementId, 'structure', 'parent');
-            $countryElements = $structureManager->getElementsByIdList($connectedIds, false, true);
+        if ($countriesElementId = $structureManager->getElementIdByMarker('deliveryCountries')) {
+            $connectedIds = $linksManager->getConnectedIdList($countriesElementId, 'structure', 'parent');
+            $countryElements = $structureManager->getElementsByIdList($connectedIds, null, true);
             foreach ($countryElements as &$countryElement) {
                 $elementData = [];
                 $elementData['id'] = $countryElement->id;

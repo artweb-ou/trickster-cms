@@ -1,41 +1,13 @@
 <?php
 
-class redirectionManager implements DependencyInjectionContextInterface
+class RedirectionManager implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
-    /** @var redirectionManager */
-    private static $instance = false;
-    protected $redirectForced;
-
-    public function __construct()
-    {
-        self::$instance = $this;
-        if (isset($_SESSION['redirectForced'])) {
-            $this->redirectForced = $_SESSION['redirectForced'];
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function getInstance()
-    {
-        if (!self::$instance) {
-            self::$instance = new redirectionManager();
-        }
-        return self::$instance;
-    }
-
-    public function forceRedirect($type)
-    {
-        $_SESSION['redirectForced'] = $type;
-        $this->redirectForced = $type;
-    }
 
     public function redirectToElement($elementId, $languageCode = '')
     {
         if (!$languageCode) {
-            $languageCode = $this->getService('languagesManager')->getCurrentLanguageCode();
+            $languageCode = $this->getService('LanguagesManager')->getCurrentLanguageCode();
         }
         $configManager = $this->getService('ConfigManager');
         $structureManager = $this->getService('structureManager', [
@@ -48,11 +20,15 @@ class redirectionManager implements DependencyInjectionContextInterface
 
     public function switchLanguage($newLanguageCode, $referrerElementId = 0, $application = '')
     {
+        /**
+         * @var uriSwitchLogics $uriSwitchLogics
+         */
         $uriSwitchLogics = $this->getService('uriSwitchLogics');
         $uriSwitchLogics->setLanguageCode($newLanguageCode);
         $uriSwitchLogics->setApplication($application);
-
-        $this->redirect($uriSwitchLogics->findForeignRelativeUrl($referrerElementId), '301');
+        $httpStatus = '302';
+        $url = $uriSwitchLogics->findForeignRelativeUrl($referrerElementId, $httpStatus);
+        $this->redirect($url, $httpStatus);
     }
 
     public function redirectToMobile($uri, $uriType = 'desktop', $newLanguage = null)
