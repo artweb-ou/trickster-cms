@@ -201,16 +201,17 @@ abstract class ProductsListElement extends menuStructureElement
             if ($sort && $sort == 'manual') {
                 $this->applyManualSorting($filteredProductsQuery, $filteredProductsQuery);
             } elseif ($sort == 'date') {
-                $filteredProductsQuery->join('structure_elements', 'filteredproducts.id', '=', 'structure_elements.id', 'left');
+                $filteredProductsQuery->join('structure_elements', 'baseproducts.id', '=', 'structure_elements.id', 'left');
                 $filteredProductsQuery->orderBy('structure_elements.dateCreated', $order);
             } elseif ($sort == 'brand') {
-                $filteredProductsQuery->join('module_brand', 'filteredproducts.brandId', '=', 'module_brand.id', 'left');
+                $filteredProductsQuery->join('module_brand', 'baseproducts.brandId', '=', 'module_brand.id', 'left');
                 $filteredProductsQuery->orderBy('module_brand.title', $order);
             } else {
                 $filteredProductsQuery->orderBy($sort, $order);
             }
 
-            $filteredProductsQuery->select('*');
+            $filteredProductsQuery->select(['baseproducts.id', 'baseproducts.title', 'baseproducts.brandId', 'baseproducts.availability', 'baseproducts.price']);
+
             /**
              * @var Connection $db
              */

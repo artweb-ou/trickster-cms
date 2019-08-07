@@ -240,22 +240,21 @@ class structureManager implements DependencyInjectionContextInterface
      * Returns the list of element's parent elements according to provided link type
      *
      * @param int $elementId
-     * @param bool $forceUpdate - if provided, then cached results are not used and all parents are searched from the scratch
      * @param string $linkType
      * @param bool $restrictLinkTypes
      * @return structureElement[]
      */
-    public function getElementsParents($elementId, $forceUpdate = false, $linkType = null, $restrictLinkTypes = true)
+    public function getElementsParents($elementId, $linkType = null, $restrictLinkTypes = true)
     {
         if (!$linkType) {
             $linkType = '';
         }
-        if (!isset($this->elementsParents[$elementId][$linkType]) || $forceUpdate) {
+        if (!isset($this->elementsParents[$elementId][$linkType])) {
             $this->elementsParents[$elementId][$linkType] = [];
             if ($restrictLinkTypes && !$linkType) {
-                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $this->getPathSearchAllowedLinks(), 'child', $forceUpdate);
+                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $this->getPathSearchAllowedLinks(), 'child');
             } else {
-                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $linkType, 'child', $forceUpdate);
+                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $linkType, 'child');
             }
 
             foreach ($elementsLinks as $link) {
