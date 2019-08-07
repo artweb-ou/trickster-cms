@@ -196,7 +196,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
                 $this->id,
                 $actionName,
                 $this->structureType
-            )){
+            )) {
                 return false;
             }
 
@@ -623,8 +623,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         $expectedFields = [],
         $validators = [],
         $filteredLanguageId = false
-    )
-    {
+    ) {
         if (!$expectedFields) {
             $expectedFields = array_keys($externalData);
         }
@@ -1170,8 +1169,8 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
          * @var $controller controller
          */
         $controller = $this->getService('controller');
-        if($linkType = $controller->getParameter('linkType')){
-            return $this->URL.'linkType:'.$linkType.'/';
+        if ($linkType = $controller->getParameter('linkType')) {
+            return $this->URL . 'linkType:' . $linkType . '/';
         }
         return $this->URL;
     }
@@ -1418,19 +1417,18 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         return $privileges[$this->structureType];
     }
 
-    public function generateImageUrl(
-        $type,
-        $fileField = 'originalName',
-        $idField = 'image'
-    )
+    public function generateImageUrl($type, $fileField = 'originalName', $idField = 'image', $multiplier = false)
     {
         if (!$this->$fileField) {
             return '';
         }
         $controller = $this->getService('controller');
         $result = $controller->baseURL . 'image/type:' . $type
-            . '/id:' . $this->$idField
-                .= '/filename:' . $this->$fileField;
+            . '/id:' . $this->$idField;
+        if ($multiplier) {
+            $result .= '/multiplier:' . $multiplier;
+        }
+        $result .= '/filename:' . $this->$fileField;
         return $result;
     }
 

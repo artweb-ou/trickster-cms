@@ -1,16 +1,18 @@
 window.LazyImageComponent = function(componentElement) {
     var self = this;
-
-    var url;
     var init = function() {
-        url = componentElement.dataset.lazysrc;
         self.initLazyLoading({
             'componentElement': componentElement,
             'displayCallback': lazyLoadingCallback,
         });
     };
     var lazyLoadingCallback = function() {
-        componentElement.src = url;
+        componentElement.src = componentElement.dataset.lazysrc;
+        componentElement.removeAttribute('dataset-lazysrc');
+        if (componentElement.dataset.lazysrcset) {
+            componentElement.srcset = componentElement.dataset.lazysrcset;
+            componentElement.removeAttribute('dataset-lazysrcset');
+        }
     };
     init();
 };
