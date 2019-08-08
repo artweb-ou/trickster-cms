@@ -270,7 +270,7 @@ class controller
         if ($this->debugMode === null) {
             if ($this->forceDebug) {
                 $this->debugMode = true;
-            } elseif (strstr($this->domainURL, 'localhost') || strstr($this->domainURL, '.local') || strstr($this->domainURL, '.loc')) {
+            } elseif (strstr($this->domainName, 'localhost') || strstr($this->domainName, '.local') || strstr($this->domainName, '.loc') || !strstr($this->domainName, '.')) {
                 $this->debugMode = true;
             } else {
                 $this->debugMode = false;
