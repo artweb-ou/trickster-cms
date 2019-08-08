@@ -276,7 +276,7 @@ class structureManager implements DependencyInjectionContextInterface
     public function getElementsFirstParent($elementId, $linkType = null)
     {
         $result = false;
-        if ($parentsList = $this->getElementsParents($elementId, $linkType, true)) {
+        if ($parentsList = $this->getElementsParents($elementId, $linkType)) {
             $result = reset($parentsList);
         }
         return $result;

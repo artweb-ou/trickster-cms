@@ -553,7 +553,7 @@ class productElement extends structureElement implements
                 $structureManager = $this->getService('structureManager');
 
                 $this->connectedCategories = [];
-                if ($parentsList = $structureManager->getElementsParents($this->id, 'catalogue', false)) {
+                if ($parentsList = $structureManager->getElementsParents($this->id, 'catalogue')) {
                     foreach ($parentsList as &$parentElement) {
                         if ($parentElement->structureType == 'category') {
                             $this->connectedCategories[] = $parentElement;
