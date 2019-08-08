@@ -583,7 +583,7 @@ class productElement extends structureElement implements
             if ($deepCategories = $this->getConnectedCategories()) {
                 foreach ($deepCategories as &$category) {
                     $this->deepParentCategories[] = $category;
-                    $parentsList = $structureManager->getElementsParents($category->id, '', false);
+                    $parentsList = $structureManager->getElementsParents($category->id, '');
                     foreach ($parentsList as &$parentsListItem) {
                         if ($parentsListItem->structureType == 'category') {
                             $this->deepParentCategories[] = $parentsListItem;
@@ -608,7 +608,7 @@ class productElement extends structureElement implements
          * @var structureManager $structureManager
          * @var structureElement $parentsList
          */
-        $parentsList = $structureManager->getElementsParents($this->id, 'catalogue', false);
+        $parentsList = $structureManager->getElementsParents($this->id, 'catalogue');
         if ($parentsList) {
             foreach ($parentsList as &$parentElement) {
                 if ($parentElement->structureType == 'brand') {

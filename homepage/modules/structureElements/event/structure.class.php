@@ -153,7 +153,7 @@ class eventElement extends structureElement implements MetadataProviderInterface
     public function getConnectedEventsLists()
     {
         $structureManager = $this->getService('structureManager');
-        $connectedEventsLists = $structureManager->getElementsParents($this->id, 'eventsListEvent', false);
+        $connectedEventsLists = $structureManager->getElementsParents($this->id, 'eventsListEvent');
         return $connectedEventsLists;
     }
 
