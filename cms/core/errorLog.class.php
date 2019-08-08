@@ -53,11 +53,11 @@ class errorLog
         }
 
 
-        $contents = $newMessage['date'] . "\n"
-            . "- " . $newMessage['locationName'] . ': ' . $newMessage['errorText'] . "\n"
-            . "- REQUEST_URI: " . $myUrl . "\n"
-            . "- IP: " . $ip . "\n"
-            . "- HTTP_REFERER: " . $referer . "\n\n";
+        $contents = $newMessage['date'] . "\r\n"
+            . "- " . $newMessage['locationName'] . ': ' . $newMessage['errorText'] . "\r\n"
+            . "- REQUEST_URI: " . $myUrl . "\r\n"
+            . "- IP: " . $ip . "\r\n"
+            . "- HTTP_REFERER: " . $referer . "\r\n\r\n";
 
         $pathsManager = controller::getInstance()->getPathsManager();
         $pathsManager->ensureDirectory($pathsManager->getPath('logs'));
@@ -77,7 +77,7 @@ class errorLog
         return $this->messageLogArray;
     }
 
-    public function logMessage($locationName, $errorText, $level = null)
+    public function logMessage($locationName, $errorText, $level = null, $throwException = true)
     {
         $newMessage = [];
 
@@ -100,7 +100,10 @@ class errorLog
         }
         $newMessage['errorText'] = $errorText;
 
-        $this->writeLogContents($newMessage);
+        if ($throwException && controller::getInstance()->getDebugMode()) {
+            throw new Exception($errorText);
+        } else {
+            $this->writeLogContents($newMessage);
+        }
     }
 }
-
