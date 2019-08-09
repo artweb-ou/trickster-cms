@@ -970,7 +970,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         }
         return $genericIconList;
     }
-    
+
     public function getFeedbackFormList() {
         $structureManager = $this->getService('structureManager');
         $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
