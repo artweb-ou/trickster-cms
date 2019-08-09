@@ -18,7 +18,6 @@ class receiveIconShared extends structureElementAction
              */
             $linkType = 'genericIcon'.ucfirst($structureElement->structureType);
             $linksManager = $this->getService('linksManager');
-            $icons = $structureElement->connectedIconIds;
             $connectedGenericIconsList = $linksManager->getConnectedIdIndex($structureElement->id, $linkType);
             foreach ($structureElement->connectedIconIds as $connectedIcon) {
                 if (!isset($connectedGenericIconsList[(int)$connectedIcon])) {

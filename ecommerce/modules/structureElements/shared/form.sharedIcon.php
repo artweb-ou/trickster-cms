@@ -6,7 +6,7 @@ class SharedIconStructure extends ElementForm
     protected $structure = [
         'connectedIconIds' => [
             'type' => 'select.universal_options_multiple',
-            'property' => 'iconsList',
+            'method' => 'getGenericIconList',
         ],
         'addIcon'  => [
             'type'             => 'show.heading',
@@ -16,4 +16,5 @@ class SharedIconStructure extends ElementForm
             'type' => 'button.createNewElement'
         ]
     ];
+    protected $additionalContent = 'shared.contentlist.tpl';
 }
