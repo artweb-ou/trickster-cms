@@ -17,6 +17,9 @@
 		]
 	]}
 {/if}
+{if $form->getElement()}
+	{$element = $form->getElement()}
+{/if}
 <div class="controls_block form_controls">
 	<input type="hidden" value="{$element->id}" name="id" />
 	<input type="hidden" value="{$action}" name="action" />

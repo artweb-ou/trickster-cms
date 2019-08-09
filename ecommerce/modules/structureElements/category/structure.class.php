@@ -85,6 +85,8 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $moduleStructure['parentCategoriesIds'] = 'array';
         $moduleStructure['importInfo'] = 'array';
 
+        $moduleStructure['connectedIconIds'] = 'array';
+
         $moduleStructure['unit'] = 'text';
 
         $moduleStructure['metaDescriptionTemplate'] = 'text';
@@ -921,8 +923,49 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         if ($currentAction == 'showProductsForm') {
             $this->allowedTypes = ['product'];
         } elseif ($currentAction == 'showIconForm') {
-            $this->allowedTypes = [];
+            $this->allowedTypes = ['genericIcon'];
         }
         return parent::getAllowedTypes($currentAction);
+    }
+
+
+    public function getConnectedGenericIconList() {
+        /**
+         * @var $linksManager linksManager
+         * @var $structureManager structureManager
+         */
+        $genericIconList = [];
+        $linksManager = $this->getService('linksManager');
+        $structureManager = $this->getService('structureManager');
+        $connectedIds = $linksManager->getConnectedIdList($this->id, 'genericIconCategory');
+        if(!empty($connectedIds)) {
+            foreach ($connectedIds as $id) {
+                if($id != 0) {
+                    $genericIconList[] = $structureManager->getElementById($id);
+                }
+            }
+        }
+        return $genericIconList;
+    }
+
+    public function getGenericIconList() {
+        /**
+         * @var $linksManager linksManager
+         * @var $structureManager structureManager
+         * @var $element genericIconElement
+         */
+        $genericIconList = [];
+        $linksManager = $this->getService('linksManager');
+        $structureManager = $this->getService('structureManager');
+        $connectedIcons = $linksManager->getConnectedIdList($this->id, 'genericIconCategory');
+        $genericIcons = $structureManager->getElementsByType('genericIcon');
+        foreach ($genericIcons as $genericIcon) {
+            $genericIconList[] = [
+                'id' => $genericIcon->id,
+                'title' => $genericIcon->getTitle(),
+                'select' => in_array($genericIcon->id, $connectedIcons)
+            ];
+        }
+        return $genericIconList;
     }
 }
