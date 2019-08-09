@@ -1,6 +1,6 @@
 <?php
 
-class showTextsProduct extends structureElementAction
+class showTextsShared extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {

@@ -2,9 +2,12 @@
 $moduleActions = [];
 $moduleActions[] = 'receive';
 $moduleActions[] = 'show';
+$moduleActions[] = 'showSortingFilter';
 $moduleActions[] = 'delete';
 $moduleActions[] = 'clone';
 $moduleActions[] = 'showForm';
+$moduleActions[] = 'showTexts';
+$moduleActions[] = 'receiveTexts';
 $moduleActions[] = 'showPositions';
 $moduleActions[] = 'receivePositions';
 $moduleActions[] = 'deleteFile';
@@ -16,8 +19,6 @@ $moduleActions[] = 'showImportForm';
 $moduleActions[] = 'receiveImportForm';
 $moduleActions[] = 'receiveIcon';
 
-$moduleActions[] = 'showSettingsForm';
-$moduleActions[] = 'receiveSettings';
 $moduleActions[] = 'showSubCategoriesForm';
 $moduleActions[] = 'showLayoutForm';
 $moduleActions[] = 'showProductsForm';

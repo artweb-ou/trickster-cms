@@ -1,6 +1,6 @@
 <?php
 
-class receiveTextsProduct extends structureElementAction
+class receiveTextsShared extends structureElementAction
 {
     protected $loggable = true;
 
@@ -16,10 +16,9 @@ class receiveTextsProduct extends structureElementAction
 
     public function setExpectedFields(&$expectedFields)
     {
-        $expectedFields = [
-            'content',
-            'introduction',
-        ];
+        if($this->structureElement->getExpectedField('texts')) {
+            $expectedFields = $this->structureElement->getExpectedField('texts');
+        }
     }
 
     public function setValidators(&$validators)

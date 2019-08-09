@@ -2011,4 +2011,13 @@ class productElement extends structureElement implements
         }
         return false;
     }
+
+    public function getExpectedField($type) {
+        if($type === 'texts') {
+            return [
+                'content',
+                'introduction',
+            ];
+        }
+    }
 }

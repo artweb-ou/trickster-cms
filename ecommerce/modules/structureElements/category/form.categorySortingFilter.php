@@ -1,15 +1,9 @@
 <?php
 
-class CategorySettingsStructure extends ElementForm
+class CategorySortingFilterStructure extends ElementForm
 {
     protected $formClass = 'category_form';
     protected $structure = [
-        'unit' => [
-            'type' => 'input.multi_language_text',
-        ],
-        'parameters' => [
-            'type' => 'select.parameters_group',
-        ],
         'defaultOrder' => [
             'type' => 'select.index',
             'options' => [
@@ -106,21 +100,5 @@ class CategorySettingsStructure extends ElementForm
             ],
             'translationGroup' => 'category',
         ],
-        'productCataloguesIds' => [
-            'type' => 'select.universal_options_multiple',
-            'property' => 'productCatalogues',
-            'defaultRequired' => true,
-        ],
-        'feedbackId' => [
-            'type' => 'multi_language_feedback',
-            'property' => 'feedbackFormsList',
-            'defaultRequired' => true,
-        ],
-        'parentCategoriesIds' => [
-            'type' => 'select.universal_options_multiple',
-            'method' => 'getParentCategoriesList',
-            'defaultRequired' => true,
-        ],
     ];
-
 }
