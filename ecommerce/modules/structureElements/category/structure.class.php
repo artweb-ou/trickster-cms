@@ -949,7 +949,8 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return $genericIconList;
     }
 
-    public function getGenericIconList() {
+    public function getGenericIconList()
+    {
         /**
          * @var $linksManager linksManager
          * @var $structureManager structureManager
@@ -962,12 +963,14 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $genericIcons = $structureManager->getElementsByType('genericIcon');
         foreach ($genericIcons as $genericIcon) {
             $genericIconList[] = [
-                'id' => $genericIcon->id,
-                'title' => $genericIcon->getTitle(),
+                'id'     => $genericIcon->id,
+                'title'  => $genericIcon->getTitle(),
                 'select' => in_array($genericIcon->id, $connectedIcons)
             ];
         }
         return $genericIconList;
+    }
+    
     public function getFeedbackFormList() {
         $structureManager = $this->getService('structureManager');
         $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
