@@ -51,14 +51,14 @@ function FileInputComponent(inputElement) {
     var synchronizeContent = function() {
         var fileSize = '';
         var fileName = '';
-        var fileDescription = '';
+        var fileDescription = '<ol>';
         if (inputElement.value !== '') {
             for (var i = 0; i < inputElement.files.length; i++) {
                 fileSize = (inputElement.files[i].size / 1024 / 1024).toFixed(4);// + " MB"
                 fileName = inputElement.files[i].name;
-                fileDescription += fileName + ' (' + fileSize + '  MB)</br>';
+                fileDescription += '<li>' + fileName + ' (' + fileSize + '  MB)</li>';
             }
-            fakeField.innerHTML = fileDescription;
+            fakeField.innerHTML = fileDescription + "</ol>";
         }
     };
     var clickHandler = function() {

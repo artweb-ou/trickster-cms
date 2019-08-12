@@ -9,10 +9,19 @@
         height: @43pt;
         border-right: none;
         line-height: 1;
-        
+    
         &:not(:empty) {
             height: auto;
             border-right: 1px solid @input_border_color;
+        
+            ol {
+                margin: 0;
+                padding: 0;
+            
+                li {
+                    margin: 5px 0 5px 2em;
+                }
+            }
         }
     }
 
