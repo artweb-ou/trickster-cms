@@ -10,6 +10,7 @@ class cataloguesElement extends structureElement
         "catalogue",
         "productParameters",
         "brands",
+        'collections',
         "currencies",
         "comments",
         "shoppingBasketServices",

@@ -183,6 +183,7 @@ class productElement extends structureElement implements
 
         $moduleStructure['unit'] = 'text';
         $moduleStructure['subTitle'] = 'text';
+        $moduleStructure['collectionsListId'] = 'array';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -1001,7 +1002,7 @@ class productElement extends structureElement implements
      */
     public function getIconsCompleteList()
     {
-        $this->logError('deprecated method getIconsCompleteList used');
+//        $this->logError('deprecated method getIconsCompleteList used');
         if ($this->iconsCompleteList === null) {
             /**
              * @var ProductIconsManager $productIconsManager
@@ -2001,5 +2002,26 @@ class productElement extends structureElement implements
     public function getNewElementUrl()
     {
         return parent::getNewElementUrl().'linkType:subArticle/';
+    }
+
+    public function getCollectionsList() {
+        /**
+         * @var $structureManager structureManager
+         * @var $linksManager linksManager
+         */
+        $arrayCollection = [];
+        $structureManager = $this->getService('structureManager');
+        $linksManager = $this->getService('linksManager');
+        $connectedCollection = $linksManager->getConnectedIdList($this->id, 'collection');
+        $collections = $structureManager->getElementsByType('collection');
+
+        foreach ($collections as $collection) {
+            $arrayCollection[] = [
+                'id' => $collection->id,
+                'title' => $collection->getTitle(),
+                'select' => in_array($collection->id, $connectedCollection)
+            ];
+        }
+        return $arrayCollection;
     }
 }
