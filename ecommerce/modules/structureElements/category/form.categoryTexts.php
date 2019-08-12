@@ -4,9 +4,6 @@ class CategoryTextsStructure extends ElementForm
 {
     protected $formClass = 'product_form';
     protected $structure = [
-        'title' => [
-            'type' => 'input.multi_language_text',
-        ],
         'introduction' => [
             'type' => 'input.multi_language_content',
         ],
@@ -14,5 +11,4 @@ class CategoryTextsStructure extends ElementForm
             'type' => 'input.multi_language_content',
         ]
     ];
-
 }

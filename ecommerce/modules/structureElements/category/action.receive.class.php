@@ -114,6 +114,7 @@ class receiveCategory extends structureElementAction
     public function setExpectedFields(&$expectedFields)
     {
         $expectedFields = [
+            'title',
             'image',
             'hidden',
             'unit',

@@ -1020,7 +1020,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     public function getExpectedField($type) {
         if($type === 'texts') {
             return [
-                'title',
                 'content',
                 'introduction',
             ];
