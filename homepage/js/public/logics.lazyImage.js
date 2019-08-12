@@ -1,6 +1,6 @@
 window.lazyImageLogics = new function() {
     var initComponents = function() {
-        var elements = _('.lazy_image');
+        var elements = document.querySelectorAll('.lazy_image');
         for (var i = elements.length; i--;) {
             new LazyImageComponent(elements[i]);
         }
