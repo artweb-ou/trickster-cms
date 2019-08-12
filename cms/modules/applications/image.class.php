@@ -50,7 +50,9 @@ class imageApplication extends controllerApplication
                 }
                 if (!empty($imagePreset['filters'])) {
                     foreach ($imagePreset['filters'] as &$filter) {
-                        $filter[1] = $this->applyMultiplier($filter[1]);
+                        if (isset($filter[1])){
+                            $filter[1] = $this->applyMultiplier($filter[1]);
+                        }
                         $this->renderer->assign('registerFilter', $filter);
                     }
                 }
