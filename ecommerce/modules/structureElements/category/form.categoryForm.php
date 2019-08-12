@@ -4,7 +4,7 @@ class CategoryFormStructure extends ElementForm
 {
     protected $structure = [
         'title' => [
-            'type' => 'input.text'
+            'type' => 'input.multi_language_text'
         ],
         'image' => [
             'type' => 'input.image',
