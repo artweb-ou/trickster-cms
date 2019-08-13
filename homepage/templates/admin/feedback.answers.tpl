@@ -18,6 +18,7 @@
 				</div>
 
 				{assign 'formNames' $rootElement->getFormNames()}
+				<div class="feedback_content_list_wrapper">
 					<table class='content_list'>
 						<thead>
 							<tr>
@@ -86,6 +87,7 @@
 						{/foreach}
 						</tbody>
 					</table>
+				</div>
 			</form>
 
 		</div>
