@@ -153,6 +153,15 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         return false;
     }
 
+    public function getCollectionsLayout()
+    {
+        $structureManager = $this->getService('structureManager');
+        if ($collectionsList = $structureManager->getElementsFirstParent($this->id)) {
+            return $collectionsList->getCurrentLayout('collection');
+        };
+        return false;
+    }
+
     public function getElementData()
     {
         $brandInfo = [];

@@ -240,6 +240,7 @@
     'collectionsList.collection.options' => [
         'thumbnailsmall',
         'detailed',
+        'scroll'
     ],
     'collectionsList.productsLayout.default' => 'thumbnail',
     'collectionsList.collection.default' => 'detailed',

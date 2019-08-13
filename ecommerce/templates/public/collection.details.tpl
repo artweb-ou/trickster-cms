@@ -20,7 +20,20 @@
 			</div>
 		</div>
     {/if}
+        {include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=true}
+		{if $pager && count($pager->pagesList)>1 || $element->isSortable()}
+			<div class="products_top_pager">
+				{include file=$theme->template('pager.tpl') pager=$pager}
+				<div class="products_top_pager_controls">
+					{include file=$theme->template('component.productslimit.tpl')}
+					{if $element->isSortable()}
+						{include file=$theme->template('component.productssorter.tpl')}
+					{/if}
+				</div>
+			</div>
+		{/if}
 		<div class='collection_details_products products_list'>
+
             {$template = $theme->template("product.{$element->getProductsLayout()}.tpl", true)}
             {if !$template}
                 {$template = $theme->template('product.thumbnailsmall.tpl')}
