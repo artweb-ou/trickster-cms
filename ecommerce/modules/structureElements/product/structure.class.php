@@ -2006,6 +2006,9 @@ class productElement extends structureElement implements
 
     public function getNewElementUrl()
     {
-        return parent::getNewElementUrl().'linkType:subArticle/';
+        if ($this->actionName == 'showTexts') {
+            return parent::getNewElementUrl().'linkType:subArticle/';
+        }
+        return parent::getNewElementUrl();
     }
 }
