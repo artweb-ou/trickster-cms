@@ -16,6 +16,10 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $this->createRenderer();
     }
 
+    /**
+     * @param controller $controller
+     * @return mixed|void
+     */
     public function execute($controller)
     {
         /**
@@ -30,7 +34,9 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $redirectionManager = $this->getService('RedirectionManager');
         $redirectionManager->checkProtocolRedirection();
         $redirectionManager->checkDomainRedirection();
-
+        /**
+         * @var DesignThemesManager $designThemesManager
+         */
         $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
 
