@@ -41,10 +41,10 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
 
         $languagesManager = $this->getService('LanguagesManager');
-        if ($controller->getParameter('lang')) {
-            $languagesManager->setCurrentLanguageCode($controller->getParameter('lang'), 'adminLanguages');
+        if ($langCode = $controller->getParameter('lang')) {
+            $languagesManager->setCurrentLanguageCode($langCode, 'adminLanguages');
             //change the public language as well, so all public-languages dependent data in admin would be displayed in a same language where possible
-            $languagesManager->setCurrentLanguageCode($controller->getParameter('lang'));
+            $languagesManager->setCurrentLanguageCode($langCode);
         }
         $currentLanguageId = $languagesManager->getCurrentLanguageId("adminLanguages");
 
@@ -97,8 +97,6 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $this->renderer->assign('controller', $controller);
         $this->renderer->assign('user', $user);
         $this->renderer->assign('settings', $this->getService('settingsManager')->getSettingsList());
-
-        $configManager = $this->getService('ConfigManager');
 
         $allowedSearchTypes = $this->getService('ConfigManager')->getMerged('searchtypes-admin.search');
         $this->renderer->assign('allowedSearchTypes', implode(',', $allowedSearchTypes));
