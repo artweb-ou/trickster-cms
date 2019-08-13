@@ -1035,7 +1035,6 @@ class productElement extends structureElement implements
                             'width' => $icon->iconWidth,
                             'widthOnProduct' => $icon->iconWidthOnProduct,
                             'fileName' => $icon->originalName,
-                            'iconapplicableToAllProducts' => $icon->applicableToAllProducts,
                             'iconRole' => '',
                             'iconLocation' => $this->productIconLocationTypes[0],
                         ];
@@ -1064,7 +1063,6 @@ class productElement extends structureElement implements
                                 'width' => $discount->iconWidth,
                                 'widthOnProduct' => $discount->iconWidthOnProduct,
                                 'fileName' => $discount->iconOriginalName,
-                                'iconapplicableToAllProducts' => $discount->applicableToAllProducts,
                                 'iconRole' => '',
                                 'iconLocation' => $this->productIconLocationTypes[0],
                             ];

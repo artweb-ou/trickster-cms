@@ -93,9 +93,12 @@ class ProductIconsManager
                 $now = time();
 
                 foreach ($allIcons as $iconElement) {
-                    if (!$iconElement->applicableToAllProducts){
+                    if (!$iconElement->applicableToAllProducts) {
+                        $productFilterExisting = false;
+
                         //if icon has products filter, check if product ID matches
-                        if (!empty($iconConnectedProductsIds = $iconElement->getConnectedProductsIds())) {
+                        if ($iconConnectedProductsIds = $iconElement->getConnectedProductsIds()) {
+                            $productFilterExisting = true;
                             if (!in_array($product->id, $iconConnectedProductsIds)) {
                                 continue;
                             }
@@ -103,6 +106,7 @@ class ProductIconsManager
 
                         //if icon has categories filter, check it first
                         if ($iconConnectedCategoriesIds = $iconElement->getConnectedCategoriesIds()) {
+                            $productFilterExisting = true;
                             $productCategoriesIds = array_column($categories, 'id');
                             if (!array_intersect($productCategoriesIds, $iconConnectedCategoriesIds)) {
                                 continue;
@@ -111,9 +115,15 @@ class ProductIconsManager
 
                         //if icon has brands filter, check if product brand ID matches
                         if ($iconConnectedBrandsIds = $iconElement->getConnectedBrandsIds()) {
+                            $productFilterExisting = true;
                             if (!in_array($product->brandId, $iconConnectedBrandsIds)) {
                                 continue;
                             }
+                        }
+
+                        //if icon doesn't have checkbox "applicableToAllProducts" and no filters are set, then no products are shown for this icon
+                        if (!$productFilterExisting) {
+                            continue;
                         }
                     }
 
