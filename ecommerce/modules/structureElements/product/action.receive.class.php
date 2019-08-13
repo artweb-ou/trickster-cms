@@ -150,17 +150,17 @@ class receiveProduct extends structureElementAction
                 $linksManager->unLinkElements($categoryId, $structureElement->id, 'connectedCategory');
             }
 
-            $collectionsIdIndex = $linksManager->getConnectedIdIndex($structureElement->id, 'collection', 'child');
+            $collectionsIdIndex = $linksManager->getConnectedIdIndex($structureElement->id, 'collectionProduct', 'child');
             foreach ($structureElement->collectionsListId as $collectionsListId) {
                 if (!isset($categoriesIdIndex[$collectionsListId])) {
-                    $linksManager->linkElements($collectionsListId, $structureElement->id, 'collection');
+                    $linksManager->linkElements($collectionsListId, $structureElement->id, 'collectionProduct');
                 } else {
                     unset($categoriesIdIndex[$collectionsListId]);
                 }
             }
             //delete obsolete categories links
             foreach ($collectionsIdIndex as $collectionId => &$value) {
-                $linksManager->unLinkElements($collectionId, $structureElement->id, 'collection');
+                $linksManager->unLinkElements($collectionId, $structureElement->id, 'collectionProduct');
             }
 
             $controller->redirect($structureElement->URL);

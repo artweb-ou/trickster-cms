@@ -11,19 +11,19 @@ class receiveCollectionsList extends structureElementAction
             $structureElement->structureName = $structureElement->title;
             $structureElement->persistElementData();
 
-            $brandsElement = $structureManager->getElementByMarker('collections');
-            $brandsList = $structureManager->getElementsChildren($brandsElement->id);
+            $collectionsElement = $structureManager->getElementByMarker('collections');
+            $collectionsList = $structureManager->getElementsChildren($collectionsElement->id);
 
             $linksManager = $this->getService('linksManager');
             $compiledLinks = $linksManager->getElementsLinksIndex($structureElement->id, 'collections', 'parent');
 
-            foreach ($brandsList as &$brand) {
-                if (isset($compiledLinks[$brand->id]) && !in_array($brand->id, $structureElement->brands) && !$structureElement->connectAll
+            foreach ($collectionsList as &$collection) {
+                if (isset($compiledLinks[$collection->id]) && !in_array($collection->id, $structureElement->brands) && !$structureElement->connectAll
                 ) {
-                    $compiledLinks[$brand->id]->delete();
-                } elseif (!isset($compiledLinks[$brand->id]) && ($structureElement->connectAll || in_array($brand->id, $structureElement->brands))
+                    $compiledLinks[$collection->id]->delete();
+                } elseif (!isset($compiledLinks[$collection->id]) && ($structureElement->connectAll || in_array($collection->id, $structureElement->collections))
                 ) {
-                    $linksManager->linkElements($structureElement->id, $brand->id, 'collections');
+                    $linksManager->linkElements($structureElement->id, $collection->id, 'collections');
                 }
             }
             $controller->redirect($structureElement->URL);
@@ -36,7 +36,7 @@ class receiveCollectionsList extends structureElementAction
     {
         $expectedFields = [
             'title',
-            'brands',
+            'collections',
             'columns',
             'content',
             'connectAll',

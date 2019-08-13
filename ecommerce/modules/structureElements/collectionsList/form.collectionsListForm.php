@@ -22,7 +22,7 @@ class CollectionsListFormStructure extends ElementForm
         'connectAll' => [
             'type' => 'input.checkbox',
         ],
-        'brands' => [
+        'collections' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getCollectionsInfo',
         ],

@@ -228,4 +228,20 @@
     ],
     'shoppingBasketStepPromo.layout.default' => 'default',
 
+    'collectionsList.layouts' => [
+        'productsLayout',
+        'collection'
+    ],
+    'collectionsList.productsLayout.options' => [
+        'thumbnailsmall',
+        'thumbnail',
+        'detailed',
+    ],
+    'collectionsList.collection.options' => [
+        'thumbnailsmall',
+        'detailed',
+    ],
+    'collectionsList.productsLayout.default' => 'thumbnail',
+    'collectionsList.collection.default' => 'detailed',
+
 ];

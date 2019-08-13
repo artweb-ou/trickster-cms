@@ -2,11 +2,18 @@
 
 class showFormCollection extends structureElementAction
 {
+
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param collectionElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->final) {
-            $structureElement->collectionsListIds = [];
-            $connectedCollectionsListsIds = $structureElement->getConnectedBrandsListsIds();
+            $structureElement->collectionsListsList = [];
+            $connectedCollectionsListsIds = $structureElement->getConnectedCollectionsListsIds();
             if ($collectionsListElements = $structureManager->getElementsByType('collectionsList')) {
                 foreach ($collectionsListElements as &$collectionsListElement) {
                     if ($collectionsListElement->connectAll) {
@@ -16,7 +23,7 @@ class showFormCollection extends structureElementAction
                     $item['id'] = $collectionsListElement->id;
                     $item['title'] = $collectionsListElement->getTitle();
                     $item['select'] = in_array($collectionsListElement->id, $connectedCollectionsListsIds);
-                    $structureElement->collectionsListIds[] = $item;
+                    $structureElement->collectionsListsList[] = $item;
                 }
             }
             $structureElement->setTemplate('shared.content.tpl');

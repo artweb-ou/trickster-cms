@@ -17,6 +17,7 @@ class receiveProductsLayoutCollectionsList extends structureElementAction
     {
         $expectedFields = [
             'productsLayout',
+            'collection'
         ];
     }
 

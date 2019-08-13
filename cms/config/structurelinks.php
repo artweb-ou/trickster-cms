@@ -17,6 +17,8 @@
         'rightColumn',
         'structure',
         'mobileMenu',
+        'collectionProduct',
+        'collections',
     ],
     'publicAllowed' => [
         'bannerCategoryBanner',
@@ -42,5 +44,7 @@
         'brands',
         'categoryParameter',
         'mobileMenu',
+        'collectionProduct',
+        'collections',
     ],
 ];

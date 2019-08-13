@@ -4,6 +4,13 @@ class receiveCollection extends structureElementAction
 {
     protected $loggable = true;
 
+
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param collectionElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
@@ -16,15 +23,15 @@ class receiveCollection extends structureElementAction
             }
             $structureElement->persistElementData();
             $linksManager = $this->getService('linksManager');
-            $connectedBrandListsIds = $structureElement->getConnectedBrandsListsIds();
+            $connectedBrandListsIds = $structureElement->getConnectedCollectionsListsIds();
             foreach ($connectedBrandListsIds as &$connectedBrandListId) {
                 $linksManager->unLinkElements($connectedBrandListId, $structureElement->id, 'collections');
             }
             // connect all brandslists configured to show all brands
-            if ($brandsLists = $structureManager->getElementsByType('collectionsList')) {
-                foreach ($brandsLists as &$brandsList) {
-                    if ($brandsList->connectAll || in_array($brandsList->id, $structureElement->brandsListsIds)) {
-                        $linksManager->linkElements($brandsList->id, $structureElement->id, 'collections');
+            if ($collectionsLists = $structureManager->getElementsByType('collectionsList')) {
+                foreach ($collectionsLists as &$collectionList) {
+                    if ($collectionList->connectAll || in_array($collectionList->id, $structureElement->collectionsListIds)) {
+                        $linksManager->linkElements($collectionList->id, $structureElement->id, 'collections');
                     }
                 }
             }
@@ -45,7 +52,7 @@ class receiveCollection extends structureElementAction
             'dateSortingEnabled',
             'introduction',
             'structureName',
-            'brandsListsIds',
+            'collectionsListIds',
             'availabilityFilterEnabled',
             'parameterFilterEnabled',
             'discountFilterEnabled',

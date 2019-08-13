@@ -5,10 +5,11 @@ class collectionsListElement extends structureElement implements ConfigurableLay
     use ConfigurableLayoutsProviderTrait, MetadataProviderTrait;
     public $dataResourceName = 'module_collections_list';
     public $defaultActionName = 'show';
-    public $role = 'container';
+    public $role = 'content';
     protected $subMenuList;
     protected $collectionsList;
     protected $collectionsInfo;
+    protected $allowedTypes = 'collection';
 
     public function getSubMenuList($linkType = 'structure')
     {
@@ -62,6 +63,8 @@ class collectionsListElement extends structureElement implements ConfigurableLay
         $moduleStructure['canonicalUrl'] = 'url';
         $moduleStructure['metaDenyIndex'] = 'checkbox';
         $moduleStructure['productsLayout'] = 'text';
+        $moduleStructure['collection'] = 'text';
+        $moduleStructure['collections'] = 'array';
     }
 
     public function getCollectionsList()
@@ -78,21 +81,21 @@ class collectionsListElement extends structureElement implements ConfigurableLay
         if ($this->collectionsInfo === null) {
             $this->collectionsInfo = [];
             $structureManager = $this->getService('structureManager');
-            $brandsList = [];
-            if ($brandsElement = $structureManager->getElementByMarker('collections')) {
-                $brandsList = $structureManager->getElementsFlatTree($brandsElement->id);
+            $collectionsList = [];
+            if ($collectionsElement = $structureManager->getElementByMarker('collections')) {
+                $collectionsList = $structureManager->getElementsFlatTree($collectionsElement->id);
             }
-            $brandsList = (array)$brandsList === $brandsList ? $brandsList : [];
+            $collectionsList = (array)$collectionsList === $collectionsList ? $collectionsList : [];
             $linksManager = $this->getService('linksManager');
             $compiledLinks = $linksManager->getElementsLinksIndex($this->id, 'collections', 'parent');
 
-            foreach ($brandsList as &$brand) {
-                $brandItem = [
-                    'select' => isset($compiledLinks[$brand->id]),
-                    'title' => $brand->getTitle(),
-                    'id' => $brand->id,
+            foreach ($collectionsList as &$collection) {
+                $collectionItem = [
+                    'select' => isset($compiledLinks[$collection->id]),
+                    'title' => $collection->getTitle(),
+                    'id' => $collection->id,
                 ];
-                $this->collectionsInfo[] = $brandItem;
+                $this->collectionsInfo[] = $collectionItem;
             }
         }
         return $this->collectionsInfo;

@@ -79,77 +79,38 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         ];
     }
 
+
     protected function getConnectedProductsIds()
     {
-        if (is_null($this->connectedProductsIds)) {
-            $this->connectedProductsIds = [];
+        /**
+         * @var $linksManager linksManager
+         */
+        $linksManager = $this->getService('linksManager');
+        $connectedProductsIds = $linksManager->getConnectedIdList($this->id, 'collectionProduct');
+        return $connectedProductsIds;
+    }
 
-            $linksManager = $this->getService('linksManager');
-            if ($connectedProductIds = $linksManager->getConnectedIdList($this->id, 'productbrand', 'parent')) {
-                // check if all products are in a category
-                $relevantProductIds = [];
-                $collection = persistableCollection::getInstance('structure_links');
-                $conditions = [
-                    [
-                        'childStructureId',
-                        'in',
-                        $connectedProductIds,
-                    ],
-                    [
-                        'type',
-                        'IN',
-                        ['catalogue', 'productCatalogueProduct'],
-                    ],
-                ];
-
-                if ($records = $collection->conditionalLoad([
-                    'childStructureId',
-                    'parentStructureId',
-                ], $conditions)
-                ) {
-                    $structureManager = $this->getService('structureManager');
-                    $languagesManager = $this->getService('LanguagesManager');
-                    $languageId = $languagesManager->getCurrentLanguageId();
-                    foreach ($records as &$record) {
-                        // check if the category/catalogue is available in current language
-                        if ($structureManager->checkElementInParent($record['parentStructureId'], $languageId)) {
-                            $relevantProductIds[] = $record['childStructureId'];
-                        }
-                    }
-                    $this->connectedProductsIds = $relevantProductIds;
+    public function getConnectedProducts() {
+        /**
+         * @var $structureManager structureManager
+         */
+        $connectedProducts = [];
+        $connectedProductIds = $this->getConnectedProductsIds();
+        if(!empty($connectedProductIds)) {
+            $structureManager = $this->getService('structureManager');
+            foreach ($connectedProductIds as $productId) {
+                $productElement = $structureManager->getElementById($productId);
+                if(!empty($productElement)) {
+                    $connectedProducts[] = $productElement;
                 }
             }
         }
-        return $this->connectedProductsIds;
+        return $connectedProducts;
     }
 
-    public function getConnectedBrandsListsIds()
+    public function getConnectedCollectionsListsIds()
     {
         return $this->getService('linksManager')->getConnectedIdList($this->id, 'collections', 'child');
-    }
-
-    public function connectWithAutomaticBrandsLists()
-    {
-        $structureManager = $this->getService('structureManager');
-        if ($brandsLists = $structureManager->getElementsByType('collectionsList')) {
-            $linksManager = $this->getService('linksManager');
-            foreach ($brandsLists as &$brandsList) {
-                if ($brandsList->connectAll) {
-                    $linksManager->linkElements($brandsList->id, $this->id, 'collections');
-                }
-            }
-        }
-    }
-
-    public function deleteElementData()
-    {
-        $collection = persistableCollection::getInstance('import_origin');
-        $searchFields = ['elementId' => $this->id];
-        $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
-            $record->delete();
-        }
-        parent::deleteElementData();
     }
 
     public function isFilterableByType($filterType)
@@ -186,8 +147,8 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
     public function getProductsLayout()
     {
         $structureManager = $this->getService('structureManager');
-        if ($brandsList = $structureManager->getElementsFirstParent($this->id)) {
-            return $brandsList->getCurrentLayout('productsLayout');
+        if ($collectionsList = $structureManager->getElementsFirstParent($this->id)) {
+            return $collectionsList->getCurrentLayout('productsLayout');
         };
         return false;
     }
