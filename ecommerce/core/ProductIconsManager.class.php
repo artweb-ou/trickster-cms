@@ -93,25 +93,27 @@ class ProductIconsManager
                 $now = time();
 
                 foreach ($allIcons as $iconElement) {
-                    //if icon has products filter, check if product ID matches
-                    if (!empty($iconConnectedProductsIds = $iconElement->getConnectedProductsIds())) {
-                        if (!in_array($product->id, $iconConnectedProductsIds)) {
-                            continue;
+                    if (!$iconElement->applicableToAllProducts){
+                        //if icon has products filter, check if product ID matches
+                        if (!empty($iconConnectedProductsIds = $iconElement->getConnectedProductsIds())) {
+                            if (!in_array($product->id, $iconConnectedProductsIds)) {
+                                continue;
+                            }
                         }
-                    }
 
-                    //if icon has categories filter, check it first
-                    if ($iconConnectedCategoriesIds = $iconElement->getConnectedCategoriesIds()) {
-                        $productCategoriesIds = array_column($categories, 'id');
-                        if (!array_intersect($productCategoriesIds, $iconConnectedCategoriesIds)) {
-                            continue;
+                        //if icon has categories filter, check it first
+                        if ($iconConnectedCategoriesIds = $iconElement->getConnectedCategoriesIds()) {
+                            $productCategoriesIds = array_column($categories, 'id');
+                            if (!array_intersect($productCategoriesIds, $iconConnectedCategoriesIds)) {
+                                continue;
+                            }
                         }
-                    }
 
-                    //if icon has brands filter, check if product brand ID matches
-                    if ($iconConnectedBrandsIds = $iconElement->getConnectedBrandsIds()) {
-                        if (!in_array($product->brandId, $iconConnectedBrandsIds)) {
-                            continue;
+                        //if icon has brands filter, check if product brand ID matches
+                        if ($iconConnectedBrandsIds = $iconElement->getConnectedBrandsIds()) {
+                            if (!in_array($product->brandId, $iconConnectedBrandsIds)) {
+                                continue;
+                            }
                         }
                     }
 

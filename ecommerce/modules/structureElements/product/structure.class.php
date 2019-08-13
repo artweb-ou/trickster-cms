@@ -46,6 +46,7 @@
  * @property string $comment_captcha
  * @property array $importInfo
  * @property string $unit
+ * @property integer $applicableToAllProducts
  */
 class productElement extends structureElement implements
     MetadataProviderInterface,
@@ -1013,6 +1014,9 @@ class productElement extends structureElement implements
         return $this->iconsCompleteList;
     }
 
+    /**
+     * @return array|bool
+     */
     public function getIconsInfo()
     {
         if ($this->iconsInfo == null) {
@@ -1029,7 +1033,9 @@ class productElement extends structureElement implements
                             'title' => $icon->title,
                             'image' => $icon->image,
                             'width' => $icon->iconWidth,
+                            'widthOnProduct' => $icon->iconWidthOnProduct,
                             'fileName' => $icon->originalName,
+                            'iconapplicableToAllProducts' => $icon->applicableToAllProducts,
                             'iconRole' => '',
                             'iconLocation' => $this->productIconLocationTypes[0],
                         ];
@@ -1056,7 +1062,9 @@ class productElement extends structureElement implements
                                 'title' => $discount->title,
                                 'image' => $discount->icon,
                                 'width' => $discount->iconWidth,
+                                'widthOnProduct' => $discount->iconWidthOnProduct,
                                 'fileName' => $discount->iconOriginalName,
+                                'iconapplicableToAllProducts' => $discount->applicableToAllProducts,
                                 'iconRole' => '',
                                 'iconLocation' => $this->productIconLocationTypes[0],
                             ];

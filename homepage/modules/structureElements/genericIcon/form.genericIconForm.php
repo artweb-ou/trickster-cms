@@ -51,6 +51,13 @@ class GenericIconFormStructure extends ElementForm
             'maxValue'  => '50',
             'stepValue' => '0.5',
         ],
+        'iconWidthOnProduct'     => [
+            'type'      => 'input.multi_language_text',
+            'inputType' => 'number',
+            'minValue'  => '0',
+            'maxValue'  => '50',
+            'stepValue' => '0.5',
+        ],
         'iconLocation'  => [
             'type'   => 'select.index',
             'method' => 'productIconLocationOptionsList',
@@ -68,6 +75,9 @@ class GenericIconFormStructure extends ElementForm
         'filters'        => [
             'type'             => 'show.heading',
             'translationGrupp' => 'shared'
+        ],
+        'applicableToAllProducts'      => [
+            'type' => 'input.checkbox'
         ],
         'iconProducts'   => [
             'type'    => 'select.universal_options_multiple',
