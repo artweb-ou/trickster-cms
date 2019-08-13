@@ -3,7 +3,7 @@
 class GenericIconFormStructure extends ElementForm
 {
 
-    protected $formClass = 'genericicon_form';
+    protected $formClass = 'genericicon_form applicable_filters_form';
     protected $structure = [];
     protected $formStructureElementTop = [
         'textSettings'  => [
@@ -77,23 +77,27 @@ class GenericIconFormStructure extends ElementForm
             'translationGrupp' => 'shared'
         ],
         'applicableToAllProducts'      => [
-            'type' => 'input.checkbox'
+            'type' => 'input.checkbox',
+            'class' => 'show_filters'
         ],
         'iconProducts'   => [
             'type'    => 'select.universal_options_multiple',
             'method'  => 'getConnectedProducts',
+            'trClass' => 'form_filters_showed',
             'class'   => 'genericicon_form_productselect',
             'dataset' => ["data-select", "product"],
         ],
         'iconCategories' => [
             'type'    => 'select.universal_options_multiple',
             'method'  => 'getConnectedCategoriesInfo',
+            'trClass' => 'form_filters_showed',
             'class'   => 'genericicon_form_categoryselect',
             'dataset' => ["data-select", "category"],
         ],
         'iconBrands'     => [
             'type'    => 'select.universal_options_multiple',
             'method'  => 'getConnectedBrands',
+            'trClass' => 'form_filters_showed',
             'class'   => 'genericicon_form_brandselect',
             'dataset' => ["data-select", "brand"],
         ],

@@ -2,7 +2,7 @@
 
 class DiscountFormStructure extends ElementForm
 {
-    protected $formClass = 'discount_form';
+    protected $formClass = 'discount_form applicable_filters_form';
     protected $structure = [
         'title' => [
             'type' => 'input.multi_language_text',
@@ -74,21 +74,25 @@ class DiscountFormStructure extends ElementForm
         ],
         'targetAllProducts' => [
             'type' => 'input.checkbox',
+            'class' => 'show_filters'
         ],
         'products' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getConnectedProducts',
             'class' => 'discount_form_productselect',
+            'trClass' => 'form_filters_showed',
         ],
         'categories' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getConnectedCategoriesInfo',
             'class' => 'discount_form_categoryselect',
+            'trClass' => 'form_filters_showed',
         ],
         'brands' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getConnectedBrands',
             'class' => 'discount_form_brandselect',
+            'trClass' => 'form_filters_showed',
         ],
         'price_changes' => [
             'type' => 'show.heading',
