@@ -10,6 +10,11 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
     public $role = 'content';
     protected $answers;
 
+    public function getFormAllowedTypes()
+    {
+        return $this->allowedTypes;
+    }
+
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
@@ -21,6 +26,14 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
         $moduleStructure['layout'] = 'text';
         $moduleStructure['colorLayout'] = 'text';
     }
+// children, getElementsChildren
+/*
+        $parentElementId,
+        $allowedRoles = null,
+        $linkTypes = 'structure',
+        $allowedTypes = null,
+        $restrictLinkTypes = false
+*/
 
     protected function getTabsList()
     {
