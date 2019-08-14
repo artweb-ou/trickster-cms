@@ -2,7 +2,6 @@
 	{assign var='formData' value=$element->getFormData()}
 	{assign var='formErrors' value=$element->getFormErrors()}
 	{assign var='formNames' value=$element->getFormNames()}
-
 	{$answersTable = $element->getAnswersTable()}
 
 	{if $element->hasActualStructureInfo()}
@@ -52,7 +51,7 @@
 									<input class='singlebox checkbox_placeholder' type="checkbox" name="{$formNames.elements}[{$answer.element->id}]" value="1" />
 								</td>
 								{foreach $answer.fields as $fieldInfo}
-									<td class="name_column">
+									<td class="name_column {$fieldInfo.type}_column">
 										{if $fieldInfo.type != 'fileinput'}
                                             {if $fieldInfo.value|is_array}
                                                 {foreach $fieldInfo.value as $value}
@@ -78,7 +77,7 @@
 								<td class='date_column'>
 									{$answer.element->dateModified}
 								</td>
-								<td>
+								<td class='delete_column'>
 									{if isset($privilege.delete) && $privilege.delete}
 										<a href="{$answer.element->URL}id:{$answer.element->id}/action:delete" class='icon icon_delete content_item_delete_button'></a>
 									{/if}
