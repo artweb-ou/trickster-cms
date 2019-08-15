@@ -179,15 +179,21 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
 
     protected function getProductsListBaseQuery()
     {
+        /**
+         * @var $linksManager linksManager
+         */
+        $linksManager = $this->getService('linksManager');
         if ($this->productsListBaseQuery !== null) {
             return $this->productsListBaseQuery;
         }
         $this->productsListBaseQuery = false;
 
+        $connectedProductIds = $linksManager->getConnectedIdList($this->id, 'collectionProduct');
         $query = $this->getProductsQuery();
-        $query->where('brandId', '=', $this->id);
+        $query->whereIn('id', $connectedProductIds);
 
         $this->productsListBaseQuery = $query;
         return $this->productsListBaseQuery;
     }
+
 }

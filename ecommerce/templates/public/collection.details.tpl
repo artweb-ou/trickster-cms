@@ -38,7 +38,7 @@
             {if !$template}
                 {$template = $theme->template('product.thumbnailsmall.tpl')}
             {/if}
-            {foreach $element->getConnectedProducts() as $product}
+            {foreach $element->getProductsList() as $product}
                 {include file=$template element=$product}
             {/foreach}
 		</div>
