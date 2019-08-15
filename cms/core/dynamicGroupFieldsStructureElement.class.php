@@ -36,7 +36,8 @@ abstract class dynamicGroupFieldsStructureElement extends dynamicFieldsStructure
             $this->customFieldsGroups = [];
 
             $structureManager = $this->getService('structureManager');
-            if ($groups = $structureManager->getElementsChildren($this->id)) {
+            $groups = ($this->allowedTypes) ? $structureManager->getElementsChildren($this->id, null, 'structure', $this->allowedTypes) :  $structureManager->getElementsChildren($this->id);
+            if ($groups) {
                 foreach ($groups as &$group) {
                     if ($fields = $group->getFormFields()) {
                         $this->customFieldsGroups[] = $group;
