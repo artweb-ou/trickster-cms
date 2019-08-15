@@ -40,8 +40,6 @@ class receiveBrand extends structureElementAction
             'content',
             'image',
             'link',
-            'importOrigin',
-            'importId',
             'priceSortingEnabled',
             'nameSortingEnabled',
             'dateSortingEnabled',

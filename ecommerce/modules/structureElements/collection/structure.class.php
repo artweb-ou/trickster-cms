@@ -5,6 +5,7 @@
  *
  * @property int $amountOnPageEnabled
  * @property int $brandFilterEnabled
+ * @property int $categoryFilterEnabled
  * @property int $discountFilterEnabled
  * @property int $parameterFilterEnabled
  * @property int $availabilityFilterEnabled
@@ -59,6 +60,7 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         $moduleStructure['parameterFilterEnabled'] = 'checkbox';
         $moduleStructure['discountFilterEnabled'] = 'checkbox';
         $moduleStructure['amountOnPageEnabled'] = 'checkbox';
+        $moduleStructure['categoryFilterEnable'] = 'checkbox';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -117,8 +119,7 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
     {
         switch ($filterType) {
             case 'category':
-                //todo: implement checkbox in admin form
-                $result = false;
+                $result = $this->categoryFilterEnable;
                 break;
             case 'brand':
                 $result = $this->brandFilterEnabled;
@@ -195,5 +196,37 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         $this->productsListBaseQuery = $query;
         return $this->productsListBaseQuery;
     }
+
+    public function getCategoryList() {
+        /**
+         * @var $structureManager structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        $categories = $structureManager->getElementsByType('category');
+        return $categories;
+    }
+
+    public function getProductsListCategories()
+    {
+        /**
+         * @var $product productElement
+         */
+        $categories = [];
+        $x = [];
+        $connectedProducts = $this->getConnectedProducts();
+        foreach ($connectedProducts as $product) {
+            $pro = $product;
+            $category = $product->getParentCategory();
+            $categories[$category->id] = $category;
+            $x[$category->id] = [];
+            while($cat = $pro->getParentCategory()) {
+                $x[$category->id][$cat->id] = $cat->getTitle();
+                $pro = $cat;
+            }
+        }
+        $a = $x;
+//       return $categories;
+    }
+
 
 }

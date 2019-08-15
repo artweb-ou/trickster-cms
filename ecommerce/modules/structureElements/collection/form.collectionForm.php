@@ -33,6 +33,9 @@ class CollectionFormStructure extends ElementForm
         'discountFilterEnabled' => [
             'type' => 'input.checkbox',
         ],
+        'categoryFilterEnable' => [
+            'type' => 'input.checkbox',
+        ],
         'availabilityFilterEnabled' => [
             'type' => 'input.checkbox',
         ],

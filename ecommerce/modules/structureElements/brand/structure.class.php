@@ -157,7 +157,7 @@ class brandElement extends ProductsListElement implements ImageUrlProviderInterf
         switch ($filterType) {
             case 'category':
                 //todo: implement checkbox in admin form
-                $result = false;
+                $result = true;
                 break;
             case 'brand':
                 $result = $this->brandFilterEnabled;

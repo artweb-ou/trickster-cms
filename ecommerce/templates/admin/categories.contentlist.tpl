@@ -23,8 +23,10 @@
 						{translations name='label.name'}
 					</th>
 					<th class='image_column'>
-						{if method_exists ($contentList[0], 'getImageUrl')}
-								{translations name='label.image'}
+						{if !empty($contentList[0])}
+                            {if method_exists ($contentList[0], 'getImageUrl')}
+                                {translations name='label.image'}
+                            {/if}
 						{/if}
 					</th>
 					<th class="name_column">

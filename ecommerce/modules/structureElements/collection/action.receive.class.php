@@ -27,7 +27,7 @@ class receiveCollection extends structureElementAction
             foreach ($connectedBrandListsIds as &$connectedBrandListId) {
                 $linksManager->unLinkElements($connectedBrandListId, $structureElement->id, 'collections');
             }
-            // connect all brandslists configured to show all brands
+
             if ($collectionsLists = $structureManager->getElementsByType('collectionsList')) {
                 foreach ($collectionsLists as &$collectionList) {
                     if ($collectionList->connectAll || in_array($collectionList->id, $structureElement->collectionsListIds)) {
@@ -57,6 +57,7 @@ class receiveCollection extends structureElementAction
             'parameterFilterEnabled',
             'discountFilterEnabled',
             'amountOnPageEnabled',
+            'categoryFilterEnable'
         ];
     }
 

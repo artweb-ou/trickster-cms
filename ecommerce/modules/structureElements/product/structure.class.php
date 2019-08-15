@@ -2012,7 +2012,7 @@ class productElement extends structureElement implements
         $arrayCollection = [];
         $structureManager = $this->getService('structureManager');
         $linksManager = $this->getService('linksManager');
-        $connectedCollection = $linksManager->getConnectedIdList($this->id, 'collection');
+        $connectedCollection = $linksManager->getConnectedIdList($this->id, 'collectionProduct');
         $collections = $structureManager->getElementsByType('collection');
 
         foreach ($collections as $collection) {
