@@ -4,6 +4,9 @@ trait DbLoggableApplication
 {
     protected $logFilePath;
     protected $connection;
+    /**
+     * @var transportObject
+     */
     protected $transportObject;
 
     protected function startDbLogging()
@@ -30,11 +33,13 @@ trait DbLoggableApplication
     protected function saveDbLog()
     {
         if ($this->logFilePath) {
+            $overall = 0;
             $text = '';
             if ($this->transportObject) {
                 if ($log = $this->transportObject->getQueriesHistory()) {
                     foreach ($log as $item) {
-                        $text .= $item . ";\r\n";
+                        $text .= $item['time'] . "\t" . $item['query'] . ";\r\n";
+                        $overall += $item['time'];
                     }
                 }
             }
@@ -47,9 +52,11 @@ trait DbLoggableApplication
                             $query = substr_replace($query, $binding, stripos($query, '?'), 1);
                         }
                         $text .= $item['time'] . "\t" . $query . ";\r\n";
+                        $overall += $item['time'];
                     }
                 }
             }
+            $text .= 'Overall SQL time:' . $overall;
             file_put_contents($this->logFilePath, $text);
         }
     }

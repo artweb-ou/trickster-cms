@@ -11,6 +11,9 @@ class pdoTransport extends errorLogger implements transportObject
     protected $tablesPrefix;
     protected $connection;
     protected $debug = false;
+    /**
+     * @var PDO
+     */
     protected $pdo;
     protected $lastOperation;
     protected $columnsString;
@@ -20,9 +23,7 @@ class pdoTransport extends errorLogger implements transportObject
     protected $limitString;
     protected $dataLines;
     protected $resourceName;
-    public $queriesCounter;
-    public $queriesHistory = [];
-    public $queriesOverallTime = 0;
+    protected $queriesHistory = [];
     public $lastInsertedID;
 
     public static function getInstance($config)
@@ -33,6 +34,10 @@ class pdoTransport extends errorLogger implements transportObject
         return self::$instance;
     }
 
+    /**
+     * pdoTransport constructor.
+     * @param Config $config
+     */
     public function __construct($config)
     {
         $this->hostAddress = $config->get('mysqlHost');
@@ -70,8 +75,10 @@ class pdoTransport extends errorLogger implements transportObject
             if ($result = $statement->execute()) {
                 if ($this->debug) {
                     $end = microtime(true);
-                    $this->queriesHistory[] = sprintf("%.2f", ($end - $start) * 1000) . "\t" . $sqlQuery;
-                    $this->queriesOverallTime += $end - $start;
+                    $this->queriesHistory[] = [
+                        'time' => sprintf("%.2f", ($end - $start) * 1000),
+                        'query' => $sqlQuery,
+                    ];
                 }
                 return $statement;
             }
@@ -88,7 +95,11 @@ class pdoTransport extends errorLogger implements transportObject
             foreach ($searchLines as $searchFieldName => &$searchFieldValue) {
                 if (is_array($searchFieldValue)) {
                     $searchFieldValue = $this->escapeArray($searchFieldValue);
-                    $fieldsStrings[] = "`" . $searchFieldName . "` IN ('" . implode("','", $searchFieldValue) . "')";
+                    if (count($searchFieldValue) > 1) {
+                        $fieldsStrings[] = "`" . $searchFieldName . "` IN ('" . implode("','", $searchFieldValue) . "')";
+                    } else {
+                        $fieldsStrings[] = "`" . $searchFieldName . "` = '" . reset($searchFieldValue) . "'";
+                    }
                 } else {
                     $fieldsStrings[] = "`" . $searchFieldName . "`='" . $this->escape($searchFieldValue) . "'";
                 }
@@ -134,11 +145,12 @@ class pdoTransport extends errorLogger implements transportObject
     {
         if (is_array($orderLines)) {
             if ($orderLines) {
-                $orderString = ' ORDER BY ';
                 $strings = [];
                 foreach ($orderLines as $column => $order) {
                     if (is_array($order)) {
-                        $strings[] = ' FIELD(`' . $column . '`,' . implode(',', $order) . ')';
+                        if (count($order) > 1) {
+                            $strings[] = ' FIELD(`' . $column . '`,' . implode(',', $order) . ')';
+                        }
                     } elseif ($order == '2' || $order === 'rand' || $order === 'RAND') {
                         $strings[] = ' RAND()';
                     } elseif ($order == '1' || $order === 'asc' || $order === 'ASC') {
@@ -155,11 +167,12 @@ class pdoTransport extends errorLogger implements transportObject
                         }
                     }
                 }
-                $orderString .= implode(',', $strings);
+                if ($strings) {
+                    $this->orderString = ' ORDER BY ' . implode(',', $strings);
+                }
             } else {
-                $orderString = '';
+                $this->orderString = '';
             }
-            $this->orderString = $orderString;
         }
     }
 
