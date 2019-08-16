@@ -2,35 +2,20 @@
 
 class urlBuilder
 {
-//    use DependencyInjectionContextTrait;
-    public $parameters;
-    public $baseUrl;
-    public $encoded;
-/*
-    public $email = '';
-    public $firstName = '';
-    public $lastName = '';
-    public $phone = '';
-    public $user;
-
-    protected $emailId = 0;
-    protected $visits;
-    protected $mostViewedCategories;
-    protected $mostViewedProducts;
-    protected $orders;
-    protected $subscribes;
-    protected $newsMailsEvents;
-    protected $addedProducts;
-    protected $visitorUpdated = false;
-    protected $feedbacks;
-    protected $emailClicks;
-    protected $searchQueries = [];
-*/
-
-    public function getUrlParametersString($parameters, $baseUrl,  $encoded = false)
+    /**
+     * @param $parameters
+     * @param $currentUrl
+     * @param array $excludedParameters
+     * @param bool $encoded
+     * @return string
+     */
+    public function getUrlParametersString($parameters, $currentUrl, $excludedParameters=[], $encoded = false)
     {
         $imploded = "";
         foreach ($parameters as $key => $value) {
+            if (!empty($excludedParameters) && in_array($key, $excludedParameters)) {
+                continue;
+            }
             if (!is_array($value)) {
                 if ($encoded) {
                     $imploded .= $key . ":" . urlencode($value) . "/";
@@ -39,7 +24,7 @@ class urlBuilder
                 }
             }
         }
-        return $baseUrl.$imploded;
+        return $currentUrl.$imploded;
     }
 
 }

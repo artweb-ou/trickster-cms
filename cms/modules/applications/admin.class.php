@@ -105,14 +105,12 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $this->renderer->assign('JSFileName', $this->getJsScripts($resourcesUniterHelper));
         $this->renderer->assign('CSSFileName', $resourcesUniterHelper->getResourceCacheFileName('css'));
 
+        $this->renderer->assign('currentFullUrl', $this->getCurrentFullUrl());
+
         $this->renderer->template = $currentTheme->template('index.tpl');
         $this->renderer->setCacheControl('no-cache');
         $this->renderer->setContentType('text/html');
         $this->renderer->display();
-
-        $thisFullUrl = $this->getCurrentFullUrl();
-        $this->renderer->assign('currentFullUrl', $currentLanguageId);
-        var_dump($thisFullUrl);
     }
 
     public function processRequestParameters()
@@ -175,12 +173,20 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         return $jsScripts;
     }
 
-    public function getCurrentFullUrl()
+    /**
+     * @return string
+     */
+    protected function getCurrentFullUrl()
     {
+        $excludedParameters = ['lang'];
         $controller = controller::getInstance();
-        $parameters = array($controller->requestParameters);
+        $parameters = $controller->getParameters();
+
+        $structureManager = $this->getService('structureManager');
+        $currentElement = $structureManager->getCurrentElement();
+
         $fullUrl = new urlBuilder();
-     //   return $fullUrl->getUrlParametersString($parameters, $controller->baseURL);
-        return "action:showPositions";
+
+        return $fullUrl->getUrlParametersString($parameters,$currentElement->URL, $excludedParameters);
     }
 }
