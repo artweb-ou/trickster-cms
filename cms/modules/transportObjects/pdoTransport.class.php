@@ -120,7 +120,7 @@ class pdoTransport extends errorLogger implements transportObject
         $limitString = '';
         if ($limitParameters !== null) {
             if (is_numeric($limitParameters)) {
-                $limitString = ' LIMIT 0,' . $limitParameters;
+                $limitString = ' LIMIT ' . $limitParameters;
             } elseif (count($limitParameters) == 2) {
                 if (is_numeric($limitParameters[0]) && is_numeric($limitParameters[1])) {
                     $limitString = ' LIMIT ' . $limitParameters[0] . ',' . $limitParameters[1];

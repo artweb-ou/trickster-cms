@@ -112,7 +112,6 @@ class productElement extends structureElement implements
     protected $campaignDiscounts;
     protected $deepParentCategories;
     protected $deepParentCategoriesIdList;
-    protected $brandsIdList;
     /**
      * @var feedbackElement
      */
@@ -266,19 +265,6 @@ class productElement extends structureElement implements
         }
 
         return false;
-    }
-
-    public function getBrandsIdList()
-    {
-        if ($this->brandsIdList === null) {
-            $this->brandsIdList = $this->getService('linksManager')->getConnectedIdList($this->id, 'productbrand', 'child');
-        }
-        return $this->brandsIdList;
-    }
-
-    public function setBrandsIdList($brandsIds)
-    {
-        $this->brandsIdList = $brandsIds;
     }
 
     /**
@@ -823,22 +809,17 @@ class productElement extends structureElement implements
     {
         if ($this->brandElement === null) {
             $this->brandElement = false;
-
-            $cache = $this->getElementsListCache('brand', 60 * 60 * 24);
-            if (($elements = $cache->load()) === false) {
-                if ($idList = $this->getBrandsIdList()) {
-                    /**
-                     * @var structureManager $structureManager
-                     */
+            if ($this->brandId) {
+                $cache = $this->getElementsListCache('brand', 60 * 60 * 24);
+                if (($elements = $cache->load()) === false) {
                     $structureManager = $this->getService('structureManager');
-                    $this->brandElement = $structureManager->getElementById(reset($idList));
+                    $this->brandElement = $structureManager->getElementById($this->brandId);
+
+                    $cache->save([$this->brandElement]);
+                } else {
+                    $this->brandElement = reset($elements);
                 }
-                $cache->save([$this->brandElement]);
-            } else {
-                $this->brandElement = reset($elements);
             }
-
-
         }
         return $this->brandElement;
     }
@@ -2001,7 +1982,7 @@ class productElement extends structureElement implements
     public function getNewElementUrl()
     {
         if ($this->actionName == 'showTexts') {
-            return parent::getNewElementUrl().'linkType:subArticle/';
+            return parent::getNewElementUrl() . 'linkType:subArticle/';
         }
         return parent::getNewElementUrl();
     }
