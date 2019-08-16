@@ -185,7 +185,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $structureManager = $this->getService('structureManager');
         $currentElement = $structureManager->getCurrentElement();
 
-        $fullUrl = new urlBuilder();
+        $fullUrl = new UrlBuilder();
 
         return $fullUrl->getUrlParametersString($parameters,$currentElement->URL, $excludedParameters);
     }
