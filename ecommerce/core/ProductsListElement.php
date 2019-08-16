@@ -113,9 +113,6 @@ abstract class ProductsListElement extends menuStructureElement
             $this->filteredProductsQuery = false;
 
             $filteredProductsQuery = clone $this->getProductsListBaseOptimizedQuery();
-            /**
-             * @var structureManager $structureManager
-             */
             $structureManager = $this->getService('structureManager');
             if ($categoryIds = $this->getFilterCategoryIds()) {
                 $deepCategoryIds = [];
@@ -246,9 +243,6 @@ abstract class ProductsListElement extends menuStructureElement
             if ($records = $filteredProductsQuery->get()) {
                 $productIds = array_column($records, 'id');
                 $parentRestrictionId = $this->getProductsListParentRestrictionId();
-                /**
-                 * @var structureManager $structureManager
-                 */
                 $structureManager = $this->getService('structureManager');
                 foreach ($productIds as &$productId) {
                     if ($product = $structureManager->getElementById($productId, $parentRestrictionId)) {

@@ -1004,9 +1004,6 @@ class productElement extends structureElement implements
     {
         $this->logError('deprecated method getIconsCompleteList used');
         if ($this->iconsCompleteList === null) {
-            /**
-             * @var ProductIconsManager $productIconsManager
-             */
             $productIconsManager = $this->getService('ProductIconsManager');
             $this->iconsCompleteList = $productIconsManager->getProductIcons($this);
         }
@@ -1023,9 +1020,6 @@ class productElement extends structureElement implements
             $cache = $this->getService('Cache');
             if (($this->iconsInfo = $cache->get($this->id . ':icons') === false)) {
                 $this->iconsInfo = [];
-                /**
-                 * @var ProductIconsManager $productIconsManager
-                 */
                 $productIconsManager = $this->getService('ProductIconsManager');
                 if ($icons = $productIconsManager->getProductIcons($this)) {
                     foreach ($icons as $icon) {
@@ -1676,7 +1670,7 @@ class productElement extends structureElement implements
     public function getElementData($detailed = false)
     {
         $languageManager = $this->getService('LanguagesManager');
-        $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
+        $defaultLanguage = $languageManager->getDefaultLanguage('public_root');
         $brandElement = $this->getBrandElement();
         $categoryElement = $this->getRequestedParentCategory();
 
