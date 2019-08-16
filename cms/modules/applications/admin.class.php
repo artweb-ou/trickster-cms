@@ -109,6 +109,10 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $this->renderer->setCacheControl('no-cache');
         $this->renderer->setContentType('text/html');
         $this->renderer->display();
+
+        $thisFullUrl = $this->getCurrentFullUrl();
+        $this->renderer->assign('currentFullUrl', $currentLanguageId);
+        var_dump($thisFullUrl);
     }
 
     public function processRequestParameters()
@@ -169,5 +173,14 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
             $jsScripts = array_merge($jsScripts, $currentElement->getClientScripts());
         }
         return $jsScripts;
+    }
+
+    public function getCurrentFullUrl()
+    {
+        $controller = controller::getInstance();
+        $parameters = array($controller->requestParameters);
+        $fullUrl = new urlBuilder();
+     //   return $fullUrl->getUrlParametersString($parameters, $controller->baseURL);
+        return "action:showPositions";
     }
 }
