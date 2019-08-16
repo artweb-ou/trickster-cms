@@ -1,6 +1,6 @@
 <?php
 
-class urlBuilder
+class UrlBuilder
 {
     /**
      * @param $parameters
