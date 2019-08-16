@@ -503,6 +503,9 @@ class controller
         return $this->getParameter($parameterName);
     }
 
+    /**
+     * @return array
+     */
     public function getParameters()
     {
         return $this->requestParameters;
