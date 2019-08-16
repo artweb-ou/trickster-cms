@@ -92,17 +92,21 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         return $connectedProductsIds;
     }
 
-    public function getConnectedProducts() {
+    /**
+     * @return productElement[]
+     */
+    public function getConnectedProducts()
+    {
         /**
          * @var $structureManager structureManager
          */
         $connectedProducts = [];
         $connectedProductIds = $this->getConnectedProductsIds();
-        if(!empty($connectedProductIds)) {
+        if (!empty($connectedProductIds)) {
             $structureManager = $this->getService('structureManager');
             foreach ($connectedProductIds as $productId) {
                 $productElement = $structureManager->getElementById($productId);
-                if(!empty($productElement)) {
+                if (!empty($productElement)) {
                     $connectedProducts[] = $productElement;
                 }
             }
@@ -197,7 +201,8 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         return $this->productsListBaseQuery;
     }
 
-    public function getCategoryList() {
+    public function getCategoryList()
+    {
         /**
          * @var $structureManager structureManager
          */
@@ -208,25 +213,63 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
 
     public function getProductsListCategories()
     {
-        /**
-         * @var $product productElement
-         */
-        $categories = [];
-        $x = [];
+        $topCategories = [];
         $connectedProducts = $this->getConnectedProducts();
+        $allCategories = [];
         foreach ($connectedProducts as $product) {
-            $pro = $product;
-            $category = $product->getParentCategory();
-            $categories[$category->id] = $category;
-            $x[$category->id] = [];
-            while($cat = $pro->getParentCategory()) {
-                $x[$category->id][$cat->id] = $cat->getTitle();
-                $pro = $cat;
+            foreach ($product->getConnectedCategories() as $category) {
+                $this->processCategory($category, $allCategories, $topCategories);
             }
         }
-        $a = $x;
-//       return $categories;
+        $categoryIds = array_keys($allCategories);
+        $x = [];
+        foreach ($topCategories as $topCategory) {
+            $level = 0;
+            $topCategory->setLevel($level);
+            $x[] = $topCategory;
+            $this->x($topCategory, $categoryIds, $x, $level);
+        }
+        return $x;
+    }
+
+    /**
+     * @param $category categoryElement
+     * @param $allCategories
+     * @param $x
+     * @param $level
+     */
+    protected function x($category, $allCategories, &$x, $level) {
+        if(in_array($category->id, $allCategories)) {
+            if ($childCategories = $category->getChildCategories()) {
+                $level ++;
+                foreach ($childCategories as $childCategory) {
+                    if (in_array($childCategory->id, $allCategories)) {
+                        $childCategory->setLevel($level);
+                        $x[] = $childCategory;
+                        $this->x($childCategory, $allCategories, $x, $level);
+                    }
+                }
+            }
+        }
     }
 
 
+    /**
+     * @param categoryElement $category
+     * @param $allCategories
+     * @param $topCategories
+     */
+    protected function processCategory($category, &$allCategories, &$topCategories)
+    {
+        if (!isset($allCategories[$category->id])) {
+            $allCategories[$category->id] = $category;
+            if ($parentCategories = $category->getParentCategories()) {
+                foreach ($parentCategories as $parentCategory) {
+                    $this->processCategory($parentCategory, $allCategories, $topCategories);
+                }
+            } else {
+                $topCategories[$category->id] = $category;
+            }
+        }
+    }
 }

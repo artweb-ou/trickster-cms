@@ -1182,6 +1182,9 @@ class productElement extends structureElement implements
         return false;
     }
 
+    /**
+     * @return categoryElement[]
+     */
     public function getProductConnectedCategories()
     {
         if (is_null($this->connectedProductCategories)) {
