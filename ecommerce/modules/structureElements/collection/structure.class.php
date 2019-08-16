@@ -213,40 +213,48 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
 
     public function getProductsListCategories()
     {
+        /**
+         * @var $structureManager structureManager
+         * @var $productCatalogue productCatalogueElement
+         */
+        $structureManager = $this->getService('structureManager');
+
         $topCategories = [];
         $connectedProducts = $this->getConnectedProducts();
-        $allCategories = [];
+        $currentLanguage = $connectedProducts[0]->getCurrentLanguage();
+        $productCatalogue = $structureManager->getElementsByType('productCatalogue', $currentLanguage)[0];
+        $topCategories = $productCatalogue->getCategoriesList();
         foreach ($connectedProducts as $product) {
             foreach ($product->getConnectedCategories() as $category) {
                 $this->processCategory($category, $allCategories, $topCategories);
             }
         }
         $categoryIds = array_keys($allCategories);
-        $x = [];
+        $categories = [];
         foreach ($topCategories as $topCategory) {
             $level = 0;
             $topCategory->setLevel($level);
-            $x[] = $topCategory;
-            $this->x($topCategory, $categoryIds, $x, $level);
+            $categories[] = $topCategory;
+            $this->categoryFilter($topCategory, $categoryIds, $categories, $level);
         }
-        return $x;
+        return $categories;
     }
 
     /**
      * @param $category categoryElement
      * @param $allCategories
-     * @param $x
+     * @param $categories
      * @param $level
      */
-    protected function x($category, $allCategories, &$x, $level) {
+    protected function categoryFilter($category, $allCategories, &$categories, $level) {
         if(in_array($category->id, $allCategories)) {
             if ($childCategories = $category->getChildCategories()) {
                 $level ++;
                 foreach ($childCategories as $childCategory) {
                     if (in_array($childCategory->id, $allCategories)) {
                         $childCategory->setLevel($level);
-                        $x[] = $childCategory;
-                        $this->x($childCategory, $allCategories, $x, $level);
+                        $categories[] = $childCategory;
+                        $this->categoryFilter($childCategory, $allCategories, $categories, $level);
                     }
                 }
             }
