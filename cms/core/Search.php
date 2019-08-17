@@ -104,10 +104,6 @@ class Search implements DependencyInjectionContextInterface
                 $queryResult = $apiQuery->getFilteredIdLists();
                 if (!empty($queryResult[$type])) {
                     $idsByType[$type . $typePostfix] = $queryResult[$type];
-                    // remove doubles from translations search results in variable langs
-                    if($type == 'translation' || $type == 'adminTranslation') {
-                        $idsByType[$type . $typePostfix] = array_unique($idsByType[$type . $typePostfix]);
-                    }
                 }
             }
             if ($idsByType) {

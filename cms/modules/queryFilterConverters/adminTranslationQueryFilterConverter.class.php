@@ -1,17 +1,25 @@
 <?php
 
+use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder;
+
 class adminTranslationQueryFilterConverter extends queryFilterConverter
 {
     public function convert($sourceData, $sourceType)
     {
         /**
-         * @var \Illuminate\Database\Connection $db ;
+         * @var Connection $db ;
          */
         $db = $this->getService('db');
         $query = $db
             ->table($this->getTableName())
             ->select('id')
+            // remove doubles from translations search results in variable langs
+            ->distinct()
             ->whereIn('id', function($query){
+                /**
+                 * @var Builder $query
+                 */
                 $query
                     ->from('structure_elements')
                     ->where('structureType', '=', 'adminTranslation')
