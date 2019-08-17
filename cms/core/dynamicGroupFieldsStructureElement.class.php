@@ -36,8 +36,7 @@ abstract class dynamicGroupFieldsStructureElement extends dynamicFieldsStructure
             $this->customFieldsGroups = [];
 
             $structureManager = $this->getService('structureManager');
-            $groups = ($this->allowedTypes) ? $structureManager->getElementsChildren($this->id, null, 'structure', $this->allowedTypes) :  $structureManager->getElementsChildren($this->id);
-            if ($groups) {
+            if ($groups = $structureManager->getElementsChildren($this->id)) {
                 foreach ($groups as &$group) {
                     if ($fields = $group->getFormFields()) {
                         $this->customFieldsGroups[] = $group;
@@ -47,4 +46,6 @@ abstract class dynamicGroupFieldsStructureElement extends dynamicFieldsStructure
         }
         return $this->customFieldsGroups;
     }
+
+    abstract protected function getInheritedCustomFieldsList();
 }
