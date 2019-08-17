@@ -143,6 +143,7 @@ class pdoTransport extends errorLogger implements transportObject
 
     public function setOrderFields($orderLines, $literal = false)
     {
+        $this->orderString = '';
         if (is_array($orderLines)) {
             if ($orderLines) {
                 $strings = [];
@@ -170,8 +171,6 @@ class pdoTransport extends errorLogger implements transportObject
                 if ($strings) {
                     $this->orderString = ' ORDER BY ' . implode(',', $strings);
                 }
-            } else {
-                $this->orderString = '';
             }
         }
     }
