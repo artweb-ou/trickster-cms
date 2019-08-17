@@ -9,6 +9,8 @@
  * @property string $startDate
  * @property string $endDate
  * @property string $iconWidth
+ * @property string $iconWidthOnProduct
+ * @property integer $applicableToAllProducts
  */
 class genericIconElement extends structureElement implements ImageUrlProviderInterface
 {
@@ -25,6 +27,9 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
     public $defaultActionName = 'show';
     public $role = 'content';
 
+    /**
+     * @param $moduleStructure
+     */
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
@@ -37,10 +42,12 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['endDate'] = 'date';
         $moduleStructure['days'] = 'naturalNumber';
         $moduleStructure['iconWidth'] = 'text';
+        $moduleStructure['iconWidthOnProduct'] = 'text';
         $moduleStructure['iconLocation'] = 'naturalNumber';
         $moduleStructure['iconBgColor'] = 'text';
         $moduleStructure['iconTextColor'] = 'text';
         $moduleStructure['iconRole'] = 'naturalNumber';
+        $moduleStructure['applicableToAllProducts'] = 'checkbox';
         $moduleStructure['iconProductAvail'] = 'serializedIndex';
         $moduleStructure['iconProductParameters'] = 'numbersArray';
     }
@@ -51,6 +58,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $multiLanguageFields[] = 'image';
         $multiLanguageFields[] = 'originalName';
         $multiLanguageFields[] = 'iconWidth';
+        $multiLanguageFields[] = 'iconWidthOnProduct';
     }
 
     public function getSettingsVariablles($variable)

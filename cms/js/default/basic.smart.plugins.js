@@ -15,3 +15,7 @@ jSmart.prototype.getTemplate = function(name) {
         return 'Missing JS Template ' + name;
     }
 };
+
+function empty(variable) {
+    return (typeof variable === 'undefined' || variable === '' || variable === 0 || variable === '0' || variable === null || variable === false || (Array.isArray(variable) && variable.length === 0));
+}

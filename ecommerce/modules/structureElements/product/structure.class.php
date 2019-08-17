@@ -46,6 +46,7 @@
  * @property string $comment_captcha
  * @property array $importInfo
  * @property string $unit
+ * @property integer $applicableToAllProducts
  */
 class productElement extends structureElement implements
     MetadataProviderInterface,
@@ -111,7 +112,6 @@ class productElement extends structureElement implements
     protected $campaignDiscounts;
     protected $deepParentCategories;
     protected $deepParentCategoriesIdList;
-    protected $brandsIdList;
     /**
      * @var feedbackElement
      */
@@ -265,19 +265,6 @@ class productElement extends structureElement implements
         }
 
         return false;
-    }
-
-    public function getBrandsIdList()
-    {
-        if ($this->brandsIdList === null) {
-            $this->brandsIdList = $this->getService('linksManager')->getConnectedIdList($this->id, 'productbrand', 'child');
-        }
-        return $this->brandsIdList;
-    }
-
-    public function setBrandsIdList($brandsIds)
-    {
-        $this->brandsIdList = $brandsIds;
     }
 
     /**
@@ -543,22 +530,17 @@ class productElement extends structureElement implements
     /**
      * returns list of all parent categories
      *
-     * @param bool $forceUpdate - ignore cache when set
      * @return categoryElement[]
      */
-    public function getConnectedCategories($forceUpdate = false)
+    public function getConnectedCategories()
     {
-        if ($forceUpdate) {
-            $this->logError('Deprecated workaround is used in productElement::getConnectedCategories()');
-        }
-
         if ($this->connectedCategories === null) {
             $cache = $this->getElementsListCache('cCats', 3600);
             if (($this->connectedCategories = $cache->load()) === false) {
                 $structureManager = $this->getService('structureManager');
 
                 $this->connectedCategories = [];
-                if ($parentsList = $structureManager->getElementsParents($this->id, $forceUpdate, 'catalogue', false)) {
+                if ($parentsList = $structureManager->getElementsParents($this->id, 'catalogue')) {
                     foreach ($parentsList as &$parentElement) {
                         if ($parentElement->structureType == 'category') {
                             $this->connectedCategories[] = $parentElement;
@@ -588,7 +570,7 @@ class productElement extends structureElement implements
             if ($deepCategories = $this->getConnectedCategories()) {
                 foreach ($deepCategories as &$category) {
                     $this->deepParentCategories[] = $category;
-                    $parentsList = $structureManager->getElementsParents($category->id, false, '', false);
+                    $parentsList = $structureManager->getElementsParents($category->id, '');
                     foreach ($parentsList as &$parentsListItem) {
                         if ($parentsListItem->structureType == 'category') {
                             $this->deepParentCategories[] = $parentsListItem;
@@ -613,7 +595,7 @@ class productElement extends structureElement implements
          * @var structureManager $structureManager
          * @var structureElement $parentsList
          */
-        $parentsList = $structureManager->getElementsParents($this->id, 'catalogue', false);
+        $parentsList = $structureManager->getElementsParents($this->id, 'catalogue');
         if ($parentsList) {
             foreach ($parentsList as &$parentElement) {
                 if ($parentElement->structureType == 'brand') {
@@ -624,12 +606,12 @@ class productElement extends structureElement implements
         return $brands;
     }
 
-    public function getConnectedCatalogues($forceUpdate = false)
+    public function getConnectedCatalogues()
     {
         $structureManager = $this->getService('structureManager');
 
         $catalogues = [];
-        $parentsList = $structureManager->getElementsParents($this->id, $forceUpdate, 'productCatalogueProduct');
+        $parentsList = $structureManager->getElementsParents($this->id, 'productCatalogueProduct');
         if ($parentsList) {
             foreach ($parentsList as &$parentElement) {
                 if ($parentElement instanceof categoryElement) {
@@ -698,9 +680,9 @@ class productElement extends structureElement implements
         if ($this->parametersGroupsInfo === null) {
             $this->parametersGroupsInfo = [];
 
-            $groupsParentElements = $this->getDeepParentCategories(); //+$this->getConnectedCatalogues(true) +$this->getDeepParentCategories()
+            $groupsParentElements = $this->getDeepParentCategories(); //+$this->getConnectedCatalogues() +$this->getDeepParentCategories()
             if (!$groupsParentElements) {
-                $groupsParentElements = $this->getConnectedCatalogues(true);
+                $groupsParentElements = $this->getConnectedCatalogues();
             }
 
             $groupsList = [];
@@ -827,22 +809,17 @@ class productElement extends structureElement implements
     {
         if ($this->brandElement === null) {
             $this->brandElement = false;
-
-            $cache = $this->getElementsListCache('brand', 60 * 60 * 24);
-            if (($elements = $cache->load()) === false) {
-                if ($idList = $this->getBrandsIdList()) {
-                    /**
-                     * @var structureManager $structureManager
-                     */
+            if ($this->brandId) {
+                $cache = $this->getElementsListCache('brand', 60 * 60 * 24);
+                if (($elements = $cache->load()) === false) {
                     $structureManager = $this->getService('structureManager');
-                    $this->brandElement = $structureManager->getElementById(reset($idList));
+                    $this->brandElement = $structureManager->getElementById($this->brandId);
+
+                    $cache->save([$this->brandElement]);
+                } else {
+                    $this->brandElement = reset($elements);
                 }
-                $cache->save([$this->brandElement]);
-            } else {
-                $this->brandElement = reset($elements);
             }
-
-
         }
         return $this->brandElement;
     }
@@ -1008,9 +985,6 @@ class productElement extends structureElement implements
     {
         $this->logError('deprecated method getIconsCompleteList used');
         if ($this->iconsCompleteList === null) {
-            /**
-             * @var ProductIconsManager $productIconsManager
-             */
             $productIconsManager = $this->getService('ProductIconsManager');
             $this->iconsCompleteList = $productIconsManager->getProductIcons($this);
         }
@@ -1018,15 +992,15 @@ class productElement extends structureElement implements
         return $this->iconsCompleteList;
     }
 
+    /**
+     * @return array|bool
+     */
     public function getIconsInfo()
     {
         if ($this->iconsInfo == null) {
             $cache = $this->getService('Cache');
             if (($this->iconsInfo = $cache->get($this->id . ':icons') === false)) {
                 $this->iconsInfo = [];
-                /**
-                 * @var ProductIconsManager $productIconsManager
-                 */
                 $productIconsManager = $this->getService('ProductIconsManager');
                 if ($icons = $productIconsManager->getProductIcons($this)) {
                     foreach ($icons as $icon) {
@@ -1034,7 +1008,9 @@ class productElement extends structureElement implements
                             'title' => $icon->title,
                             'image' => $icon->image,
                             'width' => $icon->iconWidth,
+                            'widthOnProduct' => $icon->iconWidthOnProduct,
                             'fileName' => $icon->originalName,
+                            'iconRole' => '',
                             'iconLocation' => $this->productIconLocationTypes[0],
                         ];
                         if ($icon->structureType == 'genericIcon') {
@@ -1060,7 +1036,9 @@ class productElement extends structureElement implements
                                 'title' => $discount->title,
                                 'image' => $discount->icon,
                                 'width' => $discount->iconWidth,
+                                'widthOnProduct' => $discount->iconWidthOnProduct,
                                 'fileName' => $discount->iconOriginalName,
+                                'iconRole' => '',
                                 'iconLocation' => $this->productIconLocationTypes[0],
                             ];
                         }
@@ -1673,7 +1651,7 @@ class productElement extends structureElement implements
     public function getElementData($detailed = false)
     {
         $languageManager = $this->getService('LanguagesManager');
-        $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
+        $defaultLanguage = $languageManager->getDefaultLanguage('public_root');
         $brandElement = $this->getBrandElement();
         $categoryElement = $this->getRequestedParentCategory();
 
@@ -1942,7 +1920,7 @@ class productElement extends structureElement implements
              * @var structureManager $structureManager
              */
             $structureManager = $this->getService('structureManager');
-            if ($parentsList = $structureManager->getElementsParents($this->id, false, 'catalogue')) {
+            if ($parentsList = $structureManager->getElementsParents($this->id, 'catalogue')) {
                 $this->parentCategory = reset($parentsList);
             }
         }
@@ -2003,6 +1981,9 @@ class productElement extends structureElement implements
 
     public function getNewElementUrl()
     {
-        return parent::getNewElementUrl().'linkType:subArticle/';
+        if ($this->actionName == 'showTexts') {
+            return parent::getNewElementUrl() . 'linkType:subArticle/';
+        }
+        return parent::getNewElementUrl();
     }
 }

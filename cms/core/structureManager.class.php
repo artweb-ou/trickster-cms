@@ -240,22 +240,21 @@ class structureManager implements DependencyInjectionContextInterface
      * Returns the list of element's parent elements according to provided link type
      *
      * @param int $elementId
-     * @param bool $forceUpdate - if provided, then cached results are not used and all parents are searched from the scratch
      * @param string $linkType
      * @param bool $restrictLinkTypes
      * @return structureElement[]
      */
-    public function getElementsParents($elementId, $forceUpdate = false, $linkType = null, $restrictLinkTypes = true)
+    public function getElementsParents($elementId, $linkType = null, $restrictLinkTypes = true)
     {
         if (!$linkType) {
             $linkType = '';
         }
-        if (!isset($this->elementsParents[$elementId][$linkType]) || $forceUpdate) {
+        if (!isset($this->elementsParents[$elementId][$linkType])) {
             $this->elementsParents[$elementId][$linkType] = [];
             if ($restrictLinkTypes && !$linkType) {
-                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $this->getPathSearchAllowedLinks(), 'child', $forceUpdate);
+                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $this->getPathSearchAllowedLinks(), 'child');
             } else {
-                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $linkType, 'child', $forceUpdate);
+                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $linkType, 'child');
             }
 
             foreach ($elementsLinks as $link) {
@@ -271,14 +270,13 @@ class structureManager implements DependencyInjectionContextInterface
      * Returns the first parent of element specified by id
      *
      * @param int $elementId
-     * @param bool $forceUpdate
      * @param null $linkType
      * @return bool|structureElement
      */
-    public function getElementsFirstParent($elementId, $forceUpdate = false, $linkType = null)
+    public function getElementsFirstParent($elementId, $linkType = null)
     {
         $result = false;
-        if ($parentsList = $this->getElementsParents($elementId, $forceUpdate, $linkType, true)) {
+        if ($parentsList = $this->getElementsParents($elementId, $linkType)) {
             $result = reset($parentsList);
         }
         return $result;
@@ -789,17 +787,15 @@ class structureManager implements DependencyInjectionContextInterface
             }
 
             if ($idListToLoad) {
-                //get allowed children elements types list according to the privilegies
                 if ($this->privilegeChecking) {
-                    $allowedElements = $this->privilegesManager->getAllowedElements($parentElementId, $idListToLoad);
-                    if (!is_null($allowedTypes)) {
-                        $allowedElements = array_intersect($allowedTypes, $allowedElements);
-                    }
+                    //calculate required privileges for a postcheck
+                    $this->privilegesManager->getAllowedElements($parentElementId, $idListToLoad);
+                }
+
+                if ($allowedTypes !== null) {
+                    $allowedElements = $allowedTypes;
                 } else {
                     $allowedElements = [];
-                    if (!is_null($allowedTypes)) {
-                        $allowedElements = $allowedTypes;
-                    }
                 }
 
                 foreach ($rolesToLoad as &$role) {

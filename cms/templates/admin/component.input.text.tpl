@@ -11,8 +11,9 @@
 {assign var="formFieldCols" value=""}
 {assign var='primColor' value=''}
 {if !empty($item.additionalFormat)}
-	{$labelBefore = $item.additionalFormat.labelBefore}
-	{if empty($labelBefore)}
+	{if !empty($item.additionalFormat.labelBefore)}
+		{$labelBefore = $item.additionalFormat.labelBefore}
+	{else}
 		{$labelBefore = $fieldName}
 	{/if}
     {$labelAfter  = $item.additionalFormat.labelAfter}

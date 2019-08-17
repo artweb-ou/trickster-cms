@@ -248,15 +248,20 @@ class controller
 
     public function dispatch()
     {
-        if ($application = $this->getApplication()) {
-            if ($this->application instanceof ApplicationCacheInterface && $this->application->canServeCache()) {
-                return $this->application->serveCache();
+        try {
+            if ($application = $this->getApplication()) {
+                if ($this->application instanceof ApplicationCacheInterface && $this->application->canServeCache()) {
+                    return $this->application->serveCache();
+                } else {
+                    return $this->application->execute($this);
+                }
             } else {
-                return $this->application->execute($this);
+                header('HTTP/1.0 403 Forbidden');
+                exit;
             }
-        } else {
-            header('HTTP/1.0 403 Forbidden');
-            exit;
+        } catch (Exception $exception) {
+            echo '<h1>'.$exception->getMessage() . '</h1>';
+            echo '<pre>'.$exception->getTraceAsString().'</pre>';
         }
     }
 
@@ -265,7 +270,7 @@ class controller
         if ($this->debugMode === null) {
             if ($this->forceDebug) {
                 $this->debugMode = true;
-            } elseif (strstr($this->domainURL, 'localhost') || strstr($this->domainURL, '.local') || strstr($this->domainURL, '.loc')) {
+            } elseif (strstr($this->domainName, 'localhost') || strstr($this->domainName, '.local') || strstr($this->domainName, '.loc') || !strstr($this->domainName, '.')) {
                 $this->debugMode = true;
             } else {
                 $this->debugMode = false;
@@ -498,6 +503,9 @@ class controller
         return $this->getParameter($parameterName);
     }
 
+    /**
+     * @return array
+     */
     public function getParameters()
     {
         return $this->requestParameters;

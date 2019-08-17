@@ -13,6 +13,7 @@ class cloneProduct extends structureElementAction
             'leftColumn',
             'rightColumn',
             'bottomMenu',
+            'subArticle',
         ]);
 
         if ($structureElement->final && $copyData) {

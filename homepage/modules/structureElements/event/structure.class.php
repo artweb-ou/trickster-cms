@@ -153,7 +153,7 @@ class eventElement extends structureElement implements MetadataProviderInterface
     public function getConnectedEventsLists()
     {
         $structureManager = $this->getService('structureManager');
-        $connectedEventsLists = $structureManager->getElementsParents($this->id, 'eventsListEvent', false);
+        $connectedEventsLists = $structureManager->getElementsParents($this->id, 'eventsListEvent');
         return $connectedEventsLists;
     }
 
@@ -162,16 +162,26 @@ class eventElement extends structureElement implements MetadataProviderInterface
      */
     public function getConnectedEventsListsInfo()
     {
-        $connectedEventsLists = [];
-        if ($eventElements = $this->getConnectedEventsLists()) {
-            foreach ($eventElements as $eventElement) {
-                $item['id'] = $eventElement->id;
-                $item['title'] = $eventElement->getTitle();
-                $item['select'] = true;
-                $connectedEventsLists[] = $item;
-            }
+        /**
+         * @var structureManager $structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        /**
+         * @var linksManager $linksManager
+         */
+        $linksManager = $this->getService('linksManager');
+
+        $connectedIdIndex = $linksManager->getConnectedIdIndex($this->id, 'eventsListEvent', 'child');
+        $allEventsLists = $structureManager->getElementsByType('eventsList');
+        $connectedEventsListsInfo = [];
+
+        foreach ($allEventsLists as $eventsList) {
+            $item['id'] = $eventsList->id;
+            $item['title'] = $eventsList->getSearchTitle();
+            $item['select'] = isset($connectedIdIndex[$eventsList->id]);
+            $connectedEventsListsInfo[] = $item;
         }
-        return $connectedEventsLists;
+        return $connectedEventsListsInfo;
     }
 
     public function getImagesLinkType()

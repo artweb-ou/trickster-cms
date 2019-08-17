@@ -39,6 +39,7 @@ class ServiceFormStructure extends ElementForm
         ],
         'structureRole' => [
             'type' => 'select.array',
+            'class' => 'service_mode_select',
             'options' => ['hybrid', 'content', 'container'],
             'translationGroup' => 'menulogic',
         ],
