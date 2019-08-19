@@ -1,4 +1,4 @@
-window.ActionsButtonsComponent = function(controlsElement, containerElement) {
+window.ActionsButtonsComponent = function(controlsElement, containerElement=false) {
     var hinted;
     var hint;
     var hintClassName = 'action_hint';
@@ -8,28 +8,41 @@ window.ActionsButtonsComponent = function(controlsElement, containerElement) {
     var i;
 
     this.init = function() {
-        if (containerElement.querySelectorAll('.singlebox').length > 0 && controlsElement.querySelectorAll('.actions_form_button').length > 0) {
+        if (controlsElement.querySelectorAll('.actions_form_button').length > 0) {
             actionsButtons = controlsElement.querySelectorAll('.actions_form_button');
+        }
+        if (containerElement && containerElement.querySelectorAll('.singlebox').length > 0) {
             contentListElements = containerElement.querySelectorAll('.singlebox');
-            for (i = contentListElements.length; i--;) {
-                eventsManager.addHandler(contentListElements[i], 'change', isEnableActionsButtons);
+            if (contentListElements.length > 0) {
+                for (i = contentListElements.length; i--;) {
+                    eventsManager.addHandler(contentListElements[i], 'change', isEnableActionsButtons);
+                }
             }
         }
     };
 
     var isEnableActionsButtons = function() {
-        contentListCheckedElements = containerElement.querySelectorAll('.singlebox:checked');
-        if (contentListCheckedElements.length > 0) {
-            for (i = actionsButtons.length; i--;) {
-                actionsButtons[i].disabled = false;
+        if (containerElement) {
+            contentListElements = containerElement.querySelectorAll('.singlebox');
+            contentListCheckedElements = containerElement.querySelectorAll('.singlebox:checked');
+            if (contentListElements.length > 0 && contentListCheckedElements.length > 0) {
+                for (i = actionsButtons.length; i--;) {
+                    actionsButtons[i].disabled = false;
+                }
             }
-        }
 
-        else {
-            for (i = actionsButtons.length; i--;) {
-                actionsButtons[i].disabled = true;
+            else {
+                for (i = actionsButtons.length; i--;) {
+                    actionsButtons[i].disabled = true;
+                }
             }
         }
+        else {
+                for (i = actionsButtons.length; i--;) {
+                    actionsButtons[i].disabled = true;
+                }
+            }
+
     };
 
     var popup_hint = function() {
