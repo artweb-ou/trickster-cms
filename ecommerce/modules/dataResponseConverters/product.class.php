@@ -59,7 +59,7 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'lastPurchaseDate'          => 'lastPurchaseDate',
             'importPrice'               => 'importPrice',
             'h1'                        => 'h1',
-            'qtFromConnectedCategories' => 'qtFromConnectedCategories',
+//            'qtFromConnectedCategories' => 'qtFromConnectedCategories',
 
 
 // new new

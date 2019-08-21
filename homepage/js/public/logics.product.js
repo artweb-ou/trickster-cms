@@ -5,10 +5,15 @@ window.productLogics = new function() {
         var impressionProducts = Array();
         if (typeof window.products !== 'undefined' && window.products) {
             for (var i = 0; i < window.products.length; i++) {
+                var products = new Product(window.products[i]);
+                productsIndex[products.getId()] = products;
+                impressionProducts.push(products);
+/*
                 var product = new Product();
                 product.updateData(window.products[i]);
                 productsIndex[product.getId()] = product;
                 impressionProducts.push(product);
+*/
             }
             tracking.impressionTracking(impressionProducts);
         }
@@ -22,11 +27,58 @@ window.productLogics = new function() {
     };
 
     controller.addListener('initDom', init);
-};
 
+/*    this.updateData = function(data) {
+        importData(data);
+    };
+    var importData = function(data) {
+        self.id = parseInt(data.id, 10);
+        self.title = data.title;
+        self.code = data.code;
+        self.basketText = data.basketText;
+        self.displayText = data.displayText;
+        self.displayProductsInBasket = data.displayProductsInBasket;
+        self.products = data.products;
+    };*/
+};
 /*
-window.Product = function() {
+
+window.HeaderGalleryImageProduct = function() {
     var self = this;
+
+    var id;
+    var positionX;
+    var positionY;
+    var title;
+    var description;
+    var price;
+    var image;
+    var url;
+    var primaryParametersInfo;
+    var markerLogic;
+
+    this.updateData = function(data) {
+        id = parseInt(data.id, 10);
+        positionX = parseFloat(data.positionX, 10);
+        positionY = parseFloat(data.positionY, 10);
+        title = data.title;
+        description = data.description;
+        price = parseFloat(data.price, 10);
+        image = data.image;
+        url = data.url;
+        primaryParametersInfo = data.primaryParametersInfo;
+    };
+
+    this.getId = function() {
+        return id;
+    };
+    this.getTitle = function() {
+        return title;
+    };
+
+ */
+window.Product = function(data) {
+ //   var self = this;
     var product = data;
 
     this.getId = function() {
@@ -38,8 +90,8 @@ window.Product = function() {
     };
 
     this.getName = function() {
-        if (product.name_ga) {
-            return product.name_ga;
+        if (product.title_ga) {
+            return product.title_ga;
         }
         return false;
     };
@@ -94,10 +146,11 @@ window.Product = function() {
     };
 };
 
-*/
+/*
 window.Product = function() {
     var self = this;
     var legacyApproachData;
+    var updateData;
     this.title = null;
     this.id = null;
 
@@ -106,69 +159,71 @@ window.Product = function() {
         //self.title = newData.title;
 
         legacyApproachData = newData;
+        var self = this;
+        // var product = data;
+        var product = newData;
     };
 
     this.getId = function() {
-        if (legacyApproachData.id) {
-            return legacyApproachData.id;
+        if (this.id) {
+            return self.id;
         }
         return false;
-
     };
 
     this.getName = function() {
-        if (legacyApproachData.title_ga) {
-            return legacyApproachData.title_ga;
+        if (product.title_ga) {
+            return this.title_ga;
         }
         return false;
     };
 
     this.getBrand = function() {
-        if (legacyApproachData.brand_ga) {
-            return legacyApproachData.brand_ga;
+        if (this.brand_ga) {
+            return this.brand_ga;
         }
         return false;
     };
 
     this.getCategory = function() {
-        if (legacyApproachData.category_ga) {
-            return legacyApproachData.category_ga;
+        if (this.category_ga) {
+            return this.category_ga;
         }
         return false;
     };
 
     this.getVariant = function() {
-        if (legacyApproachData.variant) {
-            return legacyApproachData.variant;
+        if (this.variant) {
+            return this.variant;
         }
         return false;
     };
 
     this.getPrice = function() {
-        if (legacyApproachData.price) {
-            return legacyApproachData.price;
+        if (this.price) {
+            return this.price;
         }
         return false;
     };
 
     this.getQuantity = function() {
-        if (legacyApproachData.quantity) {
-            return legacyApproachData.quantity;
+        if (this.quantity) {
+            return this.quantity;
         }
         return false;
     };
 
     this.getCoupon = function() {
-        if (legacyApproachData.coupon) {
-            return legacyApproachData.coupon;
+        if (this.coupon) {
+            return this.coupon;
         }
         return false;
     };
 
     this.getPosition = function() {
-        if (legacyApproachData.position) {
-            return legacyApproachData.position;
+        if (this.position) {
+            return this.position;
         }
         return false;
     };
-};
+};*/

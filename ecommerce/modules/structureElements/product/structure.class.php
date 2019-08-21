@@ -1731,7 +1731,7 @@ class productElement extends structureElement implements
         $info = [
             'id' => $this->id,
             'price' => $this->getPrice(),
-            'name' => $this->getTitle(),
+            'title' => $this->getTitle(),
             'oldPrice' => $this->getOldPrice(),
             'title_ga' => $this->getValue('title', $defaultLanguage->id),
             'category_ga' => $categoryElement->getValue('title', $defaultLanguage->id),
