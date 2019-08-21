@@ -40,7 +40,7 @@ window.BasketButtonComponent = function(componentElement, onClick, id) {
             var additionalClassName = 'notice_basket';
             var currentProduct = document.createElement('span');
             currentProduct.className = 'notice_product_name';
-            currentProduct.textContent = window.productDetailsData.name || window.productDetailsData.name_ga;
+            currentProduct.textContent = window.productDetailsData.name || window.productDetailsData.title_ga;
             var currentAmount = document.createElement('em');
             currentAmount.className = 'notice_product_amount';
 
@@ -93,7 +93,7 @@ window.BasketButtonComponent = function(componentElement, onClick, id) {
         if (addToBasketButtonAction) {
             var message = [];
             var additionalContainerClassName = 'notice_box';
-            message['title'] = window.productDetailsData.name || window.productDetailsData.name_ga;
+            message['title'] = window.productDetailsData.name || window.productDetailsData.title_ga;
             message['content'] = window.translationsLogics.get(argument);
             message['footer'] = '';
             // only modal on error

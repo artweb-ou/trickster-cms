@@ -885,7 +885,10 @@ class productElement extends structureElement implements
 
             if ($discounts = $shoppingBasketDiscounts->getApplicableDiscountsList()) {
                 $zeroAndSmallestDiscountOnProduct = false;
-                foreach ($discounts as &$discount) {
+                /**
+                 * @var $discount ShoppingBasketDiscount
+                 */
+                foreach ($discounts as $discount) {
                     if ($discount->isUsed()) {
                         if ($discount->groupBehaviour == 'useSmallest' && $discount->productDiscount === '0' && $discount->isProductDiscountable($this->id)) {
                             $zeroAndSmallestDiscountOnProduct = $discount;
@@ -992,6 +995,9 @@ class productElement extends structureElement implements
     {
         $this->logError('deprecated method getIconsCompleteList used');
         if ($this->iconsCompleteList === null) {
+            /**
+             * @var ProductIconsManager $productIconsManager
+             */
             $productIconsManager = $this->getService('ProductIconsManager');
             $this->iconsCompleteList = $productIconsManager->getProductIcons($this);
         }
@@ -1008,6 +1014,9 @@ class productElement extends structureElement implements
             $cache = $this->getService('Cache');
             if (($this->iconsInfo = $cache->get($this->id . ':icons') === false)) {
                 $this->iconsInfo = [];
+                /**
+                 * @var ProductIconsManager $productIconsManager
+                 */
                 $productIconsManager = $this->getService('ProductIconsManager');
                 if ($icons = $productIconsManager->getProductIcons($this)) {
                     foreach ($icons as $icon) {
@@ -1107,6 +1116,9 @@ class productElement extends structureElement implements
                         $value = $parameter->value;
                     } elseif ($parameter->structureType == "productSelection") {
                         $value = "";
+                        /**
+                         * @var $parameter productSelectionElement
+                         */
                         $values = $parameter->getSelectionOptions();
                         foreach ($values as &$option) {
                             if ($value) {
@@ -1220,6 +1232,9 @@ class productElement extends structureElement implements
             if ($connectedIdList = $linksManager->getConnectedIdList($this->id, 'connected', 'child')) {
                 foreach ($connectedIdList as &$connectedId) {
                     if ($productElement = $structureManager->getElementById($connectedId)) {
+                        /**
+                         * @var $productElement productElement
+                         */
                         if ($productElement->inactive == '0' && ($productElement->isPurchasable() || $productElement->availability == "inquirable")) {
                             $this->connectedProducts[] = $productElement;
                         }
@@ -1239,7 +1254,10 @@ class productElement extends structureElement implements
             if ($connectedIdList = $linksManager->getConnectedIdList($this->id, 'connected2', 'child')) {
                 foreach ($connectedIdList as &$connectedId) {
                     if ($productElement = $structureManager->getElementById($connectedId)) {
-                        if ($productElement->inactive == '0' && ($productElement->isPurchasable() || $productElement->availability == "inquirable")) {
+                        /**
+                         * @var $productElement productElement
+                         */
+                       if ($productElement->inactive == '0' && ($productElement->isPurchasable() || $productElement->availability == "inquirable")) {
                             $this->connectedProducts2[] = $productElement;
                         }
                     }
@@ -1258,6 +1276,9 @@ class productElement extends structureElement implements
             if ($connectedIdList = $linksManager->getConnectedIdList($this->id, 'connected3', 'child')) {
                 foreach ($connectedIdList as &$connectedId) {
                     if ($productElement = $structureManager->getElementById($connectedId)) {
+                        /**
+                         * @var $productElement productElement
+                         */
                         if ($productElement->inactive == '0' && ($productElement->isPurchasable() || $productElement->availability == "inquirable")) {
                             $this->connectedProducts3[] = $productElement;
                         }
@@ -1643,6 +1664,51 @@ class productElement extends structureElement implements
         return $result;
     }
 
+    // return property value for default lang in public
+    public function getDefaultLanguageCustomProperty($property, $structureName = false)
+    {
+        $languageManager = $this->getService('LanguagesManager');
+
+        switch ($structureName) {
+            case 'category':
+                return ($structureElement = $this->getRequestedParentCategory()) ? $structureElement->getValue($property, $languageManager->getDefaultLanguage('public_root')->id) : "";
+
+            case 'brand':
+                return ($structureElement = $this->getBrandElement()) ? $structureElement->getValue($property, $languageManager->getDefaultLanguage('public_root')->id) : "";
+
+            default:
+                return $this->getValue($property, $languageManager->getDefaultLanguage('public_root')->id);
+        }
+    }
+
+
+    public function selectionsPricingsProperties()
+    {
+        $selectionsPricings = $this->getSelectionsPricingsMap();
+        $selectionsOldPricings = [];
+        if ($selectionsPricings) {
+            $discountsManager = $this->getService('shoppingBasketDiscounts');
+            $mainConfig = $this->getService('ConfigManager')->getConfig('main');
+            $vatRateSetting = $mainConfig->get('vatRate');
+            $vatIncluded = $this->vatIncluded || $mainConfig->get('pricesContainVat') === true;
+            $currencySelector = $this->getService('CurrencySelector');
+            foreach ($selectionsPricings as $combo => &$price) {
+                if (!$vatIncluded) {
+                    $price *= $vatRateSetting;
+                    $this->vatIncluded = true;
+                }
+
+                $selectionsOldPricings[$combo] = $currencySelector->formatPrice($price);
+
+                $discountAmount = $discountsManager->getProductDiscount($this->id, $price);
+                if ($discountAmount) {
+                    $price -= $discountAmount;
+                }
+                $selectionsPricings[$combo] = $currencySelector->formatPrice($price);
+            }
+        }
+    }
+
     /**
      * @deprecated - use getElementData() instead
      */
@@ -1667,7 +1733,7 @@ class productElement extends structureElement implements
             'price' => $this->getPrice(),
             'name' => $this->getTitle(),
             'oldPrice' => $this->getOldPrice(),
-            'name_ga' => $this->getValue('title', $defaultLanguage->id),
+            'title_ga' => $this->getValue('title', $defaultLanguage->id),
             'category_ga' => $categoryElement->getValue('title', $defaultLanguage->id),
             'brand_ga' => $brandElement ? $brandElement->getValue('title', $defaultLanguage->id) : '',
             'category' => $categoryElement->getTitle(),
@@ -1679,6 +1745,9 @@ class productElement extends structureElement implements
             if ($selectionsPricings) {
                 $discountsManager = $this->getService('shoppingBasketDiscounts');
                 $mainConfig = $this->getService('ConfigManager')->getConfig('main');
+                /**
+                 * @var $mainConfig ConfigManager
+                 */
                 $vatRateSetting = $mainConfig->get('vatRate');
                 $vatIncluded = $this->vatIncluded || $mainConfig->get('pricesContainVat') === true;
                 $currencySelector = $this->getService('CurrencySelector');
@@ -1823,7 +1892,10 @@ class productElement extends structureElement implements
                 $inactiveDeliveriesRecords = $this->getDisabledDeliveryTypesRecords();
                 $currencySelector = $this->getService('CurrencySelector');
 
-                foreach ($deliveryTypeElements as &$deliveryTypeElement) {
+                /**
+                 * @var $deliveryTypeElement deliveryTypeElement
+                 */
+                foreach ($deliveryTypeElements as $deliveryTypeElement) {
                     if (!isset($inactiveDeliveriesRecords[$deliveryTypeElement->id])) {
                         $deliveryTypeInfo = [];
                         $deliveryTypeInfo["element"] = $deliveryTypeElement;

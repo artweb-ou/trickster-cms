@@ -77,7 +77,8 @@ class errorLog
         return $this->messageLogArray;
     }
 
-    public function logMessage($locationName, $errorText, $level = null, $throwException = true)
+    public function logMessage($locationName, $errorText, $level = null, $throwException = false)
+//    public function logMessage($locationName, $errorText, $level = null, $throwException = true)
     {
         $newMessage = [];
 
