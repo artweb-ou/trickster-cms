@@ -23,7 +23,7 @@
 			height: 100%;
 			z-index: 2;
 			background-color: @white;
-			cursor: wait;
+			cursor: not-allowed;
 			border-radius: 3px;
 		}
 		
@@ -39,8 +39,8 @@
 		position: absolute;
 		bottom: 100%;
 		z-index: 9;
-		left: 0;
-		width: 100%;
+		width: @200pt;
+		left: ~"calc(50% - @{100pt})";
 		text-align: center;
 		padding: .5em .75em;
 		background-color: @white;
@@ -50,6 +50,8 @@
 		border: 1px solid @border_color;
 		box-sizing: border-box;
 		margin-bottom: 10px;
+		word-wrap: break-word;
+		word-break: break-word;
 		
 		&:before, &:after {
 			position: absolute;
