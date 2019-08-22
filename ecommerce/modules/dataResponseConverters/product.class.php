@@ -59,7 +59,26 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'lastPurchaseDate'          => 'lastPurchaseDate',
             'importPrice'               => 'importPrice',
             'h1'                        => 'h1',
-//            'qtFromConnectedCategories' => 'qtFromConnectedCategories',
+            'connectedProductCategories'=> function($element) {
+                /**
+                 * @var productElement $element
+                 */
+                return $element->getProductConnectedCategories();
+            },
+            'qtFromConnectedCategories' => 'qtFromConnectedCategories',
+            'discountAmount'         =>  function($element) {
+                /**
+                 * @var productElement $element
+                 */
+                return ($element->getDiscountAmount(false, true) > 0) ? $element->getDiscountAmount(false, true) : false;
+            },
+
+            'deliveryTypesInfo'         =>  function($element) {
+                /**
+                 * @var productElement $element
+                 */
+                return $element->getDeliveryTypesInfo();
+            },
 
 
 // new new
@@ -165,6 +184,8 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'price',
                 'oldPrice',
                 'discount',
+
+                'discountAmount',
                 'showincategory',
                 'brandId',
                 'brand',
@@ -197,8 +218,10 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'lastPurchaseDate',
                 'importPrice',
                 'h1',
+                'connectedProductCategories',
                 'qtFromConnectedCategories',
-                // new END
+
+                'deliveryTypesInfo',
 
 
             ],
