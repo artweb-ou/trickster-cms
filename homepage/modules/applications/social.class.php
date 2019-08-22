@@ -273,5 +273,47 @@ class socialApplication extends controllerApplication
         $tokenKey = get_class($this->pluginApi) . '_access_token';
         return $this->getService('user')->getStorageAttribute($tokenKey);
     }
+
+    //todo: move to element action? privileges doesnot check
+    protected function action_publish()
+    {
+        $this->performAuthorization();
+        $structureManager = $this->getService('structureManager');
+        $controller = controller::getInstance();
+        if ($socialPostId = $controller->getParameter('socialPostId')) {
+            if ($socialPostElement = $structureManager->getElementById($socialPostId)) {
+                $info = [];
+                if ($socialPostElement->message) {
+                    $info['message'] = $socialPostElement->message;
+                }
+                if ($socialPostElement->linkTitle) {
+                    $info['linkTitle'] = $socialPostElement->linkTitle;
+                }
+                if ($socialPostElement->linkTitle) {
+                    $info['linkDescription'] = $socialPostElement->linkDescription;
+                }
+                if ($socialPostElement->linkURL) {
+                    $info['linkURL'] = $socialPostElement->linkURL;
+                }
+                if ($socialPostElement->originalName) {
+                    $info['image'] = $controller->baseURL . 'image/type:socialImage/id:' . $socialPostElement->image . '/filename:' . $socialPostElement->originalName;
+                }
+                $info['pagesSocialIds'] = [];
+                if($controller->getParameter('pages')) {
+                    foreach($controller->getParameter('pages') as $pageId) {
+                        $page = $structureManager->getElementById($pageId);
+                        $info['pagesSocialIds'][] = $page->socialId;
+                    }
+                }
+
+                if ($this->pluginApi->makePost($info)) {
+                    $socialPostElement->updateStatusInfo($this->pluginId, 'success');
+                } else {
+                    $socialPostElement->updateStatusInfo($this->pluginId, 'error');
+                }
+            }
+        }
+        $this->redirect($this->returnUrl);
+    }
 }
 

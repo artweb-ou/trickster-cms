@@ -57,7 +57,7 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
             $result = $helper->getAccessToken();
         } catch (Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
-            $this->logError($e->getCode(), $e->getMessage());
+            $this->logError($e->getCode() . ' ' . $e->getMessage());
         } catch (Facebook\Exceptions\FacebookSDKException $e) {
             // When validation fails or other local issues
             echo 'Facebook SDK returned an error: ' . $e->getMessage();
@@ -104,10 +104,10 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
             $result = $response->getGraphUser();
         } catch (Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
-            $this->logError($e->getCode(), $e->getMessage());
+            $this->logError($e->getCode() . ' ' . $e->getMessage());
         } catch (Facebook\Exceptions\FacebookSDKException $e) {
             // When validation fails or other local issues
-            $this->logError($e->getCode(), $e->getMessage());
+            $this->logError($e->getCode() . ' ' . $e->getMessage());
         }
         return $result;
     }
@@ -116,7 +116,7 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
     {
         if (is_null($this->appOwnerId)) {
             if ($response = $this->getApi()->get('/' . $this->appId . '?fields=creator_uid', $this->getAppToken())) {
-                if($result = $response->getGraphNode()) {
+                if ($result = $response->getGraphNode()) {
                     $this->appOwnerId = $result->getField('creator_uid');
                 }
             }
@@ -141,21 +141,22 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
                 $result = [];
                 try {
                     $response = $this->getApi()->get('/me/accounts?type=page');
-                    if($pages = $response->getGraphEdge()) {
-                        foreach($pages as $page) {
+                    if ($pages = $response->getGraphEdge()) {
+                        foreach ($pages as $page) {
                             $result[] = [
                                 'socialId' => $page->getField('id'),
-                                'title'     => $page->getField('name'),
+                                'title'    => $page->getField('name'),
+                                'access_token'    => $page->getField('access_token'),
                             ];
                         }
                     }
                 } catch (Facebook\Exceptions\FacebookResponseException $e) {
                     // When Graph returns an error
-                    $this->logError($e->getCode(), $e->getMessage());
+                    $this->logError($e->getCode() . ' ' . $e->getMessage());
                     return false;
                 } catch (Facebook\Exceptions\FacebookSDKException $e) {
                     // When validation fails or other local issues
-                    $this->logError($e->getCode(), $e->getMessage());
+                    $this->logError($e->getCode() . ' ' . $e->getMessage());
                     return false;
                 }
                 return $result;
@@ -165,6 +166,45 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
         } else {
             return new SocialErrorMessage('2');
         }
+    }
+
+    protected function getPageToken($pageSocialId) {
+        $this->getApi()->get('/' . (int)$pageSocialId . '?fields=access_token');
+    }
+
+    public function makePost($data)
+    {
+        if ($data['pagesSocialIds']) {
+            $pages = $this->getPages();
+            foreach ($data['pagesSocialIds'] as $socialId) {
+                $pageToken = '';
+                foreach($pages as $page) {
+                    if($page['socialId'] == $socialId) {
+                        $pageToken = $page['access_token'];
+                    }
+                }
+                try {
+                    $response = $this->getApi()->post(
+                        '/' . $socialId . '/feed',
+                        array(
+                            'message' => $data['message'],
+                        ),
+                        $pageToken
+                    );
+                    $result = $response->getGraphNode();
+                    return $result->getField('id');
+                } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                    // When Graph returns an error
+                    $this->logError($e->getCode() . ' ' . $e->getMessage());
+                    return false;
+                } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                    // When validation fails or other local issues
+                    $this->logError($e->getCode() . ' ' . $e->getMessage());
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 }
 

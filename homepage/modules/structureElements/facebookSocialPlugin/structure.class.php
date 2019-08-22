@@ -20,4 +20,8 @@ class facebookSocialPluginElement extends socialPluginElement
     {
         return 'facebookSocialNetworkAdapter';
     }
+
+//    public function makePost() {
+//
+//    }
 }

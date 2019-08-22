@@ -41,7 +41,7 @@ class socialPostElement extends structureElement
                 $pluginsList = $structureManager->getElementsChildren($pluginsElement->id);
                 foreach ($pluginsList as &$pluginElement) {
                     $statusText = 'undefined';
-                    if ($statusesInfo[$pluginElement->id]) {
+                    if (isset($statusesInfo[$pluginElement->id])) {
                         $statusText = $statusesInfo[$pluginElement->id]->status;
                     }
 
@@ -49,7 +49,9 @@ class socialPostElement extends structureElement
                         'title' => $pluginElement->title,
                         'id' => $pluginElement->id,
                         'statusText' => $statusText,
-                        'publishURL' => $this->URL . 'id:' . $this->id . '/action:publish/plugin:' . $pluginElement->id . '/',
+                        'pages' => $pluginElement->getPages(),
+//                        'publishURL' => $this->URL . 'id:' . $this->id . '/action:publish/plugin:' . $pluginElement->id . '/',
+                        'publishURL' => $pluginElement->getSocialActionUrl('publish')
                     ];
                     $this->publishingInfo[] = $info;
                 }

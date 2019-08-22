@@ -91,6 +91,10 @@ abstract class socialPluginElement extends structureElement
             . '/?return=' . rawurlencode($returnUrl);
     }
 
+    public function getPages() {
+        return $this->getChildrenList();
+    }
+
 //    public abstract function makePost();
 }
 

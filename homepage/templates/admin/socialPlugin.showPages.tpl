@@ -11,7 +11,7 @@
 		{if !empty($socialErrorMessage)}
 			{$socialErrorMessage}
 		{/if}
-		{if $currentElement->getChildrenList()}
+		{if $pages = $currentElement->getPages()}
 			<table class='content_list'>
 				<thead>
 				<tr>
@@ -39,7 +39,7 @@
 				</tr>
 				</thead>
 				<tbody>
-				{foreach from=$currentElement->getChildrenList() item=contentItem}
+				{foreach from=$pages item=contentItem}
 					{assign var='typeName' value=$contentItem->structureType}
 					{assign var='typeLowered' value=$contentItem->structureType|strtolower}
 					{assign var='type' value="element."|cat:$typeLowered}
