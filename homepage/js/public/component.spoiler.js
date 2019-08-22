@@ -27,7 +27,7 @@ window.SpoilerComponent = function(componentElement) {
 		plusComponent = componentElement.querySelector('.spoiler_component_plus');
 
 		if (titleElement && contentElement) {
-			maxHeight = contentElement.scrollHeight + 'px';
+			maxHeight = contentElement.clientHeight + 'px';
 			let computedStyles = getComputedStyle(contentWrapperElement);
 			if (componentElement.classList.contains('spoiler_partly_hidden')) {
 				initGradientElement();
@@ -40,7 +40,10 @@ window.SpoilerComponent = function(componentElement) {
 				showMoreText = buttonElement.innerHTML;
 			}
 			if(contentWrapperElement.classList.contains(showContentClass)) {
-				contentWrapperElement.style.height = contentElement.scrollHeight + 'px';
+				if(maxHeight == '0px') {
+					maxHeight = 'auto';
+				}
+				contentWrapperElement.style.height = maxHeight;
 			}
 			if(contentWrapperElement.classList.contains(hideContentClass)) {
 				contentWrapperElement.style.height = '0px';
@@ -112,6 +115,9 @@ window.SpoilerComponent = function(componentElement) {
 	this.showElement = function() {
 		contentWrapperElement.classList.remove(hideContentClass);
 		contentWrapperElement.classList.add(showContentClass);
+		if(maxHeight == '0px' || maxHeight == 'auto') {
+			maxHeight = contentElement.clientHeight + 'px';
+		}
 		TweenLite.to(contentWrapperElement, 0.5, {
 			'css': {
 				'height': maxHeight
