@@ -127,7 +127,20 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 /**
                  * @var productElement $element
                  */
-                return $element->getParametersGroupsInfo();
+                $parametersGroupsInfo = $element->getParametersGroupsInfo();
+                $parametersInfo = [];
+                foreach ($parametersGroupsInfo as $info) {
+                    $parametersList = [];
+                    foreach ($info['parametersList'] as $list) {
+                        $listOptions = [];
+                        foreach ($list['productOptions'] as $option) {
+                            $listOptions[] = [$option['id'], $option['title'], $option['value']];
+                        };
+                        $parametersList[$list['id']] = [$list['title'], $listOptions];
+                    }
+                    $parametersInfo[$info['id']] = ['title'=>$info['title'], 'parametersList' => $parametersList];
+                }
+                return $parametersInfo;
             },
 
             // new END

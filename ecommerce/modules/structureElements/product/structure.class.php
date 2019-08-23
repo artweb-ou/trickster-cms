@@ -726,6 +726,9 @@ class productElement extends structureElement implements
                     if (!$values) {
                         continue;
                     }
+                    /**
+                     * @var $parameterObject productParameterElement
+                     */
                     $parameterInfo = [
                         'id' => $parameterObject->id,
                         'title' => $parameterObject->title,
@@ -750,6 +753,9 @@ class productElement extends structureElement implements
                         $parameterInfo['influential'] = $parameterObject->influential;
                         $parameterInfo['productOptions'] = [];
                         //todo: use index inside parameterObject instead
+                        /**
+                         * @var $parameterObject productSelectionElement
+                         */
                         foreach ($parameterObject->getSelectionOptions() as $selectionValueElement) {
                             if (in_array($selectionValueElement->id, $values)) {
                                 $parameterInfo['productOptions'][] = [
