@@ -59,13 +59,14 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'lastPurchaseDate'          => 'lastPurchaseDate',
             'importPrice'               => 'importPrice',
             'h1'                        => 'h1',
+            'qtFromConnectedCategories' => 'qtFromConnectedCategories',
+// new new
             'connectedProductCategories'=> function($element) {
                 /**
                  * @var productElement $element
                  */
                 return $element->getProductConnectedCategories();
             },
-            'qtFromConnectedCategories' => 'qtFromConnectedCategories',
             'discountAmount'         =>  function($element) {
                 /**
                  * @var productElement $element
@@ -77,11 +78,16 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 /**
                  * @var productElement $element
                  */
-                return $element->getDeliveryTypesInfo();
+
+                $deliveryTypesInfo = $element->getDeliveryTypesInfo();
+                $deliveryInfo = [];
+                foreach ($deliveryTypesInfo as $key=>$value) {
+                    $deliveryInfo[$value['id']] = ['title'=>$value['title'], 'minPrice' => $value['minPrice'], 'maxPrice' => $value['maxPrice']];
+                }
+                return $deliveryInfo ;
             },
 
 
-// new new
             'title_ga' =>function ($element) {
                 /**
                  * @var productElement $element
@@ -115,6 +121,13 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                  * @var productElement $element
                  */
                 return $element->getOptionsImagesInfo();
+            },
+
+            'parameters' => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
+                return $element->getParametersGroupsInfo();
             },
 
             // new END
@@ -218,6 +231,8 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'lastPurchaseDate',
                 'importPrice',
                 'h1',
+
+                'parameters',
                 'connectedProductCategories',
                 'qtFromConnectedCategories',
 

@@ -1903,6 +1903,7 @@ class productElement extends structureElement implements
                         $deliveryTypeInfo["minPrice"] = $currencySelector->convertPrice($deliveryTypeElement->getMinPrice() + $priceExtra);
                         $deliveryTypeInfo["maxPrice"] = $currencySelector->convertPrice($deliveryTypeElement->getMaxPrice() + $priceExtra);
                         $deliveryTypeInfo["title"] = $deliveryTypeElement->getTitle();
+                        $deliveryTypeInfo["id"] = $deliveryTypeElement->id;
                         $this->deliveryTypesInfo[] = $deliveryTypeInfo;
                     }
                 }
