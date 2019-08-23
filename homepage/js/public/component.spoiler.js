@@ -27,7 +27,7 @@ window.SpoilerComponent = function(componentElement) {
 		plusComponent = componentElement.querySelector('.spoiler_component_plus');
 
 		if (titleElement && contentElement) {
-			maxHeight = contentElement.clientHeight + 'px';
+			maxHeight = contentElement.scrollHeight + 'px';
 			let computedStyles = getComputedStyle(contentWrapperElement);
 			if (componentElement.classList.contains('spoiler_partly_hidden')) {
 				initGradientElement();
@@ -115,9 +115,7 @@ window.SpoilerComponent = function(componentElement) {
 	this.showElement = function() {
 		contentWrapperElement.classList.remove(hideContentClass);
 		contentWrapperElement.classList.add(showContentClass);
-		if(maxHeight == '0px' || maxHeight == 'auto') {
-			maxHeight = contentElement.clientHeight + 'px';
-		}
+		maxHeight = contentElement.clientHeight + 'px';
 		TweenLite.to(contentWrapperElement, 0.5, {
 			'css': {
 				'height': maxHeight
