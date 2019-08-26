@@ -1746,38 +1746,64 @@ class productElement extends structureElement implements
             'brand' => $brandElement ? $brandElement->getTitle() : $brandElement,
         ];
         if ($detailed) {
-            $selectionsPricings = $this->getSelectionsPricingsMap();
-            $selectionsOldPricings = [];
-            if ($selectionsPricings) {
-                $discountsManager = $this->getService('shoppingBasketDiscounts');
-                $mainConfig = $this->getService('ConfigManager')->getConfig('main');
-                /**
-                 * @var $mainConfig ConfigManager
-                 */
-                $vatRateSetting = $mainConfig->get('vatRate');
-                $vatIncluded = $this->vatIncluded || $mainConfig->get('pricesContainVat') === true;
-                $currencySelector = $this->getService('CurrencySelector');
-                foreach ($selectionsPricings as $combo => &$price) {
-                    if (!$vatIncluded) {
-                        $price *= $vatRateSetting;
-                        $this->vatIncluded = true;
-                    }
-
-                    $selectionsOldPricings[$combo] = $currencySelector->formatPrice($price);
-
-                    $discountAmount = $discountsManager->getProductDiscount($this->id, $price);
-                    if ($discountAmount) {
-                        $price -= $discountAmount;
-                    }
-                    $selectionsPricings[$combo] = $currencySelector->formatPrice($price);
-                }
-            }
-
-            $info['selectionsPricings'] = $selectionsPricings;
-            $info['selectionsOldPricings'] = $selectionsOldPricings;
+            $info['parametersGroups'] = $this->getGroupedParametersInfo();
+            $info['selectionsPricings'] = $this->getSelectionsPricings()['selectionsPricings'];
+            $info['selectionsOldPricings'] = $this->getSelectionsPricings()['selectionsOldPricings'];
             $info['selectionsImages'] = $this->getOptionsImagesInfo();
         }
         return $info;
+    }
+
+    public function getSelectionsPricings()
+    {
+        $selectionsPricings = $this->getSelectionsPricingsMap();
+        $selectionsOldPricings = [];
+        if ($selectionsPricings) {
+            $discountsManager = $this->getService('shoppingBasketDiscounts');
+            $mainConfig = $this->getService('ConfigManager')->getConfig('main');
+            /**
+             * @var $mainConfig ConfigManager
+             */
+            $vatRateSetting = $mainConfig->get('vatRate');
+            $vatIncluded = $this->vatIncluded || $mainConfig->get('pricesContainVat') === true;
+            $currencySelector = $this->getService('CurrencySelector');
+            foreach ($selectionsPricings as $combo => $price) {
+                if (!$vatIncluded) {
+                    $price *= $vatRateSetting;
+                    $this->vatIncluded = true;
+                }
+
+                $selectionsOldPricings[$combo] = $currencySelector->formatPrice($price);
+
+                $discountAmount = $discountsManager->getProductDiscount($this->id, $price);
+                if ($discountAmount) {
+                    $price -= $discountAmount;
+                }
+                $selectionsPricings[$combo] = $currencySelector->formatPrice($price);
+            }
+        }
+
+        return ['selectionsPricings' => $selectionsPricings,
+                'selectionsOldPricings' =>  $selectionsOldPricings];
+    }
+
+    public function getGroupedParametersInfo()
+    {
+        $parametersGroupsInfo = $this->getParametersGroupsInfo();
+        $parametersInfo = [];
+        foreach ($parametersGroupsInfo as $info) {
+            $parametersList = [];
+            foreach ($info['parametersList'] as $list) {
+                $listOptions = [];
+                foreach ($list['productOptions'] as $option) {
+                    $listOptions[$option['id']] = ['title' => $option['title'], 'value' => $option['value']];
+                };
+
+                $parametersList[$list['id']] = !empty($listOptions) ? ['title' => $list['title'], 'value' => isset($list['value']) ? $list['value'] : false, 'parameter' => $listOptions] : ['title' => $list['title'], 'value' => $list['value']];
+            }
+            $parametersInfo[$info['id']] = ['groupTitle' => $info['title'], 'parametersList'=>$parametersList];
+        }
+        return $parametersInfo;
     }
 
     public function getPriceBySelectedOptions($options)

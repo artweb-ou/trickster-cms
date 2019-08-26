@@ -56,17 +56,24 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'canonicalUrl'              => 'canonicalUrl',
             'metaDenyIndex'             => 'metaDenyIndex',
             'minimumOrder'              => 'minimumOrder',
-            'lastPurchaseDate'          => 'lastPurchaseDate',
+//            'lastPurchaseDate'          => 'lastPurchaseDate',
+            'lastPurchaseDate'          => function ($element) {
+            /**
+             * @var productElement $element
+             */
+                return date('Y-m-d H:i:s',$element->lastPurchaseDate);
+            },
             'importPrice'               => 'importPrice',
             'h1'                        => 'h1',
             'qtFromConnectedCategories' => 'qtFromConnectedCategories',
 // new new
-            'connectedProductCategories'=> function($element) {
-                /**
-                 * @var productElement $element
-                 */
-                return $element->getProductConnectedCategories();
-            },
+            'connectedProductCategories'=> 'getProductConnectedCategories',
+//            'connectedProductCategories'=> function($element) {
+//                /**
+//                 * @var productElement $element
+//                 */
+//                return $element->getProductConnectedCategories();
+//            },
             'discountAmount'         =>  function($element) {
                 /**
                  * @var productElement $element
@@ -122,27 +129,44 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                  */
                 return $element->getOptionsImagesInfo();
             },
-
-            'parametersGroups' => function ($element) {
+            'selectionsPricings' => function ($element) {
                 /**
                  * @var productElement $element
                  */
-                $parametersGroupsInfo = $element->getParametersGroupsInfo();
-                $parametersInfo = [];
-                foreach ($parametersGroupsInfo as $info) {
-                    $parametersList = [];
-                    foreach ($info['parametersList'] as $list) {
-                        $listOptions = [];
-                        foreach ($list['productOptions'] as $option) {
-                           $listOptions[$option['id']] = ['title' => $option['title'], 'value' => $option['value']];
-                        };
-
-                        $parametersList[$list['id']] = !empty($listOptions) ? ['title' => $list['title'], 'value' => isset($list['value']) ? $list['value'] : false, 'parameter' => $listOptions] : ['title' => $list['title'], 'value' => $list['value']];
-                    }
-                    $parametersInfo[$info['id']] = ['groupTitle' => $info['title'], 'parametersList'=>$parametersList];
-                }
-                return $parametersInfo;
+                $getSelectionsPricings = $element->getSelectionsPricings();
+                return $getSelectionsPricings['selectionsPricings'];
             },
+            'selectionsOldPricings' => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
+                $getSelectionsPricings = $element->getSelectionsPricings();
+                return $getSelectionsPricings['selectionsOldPricings'];
+            },
+
+
+
+            'parametersGroups' => 'getGroupedParametersInfo',
+//            'parametersGroups' => function ($element) {
+//                    /**
+//                     * @var productElement $element
+//                     */
+//                    $parametersGroupsInfo = $element->getParametersGroupsInfo();
+//                    $parametersInfo = [];
+//                    foreach ($parametersGroupsInfo as $info) {
+//                        $parametersList = [];
+//                        foreach ($info['parametersList'] as $list) {
+//                            $listOptions = [];
+//                            foreach ($list['productOptions'] as $option) {
+//                               $listOptions[$option['id']] = ['title' => $option['title'], 'value' => $option['value']];
+//                            };
+//
+//                            $parametersList[$list['id']] = !empty($listOptions) ? ['title' => $list['title'], 'value' => isset($list['value']) ? $list['value'] : false, 'parameter' => $listOptions] : ['title' => $list['title'], 'value' => $list['value']];
+//                        }
+//                        $parametersInfo[$info['id']] = ['groupTitle' => $info['title'], 'parametersList'=>$parametersList];
+//                    }
+//                    return $parametersInfo;
+//                },
 
             // new END
 
@@ -224,6 +248,8 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'category',
 
                 'selectionsImages',
+                'selectionsPricings',
+                'selectionsOldPricings',
 
 
                 'purchaseCount',
