@@ -8,6 +8,7 @@ class socialPluginsElement extends structureElement
     protected $allowedTypes = [
         'facebookSocialPlugin',
         'googleSocialPlugin',
+        'instagramSocialPlugin',
     ];
     public $defaultActionName = 'showFullList';
     public $role = 'container';

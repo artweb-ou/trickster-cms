@@ -6,3 +6,6 @@ CREATE TABLE `engine_module_social_page` (
 
 ALTER TABLE `engine_module_social_page`
   ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `engine_social_publishing_status` ADD `pageId` INT(11) NOT NULL AFTER `status`;

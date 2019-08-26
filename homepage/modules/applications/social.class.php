@@ -299,17 +299,17 @@ class socialApplication extends controllerApplication
                     $info['image'] = $controller->baseURL . 'image/type:socialImage/id:' . $socialPostElement->image . '/filename:' . $socialPostElement->originalName;
                 }
                 $info['pagesSocialIds'] = [];
-                if($controller->getParameter('pages')) {
-                    foreach($controller->getParameter('pages') as $pageId) {
+                if($pagesIds = $controller->getParameter('pages')) {
+                    foreach($pagesIds as $pageId) {
                         $page = $structureManager->getElementById($pageId);
                         $info['pagesSocialIds'][] = $page->socialId;
                     }
                 }
 
                 if ($this->pluginApi->makePost($info)) {
-                    $socialPostElement->updateStatusInfo($this->pluginId, 'success');
+                    $socialPostElement->updateStatusInfo($this->pluginId, 'success', $pagesIds);
                 } else {
-                    $socialPostElement->updateStatusInfo($this->pluginId, 'error');
+                    $socialPostElement->updateStatusInfo($this->pluginId, 'error', $pagesIds);
                 }
             }
         }
