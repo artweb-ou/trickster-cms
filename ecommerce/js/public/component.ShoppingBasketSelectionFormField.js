@@ -70,7 +70,8 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
             }
         }
     };
-    var checkVatHandler = function() {
+    var checkVatHandler = function(event) {
+        event.preventDefault();
         shoppingBasketLogics.checkVatNumber(fieldComponent.componentElement.value);
     };
     this.getComponentElement = function() {
