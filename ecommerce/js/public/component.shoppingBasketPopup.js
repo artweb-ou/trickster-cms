@@ -179,7 +179,7 @@ window.ShoppingBasketPopupProductComponent = function(productInfo) {
             var message = [];
             var additionalContainerClassName = 'notice_box';
             var additionalClassName = 'notice_basket';
-            message['title'] = window.productDetailsData.name || window.productDetailsData.title_ga;
+            message['title'] = window.productDetailsData.title || window.productDetailsData.title_ga;
             message['content'] = window.translationsLogics.get('product.quantityunavailable');
             message['footer'] = '';
             // only modal on error
