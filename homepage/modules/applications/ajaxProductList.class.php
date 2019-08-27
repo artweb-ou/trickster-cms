@@ -35,8 +35,8 @@ class ajaxProductListApplication extends controllerApplication
         $status = 'fail';
 
         $categoryFilters = [];
-        if ($elementId = $controller->getParameter('elementId')) {
-            if ($element = $structureManager->getElementById($elementId)) {
+        if ($listElementId = $controller->getParameter('listElementId')) {
+            if ($element = $structureManager->getElementById($listElementId)) {
                 if ($element instanceof ProductsListElement) {
                     $status = 'success';
 
@@ -51,6 +51,26 @@ class ajaxProductListApplication extends controllerApplication
                             'options'   => $filter->getOptionsInfo(),
                         ];
                     }
+                }
+            }
+        }
+
+        if ($elementId = $controller->getParameter('elementId')) {
+            if ($element = $structureManager->getElementById($elementId)) {
+                if ($element instanceof ProductsListElement) {
+                    $status = 'success';
+
+                    $product = $element->getProductsListElement();
+/*                    $filters = $element->getFilters();
+
+                    foreach ($filters as $nr => $filter) {
+                        $categoryFilters['filters'][] = [
+                            'type'      => $filter->getType(),
+                            'id'        => $filter->getId(),
+                            'title'     => $filter->getTitle(),
+                            'options'   => $filter->getOptionsInfo(),
+                        ];
+                    }*/
                 }
             }
         }
