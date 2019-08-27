@@ -216,14 +216,14 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         /**
          * @var $structureManager structureManager
          * @var $productCatalogue productCatalogueElement
+         * @var $topCategoryElements categoryElement[]
          */
         $structureManager = $this->getService('structureManager');
-
         $topCategories = [];
         $connectedProducts = $this->getConnectedProducts();
         $currentLanguage = $connectedProducts[0]->getCurrentLanguage();
         $productCatalogue = $structureManager->getElementsByType('productCatalogue', $currentLanguage)[0];
-        $topCategories = $productCatalogue->getCategoriesList();
+        $topCategoryElements = $productCatalogue->getCategoriesList();
         foreach ($connectedProducts as $product) {
             foreach ($product->getConnectedCategories() as $category) {
                 $this->processCategory($category, $allCategories, $topCategories);
@@ -231,20 +231,24 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         }
         $categoryIds = array_keys($allCategories);
         $categories = [];
-        foreach ($topCategories as $topCategory) {
-            $level = 0;
-            $topCategory->setLevel($level);
-            $categories[] = $topCategory;
-            $this->categoryFilter($topCategory, $categoryIds, $categories, $level);
+        foreach ($topCategoryElements as &$topCategory) {
+            if(isset($topCategories[$topCategory->id])) {
+                $level = 0;
+                $topCategory->setLevel($level);
+                $categories[] = $topCategory;
+                $this->categoryFilter($topCategory, $categoryIds, $categories, $level);
+            } else {
+                unset($topCategory);
+            }
         }
         return $categories;
     }
 
     /**
      * @param $category categoryElement
-     * @param $allCategories
-     * @param $categories
-     * @param $level
+     * @param $allCategories categoryElement[]
+     * @param $categories array
+     * @param $level int
      */
     protected function categoryFilter($category, $allCategories, &$categories, $level) {
         if(in_array($category->id, $allCategories)) {
