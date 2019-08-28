@@ -1749,7 +1749,7 @@ class productElement extends structureElement implements
             $info['parametersGroups'] = $this->getGroupedParametersInfo();
             $info['selectionsPricings'] = $this->getSelectionsPricings()['selectionsPricings'];
             $info['selectionsOldPricings'] = $this->getSelectionsPricings()['selectionsOldPricings'];
-            $info['selectionsImages'] = $this->getOptionsImagesInfo();
+            $info['selectionsImages'] =  !empty($this->getOptionsImagesInfo()) ? $this->getOptionsImagesInfo() : false;
         }
         return $info;
     }
@@ -1893,6 +1893,15 @@ class productElement extends structureElement implements
         if ($image = $this->getFirstImageElement()) {
             $controller = controller::getInstance();
             return $controller->baseURL . 'image/type:galleryFullImage/id:' . $image->id . '/filename:' . $image->originalName;
+        }
+        return false;
+    }
+
+    public function getCustomImageUrl($type, $imageFileName)
+    {
+        if ($image = $this->getFirstImageElement()) {
+            $controller = controller::getInstance();
+            return $controller->baseURL . 'image/type:'. $type .'/id:' . $image->id . '/filename:' . $image->$imageFileName;
         }
         return false;
     }

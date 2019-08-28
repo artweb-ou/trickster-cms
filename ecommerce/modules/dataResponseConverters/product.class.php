@@ -13,6 +13,16 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'url' => 'getUrl',
             'structureType' => 'structureType',
             'image' => 'image',
+            'imageUrl' => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
+
+                if ($element->image && $element->originalName) {
+                    return $element->getCustomImageUrl('productGalleryImage', 'originalName');
+                }
+                return '';
+            },
             'content' => 'content',
 
             // new
@@ -31,7 +41,7 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             },
             'showincategory'            => 'showincategory',
             'brandId'                   => 'brandId',
-            'brand'                => function ($element) {
+            'brand'                     => function ($element) {
                 /**
                  * @var productElement $element
                  */
@@ -51,18 +61,29 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'importId'                  => 'importId',
             'metaTitle'                 => 'metaTitle',
             'metaDescription'           => 'metaDescription',
-            'availability'              => 'availability',
+        //    'availability'              => 'availability',
+            'availability'              => function ($element) {
+            /**
+             * @var productElement $element
+             */
+                $translationsManager = $element->getService('translationsManager');
+                $availabilityStatus =  $translationsManager->getTranslationByName('product.' . $element->availability);
+
+                $elementAvailability = [];
+                $elementAvailability[$element->availability] = $availabilityStatus;
+                return $elementAvailability;
+            },
             'quantity'                  => 'quantity',
             'canonicalUrl'              => 'canonicalUrl',
             'metaDenyIndex'             => 'metaDenyIndex',
             'minimumOrder'              => 'minimumOrder',
-//            'lastPurchaseDate'          => 'lastPurchaseDate',
-            'lastPurchaseDate'          => function ($element) {
-            /**
-             * @var productElement $element
-             */
-                return date('Y-m-d H:i:s',$element->lastPurchaseDate);
-            },
+            'lastPurchaseDate'          => 'lastPurchaseDate',
+//            'lastPurchaseDate'          => function ($element) {
+//            /**
+//             * @var productElement $element
+//             */
+//                return date('Y-m-d H:i:s',$element->lastPurchaseDate);
+//            },
             'importPrice'               => 'importPrice',
             'h1'                        => 'h1',
             'qtFromConnectedCategories' => 'qtFromConnectedCategories',
@@ -127,7 +148,7 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 /**
                  * @var productElement $element
                  */
-                return $element->getOptionsImagesInfo();
+                return !empty($element->getOptionsImagesInfo()) ? $element->getOptionsImagesInfo() : false;
             },
             'selectionsPricings' => function ($element) {
                 /**
@@ -226,6 +247,7 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'dateModified',
                 'url',
                 'image',
+                'imageUrl',
                 'content',
                 'introduction',
 

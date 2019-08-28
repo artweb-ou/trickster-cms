@@ -34,11 +34,10 @@ window.AjaxProductListComponent = function(productElement, productId, productsLi
 
         if(productsListSetsArray.length > 0) {
             [].forEach.call(productsListSetsArray, function(productsListSet, i) {
-             //   new AjaxSelectComponent(genericIconFormElement, genericIconFormElement.dataset.select, 'admin');
                 if (productsListSet === 'quickview') {
                     self.productElement.classList += ' product_with_quickview';
                     productElementQuickView = document.createElement('div');
-                    productElementQuickView.className = 'product_quickview';
+                    productElementQuickView.className = 'product_quickview_trigger';
                     productElementQuickViewLink = document.createElement('a');
                     productElementQuickViewLink.className = 'product_quickview_link product_quickview_button';
                     productElementQuickViewUrl = '/ajaxProductList/listElementId:' + window.currentElementId + '/elementId:' + productId + '/';
@@ -49,7 +48,7 @@ window.AjaxProductListComponent = function(productElement, productId, productsLi
                     self.productElement.appendChild(productElementQuickView);
 
                     productElementQuickView.addEventListener("click", function(e){
-                        clickHandler(e,productId,productElementQuickView);
+                        clickHandler(e,productId,productElementQuickView,productElementQuickViewUrl);
                     }, false);
                 }
             });
@@ -141,12 +140,13 @@ window.AjaxProductListComponent = function(productElement, productId, productsLi
 
 
 */
-    var clickHandler = function(e,productId,productElementQuickView) {
+    var clickHandler = function(e,productId,productElementQuickView,productElementQuickViewUrl) {
         e.preventDefault();
         e.stopPropagation();
-        console.log(productId)
 
-        self.sendQuery();
+        self.sendQuery(getProductData,productElementQuickViewUrl);
+
+    //    window.jsonData.product = 'product': $element->getElementData()|json_encode};
 
 
         /*
@@ -157,27 +157,170 @@ window.AjaxProductListComponent = function(productElement, productId, productsLi
 
         */
 };
+    var getProductData = function(responseData) {
+        new AjaxProductListSingleItem(productId,responseData.product[0]);
 
-    var receiveData = function(
-        responseStatus, requestName, responseData, callBack) {
+
+        // if (allElements.length > 0) {
+        //     ajaxSearchResultsComponent.updateData(allElements);
+        //     ajaxSearchResultsComponent.displayComponent();
+        // } else {
+        //     ajaxSearchResultsComponent.hideComponent();
+        // }
+        // if (resultsUpdateCallback) {
+        //     resultsUpdateCallback(allElements);
+        // }
+    };
+
+
+    var receiveData = function(responseStatus, requestName, responseData, callBack) {
         if (responseStatus === 'success' && responseData) {
-         //   callBack(responseData);
-        } else {
+           callBack(responseData);
+        }
+        else {
             controller.fireEvent('ajaxSearchResultsFailure', responseData);
         }
     };
-    this.sendQuery = function(
-        callBack, query, types, apiMode, resultsLimit, language, filters) {
-        var url = productElementQuickViewLink.href;
-        var request = new JsonRequest(url,
+    this.sendQuery = function(callBack, reqUrl) {
+        //JsonRequest > requestURL, callback, requestName, requestParameters, formData
+        var request = new JsonRequest(reqUrl,
             function(responseStatus, requestName, responseData) {
-                return receiveData(responseStatus, requestName, responseData,
-                //    callBack
-                );
+                return receiveData(responseStatus, requestName, responseData, callBack);
             }, 'ajaxProductList');
+
         request.send();
     };
     init();
+};
+
+window.AjaxProductListSingleItem = function(productId,productItem) {
+    // var productElement;
+    var quickElement;
+    var quickElementInner = [];
+    var productAttrs = [
+        'title',
+        'imageUrl',
+        'introduction',
+        'availability',
+        'price',
+        'oldPrice',
+    ];
+
+
+    var addToBasket = document.createElement('a');
+    addToBasket.className = 'quickview_addto_basket product_short_basket button';
+    addToBasket.setAttribute('href', productItem.url);
+    addToBasket.textContent = translationsLogics.get('product.addtobasket');
+    var additionalContainerClassName = 'notice_box product_quickview_box';
+    var message = [];
+    var quickElementAttr = [];
+
+    // var onBasketButtonClick = function(event) {
+    //     var amount = amountInputElement ? amountInputElement.value : minimumOrder;
+    //     if (amount % minimumOrder != 0) {
+    //         amount = minimumOrder;
+    //     }
+    //     var variation = '';
+    //     if (optionSelectElements) {
+    //         for (var i = 0; i < optionSelectElements.length; ++i) {
+    //             if (i != 0) {
+    //                 variation += ', ';
+    //             }
+    //             variation += optionSelectElements[i].value;
+    //         }
+    //     }
+    //     shoppingBasketLogics.addProduct(productId, amount, variation);
+    // };
+    //
+    // if (basketButton = componentElement.querySelector('.product_short_basket')) {
+    //     new BasketButtonComponent(basketButton, onBasketButtonClick, productId);
+    // }
+
+
+    // var displayComponent = function() {
+    //     componentElement.style.display = 'block';
+    //     centerComponent.updateContents();
+    //     window.addEventListener('keydown', keyDownHandler);
+    // };
+    // var closeClick = function(e) {
+    //     eventsManager.preventDefaultAction(e);
+    //     self.setDisplayed(false);
+    // };
+   // DarkLayerComponent.showLayer();
+  //  productElement = document.querySelector('.productid_' + productId);
+    quickElement = document.createElement('div');
+    quickElement.className = 'product_quickview';
+
+    productAttrs.forEach(function(productAttr, i) {
+        quickElementInner[i] = document.createElement('div');
+     //   console.log(typeof(productItem[productAttr]))
+        if (typeof(productItem[productAttr]) === 'object') {
+            for (var key in productItem[productAttr]) {
+                quickElementInner[i].className = 'product_quickview_' + productAttr.toLowerCase() + ' ' + key.toLowerCase();
+                quickElementAttr['val'] = productItem[productAttr][key];
+            }
+        }
+        else {
+            quickElementInner[i].className = 'product_quickview_' + productAttr;
+            quickElementAttr['val'] = productItem[productAttr];
+        }
+
+        if (productAttr === 'imageUrl') {
+            quickElementInner[i].innerHTML = '<img src="' + quickElementAttr['val'] + '">';
+        }
+        else {
+            quickElementInner[i].innerHTML = quickElementAttr['val'];
+        }
+        quickElement.appendChild(quickElementInner[i]);
+    });
+    // quickElementInner[1] = document.createElement('div');
+    // quickElementInner[1].className = 'product_quickview_title';
+    // quickElementInner[1].innerHTML = productItem.title;
+
+
+
+
+    message['title'] = productItem.title;
+    message['content'] = quickElement.outerHTML;
+    message['footer'] = addToBasket.outerHTML;
+
+    // window.ModalActionComponent = function(checkboxElement, footerElement, elementForPosition, additionalClassName, bubbleCloseTag, message) {
+
+    var modalActionComponent = new ModalActionComponent(false, 'multiple', quickElement, additionalContainerClassName, false, message); // checkbox-input, multiple footer buttons, element for position, messages
+    if(modalActionComponent) {
+/*
+        var onBasketButtonClick = function(event) {
+            var amount = amountInputElement ? amountInputElement.value : minimumOrder;
+            if (amount % minimumOrder != 0) {
+                amount = minimumOrder;
+            }
+            var variation = '';
+            if (optionSelectElements) {
+                for (var i = 0; i < optionSelectElements.length; ++i) {
+                    if (i != 0) {
+                        variation += ', ';
+                    }
+                    variation += optionSelectElements[i].value;
+                }
+            }
+            console.log(productId, amount)
+            shoppingBasketLogics.addProduct(productId, amount, variation);
+        };
+       // console.log(quickElement.querySelector('.product_short_basket'))
+
+        if (addToBasket) {
+            new BasketButtonComponent(addToBasket, onBasketButtonClick, productId);
+               console.log(productId)
+        }
+*/
+    }
+    // new ModalActionComponent(false, 'multiple', quickElement, additionalContainerClassName, false, message); // checkbox-input, multiple footer buttons, element for position, messages
+    // new ProductShortComponent(addToBasket);
+
+
+  //  document.body.appendChild(quickElement);
+
+    // console.log(productId)
 };
 
 /*
