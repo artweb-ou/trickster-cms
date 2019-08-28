@@ -220,6 +220,7 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
          */
         $structureManager = $this->getService('structureManager');
         $topCategories = [];
+        $allCategories = [];
         $connectedProducts = $this->getConnectedProducts();
         $currentLanguage = $connectedProducts[0]->getCurrentLanguage();
         $productCatalogue = $structureManager->getElementsByType('productCatalogue', $currentLanguage)[0];
