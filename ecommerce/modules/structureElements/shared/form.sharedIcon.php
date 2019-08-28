@@ -16,5 +16,4 @@ class SharedIconStructure extends ElementForm
             'type' => 'button.createNewElement'
         ]
     ];
-    protected $additionalContent = 'shared.contentlist.tpl';
 }

@@ -443,7 +443,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 ];
                 $orderFields = [
                     'showincategory' => 'desc',
-                    'purchaseCount' => 'desc',
+                    'purchaseCount'  => 'desc',
                 ];
                 $productIdFilter = [];
 
@@ -801,7 +801,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     {
         $controller = controller::getInstance();
         $this->requestArguments = [
-            'page' => (int)$controller->getParameter('page'),
+            'page'  => (int)$controller->getParameter('page'),
             'order' => false,
         ];
         $orderParameter = $controller->getParameter("order");
@@ -815,12 +815,12 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 $orderArgument = 'asc';
             }
             $this->requestArguments['order'] = [
-                'field' => $orderField,
+                'field'    => $orderField,
                 'argument' => $orderArgument,
             ];
         } else {
             $this->requestArguments['order'] = [
-                'field' => 'id',
+                'field'    => 'id',
                 'argument' => 'desc',
             ];
         }
@@ -929,37 +929,18 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return parent::getAllowedTypes($currentAction);
     }
 
-
-    public function getConnectedGenericIconList() {
-        /**
-         * @var $linksManager linksManager
-         * @var $structureManager structureManager
-         */
-        $genericIconList = [];
+    public function getConnectedGenericIconList()
+    {
         $linksManager = $this->getService('linksManager');
-        $structureManager = $this->getService('structureManager');
         $connectedIds = $linksManager->getConnectedIdList($this->id, 'genericIconCategory');
-        if(!empty($connectedIds)) {
-            foreach ($connectedIds as $id) {
-                if($id != 0) {
-                    $genericIconList[] = $structureManager->getElementById($id);
-                }
-            }
-        }
-        return $genericIconList;
+        return $connectedIds;
     }
 
     public function getGenericIconList()
     {
-        /**
-         * @var $linksManager linksManager
-         * @var $structureManager structureManager
-         * @var $element genericIconElement
-         */
         $genericIconList = [];
-        $linksManager = $this->getService('linksManager');
         $structureManager = $this->getService('structureManager');
-        $connectedIcons = $linksManager->getConnectedIdList($this->id, 'genericIconCategory');
+        $connectedIcons = $this->getConnectedGenericIconList();
         $genericIcons = $structureManager->getElementsByType('genericIcon');
         foreach ($genericIcons as $genericIcon) {
             $genericIconList[] = [
@@ -971,7 +952,8 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return $genericIconList;
     }
 
-    public function getFeedbackFormList() {
+    public function getFeedbackFormList()
+    {
         $structureManager = $this->getService('structureManager');
         $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
         $publicRoot = $structureManager->getElementByMarker($marker);
@@ -995,7 +977,8 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return $feedbackFormsList;
     }
 
-    public function getProductCataloguesIds() {
+    public function getProductCataloguesIds()
+    {
         $structureManager = $this->getService('structureManager');
         $productCataloguesIds = [];
         $connectedFoldersIds = $this->getConnectedCatalogueFoldersIds();
@@ -1017,8 +1000,9 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return $productCataloguesIds;
     }
 
-    public function getExpectedField($type) {
-        if($type === 'texts') {
+    public function getExpectedField($type)
+    {
+        if ($type === 'texts') {
             return [
                 'content',
                 'introduction',

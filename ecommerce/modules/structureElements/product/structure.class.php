@@ -1990,15 +1990,8 @@ class productElement extends structureElement implements
                 return $templatedSubTitle;
             }
             return $this->getParentCategory()->getTitle();
-
         }
     }
-
-    public function getNewElementUrl()
-    {
-        return parent::getNewElementUrl().'linkType:subArticle/';
-    }
-
     /**
      * @return string
      */
@@ -2019,5 +2012,25 @@ class productElement extends structureElement implements
                 'introduction',
             ];
         }
+    }
+        $linksManager = $this->getService('linksManager');
+        $connectedIds = $linksManager->getConnectedIdList($this->id, 'genericIconProduct');
+
+        return $connectedIds;
+    }
+
+    public function getGenericIconList() {
+        $genericIconList = [];
+        $structureManager = $this->getService('structureManager');
+        $connectedIcons = $this->getConnectedGenericIconList();
+        $genericIcons = $structureManager->getElementsByType('genericIcon');
+        foreach ($genericIcons as $genericIcon) {
+            $genericIconList[] = [
+                'id' => $genericIcon->id,
+                'title' => $genericIcon->getTitle(),
+                'select' => in_array($genericIcon->id, $connectedIcons)
+            ];
+        }
+        return $genericIconList;
     }
 }
