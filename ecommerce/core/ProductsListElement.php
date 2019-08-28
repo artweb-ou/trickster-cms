@@ -228,6 +228,9 @@ abstract class ProductsListElement extends menuStructureElement
      */
     public function getProductsList()
     {
+        $sessionManager = $this->getService('ServerSessionManager');
+        $sessionManager->setEnabled(true);
+        $sessionManager->set('fromProductList', $this->id);
         if ($this->productsList !== null) {
             return $this->productsList;
         }
