@@ -41,7 +41,7 @@ window.AjaxProductListComponent = function(productElement, productId, productsLi
                     productElementQuickView.className = 'product_quickview';
                     productElementQuickViewLink = document.createElement('a');
                     productElementQuickViewLink.className = 'product_quickview_link product_quickview_button';
-                    productElementQuickViewUrl = '/ajaxProductList/listElementId:' + window.currentElementId + '/elementId:' + productId;
+                    productElementQuickViewUrl = '/ajaxProductList/listElementId:' + window.currentElementId + '/elementId:' + productId + '/';
                     productElementQuickViewLink.href = productElementQuickViewUrl;
                     productElementQuickViewLink.innerText = translationsLogics.get('product.quickview');
 
@@ -146,15 +146,37 @@ window.AjaxProductListComponent = function(productElement, productId, productsLi
         e.stopPropagation();
         console.log(productId)
 
-/*
+        self.sendQuery();
 
-        var productQuickView = new AjaxSearchResultsItemComponent(elementsList[i],
-            parentObject);
-        productElementQuickView.appendChild(item.productElement);
 
-*/
+        /*
+
+                var productQuickView = new AjaxSearchResultsItemComponent(elementsList[i],
+                    parentObject);
+                productElementQuickView.appendChild(item.productElement);
+
+        */
 };
 
+    var receiveData = function(
+        responseStatus, requestName, responseData, callBack) {
+        if (responseStatus === 'success' && responseData) {
+         //   callBack(responseData);
+        } else {
+            controller.fireEvent('ajaxSearchResultsFailure', responseData);
+        }
+    };
+    this.sendQuery = function(
+        callBack, query, types, apiMode, resultsLimit, language, filters) {
+        var url = productElementQuickViewLink.href;
+        var request = new JsonRequest(url,
+            function(responseStatus, requestName, responseData) {
+                return receiveData(responseStatus, requestName, responseData,
+                //    callBack
+                );
+            }, 'ajaxProductList');
+        request.send();
+    };
     init();
 };
 
