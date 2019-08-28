@@ -120,7 +120,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
             $this->totalFullPrice += $element->getTotalFullPrice();
         }
         $this->productsPrice = $productsPrice;
-        $totalPrice = $this->totalFullPrice + $this->deliveryPrice;
+        $totalPrice = (float)$this->totalFullPrice + (float)$this->deliveryPrice;
         if ($services = $this->getServicesList()) {
             foreach ($services as &$service) {
                 $totalPrice += $service->price;

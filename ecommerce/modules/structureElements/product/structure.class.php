@@ -1005,7 +1005,7 @@ class productElement extends structureElement implements
      */
     public function getIconsCompleteList()
     {
-        $this->logError('deprecated method getIconsCompleteList used');
+//        $this->logError('deprecated method getIconsCompleteList used');
         if ($this->iconsCompleteList === null) {
             /**
              * @var ProductIconsManager $productIconsManager
@@ -1183,6 +1183,9 @@ class productElement extends structureElement implements
         return false;
     }
 
+    /**
+     * @return categoryElement[]
+     */
     public function getProductConnectedCategories()
     {
         if (is_null($this->connectedProductCategories)) {
@@ -2034,5 +2037,26 @@ class productElement extends structureElement implements
             ];
         }
         return $genericIconList;
+    }
+
+    public function getCollectionsList() {
+        /**
+         * @var $structureManager structureManager
+         * @var $linksManager linksManager
+         */
+        $arrayCollection = [];
+        $structureManager = $this->getService('structureManager');
+        $linksManager = $this->getService('linksManager');
+        $connectedCollection = $linksManager->getConnectedIdList($this->id, 'collectionProduct');
+        $collections = $structureManager->getElementsByType('collection');
+
+        foreach ($collections as $collection) {
+            $arrayCollection[] = [
+                'id' => $collection->id,
+                'title' => $collection->getTitle(),
+                'select' => in_array($collection->id, $connectedCollection)
+            ];
+        }
+        return $arrayCollection;
     }
 }

@@ -969,6 +969,9 @@ abstract class ProductsListElement extends menuStructureElement
 
     public function getProductsListCategories()
     {
+        /**
+         * @var $categoryElement categoryElement
+         */
         $result = [];
         $productIdsQuery = clone $this->getFilteredProductsQuery();
         $db = $this->getService('db');
@@ -979,13 +982,14 @@ abstract class ProductsListElement extends menuStructureElement
             ->get()) {
             $structureManager = $this->getService('structureManager');
             $sort = [];
+            $x = [];
             foreach ($records as $record) {
                 if ($categoryElement = $structureManager->getElementById($record['parentStructureId'])) {
+
                     $result[] = $categoryElement;
                     $sort[] = $categoryElement->title;
                 }
             }
-            array_multisort($sort, SORT_ASC, $result);
         }
         return $result;
     }

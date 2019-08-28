@@ -9,6 +9,11 @@
         height: @43pt;
         border-right: none;
         line-height: 1;
+        
+        &:not(:empty) {
+            height: auto;
+            border-right: 1px solid @input_border_color;
+        }
     }
 
     .file_input_button {

@@ -10,7 +10,6 @@
 					{include file=$theme->template('component.elementimage.tpl') type='categoryDetails' class='category_details_image'}
 				</div>
 			{/if}
-
 			<div class="category_details_right">
 				{if $element->content}
 					<div class='category_details_content html_content'>
@@ -21,6 +20,11 @@
 		</div>
 	{/if}
 	{include file=$theme->template('category.subcategories.tpl') element=$element}
+		<div class="category_collectionslist">
+            {foreach $element->getCollectionLists() as $collection}
+                {include file=$theme->template($collection->getTemplate('thumbnailsmall')) element=$collection}
+            {/foreach}
+		</div>
 	{include file=$theme->template('category.products.tpl') element=$element}
 	{/stripdomspaces}
 {/capture}

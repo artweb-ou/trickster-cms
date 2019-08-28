@@ -24,11 +24,13 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     protected $currentProductCatalogue;
     public $feedbackFormsList = [];
     public $columns;
+    public $level = 0;
     protected $parametersGroups;
     protected $discountsList;
     protected $iconsList;
     protected $iconsCompleteList;
     protected $parentCategory;
+    protected $parentCategories;
     protected $topProductsList;
     protected $mainParentCategory;
     protected $usedParametersIds;
@@ -469,6 +471,10 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return $this->topProductsList;
     }
 
+    /**
+     * @param null $limit
+     * @return categoryElement[]
+     */
     public function getChildCategories($limit = null)
     {
         $childCategories = [];
@@ -543,23 +549,39 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     }
 
     /**
+     * @return categoryElement[]
+     */
+    public function getParentCategories()
+    {
+        if ($this->parentCategories === null) {
+            $this->parentCategories = [];
+            $structureManager = $this->getService('structureManager');
+            if ($parentElements = $structureManager->getElementsParents($this->id)) {
+                foreach ($parentElements as &$parent) {
+                    if ($parent->structureType == "category") {
+                        $this->parentCategories[] = $parent;
+                    }
+                }
+            }
+        }
+        return $this->parentCategories;
+    }
+
+    /**
      * @return bool|categoryElement
      */
     public function getParentCategory()
     {
         if ($this->parentCategory === null) {
             $this->parentCategory = false;
-            $structureManager = $this->getService('structureManager');
-            if ($parentElements = $structureManager->getElementsParents($this->id)) {
-                foreach ($parentElements as &$parent) {
-                    if ($parent->structureType == "category") {
-                        if (!$this->parentCategory) {
-                            $this->parentCategory = $parent;
-                        }
-                        if ($parent->requested) {
-                            $this->parentCategory = $parent;
-                            break;
-                        }
+            if ($parentElements = $this->getParentCategories()) {
+                foreach ($parentElements as $parent) {
+                    if (!$this->parentCategory) {
+                        $this->parentCategory = $parent;
+                    }
+                    if ($parent->requested) {
+                        $this->parentCategory = $parent;
+                        break;
                     }
                 }
             }

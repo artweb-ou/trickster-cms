@@ -14,7 +14,7 @@ class CategoryProductFilter extends ProductFilter
                 foreach ($categories as &$category) {
                     if (!$category->hidden) {
                         $this->optionsInfo[] = [
-                            'title' => $category->title,
+                            'title' => $category->getLevel().$category->title,
                             'selected' => isset($argumentMap[$category->id]) || $category->requested,
                             'id' => $category->id,
                             'url' => $category->URL,

@@ -33,6 +33,11 @@ class ProductFormStructure extends ElementForm
             'property' => 'brandsList',
             'defaultRequired' => true,
         ],
+        'collectionsListId' => [
+            'type' => 'select.universal_options_multiple',
+            'method' => 'getCollectionsList',
+            'defaultRequired' => true,
+        ],
         'categories' => [
             'type' => 'select.universal_options_multiple',
             'property' => 'categoriesList',
