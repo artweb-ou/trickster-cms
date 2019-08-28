@@ -36,10 +36,11 @@ window.AjaxProductListComponent = function(productElement, productId, productsLi
             [].forEach.call(productsListSetsArray, function(productsListSet, i) {
              //   new AjaxSelectComponent(genericIconFormElement, genericIconFormElement.dataset.select, 'admin');
                 if (productsListSet === 'quickview') {
+                    self.productElement.classList += ' product_with_quickview';
                     productElementQuickView = document.createElement('div');
                     productElementQuickView.className = 'product_quickview';
                     productElementQuickViewLink = document.createElement('a');
-                    productElementQuickViewLink.className = 'product_quickview_link';
+                    productElementQuickViewLink.className = 'product_quickview_link product_quickview_button';
                     productElementQuickViewUrl = '/ajaxProductList/listElementId:' + window.currentElementId + '/elementId:' + productId;
                     productElementQuickViewLink.href = productElementQuickViewUrl;
                     productElementQuickViewLink.innerText = translationsLogics.get('product.quickview');

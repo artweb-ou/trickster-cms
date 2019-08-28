@@ -44,7 +44,7 @@
                     </tbody>
                 </table>
             {else}
-                <div class='category_details_products products_list'>
+                <div class='category_details_products products_list' data-products-list="quickview, basket">
                     {$template = $theme->template("product.{$element->getProductsLayout()}.tpl", true)}
                     {if !$template}
                         {$template = $theme->template('product.thumbnailsmall.tpl')}

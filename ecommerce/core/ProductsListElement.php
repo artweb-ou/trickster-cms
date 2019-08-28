@@ -256,6 +256,40 @@ abstract class ProductsListElement extends menuStructureElement
         return $this->productsList;
     }
 
+    public function getSingleProduct($singleId)
+    {
+        if ($this->productsList !== null) {
+            return $this->productsList;
+        }
+        $cacheKey = $this->getCacheKey();
+        $cache = $this->getElementsListCache('prList:' . $cacheKey, 3600);
+        if ($this->productsList = $cache->load()) {
+            return $this->productsList;
+        }
+
+        $this->productsList = [];
+        if ($filteredProductsQuery = clone $this->getFilteredProductsQuery()) {
+            $pager = $this->getProductsPager();
+
+            $filteredProductsQuery->skip($pager->startElement)->take($this->getFilterLimit());
+            if ($records = $filteredProductsQuery->get()) {
+                $productIds = array_column($records, 'id');
+                $parentRestrictionId = $this->getProductsListParentRestrictionId();
+                $structureManager = $this->getService('structureManager');
+                foreach ($productIds as &$productId) {
+                    if ($product = $structureManager->getElementById($productId, $parentRestrictionId)) {
+                        if ($productId == $singleId) {
+                            $this->productsList[] = $product;
+                        }
+                    }
+                }
+            }
+        }
+        $cache->save($this->productsList);
+
+        return $this->productsList;
+    }
+
     public function getFilteredProductsAmount()
     {
         if ($this->filteredProductsAmount === null) {
