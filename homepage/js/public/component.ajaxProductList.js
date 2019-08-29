@@ -278,13 +278,46 @@ window.AjaxProductListSingleItem = function(productId,productItem) {
     // quickElementInner[1].innerHTML = productItem.title;
 
 
+ //   smartyRenderer.setTemplate('product.detailed.js.tpl');
 
+    // var quickTpl = new jSmart( document.getElementById('product.detailed.js.tpl').innerHTML );
+    // var quickRes = quickTpl.fetch( {} );
+ //   quickElement.innerHTML = quickRes;
 
+    var buildHtml = function() {
+        var templateInternal = 'product.detailed.js.tpl';
+        var compiled = new jSmart(window.templates[templateInternal]);
+
+        quickElement.innerHTML = compiled.fetch({
+            // 'element': self,
+            // 'selectedCurrencyItem': window.selectedCurrencyItem,
+            // 'checkout': checkout,
+        });
+        /*
+
+                if (rowsContainerElement = componentElement.querySelector('.shoppingbasket_table_rows')) {
+                    var productRows = rowsContainerElement.querySelectorAll('.shoppingbasket_table_product');
+                    if (productRows) {
+                        for (var i = 0; i < productRows.length; i++) {
+                            var basketProductId = productRows[i].dataset.id;
+                            if (typeof productComponentsIndex[basketProductId] !== 'undefined') {
+                                productComponentsIndex[basketProductId].setComponentElement(productRows[i]);
+                            }
+                        }
+                    }
+                }
+        */
+
+    };
+
+    buildHtml();
     message['title'] = productItem.title;
     message['content'] = quickElement.outerHTML;
     message['footer'] = addToBasket.outerHTML;
 
     // window.ModalActionComponent = function(checkboxElement, footerElement, elementForPosition, additionalClassName, bubbleCloseTag, message) {
+
+
 
     var modalActionComponent = new ModalActionComponent(false, 'multiple', quickElement, additionalContainerClassName, false, message); // checkbox-input, multiple footer buttons, element for position, messages
     if(modalActionComponent) {

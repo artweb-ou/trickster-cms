@@ -59,3 +59,8 @@
         {include file=$theme->template('pager.tpl') pager=$pager}
     </div>
 {/if}
+<script>
+    window.templates = window.templates || {ldelim}{rdelim};
+    window.templates['product.detailed.js.tpl'] = {$theme->getTemplateSource('product.detailed.js.tpl', true)};
+</script>
+
