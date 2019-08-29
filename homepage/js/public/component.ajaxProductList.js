@@ -284,12 +284,19 @@ window.AjaxProductListSingleItem = function(productId,productItem) {
     // var quickRes = quickTpl.fetch( {} );
  //   quickElement.innerHTML = quickRes;
 
+    var content;
     var buildHtml = function() {
-        var templateInternal = 'product.detailed.js.tpl';
-        var compiled = new jSmart(window.templates[templateInternal]);
+        var templateInternal = 'product.details.tpl';
+        smartyRenderer.setTemplate(templateInternal);
+        content = smartyRenderer.fetch({'element': productItem.selectionsImages});
 
+        var compiled = new jSmart(window.templates[templateInternal]);
+        console.log(compiled)
         quickElement.innerHTML = compiled.fetch({
-            // 'element': self,
+            'element': self,
+           // 'getImagesList' : function() {
+           //     return productItem.selectionsImages;
+           // },
             // 'selectedCurrencyItem': window.selectedCurrencyItem,
             // 'checkout': checkout,
         });
@@ -311,8 +318,9 @@ window.AjaxProductListSingleItem = function(productId,productItem) {
     };
 
     buildHtml();
+  //  quickElement.innerText = content;
     message['title'] = productItem.title;
-    message['content'] = quickElement.outerHTML;
+    message['content'] = content;
     message['footer'] = addToBasket.outerHTML;
 
     // window.ModalActionComponent = function(checkboxElement, footerElement, elementForPosition, additionalClassName, bubbleCloseTag, message) {
@@ -354,6 +362,14 @@ window.AjaxProductListSingleItem = function(productId,productItem) {
   //  document.body.appendChild(quickElement);
 
     // console.log(productId)
+
+    // function getImagesList() {
+    //     return productItem.selectionsImages;
+    // }
+    this.getImagesList = function() {
+        return productItem.selectionsImages;
+    };
+
 };
 
 /*

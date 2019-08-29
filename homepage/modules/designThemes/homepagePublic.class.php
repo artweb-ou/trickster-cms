@@ -52,6 +52,7 @@ class homepagePublicDesignTheme extends DesignTheme
             'logics.mobileCommonMenu.js',
             'logics.smoothScrollTo.js',
             'logics.spoiler.js',
+            'logics.jsmart.js',
             'mixin.LazyLoading.js',
             'mixin.slides.js',
             'mixin.scrollPages.js',
