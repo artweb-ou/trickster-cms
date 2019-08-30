@@ -9,7 +9,6 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
     public $defaultActionName = 'show';
     public $role = 'content';
     protected $answers;
-    private $id;
 
     public function getFormAllowedTypes()
     {
@@ -299,7 +298,7 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
     /**
      * @return array
      */
-    protected function getInheritedCustomFieldsList()
+    public function getInheritedCustomFieldsList()
     {
         if (is_null($this->customFieldsList)) {
             $this->customFieldsList = [];
@@ -317,23 +316,6 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
 
     }
 
-    /*
-
-            if ($this->customFieldsList === null) {
-            $this->customFieldsList = parent::getCustomFieldsList();
-            $controller = controller::getInstance();
-//            if ($controller->getApplicationName() === 'mobile') {
-//                foreach ($this->customFieldsList as $fieldInfo) {
-//                    if ($fieldInfo->fieldType === 'dateInput'
-//                        && $fieldInfo->validator === 'validDate') {
-//                        $fieldInfo->validator = '';
-//                    }
-//                }
-//            }
-        }
-        return $this->customFieldsList;
-
-     */
 
     /**
      * @return array
