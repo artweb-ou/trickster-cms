@@ -9,12 +9,15 @@ class SharedSingleLanguageSeoStructure extends ElementForm
         ],
         'metaTitle' => [
             'type' => 'input.text',
+            'translationGroup' => 'seo',
         ],
         'h1' => [
             'type' => 'input.text',
+            'translationGroup' => 'seo',
         ],
         'metaDescription' => [
             'type' => 'input.textarea',
+            'translationGroup' => 'seo',
         ],
         'canonicalUrl' => [
             'type' => 'input.text',
@@ -22,6 +25,7 @@ class SharedSingleLanguageSeoStructure extends ElementForm
         ],
         'metaDenyIndex' => [
             'type' => 'input.checkbox',
+            'translationGroup' => 'seo',
         ],
     ];
 

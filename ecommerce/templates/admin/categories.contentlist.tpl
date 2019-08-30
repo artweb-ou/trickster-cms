@@ -11,7 +11,10 @@
 			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedTypes()}
 		</div>
 		{assign var='formNames' value=$rootElement->getFormNames()}
-		{if $currentElement->getChildrenList()}
+		{if !isset($contentList)}
+			{assign 'contentList' $currentElement->getChildrenList()}
+		{/if}
+		{if $contentList}
 			{*  __ data table *}
 			<table class='content_list'>
 			<thead>
@@ -23,9 +26,9 @@
 						{translations name='label.name'}
 					</th>
 					<th class='image_column'>
-						{if method_exists ($contentList[0], 'getImageUrl')}
-								{translations name='label.image'}
-						{/if}
+							{if method_exists ($contentList[0], 'getImageUrl')}
+									{translations name='label.image'}
+							{/if}
 					</th>
 					<th class="name_column">
 						{translations name='label.categoryid'}

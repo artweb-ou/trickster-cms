@@ -83,7 +83,7 @@ class commentElement extends structureElement implements MetadataProviderInterfa
     public function getParentElement()
     {
         $structureManager = $this->getService('structureManager');
-        return $structureManager->getElementsFirstParent($this->id, false, 'commentTarget');
+        return $structureManager->getElementsFirstParent($this->id, 'commentTarget');
     }
 
     public function logCreation()

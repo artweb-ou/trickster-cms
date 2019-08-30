@@ -1,0 +1,14 @@
+{
+  "methodCalls": [
+    {
+      "class": "\\DependencyInjectionContextTrait",
+      "method": "getService",
+      "position": 0
+    },
+    {
+      "class": "\\DbLoggableApplication",
+      "method": "getService",
+      "position": 0
+    }
+  ]
+}

@@ -38,8 +38,9 @@ class IconsManager
     public function getAllIcons()
     {
         if ($this->iconElements === null) {
+            $this->iconElements = [];
             $allIconsIds = $this->db->table('module_generic_icon')->select('module_generic_icon.id')
-                ->leftJoin('structure_links', function($query){
+                ->leftJoin('structure_links', function ($query) {
                     $query->on('module_generic_icon.id', '=', 'structure_links.childStructureId')
                         ->where('structure_links.type', '=', 'structure');
                 })

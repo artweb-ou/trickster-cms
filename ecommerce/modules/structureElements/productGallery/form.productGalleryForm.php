@@ -22,7 +22,6 @@ class ProductGalleryFormStructure extends ElementForm
                 2=>'marker_title_mouseover',
                 3=>'show_both'
             ],
-            'translationGroup' => 'menulogic',
         ],
         'popup'                 => [
             'type' => 'input.checkbox',

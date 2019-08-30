@@ -18,7 +18,7 @@ class fileReaderRendererPlugin extends rendererPlugin
         $this->requestHeadersManager = $this->getService('requestHeadersManager');
         $this->httpResponse = CmsHttpResponse::getInstance();
 
-        $this->maxAge = 8 * 60 * 60 * 24;
+        $this->maxAge = 365 * 60 * 60 * 24;
         $this->chunkSize = 10 * 1024 * 1024;
 
         $this->preferredEncodings = ['identity'];

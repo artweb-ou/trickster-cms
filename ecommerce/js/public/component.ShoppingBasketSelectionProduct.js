@@ -31,8 +31,10 @@ window.ShoppingBasketSelectionProduct = function(basketProductId, initData) {
         if (amountPlusButton = componentElement.querySelector('.shoppingbasket_table_amount_plus')) {
             eventsManager.addHandler(amountPlusButton, 'click', plusClickHandler);
         }
-        if (removeButton = componentElement.querySelector('.shoppingbasket_table_remove')) {
-            eventsManager.addHandler(removeButton, 'click', removeClickHandler);
+        if (removeButton = componentElement.querySelectorAll('.shoppingbasket_table_remove')) {
+            for(var i = 0; i < removeButton.length; i ++) {
+                eventsManager.addHandler(removeButton[i], 'click', removeClickHandler);
+            }
         }
     };
 

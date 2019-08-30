@@ -113,9 +113,6 @@ abstract class ProductsListElement extends menuStructureElement
             $this->filteredProductsQuery = false;
 
             $filteredProductsQuery = clone $this->getProductsListBaseOptimizedQuery();
-            /**
-             * @var structureManager $structureManager
-             */
             $structureManager = $this->getService('structureManager');
             if ($categoryIds = $this->getFilterCategoryIds()) {
                 $deepCategoryIds = [];
@@ -220,16 +217,17 @@ abstract class ProductsListElement extends menuStructureElement
             if ($sort && $sort == 'manual') {
                 $this->applyManualSorting($filteredProductsQuery, $filteredProductsQuery);
             } elseif ($sort == 'date') {
-                $filteredProductsQuery->join('structure_elements', 'filteredproducts.id', '=', 'structure_elements.id', 'left');
+                $filteredProductsQuery->join('structure_elements', 'baseproducts.id', '=', 'structure_elements.id', 'left');
                 $filteredProductsQuery->orderBy('structure_elements.dateCreated', $order);
             } elseif ($sort == 'brand') {
-                $filteredProductsQuery->join('module_brand', 'filteredproducts.brandId', '=', 'module_brand.id', 'left');
+                $filteredProductsQuery->join('module_brand', 'baseproducts.brandId', '=', 'module_brand.id', 'left');
                 $filteredProductsQuery->orderBy('module_brand.title', $order);
             } else {
                 $filteredProductsQuery->orderBy($sort, $order);
             }
 
-            $filteredProductsQuery->select('*');
+            $filteredProductsQuery->select(['baseproducts.id', 'baseproducts.title', 'baseproducts.brandId', 'baseproducts.availability', 'baseproducts.price']);
+
             /**
              * @var Connection $db
              */
@@ -267,9 +265,6 @@ abstract class ProductsListElement extends menuStructureElement
             if ($records = $filteredProductsQuery->get()) {
                 $productIds = array_column($records, 'id');
                 $parentRestrictionId = $this->getProductsListParentRestrictionId();
-                /**
-                 * @var structureManager $structureManager
-                 */
                 $structureManager = $this->getService('structureManager');
                 foreach ($productIds as &$productId) {
                     if ($product = $structureManager->getElementById($productId, $parentRestrictionId)) {
@@ -728,6 +723,15 @@ abstract class ProductsListElement extends menuStructureElement
          * @var Connection $db
          */
         $db = $this->getService('db');
+
+
+//
+//        select `links`.`parentStructureId`, `values`.`id` from `engine_module_product_selection_value` AS `values`
+//left join `engine_structure_links` AS links on `values`.`id` = `links`.`childStructureId` and `links`.`type` = 'structure'
+//where `links`.`parentStructureId` in ('29146', '29135', '29122', '11107')
+//group by `values`.id
+//order by `links`.`position` asc
+//    ;
 
         $query = $db->table('module_product_parameter_value')
             ->select(['parameterId', 'value'])->distinct()

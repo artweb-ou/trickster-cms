@@ -405,7 +405,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
      */
     public function getAllowedTypes($currentAction = 'showFullList')
     {
-        if ($this->allowedTypesByAction[$currentAction] === null) {
+        if (!isset($this->allowedTypesByAction[$currentAction])) {
             $this->allowedTypesByAction[$currentAction] = [];
 
             $childCreationAction = 'showForm';

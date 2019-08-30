@@ -95,7 +95,7 @@ class ajaxSearchApplication extends controllerApplication
             $page = (int)$controller->getParameter('page');
             $offset = max(0, $page - 1) * $resultsLimit;
             $search = new Search();
-            if ($this->mode == 'public'){
+            if ($this->mode == 'public') {
                 $search->setLanguageId($languagesManager->getCurrentLanguageId());
             }
             $search->setInput($query);

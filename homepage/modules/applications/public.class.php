@@ -49,7 +49,6 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             'rootUrl' => $controller->rootURL,
             'rootMarker' => $this->configManager->get('main.rootMarkerPublic'),
         ], true);
-
         $this->renderer->assign('js_translations', $this->loadJsTranslations());
 
         $resourcesUniterHelper = $this->getService('ResourcesUniterHelper', ['currentThemeCode' => $currentTheme->getCode()], true);

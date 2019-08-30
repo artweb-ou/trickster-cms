@@ -163,10 +163,20 @@
 
 .shoppingbasket_delivery_vatnumber.form_field {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    .check_vat_number_input {
+        flex-basis: @250pt;
+        flex-shrink: 0;
+        flex-grow: 1;
+        margin-bottom: @10pt;
+    }
 }
 
 .check_vat_button.button {
     margin-left: 1rem;
+    line-height: 1.25;
+    margin-bottom: @10pt;
 }
 
 .shoppingbasket_payer_data_controls {

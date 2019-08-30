@@ -163,5 +163,7 @@ class feedbackAnswerElement extends dynamicGroupFieldsStructureElement
         }
         parent::deleteElementData();
     }
+
+    public function getInheritedCustomFieldsList(){}
 }
 
