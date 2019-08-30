@@ -1031,4 +1031,20 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             ];
         }
     }
+
+    /**
+     * @return int
+     */
+    public function getLevel()
+    {
+        return str_repeat('&nbsp;&nbsp;&nbsp;', $this->level);
+    }
+
+    /**
+     * @param int $level
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+    }
 }
