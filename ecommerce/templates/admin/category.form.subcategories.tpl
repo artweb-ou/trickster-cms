@@ -11,10 +11,10 @@
 			{include file=$theme->template("block.newelement.tpl") allowedTypes=$currentElement->getAllowedTypes()}
 			{if count($currentElement->getChildCategories()) && isset($rootPrivileges.deleteElements)}
 				<button type='submit' onclick='if (!confirm("{translations name='message.deleteselectedconfirm'}")) return false;'
-						class='button warning_button'><span class="icon icon_delete"></span>{translations name='button.deleteselected'}</button>
+						class='actions_form_button button warning_button'><span class="icon icon_delete"></span>{translations name='button.deleteselected'}</button>
 			{/if}
 			{if isset($rootPrivileges.moveElements)}
-				<button class="button actions_form_move">{translations name="button.moveselected"}</button>
+				<button class="actions_form_button button actions_form_move">{translations name="button.moveselected"}</button>
 			{/if}
 		</div>
 
