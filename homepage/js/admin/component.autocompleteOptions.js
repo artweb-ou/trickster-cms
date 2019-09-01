@@ -15,8 +15,10 @@ window.autocompleteOptionsComponent = function(formElement, autocompleteOptionsE
         hiddenRows = formElement.querySelectorAll(hiddenRowSelector);
         isPageUrl = autocompleteOptionsElement.value === 'pageUrl';
         if (hide_public) {
-            hide_public.checked = isPageUrl;
-            eventsManager.fireEvent(hide_public, 'change');
+            if(isPageUrl) {
+                hide_public.checked = true;
+                eventsManager.fireEvent(hide_public, 'change');
+            }
             if (hiddenRows.length>0) {
                 for (i = hiddenRows.length; i--;) {
                     hiddenRows[i].style.display = isPageUrl ? 'none' : '';

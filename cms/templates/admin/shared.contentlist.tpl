@@ -6,7 +6,7 @@
 
 {if $element->hasActualStructureInfo()}
 	<div class="content_list_block">
-		<form class="content_list_form" action="{$currentElement->getFormActionURL()}" method="post" enctype="multipart/form-data">
+		<form class="content_list_form{if !empty($currentElement->getCurrentParentElement()->dataResourceName)} content_list_form_{$currentElement->getCurrentParentElement()->dataResourceName}{/if}" action="{$currentElement->getFormActionURL()}" method="post" enctype="multipart/form-data">
 			{if $controls}
 {*				{if $currentElement->getAllowedTypes($currentElement->getActionName()) || !empty($actionButtons)}*}
 					<div class='controls_block content_list_controls'>
