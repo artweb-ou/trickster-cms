@@ -18,6 +18,12 @@ class feedbackAnswerElement extends dynamicGroupFieldsStructureElement
         return $structureManager->getElementsFirstParent($this->id);
     }
 
+    public function getBaseUrl()
+    {
+        $controller = $this->getService('controller');
+        return $controller->baseURL;
+    }
+
     public function getAdminReport()
     {
         $result = [];
@@ -39,6 +45,7 @@ class feedbackAnswerElement extends dynamicGroupFieldsStructureElement
                 $fieldInfo = [
                     'title' => $field->title,
                     'type' => $field->fieldType,
+                    'subType' => $field->autocomplete,
                 ];
                 if ($field->fieldType != 'fileinput') {
                     if (!empty($genericValues[$field->id])) {

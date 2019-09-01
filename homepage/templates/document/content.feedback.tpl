@@ -20,7 +20,11 @@
 									<div class="form_value_multiple">{$selectedItem}</div>
 								{/foreach}
 							{else}
-								{$formField.fieldValue}
+								{if $formField.fieldSubType == 'pageUrl'}
+									<a target="_blank" href="{$data.baseUrl}{$formField.fieldValue}">{$formField.fieldValue}</a>
+								{else}
+									{$formField.fieldValue}
+								{/if}
 							{/if}
 						{elseif $formField.fieldType == 'checkbox'}
 							{if $formField.fieldValue == '1'}&#9745;{else}&#9744;{/if}

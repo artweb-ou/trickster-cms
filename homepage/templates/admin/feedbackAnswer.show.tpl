@@ -33,7 +33,11 @@
                                 {/if}
                             {/foreach}
                         {else}
+							{if $field.subType == 'pageUrl'}
+								<a target="_blank" href="{$element->getBaseUrl()}{$field.value}">{$field.value}</a>
+							{else}
                             {$field.value}
+                        	{/if}
                         {/if}
 					{elseif $field.fileInput }
 						{foreach $field.fileInput  as $file}

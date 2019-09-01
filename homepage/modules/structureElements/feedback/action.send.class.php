@@ -16,6 +16,7 @@ class sendFeedback extends structureElementAction
             $data = [
                 'groups' => [],
                 'heading' => $subject,
+                'baseUrl' => $structureManager->rootURL,
             ];
 
             $emailToCheck = false;
@@ -80,6 +81,7 @@ class sendFeedback extends structureElementAction
                             'fieldTitle' => $formField->title,
                             'fieldType' => $formField->fieldType,
                             'fieldValue' => $value,
+                            'fieldSubType' => $formField->autocomplete,
                         ];
                         $groupInfo['formFields'][] = $fieldInfo;
 
