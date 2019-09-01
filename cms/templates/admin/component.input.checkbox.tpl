@@ -1,4 +1,4 @@
-<div class="form_field_{$fieldName} form_items">
+<div class="form_field_{$fieldName} form_items{if !empty($item.trClass)} {$item.trClass}{/if}">
     <span class="form_label checkbox_header">
         {translations name="{$translationGroup}.{strtolower($fieldName)}"}
     </span>

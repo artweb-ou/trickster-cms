@@ -21,8 +21,6 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
         $moduleStructure['destination'] = 'text';
         $moduleStructure['content'] = 'html';
         $moduleStructure['buttonTitle'] = 'text';
-        $moduleStructure['needSaveCurrentUrl'] = 'checkbox';
-        $moduleStructure['currentUrl'] = 'text';
         $moduleStructure['role'] = 'text';
 
         $moduleStructure['layout'] = 'text';
@@ -338,11 +336,17 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
         return $this->customFieldsGroups;
     }
 
-    protected function getCurrentURL()
+    public function getCurrentPageUrl()
     {
-        $controller = $this->getService('controller');
-        return $controller->pathURL;
+        $requestHeadersManager = $this->getService('requestHeadersManager');
+        $pageUrl = $requestHeadersManager->getReferer();
+        $structureManager = $this->getService('structureManager');
+        $rootUrl = $structureManager->rootURL;
+
+        return  mb_substr($pageUrl, mb_strlen($rootUrl));
     }
+
+
 
 }
 

@@ -4,10 +4,10 @@ class sendFeedback extends structureElementAction
 {
     use AjaxFormTrait;
     protected $loggable = true;
-
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         $translationsManager = $this->getService('translationsManager');
+
 
         if ($this->validated && $this->validateAjaxRequest()) {
             $settings = $this->getService('settingsManager')->getSettingsList();
@@ -68,6 +68,12 @@ class sendFeedback extends structureElementAction
                             if (count($parts) === 3) {
                                 $value = implode('.', array_reverse($parts));
                             }
+                        }
+                        if ($formField->autocomplete == 'pageUrl') {
+                            /**
+                             * @var $structureElement feedbackElement
+                             */
+                             $value = $structureElement->getCurrentPageUrl();
                         }
                         $fieldInfo = [
                             'fieldName' => $fieldName,
@@ -203,4 +209,5 @@ class sendFeedback extends structureElementAction
     {
         $expectedFields = array_merge($expectedFields, $this->structureElement->getCustomExpectedFields());
     }
+
 }

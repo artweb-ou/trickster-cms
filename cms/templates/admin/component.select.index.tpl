@@ -13,8 +13,6 @@
 {assign var='currentStatus' value=''}
 {assign var='currentSelected' value=''}
 {assign var='additionalCell' value=[]}
-{assign var='optionAttr' value=''}
-
 {if isset($item.additionalCell)}
 	{$additionalCell = $item.additionalCell}
 {/if}
@@ -33,12 +31,9 @@
 						{$currentStatus = $value}
 						{$currentSelected = ' selected="selected"'}
 					{/if}
-
 					<option value="{$value}"{$currentSelected}>
 						{if is_numeric($title)}
 							{$title}
-						{elseif empty($title)}
-							{""}
 						{else}
 							{translations name="{$translationGroup}.{$title}"}
 						{/if}

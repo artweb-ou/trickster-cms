@@ -5,7 +5,7 @@
     {foreach from=$groupElement->getFormFields() item=formField}
         {if $formField->hidden != 1}
             {assign var='fieldName' value=$formField->fieldName}
-            {if $placeholders} {$placeholder=" placeholder='{$formField->title}'"}{/if}
+            {if !empty($placeholders)} {$placeholder=" placeholder='{$formField->title}'"}{else}{$placeholder=''}{/if}
 
             <div data-fieldname="{$formNames.$fieldName}" class='form_table_row_{$formField->fieldType}{if $formErrors.$fieldName} form_error{/if} field{$formField->id} feedback_field_container' data-type="container_{$formField->fieldType}">
                 <div class="form_label feedback_field_label{if $formField->fieldType == 'select'}{if $formField->getSelectionType()} {$formField->getSelectionType()}{/if}{/if}">

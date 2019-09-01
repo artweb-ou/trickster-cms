@@ -60,6 +60,8 @@ class homepageAdminDesignTheme extends DesignTheme
             'component.showFilters.js',
             'logics.actionsButtons.js',
             'component.actionsButtons.js',
+            'logics.autocompleteOptions.js',
+            'component.autocompleteOptions.js',
         ];
     }
 }

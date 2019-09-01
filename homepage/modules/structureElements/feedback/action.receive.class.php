@@ -26,8 +26,6 @@ class receiveFeedback extends structureElementAction
             'destination',
             'content',
             'buttonTitle',
-            'needSaveCurrentUrl',
-            'currentUrl',
             'role',
             'displayMenus'
         ];
