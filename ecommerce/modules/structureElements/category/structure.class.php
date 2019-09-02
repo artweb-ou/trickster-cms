@@ -1061,4 +1061,9 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     {
         $this->level = $level;
     }
+
+    public function isHiddenCollection() {
+        $x = $this->getCurrentLayout('collectionLayout') == 'hide';
+        return $this->getCurrentLayout('collectionLayout') == 'hide';
+    }
 }
