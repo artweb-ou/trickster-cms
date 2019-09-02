@@ -16,14 +16,14 @@ window.ProductCatalogueFormComponent = function(componentElement) {
             if (categoriesRowElement) {
                 categoriesRowElement.style.display = '';
             }
-            if (categoriesRowElement) {
+            if (populationRowElement) {
                 populationRowElement.style.display = '';
             }
         } else {
             if (categoriesRowElement) {
                 categoriesRowElement.style.display = 'none';
             }
-            if (categoriesRowElement) {
+            if (populationRowElement) {
                 populationRowElement.style.display = 'none';
             }
         }
