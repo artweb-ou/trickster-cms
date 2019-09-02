@@ -56,6 +56,7 @@
         'categoryLayout',
         'productsLayout',
         'colorLayout',
+        'collectionLayout',
         'search',
     ],
     'category.categoryLayout.options' => [
@@ -78,7 +79,15 @@
         'table',
         'wide',
     ],
+
     'category.productsLayout.default' => 'thumbnail',
+    'category.collectionLayout.options' => [
+        'hide',
+        'thumbnailsmall',
+        'detailed',
+        'scroll'
+    ],
+    'category.collectionLayout.default' => 'thumbnailsmall',
     'category.search.default' => 'thumbnail',
 
     'discountsList.layouts' => [

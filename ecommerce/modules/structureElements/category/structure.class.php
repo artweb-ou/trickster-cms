@@ -53,6 +53,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $moduleStructure['layout'] = 'text';
         $moduleStructure['productsLayout'] = 'text';
         $moduleStructure['colorLayout'] = 'text';
+        $moduleStructure['collectionLayout'] = 'text';
         $moduleStructure['productsMobileLayout'] = 'text';
         $moduleStructure['categoriesMobileLayout'] = 'text';
 
