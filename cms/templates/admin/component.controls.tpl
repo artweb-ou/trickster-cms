@@ -3,6 +3,7 @@
 {/if}
 {if !empty($form)}
 	{$buttons = $form->getControls()}
+    {$element = $form->getElement()}
 {else}
 	{$buttons = [
 			'save' => [
@@ -16,9 +17,6 @@
 			'confirmation' => 'message.deleteelementconfirmation'
 		]
 	]}
-{/if}
-{if $form->getElement()}
-	{$element = $form->getElement()}
 {/if}
 <div class="controls_block form_controls">
 	<input type="hidden" value="{$element->id}" name="id" />
