@@ -343,6 +343,9 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
         $structureManager = $this->getService('structureManager');
         $rootUrl = $structureManager->rootURL;
 
+        if (mb_strlen($rootUrl) == mb_strlen($pageUrl)) {
+            return '../';
+        }
         return  mb_substr($pageUrl, mb_strlen($rootUrl));
     }
 
