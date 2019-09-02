@@ -118,6 +118,12 @@ class homepagePublicDesignTheme extends DesignTheme
             'mixin.scrollAttaching.js',
             'logics.ajaxProductList.js',
             'component.ajaxProductList.js',
+            'logics.templatesManager.js',
+
+            'logics.pager.js',
+            'component.pager.js',
+            'basic.urlParameters.js',
+
         ];
     }
 }

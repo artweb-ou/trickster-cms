@@ -3,7 +3,7 @@
     'post24Enabled' => false,
     'smartPostEnabled' => false,
     'pageAmountProducts' => 40,
-    'availablePageAmountProducts' => [20, 40, 60, 100],
+    'availablePageAmountProducts' => [5, 10, 20, 40, 60, 100],
     'vatCheckEnable' => false,
     'vatCheckCurrentCountry' => 'EE'
 ];

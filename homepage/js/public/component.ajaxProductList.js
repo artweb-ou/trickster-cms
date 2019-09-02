@@ -291,7 +291,7 @@ window.AjaxProductListSingleItem = function(productId,productItem) {
         content = smartyRenderer.fetch({'element': productItem.selectionsImages});
 
         var compiled = new jSmart(window.templates[templateInternal]);
-        console.log(compiled)
+        // console.log(compiled)
         quickElement.innerHTML = compiled.fetch({
             'element': self,
            // 'getImagesList' : function() {
