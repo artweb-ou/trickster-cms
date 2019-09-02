@@ -49,7 +49,6 @@ class CollectionFormStructure extends ElementForm
         ],
     ];
 
-
     public function getTranslationGroup()
     {
         return 'brand';

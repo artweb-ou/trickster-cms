@@ -266,7 +266,6 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         }
     }
 
-
     /**
      * @param categoryElement $category
      * @param $allCategories

@@ -18,7 +18,7 @@ class receiveCollectionsList extends structureElementAction
             $compiledLinks = $linksManager->getElementsLinksIndex($structureElement->id, 'collections', 'parent');
 
             foreach ($collectionsList as &$collection) {
-                if (isset($compiledLinks[$collection->id]) && !in_array($collection->id, $structureElement->brands) && !$structureElement->connectAll
+                if (isset($compiledLinks[$collection->id]) && !in_array($collection->id, $structureElement->collections) && !$structureElement->connectAll
                 ) {
                     $compiledLinks[$collection->id]->delete();
                 } elseif (!isset($compiledLinks[$collection->id]) && ($structureElement->connectAll || in_array($collection->id, $structureElement->collections))

@@ -53,7 +53,6 @@ class collectionsListElement extends structureElement implements ConfigurableLay
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
-        $moduleStructure['brands'] = 'numbersArray';
         $moduleStructure['columns'] = 'text';
         $moduleStructure['content'] = 'html';
         $moduleStructure['connectAll'] = 'checkbox';
@@ -64,7 +63,7 @@ class collectionsListElement extends structureElement implements ConfigurableLay
         $moduleStructure['metaDenyIndex'] = 'checkbox';
         $moduleStructure['productsLayout'] = 'text';
         $moduleStructure['collection'] = 'text';
-        $moduleStructure['collections'] = 'array';
+        $moduleStructure['collections'] = 'numbersArray';
     }
 
     public function getCollectionsList()

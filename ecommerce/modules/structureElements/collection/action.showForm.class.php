@@ -16,9 +16,6 @@ class showFormCollection extends structureElementAction
             $connectedCollectionsListsIds = $structureElement->getConnectedCollectionsListsIds();
             if ($collectionsListElements = $structureManager->getElementsByType('collectionsList')) {
                 foreach ($collectionsListElements as &$collectionsListElement) {
-                    if ($collectionsListElement->connectAll) {
-                        continue;
-                    }
                     $item = [];
                     $item['id'] = $collectionsListElement->id;
                     $item['title'] = $collectionsListElement->getTitle();

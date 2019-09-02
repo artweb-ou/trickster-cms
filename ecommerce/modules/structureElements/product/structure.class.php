@@ -183,8 +183,8 @@ class productElement extends structureElement implements
 
         $moduleStructure['unit'] = 'text';
         $moduleStructure['subTitle'] = 'text';
-
         $moduleStructure['connectedIconIds'] = 'array';
+        $moduleStructure['collectionsListId'] = 'array';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
