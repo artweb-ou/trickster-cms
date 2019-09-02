@@ -1032,6 +1032,19 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         }
     }
 
+    public function getCollectionLists()
+    {
+        /**
+         * @var $structureManager structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        $collectionLists = $structureManager->getElementsByType('collection');
+        foreach ($collectionLists as &$collection) {
+            $collection->URL = $collection->URL . 'category:' . $this->id;
+        }
+        return $collectionLists;
+    }
+
     /**
      * @return int
      */
