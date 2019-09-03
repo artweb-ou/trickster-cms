@@ -1,17 +1,25 @@
-window.PagerComponent = function(pagerPage, pageIndex, selectedPageIndex) {
+window.PagerComponent = function(pagerPage, pageIndex) {
 	var self = this;
-	this.pagerPage = false;
+//	this.pagerPage = false;
 	this.urlParameters = [];
-	var currentPage;
-
 	var data = [];
-	data['number'] = 2;
+	this.currentPage;
+	this.currentPageIndex;
+	// data['number'] = 2;
 
 	var init = function() {
-		if (!selectedPageIndex) {
-			selectedPageIndex = 0;
+		if (domHelper.hasClass(pagerPage, 'pager_active')) {
+			this.currentPageIndex = pageIndex;
+			this.currentPage = pagerPage;
+			// console.log(selectedPageIndex)
 		}
-		eventsManager.addHandler(pagerPage, 'click', self.getChangePage(selectedPageIndex));
+
+		eventsManager.addHandler(pagerPage, 'click', getChangePage);
+		// else {
+		// 	eventsManager.addHandler(pagerPage, 'click', getChangePage);
+		//
+		// }
+		// changePage();
 	//	self.getChangePage();
 	};
 //	pagerComponent = window.pagerLogics.getPager(window.currentElementUrl, listInfo.total, listInfo.pageSize, page, 'page', 4);
@@ -38,20 +46,35 @@ window.PagerComponent = function(pagerPage, pageIndex, selectedPageIndex) {
 			self.componentElement = componentElement;
 		};
 	*/
-	var changePage = function(event) {
-		eventsManager.preventDefaultAction(event);
-		console.log(pagerPage.text)
-		window.urlParameters.setParameter('page', pagerPage.text);
-		pagerPage.className += ' pager_active';
+	var changePage = function() {
+		// window.urlParameters.setParameter('page', pagerPage.text);
 
+
+		window.urlParameters.setParameter('page', pagerPage.text);
+		domHelper.removeClass(currentPage, 'pager_active');
+		domHelper.addClass(pagerPage, 'pager_active');
+		// currentPageIndex = pageIndex;
+		// currentPage = pagerPage;
+		this.currentPageIndex = pageIndex;
+		this.currentPage = pagerPage;
 		//     setParameter(namespaceURI: string, localName: string, value: any): void;
 		// http://klaasistuudio.local/est/peegel/limit:5/sort:price/page:2/
 	};
-	this.getChangePage = function(selectedPageIndex) {
-		pagerPage[selectedPageIndex].classList.remove('pager_active');
-		pagerPage.className += ' pager_active';
-		return changePage;
+	var getChangePage = function(event) {
+		eventsManager.preventDefaultAction(event);
+
+		if (pageIndex !== this.currentPageIndex) {
+			console.log(pageIndex, this.currentPageIndex)
+			console.log(this.currentPage)
+			changePage();
+		}
+
 	};
+	//	pagerPage.classList.remove('pager_active');
+	//	pagerPage.className += ' pager_active';
+	//	return changePage;
+
+	//	selectedPage();
 	// this.setParameter = function(name, value, ninjaUpdate) {
 	// 	if (value == false) {
 	// 		delete currentParameters[name];
@@ -70,7 +93,6 @@ window.PagerComponent = function(pagerPage, pageIndex, selectedPageIndex) {
 	};
 
 */
-
 
 	init();
 };
