@@ -1,8 +1,8 @@
 window.pagerLogics = new function() {
 	var initComponents = function() {
 		var pagerBlock = _('.pager_block')[0];
-		var selectedPageIndex = 0;
-		var selectedPage = false;
+		// var selectedPageIndex = 0;
+		// var selectedPage = false;
 		if (pagerBlock && pagerBlock.querySelectorAll('.pager_page').length >0 ) {
 
 			// Array.prototype.slice.call(pagerBlock.querySelectorAll('.pager_page')).forEach(function(pagerPage, i) {
@@ -37,6 +37,7 @@ window.pagerLogics = new function() {
 
 	//pager_block
 };
+/*
 window.PagerData = function(baseURL, elementsCount, elementsOnPage, currentPage, parameterName, visibleAmount) {
 	var self = this;
 
@@ -132,4 +133,4 @@ window.PagerData = function(baseURL, elementsCount, elementsOnPage, currentPage,
 		return element;
 	};
 	init();
-};
+};*/

@@ -3,8 +3,8 @@ window.PagerComponent = function(pagerPage, pageIndex) {
 //	this.pagerPage = false;
 	this.urlParameters = [];
 	var data = [];
-	this.currentPage;
-	this.currentPageIndex;
+	// this.currentPage;
+	// this.currentPageIndex;
 	// data['number'] = 2;
 
 	var init = function() {
@@ -13,7 +13,6 @@ window.PagerComponent = function(pagerPage, pageIndex) {
 			this.currentPage = pagerPage;
 			// console.log(selectedPageIndex)
 		}
-
 		eventsManager.addHandler(pagerPage, 'click', getChangePage);
 		// else {
 		// 	eventsManager.addHandler(pagerPage, 'click', getChangePage);
@@ -48,11 +47,13 @@ window.PagerComponent = function(pagerPage, pageIndex) {
 	*/
 	var changePage = function() {
 		// window.urlParameters.setParameter('page', pagerPage.text);
-
+//href='{$page.URL}'
 
 		window.urlParameters.setParameter('page', pagerPage.text);
 		domHelper.removeClass(currentPage, 'pager_active');
 		domHelper.addClass(pagerPage, 'pager_active');
+		changePagerPageTag(pagerPage,'span');
+		changePagerPageTag(currentPage,'a');
 		// currentPageIndex = pageIndex;
 		// currentPage = pagerPage;
 		this.currentPageIndex = pageIndex;
@@ -62,14 +63,53 @@ window.PagerComponent = function(pagerPage, pageIndex) {
 	};
 	var getChangePage = function(event) {
 		eventsManager.preventDefaultAction(event);
+		console.log(currentPage, currentPageIndex)
 
-		if (pageIndex !== this.currentPageIndex) {
-			console.log(pageIndex, this.currentPageIndex)
-			console.log(this.currentPage)
+		if (pageIndex !== currentPageIndex) {
+			// console.log(pageIndex, currentPageIndex)
+			// console.log(currentPage)
 			changePage();
 		}
 
 	};
+
+	var replacePagerPageTag = function() {
+		var newSelectedPage = document.createElement('a');
+		newSelectedPage.innerHTML = currentPage.innerHTML;
+		currentPage.parentNode.replaceChild(newSelectedPage, currentPage);
+	}
+
+	var changePagerPageTag = function(element, newTag) {
+		// var newSelectedPage = document.createElement(newTag);
+		// newSelectedPage.innerHTML = currentPage.innerHTML;
+		// currentPage.parentNode.replaceChild(newSelectedPage, currentPage);
+		//
+		// var parent = document.createElement("div");
+		// var child = document.createElement("p");
+		// parent.appendChild(child);
+		// var span = document.createElement("span");
+
+		let elementHtml = element.innerHTML;
+		let replacedElement = document.createElement(newTag);
+
+		// copy attributes
+	//	let savedAttributes = [];
+		for( var i=0, attrs=element.attributes, l=attrs.length; i<l; i++) {
+			replacedElement.setAttribute(attrs[i].name, attrs[i].value);
+		}
+
+		replacedElement.innerHTML = elementHtml;
+		//	console.log(savedAttributes);
+		console.log(replacedElement);
+
+		// replacedElement.attributes
+		// replacedElement.setAttribute(savedAttributes, 'readonly');
+		element.replaceWith(replacedElement);
+
+	//	console.log(replacedElement.outerHTML);
+	};
+
+
 	//	pagerPage.classList.remove('pager_active');
 	//	pagerPage.className += ' pager_active';
 	//	return changePage;
