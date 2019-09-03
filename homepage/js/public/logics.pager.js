@@ -1,10 +1,14 @@
 window.pagerLogics = new function() {
 	var initComponents = function() {
 		var pagerBlock = _('.pager_block')[0];
-		if (pagerBlock.querySelectorAll('.pager_page').length >0 ) {
+		var selectedPageIndex;
+		if (pagerBlock && pagerBlock.querySelectorAll('.pager_page').length >0 ) {
 
 			[].forEach.call(pagerBlock.querySelectorAll('.pager_page'), function(pagerPage, i) {
-				new PagerComponent(pagerPage, i);
+				if(pagerPage.hasClass('pager_active')) {
+					selectedPageIndex = i;
+				}
+				new PagerComponent(pagerPage, i, selectedPageIndex);
 			});
 
 		//	new PagerComponent(pagerBlock);

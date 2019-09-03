@@ -1,14 +1,20 @@
-window.PagerComponent = function(pagerPage, pageIndex) {
+window.PagerComponent = function(pagerPage, pageIndex, selectedPageIndex) {
 	var self = this;
 	this.pagerPage = false;
 	this.urlParameters = [];
+	var currentPage;
 
 	var data = [];
 	data['number'] = 2;
 
 	var init = function() {
-		eventsManager.addHandler(pagerPage, 'click', changePage);
+		if (!selectedPageIndex) {
+			selectedPageIndex = 0;
+		}
+		eventsManager.addHandler(pagerPage, 'click', self.getChangePage(selectedPageIndex));
+	//	self.getChangePage();
 	};
+//	pagerComponent = window.pagerLogics.getPager(window.currentElementUrl, listInfo.total, listInfo.pageSize, page, 'page', 4);
 
 
 	/*
@@ -36,8 +42,15 @@ window.PagerComponent = function(pagerPage, pageIndex) {
 		eventsManager.preventDefaultAction(event);
 		console.log(pagerPage.text)
 		window.urlParameters.setParameter('page', pagerPage.text);
+		pagerPage.className += ' pager_active';
+
 		//     setParameter(namespaceURI: string, localName: string, value: any): void;
 		// http://klaasistuudio.local/est/peegel/limit:5/sort:price/page:2/
+	};
+	this.getChangePage = function(selectedPageIndex) {
+		pagerPage[selectedPageIndex].classList.remove('pager_active');
+		pagerPage.className += ' pager_active';
+		return changePage;
 	};
 	// this.setParameter = function(name, value, ninjaUpdate) {
 	// 	if (value == false) {
@@ -54,9 +67,6 @@ window.PagerComponent = function(pagerPage, pageIndex) {
 	var click = function(event) {
 		eventsManager.preventDefaultAction(event);
 		window.urlParameters.setParameter('page', data.number);
-	};
-	this.getComponentElement = function() {
-		return componentElement;
 	};
 
 */
