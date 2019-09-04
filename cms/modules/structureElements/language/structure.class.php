@@ -505,9 +505,11 @@ class languageElement extends structureElement implements MetadataProviderInterf
 
     public function getBreadcrumbsUrl()
     {
-        $firstPageElement = $this->getFirstPageElement();
-        if ($firstPageElement) {
-            return $firstPageElement->getUrl();
+        if ($this->getService('controllerApplication')->getApplicationName() !== 'admin') {
+            $firstPageElement = $this->getFirstPageElement();
+            if ($firstPageElement) {
+                return $firstPageElement->getUrl();
+            }
         }
         return $this->getUrl();
     }
