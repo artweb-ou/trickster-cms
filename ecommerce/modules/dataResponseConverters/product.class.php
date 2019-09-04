@@ -166,6 +166,15 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             },
 
 
+///*            'amountFilterDefaultLimit' => function ($element) {
+//                /**
+//                 * @var productElement $element
+//                 */
+//                $amountFilterConfig = $element->getService('ConfigManager');
+//                return $amountFilterConfig->get('main.pageAmountProducts');
+//            },*/
+//            'amountFilterDefaultLimit' => 'getDefaultLimit',
+            'amountFilter' => 'getAmountSelectionOptions',
 
             'parametersGroups' => 'getGroupedParametersInfo',
 //            'parametersGroups' => function ($element) {
@@ -299,6 +308,8 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'qtFromConnectedCategories',
 
                 'deliveryTypesInfo',
+//                'amountFilter',
+//                'amountFilterDefaultLimit',
 
 
             ],

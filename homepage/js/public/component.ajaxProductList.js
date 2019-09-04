@@ -372,6 +372,10 @@ window.AjaxProductListSingleItem = function(productId,productItem) {
 
 };
 
+window.AjaxProductShowListComponent = function(elementsList,productsListSetsArray){
+    console.log(elementsList)
+};
+
 /*
 window.AjaxSearchResultsComponent = function(parentObject, customResultsElement) {
     var productElement;

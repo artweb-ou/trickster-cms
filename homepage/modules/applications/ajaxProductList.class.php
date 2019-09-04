@@ -57,12 +57,35 @@ class ajaxProductListApplication extends controllerApplication
                             'options'   => $filter->getOptionsInfo(),
                         ];
                     }
+
+                    $settings['settings'] = [
+                        'pagerDefaultLimit'=> $element->getDefaultLimit(),
+                    ];
+
+
+//                    $pager = $element->getDefaultLimit();
+
+//                    public function getDefaultLimit()
+//                    {
+//                        return $this->getService('ConfigManager')->get('main.pageAmountProducts');
+//                    }
+//
+//
+//                    'amountFilterDefaultLimit' => function ($element) {
+//                        /**
+//                         * @var productElement $element
+//                         */
+//                        $amountFilterConfig = $element->getService('ConfigManager');
+//                        return $amountFilterConfig->get('main.pageAmountProducts');
+//                    },
+
                 }
             }
         }
 
         $response->setResponseData("product", $products);
         $response->setResponseData("listInfo", $categoryFilters);
+        $response->setResponseData("settings", $settings);
 
         $this->renderer->assign('responseStatus', $status);
         $this->renderer->assign('responseData', $response->responseData);

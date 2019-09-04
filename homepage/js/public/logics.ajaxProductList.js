@@ -7,17 +7,23 @@ window.ajaxProductListLogics = new function() {
         var productsListSets;
         var productsListSetsArray = [];
         elementsList = document.querySelector('.products_list');
-        //  data-products-list="quickview, basket"
+        //  data-products-list="quickview, basket, pager"
         if (elementsList && elementsList.dataset.productsList && trimSpaces(elementsList.dataset.productsList) !=='') {
             // todo: now only 'product_detailed' test for, need any sign for each product which could be call by Ajax
             productsListSets = trimSpaces(elementsList.dataset.productsList);
             productsListSetsArray = productsListSets.split(',');
+            if (productsListSetsArray.indexOf('quickview') || productsListSetsArray.indexOf('basket')) {
 
-            elements = elementsList.querySelectorAll("[class*='productid_']");
+                elements = elementsList.querySelectorAll("[class*='productid_']");
 
-            for (var i = 0; i < elements.length; i++) {
-                productId = parseInt(elements[i].className.split('productid_')[1], 10);
-                new AjaxProductListComponent(elements[i], productId, productsListSetsArray);
+                for (var i = 0; i < elements.length; i++) {
+                    productId = parseInt(elements[i].className.split('productid_')[1], 10);
+                    new AjaxProductListComponent(elements[i], productId, productsListSetsArray);
+                }
+            }
+
+            if (productsListSetsArray.indexOf('pager')) {listElementId, selectedPageId, productsListSetsArray, data
+                new AjaxProductShowListComponent(elementsList, productsListSetsArray);
             }
         }
     };

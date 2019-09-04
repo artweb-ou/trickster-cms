@@ -13,56 +13,31 @@ window.PagerComponent = function(pagerPage, pagerPageIndex, pagerPages) {
 
 
 	var replacement;
-	var pagerPageIndexSelf;
 
 	var init = function() {
-		// currentPageIndex = getCurrentPageIndex();
-		// currentPage = pagerPages[currentPageIndex];
 		eventsManager.addHandler(pagerPage, 'click', getChangePage);
 	};
-	// var changePage = function(pageNumber, pagerPageIndex, currentPageIndex) {
-	//
-	// 	window.urlParameters.setParameter('page', pageNumber);
-	// 	changePagerPageTag(pagerPages[currentPageIndex],'a');
-	// 	changePagerPageTag(pagerPages[pagerPageIndex],'span');
-
-	// };
-	var getChangePage = function( event) {
+	var getChangePage = function(event) {
 		eventsManager.preventDefaultAction(event);
+		window.urlParameters.setParameter('page', pagerPages[pagerPageIndex].textContent);
 
-		pagerPageIndexSelf = pagerPages.indexOf(pagerPage);
 		currentPageIndex = getCurrentPageIndex();
 		currentPage = pagerPages[currentPageIndex];
-		console.log(currentPageIndex, pagerPageIndexSelf)
 
-		// pagerPage.dataset.currentPageIndex = currentPageIndex;
-		// pagerPage.dataset.pagerPageIndexSelf = pagerPageIndexSelf;
-		// currentPage.dataset.pagerPageIndexSelf = currentPageIndex;
-		// currentPage.dataset.currentPageIndex = pagerPageIndexSelf;
-
-		window.urlParameters.setParameter('page', pagerPage.textContent);
 		domHelper.removeClass(currentPage, 'pager_active');
 		domHelper.addClass(pagerPage, 'pager_active');
-		// let tempcurrentPage = currentPage;
-		// let temppagerPage = pagerPage;
 
-		//currentPage = temppagerPage;
-		//pagerPage = tempcurrentPage;
-		// changePagerPageTag(currentPage, currentPageIndex, 'a');
-	//	eventsManager.addHandler(currentPage, 'click', getChangePage);
-		// eventsManager.addHandler(replacement, 'click', getChangePage);
-		// console.log(currentPage)
-		// changePagerPageTag(pagerPage, pagerPageIndexSelf, 'span');
-		//pagerPage = pagerPages[pagerPageIndex];
+		changePagerPageTag(currentPage, currentPageIndex, 'a');
+		changePagerPageTag(pagerPage, pagerPageIndex, 'span');
 	};
 
 
 
 	var getCurrentPageIndex = function() {
 		var cpi = 0;
-		pagerPages.forEach(function(pagerItem, pagerPageIndexSelf) {
+		pagerPages.forEach(function(pagerItem, pagerPage) {
 			if (domHelper.hasClass(pagerItem, 'pager_active')) {
-				cpi = pagerPageIndexSelf;
+				cpi = pagerPage;
 			}
 		});
 		return cpi;
@@ -70,17 +45,9 @@ window.PagerComponent = function(pagerPage, pagerPageIndex, pagerPages) {
 
 
 
-	var changePagerPageTag = function(replaced, itemIndex, newTag) {
-		// var newSelectedPage = document.createElement(newTag);
-		// newSelectedPage.innerHTML = currentPage.innerHTML;
-		// currentPage.parentNode.replaceChild(newSelectedPage, currentPage);
-		//
-		// var parent = document.createElement("div");
-		// var child = document.createElement("p");
-		// parent.appendChild(child);
-		// var span = document.createElement("span");
+	var changePagerPageTag = function(replaced, replacedItemIndex, newTag) {
 
-		let elementHtml = replaced.innerHTML;
+		let replacedHtml = replaced.innerHTML;
 		replacement = document.createElement(newTag);
 
 		// copy attributes
@@ -91,19 +58,68 @@ window.PagerComponent = function(pagerPage, pagerPageIndex, pagerPages) {
 			}
 		}
 
-		replacement.innerHTML = elementHtml;
+		replacement.innerHTML = replacedHtml;
 		replaced.replaceWith(replacement);
-		// console.log(pagerPages)
-		pagerPages[itemIndex] = replacement;
-		// console.log(pagerPages)
-		console.log(itemIndex)
-		eventsManager.addHandler(pagerPages[itemIndex], 'click', getChangePage);
+
+		pagerPages[replacedItemIndex] = replacement;
+		pagerPage = pagerPages[replacedItemIndex];
+		pagerPageIndex = pagerPages.indexOf(pagerPage);
+
+		eventsManager.addHandler(pagerPage, 'click', getChangePage);
 
 	};
 
 
 	init();
 };
+
+window.PagerPageUrl = function(listElementId, selectedPageId, productsListSetsArray, data) {
+	var productListPagerLink;
+	var productListPagerUrl;
+	self.productElement = listElementId;
+
+	if(productsListSetsArray.length > 0) {
+		[].forEach.call(productsListSetsArray, function(productsListSet, i) {
+			if (productsListSet === 'pager') {
+				self.listElementId.classList += ' product_paging';
+				productListPagerUrl = '/ajaxProductList/listElementId:' + listElementId + '/page:' + selectedPageId + '/';
+
+				productListPagerLink.href = productListPagerUrl;
+
+
+
+
+
+				productElementQuickView = document.createElement('div');
+				productElementQuickView.className = 'product_quickview_trigger';
+				productElementQuickViewLink = document.createElement('a');
+				productElementQuickViewLink.className = 'product_quickview_link product_quickview_button';
+				productElementQuickViewUrl = '/ajaxProductList/listElementId:' + window.currentElementId + '/elementId:' + productId + '/';
+				productElementQuickViewLink.href = productElementQuickViewUrl;
+				productElementQuickViewLink.innerText = translationsLogics.get('product.quickview');
+
+				productElementQuickView.appendChild(productElementQuickViewLink);
+				self.productElement.appendChild(productElementQuickView);
+
+				productElementQuickView.addEventListener("click", function(e){
+					clickHandler(e,productId,productElementQuickView,productElementQuickViewUrl);
+				}, false);
+			}
+		});
+	}
+	productListPagerUrl = '/ajaxproductList/listElementId:' + window.currentPageId + '/page:' + pageId + '/';
+
+	productListPagerLink.href = productListPagerUrl;
+	//productListPagerLink.innerText = translationsLogics.get('product.quickview');
+
+	productElementQuickView.appendChild(productElementQuickViewLink);
+	self.productElement.appendChild(productElementQuickView);
+
+	productListPagerLink.addEventListener("click", function(e){
+		clickHandler(e,pageId,productListPagerUrl);
+	}, false);
+}
+/*
 window.PagerPageComponent = function(data) {
 	var componentElement;
 	var self = this;
@@ -191,3 +207,4 @@ window.PagerNextComponent = function(data)
 	};
 	init();
 };
+*/

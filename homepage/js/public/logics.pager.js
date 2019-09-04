@@ -4,12 +4,8 @@ window.pagerLogics = new function() {
 		var currentPageIndex = -1;
 		var currentPage = false;
 		if (pagerBlock && pagerBlock.querySelectorAll('.pager_page').length >0 ) {
-			// Array.prototype.slice.call(pagerBlock.querySelectorAll('.pager_page')).forEach(function(pagerPage, i) {
 			var pagerPages = Array.prototype.slice.call(pagerBlock.querySelectorAll('.pager_page'));
 
-			// if (pagerPages.indexOf(currentPage) !== -1) {
-			// 	currentPageIndex = pagerPages.indexOf(currentPage);
-			// }
 			pagerPages.forEach(function(pagerPage, pageIndex) {
 				new PagerComponent(pagerPage, pageIndex, pagerPages);
 			});
