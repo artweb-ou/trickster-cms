@@ -1,85 +1,68 @@
-window.PagerComponent = function(pagerPage, pageIndex) {
+window.PagerComponent = function(pagerPage, pagerPageIndex, pagerPages) {
 	var self = this;
 //	this.pagerPage = false;
-	this.urlParameters = [];
+// 	this.urlParameters = [];
 	var data = [];
-	// this.currentPage;
-	// this.currentPageIndex;
+	var currentPage;
+	// var selectedPageIndex;
+	// var pagerPage;
+	// var pagerPageIndex;
+	// var currentPageIndex;
 	// data['number'] = 2;
+	var currentPageIndex;
+
+
+	var replacement;
+	var oldCurrentPageIndex;
 
 	var init = function() {
-		if (domHelper.hasClass(pagerPage, 'pager_active')) {
-			this.currentPageIndex = pageIndex;
-			this.currentPage = pagerPage;
-			// console.log(selectedPageIndex)
-		}
+		currentPageIndex = getCurrentPageIndex();
+		currentPage = pagerPages[currentPageIndex];
 		eventsManager.addHandler(pagerPage, 'click', getChangePage);
-		// else {
-		// 	eventsManager.addHandler(pagerPage, 'click', getChangePage);
-		//
-		// }
-		// changePage();
-	//	self.getChangePage();
 	};
-//	pagerComponent = window.pagerLogics.getPager(window.currentElementUrl, listInfo.total, listInfo.pageSize, page, 'page', 4);
+	var changePage = function(pageNumber, pagerPageIndex, currentPageIndex) {
 
+		window.urlParameters.setParameter('page', pageNumber);
+		changePagerPageTag(pagerPages[currentPageIndex],'a');
+		changePagerPageTag(pagerPages[pagerPageIndex],'span');
 
-	/*
-		var self = this;
-		this.componentElement = false;
-		var init = function() {
-			var componentElement = document.createElement('div');
-			componentElement.className = 'pager_block';
+	};
+	var getChangePage = function( event) {
+		eventsManager.preventDefaultAction(event);
 
-			var button = new PagerPreviousComponent(pagerData.previousPage);
-			componentElement.appendChild(button.getComponentElement());
+		currentPageIndex = getCurrentPageIndex();
+		currentPage = pagerPages[currentPageIndex];
 
-			for (var i = 0; i < pagerData.pagesList.length; i++) {
-				var pageData = pagerData.pagesList[i];
-				var page = new PagerPageComponent(pageData);
-				componentElement.appendChild(page.getComponentElement());
-			}
-			var button = new PagerNextComponent(pagerData.nextPage);
-			componentElement.appendChild(button.getComponentElement());
-
-			self.componentElement = componentElement;
-		};
-	*/
-	var changePage = function() {
-		// window.urlParameters.setParameter('page', pagerPage.text);
-//href='{$page.URL}'
-
-		window.urlParameters.setParameter('page', pagerPage.text);
+		window.urlParameters.setParameter('page', pagerPage.textContent);
 		domHelper.removeClass(currentPage, 'pager_active');
 		domHelper.addClass(pagerPage, 'pager_active');
-		changePagerPageTag(pagerPage,'span');
+		let tempcurrentPage = currentPage;
+		let temppagerPage = pagerPage;
+
+		currentPage = temppagerPage;
+		//pagerPage = tempcurrentPage;
 		changePagerPageTag(currentPage,'a');
-		// currentPageIndex = pageIndex;
-		// currentPage = pagerPage;
-		this.currentPageIndex = pageIndex;
-		this.currentPage = pagerPage;
-		//     setParameter(namespaceURI: string, localName: string, value: any): void;
-		// http://klaasistuudio.local/est/peegel/limit:5/sort:price/page:2/
-	};
-	var getChangePage = function(event) {
-		eventsManager.preventDefaultAction(event);
-		console.log(currentPage, currentPageIndex)
-
-		if (pageIndex !== currentPageIndex) {
-			// console.log(pageIndex, currentPageIndex)
-			// console.log(currentPage)
-			changePage();
-		}
+		eventsManager.addHandler(replacement, 'click', getChangePage);
+		console.log(currentPage)
+		changePagerPageTag(pagerPage,'span');
 
 	};
 
-	var replacePagerPageTag = function() {
-		var newSelectedPage = document.createElement('a');
-		newSelectedPage.innerHTML = currentPage.innerHTML;
-		currentPage.parentNode.replaceChild(newSelectedPage, currentPage);
-	}
 
-	var changePagerPageTag = function(element, newTag) {
+
+	var getCurrentPageIndex = function() {
+		var cpi = 0;
+		pagerPages.forEach(function(pagerItem, pagerItemIndex) {
+			if (domHelper.hasClass(pagerItem, 'pager_active')) {
+				cpi = pagerItemIndex;
+			}
+		});
+		return cpi;
+	};
+
+
+
+	var changePagerPageTag = function(replaced, newTag) {
 		// var newSelectedPage = document.createElement(newTag);
 		// newSelectedPage.innerHTML = currentPage.innerHTML;
 		// currentPage.parentNode.replaceChild(newSelectedPage, currentPage);
@@ -89,50 +72,22 @@ window.PagerComponent = function(pagerPage, pageIndex) {
 		// parent.appendChild(child);
 		// var span = document.createElement("span");
 
-		let elementHtml = element.innerHTML;
-		let replacedElement = document.createElement(newTag);
+		let elementHtml = replaced.innerHTML;
+		replacement = document.createElement(newTag);
 
 		// copy attributes
-	//	let savedAttributes = [];
-		for( var i=0, attrs=element.attributes, l=attrs.length; i<l; i++) {
-			replacedElement.setAttribute(attrs[i].name, attrs[i].value);
+		if (replaced.hasAttributes()) {
+			var attrs = replaced.attributes;
+			for (var i = attrs.length - 1; i >= 0; i--) {
+				replacement.setAttribute(attrs[i].name, attrs[i].value);
+			}
 		}
 
-		replacedElement.innerHTML = elementHtml;
-		//	console.log(savedAttributes);
-		console.log(replacedElement);
+		replacement.innerHTML = elementHtml;
+		replaced.replaceWith(replacement);
 
-		// replacedElement.attributes
-		// replacedElement.setAttribute(savedAttributes, 'readonly');
-		element.replaceWith(replacedElement);
-
-	//	console.log(replacedElement.outerHTML);
 	};
 
-
-	//	pagerPage.classList.remove('pager_active');
-	//	pagerPage.className += ' pager_active';
-	//	return changePage;
-
-	//	selectedPage();
-	// this.setParameter = function(name, value, ninjaUpdate) {
-	// 	if (value == false) {
-	// 		delete currentParameters[name];
-	// 	} else {
-	// 		currentParameters[name] = value;
-	// 	}
-	// 	if (!ninjaUpdate) {
-	// 		updateHistoryState();
-	// 		controller.fireEvent('urlParametersUpdate', currentParameters);
-	// 	}
-	// };
-/*
-	var click = function(event) {
-		eventsManager.preventDefaultAction(event);
-		window.urlParameters.setParameter('page', data.number);
-	};
-
-*/
 
 	init();
 };

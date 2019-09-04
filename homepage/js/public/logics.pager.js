@@ -1,17 +1,18 @@
 window.pagerLogics = new function() {
 	var initComponents = function() {
 		var pagerBlock = _('.pager_block')[0];
-		// var selectedPageIndex = 0;
-		// var selectedPage = false;
+		var currentPageIndex = -1;
+		var currentPage = false;
 		if (pagerBlock && pagerBlock.querySelectorAll('.pager_page').length >0 ) {
-
 			// Array.prototype.slice.call(pagerBlock.querySelectorAll('.pager_page')).forEach(function(pagerPage, i) {
 			var pagerPages = Array.prototype.slice.call(pagerBlock.querySelectorAll('.pager_page'));
-			pagerPages.forEach(function(pagerPage, pageIndex, pagerPages) {
-				new PagerComponent(pagerPage, pageIndex+1);
-			});
 
-		//	new PagerComponent(pagerBlock);
+			// if (pagerPages.indexOf(currentPage) !== -1) {
+			// 	currentPageIndex = pagerPages.indexOf(currentPage);
+			// }
+			pagerPages.forEach(function(pagerPage, pageIndex) {
+				new PagerComponent(pagerPage, pageIndex, pagerPages);
+			});
 		}
 	};
 	controller.addListener('initDom', initComponents);
