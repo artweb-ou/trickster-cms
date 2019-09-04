@@ -1,4 +1,4 @@
-window.ActionsButtonsComponent = function(controlsElement, containerElement=false) {
+window.ActionsButtonsComponent = function(controlsElement, containerElement = false) {
     var hinted;
     var hint;
     var hintClassName = 'action_hint';
@@ -8,44 +8,30 @@ window.ActionsButtonsComponent = function(controlsElement, containerElement=fals
     var i;
 
     this.init = function() {
-        if (controlsElement.querySelectorAll('.actions_form_button').length > 0) {
-            actionsButtons = controlsElement.querySelectorAll('.actions_form_button');
-        }
-        if (containerElement && containerElement.querySelectorAll('.singlebox').length > 0) {
+        actionsButtons = controlsElement.querySelectorAll('.actions_form_button');
+        if (containerElement) {
             contentListElements = containerElement.querySelectorAll('.singlebox');
-            if (contentListElements.length > 0) {
-                for (i = contentListElements.length; i--;) {
-                    eventsManager.addHandler(contentListElements[i], 'change', isEnableActionsButtons);
-                }
+            for (i = contentListElements.length; i--;) {
+                eventsManager.addHandler(contentListElements[i], 'change', isEnableActionsButtons);
             }
         }
+        isEnableActionsButtons();
+        initHints();
     };
 
     var isEnableActionsButtons = function() {
+        var actionButtonsDisabled = true;
         if (containerElement) {
             contentListElements = containerElement.querySelectorAll('.singlebox');
             contentListCheckedElements = containerElement.querySelectorAll('.singlebox:checked');
-            if (contentListElements.length > 0 && contentListCheckedElements.length > 0) {
-                for (i = actionsButtons.length; i--;) {
-                    actionsButtons[i].disabled = false;
-                }
-            }
-
-            else {
-                for (i = actionsButtons.length; i--;) {
-                    actionsButtons[i].disabled = true;
-                }
-            }
+            actionButtonsDisabled = !(contentListElements.length && contentListCheckedElements.length);
         }
-        else {
-                for (i = actionsButtons.length; i--;) {
-                    actionsButtons[i].disabled = true;
-                }
-            }
-
+        for (i = actionsButtons.length; i--;) {
+            actionsButtons[i].disabled = actionButtonsDisabled;
+        }
     };
 
-    var popup_hint = function() {
+    var initHints = function() {
         for (i = actionsButtons.length; i--;) {
             hinted = actionsButtons[i];
             hint = document.createElement('span');
@@ -56,6 +42,4 @@ window.ActionsButtonsComponent = function(controlsElement, containerElement=fals
     };
 
     this.init();
-    isEnableActionsButtons();
-    popup_hint();
 };
