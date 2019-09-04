@@ -13,48 +13,56 @@ window.PagerComponent = function(pagerPage, pagerPageIndex, pagerPages) {
 
 
 	var replacement;
-	var oldCurrentPageIndex;
+	var pagerPageIndexSelf;
 
 	var init = function() {
-		currentPageIndex = getCurrentPageIndex();
-		currentPage = pagerPages[currentPageIndex];
+		// currentPageIndex = getCurrentPageIndex();
+		// currentPage = pagerPages[currentPageIndex];
 		eventsManager.addHandler(pagerPage, 'click', getChangePage);
 	};
-	var changePage = function(pageNumber, pagerPageIndex, currentPageIndex) {
+	// var changePage = function(pageNumber, pagerPageIndex, currentPageIndex) {
+	//
+	// 	window.urlParameters.setParameter('page', pageNumber);
+	// 	changePagerPageTag(pagerPages[currentPageIndex],'a');
+	// 	changePagerPageTag(pagerPages[pagerPageIndex],'span');
 
-		window.urlParameters.setParameter('page', pageNumber);
-		changePagerPageTag(pagerPages[currentPageIndex],'a');
-		changePagerPageTag(pagerPages[pagerPageIndex],'span');
-
-	};
+	// };
 	var getChangePage = function( event) {
 		eventsManager.preventDefaultAction(event);
 
+		pagerPageIndexSelf = pagerPages.indexOf(pagerPage);
 		currentPageIndex = getCurrentPageIndex();
 		currentPage = pagerPages[currentPageIndex];
+		console.log(currentPageIndex, pagerPageIndexSelf)
+
+		// pagerPage.dataset.currentPageIndex = currentPageIndex;
+		// pagerPage.dataset.pagerPageIndexSelf = pagerPageIndexSelf;
+		// currentPage.dataset.pagerPageIndexSelf = currentPageIndex;
+		// currentPage.dataset.currentPageIndex = pagerPageIndexSelf;
 
 		window.urlParameters.setParameter('page', pagerPage.textContent);
 		domHelper.removeClass(currentPage, 'pager_active');
 		domHelper.addClass(pagerPage, 'pager_active');
-		let tempcurrentPage = currentPage;
-		let temppagerPage = pagerPage;
+		// let tempcurrentPage = currentPage;
+		// let temppagerPage = pagerPage;
 
-		currentPage = temppagerPage;
+		//currentPage = temppagerPage;
 		//pagerPage = tempcurrentPage;
-		changePagerPageTag(currentPage,'a');
-		eventsManager.addHandler(replacement, 'click', getChangePage);
-		console.log(currentPage)
-		changePagerPageTag(pagerPage,'span');
-
+		// changePagerPageTag(currentPage, currentPageIndex, 'a');
+	//	eventsManager.addHandler(currentPage, 'click', getChangePage);
+		// eventsManager.addHandler(replacement, 'click', getChangePage);
+		// console.log(currentPage)
+		// changePagerPageTag(pagerPage, pagerPageIndexSelf, 'span');
+		//pagerPage = pagerPages[pagerPageIndex];
 	};
 
 
 
 	var getCurrentPageIndex = function() {
 		var cpi = 0;
-		pagerPages.forEach(function(pagerItem, pagerItemIndex) {
+		pagerPages.forEach(function(pagerItem, pagerPageIndexSelf) {
 			if (domHelper.hasClass(pagerItem, 'pager_active')) {
-				cpi = pagerItemIndex;
+				cpi = pagerPageIndexSelf;
 			}
 		});
 		return cpi;
@@ -62,7 +70,7 @@ window.PagerComponent = function(pagerPage, pagerPageIndex, pagerPages) {
 
 
 
-	var changePagerPageTag = function(replaced, newTag) {
+	var changePagerPageTag = function(replaced, itemIndex, newTag) {
 		// var newSelectedPage = document.createElement(newTag);
 		// newSelectedPage.innerHTML = currentPage.innerHTML;
 		// currentPage.parentNode.replaceChild(newSelectedPage, currentPage);
@@ -85,6 +93,11 @@ window.PagerComponent = function(pagerPage, pagerPageIndex, pagerPages) {
 
 		replacement.innerHTML = elementHtml;
 		replaced.replaceWith(replacement);
+		// console.log(pagerPages)
+		pagerPages[itemIndex] = replacement;
+		// console.log(pagerPages)
+		console.log(itemIndex)
+		eventsManager.addHandler(pagerPages[itemIndex], 'click', getChangePage);
 
 	};
 
