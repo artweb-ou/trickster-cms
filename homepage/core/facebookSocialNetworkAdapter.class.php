@@ -39,7 +39,7 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
     public function getAuthRedirectUrl()
     {
         $helper = $this->getApi()->getRedirectLoginHelper();
-        $permissions = ['public_profile', 'email']; // optional
+        $permissions = ['public_profile', 'email', 'instagram_basic']; // optional
         return $helper->getLoginUrl($this->authReturnUrl, $permissions);
     }
 
@@ -134,7 +134,7 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
         return $this->appToken;
     }
 
-    public function getPages()
+    public function requestPages()
     {
         if ($currentUserData = $this->getAuthorizedUserData()) {
             if ($currentUserData->id == $this->getOwnerId()) {
@@ -144,9 +144,9 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
                     if ($pages = $response->getGraphEdge()) {
                         foreach ($pages as $page) {
                             $result[] = [
-                                'socialId' => $page->getField('id'),
-                                'title'    => $page->getField('name'),
-                                'access_token'    => $page->getField('access_token'),
+                                'socialId'     => $page->getField('id'),
+                                'title'        => $page->getField('name'),
+                                'access_token' => $page->getField('access_token'),
                             ];
                         }
                     }
@@ -168,18 +168,70 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
         }
     }
 
-    protected function getPageToken($pageSocialId) {
+    public function requestInstagramImages($data)
+    {
+        if ($data['pagesSocialIds']) {
+            $pages = $this->requestPages();
+            foreach ($data['pagesSocialIds'] as $socialId) {
+                $pageToken = '';
+                foreach ($pages as $page) {
+                    if ($page['socialId'] == $socialId) {
+                        $pageToken = $page['access_token'];
+                    }
+                }
+                $result = [];
+                try {
+                    $instagramAccountId = $this->getInstagramAccountId($socialId, $pageToken);
+
+                    $response = $this->getApi()->get($instagramAccountId . '/media?fields=media_url', $this->token);
+                    if($images = $response->getGraphEdge()) {
+                        foreach($images as $image) {
+                            $result[] = [
+                                'id'     => $image->getField('id'),
+                                'image'  => $image->getField('media_url'),
+                                'pageSocialId'  => $socialId,
+                            ];
+                        }
+                    }
+                    return $result;
+                } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                    // When Graph returns an error
+                    $this->logError($e->getCode() . ' ' . $e->getMessage());
+                    return false;
+                } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                    // When validation fails or other local issues
+                    $this->logError($e->getCode() . ' ' . $e->getMessage());
+                    return false;
+                }
+            }
+        }
+
+        return new SocialErrorMessage('3');
+    }
+
+    protected function getInstagramAccountId($socialId, $pageToken)
+    {
+        $response = $this->getApi()->get(
+            '/' . $socialId . '?fields=instagram_business_account',
+            $pageToken
+        );
+        $result = $response->getGraphNode();
+        return $result->getField('instagram_business_account')->getField('id');
+    }
+
+    protected function getPageToken($pageSocialId)
+    {
         $this->getApi()->get('/' . (int)$pageSocialId . '?fields=access_token');
     }
 
     public function makePost($data)
     {
         if ($data['pagesSocialIds']) {
-            $pages = $this->getPages();
+            $pages = $this->requestPages();
             foreach ($data['pagesSocialIds'] as $socialId) {
                 $pageToken = '';
-                foreach($pages as $page) {
-                    if($page['socialId'] == $socialId) {
+                foreach ($pages as $page) {
+                    if ($page['socialId'] == $socialId) {
                         $pageToken = $page['access_token'];
                     }
                 }
@@ -205,6 +257,53 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
             }
         }
         return false;
+    }
+
+    public function postToInstagram($data)
+    {
+        if ($data['pagesSocialIds']) {
+            $pages = $this->requestPages();
+            foreach ($data['pagesSocialIds'] as $socialId) {
+                $pageToken = '';
+                foreach ($pages as $page) {
+                    if ($page['socialId'] == $socialId) {
+                        $pageToken = $page['access_token'];
+                    }
+                }
+                try {
+                    $response = $this->getApi()->get(
+                        '/' . $socialId . '?fields=instagram_business_account',
+                        $pageToken
+                    );
+                    $result = $response->getGraphNode();
+                    $instagramAccountId = $result->getField('instagram_business_account')->getField('id');
+
+                    $response = $this->getApi()->post($instagramAccountId . '/media', [
+                        'image_url' => '',
+                        //                        'caption' => '',
+                        //                        'location_id' => '',
+                        //                        'user_tags' => '',
+                    ], $pageToken
+                    );
+                    $result = $response->getGraphNode();
+                    $creationId = $result->getField('id');
+
+                    $response = $this->getApi()->post($instagramAccountId . '/media_publish', [
+                        'creation_id' => $creationId
+                    ], $pageToken);
+
+
+                } catch (Facebook\Exceptions\FacebookResponseException $e) {
+                    // When Graph returns an error
+                    $this->logError($e->getCode() . ' ' . $e->getMessage());
+                    return false;
+                } catch (Facebook\Exceptions\FacebookSDKException $e) {
+                    // When validation fails or other local issues
+                    $this->logError($e->getCode() . ' ' . $e->getMessage());
+                    return false;
+                }
+            }
+        }
     }
 }
 

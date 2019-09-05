@@ -11,7 +11,7 @@
 						{$status = $page->statusText}
 						{translations name="socialpost.status_$status"}
 						<label>
-							<input type="checkbox" name="pages[]" value="{$page->id}" />
+							<input type="checkbox" name="pages[]" value="{$page->socialId}" />
 							<span>{$page->title}</span>
 						</label><br />
 					{/foreach}

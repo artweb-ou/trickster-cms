@@ -20,8 +20,4 @@ class InstagramSocialPluginElement extends socialPluginElement
     {
         return 'instagramSocialNetworkAdapter';
     }
-
-//    public function makePost() {
-//
-//    }
 }

@@ -58,4 +58,6 @@
     'file' => 'showForm',
     'genericIcon' => 'showForm',
     'socialPage' => 'showForm',
+    'instagramImage' => 'showForm',
+    'instagramImagesHolder' => 'showForm',
 ];

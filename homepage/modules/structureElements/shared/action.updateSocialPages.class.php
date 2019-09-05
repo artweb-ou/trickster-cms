@@ -7,7 +7,7 @@ class updateSocialPagesShared extends structureElementAction
         if ($structureElement->requested) {
             if ($structureElement->final) {
                 if (!empty($controller->getParameter('pagesdata'))) {
-                    $existedSocialPages = $structureElement->getChildrenList(null, 'structure', 'socialPage');
+                    $existedSocialPages = $structureElement->getPages();
                     $existedSocialPagesSocialIds = [];
                     foreach ($existedSocialPages as $socialPage) {
                         $existedSocialPagesSocialIds[$socialPage->socialId] = $socialPage;

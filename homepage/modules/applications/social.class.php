@@ -157,12 +157,27 @@ class socialApplication extends controllerApplication
     protected function action_updatePages()
     {
         $this->performAuthorization();//???
-        $pages = $this->pluginApi->getPages();
+        $pages = $this->pluginApi->requestPages();
         if($pages !== false) {
             if($pages instanceof SocialErrorMessage) {
                 $this->redirect($this->returnUrl . (strpos($this->returnUrl, '?') !== false ? '&' : '?') . 'social_error=' . $pages->messageCode);
             }else {
                 $this->redirect($this->returnUrl . (strpos($this->returnUrl, '?') !== false ? '&' : '?') . 'pagesdata=' . urlencode(serialize($pages)));
+            }
+        }else {
+            //???
+        }
+    }
+
+    protected function action_updateInstagramImages()
+    {
+        $this->performAuthorization();
+        $images = $this->pluginApi->requestInstagramImages(['pagesSocialIds' => controller::getInstance()->getParameter('pagesSocialIds')]);
+        if($images !== false) {
+            if($images instanceof SocialErrorMessage) {
+                $this->redirect($this->returnUrl . (strpos($this->returnUrl, '?') !== false ? '&' : '?') . 'social_error=' . $images->messageCode);
+            }else {
+                $this->redirect($this->returnUrl . (strpos($this->returnUrl, '?') !== false ? '&' : '?') . 'imagesdata=' . urlencode(serialize($images)));
             }
         }else {
             //???
@@ -178,7 +193,7 @@ class socialApplication extends controllerApplication
             $this->socialId = $this->pluginApi->getSessionUserId();
             if (!$this->socialId) {
                 errorLog::getInstance()
-                    ->logMessage("", "Attempt to login with zero facebook user id \r\n"
+                    ->logMessage("", "Attempt to login with zero user id \r\n"
                         . "\r\n\$_REQUEST = " . var_export($_REQUEST, true) . ';'
                         . "\r\n\$_SESSION = " . var_export($_SESSION, true) . ';'
                         . "\r\n\$_COOKIE = " . var_export($_COOKIE, true) . ';');
@@ -299,11 +314,8 @@ class socialApplication extends controllerApplication
                     $info['image'] = $controller->baseURL . 'image/type:socialImage/id:' . $socialPostElement->image . '/filename:' . $socialPostElement->originalName;
                 }
                 $info['pagesSocialIds'] = [];
-                if($pagesIds = $controller->getParameter('pages')) {
-                    foreach($pagesIds as $pageId) {
-                        $page = $structureManager->getElementById($pageId);
-                        $info['pagesSocialIds'][] = $page->socialId;
-                    }
+                if($pagesIds = $controller->getParameter('pagesSocialIds')) {
+                    $info['pagesSocialIds'] = $pagesIds;
                 }
 
                 if ($this->pluginApi->makePost($info)) {

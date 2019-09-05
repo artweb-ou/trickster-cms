@@ -6,7 +6,7 @@ abstract class socialPluginElement extends structureElement
     use specialFieldsElementTrait;
     public $languagesParentElementMarker = 'adminLanguages';
     public $dataResourceName = 'module_social_plugin';
-    protected $allowedTypes = ['socialPage'];
+    protected $allowedTypes = [];
     public $defaultActionName = 'showForm';
     public $role = 'content';
     protected $api;
@@ -36,7 +36,6 @@ abstract class socialPluginElement extends structureElement
     {
         return [
             'showForm',
-            'showSocialPages',
         ];
     }
 
@@ -90,12 +89,6 @@ abstract class socialPluginElement extends structureElement
         return $controller->baseURL . "social/action:$action/plugin:" . $this->id
             . '/?return=' . rawurlencode($returnUrl);
     }
-
-    public function getPages() {
-        return $this->getChildrenList();
-    }
-
-//    public abstract function makePost();
 }
 
 

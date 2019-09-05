@@ -31,5 +31,6 @@ return [
             'roomsMap',
             'productGallery',
             'selectedEvents',
+            'instagramImagesHolder',
         ],
 ];
