@@ -225,14 +225,14 @@ class ParametersManager extends errorLogger
                 $parameterPositions = [];
                 $selectionPositions = [];
                 //apply values to product primary parameters
-                foreach ($valuesList as &$record) {
+                foreach ($valuesList as $record) {
                     $position = null;
                     $parameterId = $record['parameterId'];
 
                     //build up positions info for sorting.
                     //not all products can have parent elements with sorting, some are not attached to categories
                     if (isset($productParentsInfo[$record['productId']])) {
-                        foreach ($productParentsInfo[$record['productId']] as &$parentId) {
+                        foreach ($productParentsInfo[$record['productId']] as $parentId) {
                             //for some categories product parameters positions can be missing if category was added later
                             if (isset($parametersPositionsIndex[$parentId][$parameterId]) && ($position = $parametersPositionsIndex[$parentId][$parameterId]) !== null) {
                                 //we don't need basket selection parameters in sorting, they always go separately

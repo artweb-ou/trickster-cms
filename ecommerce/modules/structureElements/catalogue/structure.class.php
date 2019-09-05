@@ -289,30 +289,12 @@ class catalogueElement extends structureElement
                             $productsOriginsIndex[$productId][] = $importOrigin;
                         }
                     }
-                    $conditions = [
-                        [
-                            'childStructureId',
-                            'IN',
-                            $productsIds,
-                        ],
-                    ];
-                    $collection = persistableCollection::getInstance('structure_links');
-                    $records = $collection->conditionalLoad([
-                        'parentStructureId',
-                        'childStructureId',
-                    ], $conditions);
-                    $productBrandIdIndex = [];
-                    foreach ($records as &$record) {
-                        $productBrandIdIndex[$record['childStructureId']] = $record['parentStructureId'];
-                    }
+
                     $this->productsPageList = $structureManager->getElementsByIdList($productsIds, $this->id, true);
                     foreach ($this->productsPageList as $product) {
                         $productId = $product->id;
                         $product->setXmlSourcesCodeNames(isset($productsOriginsIndex[$productId])
                             ? $productsOriginsIndex[$productId]
-                            : []);
-                        $product->setBrandsIdList(isset($productBrandIdIndex[$productId])
-                            ? [$productBrandIdIndex[$productId]]
                             : []);
                     }
                 }

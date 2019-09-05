@@ -46,4 +46,6 @@ abstract class dynamicGroupFieldsStructureElement extends dynamicFieldsStructure
         }
         return $this->customFieldsGroups;
     }
+
+    abstract public function getInheritedCustomFieldsList();
 }

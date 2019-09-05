@@ -10,6 +10,11 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
     public $role = 'content';
     protected $answers;
 
+    public function getFormAllowedTypes()
+    {
+        return $this->allowedTypes;
+    }
+
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
@@ -21,6 +26,14 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
         $moduleStructure['layout'] = 'text';
         $moduleStructure['colorLayout'] = 'text';
     }
+// children, getElementsChildren
+/*
+        $parentElementId,
+        $allowedRoles = null,
+        $linkTypes = 'structure',
+        $allowedTypes = null,
+        $restrictLinkTypes = false
+*/
 
     protected function getTabsList()
     {
@@ -39,16 +52,7 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
     public function getCustomFieldsList()
     {
         if ($this->customFieldsList === null) {
-            $this->customFieldsList = parent::getCustomFieldsList();
-            $controller = controller::getInstance();
-            if ($controller->getApplicationName() === 'mobile') {
-                foreach ($this->customFieldsList as $fieldInfo) {
-                    if ($fieldInfo->fieldType === 'dateInput'
-                        && $fieldInfo->validator === 'validDate') {
-                        $fieldInfo->validator = '';
-                    }
-                }
-            }
+            $this->customFieldsList = $this->getInheritedCustomFieldsList();
         }
         return $this->customFieldsList;
     }
@@ -290,5 +294,47 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
 
         return $outputData;
     }
+
+    /**
+     * @return array
+     */
+    public function getInheritedCustomFieldsList()
+    {
+        if (is_null($this->customFieldsList)) {
+            $this->customFieldsList = [];
+            if ($groups = $this->getInheritedCustomFieldsGroups()) {
+                foreach ($groups as $group) {
+                    if ($fields = $group->getFormFields()) {
+                        foreach ($fields as &$field) {
+                            $this->customFieldsList[] = $field;
+                        }
+                    }
+                }
+            }
+        }
+        return $this->customFieldsList;
+
+    }
+
+
+    /**
+     * @return array
+     */
+    protected function getInheritedCustomFieldsGroups()
+    {
+            $structureManager = $this->getService('structureManager');
+            /**
+             * @var feedbackElement $this
+             */
+            if ($groups = $structureManager->getElementsChildren($this->id, null, 'structure', $this->allowedTypes)) {
+                foreach ($groups as $group) {
+                    if ($group->getFormFields()) {
+                        $this->customFieldsGroups[] = $group;
+                    }
+                }
+            }
+        return $this->customFieldsGroups;
+    }
+
 }
 

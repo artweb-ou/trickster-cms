@@ -136,11 +136,16 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
             goto finish;
         }
         $languageCode = $this->getCodeFromCookies($groupName);
-        if ($this->checkLanguageCode($languageCode, $groupName, false)) {
+        if ($groupName == 'adminLanguages') {
+            $checkHidden = true;
+        } else {
+            $checkHidden = false;
+        }
+        if ($this->checkLanguageCode($languageCode, $groupName, $checkHidden)) {
             goto finish;
         }
         $languageCode = $this->getCodeFromConfig();
-        if ($this->checkLanguageCode($languageCode, $groupName, false)) {
+        if ($this->checkLanguageCode($languageCode, $groupName, $checkHidden)) {
             goto finish;
         }
         $headerLanguages = $this->parseLanguagesFromAcceptHeader();

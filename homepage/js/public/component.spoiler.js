@@ -12,6 +12,9 @@ window.SpoilerComponent = function(componentElement) {
 	let showMoreText;
 	let showLessText;
 
+	const showContentClass = 'show_content';
+	const hideContentClass = 'hide_content';
+
 	let visible;
 
 	let self = this;
@@ -36,7 +39,16 @@ window.SpoilerComponent = function(componentElement) {
 				showLessText = window.translationsLogics.get('spoiler.view_less_info');
 				showMoreText = buttonElement.innerHTML;
 			}
-
+			if(contentWrapperElement.classList.contains(showContentClass)) {
+				if(maxHeight == '0px') {
+					maxHeight = 'auto';
+				}
+				contentWrapperElement.style.height = maxHeight;
+			}
+			if(contentWrapperElement.classList.contains(hideContentClass)) {
+				contentWrapperElement.style.height = '0px';
+			}
+			maxHeight = contentElement.scrollHeight + 'px';
 			addHandlers();
 		}
 	};
@@ -70,8 +82,8 @@ window.SpoilerComponent = function(componentElement) {
 	};
 
 	this.hideElement = function() {
-		contentWrapperElement.classList.add('hide_content');
-		contentWrapperElement.classList.remove('show_content');
+		contentWrapperElement.classList.add(hideContentClass);
+		contentWrapperElement.classList.remove(showContentClass);
 		TweenLite.to(contentWrapperElement, 0.5,
 			{
 				'css': {
@@ -101,8 +113,9 @@ window.SpoilerComponent = function(componentElement) {
 	};
 
 	this.showElement = function() {
-		contentWrapperElement.classList.remove('hide_content');
-		contentWrapperElement.classList.add('show_content');
+		contentWrapperElement.classList.remove(hideContentClass);
+		contentWrapperElement.classList.add(showContentClass);
+		maxHeight = contentElement.clientHeight + 'px';
 		TweenLite.to(contentWrapperElement, 0.5, {
 			'css': {
 				'height': maxHeight
@@ -130,7 +143,7 @@ window.SpoilerComponent = function(componentElement) {
 	};
 
 	let isShow = function() {
-		return contentWrapperElement.style.height == maxHeight;
+		return contentWrapperElement.classList.contains(showContentClass);
 	};
 
 	let initGradientElement = function() {

@@ -1,5 +1,5 @@
 {foreach from=$formData.$fieldName key=languageId item=object}
-    <div class="form_items{if !empty($item.class)} {$item.class}{/if}{if $formErrors.$fieldName.$languageId} form_error{/if}" {if !empty($item.style)}style="{$item.style}{/if}">
+    <div class="form_items{if !empty($item.class)} {$item.class}{/if}{if $formErrors.$fieldName.$languageId} form_error{/if}" {if !empty($item.style)}style="{$item.style}"{/if}>
         <span class="form_label">
             {translations name="{$translationGroup}.{strtolower($fieldName)}"} ({$languageNames.$languageId})
         </span>

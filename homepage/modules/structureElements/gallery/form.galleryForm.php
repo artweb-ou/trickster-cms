@@ -6,9 +6,9 @@ class GalleryFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
-        'service' => [
-            'type' => 'select.array',
-        ],
+//        'service' => [
+//            'type' => 'select.array',
+//        ],
         'content' => [
             'type' => 'input.html',
         ],

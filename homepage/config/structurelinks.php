@@ -1,6 +1,7 @@
 <?php return [
     'adminAllowed' => [
-        'feedbackAnswerFile'
+        'subArticle',
+        'feedbackAnswerFile',
     ],
     'publicAllowed' => [
         'eventsListEvent',

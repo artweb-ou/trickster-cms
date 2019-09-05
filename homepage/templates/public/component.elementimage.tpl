@@ -1,6 +1,7 @@
 {stripdomspaces}
 {if empty($src)}
-	{$src = $element->generateImageUrl($type)}
+	{$src = $theme->generateImageUrl($element->image, $element->originalName, $type)}
+	{$srcset = $theme->generateImageSrcSet($element->image, $element->originalName, $type)}
 {/if}
 {if !isset($title)}
 	{if $element->title}
@@ -13,8 +14,8 @@
 	{$class = ''}
 {/if}
 {if empty($lazy)}
-	<img class="{$class}" src="{$src}" alt="{$title}"/>
+	<img class="{$class}" src="{$src}" {if !empty($srcset)}srcset="{$srcset}"{/if} alt="{$title}"/>
 {else}
-	<img class="{$class} lazy_image" src="" data-lazysrc="{$src}" alt="{$title}"/>
+	<img class="{$class} lazy_image" src="" data-lazysrc="{$src}" {if !empty($srcset)}data-lazysrcset="{$srcset}"{/if} alt="{$title}"/>
 {/if}
 {/stripdomspaces}

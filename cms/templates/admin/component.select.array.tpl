@@ -20,7 +20,7 @@
 			{if !empty($item.defaultRequired)}
 				<option value="">{if !empty($item.defaultName)}{$item.defaultName}{/if}</option>
 			{/if}
-			{if is_array($options)}
+			{if !empty($options) && is_array($options)}
 				{foreach $options as $option}
 					<option value="{$option}"{if $formData.$fieldName == $option} selected="selected"{/if}>
 						{if is_numeric({$option})}

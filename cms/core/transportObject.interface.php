@@ -17,5 +17,7 @@ interface transportObject
     public function updateData();
 
     public function selectData();
+
+    public function getQueriesHistory();
 }
 

@@ -22,6 +22,7 @@
     "smarty/smarty": "3.x",
     "pelago/emogrifier": "^2.0",
     "tedivm/jshrink": "~1.0",
-    "ext-dom": "*"
+    "ext-dom": "*",
+    "ext-pdo": "*"
   }
 }
