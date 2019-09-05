@@ -19,13 +19,12 @@ class checkVatShoppingBasket extends structureElementAction
                 if($result['valid'] && $result['country_code'] != $vatCheckCurrentCountry) {
                     $vatRate = 1;
                 }
-
                 $shoppingBasket->setVatRate($vatRate);
                 $shoppingBasket->recalculate();
                 $renderer = $this->getService('renderer');
                 $renderer->assignResponseData('shoppingBasketData', $structureElement->getElementData());
+
             }
         }
-
     }
 }
