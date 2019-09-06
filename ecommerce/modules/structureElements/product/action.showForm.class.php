@@ -171,6 +171,7 @@ class showFormProduct extends structureElementAction
             }
 
             $structureElement->setTemplate('shared.content.tpl');
+            $structureElement->allParametersGroups = $structureElement->getParametersInfoList();
             $renderer = $this->getService('renderer');
             $renderer->assign('contentSubTemplate', 'component.form.tpl');
             $renderer->assign('form', $structureElement->getForm('form'));
