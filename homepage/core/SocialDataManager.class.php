@@ -44,7 +44,7 @@ class SocialDataManager extends errorLogger
     }
 
     //todo: wrong
-    //setPrivilegeChecking(false); doesnt work in admin
+    //setPrivilegeChecking(false); doesnt work in admin, for example instagramImagesHolder -> socialID select
     //in public doesnt work any privilege checking
     public function getSocialPlugins()
     {
