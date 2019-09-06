@@ -18,8 +18,7 @@ class subArticleElement extends structureElement
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
     {
-        $parentElement = $this->getCurrentParentElement();
-        if(!empty($parentElement)) {
+        if($parentElement = $this->getCurrentParentElement()) {
             if ($parentElement->structureType == 'product') {
                 $this->multiLanguage = true;
                 $multiLanguageFields[] = 'title';

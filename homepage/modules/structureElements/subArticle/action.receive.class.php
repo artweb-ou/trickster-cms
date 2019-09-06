@@ -19,7 +19,6 @@ class receiveSubArticle extends structureElementAction
             }
             $structureElement->structureName = $structureElement->title;
             $structureElement->persistElementData();
-            $x = $structureElement->URL;
             $controller->redirect($structureElement->URL);
         }
         $structureElement->setViewName('form');
