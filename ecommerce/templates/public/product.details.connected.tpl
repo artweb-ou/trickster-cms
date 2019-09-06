@@ -1,4 +1,3 @@
-{debug}
 {if $products}
 	{$layout = $element->getDefaultLayout('connected')}
 
