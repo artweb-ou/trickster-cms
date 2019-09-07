@@ -14,6 +14,7 @@
 class orderProductElement extends structureElement
 {
     use SearchTypesProviderTrait;
+    use JsonDataProviderElement;
     public $dataResourceName = 'module_order_product';
     public $defaultActionName = 'show';
     protected $allowedTypes = [];
@@ -42,38 +43,6 @@ class orderProductElement extends structureElement
     public function isEmptyPrice()
     {
         return ($this->price === '') ? true : false;
-    }
-
-    /**
-     * @return array
-     */
-    public function getElementData()
-    {
-        $languageManager = $this->getService('LanguagesManager');
-        $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
-        $structureManager = $this->getService('structureManager');
-        $data = [
-            'id' => $this->productId,
-            'title' => $this->title,
-            'variation' => $this->variation,
-            'amount' => $this->amount,
-            'oldPrice' => $this->oldPrice,
-            'price' => $this->price,
-            'category' => '',
-            'category_ga' => '',
-            'title_ga' => $this->title_dl,
-            'variation_ga' => $this->variation_dl,
-        ];
-        /**
-         * @var productElement $productElement
-         */
-        if ($productElement = $structureManager->getElementById($this->productId)) {
-            if ($category = $productElement->getRequestedParentCategory()) {
-                $data['category'] = $category->getTitle();
-                $data['category_ga'] = $category->getValue('title', $defaultLanguage->id);
-            }
-        }
-        return $data;
     }
 
     public function getTotalPrice($formatted = false)
@@ -170,5 +139,40 @@ class orderProductElement extends structureElement
             return $currencySelector->formatPrice($fullPrice);
         }
         return $fullPrice;
+    }
+
+    public function getCategoryTitle()
+    {
+        if ($product = $this->getOriginalProduct()) {
+            if ($category = $product->getRequestedParentCategory()) {
+                return $category->getTitle();
+            }
+        }
+        return false;
+    }
+
+    public function getCategoryDefaultTitle()
+    {
+        if ($product = $this->getOriginalProduct()) {
+            if ($category = $product->getRequestedParentCategory()) {
+                $languageManager = $this->getService('LanguagesManager');
+                $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
+                return $category->$category->getValue('title', $defaultLanguage->id);
+            }
+        }
+        return false;
+    }
+
+    protected function getOriginalProduct()
+    {
+        $structureManager = $this->getService('structureManager');
+        /**
+         * @var productElement $productElement
+         */
+        if ($productElement = $structureManager->getElementById($this->productId)) {
+            return $productElement;
+        }
+        return false;
+
     }
 }

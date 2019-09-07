@@ -29,6 +29,6 @@
 {if isset($currentOrder)}
     <script>
         window.orders = window.orders ? window.orders: [] ;
-        window.orders.push({$currentOrder->getElementData()|json_encode});
+        window.orders.push({$currentOrder->getJsonInfo('api')});
     </script>
 {/if}
