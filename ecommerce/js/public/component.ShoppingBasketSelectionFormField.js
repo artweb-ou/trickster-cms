@@ -57,9 +57,8 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
             fieldComponent = new InputComponent(parameters);
             fieldElement.appendChild(fieldComponent.componentElement);
             if (info.autocomplete === 'vatNumber') {
-                var checkButton = document.createElement('input');
-                checkButton.type = 'button';
-                checkButton.value = window.translationsLogics.get('shoppingbasket.checkvat');
+                var checkButton = document.createElement('button');
+                checkButton.innerHTML = window.translationsLogics.get('shoppingbasket.checkvat');
                 checkButton.className = 'button check_vat_button';
                 fieldElement.appendChild(checkButton);
                 eventsManager.addHandler(checkButton, 'click', checkVatHandler);
@@ -71,7 +70,8 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
             }
         }
     };
-    var checkVatHandler = function() {
+    var checkVatHandler = function(event) {
+        event.preventDefault();
         shoppingBasketLogics.checkVatNumber(fieldComponent.componentElement.value);
     };
     this.getComponentElement = function() {

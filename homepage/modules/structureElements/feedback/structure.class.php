@@ -9,7 +9,6 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
     public $defaultActionName = 'show';
     public $role = 'content';
     protected $answers;
-    private $id;
 
     public function getFormAllowedTypes()
     {
@@ -299,7 +298,7 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
     /**
      * @return array
      */
-    protected function getInheritedCustomFieldsList()
+    public function getInheritedCustomFieldsList()
     {
         if (is_null($this->customFieldsList)) {
             $this->customFieldsList = [];
@@ -317,14 +316,12 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
 
     }
 
+
     /**
      * @return array
      */
     protected function getInheritedCustomFieldsGroups()
     {
-        if (is_null($this->customFieldsGroups)) {
-            $this->customFieldsGroups = [];
-
             $structureManager = $this->getService('structureManager');
             /**
              * @var feedbackElement $this
@@ -336,7 +333,6 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
                     }
                 }
             }
-        }
         return $this->customFieldsGroups;
     }
 

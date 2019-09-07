@@ -40,9 +40,9 @@ class eventElement extends structureElement implements MetadataProviderInterface
         $moduleStructure['city'] = 'text';
         $moduleStructure['address'] = 'text';
         $moduleStructure['image'] = 'image';
-        $moduleStructure['originalName'] = 'text';
+        $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['image2'] = 'image';
-        $moduleStructure['image2Name'] = 'text';
+        $moduleStructure['image2Name'] = 'fileName';
         $moduleStructure['mapCode'] = 'code';
         $moduleStructure['mapUrl'] = 'url';
         $moduleStructure['link'] = 'url';
@@ -226,10 +226,10 @@ class eventElement extends structureElement implements MetadataProviderInterface
             $currentTimestamp =  date_timestamp_get($currentDate);
 
             foreach ($idList as $eventKey => $eventId) {
-                $event = $this->getEventById($eventId);
-
-                if ($currentTimestamp > $event->getEndDayStamp() || $this->id === $eventId) {
-                    $eventExcludeIds[] = $eventId;
+                if($event = $this->getEventById($eventId)) {
+                    if ($currentTimestamp > $event->getEndDayStamp() || $this->id === $eventId) {
+                        $eventExcludeIds[] = $eventId;
+                    }
                 }
             }
 
