@@ -10,7 +10,7 @@
     'rendererPlugins' => 'modules/rendererPlugins/',
     'queryFilters' => 'modules/queryFilters/',
     'queryFilterConverters' => 'modules/queryFilterConverters/',
-    'dataResponseConverters' => 'modules/dataResponseConverters/',
+    'DataResponseConverters' => 'modules/DataResponseConverters/',
     'dispatchmentTypes' => 'modules/dispatchmentTypes/',
     'structureElements' => 'modules/structureElements/',
     'sharedActions' => 'modules/structureElements/shared/',

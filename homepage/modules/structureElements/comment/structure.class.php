@@ -20,6 +20,7 @@ class commentElement extends structureElement implements MetadataProviderInterfa
     use MetadataProviderTrait;
     use CommentsTrait;
     use SearchTypesProviderTrait;
+    use JsonDataProviderElement;
     public $dataResourceName = 'module_comment';
     protected $allowedTypes = ['comment'];
     public $defaultActionName = 'show';
@@ -132,20 +133,6 @@ class commentElement extends structureElement implements MetadataProviderInterfa
             $this->setUserVote($votesManager->getElementUserVote($this->id, $this->structureType));
         }
         return $this->userVote;
-    }
-
-    public function getJsonInfo()
-    {
-        return json_encode($this->getElementData());
-    }
-
-    public function getElementData()
-    {
-        return [
-            'id' => $this->id,
-            "votes" => $this->votes,
-            "userVote" => $this->getUserVote(),
-        ];
     }
 
     public function getAuthorName()

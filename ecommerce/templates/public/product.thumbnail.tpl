@@ -1,7 +1,7 @@
 {assign moduleTitle $element->title}
 {capture assign="moduleContent"}
 	<script>window.products = window.products ? window.products : []</script>
-	<script>window.products.push({$element->getElementData()|json_encode})</script>
+	<script>window.products.push({$element->getJsonInfo('list')})</script>
 	<a href="{$element->URL}" class="product_thumbnail_link">
 		<div class="product_thumbnail_image_container">
 			{if $element->originalName != ""}

@@ -68,6 +68,7 @@ class productElement extends structureElement implements
     use ProductIconRoleOptionsTrait;
     use ConnectedParametersProviderTrait;
     use CacheOperatingElement;
+    use JsonDataProviderElement;
 
     public $dataResourceName = 'module_product';
     public $defaultActionName = 'show';
@@ -128,12 +129,11 @@ class productElement extends structureElement implements
     protected $iconsInfo;
 
     protected $allowedTypes = ['product'];
-//    protected $allowedTypes = ['subArticle'];
     protected $allowedProductTypesByAction = [
-        'showImages'    => ['galleryImage'],
-        'showTexts'     => ['subArticle'],
-        'showFiles'     => ['file'],
-        'showFullList'  => ['galleryImage'],
+        'showImages' => ['galleryImage'],
+        'showTexts' => ['subArticle'],
+        'showFiles' => ['file'],
+        'showFullList' => ['galleryImage'],
     ];
 
     protected function setModuleStructure(&$moduleStructure)
@@ -862,10 +862,6 @@ class productElement extends structureElement implements
         return $this->inquiryForm;
     }
 
-    public function getParentCategories()
-    {
-    }
-
     public function getAllConnectedDiscounts()
     {
         if (is_null($this->connectedDiscounts)) {
@@ -934,16 +930,6 @@ class productElement extends structureElement implements
             }
         }
         return $this->deepParentCategoriesIdList;
-    }
-
-    //todo: update this to work with admin page
-    public function isDiscountProduct()
-    {
-        $result = false;
-        if ($this->getCampaignDiscounts()) {
-            $result = true;
-        }
-        return $result;
     }
 
     public function getFirstImageElement()
@@ -1263,7 +1249,7 @@ class productElement extends structureElement implements
                         /**
                          * @var $productElement productElement
                          */
-                       if ($productElement->inactive == '0' && ($productElement->isPurchasable() || $productElement->availability == "inquirable")) {
+                        if ($productElement->inactive == '0' && ($productElement->isPurchasable() || $productElement->availability == "inquirable")) {
                             $this->connectedProducts2[] = $productElement;
                         }
                     }
@@ -1720,38 +1706,8 @@ class productElement extends structureElement implements
      */
     public function getProductDetailsJsData()
     {
-        return $this->getElementData(true);
-    }
-
-    /**
-     * @return array
-     * @throws Exception
-     */
-    public function getElementData($detailed = false)
-    {
-        $languageManager = $this->getService('LanguagesManager');
-        $defaultLanguage = $languageManager->getDefaultLanguage('public_root');
-        $brandElement = $this->getBrandElement();
-        $categoryElement = $this->getRequestedParentCategory();
-
-        $info = [
-            'id' => $this->id,
-            'price' => $this->getPrice(),
-            'title' => $this->getTitle(),
-            'oldPrice' => $this->getOldPrice(),
-            'title_ga' => $this->getValue('title', $defaultLanguage->id),
-            'category_ga' => $categoryElement->getValue('title', $defaultLanguage->id),
-            'brand_ga' => $brandElement ? $brandElement->getValue('title', $defaultLanguage->id) : '',
-            'category' => $categoryElement->getTitle(),
-            'brand' => $brandElement ? $brandElement->getTitle() : $brandElement,
-        ];
-        if ($detailed) {
-            $info['parametersGroups'] = $this->getGroupedParametersInfo();
-            $info['selectionsPricings'] = $this->getSelectionsPricings()['selectionsPricings'];
-            $info['selectionsOldPricings'] = $this->getSelectionsPricings()['selectionsOldPricings'];
-            $info['selectionsImages'] =  !empty($this->getOptionsImagesInfo()) ? $this->getOptionsImagesInfo() : false;
-        }
-        return $info;
+        $this->logError('product::getProductDetailsJsData is deprecated');
+        return $this->getElementData('detailed');
     }
 
     public function getSelectionsPricings()
@@ -1783,8 +1739,10 @@ class productElement extends structureElement implements
             }
         }
 
-        return ['selectionsPricings' => $selectionsPricings,
-                'selectionsOldPricings' =>  $selectionsOldPricings];
+        return [
+            'selectionsPricings' => $selectionsPricings,
+            'selectionsOldPricings' => $selectionsOldPricings,
+        ];
     }
 
     public function getGroupedParametersInfo()
@@ -1799,9 +1757,12 @@ class productElement extends structureElement implements
                     $listOptions[$option['id']] = ['title' => $option['title'], 'value' => $option['value']];
                 };
 
-                $parametersList[$list['id']] = !empty($listOptions) ? ['title' => $list['title'], 'value' => isset($list['value']) ? $list['value'] : false, 'parameter' => $listOptions] : ['title' => $list['title'], 'value' => $list['value']];
+                $parametersList[$list['id']] = !empty($listOptions) ? ['title' => $list['title'], 'value' => isset($list['value']) ? $list['value'] : false, 'parameter' => $listOptions] : [
+                    'title' => $list['title'],
+                    'value' => $list['value'],
+                ];
             }
-            $parametersInfo[$info['id']] = ['groupTitle' => $info['title'], 'parametersList'=>$parametersList];
+            $parametersInfo[$info['id']] = ['groupTitle' => $info['title'], 'parametersList' => $parametersList];
         }
         return $parametersInfo;
     }
@@ -1901,7 +1862,7 @@ class productElement extends structureElement implements
     {
         if ($image = $this->getFirstImageElement()) {
             $controller = controller::getInstance();
-            return $controller->baseURL . 'image/type:'. $type .'/id:' . $image->id . '/filename:' . $image->$imageFileName;
+            return $controller->baseURL . 'image/type:' . $type . '/id:' . $image->id . '/filename:' . $image->$imageFileName;
         }
         return false;
     }
@@ -2060,21 +2021,11 @@ class productElement extends structureElement implements
 
     public function getAllowedTypes($currentAction = 'showFullList')
     {
-//        if ($currentAction == 'showFullList') {
-//            $fullListAllowed = [];
-//            foreach ($this->allowedProductTypesByAction as $action=>$value) {
-//                $fullListAllowed  = array_merge($fullListAllowed, $value);
-//            }
-//            return array_unique($fullListAllowed);
-//        }
-//        else {
-            if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
-                return $this->allowedProductTypesByAction[$currentAction];
-            }
-            else {
-                return [];
-            }
-//        }
+        if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
+            return $this->allowedProductTypesByAction[$currentAction];
+        } else {
+            return [];
+        }
     }
 
     public function getNewElementAction()
@@ -2090,7 +2041,7 @@ class productElement extends structureElement implements
 
         $structureManager = $this->getService('structureManager');
         $subArticles = $structureManager->getElementsChildren($this->id, null, 'subArticle');
-//
+
         return $subArticles;
     }
 
@@ -2103,9 +2054,8 @@ class productElement extends structureElement implements
             if ($templatedSubTitle = $this->getTemplatedSubTitle()) {
                 return $templatedSubTitle;
             }
-            return $this->getParentCategory()->getTitle();
-
         }
+        return $this->getParentCategory()->getTitle();
     }
 
     public function getNewElementUrl()

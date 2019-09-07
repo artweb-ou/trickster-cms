@@ -1,6 +1,6 @@
 <?php
 
-class brandDataResponseConverter extends StructuredDataResponseConverter
+class brandsWidgetDataResponseConverter extends StructuredDataResponseConverter
 {
     protected $defaultPreset = 'api';
 
@@ -18,12 +18,7 @@ class brandDataResponseConverter extends StructuredDataResponseConverter
             'dateModified' => function ($element) {
                 return $element->getValue('dateModified');
             },
-            'introduction' => 'introduction',
-            'content' => 'content',
-            'image' => 'image',
-            'imageUrl' => function ($element) {
-                return controller::getInstance()->baseURL . "image/type:brandWidgetItem/id:" . $element->image . "/filename:" . $element->originalName;
-            },
+            'brands' => 'getBrandsData',
         ];
     }
 
@@ -36,10 +31,7 @@ class brandDataResponseConverter extends StructuredDataResponseConverter
                 'dateCreated',
                 'dateModified',
                 'url',
-                'introduction',
-                'content',
-                'image',
-                'imageUrl',
+                'brands',
             ],
             'search' => [
                 'id',

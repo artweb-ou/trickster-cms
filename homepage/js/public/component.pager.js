@@ -82,7 +82,7 @@ window.PagerPageUrl = function(listElementId, selectedPageId, productsListSetsAr
 		[].forEach.call(productsListSetsArray, function(productsListSet, i) {
 			if (productsListSet === 'pager') {
 				self.listElementId.classList += ' product_paging';
-				productListPagerUrl = '/ajaxProductList/listElementId:' + listElementId + '/page:' + selectedPageId + '/';
+				productListPagerUrl = '/ajaxProductsList/listElementId:' + listElementId + '/page:' + selectedPageId + '/';
 
 				productListPagerLink.href = productListPagerUrl;
 
@@ -94,7 +94,7 @@ window.PagerPageUrl = function(listElementId, selectedPageId, productsListSetsAr
 				productElementQuickView.className = 'product_quickview_trigger';
 				productElementQuickViewLink = document.createElement('a');
 				productElementQuickViewLink.className = 'product_quickview_link product_quickview_button';
-				productElementQuickViewUrl = '/ajaxProductList/listElementId:' + window.currentElementId + '/elementId:' + productId + '/';
+				productElementQuickViewUrl = '/ajaxProductsList/listElementId:' + window.currentElementId + '/elementId:' + productId + '/';
 				productElementQuickViewLink.href = productElementQuickViewUrl;
 				productElementQuickViewLink.innerText = translationsLogics.get('product.quickview');
 
@@ -107,7 +107,7 @@ window.PagerPageUrl = function(listElementId, selectedPageId, productsListSetsAr
 			}
 		});
 	}
-	productListPagerUrl = '/ajaxproductList/listElementId:' + window.currentPageId + '/page:' + pageId + '/';
+	productListPagerUrl = '/ajaxProductsList/listElementId:' + window.currentPageId + '/page:' + pageId + '/';
 
 	productListPagerLink.href = productListPagerUrl;
 	//productListPagerLink.innerText = translationsLogics.get('product.quickview');

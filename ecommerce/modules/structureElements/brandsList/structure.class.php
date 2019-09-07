@@ -12,6 +12,9 @@ class brandsListElement extends structureElement implements ConfigurableLayoutsP
     public $defaultActionName = 'show';
     public $role = 'container';
     protected $subMenuList;
+    /**
+     * @var brandElement[]
+     */
     protected $brandsList;
     protected $brandsInfo;
 

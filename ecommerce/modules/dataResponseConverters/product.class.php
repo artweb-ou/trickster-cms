@@ -26,11 +26,11 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             'content' => 'content',
 
             // new
-            'code'                      => 'code',
-            'languageId'                => 'languageId',
-            'price'                     => 'price',
-            'oldPrice'                  => 'oldPrice',
-            'discount'                  =>  function ($element) {
+            'code' => 'code',
+            'languageId' => 'languageId',
+            'price' => 'price',
+            'oldPrice' => 'oldPrice',
+            'discount' => function ($element) {
                 /**
                  * @var productElement $element
                  */
@@ -39,9 +39,9 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 }
                 return '';
             },
-            'showincategory'            => 'showincategory',
-            'brandId'                   => 'brandId',
-            'brand'                     => function ($element) {
+            'showincategory' => 'showincategory',
+            'brandId' => 'brandId',
+            'brand' => function ($element) {
                 /**
                  * @var productElement $element
                  */
@@ -50,73 +50,59 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 }
                 return '';
             },
-            'purchaseCount'             => 'purchaseCount',
-            'inactive'                  => 'inactive',
-            'color'                     => 'color',
-            'deliveryStatus'            => 'deliveryStatus',
-            'availabilityStatus'        => 'availabilityStatus',
-            'importCode'                => 'importCode',
-            'deliveryPriceType'         => 'deliveryPriceType',
-            'importOrigin'              => 'importOrigin',
-            'importId'                  => 'importId',
-            'metaTitle'                 => 'metaTitle',
-            'metaDescription'           => 'metaDescription',
-        //    'availability'              => 'availability',
-            'availability'              => function ($element) {
-            /**
-             * @var productElement $element
-             */
+            'purchaseCount' => 'purchaseCount',
+            'inactive' => 'inactive',
+            'color' => 'color',
+            'deliveryStatus' => 'deliveryStatus',
+            'availabilityStatus' => 'availabilityStatus',
+            'importCode' => 'importCode',
+            'deliveryPriceType' => 'deliveryPriceType',
+            'importOrigin' => 'importOrigin',
+            'importId' => 'importId',
+            'metaTitle' => 'metaTitle',
+            'metaDescription' => 'metaDescription',
+            'availability' => function ($element) {
+                /**
+                 * @var productElement $element
+                 */
                 $translationsManager = $element->getService('translationsManager');
-                $availabilityStatus =  $translationsManager->getTranslationByName('product.' . $element->availability);
+                $availabilityStatus = $translationsManager->getTranslationByName('product.' . $element->availability);
 
                 $elementAvailability = [];
                 $elementAvailability[$element->availability] = $availabilityStatus;
                 return $elementAvailability;
             },
-            'quantity'                  => 'quantity',
-            'canonicalUrl'              => 'canonicalUrl',
-            'metaDenyIndex'             => 'metaDenyIndex',
-            'minimumOrder'              => 'minimumOrder',
-            'lastPurchaseDate'          => 'lastPurchaseDate',
-//            'lastPurchaseDate'          => function ($element) {
-//            /**
-//             * @var productElement $element
-//             */
-//                return date('Y-m-d H:i:s',$element->lastPurchaseDate);
-//            },
-            'importPrice'               => 'importPrice',
-            'h1'                        => 'h1',
+            'quantity' => 'quantity',
+            'canonicalUrl' => 'canonicalUrl',
+            'metaDenyIndex' => 'metaDenyIndex',
+            'minimumOrder' => 'minimumOrder',
+            'lastPurchaseDate' => 'lastPurchaseDate',
+            'importPrice' => 'importPrice',
+            'h1' => 'h1',
             'qtFromConnectedCategories' => 'qtFromConnectedCategories',
-// new new
-            'connectedProductCategories'=> 'getProductConnectedCategories',
-//            'connectedProductCategories'=> function($element) {
-//                /**
-//                 * @var productElement $element
-//                 */
-//                return $element->getProductConnectedCategories();
-//            },
-            'discountAmount'         =>  function($element) {
+            'connectedProductCategories' => 'getProductConnectedCategories',
+            'discountAmount' => function ($element) {
                 /**
                  * @var productElement $element
                  */
                 return ($element->getDiscountAmount(false, true) > 0) ? $element->getDiscountAmount(false, true) : false;
             },
 
-            'deliveryTypesInfo'         =>  function($element) {
+            'deliveryTypesInfo' => function ($element) {
                 /**
                  * @var productElement $element
                  */
 
                 $deliveryTypesInfo = $element->getDeliveryTypesInfo();
                 $deliveryInfo = [];
-                foreach ($deliveryTypesInfo as $key=>$value) {
-                    $deliveryInfo[$value['id']] = ['title'=>$value['title'], 'minPrice' => $value['minPrice'], 'maxPrice' => $value['maxPrice']];
+                foreach ($deliveryTypesInfo as $key => $value) {
+                    $deliveryInfo[$value['id']] = ['title' => $value['title'], 'minPrice' => $value['minPrice'], 'maxPrice' => $value['maxPrice']];
                 }
-                return $deliveryInfo ;
+                return $deliveryInfo;
             },
 
 
-            'title_ga' =>function ($element) {
+            'title_ga' => function ($element) {
                 /**
                  * @var productElement $element
                  */
@@ -216,13 +202,13 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             },
             'introductionText' => function ($element, $scope) {
                 /**
-                 * @var dataResponseConverter $scope
+                 * @var DataResponseConverter $scope
                  */
                 return $scope->htmlToPlainText($element->introduction);
             },
             'contentText' => function ($element, $scope) {
                 /**
-                 * @var dataResponseConverter $scope
+                 * @var DataResponseConverter $scope
                  */
                 return $scope->htmlToPlainText($element->content);
             },
@@ -233,23 +219,6 @@ class productDataResponseConverter extends StructuredDataResponseConverter
     {
         return [
             'api' => [
-                'id',
-                'title',
-                'dateCreated',
-                'dateModified',
-                'url',
-                'image',
-                'content',
-                'introduction',
-            ],
-            'search' => [
-                'id',
-                'searchTitle',
-                'url',
-                'structureType',
-                'introductionText',
-            ],
-            'detailed'    => [
                 'id',
                 'title',
                 'dateCreated',
@@ -308,10 +277,39 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 'qtFromConnectedCategories',
 
                 'deliveryTypesInfo',
-//                'amountFilter',
-//                'amountFilterDefaultLimit',
-
-
+            ],
+            'search' => [
+                'id',
+                'searchTitle',
+                'url',
+                'structureType',
+                'introductionText',
+            ],
+            'list' => [
+                'id',
+                'price',
+                'title',
+                'category',
+                'brand',
+                'title_ga',
+                'category_ga',
+                'brand_ga',
+                'oldPrice',
+            ],
+            'detailed' => [
+                'id',
+                'price',
+                'title',
+                'category',
+                'brand',
+                'title_ga',
+                'category_ga',
+                'brand_ga',
+                'oldPrice',
+                'parametersGroups',
+                'selectionsPricings',
+                'selectionsOldPricings',
+                'selectionsImages',
             ],
         ];
     }

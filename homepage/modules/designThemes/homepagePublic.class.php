@@ -116,8 +116,8 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.socialMediaShare.js',
             'component.spoiler.js',
             'mixin.scrollAttaching.js',
-            'logics.ajaxProductList.js',
-            'component.ajaxProductList.js',
+            'logics.ajaxProductsList.js',
+            'component.ajaxProductsList.js',
             'logics.templatesManager.js',
 
             'logics.pager.js',

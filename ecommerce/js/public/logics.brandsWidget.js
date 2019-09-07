@@ -1,7 +1,9 @@
 window.brandsWidgetLogics = new function() {
+    var brandsList = false;
+
     var initLogics = function() {
-        if (typeof window.brandsList != 'undefined' && window.brandsList.length > 0) {
-            brandsList = window.brandsList;
+        if (typeof window.brandsWidget != 'undefined' && typeof window.brandsWidget.brands != 'undefined' && window.brandsWidget.brands.length > 0) {
+            brandsList = window.brandsWidget.brands;
             controller.addListener('DOMContentReady', initComponents);
         }
     };
@@ -14,7 +16,5 @@ window.brandsWidgetLogics = new function() {
     this.getBrandsList = function() {
         return brandsList;
     };
-    var self = this;
-    var brandsList = false;
     controller.addListener('initLogics', initLogics);
 };

@@ -1,9 +1,9 @@
 <?php
 
-class ajaxProductListApplication extends controllerApplication
+class ajaxProductsListApplication extends controllerApplication
 {
     public $rendererName = 'json';
-    protected $applicationName = 'ajaxProductList';
+    protected $applicationName = 'ajaxProductsList';
     protected $mode = 'public';
 
     public function initialize()
@@ -17,18 +17,14 @@ class ajaxProductListApplication extends controllerApplication
 
     public function execute($controller)
     {
-
         $response = new ajaxResponse();
         $languagesManager = $this->getService('languagesManager');
 
         $response->setPreset('detailed');
-        /**
-         * @var structureManager $structureManager
-         */
 
         $structureManager = $this->getService('structureManager', [
-            'rootUrl'       => $controller->rootURL,
-            'rootMarker'    => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
+            'rootUrl' => $controller->rootURL,
+            'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
             'configActions' => false,
         ], true);
         $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
@@ -43,49 +39,26 @@ class ajaxProductListApplication extends controllerApplication
 
                     if ($elementId = $controller->getParameter('elementId')) {
                         $products = $element->getSingleProduct($elementId);
-                    }
-                    else {
+                    } else {
                         $products = $element->getProductsList();
                     }
                     $filters = $element->getFilters();
 
-                    foreach ($filters as $nr => $filter) {
+                    foreach ($filters as $filter) {
                         $categoryFilters['filters'][] = [
-                            'type'      => $filter->getType(),
-                            'id'        => $filter->getId(),
-                            'title'     => $filter->getTitle(),
-                            'options'   => $filter->getOptionsInfo(),
+                            'type' => $filter->getType(),
+                            'id' => $filter->getId(),
+                            'title' => $filter->getTitle(),
+                            'options' => $filter->getOptionsInfo(),
                         ];
                     }
-
-                    $settings['settings'] = [
-                        'pagerDefaultLimit'=> $element->getDefaultLimit(),
-                    ];
-
-
-//                    $pager = $element->getDefaultLimit();
-
-//                    public function getDefaultLimit()
-//                    {
-//                        return $this->getService('ConfigManager')->get('main.pageAmountProducts');
-//                    }
-//
-//
-//                    'amountFilterDefaultLimit' => function ($element) {
-//                        /**
-//                         * @var productElement $element
-//                         */
-//                        $amountFilterConfig = $element->getService('ConfigManager');
-//                        return $amountFilterConfig->get('main.pageAmountProducts');
-//                    },
-
                 }
             }
         }
 
         $response->setResponseData("product", $products);
-        $response->setResponseData("listInfo", $categoryFilters);
-        $response->setResponseData("settings", $settings);
+        $response->setResponseData("filters", $categoryFilters);
+        $response->setResponseData("pagerDefaultLimit", $element->getDefaultLimit());
 
         $this->renderer->assign('responseStatus', $status);
         $this->renderer->assign('responseData', $response->responseData);
