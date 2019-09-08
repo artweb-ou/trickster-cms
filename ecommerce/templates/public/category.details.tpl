@@ -20,8 +20,8 @@
 			</div>
 		</div>
 	{/if}
-	{include file=$theme->template('category.subcategories.tpl') element=$element}
-	{include file=$theme->template('category.products.tpl') element=$element}
+	{include file=$theme->template('category.subcategories.tpl')}
+	{include file=$theme->template('component.productslist.tpl') layout=$element->getProductsLayout() productsListClass='category_details_products'}
 	{/stripdomspaces}
 {/capture}
 

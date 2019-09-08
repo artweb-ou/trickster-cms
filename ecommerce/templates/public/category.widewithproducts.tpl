@@ -5,7 +5,7 @@
 			{$element->introduction}
 		</div>
 	{/if}
-	<div class="category_short_products products_list">
+	<div class="category_short_products productslist_products">
 		{foreach from=$element->getTopProductsList() item=product}
 			{include file=$theme->template('product.thumbnailsmall.tpl') element=$product}
 		{/foreach}

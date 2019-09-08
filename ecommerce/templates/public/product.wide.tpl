@@ -42,7 +42,6 @@
 		{/if}
 	</div>
 {/capture}
-
 {capture assign="moduleControls"}
 	<a href="{$element->URL}" class="product_wide_button product_short_button button">
 		<span class='button_text'>{translations name='product.short_select'}</span>
@@ -59,7 +58,7 @@
 		</div>
 	{/if}
 {/capture}
-{assign moduleClass "product_wide productid_{$element->id}"}
+{assign moduleClass "product_wide product_short productid_{$element->id}"}
 {assign moduleTitleClass "product_wide_title"}
 {assign moduleAttributes ''}
 {assign moduleSideContentClass "product_wide_image_container"}

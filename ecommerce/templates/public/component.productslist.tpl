@@ -1,5 +1,7 @@
-{if $element->getProductsLayout() != "hide"}
-    <div class="category_details_products_related">
+{$productsList=$element->getProductsList()}
+{$pager=$element->getProductsPager()}
+{if $layout != "hide"}
+    <div class="productslist_component{if !empty($componentClass)} {$componentClass}{/if}">
         {include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=true}
         {if $pager && count($pager->pagesList)>1 || $element->isSortable()}
             <div class="products_top_pager">
@@ -13,8 +15,8 @@
             </div>
         {/if}
         {* Products *}
-        {if $element->getProductsLayout() != "hide"}
-            {if $element->getProductsLayout() == 'table'}
+        {if $layout != "hide"}
+            {if $layout == 'table'}
                 {assign "parameters" $element->getUsedParametersInfo()}
                 {assign "columns" $element->getActiveTableColumns()}
                 <table class="category_products_table table_component">
@@ -44,8 +46,8 @@
                     </tbody>
                 </table>
             {else}
-                <div class='category_details_products products_list' data-products-list="quickview, basket">
-                    {$template = $theme->template("product.{$element->getProductsLayout()}.tpl", true)}
+                <div class='productslist_products {if !empty($productsListClass)} {$productsListClass}{/if}'>
+                    {$template = $theme->template("product.{$layout}.tpl", true)}
                     {if !$template}
                         {$template = $theme->template('product.thumbnailsmall.tpl')}
                     {/if}

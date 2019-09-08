@@ -25,9 +25,10 @@ class ecommercePublicDesignTheme extends DesignTheme
             'logics.categoryShort.js',
             'logics.categoryThumbnail.js',
             'logics.productGallery.js',
-            'logics.productShort.js',
             'logics.selectedProducts.js',
             'logics.productLimits.js',
+            'logics.product.js',
+            'component.ProductsList.js',
             'component.basketButton.js',
             'component.productDetails.js',
             'component.productsFilter.js',
@@ -39,6 +40,7 @@ class ecommercePublicDesignTheme extends DesignTheme
             'component.categoryThumbnail.js',
             'component.productGallery.js',
             'component.productShort.js',
+            'component.productLimits.js',
             'component.selectedProductsColumn.js',
             'component.selectedProductsScroll.js',
             'component.shoppingBasketPopup.js',
@@ -63,7 +65,6 @@ class ecommercePublicDesignTheme extends DesignTheme
             'component.ShoppingBasketTotals.js',
             'component.ShoppingBasketTotalsRow.js',
             'component.shoppingBasketStatus.js',
-            'component.productLimits.js',
         ];
     }
 }

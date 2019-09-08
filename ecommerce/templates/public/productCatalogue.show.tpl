@@ -57,7 +57,7 @@
 					</tbody>
 				</table>
 			{else}
-				<div class='category_details_products products_list'>
+				<div class='category_details_products productslist_products'>
 					{if $element->productsLayout == "thumbnailsmall"}
 						{foreach $element->getProductsList() as $product}
 							{include file=$theme->template('product.thumbnailsmall.tpl') element=$product}

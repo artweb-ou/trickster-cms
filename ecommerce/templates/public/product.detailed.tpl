@@ -73,10 +73,8 @@
 	</a>
 {/capture}
 
-{assign moduleClass "product_detailed productid_{$element->id}"}
+{assign moduleClass "product_detailed product_short productid_{$element->id}"}
 {assign moduleTitleClass "product_detailed_header_title"}
-
-
-{assign moduleSideContentClass "product_wide_image_container"}
+{assign moduleSideContentClass "product_detailed_image_container"}
 {assign moduleContentClass "product_detailed_column_right"}
 {include file=$theme->template("component.subcontentmodule_wide.tpl")}

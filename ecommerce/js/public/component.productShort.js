@@ -99,11 +99,3 @@ function ProductShortComponent(componentElement) {
 
     init();
 }
-
-function ProductGalleryComponent(componentElement) {
-    var init = function() {
-        new ToolTipComponent(componentElement, window.translationsLogics.get('product.viewproduct'));
-    };
-
-    init();
-}
