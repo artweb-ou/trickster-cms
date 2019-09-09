@@ -34,7 +34,7 @@ class EventFormStructure extends ElementForm
         'address' => [
             'type' => 'input.multi_language_text',
         ],
-	'location' => [
+        'location' => [
             'type' => 'input.multi_language_text',
         ],
         'image' => [

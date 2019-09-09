@@ -14,13 +14,19 @@ class receiveLinkListItem extends structureElementAction
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
             }
             $additionalImages = [
-                'secondaryImage',
-                'tertiaryImage',
-                'quaternaryImage',
+                'secondary'=>'secondaryImage',
+                'tertiary'=>'tertiaryImage',
+                'quaternary'=>'quaternaryImage',
             ];
-            foreach($additionalImages as $imageCode) {
+
+//            if ($structureElement->getDataChunk("secondaryImage")->originalName) {
+//                $structureElement->secondaryImage = $structureElement->id.'_secondary';
+//                $structureElement->secondaryImageOriginalName = $structureElement->getDataChunk("secondaryImage")->originalName;
+//            }
+
+            foreach($additionalImages as $imageKey=>$imageCode) {
                 if (!is_null($structureElement->getDataChunk($imageCode)->originalName)) {
-                    $structureElement->$imageCode = $structureElement->id . "_$imageCode";
+                    $structureElement->$imageCode = $structureElement->id . "_$imageKey";
                     $field = $imageCode . 'OriginalName';
                     $structureElement->$field = $structureElement->getDataChunk($imageCode)->originalName;
                 }
