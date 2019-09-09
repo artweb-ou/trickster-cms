@@ -170,21 +170,40 @@ abstract class ProductsListElement extends menuStructureElement
                 $ids = null;
                 /**
                  * @var Connection $db
+                 * @var $parameterElement productParameterElement
                  */
-                $db = $this->getService('db');
-                foreach ($parameterValues as $counter => $parameterValue) {
-                    $query = $db->table('module_product_parameter_value')
-                        ->select('productId')
-                        ->where('value', '=', $parameterValue);
-                    if ($ids !== null) {
-                        $query->whereIn('productId', $ids);
-                    }
-                    $records = $query->get();
-                    $ids = array_column($records, 'productId');
-                    if (!$ids) {
-                        break;
+                $structureManager = $this->getService('structureManager');
+                foreach ($parameterValues as $parameter) {
+                    $parameterElement = $structureManager->getElementById($parameter);
+                    if ($parameterElement) {
+                        $paramaterSelections[$parameterElement->getParentElement()->id][] = $parameter;
                     }
                 }
+                $ids = [];
+                $filteredIds = [];
+                $db = $this->getService('db');
+                $x = 0;
+                foreach ($paramaterSelections as $parameterId => $paramaterSelection) {
+                    $filteredIds[$x] = [];
+                    foreach ($paramaterSelection as $key => $value) {
+                        $query = $db->table('module_product_parameter_value')
+                            ->select('productId')
+                            ->where('value', '=', $value);
+                        $records = $query->get();
+                        $filteredIds[$x] = array_merge($filteredIds[$x], array_column($records, 'productId'));
+                        if (!$filteredIds) {
+                            break;
+                        }
+                    }
+                    $x++;
+                }
+
+                if(count($paramaterSelections) > 1) {
+                    $ids = call_user_func_array('array_intersect', $filteredIds);
+                } else {
+                    $ids = $filteredIds[0];
+                }
+
                 $filteredProductsQuery->whereIn('baseproducts.id', $ids);
             }
 
@@ -226,6 +245,9 @@ abstract class ProductsListElement extends menuStructureElement
      */
     public function getProductsList()
     {
+        $sessionManager = $this->getService('ServerSessionManager');
+        $sessionManager->setEnabled(true);
+        $sessionManager->set('fromProductList', $this->id);
         if ($this->productsList !== null) {
             return $this->productsList;
         }
