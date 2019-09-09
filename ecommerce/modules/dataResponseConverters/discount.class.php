@@ -53,6 +53,8 @@ class discountDataResponseConverter extends StructuredDataResponseConverter
                 'url',
                 'products',
                 'filters',
+                'filteredProductsAmount',
+                'filterLimit',
             ],
         ];
     }

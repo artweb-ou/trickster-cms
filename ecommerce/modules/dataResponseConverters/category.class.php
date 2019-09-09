@@ -30,6 +30,11 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
             'image' => 'image',
             'products' => 'getProductsData',
             'filters' => 'getFiltersData',
+            'filteredProductsAmount' => 'getFilteredProductsAmount',
+            'filterLimit' => 'getFilterLimit',
+            'currentPage' => function(ProductsListElement $element){
+                return $element->getProductsPager()->getCurrentPage();
+            }
         ];
     }
 
@@ -60,6 +65,9 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
                 'url',
                 'products',
                 'filters',
+                'filteredProductsAmount',
+                'filterLimit',
+                'currentPage',
             ],
         ];
     }

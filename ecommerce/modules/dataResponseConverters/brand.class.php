@@ -55,6 +55,8 @@ class brandDataResponseConverter extends StructuredDataResponseConverter
                 'url',
                 'products',
                 'filters',
+                'filteredProductsAmount',
+                'filterLimit',
             ],
         ];
     }

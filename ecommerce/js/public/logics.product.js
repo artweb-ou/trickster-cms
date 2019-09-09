@@ -14,7 +14,7 @@ window.productLogics = new function() {
         elements = document.querySelectorAll('.productslist_component');
         for (i = 0; i < elements.length; i++) {
             var id = elements[i].dataset.id;
-            if (typeof productsListsIndex[id] !== 'undefined'){
+            if (typeof productsListsIndex[id] !== 'undefined') {
                 var productsListComponent = new ProductsListComponent(elements[i], productsListsIndex[id]);
                 productsListComponents.push(productsListComponent);
             }
@@ -69,10 +69,19 @@ window.productLogics = new function() {
 window.ProductsList = function() {
     var self = this;
     this.title = '';
+    this.url = '';
     this.products = [];
     this.productsIndex = {};
+    this.filteredProductsAmount = 0;
+    this.filterLimit = 0;
+    this.currentPage = 1;
+
     this.importData = function(data) {
         self.id = data.id;
+        self.url = data.url;
+        self.filteredProductsAmount = data.filteredProductsAmount;
+        self.filterLimit = data.filterLimit;
+        self.currentPage = data.currentPage;
 
         if (typeof data.title != 'undefined') {
             self.title = data.title;

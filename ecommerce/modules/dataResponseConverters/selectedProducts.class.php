@@ -54,6 +54,8 @@ class selectedProductsDataResponseConverter extends StructuredDataResponseConver
                 'url',
                 'products',
                 'filters',
+                'filteredProductsAmount',
+                'filterLimit',
             ],
         ];
     }

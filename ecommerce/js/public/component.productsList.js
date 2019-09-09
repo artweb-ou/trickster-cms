@@ -2,6 +2,7 @@ window.ProductsListComponent = function(componentElement, productsListData) {
     var self = this;
     var productsListElement;
     var products = [];
+    var pagers = [];
     var init = function() {
         initComponents();
     };
@@ -13,6 +14,11 @@ window.ProductsListComponent = function(componentElement, productsListData) {
                 var product = new ProductShortComponent(elements[i]);
                 products.push(product);
             }
+        }
+        elements = componentElement.querySelectorAll('.pager_block');
+        for (i = 0; i < elements.length; i++) {
+            var pagerComponent = window.pagerLogics.getPager(elements[i], productsListData.url, productsListData.filteredProductsAmount, productsListData.filterLimit, productsListData.currentPage, 'page', 2);
+            pagers.push(pagerComponent);
         }
     };
 
