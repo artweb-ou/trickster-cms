@@ -13,7 +13,7 @@
         <div class="form_image_component{if !$element->$fieldName} form_image_component_hidden{/if}">
             {if $element->$fieldName}
                 <img class="form_image {$item.imageClass}"
-                    src='{$controller->baseURL}image/type:{$item.preset}/id:{$element->$fieldName}/filename:{if !empty($item.filename) && !empty($formData.{$item.filename})}{$formData.{$item.filename}}{else}{$fieldName}{/if}'/>
+                    src='{$controller->baseURL}image/type:{$item.preset}/id:{$element->$fieldName}/filename:{if !empty($item.filename) && !empty($formData.{$item.filename})}{$formData.{$item.filename}}{else}{$formData.originalName}{/if}'/>
                 <a class="form_image_delete_button" href="{$element->URL}id:{$element->id}/action:deleteFile/file:{$fieldName}/">
                 </a>
             {/if}

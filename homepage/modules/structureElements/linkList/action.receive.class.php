@@ -29,6 +29,7 @@ class receiveLinkList extends structureElementAction
     {
         $expectedFields = [
             'title',
+            'hideTitle',
             'image',
             'marker',
             'content',

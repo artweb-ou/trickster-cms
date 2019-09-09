@@ -14,6 +14,7 @@ class ServiceFormStructure extends ElementForm
         ],
         'image' => [
             'type' => 'input.image',
+            'filename' => 'originalName',
         ],
         'link_text_1' => [
             'type' => 'input.text',

@@ -15,7 +15,9 @@ class linkListElement extends menuDependantStructureElement implements Configura
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['hideTitle'] = 'checkbox';
         $moduleStructure['layout'] = 'text';
+        $moduleStructure['colorLayout'] = 'text';
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['fixedId'] = 'text';

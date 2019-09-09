@@ -7,6 +7,9 @@ class LinkListFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'hideTitle' => [
+            'type' => 'input.checkbox'
+        ],
         'content' => [
             'type' => 'input.html',
         ],
