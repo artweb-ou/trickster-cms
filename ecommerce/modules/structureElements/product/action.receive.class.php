@@ -152,10 +152,10 @@ class receiveProduct extends structureElementAction
 
             $collectionsIdIndex = $linksManager->getConnectedIdIndex($structureElement->id, 'collectionProduct', 'child');
             foreach ($structureElement->collectionsListId as $collectionsListId) {
-                if (!isset($categoriesIdIndex[$collectionsListId])) {
+                if (!isset($collectionsIdIndex[$collectionsListId])) {
                     $linksManager->linkElements($collectionsListId, $structureElement->id, 'collectionProduct');
                 } else {
-                    unset($categoriesIdIndex[$collectionsListId]);
+                    unset($collectionsIdIndex[$collectionsListId]);
                 }
             }
             //delete obsolete categories links
