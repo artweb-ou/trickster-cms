@@ -29,4 +29,3 @@
 {assign moduleContentClass "category_details"}
 
 {include file=$theme->template("component.contentmodule.tpl")}
-

@@ -16,7 +16,6 @@ class ecommercePublicDesignTheme extends DesignTheme
         $this->javascriptFiles = [
             'logics.dpd.js',
             'logics.post24.js',
-            'logics.productDetails.js',
             'logics.productsFilter.js',
             'logics.shoppingBasket.js',
             'logics.smartPost.js',

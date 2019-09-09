@@ -1,6 +1,6 @@
 <?php
 
-class categoryDataResponseConverter extends StructuredDataResponseConverter
+class selectedProductsDataResponseConverter extends StructuredDataResponseConverter
 {
     protected $defaultPreset = 'api';
 
@@ -18,16 +18,11 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
             'dateModified' => function ($element) {
                 return $element->getValue('dateModified');
             },
-            'introductionText' => function ($element, $scope) {
-                return $scope->htmlToPlainText($element->introduction);
-            },
-            'contentText' => function ($element, $scope) {
-                return $scope->htmlToPlainText($element->content);
-            },
-            'searchAmount' => 'getProductsListBaseAmount',
-            'introduction' => 'introduction',
             'content' => 'content',
             'image' => 'image',
+            'imageUrl' => function ($element) {
+                return controller::getInstance()->baseURL . "image/type:brandWidgetItem/id:" . $element->image . "/filename:" . $element->originalName;
+            },
             'products' => 'getProductsData',
             'filters' => 'getFiltersData',
         ];
@@ -45,14 +40,13 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
                 'introduction',
                 'content',
                 'image',
+                'imageUrl',
             ],
             'search' => [
                 'id',
                 'searchTitle',
                 'url',
                 'structureType',
-                'introductionText',
-                'searchAmount',
             ],
             'list' => [
                 'id',

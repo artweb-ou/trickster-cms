@@ -21,17 +21,25 @@
                 {assign "columns" $element->getActiveTableColumns()}
                 <table class="category_products_table table_component">
                     <thead>
-                    {if $columns.title}<th>{translations name='category.title'}</th>{/if}
-                    {if $columns.code}<th>{translations name='product.code'}</th>{/if}
-                    {if $columns.unit}<th>{translations name='product.unit'}</th>{/if}
-                    {if $columns.minimumOrder}<th>{translations name='product.minimum'}</th>{/if}
-                    {if $columns.availability}<th>{translations name='product.stock'}</th>{/if}
+                    {if $columns.title}
+                        <th>{translations name='category.title'}</th>{/if}
+                    {if $columns.code}
+                        <th>{translations name='product.code'}</th>{/if}
+                    {if $columns.unit}
+                        <th>{translations name='product.unit'}</th>{/if}
+                    {if $columns.minimumOrder}
+                        <th>{translations name='product.minimum'}</th>{/if}
+                    {if $columns.availability}
+                        <th>{translations name='product.stock'}</th>{/if}
                     {foreach $parameters as $parameterInfo}
                         <th>{$parameterInfo.title}</th>
                     {/foreach}
-                    {if $columns.price}<th>{translations name='product.price'}</th>{/if}
-                    {if $columns.discount}<th>{translations name='product.discount'}</th>{/if}
-                    {if $columns.quantity && $shoppingBasket}<th>{translations name='product.quantity'}</th>{/if}
+                    {if $columns.price}
+                        <th>{translations name='product.price'}</th>{/if}
+                    {if $columns.discount}
+                        <th>{translations name='product.discount'}</th>{/if}
+                    {if $columns.quantity && $shoppingBasket}
+                        <th>{translations name='product.quantity'}</th>{/if}
                     {if $columns.basket && $shoppingBasket}
                         <th></th>
                     {/if}
@@ -61,7 +69,12 @@
         {include file=$theme->template('pager.tpl') pager=$pager}
     </div>
 {/if}
+
+
 <script>
+    window.productsLists = window.productsLists ? window.productsLists : [];
+    window.productsLists.push({$element->getJsonInfo('list')});
+
     window.templates = window.templates || {ldelim}{rdelim};
     window.templates['product.detailed.js.tpl'] = {$theme->getTemplateSource('product.detailed.js.tpl', true)};
 </script>

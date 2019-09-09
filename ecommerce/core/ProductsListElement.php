@@ -16,7 +16,7 @@ abstract class ProductsListElement extends menuStructureElement
 {
     use ProductFilterFactoryTrait;
     use CacheOperatingElement;
-
+    use JsonDataProviderElement;
     protected $productsList;
 
     protected $productsListBaseQuery;
@@ -258,9 +258,9 @@ abstract class ProductsListElement extends menuStructureElement
 
     public function getSingleProduct($singleId)
     {
-        if ($productsList = $this->getProductsList()){
-            foreach ($productsList as $productElement){
-                if ($productElement->id == $singleId){
+        if ($productsList = $this->getProductsList()) {
+            foreach ($productsList as $productElement) {
+                if ($productElement->id == $singleId) {
                     return $productElement;
                 }
             }
@@ -1025,5 +1025,28 @@ abstract class ProductsListElement extends menuStructureElement
     public function isFiltrationApplied()
     {
         return $this->getFilterPrice() || $this->getFilterDiscountIds() || $this->getFilterBrandIds() || $this->getFilterCategoryIds() || $this->getFilterParameterValueIds() || $this->getFilterAvailability();
+    }
+
+    public function getProductsData()
+    {
+        $data = [];
+        foreach ($this->getProductsList() as $productElement) {
+            $data[] = $productElement->getElementData('list');
+        }
+        return $data;
+    }
+
+    public function getFiltersData()
+    {
+        $data = [];
+        foreach ($this->getFilters() as $filter) {
+            $data[] = [
+                'type' => $filter->getType(),
+                'id' => $filter->getId(),
+                'title' => $filter->getTitle(),
+                'options' => $filter->getOptionsInfo(),
+            ];
+        }
+        return $data;
     }
 }

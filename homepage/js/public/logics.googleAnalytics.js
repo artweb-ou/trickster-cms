@@ -215,7 +215,7 @@ window.googleAnalyticsLogics = new function() {
                     'id': parameters.products[i].getId(),
                     'name': parameters.products[i].getName(),
                     'price': parameters.products[i].getPrice(),
-                    'list_name': list_name,
+                    'list_name': parameters.list_name,
                     'category': parameters.products[i].getCategory(),
                 });
             }

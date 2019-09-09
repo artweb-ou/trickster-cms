@@ -1,6 +1,4 @@
 <tr class="category_products_table_product category_products_table_productid_{$element->id}">
-	<script>window.products = window.products ? window.products: []</script>
-	<script>window.products.push({$element->getJsonInfo('list')})</script>
 	{if $columns.title}
 		<td class="">
 			<a href="{$element->URL}" class="category_products_table_product_link">{$element->title}</a>

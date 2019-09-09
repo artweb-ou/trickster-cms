@@ -22,6 +22,8 @@ class discountDataResponseConverter extends StructuredDataResponseConverter
             'dateModified' => function ($element) {
                 return $element->getValue('dateModified');
             },
+            'products' => 'getProductsData',
+            'filters' => 'getFiltersData',
         ];
     }
 
@@ -44,6 +46,13 @@ class discountDataResponseConverter extends StructuredDataResponseConverter
                 'searchTitle',
                 'url',
                 'structureType',
+            ],
+            'list' => [
+                'id',
+                'title',
+                'url',
+                'products',
+                'filters',
             ],
         ];
     }

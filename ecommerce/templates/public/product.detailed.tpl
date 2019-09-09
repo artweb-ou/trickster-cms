@@ -58,8 +58,6 @@
 			</div>
 		{/stripdomspaces}
 	{/if}
-	<script>window.products = window.products ? window.products : []</script>
-	<script>window.products.push({$element->getJsonInfo('list')})</script>
 {/capture}
 
 {capture assign="moduleControls"}

@@ -1,25 +1,31 @@
 window.productLogics = new function() {
+    var self = this;
     var productsIndex = {};
-    var productsList = [];
+    var productsLists = [];
+    var productsListComponents = [];
     var initLogics = function() {
-        if (typeof window.products !== 'undefined') {
-            importData(window.products);
+        if (typeof window.productsLists !== 'undefined') {
+            importProductsLists(window.productsLists);
         }
-        trackImpressions(productsList);
+        trackImpressions(productsLists);
     };
     var initComponents = function() {
         var elements, i;
-        elements = document.querySelectorAll('.productslist_products');
+        elements = document.querySelectorAll('.productslist_component');
         for (i = 0; i < elements.length; i++) {
-            new ProductShortComponent(elements[i]);
+            var productsListComponent = new ProductsListComponent(elements[i]);
+            productsListComponents.push(productsListComponent);
+        }
+        elements = document.querySelectorAll('.product_details');
+        for (i = 0; i < elements.length; i++) {
+            new ProductDetailsComponent(elements[i]);
         }
     };
-    var importData = function(data) {
-        for (let i = 0; i < data.length; i++) {
-            var product = new Product();
-            product.importData(data[i]);
-            productsList.push(product);
-            productsIndex[product.getId()] = product;
+    var importProductsLists = function(data) {
+        for (var i = 0; i < data.length; i++) {
+            var productsList = new ProductsList(self);
+            productsList.importData(data[i]);
+            productsLists.push(productsList);
         }
     };
     this.getProduct = function(id) {
@@ -28,10 +34,11 @@ window.productLogics = new function() {
         }
         return false;
     };
-    var trackImpressions = function(products) {
-        tracking.impressionTracking(products);
+    var trackImpressions = function(productsLists) {
+        for (var i = 0; i < productsLists.length; i++) {
+            tracking.impressionTracking(productsLists[i].products, productsLists[i].title);
+        }
     };
-
     var receiveData = function(responseStatus, requestName, responseData, callBack) {
         if (responseStatus === 'success' && responseData) {
             callBack(responseData);
@@ -47,11 +54,37 @@ window.productLogics = new function() {
 
         request.send();
     };
+    this.importProduct = function(product) {
+        self.productsIndex[product.getId()] = product;
+    };
 
     controller.addListener('initLogics', initLogics);
     controller.addListener('initDom', initComponents);
 };
 
+window.ProductsList = function() {
+    var self = this;
+    this.title = '';
+    this.products = [];
+    this.productsIndex = {};
+    this.importData = function(data) {
+        self.id = data.id;
+
+        if (typeof data.title != 'undefined') {
+            self.title = data.title;
+        }
+        if (typeof data.products != 'undefined') {
+            for (var i = 0; i < data.products.length; i++) {
+                var product = new Product();
+                product.importData(data.products[i]);
+                self.products.push(product);
+                self.productsIndex[product.getId()] = product;
+
+                window.productLogics.importProduct(product);
+            }
+        }
+    };
+};
 window.Product = function() {
     var data = data;
 

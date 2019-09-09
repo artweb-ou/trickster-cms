@@ -24,6 +24,8 @@ class brandDataResponseConverter extends StructuredDataResponseConverter
             'imageUrl' => function ($element) {
                 return controller::getInstance()->baseURL . "image/type:brandWidgetItem/id:" . $element->image . "/filename:" . $element->originalName;
             },
+            'products' => 'getProductsData',
+            'filters' => 'getFiltersData',
         ];
     }
 
@@ -46,6 +48,13 @@ class brandDataResponseConverter extends StructuredDataResponseConverter
                 'searchTitle',
                 'url',
                 'structureType',
+            ],
+            'list' => [
+                'id',
+                'title',
+                'url',
+                'products',
+                'filters',
             ],
         ];
     }

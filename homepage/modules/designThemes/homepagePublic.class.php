@@ -29,7 +29,6 @@ class homepagePublicDesignTheme extends DesignTheme
             'logics.emailConversion.js',
             'logics.orders.js',
             'logics.googleAnalytics.js',
-            'logics.product.js',
             'logics.passwordReminder.js',
             'logics.lazyImage.js',
             'logics.events.js',
