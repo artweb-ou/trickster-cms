@@ -18,6 +18,7 @@ class formFieldsGroupElement extends structureElement
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['hideTitle'] = 'checkbox';
     }
 
     public function getFormFields()

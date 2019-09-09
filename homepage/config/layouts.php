@@ -61,6 +61,7 @@
 
     'linkList.layouts' => [
         'layout',
+        'colorLayout',
     ],
     'linkList.layout.options' => [
         'thumbnails',

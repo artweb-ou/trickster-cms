@@ -20,7 +20,10 @@ class receiveFormFieldsGroup extends structureElementAction
 
     public function setExpectedFields(&$expectedFields)
     {
-        $expectedFields = ['title'];
-    }
+        $expectedFields = [
+            'title',
+            'hideTitle',
+        ];
+   }
 }
 

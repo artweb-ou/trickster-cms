@@ -23,6 +23,7 @@ class receiveFeedback extends structureElementAction
     {
         $expectedFields = [
             'title',
+            'hideTitle',
             'destination',
             'content',
             'buttonTitle',

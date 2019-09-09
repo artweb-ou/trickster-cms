@@ -6,6 +6,9 @@ class FeedbackFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'hideTitle' => [
+            'type' => 'input.checkbox'
+        ],
         'destination' => [
             'type' => 'input.email',
         ],

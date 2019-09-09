@@ -18,6 +18,7 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['hideTitle'] = 'checkbox';
         $moduleStructure['destination'] = 'text';
         $moduleStructure['content'] = 'html';
         $moduleStructure['buttonTitle'] = 'text';
