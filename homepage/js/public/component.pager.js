@@ -11,15 +11,15 @@ window.PagerComponent = function(componentElement, pagerData) {
             }
         }
 
-        button = new PagerPreviousComponent(pagerData.previousPage);
+        button = new PagerPreviousComponent(pagerData.previousPage, pagerData.callBack);
         componentElement.appendChild(button.getComponentElement());
 
         for (var i = 0; i < pagerData.pagesList.length; i++) {
             var pageData = pagerData.pagesList[i];
-            var page = new PagerPageComponent(pageData);
+            var page = new PagerPageComponent(pageData, pagerData.callBack);
             componentElement.appendChild(page.getComponentElement());
         }
-        button = new PagerNextComponent(pagerData.nextPage);
+        button = new PagerNextComponent(pagerData.nextPage, pagerData.callBack);
         componentElement.appendChild(button.getComponentElement());
     };
     this.getComponentElement = function() {
@@ -28,9 +28,8 @@ window.PagerComponent = function(componentElement, pagerData) {
 
     init();
 };
-window.PagerPageComponent = function(data) {
+window.PagerPageComponent = function(data, callBack) {
     var componentElement;
-    var self = this;
     var init = function() {
         if (data.active) {
             componentElement = document.createElement('a');
@@ -48,18 +47,18 @@ window.PagerPageComponent = function(data) {
         }
     };
     var click = function(event) {
-        eventsManager.preventDefaultAction(event);
-        window.urlParameters.setParameter('page', data.number);
+        event.preventDefault();
+        if (callBack) {
+            callBack(data.number);
+        }
     };
     this.getComponentElement = function() {
         return componentElement;
     };
     init();
 };
-DomElementMakerMixin.call(PagerPageComponent.prototype);
-window.PagerPreviousComponent = function(data) {
+window.PagerPreviousComponent = function(data, callBack) {
     var componentElement;
-    var self = this;
     var init = function() {
         componentElement = document.createElement('a');
         componentElement.className = 'pager_previous';
@@ -75,17 +74,18 @@ window.PagerPreviousComponent = function(data) {
         }
     };
     var click = function(event) {
-        eventsManager.preventDefaultAction(event);
-        window.urlParameters.setParameter('page', data.number);
+        event.preventDefault();
+        if (callBack) {
+            callBack(data.number);
+        }
     };
     this.getComponentElement = function() {
         return componentElement;
     };
     init();
 };
-window.PagerNextComponent = function(data) {
+window.PagerNextComponent = function(data, callBack) {
     var componentElement;
-    var self = this;
     var init = function() {
         componentElement = document.createElement('a');
         componentElement.className = 'pager_next';
@@ -101,8 +101,10 @@ window.PagerNextComponent = function(data) {
         }
     };
     var click = function(event) {
-        eventsManager.preventDefaultAction(event);
-        window.urlParameters.setParameter('page', data.number);
+        event.preventDefault();
+        if (callBack) {
+            callBack(data.number);
+        }
     };
     this.getComponentElement = function() {
         return componentElement;

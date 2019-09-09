@@ -1,21 +1,22 @@
 window.pagerLogics = new function() {
-    this.getPager = function(componentElement, baseURL, elementsCount, elementsOnPage, currentPage, parameterName, visibleAmount) {
-        if (typeof elementsOnPage == 'undefined' || !elementsOnPage) {
-            elementsOnPage = 10;
+    this.getPager = function(parameters) {
+        if (typeof parameters.elementsOnPage == 'undefined' || !parameters.elementsOnPage) {
+            parameters.elementsOnPage = 10;
         }
-        if (typeof currentPage == 'undefined' || !currentPage) {
-            currentPage = 0;
+        if (typeof parameters.currentPage == 'undefined' || !parameters.currentPage) {
+            parameters.currentPage = 0;
         }
-        if (typeof parameterName == 'undefined' || !parameterName) {
-            parameterName = 'page';
+        if (typeof parameters.parameterName == 'undefined' || !parameters.parameterName) {
+            parameters.parameterName = 'page';
         }
-        if (typeof visibleAmount == 'undefined' || !visibleAmount) {
-            visibleAmount = 1;
+        if (typeof parameters.visibleAmount == 'undefined' || !parameters.visibleAmount) {
+            parameters.visibleAmount = 1;
         }
-        return new PagerComponent(componentElement, new PagerData(baseURL, elementsCount, elementsOnPage, currentPage, parameterName, visibleAmount));
+        return new PagerComponent(parameters.componentElement,
+            new PagerData(parameters.baseURL, parameters.elementsCount, parameters.elementsOnPage, parameters.currentPage, parameters.parameterName, parameters.visibleAmount, parameters.callBack));
     };
 };
-window.PagerData = function(baseURL, elementsCount, elementsOnPage, currentPage, parameterName, visibleAmount) {
+window.PagerData = function(baseURL, elementsCount, elementsOnPage, currentPage, parameterName, visibleAmount, callBack) {
     var self = this;
 
     this.nextPage = {};
@@ -24,10 +25,12 @@ window.PagerData = function(baseURL, elementsCount, elementsOnPage, currentPage,
     this.currentPage = 0;
     this.startElement = 0;
     this.pagesAmount = 0;
+    this.callBack = null;
 
     var init = function() {
         self.pagesAmount = Math.ceil(elementsCount / elementsOnPage);
         self.currentPage = currentPage;
+        self.callBack = callBack;
 
         if (self.currentPage > self.pagesAmount) {
             self.currentPage = self.pagesAmount;
