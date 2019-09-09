@@ -1,7 +1,7 @@
 {$productsList=$element->getProductsList()}
 {$pager=$element->getProductsPager()}
 {if $layout != "hide"}
-    <div class="productslist_component{if !empty($componentClass)} {$componentClass}{/if}">
+    <div class="productslist_component{if !empty($componentClass)} {$componentClass}{/if}" data-id="{$element->id}">
         {include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=true}
         {if $pager && count($pager->pagesList)>1 || $element->isSortable()}
             <div class="products_top_pager">

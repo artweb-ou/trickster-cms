@@ -1,4 +1,4 @@
-window.ProductsListComponent = function(componentElement) {
+window.ProductsListComponent = function(componentElement, productsListData) {
     var self = this;
     var productsListElement;
     var products = [];
@@ -15,5 +15,6 @@ window.ProductsListComponent = function(componentElement) {
             }
         }
     };
+
     init();
 };

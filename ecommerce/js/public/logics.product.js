@@ -1,7 +1,7 @@
 window.productLogics = new function() {
     var self = this;
     var productsIndex = {};
-    var productsLists = [];
+    var productsListsIndex = {};
     var productsListComponents = [];
     var initLogics = function() {
         if (typeof window.productsLists !== 'undefined') {
@@ -13,8 +13,11 @@ window.productLogics = new function() {
         var elements, i;
         elements = document.querySelectorAll('.productslist_component');
         for (i = 0; i < elements.length; i++) {
-            var productsListComponent = new ProductsListComponent(elements[i]);
-            productsListComponents.push(productsListComponent);
+            var id = elements[i].dataset.id;
+            if (typeof productsListsIndex[id] !== 'undefined'){
+                var productsListComponent = new ProductsListComponent(elements[i], productsListsIndex[id]);
+                productsListComponents.push(productsListComponent);
+            }
         }
         elements = document.querySelectorAll('.product_details');
         for (i = 0; i < elements.length; i++) {
@@ -25,7 +28,8 @@ window.productLogics = new function() {
         for (var i = 0; i < data.length; i++) {
             var productsList = new ProductsList(self);
             productsList.importData(data[i]);
-            productsLists.push(productsList);
+
+            productsListsIndex[productsList.id] = productsList;
         }
     };
     this.getProduct = function(id) {
@@ -55,7 +59,7 @@ window.productLogics = new function() {
         request.send();
     };
     this.importProduct = function(product) {
-        self.productsIndex[product.getId()] = product;
+        productsIndex[product.getId()] = product;
     };
 
     controller.addListener('initLogics', initLogics);
