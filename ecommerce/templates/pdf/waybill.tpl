@@ -6,12 +6,12 @@
                     {if empty($logo)}
                         {$logo = $theme->getImageUrl("logo.png")}
                     {/if}
-					<img class="logo_image" src="{$logo}">
+					<img class="waybill_logo_image" src="{$logo}">
 				</div>
 			</td>
 			<td class="invoice_header_invoice_info">
 				<div class="invoice_header_order_date">
-                    {date("d.m.y")}
+					{translations name='orderslist.date'}: {date("d.m.Y")}
 				</div>
 			</td>
 		</tr>
