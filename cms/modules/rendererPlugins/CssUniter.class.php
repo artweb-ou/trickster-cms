@@ -95,6 +95,11 @@ class cssUniterRendererPlugin extends rendererPlugin
                 }
             });
 
+            // list length -> Less features not supported by this compiler
+            $this->lessCompiler->registerFunction('length', function ($arg) {
+                list($type, $delimiter, $values) = $arg;
+                return count($values);
+            });
             // min max are Less features not supported by this compiler
             $this->lessCompiler->registerFunction('min', function ($arg) {
                 list($type, $delimiter, $values) = $arg;
