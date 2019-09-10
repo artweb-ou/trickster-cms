@@ -107,10 +107,10 @@ class orderProductElement extends structureElement
      */
     public function getPrice($formatted = true)
     {
-        if(empty($this->price)) {
+        if(!empty($this->vatLessPrice)) {
             $this->price = $this->getVatLessPrice() * $this->getVatRate();
         }
-
+        
         if ($formatted) {
             $currencySelector = $this->getService('CurrencySelector');
             return $currencySelector->formatPrice($this->price);
