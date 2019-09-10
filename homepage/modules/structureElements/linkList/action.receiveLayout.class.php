@@ -17,6 +17,7 @@ class receiveLayoutLinkList extends structureElementAction
     {
         $expectedFields = [
             'layout',
+            'colorLayout',
             'cols',
         ];
     }

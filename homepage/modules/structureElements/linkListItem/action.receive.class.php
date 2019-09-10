@@ -49,6 +49,7 @@ class receiveLinkListItem extends structureElementAction
             'linkText',
             'content',
             'title',
+            'hideTitle',
             'fixedId',
             'marker',
             'highlighted',

@@ -13,6 +13,7 @@ class linkListItemElement extends structureElement implements ConfigurableLayout
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['hideTitle'] = 'checkbox';
         $moduleStructure['content'] = 'html';
         $moduleStructure['link'] = 'url';
         $moduleStructure['linkText'] = 'text';

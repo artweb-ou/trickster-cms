@@ -9,6 +9,9 @@ class LinkListItemFormStructure extends ElementForm
             'type' => 'input.text',
             'textClass' => 'linklistitem_form_search_title',
         ],
+        'hideTitle' => [
+            'type' => 'input.checkbox'
+        ],
         'image' => [
             'type' => 'input.image',
             'preset' => 'adminImage',
