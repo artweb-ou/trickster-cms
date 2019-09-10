@@ -127,7 +127,14 @@ class productElement extends structureElement implements
 
     protected $iconsInfo;
 
-    protected $allowedTypes = ['subArticle'];
+    protected $allowedTypes = ['product'];
+//    protected $allowedTypes = ['subArticle'];
+    protected $allowedProductTypesByAction = [
+        'showImages'    => ['galleryImage'],
+        'showTexts'     => ['subArticle'],
+        'showFiles'     => ['file'],
+        'showFullList'  => ['galleryImage'],
+    ];
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -1445,7 +1452,15 @@ class productElement extends structureElement implements
 
     protected function loadResidingProducts()
     {
-        if ($category = $this->getRequestedParentCategory()) {
+        $sessionManager = $this->getService('ServerSessionManager');
+        $fromCategory = $sessionManager->get('fromProductList');
+        $structureManager = $this->getService('structureManager');
+        if(!empty($fromCategory)) {
+            $category = $structureManager->getElementById($fromCategory);
+        } else {
+            $category = $this->getRequestedParentCategory();
+        }
+        if (!empty($category)) {
             if ($result = $category->getResidingProducts($this->id)) {
                 if ($result['next']) {
                     $this->nextProduct = $result['next'];
@@ -1938,14 +1953,21 @@ class productElement extends structureElement implements
 
     public function getAllowedTypes($currentAction = 'showFullList')
     {
-        if ($currentAction == 'showImages') {
-            $this->allowedTypes = ['galleryImage'];
-        } elseif ($currentAction == 'showTexts') {
-            $this->allowedTypes = ['subArticle'];
-        } else {
-            $this->allowedTypes = [];
-        }
-        return $this->allowedTypes;
+//        if ($currentAction == 'showFullList') {
+//            $fullListAllowed = [];
+//            foreach ($this->allowedProductTypesByAction as $action=>$value) {
+//                $fullListAllowed  = array_merge($fullListAllowed, $value);
+//            }
+//            return array_unique($fullListAllowed);
+//        }
+//        else {
+            if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
+                return $this->allowedProductTypesByAction[$currentAction];
+            }
+            else {
+                return [];
+            }
+//        }
     }
 
     public function getNewElementAction()
