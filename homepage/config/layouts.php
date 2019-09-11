@@ -150,5 +150,13 @@
         'layout',
         'colorLayout',
     ],
+    'widget.layouts' => [
+        'layout',
+        'colorLayout',
+    ],
+    'widget.layout.options' => [
+        'details',
+    ],
+    'widget.layout.default' => 'details',
 
 ];

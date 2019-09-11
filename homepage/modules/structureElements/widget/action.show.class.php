@@ -4,7 +4,8 @@ class showWidget extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $structureElement->setViewName('details');
+//        $structureElement->setViewName('details');
+        $structureElement->setViewName($structureElement->getCurrentLayout('layout'));
     }
 }
 

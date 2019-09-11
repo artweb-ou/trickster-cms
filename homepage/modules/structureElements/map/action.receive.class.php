@@ -27,6 +27,7 @@ class receiveMap extends structureElementAction
     {
         $expectedFields = [
             'title',
+            'hideTitle',
             'content',
             'mapCode',
             'country',

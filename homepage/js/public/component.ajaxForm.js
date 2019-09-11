@@ -53,6 +53,8 @@ function AjaxFormComponent(formElement, callCallback) {
         var errorElementParent;
         if (responseStatus == 'success') {
             var response = responseData['form' + formId + formAction];
+            var sender = '';
+            var senderName = '';
             if (callCallback) {
                 callCallback();
             }
@@ -61,7 +63,7 @@ function AjaxFormComponent(formElement, callCallback) {
                 for (i = 0; i < formElement.elements.length; i++) {
                     if (errorElementName = formElement.elements[i].dataset.name || formElement.elements[i].name) {
                         errorElementParent = formElement.querySelector('[data-fieldname="' + errorElementName + '"]');
-                        console.log(errorElementName)
+                        // console.log(errorElementName)
                         if(errorElementParent) {
                             domHelper.removeClass(errorElementParent, 'form_error');
                         }
@@ -77,7 +79,14 @@ function AjaxFormComponent(formElement, callCallback) {
                     } else if (typeof response.reload !== 'undefined') {
                         document.location.href = document.location.href;
                     } else {
-                        successMessageElement.innerHTML = response.success_message;
+                        if (formElement.dataset && formElement.dataset.sender) {
+                            sender = formElement.querySelector('[name="' + formElement.dataset.sender + '"]');
+                            if (sender && sender.value != '') {
+                                senderName = sender.value.toUpperCase() + ",<br>";
+                            }
+                        }
+                        successMessageElement.innerHTML = senderName + response.success_message;
+                        
                         successMessageElement.style.display = 'block';
 
                         errorMessageElement.innerHTML = '';

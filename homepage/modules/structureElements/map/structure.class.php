@@ -10,6 +10,7 @@ class mapElement extends menuDependantStructureElement implements ConfigurableLa
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['hideTitle'] = 'checkbox';
         $moduleStructure['content'] = 'html';
         $moduleStructure['mapCode'] = 'code';
         $moduleStructure['country'] = 'text';

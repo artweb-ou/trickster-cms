@@ -31,6 +31,7 @@ class receiveWidget extends structureElementAction
         $expectedFields = [
             'structureName',
             'title',
+            'hideTitle',
             'content',
             'code',
             'image',

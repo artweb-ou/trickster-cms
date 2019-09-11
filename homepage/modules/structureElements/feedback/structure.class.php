@@ -101,6 +101,26 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
         return $this->getService('linksManager')->getConnectedIdList($this->id, 'feedbackAnswer', 'parent');
     }
 
+    public function getSenderName()
+    {
+        $groups = $this->getCustomFieldsGroups();
+        $senderName = '';
+
+        $fields = [];
+        foreach ($groups as $groupElement) {
+            foreach ($groupElement->getFormFields() as $field) {
+                if ($field->fieldType == 'input' && (in_array($field->autocomplete, array('firstName', 'fullName')))) {
+                    $senderName = $field->fieldName;
+                    break;
+                }
+            }
+        }
+        //autocomplete
+        //firstName
+        //fullName
+        return $senderName;
+    }
+
     public function getExportArchive()
     {
         $result = '';
