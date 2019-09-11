@@ -103,6 +103,12 @@ function AjaxFormComponent(formElement, callCallback) {
 
                             if(errorElementParent) {
                                 domHelper.addClass(errorElementParent, 'form_error');
+                                if (errorElementParent.dataset && errorElementParent.dataset.errorMessage && errorElementParent.querySelector('[data-error-message-wrapper]')) {
+                                    var errorMessageFormElement = document.createElement('em');
+                                    errorMessageFormElement.textContent = errorElementParent.dataset.errorMessage;
+                                    var errorMessageFormElementparent = errorElementParent.querySelector('[data-error-message-wrapper]');
+                                    errorMessageFormElementparent.appendChild(errorMessageFormElement);
+                                }
                             }
                             else {
                                  domHelper.addClass(errorElement.parentNode.parentNode, 'form_error');
