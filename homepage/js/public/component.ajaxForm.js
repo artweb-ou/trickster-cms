@@ -5,6 +5,8 @@ function AjaxFormComponent(formElement, callCallback) {
     var successMessageElement;
     var errorMessageElement;
     var hideOnSuccessElements;
+    var errorMessageFormElement = [];
+    var errorMessageFormElementParent = [];
 
     var init = function() {
         formId = formElement.elements['id'].value;
@@ -109,14 +111,13 @@ function AjaxFormComponent(formElement, callCallback) {
                                 errorElement = formElement.querySelector('[data-name="' + errorElementName + '"]');
                             }
                             errorElementParent = formElement.querySelector('[data-fieldname="' + errorElementName + '"]');
-
                             if(errorElementParent) {
                                 domHelper.addClass(errorElementParent, 'form_error');
-                                if (errorElementParent.dataset && errorElementParent.dataset.errorMessage && errorElementParent.querySelector('[data-error-message-wrapper]')) {
-                                    var errorMessageFormElement = document.createElement('em');
-                                    errorMessageFormElement.textContent = errorElementParent.dataset.errorMessage;
-                                    var errorMessageFormElementparent = errorElementParent.querySelector('[data-error-message-wrapper]');
-                                    errorMessageFormElementparent.appendChild(errorMessageFormElement);
+                                if (errorElementParent.dataset && errorElementParent.dataset.errorMessage && errorElementParent.querySelector('[data-error-message-wrapper]') && typeof errorMessageFormElement[i] == 'undefined') {
+                                    errorMessageFormElement[i]  = document.createElement('em');
+                                    errorMessageFormElement[i].textContent = errorElementParent.dataset.errorMessage;
+                                    errorMessageFormElementParent[i] = errorElementParent.querySelector('[data-error-message-wrapper]');
+                                    errorMessageFormElementParent[i].appendChild(errorMessageFormElement[i]);
                                 }
                             }
                             else {
