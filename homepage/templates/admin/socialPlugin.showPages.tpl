@@ -1,9 +1,11 @@
+{assign var='formData' value=$element->getFormData()}
+{assign var='formErrors' value=$element->getFormErrors()}
+{assign var='formNames' value=$element->getFormNames()}
 <div class="content_list_block">
-
 	<form class="content_list_form" action="{$currentElement->getFormActionURL()}" method="post" enctype="multipart/form-data">
 		<div class='controls_block content_list_controls'>
 			{capture assign="returnUrl"}{$currentElement->getURL()}id:{$currentElement->id}/action:updateSocialPages/{/capture}
-			<a class="actions_form_button button" href="{$currentElement->getSocialActionUrl('updatePages', $returnUrl)}">
+			<a class="button" href="{$currentElement->getSocialActionUrl('updatePages', $returnUrl)}">
 				<span class="icon icon_move"></span>
 				{translations name='label.update'}
 			</a>

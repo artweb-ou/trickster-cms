@@ -1,0 +1,26 @@
+.instagram_holder_images {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.instagram_holder_image {
+	width: 25%;
+	padding-top: 25%;
+	position: relative;
+	overflow: hidden;
+
+	img {
+		position: absolute;
+		left: 0;
+		top: 0;
+		min-width: 100%;
+		height: 100%;
+	}
+}
+
+@media (max-width: @screen_breakpoint_sm_max) {
+	.instagram_holder_image {
+		width: 50%;
+		padding-top: 50%;
+	}
+}

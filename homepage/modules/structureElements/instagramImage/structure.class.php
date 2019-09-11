@@ -13,5 +13,6 @@ class instagramImageElement extends structureElement
         $moduleStructure['instagramId'] = 'text';
         $moduleStructure['image'] = 'text';
         $moduleStructure['pageSocialId'] = 'text';
+        $moduleStructure['link'] = 'text';
     }
 }

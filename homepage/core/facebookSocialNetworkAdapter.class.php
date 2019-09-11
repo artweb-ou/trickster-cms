@@ -183,12 +183,13 @@ class facebookSocialNetworkAdapter extends SocialNetworkAdapter
                 try {
                     $instagramAccountId = $this->getInstagramAccountId($socialId, $pageToken);
 
-                    $response = $this->getApi()->get($instagramAccountId . '/media?fields=media_url', $this->token);
+                    $response = $this->getApi()->get($instagramAccountId . '/media?fields=media_url,permalink', $this->token);
                     if($images = $response->getGraphEdge()) {
                         foreach($images as $image) {
                             $result[] = [
                                 'id'     => $image->getField('id'),
                                 'image'  => $image->getField('media_url'),
+                                'link'   => $image->getField('permalink'),
                                 'pageSocialId'  => $socialId,
                             ];
                         }

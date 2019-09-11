@@ -13,11 +13,11 @@ class instagramImagesHolderElement extends structureElement
         $moduleStructure['pageSocialId'] = 'text';
     }
 
-    public function getImages()
+    public function getImages($limit = false)
     {
         $socialDataManager = $this->getService('socialDataManager');
         if ($facebookSocialPlugin = $socialDataManager->getSocialPluginByName('facebook')) {
-            return $facebookSocialPlugin->getInstagramImages($this->pageSocialId);
+            return $facebookSocialPlugin->getInstagramImages($this->pageSocialId, $limit);
         }
 
         return false;

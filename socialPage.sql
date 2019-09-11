@@ -13,6 +13,7 @@ ALTER TABLE `engine_social_publishing_status` ADD `pageId` INT(11) NOT NULL AFTE
 CREATE TABLE `engine_module_instagram_image` (
   `id` int(11) NOT NULL,
   `image` text NOT NULL,
+  `link` text NOT NULL,
   `instagramId` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

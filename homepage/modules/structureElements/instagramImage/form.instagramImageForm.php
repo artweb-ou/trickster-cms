@@ -12,6 +12,9 @@ class InstagramImageFormStructure extends ElementForm
         'image' => [
             'type' => 'input.text',
         ],
+        'link' => [
+            'type' => 'input.text',
+        ],
         'pageSocialId' => [
             'type' => 'input.text',
         ],

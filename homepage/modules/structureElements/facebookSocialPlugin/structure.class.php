@@ -50,13 +50,16 @@ class facebookSocialPluginElement extends socialPluginElement
         return $this->pages;
     }
 
-    public function getInstagramImages($pageSocialId = false)
+    public function getInstagramImages($pageSocialId = false, $limit = false)
     {
         $return = [];
         foreach ($this->getChildrenList() as $child) {
             if ($child->structureType == 'instagramImage') {
                 if(!$pageSocialId || $child->pageSocialId == $pageSocialId) {
                     $return[] = $child;
+                    if($limit && count($return) == $limit) {
+                        break;
+                    }
                 }
             }
         }

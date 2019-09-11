@@ -2,10 +2,10 @@
 	{$element->getTitle()}
 {/capture}
 {capture assign="moduleContent"}
-	{if $images = $element->getImages()}
+	{if $images = $element->getImages(8)}
 		<div class="instagram_holder_images">
 			{foreach $images as $image}
-				<a class="instagram_holder_images">
+				<a class="instagram_holder_image" href="{$image->link}" target="_blank">
 					<img src="{$image->image}" />
 				</a>
 			{/foreach}

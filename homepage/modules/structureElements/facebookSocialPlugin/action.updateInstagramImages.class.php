@@ -18,6 +18,7 @@ class updateInstagramImagesFacebookSocialPlugin extends structureElementAction
                             $existedImageElement->prepareActualData();
                             $existedImageElement->importExternalData([
                                 'image' => $image['image'],
+                                'link' => $image['link'],
                             ]);
                             $existedImageElement->persistElementData();
                             unset($existedImagesIds[$image['id']]);
@@ -28,6 +29,7 @@ class updateInstagramImagesFacebookSocialPlugin extends structureElementAction
                             $newImageElement->importExternalData([
                                 'instagramId' => $image['id'],
                                 'image' => $image['image'],
+                                'link' => $image['link'],
                                 'pageSocialId' => $image['pageSocialId'],
                             ]);
                             $newImageElement->persistElementData();

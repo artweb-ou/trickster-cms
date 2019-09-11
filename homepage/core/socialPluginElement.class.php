@@ -17,6 +17,7 @@ abstract class socialPluginElement extends structureElement
         $moduleStructure['icon'] = 'image';
         $moduleStructure['iconOriginalName'] = 'text';
         $moduleStructure['data'] = 'text';
+        $moduleStructure['elements'] = 'array';
         foreach ($this->getSpecialFields() as $fieldName => $specialField) {
             $moduleStructure[$fieldName] = $specialField['format'];
         }

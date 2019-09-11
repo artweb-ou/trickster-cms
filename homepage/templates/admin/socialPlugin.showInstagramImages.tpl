@@ -1,3 +1,6 @@
+{assign var='formData' value=$element->getFormData()}
+{assign var='formErrors' value=$element->getFormErrors()}
+{assign var='formNames' value=$element->getFormNames()}
 <div class="content_list_block">
 	<div class='content_list_controls'>
 		<form method="GET" action="{$currentElement->getSocialActionUrl('updateInstagramImages')}">
@@ -10,7 +13,7 @@
 			<br />
 			{*<input type="hidden" value="{$element->id}" name="socialPostId" />*}
 			<input type="hidden" value="{$currentElement->URL}id:{$currentElement->id}/action:updateInstagramImages/" name="return" />
-			<button type="submit" class="actions_form_button button">
+			<button type="submit" class="button">
 				<span class="icon icon_move"></span>
 				{translations name='label.import'}
 			</button>
