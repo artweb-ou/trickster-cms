@@ -60,4 +60,6 @@
     'socialPage' => 'showForm',
     'instagramImage' => 'showForm',
     'instagramImagesHolder' => 'showForm',
+    'facebookSocialPlugin' => 'showForm',
+    'googleSocialPlugin' => 'showForm',
 ];

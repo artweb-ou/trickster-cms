@@ -7,7 +7,7 @@ abstract class socialPluginElement extends structureElement
     public $languagesParentElementMarker = 'adminLanguages';
     public $dataResourceName = 'module_social_plugin';
     protected $allowedTypes = [];
-    public $defaultActionName = 'showForm';
+    public $defaultActionName = 'show';
     public $role = 'content';
     protected $api;
 
