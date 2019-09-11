@@ -1,5 +1,12 @@
 window.pagerLogics = new function() {
+    var self = this;
     this.getPager = function(parameters) {
+        var pagerData = self.getPagerData(parameters);
+        var pager = new PagerComponent(parameters.componentElement);
+        pager.updateData(pagerData);
+        return pager;
+    };
+    this.getPagerData = function(parameters) {
         if (typeof parameters.elementsOnPage == 'undefined' || !parameters.elementsOnPage) {
             parameters.elementsOnPage = 10;
         }
@@ -12,8 +19,7 @@ window.pagerLogics = new function() {
         if (typeof parameters.visibleAmount == 'undefined' || !parameters.visibleAmount) {
             parameters.visibleAmount = 1;
         }
-        return new PagerComponent(parameters.componentElement,
-            new PagerData(parameters.baseURL, parameters.elementsCount, parameters.elementsOnPage, parameters.currentPage, parameters.parameterName, parameters.visibleAmount, parameters.callBack));
+        return new PagerData(parameters.baseURL, parameters.elementsCount, parameters.elementsOnPage, parameters.currentPage, parameters.parameterName, parameters.visibleAmount, parameters.callBack);
     };
 };
 window.PagerData = function(baseURL, elementsCount, elementsOnPage, currentPage, parameterName, visibleAmount, callBack) {

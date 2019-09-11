@@ -31,6 +31,8 @@ abstract class ProductsListElement extends menuStructureElement
     protected $amountSelectionOptions;
     protected $filterArguments;
     protected $priceRangeSets;
+    protected $productsListMinPrice;
+    protected $productsListMaxPrice;
     protected $selectionsIdsForFiltering;
     protected $selectionsValuesIndex;
     protected $sortingOptions;
@@ -128,6 +130,9 @@ abstract class ProductsListElement extends menuStructureElement
                 if ($deepCategoryIds) {
                     $deepCategoryIds = array_keys($deepCategoryIds);
                     $filteredProductsQuery->whereIn('baseproducts.id', function ($query) use ($deepCategoryIds) {
+                        /**
+                         * @var Builder $query
+                         */
                         $query->from('structure_links')
                             ->select('childStructureId')
                             ->whereIn('parentStructureId', $deepCategoryIds)

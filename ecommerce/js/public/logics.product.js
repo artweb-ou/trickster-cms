@@ -15,7 +15,7 @@ window.productLogics = new function() {
         for (i = 0; i < elements.length; i++) {
             var id = elements[i].dataset.id;
             if (typeof productsListsIndex[id] !== 'undefined') {
-                var productsListComponent = new ProductsListComponent(elements[i], productsListsIndex[id]);
+                var productsListComponent = new ProductsListComponent(elements[i]);
                 productsListComponents.push(productsListComponent);
             }
         }
@@ -25,11 +25,16 @@ window.productLogics = new function() {
         }
     };
     var importProductsLists = function(data) {
+        var productsList;
         for (var i = 0; i < data.length; i++) {
-            var productsList = new ProductsList(self);
+            var id = data[i].id;
+            if (typeof productsListsIndex[id] === 'undefined') {
+                productsList = new ProductsList(self);
+                productsListsIndex[id] = productsList;
+            } else {
+                productsList = productsListsIndex[id];
+            }
             productsList.importData(data[i]);
-
-            productsListsIndex[productsList.id] = productsList;
         }
     };
     this.getProduct = function(id) {
@@ -38,24 +43,38 @@ window.productLogics = new function() {
         }
         return false;
     };
+    this.getProductsList = function(id) {
+        if (typeof productsListsIndex[id] !== 'undefined') {
+            return productsListsIndex[id];
+        }
+        return false;
+    };
     var trackImpressions = function(productsLists) {
         for (var i = 0; i < productsLists.length; i++) {
             tracking.impressionTracking(productsLists[i].products, productsLists[i].title);
         }
     };
-    var receiveData = function(responseStatus, requestName, responseData, callBack) {
-        if (responseStatus === 'success' && responseData) {
-            callBack(responseData);
-        } else {
-            controller.fireEvent('ajaxSearchResultsFailure', responseData);
+    var receiveData = function(responseStatus, requestName, responseData) {
+        if (requestName === 'ajaxProductsList') {
+            if (responseStatus === 'success' && responseData) {
+                if (typeof responseData.productsList !== 'undefined') {
+                    importProductsLists([responseData.productsList]);
+                }
+            } else {
+                controller.fireEvent('ajaxSearchResultsFailure', responseData);
+            }
         }
     };
-    this.sendQuery = function(callBack, reqUrl) {
-        var request = new JsonRequest(reqUrl,
-            function(responseStatus, requestName, responseData) {
-                return receiveData(responseStatus, requestName, responseData, callBack);
-            }, 'ajaxProductsList');
-
+    this.requestProductsListData = function(productsListId, page, filters) {
+        var reqUrl = '/ajaxProductsList/';
+        var parameters = {
+            'listElementId': productsListId,
+            'page': page,
+        };
+        if (typeof filters !== 'undefined') {
+            parameters['filters'] = filters;
+        }
+        var request = new JsonRequest(reqUrl, receiveData, 'ajaxProductsList', parameters);
         request.send();
     };
     this.importProduct = function(product) {
@@ -68,13 +87,14 @@ window.productLogics = new function() {
 
 window.ProductsList = function() {
     var self = this;
-    this.title = '';
-    this.url = '';
-    this.products = [];
-    this.productsIndex = {};
+    this.id = null;
+    this.title = null;
+    this.url = null;
     this.filteredProductsAmount = 0;
     this.filterLimit = 0;
     this.currentPage = 1;
+    var productsByPages = {};
+    var productsIndex = {};
 
     this.importData = function(data) {
         self.id = data.id;
@@ -87,14 +107,21 @@ window.ProductsList = function() {
             self.title = data.title;
         }
         if (typeof data.products != 'undefined') {
+            productsByPages[self.currentPage] = [];
             for (var i = 0; i < data.products.length; i++) {
                 var product = new Product();
                 product.importData(data.products[i]);
-                self.products.push(product);
-                self.productsIndex[product.getId()] = product;
 
+                productsByPages[self.currentPage].push(product);
+                productsIndex[product.getId()] = product;
                 window.productLogics.importProduct(product);
             }
+        }
+        controller.fireEvent('productsListUpdated', self.id);
+    };
+    this.changePage = function(newPageNumber) {
+        if (self.currentPage !== newPageNumber) {
+            productLogics.requestProductsListData(self.id, newPageNumber);
         }
     };
 };
