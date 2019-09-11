@@ -25,11 +25,17 @@
                 {if $data.receiverFields}
 					<div class="invoice_top_to">{translations name='invoice.receiver'}:</div>
 					<div class="invoice_top_payer_row">
-                        {if !empty($data.receiverFields.company.value)}
-                            {$data.receiverFields.company.value} ({$data.receiverFields.firstName.value} {$data.receiverFields.lastName.value})
-                        {else}
-                            {$data.receiverFields.firstName.value} {$data.receiverFields.lastName.value}
-                        {/if}
+						{if !empty($data.receiverFields.firstName.value) && !empty($data.receiverFields.lastName.value)}
+                            {if !empty($data.receiverFields.company.value)}
+                                {$data.receiverFields.company.value} ({$data.receiverFields.firstName.value} {$data.receiverFields.lastName.value})
+                            {else}
+                                {$data.receiverFields.firstName.value} {$data.receiverFields.lastName.value}
+                            {/if}
+							{elseif !empty($data.receiverFields.firstName.value)}
+                            	{$data.receiverFields.firstName.value}
+							{elseif !empty($data.receiverFields.lastName.value)}
+                            	{$data.receiverFields.lastName.value}
+						{/if}
 					</div>
                     {if !empty($data.receiverFields.address.value)}
 						<div class="invoice_top_payer_row">
