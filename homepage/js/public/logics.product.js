@@ -9,7 +9,9 @@ window.productLogics = new function() {
                 productsIndex[products.getId()] = products;
                 impressionProducts.push(products);
             }
-            tracking.impressionTracking(impressionProducts);
+            if(window.productDetailsData === undefined) {
+                tracking.impressionTracking(impressionProducts);
+            }
         }
     };
 
