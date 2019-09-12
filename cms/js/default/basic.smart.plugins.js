@@ -1,3 +1,11 @@
+function empty(variable) {
+    return (typeof variable === 'undefined' || variable === '' || variable === 0 || variable === '0' || variable === null || variable === false || (Array.isArray(variable) && variable.length === 0));
+}
+
+function isset(variable) {
+    return !!variable;
+}
+
 jSmart.prototype.registerPlugin(
     'function',
     'translations',
@@ -6,16 +14,26 @@ jSmart.prototype.registerPlugin(
             return window.translationsLogics.get(params.name);
         }
         return false;
-    }
+    },
 );
+
 jSmart.prototype.getTemplate = function(name) {
-    if (typeof window.templates[name] !== 'undefined') {
-        return window.templates[name];
-    } else {
-        return 'Missing JS Template ' + name;
-    }
+    return templatesManager.get(name);
 };
 
-function empty(variable) {
-    return (typeof variable === 'undefined' || variable === '' || variable === 0 || variable === '0' || variable === null || variable === false || (Array.isArray(variable) && variable.length === 0));
-}
+window.smartyRenderer = new function() {
+    var templates = {};
+    this.fetch = function(name, data) {
+        if (!templates[name]) {
+            templates[name] = new jSmart(templatesManager.get(name));
+        }
+
+        var template = templates[name];
+        data['theme'] = {
+            template: function(templateName) {
+                return templateName;
+            },
+        };
+        return template.fetch(data);
+    };
+};

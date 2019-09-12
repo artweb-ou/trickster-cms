@@ -76,6 +76,7 @@
     window.productsLists.push({$element->getJsonInfo('list')});
 
     window.templates = window.templates || {ldelim}{rdelim};
-    window.templates['product.detailed.js.tpl'] = {$theme->getTemplateSource('product.detailed.js.tpl', true)};
+    window.templates['product.detailed2.tpl'] = {$theme->getTemplateSource('product.detailed2.tpl', true)};
+    window.templates['component.subcontentmodule_wide.tpl'] = {$theme->getTemplateSource('component.subcontentmodule_wide.tpl', true)};
 </script>
 

@@ -40,7 +40,6 @@ window.ProductsListComponent = function(componentElement) {
     var updateHandler = function(updatedId) {
         if (updatedId === id) {
             if (productsListData = window.productLogics.getProductsList(id)) {
-
                 for (var i = 0; i < pagers.length; i++) {
                     var parameters = {
                         'baseURL': productsListData.url,
@@ -57,6 +56,17 @@ window.ProductsListComponent = function(componentElement) {
                 while (productsListElement.firstChild) {
                     productsListElement.removeChild(productsListElement.firstChild);
                 }
+                var html = [];
+                var products = productsListData.getCurrentPageProducts();
+                for (var i = 0; i < products.length; i++) {
+                    var templateName = 'product.detailed2.tpl';
+
+                    var data = {
+                        'element': products[i],
+                    };
+                    html += smartyRenderer.fetch(templateName, data);
+                }
+                componentElement.innerHTML = html;
             }
         }
     };

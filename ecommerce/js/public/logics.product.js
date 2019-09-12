@@ -124,8 +124,16 @@ window.ProductsList = function() {
             productLogics.requestProductsListData(self.id, newPageNumber);
         }
     };
+    this.getCurrentPageProducts = function() {
+        if (typeof productsByPages[self.currentPage] !== 'undefined') {
+            return productsByPages[self.currentPage];
+        }
+        return false;
+    };
 };
 window.Product = function() {
+    var self = this;
+    this.title = null;
     var data = data;
 
     this.getId = function() {
@@ -193,5 +201,6 @@ window.Product = function() {
 
     this.importData = function(newData) {
         data = newData;
+        self.title = data.title;
     };
 };
