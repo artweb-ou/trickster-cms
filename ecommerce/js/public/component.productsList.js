@@ -56,7 +56,7 @@ window.ProductsListComponent = function(componentElement) {
                 while (productsListElement.firstChild) {
                     productsListElement.removeChild(productsListElement.firstChild);
                 }
-                var html = [];
+                var html = '';
                 var products = productsListData.getCurrentPageProducts();
                 for (var i = 0; i < products.length; i++) {
                     var templateName = 'product.detailed2.tpl';
@@ -66,7 +66,7 @@ window.ProductsListComponent = function(componentElement) {
                     };
                     html += smartyRenderer.fetch(templateName, data);
                 }
-                componentElement.innerHTML = html;
+                productsListElement.innerHTML = html;
             }
         }
     };
