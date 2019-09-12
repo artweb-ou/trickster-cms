@@ -69,23 +69,22 @@
 	&:hover {
 		cursor: pointer;
 	}
-	&.show {
-		&:before {
-			transform: rotate(-45deg);
-		}
 
-		&:after {
-			transform: rotate(-45deg);
-		}
+	&.show {
+		.rotate (45deg)
 	}
 
 	&.hide {
+		.rotate(0);
+	}
+
+	.rotate (@deg) {
 		&:before {
-			transform: rotate(90deg);
+			transform: rotate(@deg);
 		}
 
 		&:after {
-			transform: rotate(90deg);
+			transform: rotate(@deg);
 		}
 	}
 }
