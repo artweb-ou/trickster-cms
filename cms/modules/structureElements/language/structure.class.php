@@ -118,6 +118,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         $moduleStructure['backgroundImage'] = 'image';
         $moduleStructure['logoImageOriginalName'] = 'fileName';
         $moduleStructure['logoImage'] = 'image';
+        $moduleStructure['promoText'] = 'text';
         $moduleStructure['hidden'] = 'checkbox';
         $moduleStructure['patternBackground'] = 'checkbox';
     }

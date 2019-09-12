@@ -6,6 +6,9 @@ class FolderFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'subTitle' => [
+            'type' => 'input.text',
+        ],
         'hidden' => [
             'type' => 'input.checkbox',
         ],

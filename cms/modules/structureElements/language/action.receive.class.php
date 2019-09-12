@@ -53,6 +53,7 @@ class receiveLanguage extends structureElementAction
             'image',
             'backgroundImage',
             'logoImage',
+            'promoText',
         ];
     }
 }

@@ -18,6 +18,9 @@ class LanguageFormStructure extends ElementForm
         'logoImage' => [
             'type' => 'input.image',
         ],
+        'promoText' => [
+            'type' => 'input.text',
+        ],
         'backgroundImage' => [
             'type' => 'input.image',
         ],

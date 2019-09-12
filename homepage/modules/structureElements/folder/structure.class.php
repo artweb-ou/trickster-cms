@@ -54,6 +54,7 @@ class folderElement extends menuDependantStructureElement implements Configurabl
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['subTitle'] = 'text';
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['metaTitle'] = 'text';

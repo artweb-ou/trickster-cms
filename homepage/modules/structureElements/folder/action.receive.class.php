@@ -34,6 +34,7 @@ class receiveFolder extends structureElementAction
         $expectedFields = [
             'marker',
             'title',
+            'subTitle',
             'image',
             'hidden',
             'columns',
