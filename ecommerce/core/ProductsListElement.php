@@ -50,6 +50,7 @@ abstract class ProductsListElement extends menuStructureElement
     protected $filterLimit;
     protected $priceInterval = 5;
     protected $cacheKey;
+    protected $categoryIds = null;
 
     public function getProductsListElement()
     {
@@ -639,23 +640,116 @@ abstract class ProductsListElement extends menuStructureElement
         return $this->productsPager;
     }
 
-    protected function getSelectionIdsForFiltering()
-    {
-        if ($this->selectionsIdsForFiltering === null) {
-            $this->selectionsIdsForFiltering = [];
-            /**
-             * @var Connection $db
-             */
-            $db = $this->getService('db');
-            $query = $db->table('module_product_selection')
-                ->select('id')->distinct()
-                ->where('filter', '=', 1);
+//    protected function getSelectionIdsForFiltering()
+//    {
+//        if ($this->selectionsIdsForFiltering === null) {
+//            $this->selectionsIdsForFiltering = [];
+//            /**
+//             * @var Connection $db
+//             */
+//            $db = $this->getService('db');
+//            $query = $db->table('module_product_selection')
+//                ->select('id')->distinct()
+//                ->where('filter', '=', 1);
+//
+//            if ($records = $query->get()) {
+//                $this->selectionsIdsForFiltering = array_column($records, 'id');
+//            }
+//        }
+//        return $this->selectionsIdsForFiltering;
+//    }
 
-            if ($records = $query->get()) {
-                $this->selectionsIdsForFiltering = array_column($records, 'id');
+    protected function getCategoriesIdToTop()
+    {
+        /**
+         * @var $structureManager structureManager
+         * @var $productCatalogue productCatalogueElement
+         * @var $topCategoryElements categoryElement[]
+         */
+        if($this->categoryIds !== null) {
+            return $this->categoryIds;
+        }
+        $structureManager = $this->getService('structureManager');
+        $topCategories = [];
+        $allCategories = [];
+        $connectedProducts = $this->getProductsList();
+        $currentLanguage = $connectedProducts[0]->getCurrentLanguage();
+        $productCatalogue = $structureManager->getElementsByType('productCatalogue', $currentLanguage)[0];
+        $topCategoryElements = $productCatalogue->getCategoriesList();
+        foreach ($connectedProducts as $product) {
+            foreach ($product->getConnectedCategories() as $category) {
+                $this->processCategory($category, $allCategories, $topCategories);
             }
         }
-        return $this->selectionsIdsForFiltering;
+        $this->categoryIds = array_keys($allCategories);
+        $categories = [];
+        foreach ($topCategoryElements as &$topCategory) {
+            if(isset($topCategories[$topCategory->id])) {
+                $level = 0;
+                $topCategory->setLevel($level);
+                $categories[] = $topCategory;
+                $this->categoryFilter($topCategory, $this->categoryIds, $categories, $level);
+            } else {
+                unset($topCategory);
+            }
+        }
+        return $this->categoryIds;
+    }
+
+    /**
+     * @param $category categoryElement
+     * @param $allCategories categoryElement[]
+     * @param $categories array
+     * @param $level int
+     */
+    protected function categoryFilter($category, $allCategories, &$categories, $level) {
+        if(in_array($category->id, $allCategories)) {
+            if ($childCategories = $category->getChildCategories()) {
+                $level ++;
+                foreach ($childCategories as $childCategory) {
+                    if (in_array($childCategory->id, $allCategories)) {
+                        $childCategory->setLevel($level);
+                        $categories[] = $childCategory;
+                        $this->categoryFilter($childCategory, $allCategories, $categories, $level);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param categoryElement $category
+     * @param $allCategories
+     * @param $topCategories
+     */
+    protected function processCategory($category, &$allCategories, &$topCategories)
+    {
+        if (!isset($allCategories[$category->id])) {
+            $allCategories[$category->id] = $category;
+            if ($parentCategories = $category->getParentCategories()) {
+                foreach ($parentCategories as $parentCategory) {
+                    $this->processCategory($parentCategory, $allCategories, $topCategories);
+                }
+            } else {
+                $topCategories[$category->id] = $category;
+            }
+        }
+    }
+
+    protected function getSelectionIdsForFiltering() {
+        $categoryIds = $this->getCategoriesIdToTop();
+        $filtersId = [];
+        if(!empty($categoryIds)) {
+            $db = $this->getService('db');
+            $query = $db->table('structure_links')->select('childStructureId')
+                ->whereIn('parentStructureId', $categoryIds)
+                ->where('type', '=', 'categoryParameter');
+            $result = $query->get();
+            foreach ($result as $id) {
+                $filtersId[$id['childStructureId']] = $id['childStructureId'];
+            }
+        }
+        return $filtersId;
     }
 
     public function getParameterSelectionsForFiltering()

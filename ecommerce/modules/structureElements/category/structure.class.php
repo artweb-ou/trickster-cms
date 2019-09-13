@@ -1066,4 +1066,33 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $x = $this->getCurrentLayout('collectionLayout') == 'hide';
         return $this->getCurrentLayout('collectionLayout') == 'hide';
     }
+
+    public function isFilterableByType($filterType)
+    {
+        switch ($filterType) {
+            case 'category':
+                $result = $this->categoryFilterEnable;
+                break;
+            case 'brand':
+                $result = $this->brandFilterEnabled;
+                break;
+            case 'discount':
+                $result = $this->discountFilterEnabled;
+                break;
+            case 'parameter':
+                $result = $this->parameterFilterEnabled;
+                break;
+            case 'price':
+                //todo: implement checkbox in admin form
+                $result = false;
+                break;
+            case 'availability':
+                $result = $this->availabilityFilterEnabled;
+                break;
+            default:
+                $result = true;
+        }
+
+        return $result;
+    }
 }

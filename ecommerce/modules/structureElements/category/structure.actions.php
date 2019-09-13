@@ -3,6 +3,7 @@ $moduleActions = [];
 $moduleActions[] = 'receive';
 $moduleActions[] = 'show';
 $moduleActions[] = 'showSortingFilter';
+$moduleActions[] = 'receiveSortingFilter';
 $moduleActions[] = 'delete';
 $moduleActions[] = 'clone';
 $moduleActions[] = 'showForm';

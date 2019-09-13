@@ -1,6 +1,6 @@
 <?php
 
-class receiveSettingsCategory extends structureElementAction
+class receiveSortingFilterCategory extends structureElementAction
 {
     protected $loggable = true;
 
