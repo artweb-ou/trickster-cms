@@ -58,7 +58,7 @@ class orderProductElement extends structureElement
             'variation' => $this->variation,
             'amount' => $this->amount,
             'oldPrice' => $this->oldPrice,
-            'price' => $this->price,
+            'price' => $this->getPrice(true),
             'category' => '',
             'category_ga' => '',
             'title_ga' => $this->title_dl,
@@ -107,6 +107,10 @@ class orderProductElement extends structureElement
      */
     public function getPrice($formatted = true)
     {
+        if(!empty($this->vatLessPrice)) {
+            $this->price = $this->getVatLessPrice() * $this->getVatRate();
+        }
+        
         if ($formatted) {
             $currencySelector = $this->getService('CurrencySelector');
             return $currencySelector->formatPrice($this->price);
@@ -149,12 +153,9 @@ class orderProductElement extends structureElement
 
     public function getVatLessPrice()
     {
-        if ($this->price !== '') {
+        if (empty($this->vatLessPrice)) {
             $this->vatLessPrice = $this->getPrice(false) / $this->getVatRate();
-        } else {
-            $this->vatLessPrice = '';
         }
-
         return $this->vatLessPrice;
     }
 
