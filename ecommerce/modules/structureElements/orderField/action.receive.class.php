@@ -8,6 +8,13 @@ class receiveOrderField extends structureElementAction
     {
         if ($this->validated) {
             $structureElement->prepareActualData();
+            if($fieldId = $structureElement->fieldId) {
+                $element = $structureManager->getElementById($fieldId);
+                if(!empty($element)) {
+                    $structureElement->title = $element->getTitle();
+                    $structureElement->fieldName = $element->fieldName;
+                }
+            }
             $structureElement->persistElementData();
         }
         $structureElement->executeAction("showForm");
@@ -17,6 +24,7 @@ class receiveOrderField extends structureElementAction
     {
         $expectedFields = [
             'value',
+            'fieldId'
         ];
     }
 }
