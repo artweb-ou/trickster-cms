@@ -93,6 +93,7 @@ window.ProductsList = function() {
     this.filteredProductsAmount = 0;
     this.filterLimit = 0;
     this.currentPage = 1;
+    this.productsLayout = 'thumbnail';
     var productsByPages = {};
     var productsIndex = {};
 
@@ -102,6 +103,7 @@ window.ProductsList = function() {
         self.filteredProductsAmount = data.filteredProductsAmount;
         self.filterLimit = data.filterLimit;
         self.currentPage = data.currentPage;
+        self.productsLayout = data.productsLayout;
 
         if (typeof data.title != 'undefined') {
             self.title = data.title;
@@ -133,14 +135,20 @@ window.ProductsList = function() {
 };
 window.Product = function() {
     var self = this;
+    var data;
+
+    this.id = null;
     this.title = null;
-    var data = data;
+    this.price = null;
+    this.code = null;
+    this.image = null;
+    this.originalName = null;
+    this.URL = null;
+
+    var iconsInfo;
 
     this.getId = function() {
-        if (data.id) {
-            return data.id;
-        }
-        return false;
+        return self.id;
     };
 
     this.getName = function() {
@@ -172,10 +180,7 @@ window.Product = function() {
     };
 
     this.getPrice = function() {
-        if (data.price) {
-            return data.price;
-        }
-        return false;
+        return self.price;
     };
 
     this.getQuantity = function() {
@@ -201,6 +206,16 @@ window.Product = function() {
 
     this.importData = function(newData) {
         data = newData;
+        self.id = data.id;
         self.title = data.title;
+        self.price = data.price;
+        self.code = data.code;
+        self.image = data.image;
+        self.URL = data.url;
+        self.originalName = data.originalName;
+        iconsInfo = data.iconsInfo;
+    };
+    this.getIconsInfo = function() {
+        return iconsInfo;
     };
 };

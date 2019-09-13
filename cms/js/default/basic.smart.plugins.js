@@ -6,6 +6,10 @@ function isset(variable) {
     return !!variable;
 }
 
+function strtoupper(variable) {
+    return variable.toUpperCase();
+}
+
 jSmart.prototype.registerPlugin(
     'function',
     'translations',
@@ -14,6 +18,13 @@ jSmart.prototype.registerPlugin(
             return window.translationsLogics.get(params.name);
         }
         return false;
+    },
+);
+jSmart.prototype.registerPlugin(
+    'block',
+    'stripdomspaces',
+    function(params, content, data, repeat) {
+        return content.replace(/([}>])s+([{<])/u, '$1$2');
     },
 );
 
@@ -29,11 +40,32 @@ window.smartyRenderer = new function() {
         }
 
         var template = templates[name];
-        data['theme'] = {
-            template: function(templateName) {
-                return templateName;
-            },
-        };
+        data['theme'] = window.theme;
+        data['selectedCurrencyItem'] = window.selectedCurrencyItem;
         return template.fetch(data);
     };
+};
+
+window.theme = new function() {
+    var srcSetPresets = ['1.5', '2', '3'];
+    var self = this;
+    this.template = function(templateName) {
+        return templateName;
+    };
+    this.generateImageUrl = function(imageId, fileName, type, multiplier) {
+        var result = location.protocol + '//' + location.hostname + '/image/type:' + type + '/id:' + imageId;
+        if (typeof multiplier !== 'undefined') {
+            result += '/multiplier:' + multiplier;
+        }
+        result += '/' + fileName;
+        return result;
+    };
+    this.generateImageSrcSet = function(imageId, fileName, type) {
+        var urls = [];
+        for (var i = 0; i < srcSetPresets.length; i++) {
+            urls.push(self.generateImageUrl(imageId, fileName, type, srcSetPresets[i]) + ' ' + srcSetPresets[i] + 'x');
+        }
+        return urls.join(',');
+    };
+
 };

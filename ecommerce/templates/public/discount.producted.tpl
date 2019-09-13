@@ -1,6 +1,6 @@
 <div class="discountslist_discount">
 	<div class="discountslist_image">
-		{include file=$theme->template('component.elementimage.tpl') element=$discount type='discountProducted' lazy=true}
+		{include file=$theme->template('component.elementimage.tpl') type='discountProducted' element=$discount lazy=true}
 	</div>
 	{if $discountProductList = $discount->getProductsList()}
 		<div class="discountslist_products">

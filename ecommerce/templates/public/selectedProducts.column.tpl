@@ -12,7 +12,7 @@
 
 				<a class="selectedproducts_column_product slide" href="{$product->URL}" title="{$product->title}">
 					<span class="selectedproducts_column_product_image_wrap">
-						{include file=$theme->template('component.elementimage.tpl') element=$product type='columnProduct' class='selectedproducts_column_product_image' lazy=true}
+						{include file=$theme->template('component.elementimage.tpl') type='columnProduct' element=$product class='selectedproducts_column_product_image' lazy=true}
 					</span>
 				</a>
 

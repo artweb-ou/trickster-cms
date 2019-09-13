@@ -1,6 +1,7 @@
 {$productsList=$element->getProductsList()}
 {$pager=$element->getProductsPager()}
 {if $layout != "hide"}
+    {$template = "product.{$layout}.tpl"}
     <div class="productslist_component{if !empty($componentClass)} {$componentClass}{/if}" data-id="{$element->id}">
         {include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=true}
         {if $pager && count($pager->pagesList)>1 || $element->isSortable()}
@@ -55,12 +56,8 @@
                 </table>
             {else}
                 <div class='productslist_products {if !empty($productsListClass)} {$productsListClass}{/if}'>
-                    {$template = $theme->template("product.{$layout}.tpl", true)}
-                    {if !$template}
-                        {$template = $theme->template('product.thumbnailsmall.tpl')}
-                    {/if}
                     {foreach $element->getProductsList() as $product}
-                        {include file=$template element=$product}
+                        {include file=$theme->template($template, true) element=$product}
                     {/foreach}
                 </div>
             {/if}
@@ -68,15 +65,16 @@
 
         {include file=$theme->template('pager.tpl') pager=$pager}
     </div>
+
+    <script>
+        window.productsLists = window.productsLists ? window.productsLists : [];
+        window.productsLists.push({$element->getJsonInfo('list')});
+
+        window.templates = window.templates || {ldelim}{rdelim};
+        window.templates['{$template}'] = {$theme->getTemplateSource($template, true)};
+        window.templates['component.subcontentmodule_wide.tpl'] = {$theme->getTemplateSource('component.subcontentmodule_wide.tpl', true)};
+        window.templates['component.subcontentmodule_square.tpl'] = {$theme->getTemplateSource('component.subcontentmodule_square.tpl', true)};
+        window.templates['component.elementimage.tpl'] = {$theme->getTemplateSource('component.elementimage.tpl', true)};
+    </script>
 {/if}
-
-
-<script>
-    window.productsLists = window.productsLists ? window.productsLists : [];
-    window.productsLists.push({$element->getJsonInfo('list')});
-
-    window.templates = window.templates || {ldelim}{rdelim};
-    window.templates['product.detailed2.tpl'] = {$theme->getTemplateSource('product.detailed2.tpl', true)};
-    window.templates['component.subcontentmodule_wide.tpl'] = {$theme->getTemplateSource('component.subcontentmodule_wide.tpl', true)};
-</script>
 

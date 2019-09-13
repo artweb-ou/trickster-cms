@@ -17,6 +17,12 @@ class ajaxProductsListApplication extends controllerApplication
 
     public function execute($controller)
     {
+        /**
+         * @var Cache $cache
+         */
+        $cache = $this->getService('Cache');
+        $cache->enable();
+
         $response = new ajaxResponse();
         $languagesManager = $this->getService('languagesManager');
 

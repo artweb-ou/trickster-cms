@@ -6,4 +6,5 @@ window.lazyImageLogics = new function() {
         }
     };
     controller.addListener('startApplication', initComponents);
+    controller.addListener('initLazyImages', initComponents);
 };

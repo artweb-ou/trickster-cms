@@ -28,13 +28,14 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
             'introduction' => 'introduction',
             'content' => 'content',
             'image' => 'image',
+            'productsLayout' => 'getProductsLayout',
             'products' => 'getProductsData',
             'filters' => 'getFiltersData',
             'filteredProductsAmount' => 'getFilteredProductsAmount',
             'filterLimit' => 'getFilterLimit',
-            'currentPage' => function(ProductsListElement $element){
+            'currentPage' => function (ProductsListElement $element) {
                 return $element->getProductsPager()->getCurrentPage();
-            }
+            },
         ];
     }
 
@@ -68,6 +69,7 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
                 'filteredProductsAmount',
                 'filterLimit',
                 'currentPage',
+                'productsLayout',
             ],
         ];
     }
