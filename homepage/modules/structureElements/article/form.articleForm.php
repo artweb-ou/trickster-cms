@@ -7,7 +7,8 @@ class ArticleFormStructure extends ElementForm
             'type' => 'input.text',
         ],
         'hideTitle' => [
-            'type' => 'input.checkbox'
+            'type' => 'input.checkbox',
+            'translationGroup' => 'shared',
         ],
         'content' => [
             'type' => 'input.html',

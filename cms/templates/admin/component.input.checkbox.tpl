@@ -1,6 +1,6 @@
 <div class="form_field_{$fieldName} form_items">
     <span class="form_label checkbox_header">
-        {translations name="{$translationGroup}.{strtolower($fieldName)}"}
+        {translations name="{if !empty($item.translationGroup)}{$item.translationGroup}{else}{$translationGroup}{/if}.{strtolower($fieldName)}"}
     </span>
     <div class="form_field">
         <input class="{if !empty($item.class)} {$item.class} {/if}checkbox_placeholder" type="checkbox" value="1" name="{$formNames.$fieldName}"{if $formData.$fieldName} checked="checked"{/if} />

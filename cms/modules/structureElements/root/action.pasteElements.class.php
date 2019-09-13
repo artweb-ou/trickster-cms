@@ -29,6 +29,7 @@ class pasteElementsRoot extends structureElementAction
                         'leftColumn',
                         'rightColumn',
                         'bottomMenu',
+                        'freeBlocks',
                     ], $contentType)
                     ) {
                         if ($navigateId == $copyInformation['sourceId']) {
@@ -44,6 +45,7 @@ class pasteElementsRoot extends structureElementAction
                         'leftColumn',
                         'rightColumn',
                         'bottomMenu',
+                        'freeBlocks',
                     ])
                     ) {
                         $controller->redirect($targetUrl);

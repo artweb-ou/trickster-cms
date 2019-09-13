@@ -44,6 +44,11 @@ class ServiceFormStructure extends ElementForm
             'options' => ['hybrid', 'content', 'container'],
             'translationGroup' => 'menulogic',
         ],
+        'displayMenus' => [
+            'type' => 'select.universal_options_multiple',
+            'method' => 'getDisplayMenusInfo',
+            'condition' => 'checkDisplayMenus',
+        ],
     ];
 
 }

@@ -29,6 +29,7 @@ class receiveSubArticle extends structureElementAction
     {
         $expectedFields = [
             'title',
+            'hideTitle',
             'content',
             'image',
         ];

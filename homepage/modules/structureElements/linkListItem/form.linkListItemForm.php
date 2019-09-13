@@ -10,7 +10,8 @@ class LinkListItemFormStructure extends ElementForm
             'textClass' => 'linklistitem_form_search_title',
         ],
         'hideTitle' => [
-            'type' => 'input.checkbox'
+            'type' => 'input.checkbox',
+            'translationGroup' => 'shared',
         ],
         'image' => [
             'type' => 'input.image',

@@ -7,7 +7,8 @@ class FeedbackFormStructure extends ElementForm
             'type' => 'input.text',
         ],
         'hideTitle' => [
-            'type' => 'input.checkbox'
+            'type' => 'input.checkbox',
+            'translationGroup' => 'shared',
         ],
         'destination' => [
             'type' => 'input.email',

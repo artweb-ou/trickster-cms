@@ -29,6 +29,7 @@ class receiveService extends structureElementAction
             foreach ($linksIndex as &$link) {
                 $link->delete();
             }
+            $structureElement->persistDisplayMenusLinks();
             $controller->redirect($structureElement->URL);
         }
         $structureElement->executeAction("showForm");
@@ -48,6 +49,7 @@ class receiveService extends structureElementAction
             'galleries',
             'feedbackId',
             'structureRole',
+            'displayMenus',
         ];
     }
 

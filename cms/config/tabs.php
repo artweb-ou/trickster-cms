@@ -10,6 +10,7 @@
     'headerContent',
     'leftColumn',
     'rightColumn',
+    'freeBlocks',
     'showLayoutForm',
     'showFiles',
     'showImportForm',

@@ -9,6 +9,7 @@ class subArticleElement extends structureElement
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['hideTitle'] = 'checkbox';
         $moduleStructure['content'] = 'html';
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['image'] = 'image';

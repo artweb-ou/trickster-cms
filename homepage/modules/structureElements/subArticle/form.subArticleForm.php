@@ -6,6 +6,10 @@ class SubArticleFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'hideTitle' => [
+            'type' => 'input.checkbox',
+            'translationGroup' => 'shared',
+        ],
         'content' => [
             'type' => 'input.html',
         ],

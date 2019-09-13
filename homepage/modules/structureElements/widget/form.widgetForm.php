@@ -6,8 +6,9 @@ class WidgetFormStructure extends ElementForm
         'title'   => [
             'type' => 'input.text',
         ],
-        'hideTitle'   => [
+        'hideTitle'  => [
             'type' => 'input.checkbox',
+            'translationGroup' => 'shared',
         ],
         'image'   => [
             'type'     => 'input.image',
