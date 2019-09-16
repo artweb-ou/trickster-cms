@@ -1,6 +1,13 @@
 .select_multiple {
 	.inputs_common();
-	height: @300pt;
+
+	&:not(.single_select) {
+		height: @300pt;
+	}
+
+	&.single_select {
+		height: auto;
+	}
 
 	&.select_simple{
 		height: auto;

@@ -10,14 +10,18 @@
 {else}
 	{assign var='condition' value=true}
 {/if}
-
+{if isset($item.size) && $item.size == 'single'}
+	{$multiple = ''}
+{else}
+	{$multiple = 'multiple="multiple"'}
+{/if}
 {if $condition}
 	<div class="form_items{if $formErrors.$fieldName} form_error{/if}{if !empty($item.trClass)} {$item.trClass}{/if}">
 	<span class="form_label">
 		{translations name="{$translationGroup}.{$fieldName}"}
 	</span>
 		<div class="form_field">
-			<select class="{if !empty($item.class)}{$item.class} {/if}select_multiple"{if !empty($item.dataset)} {$item.dataset[0]}="{$item.dataset[1]}" {/if}multiple="multiple" name="{$formNames.$fieldName}[]" autocomplete='off'>
+			<select class="{if !empty($item.class)}{$item.class} {/if}select_multiple"{if !empty($item.dataset)} {$item.dataset[0]}="{$item.dataset[1]}" {/if}{$multiple} name="{$formNames.$fieldName}[]" autocomplete='off'>
 				<option value=''></option>
 				{if is_array($options)}
 					{foreach $options as $option}

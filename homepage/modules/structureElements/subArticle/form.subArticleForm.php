@@ -16,7 +16,7 @@ class SubArticleFormStructure extends ElementForm
         'image' => [
             'type' => 'input.image',
             'preset' => 'adminImage',
-            'filename' => 'image',
+            'filename' => 'originalName',
         ],
     ];
 

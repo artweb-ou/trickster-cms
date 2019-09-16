@@ -15,7 +15,7 @@
         <div class="html_content">
             {$element->content}
         </div>
-    {/if}{var_dump($element->getSubArticles())}
+    {/if}
     {if $subArticles = $element->getSubArticles()}
         {$layout = $element->getCurrentLayout('subLayout')}
         {if !empty($layout)}

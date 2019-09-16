@@ -28,8 +28,6 @@ class languageElement extends structureElement implements MetadataProviderInterf
     protected $mainMenuElements;
     protected $firstPageElement;
 
-    protected $freeBlocksElementsList;
-    protected $freeBlocksrElementsIndex;
 
     protected function getTabsList()
     {
@@ -40,7 +38,6 @@ class languageElement extends structureElement implements MetadataProviderInterf
             'leftColumn',
             'rightColumn',
             'bottomMenu',
-            'freeBlocks',
             'mobileMenu',
             'showPositions',
             'showPrivileges',
@@ -193,29 +190,6 @@ class languageElement extends structureElement implements MetadataProviderInterf
     }
 
 
-
-// FreeBlocks
-    public function getFreeBlocksElementsList()
-    {
-        return $this->getElementsFromContext('freeBlocks');
-    }
-
-    public function getFreeBlocksElementsIndex()
-    {
-        return $this->getElementsTypesIndexFromContext('freeBlocks');
-    }
-
-    public function getElementFromFreeBlocks($structureType, $number = 0)
-    {
-        return $this->getElementFromContextByType('freeBlocks', $structureType, $number);
-    }
-
-    public function getElementsFromFreeBlocks($structureType)
-    {
-        return $this->getElementsFromContextByType('freeBlocks', $structureType);
-    }
-
-// FreeBlocks END
 
 
 
@@ -458,8 +432,6 @@ class languageElement extends structureElement implements MetadataProviderInterf
                 $allowedTypes = $configManager->getMerged('language-allowedTypes.header');
             } elseif ($contentType == 'bottomMenu') {
                 $allowedTypes = $configManager->getMerged('language-allowedTypes.footer');
-            } elseif ($contentType == 'freeBlocks') {
-                $allowedTypes = $configManager->getMerged('folder-allowedTypes.content');
             } elseif ($contentType == 'mobileMenu') {
                 $allowedTypes = $configManager->getMerged('language-allowedTypes.mobile');
             } elseif ($contentType != 'structure') {
