@@ -7,7 +7,7 @@
 		<div class="collection_details_top_block">
             {if $element->originalName}
 				<div class="collection_details_image_wrap">
-                    {include file=$theme->template('component.elementimage.tpl') type='collectionDetails' class='collection_details_image'}
+					<img src="{$element->getImageUrl()}" alt="{$element->getImageName()}">
 				</div>
             {/if}
 
@@ -33,13 +33,8 @@
 			</div>
 		{/if}
 		<div class='collection_details_products products_list'>
-
-            {$template = $theme->template("product.{$element->getProductsLayout()}.tpl", true)}
-            {if !$template}
-                {$template = $theme->template('product.thumbnailsmall.tpl')}
-            {/if}
             {foreach $element->getProductsList() as $product}
-                {include file=$template element=$product}
+                {include file=$theme->template($product->getTemplate($element->getCollectionListProductLayout())) element=$product}
             {/foreach}
 		</div>
     {/stripdomspaces}

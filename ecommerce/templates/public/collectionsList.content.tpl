@@ -11,7 +11,7 @@
 	{/if}
 	<div class="collectionslist_grid">
 		{foreach $element->getCollectionsList() as $collection}
-			{include file=$theme->template($collection->getTemplate($element->getCurrentLayout('collection'))) element=$collection}
+			{include file=$theme->template($collection->getTemplate($element->getCurrentLayout('collection'))) element = $collection }
 		{/foreach}
 	</div>
 {/capture}

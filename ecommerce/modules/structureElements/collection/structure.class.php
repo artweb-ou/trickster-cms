@@ -61,6 +61,7 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         $moduleStructure['discountFilterEnabled'] = 'checkbox';
         $moduleStructure['amountOnPageEnabled'] = 'checkbox';
         $moduleStructure['categoryFilterEnable'] = 'checkbox';
+        $moduleStructure['connectedProducts'] = 'array';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -209,5 +210,14 @@ class collectionElement extends ProductsListElement implements ImageUrlProviderI
         $structureManager = $this->getService('structureManager');
         $categories = $structureManager->getElementsByType('category');
         return $categories;
+    }
+
+    public function getCollectionListProductLayout() {
+        /**
+         * @var $collectionList collectionsElement
+         */
+        $collectionList = $this->getCurrentParentElement();
+        $layout = $collectionList->getCurrentLayout('productsLayout');
+        return $layout;
     }
 }

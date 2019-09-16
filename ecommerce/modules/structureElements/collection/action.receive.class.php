@@ -35,6 +35,20 @@ class receiveCollection extends structureElementAction
                     }
                 }
             }
+
+            // connect product with connected products
+            $productsIdIndex = $linksManager->getConnectedIdIndex($structureElement->id, 'collectionProduct');
+            foreach ($structureElement->connectedProducts as $productId) {
+                if (!isset($productsIdIndex[$productId])) {
+                    $linksManager->linkElements($productId, $structureElement->id, 'collectionProduct', true);
+                } else {
+                    unset($productsIdIndex[$productId]);
+                }
+            }
+            //delete obsolete connected products links
+            foreach ($productsIdIndex as $productId => &$value) {
+                $linksManager->unLinkElements($productId, $structureElement->id, 'collectionProduct');
+            }
             $controller->redirect($structureElement->URL);
         }
         $structureElement->executeAction("showForm");
@@ -57,7 +71,8 @@ class receiveCollection extends structureElementAction
             'parameterFilterEnabled',
             'discountFilterEnabled',
             'amountOnPageEnabled',
-            'categoryFilterEnable'
+            'categoryFilterEnable',
+            'connectedProducts',
         ];
     }
 
