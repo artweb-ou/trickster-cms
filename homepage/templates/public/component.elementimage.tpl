@@ -13,11 +13,9 @@
 {if empty($class)}
 	{$class = ''}
 {/if}
-{if !empty($src)}
-	{if empty($lazy)}
-		<img class="{$class}" src="{$src}" {if !empty($srcset)}srcset="{$srcset}"{/if} alt="{$title}"/>
-	{else}
-		<img class="{$class} lazy_image" src="" data-lazysrc="{$src}" {if !empty($srcset)}data-lazysrcset="{$srcset}"{/if} alt="{$title}"/>
-	{/if}
+{if empty($lazy)}
+	<img class="{$class}" src="{$src}" {if !empty($srcset)}srcset="{$srcset}"{/if} alt="{$title}"/>
+{else}
+	<img class="{$class} lazy_image" src="" data-lazysrc="{$src}" {if !empty($srcset)}data-lazysrcset="{$srcset}"{/if} alt="{$title}"/>
 {/if}
 {/stripdomspaces}
