@@ -46,7 +46,9 @@
 			</div>
 		{/if}
 		<div class="footer_links">
-{*			{include file=$theme->template("component.mainmenu.tpl")}*}
+			{if $subMenuList = $currentLanguage->getElementFromHeader('subMenuList')}
+				{include file=$theme->template("subMenuList.header.tpl") element=$subMenuList}
+			{/if}
 			{include file=$theme->template("component.artweb.tpl")}
 			<div class="clearfix"></div>
 		</div>

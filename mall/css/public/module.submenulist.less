@@ -1,26 +1,88 @@
-.submenu_item_link {
-	position: relative;
-	line-height: 1em;
-	padding: 0.3em 1em 0.43em;
-	text-decoration: none;
-	color: @font_light_color;
-	font-size: 1.12em;
-	display: block;
-	transition: background-color 250ms linear;
-	margin-bottom: 2px;
-	background: @primary_color;
+.header_links {
+    .submenu_block {
+        line-height: @55px;
+    }
 
-	&:hover {
-		background: @primary_color_darker;
-	}
+    .submenu_content {
+        display: inline-block;
+    }
+
+    .submenu_item {
+        color: @font_light_color;
+        font-size: 1em;
+        padding: 0 @36px;
+        vertical-align: top;
+        transition: background-color 250ms linear;
+    }
+
+    .submenu_item_active,
+    .submenu_item:hover {
+        background-color: @primary_color_darker;
+    }
 }
 
-.submenu_item_submenus {
-	.submenu_item_link {
-		font-size: 0.95em;
-	}
+.footer {
+    .submenu_block {
+        line-height: @64px;
+        overflow: hidden;
+
+        .submenu_content {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+    }
+
+    .submenu_item {
+        color: @font_light_color;
+        padding: 0 @30px;
+        text-decoration: none;
+    }
+
+    .submenu_item_active,
+    .submenu_item:hover {
+        background-color: @primary_color_darker;
+    }
 }
 
-.submenu_item_active > .submenu_item_link {
-	background: @primary_color_darker;
+@media (max-width: @screen_breakpoint_md) {
+    .footer {
+        .submenu_block {
+            overflow: visible;
+            margin-bottom: 2em;
+
+            .submenu_content a {
+                width: 100%;
+            }
+        }
+    }
+}
+
+.submenu_column {
+    .submenu_item_link {
+        position: relative;
+        line-height: 1em;
+        padding: 0.3em 1em 0.43em;
+        text-decoration: none;
+        color: @font_light_color;
+        font-size: 1.12em;
+        display: block;
+        transition: background-color 250ms linear;
+        margin-bottom: 2px;
+        background: @primary_color;
+
+        &:hover {
+            background: @primary_color_darker;
+        }
+    }
+
+    .submenu_item_submenus {
+        .submenu_item_link {
+            font-size: 0.95em;
+        }
+    }
+
+    .submenu_item_active > .submenu_item_link {
+        background: @primary_color_darker;
+    }
 }

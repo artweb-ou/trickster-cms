@@ -38,8 +38,10 @@
 </div>
 <div class="header_links">
     <div class="header_links_inner wrap">
-{*        {include file=$theme->template("component.mainmenu.tpl")}*}
-{*        {include file=$theme->template("component.languages.tpl")}*}
+        {if $subMenuList = $currentLanguage->getElementFromHeader('subMenuList')}
+            {include file=$theme->template("subMenuList.header.tpl") element=$subMenuList}
+        {/if}
+        {include file=$theme->template("component.languages.tpl")}
     </div>
 </div>
 {if $currentLanguage->getElementsFromHeader('gallery')}
