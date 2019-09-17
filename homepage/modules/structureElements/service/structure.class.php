@@ -14,6 +14,8 @@ class serviceElement extends menuStructureElement implements ConfigurableLayouts
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['icon'] = 'image';
+        $moduleStructure['iconOriginalName'] = 'fileName';
         $moduleStructure['introduction'] = 'html';
         $moduleStructure['content'] = 'html';
         $moduleStructure['originalName'] = 'fileName';

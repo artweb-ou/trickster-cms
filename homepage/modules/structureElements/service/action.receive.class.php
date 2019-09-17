@@ -17,6 +17,19 @@ class receiveService extends structureElementAction
                 $structureElement->image = $structureElement->id;
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
             }
+            if (!is_null($structureElement->getDataChunk("icon")->originalName)) {
+                $structureElement->icon = $structureElement->id . "_icon";
+                $structureElement->iconOriginalName = $structureElement->getDataChunk("icon")->originalName;
+            }
+
+//            foreach($additionalImages as $imageKey=>$imageCode) {
+//                if (!is_null($structureElement->getDataChunk($imageCode)->originalName)) {
+//                    $structureElement->$imageCode = $structureElement->id . "_$imageKey";
+//                    $field = $imageCode . 'OriginalName';
+//                    $structureElement->$field = $structureElement->getDataChunk($imageCode)->originalName;
+//                }
+//            }
+
             $structureElement->persistElementData();
 
             $linksIndex = $linksManager->getElementsLinksIndex($structureElement->id, 'connectedGallery', 'parent');
@@ -39,6 +52,7 @@ class receiveService extends structureElementAction
     {
         $expectedFields = [
             'title',
+            'icon',
             'image',
             'link_1',
             'link_2',

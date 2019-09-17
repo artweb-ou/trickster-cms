@@ -6,6 +6,10 @@ class ServiceFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'icon' => [
+            'type' => 'input.image',
+            'filename' => 'iconOriginalName',
+        ],
         'introduction' => [
             'type' => 'input.html',
         ],
