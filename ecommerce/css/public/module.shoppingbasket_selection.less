@@ -165,6 +165,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
+
     .check_vat_number_input {
         flex-basis: @250pt;
         flex-shrink: 0;
@@ -200,7 +201,15 @@
 }
 
 /********************************************************
-/*  SHOPPING BASKET PRODUCT VARITIONS
+/*  SHOPPING BASKET PROMO CODE
+/********************************************************/
+.shoppingbasket_promocode_error {
+    display: none;
+    .form_error();
+}
+
+/********************************************************
+/*  SHOPPING BASKET PRODUCT VARIATIONS
 /********************************************************/
 .variation_name {
 }
