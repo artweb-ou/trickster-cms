@@ -46,7 +46,7 @@
 			</div>
 		{/if}
 		<div class="footer_links">
-			{include file=$theme->template("component.mainmenu.tpl")}
+{*			{include file=$theme->template("component.mainmenu.tpl")}*}
 			{include file=$theme->template("component.artweb.tpl")}
 			<div class="clearfix"></div>
 		</div>
