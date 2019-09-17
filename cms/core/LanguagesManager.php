@@ -72,6 +72,17 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
         return false;
     }
 
+    public function getLanguageByCode($code, $groupName = null)
+    {
+        $groupName = $groupName ?: $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        foreach ($this->getLanguagesList($groupName) as $language) {
+            if ($language->iso6393 == $code) {
+                return $language;
+            }
+        }
+        return false;
+    }
+
     public function getCurrentLanguageId($groupName = null)
     {
         $groupName = $groupName ?: $this->getService('ConfigManager')
