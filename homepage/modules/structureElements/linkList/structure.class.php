@@ -22,6 +22,7 @@ class linkListElement extends menuDependantStructureElement implements Configura
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['fixedId'] = 'text';
         $moduleStructure['content'] = 'html';
+        $moduleStructure['subTitle'] = 'text';
         $moduleStructure['cols'] = 'naturalNumber';
     }
 

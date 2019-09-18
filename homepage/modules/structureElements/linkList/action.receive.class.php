@@ -33,6 +33,7 @@ class receiveLinkList extends structureElementAction
             'image',
             'marker',
             'content',
+            'subTitle',
             'displayMenus',
             'fixedId',
         ];

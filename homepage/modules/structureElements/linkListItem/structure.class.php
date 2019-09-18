@@ -1,9 +1,10 @@
 <?php
 
-class linkListItemElement extends structureElement implements ConfigurableLayoutsElementsInterface
+class linkListItemElement extends structureElement implements ConfigurableLayoutsElementsInterface //, ConfigurableLayoutsProviderInterface
 {
     use SearchTypesProviderTrait;
 	use ImageUrlProviderTrait;
+    use ConfigurableLayoutsProviderTrait;
     public $dataResourceName = 'module_linklist_item';
     public $defaultActionName = 'show';
     public $role = 'content';
@@ -27,6 +28,14 @@ class linkListItemElement extends structureElement implements ConfigurableLayout
         $moduleStructure['tertiaryImageOriginalName'] = 'fileName';
         $moduleStructure['quaternaryImage'] = 'image';
         $moduleStructure['quaternaryImageOriginalName'] = 'fileName';
+        $moduleStructure['colorLayout'] = 'text';
+    }
+    protected function getTabsList()
+    {
+        return [
+            'showForm',
+            'showLayoutForm',
+        ];
     }
 
     public function isLinkInternal()

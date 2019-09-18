@@ -14,6 +14,9 @@ class LinkListFormStructure extends ElementForm
         'content' => [
             'type' => 'input.html',
         ],
+        'subTitle' => [
+            'type' => 'input.text',
+        ],
         'image' => [
             'type' => 'input.image',
             'preset' => 'adminImage',

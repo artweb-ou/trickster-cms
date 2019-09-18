@@ -53,6 +53,7 @@ class receiveLinkListItem extends structureElementAction
             'fixedId',
             'marker',
             'highlighted',
+            'colorLayout',
         ];
     }
 }
