@@ -759,6 +759,9 @@ abstract class ProductsListElement extends menuStructureElement
                 }
                 $this->selectionsValuesIndex[$record['parameterId']][$positions[$record['value']]] = $record['value'];
             }
+            foreach ($this->selectionsValuesIndex as $key=>$values){
+                ksort($this->selectionsValuesIndex[$key]);
+            }
         }
     }
 
