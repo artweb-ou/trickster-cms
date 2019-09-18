@@ -1709,6 +1709,7 @@ class productElement extends structureElement implements
             $info['selectionsPricings'] = $selectionsPricings;
             $info['selectionsOldPricings'] = $selectionsOldPricings;
             $info['selectionsImages'] = $this->getOptionsImagesInfo();
+            $info['basketSelectionsInfo'] = $this->getBasketSelectionsInfo();
         }
         return $info;
     }

@@ -166,6 +166,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
                 $elementData['showInBasket'] = $discountElement->showInBasket;
                 $elementData['basketText'] = $discountElement->basketText;
                 $elementData['displayText'] = $discountElement->displayText;
+                $elementData['reference'] = $discountElement->reference;
                 $elementData['displayProductsInBasket'] = $discountElement->displayProductsInBasket;
                 $data[] = $elementData;
             }
@@ -439,6 +440,7 @@ class ShoppingBasketDiscount extends errorLogger implements DependencyInjectionC
     public $showInBasket;
     public $basketText;
     public $displayText;
+    public $reference;
     public $displayProductsInBasket = false;
     public $active = false;
     public $appliedLast = true;
@@ -489,6 +491,7 @@ class ShoppingBasketDiscount extends errorLogger implements DependencyInjectionC
 
         $this->showInBasket = $discountData['showInBasket'];
         $this->basketText = $discountData['basketText'];
+        $this->reference = $discountData['reference'];
         $this->displayText = true;
         $this->displayProductsInBasket = $discountData['displayProductsInBasket'];
     }
