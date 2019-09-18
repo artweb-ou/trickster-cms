@@ -46,7 +46,6 @@
  * @property string $comment_captcha
  * @property array $importInfo
  * @property string $unit
- * @property integer $applicableToAllProducts
  */
 class productElement extends structureElement implements
     MetadataProviderInterface,
