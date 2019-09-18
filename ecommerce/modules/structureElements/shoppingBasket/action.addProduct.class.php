@@ -15,6 +15,7 @@ class addProductShoppingBasket extends structureElementAction
          */
         $shoppingBasket = $this->getService('shoppingBasket');
         $structureElement->shoppingBasket = $shoppingBasket;
+        $currencySelector = $this->getService('CurrencySelector');
 
         $productAmount = $controller->getParameter('productAmount');
         $productId = $controller->getParameter('productId');
@@ -45,7 +46,9 @@ class addProductShoppingBasket extends structureElementAction
                         $variant = $structureManager->getElementById($option['id']);
                         $selectedOption = $option['id'];
                         $variations[] = $selection['title'] . ': ' . $option['title'];
-
+                        if ($option['price'] > 0) {
+                            $variations[$selection['id']] .= ' (' . $currencySelector->convertPrice($option['price'], true, true) . ')';
+                        }
                         $variations_dl[] = ($select ?
                                 $select->getValue('title', $defaultLanguage->id) : '') . ': '
                             . ($variant ? $variant->getValue('title', $defaultLanguage->id) : '');
