@@ -37,6 +37,7 @@ class addProductShoppingBasket extends structureElementAction
             $influentialOptions = [];
             $languageManager = $this->getService('LanguagesManager');
             $defaultLanguage = $languageManager->getDefaultLanguage('adminLanguages');
+            $optionsAdditionalPrices = 0;
             foreach ($selections as $selection) {
                 $select = $structureManager->getElementById($selection['id'], null, true);
                 foreach ($selection['productOptions'] as $option) {
@@ -59,6 +60,11 @@ class addProductShoppingBasket extends structureElementAction
                 }
             }
             $productPrice = !empty($parametersPrice) ? $parametersPrice : $productElement->price;
+
+
+            //add price of all options with extra price
+            $productPrice += $optionsAdditionalPrices;
+
             if (is_numeric($productAmount) && is_numeric($productId) && ($everythingSelected || $controller->getParameter('productVariation'))) {
                 $finalAmount = $shoppingBasket->getProductOverallQuantity($productId) + $productAmount;
                 if ($productElement->isPurchasable($finalAmount)) {
