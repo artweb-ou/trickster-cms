@@ -1,6 +1,6 @@
 <?php
 
-class facebookSocialPluginElement extends socialPluginElement
+class facebookSocialPluginElement extends socialPluginElement implements socialPluginWithPagesInterface
 {
     protected $allowedTypes = [
         'socialPage',

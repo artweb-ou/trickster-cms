@@ -20,6 +20,7 @@ class socialPostElement extends structureElement
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'text';
         $moduleStructure['replacementImage'] = 'text';
+        $moduleStructure['search'] = 'text';
     }
 
     protected function getTabsList()
@@ -41,18 +42,26 @@ class socialPostElement extends structureElement
                 $pluginsList = $structureManager->getElementsChildren($pluginsElement->id);
                 foreach ($pluginsList as &$pluginElement) {
                     $pages = [];
-                    foreach($pluginElement->getPages() as $page) {
-                        $statusText = 'undefined';
-                        if (isset($statusesInfo[$pluginElement->id][$page->id])) {
-                            $statusText = $statusesInfo[$pluginElement->id][$page->id]->status;
+                    $pluginStatusText = '';
+                    if($pluginElement instanceof socialPluginWithPagesInterface) {
+                        foreach($pluginElement->getPages() as $page) {
+                            $statusText = 'undefined';
+                            if (isset($statusesInfo[$pluginElement->id][$page->id])) {
+                                $statusText = $statusesInfo[$pluginElement->id][$page->id]->status;
+                            }
+                            $page->statusText = $statusText;
+                            $pages[] = $page;
                         }
-                        $page->statusText = $statusText;
-                        $pages[] = $page;
+                    }else {
+                        if (isset($statusesInfo[$pluginElement->id][0])) {
+                            $pluginStatusText = $statusesInfo[$pluginElement->id][0]->status;
+                        }
                     }
 
                     $info = [
                         'title'      => $pluginElement->title,
                         'id'         => $pluginElement->id,
+                        'statusText' => $pluginStatusText,
                         'pages'      => $pages,
                         //                        'publishURL' => $this->URL . 'id:' . $this->id . '/action:publish/plugin:' . $pluginElement->id . '/',
                         'publishURL' => $pluginElement->getSocialActionUrl('publish')

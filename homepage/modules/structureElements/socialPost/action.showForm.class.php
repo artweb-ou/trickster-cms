@@ -13,10 +13,10 @@ class showFormSocialPost extends structureElementAction
             }
         }
 
-        if ($socialPostElement = $structureElement->getSearchTypesString('admin')) {
-            $content['id'] = $socialPostElement->id;
-            $content['title'] = $socialPostElement->userName;
-        }
+//        if ($socialPostElement = $structureElement->getSearchTypesString('admin')) {
+//            $content['id'] = $socialPostElement->id;
+//            $content['title'] = $socialPostElement->userName;
+//        }
 
         if ($structureElement->final) {
             $structureElement->setTemplate('shared.content.tpl');

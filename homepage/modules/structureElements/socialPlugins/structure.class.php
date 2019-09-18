@@ -9,6 +9,7 @@ class socialPluginsElement extends structureElement
         'facebookSocialPlugin',
         'googleSocialPlugin',
         'instagramSocialPlugin',
+        'twitterSocialPlugin',
     ];
     public $defaultActionName = 'showFullList';
     public $role = 'container';

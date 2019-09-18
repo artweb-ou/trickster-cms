@@ -62,4 +62,5 @@
     'instagramImagesHolder' => 'showForm',
     'facebookSocialPlugin' => 'showForm',
     'googleSocialPlugin' => 'showForm',
+    'twitterSocialPlugin' => 'showForm',
 ];

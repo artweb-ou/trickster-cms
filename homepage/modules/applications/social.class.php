@@ -327,5 +327,10 @@ class socialApplication extends controllerApplication
         }
         $this->redirect($this->returnUrl);
     }
+
+    protected function action_test()
+    {
+        $this->performAuthorization();
+    }
 }
 
