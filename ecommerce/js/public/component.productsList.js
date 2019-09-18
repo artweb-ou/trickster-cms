@@ -1,7 +1,9 @@
 window.ProductsListComponent = function(componentElement) {
+    var self = this;
     var id;
     var productsListData;
     var productsListElement;
+    var filtersComponent;
     var productComponents = [];
     var pagers = [];
 
@@ -12,8 +14,10 @@ window.ProductsListComponent = function(componentElement) {
     var initComponents = function() {
         id = parseInt(componentElement.dataset.id, 10);
         if (productsListData = window.productLogics.getProductsList(id)) {
-            productsListElement = componentElement.querySelector('.productslist_products');
-            createProductComponents();
+            if (productsListElement = componentElement.querySelector('.productslist_products')) {
+                createProductComponents();
+            }
+            createProductsFilterComponent();
             createPagers();
 
             controller.addListener('productsListUpdated', updateHandler);
@@ -24,6 +28,9 @@ window.ProductsListComponent = function(componentElement) {
         if (updatedId === id) {
             if (productsListData = window.productLogics.getProductsList(id)) {
                 updatePagers();
+                if (filtersComponent) {
+                    filtersComponent.updateData(productsListData.filters);
+                }
                 renderProductsHtml();
                 createProductComponents();
                 controller.fireEvent('initLazyImages');
@@ -69,6 +76,11 @@ window.ProductsListComponent = function(componentElement) {
             pagers[i].updateData(pagerData);
         }
     };
+    var updateProductsFilter = function() {
+        if (filtersComponent) {
+            filtersComponent.updateData(productsListData.filters);
+        }
+    };
 
     var createPagers = function() {
         var elements, i;
@@ -99,6 +111,19 @@ window.ProductsListComponent = function(componentElement) {
                 productComponents.push(product);
             }
         }
+    };
+
+    var createProductsFilterComponent = function() {
+        var element = componentElement.querySelector('.products_filter');
+        if (element) {
+            filtersComponent = new ProductsFilterComponent(element, self);
+            filtersComponent.updateData(productsListData.filters);
+            filtersComponent.initFilters();
+        }
+    };
+
+    this.changeFilterValue = function(type, value) {
+        productsListData.changeFilter(type, value);
     };
 
     init();

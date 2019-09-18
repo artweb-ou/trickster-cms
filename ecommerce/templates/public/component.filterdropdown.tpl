@@ -2,7 +2,7 @@
 	<div class="products_filter_label">
 		{$filter->getTitle()}:
 	</div>
-	<select autocomplete="off" class="products_filter_dropdown products_filter_dropdown_type_{$filter->getType()} dropdown_placeholder">
+	<select autocomplete="off" class="products_filter_dropdown products_filter_dropdown_type_{$filter->getType()} products_filter_{$filter->getId()} dropdown_placeholder">
 		<option value=''>{translations name="products.filter_select"}</option>
 		{foreach $filter->getOptionsInfo() as $optionInfo}
 			<option value="{$optionInfo.id}"{if $optionInfo.selected} selected="selected"{/if}>

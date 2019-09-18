@@ -72,7 +72,19 @@ window.productLogics = new function() {
             'page': page,
         };
         if (typeof filters !== 'undefined') {
-            parameters['filters'] = filters;
+            var i;
+            var uniqueValues = {};
+            for (i = 0; i < filters.length; i++) {
+                if (typeof (uniqueValues[filters[i][0]]) === 'undefined') {
+                    uniqueValues[filters[i][0]] = [];
+                }
+                uniqueValues[filters[i][0]].push(filters[i][1]);
+            }
+            for (i in uniqueValues) {
+                if (uniqueValues.hasOwnProperty(i)) {
+                    parameters[i] = uniqueValues[i].join(',');
+                }
+            }
         }
         var request = new JsonRequest(reqUrl, receiveData, 'ajaxProductsList', parameters);
         request.send();
@@ -90,6 +102,7 @@ window.ProductsList = function() {
     this.id = null;
     this.title = null;
     this.url = null;
+    this.filters = [];
     this.filteredProductsAmount = 0;
     this.filterLimit = 0;
     this.currentPage = 1;
@@ -103,6 +116,7 @@ window.ProductsList = function() {
         self.filteredProductsAmount = data.filteredProductsAmount;
         self.filterLimit = data.filterLimit;
         self.currentPage = data.currentPage;
+        self.filters = data.filters;
         self.productsLayout = data.productsLayout;
 
         if (typeof data.title != 'undefined') {
@@ -123,8 +137,36 @@ window.ProductsList = function() {
     };
     this.changePage = function(newPageNumber) {
         if (self.currentPage !== newPageNumber) {
-            productLogics.requestProductsListData(self.id, newPageNumber);
+            var filtersInfo = gatherFilterValues();
+            productLogics.requestProductsListData(self.id, newPageNumber, filtersInfo);
         }
+    };
+    this.changeFilter = function(filterId, value) {
+        var filtersInfo = gatherFilterValues(filterId, value);
+        productLogics.requestProductsListData(self.id, 0, filtersInfo);
+    };
+    var gatherFilterValues = function(filterId, value) {
+        var filtersInfo = [];
+        var i, j;
+        for (i = 0; i < self.filters.length; i++) {
+            var filter = self.filters[i];
+            if (filter.id == filterId) {
+                for (j = 0; j < filter.options.length; j++) {
+                    if (filter.options[j].id == value) {
+                        filtersInfo.push([filter.type, filter.options[j].id]);
+                        break;
+                    }
+                }
+            } else {
+                for (j = 0; j < filter.options.length; j++) {
+                    if (filter.options[j].selected) {
+                        filtersInfo.push([filter.type, filter.options[j].id]);
+                        break;
+                    }
+                }
+            }
+        }
+        return filtersInfo;
     };
     this.getCurrentPageProducts = function() {
         if (typeof productsByPages[self.currentPage] !== 'undefined') {
