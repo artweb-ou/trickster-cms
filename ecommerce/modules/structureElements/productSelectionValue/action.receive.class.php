@@ -86,6 +86,7 @@ class receiveProductSelectionValue extends structureElementAction
             'hint',
             'importKeywords',
             'excludeImportKeywords',
+            'price',
             'value',
             'image',
             'mergeIds',

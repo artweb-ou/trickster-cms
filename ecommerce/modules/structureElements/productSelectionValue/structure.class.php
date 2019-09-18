@@ -13,6 +13,7 @@ class productSelectionValueElement extends structureElement
         $moduleStructure['importKeywords'] = 'text';
         $moduleStructure['excludeImportKeywords'] = 'text';
         $moduleStructure['value'] = 'text';
+        $moduleStructure['price'] = 'money';
         $moduleStructure['hint'] = 'html';
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'fileName';
