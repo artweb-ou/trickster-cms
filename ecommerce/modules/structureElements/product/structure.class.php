@@ -1600,7 +1600,7 @@ class productElement extends structureElement implements
     {
         $result = &$this->selectionsPricingMap;
         if ($result === null) {
-            $result = $this->getService('ProductOptionsPricesManager')->getData($this->id, $this->price);
+            $result = $this->getService('ProductOptionsPricesManager')->getData($this->id);
         }
         return $result;
     }

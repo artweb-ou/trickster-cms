@@ -390,14 +390,6 @@ class ParametersManager extends errorLogger
                 //if this selection has no option, the strip it from selections
                 if (!$productSelection['productOptions']) {
                     unset($this->productBasketSelections[$productId][$key]);
-                } else {
-                    //if any of the options have a price, then mark selection as "price-influential" - required by JS an adding to basket
-                    foreach ($productSelection['productOptions'] as $option) {
-                        if ($option['price'] > 0) {
-                            $this->productBasketSelections[$productId][$key]['influential'] = true;
-                            break;
-                        }
-                    }
                 }
             }
         }
