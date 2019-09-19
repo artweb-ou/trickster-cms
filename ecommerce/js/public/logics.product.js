@@ -102,21 +102,22 @@ window.ProductsList = function() {
     this.id = null;
     this.title = null;
     this.url = null;
-    this.filters = [];
     this.filteredProductsAmount = 0;
     this.filterLimit = 0;
     this.currentPage = 1;
     this.productsLayout = 'thumbnail';
+
+    var filters = [];
     var productsByPages = {};
     var productsIndex = {};
 
     this.importData = function(data) {
+        var i;
         self.id = data.id;
         self.url = data.url;
         self.filteredProductsAmount = data.filteredProductsAmount;
         self.filterLimit = data.filterLimit;
         self.currentPage = data.currentPage;
-        self.filters = data.filters;
         self.productsLayout = data.productsLayout;
 
         if (typeof data.title != 'undefined') {
@@ -124,13 +125,21 @@ window.ProductsList = function() {
         }
         if (typeof data.products != 'undefined') {
             productsByPages[self.currentPage] = [];
-            for (var i = 0; i < data.products.length; i++) {
+            for (i = 0; i < data.products.length; i++) {
                 var product = new Product();
                 product.importData(data.products[i]);
 
                 productsByPages[self.currentPage].push(product);
                 productsIndex[product.getId()] = product;
                 window.productLogics.importProduct(product);
+            }
+        }
+        if (typeof data.filters != 'undefined') {
+            filters = [];
+            for (i = 0; i < data.filters.length; i++) {
+                var filter = new ProductsListFilter();
+                filter.importData(data.filters[i]);
+                filters.push(filter);
             }
         }
         controller.fireEvent('productsListUpdated', self.id);
@@ -148,19 +157,21 @@ window.ProductsList = function() {
     var gatherFilterValues = function(filterId, value) {
         var filtersInfo = [];
         var i, j;
-        for (i = 0; i < self.filters.length; i++) {
-            var filter = self.filters[i];
-            if (filter.id == filterId) {
-                for (j = 0; j < filter.options.length; j++) {
-                    if (filter.options[j].id == value) {
-                        filtersInfo.push([filter.type, filter.options[j].id]);
+        var options;
+        for (i = 0; i < filters.length; i++) {
+            var filter = filters[i];
+            options = filter.getOptionsInfo();
+            if (filter.getId() == filterId) {
+                for (j = 0; j < options.length; j++) {
+                    if (options[j].id == value) {
+                        filtersInfo.push([filter.getType(), options[j].id]);
                         break;
                     }
                 }
             } else {
-                for (j = 0; j < filter.options.length; j++) {
-                    if (filter.options[j].selected) {
-                        filtersInfo.push([filter.type, filter.options[j].id]);
+                for (j = 0; j < options.length; j++) {
+                    if (options[j].selected) {
+                        filtersInfo.push([filter.getType(), options[j].id]);
                         break;
                     }
                 }
@@ -174,6 +185,30 @@ window.ProductsList = function() {
         }
         return false;
     };
+    this.getFilters = function() {
+        return filters;
+    };
+    // var generateQueryString = function(arguments) {
+    //     var queryString = '';
+    //     for (var key in arguments) {
+    //         queryString += key + ':' + arguments[key].join(',') + '/';
+    //     }
+    //     // workaround for retaining order
+    //     var currentUrl = document.location.href;
+    //     var sortArgumentPosition = currentUrl.indexOf('sort:');
+    //     if (sortArgumentPosition > 0) {
+    //         var sortSlice = currentUrl.slice(sortArgumentPosition);
+    //         if (sortSlice.indexOf('limit:') <= 0) {
+    //             var limitArgumentPosition = currentUrl.indexOf('limit:');
+    //             if (limitArgumentPosition > 0) {
+    //                 sortSlice = currentUrl.slice(limitArgumentPosition);
+    //             }
+    //         }
+    //         queryString += sortSlice;
+    //     }
+    //     return encodeURI(queryString);
+    // };
+
 };
 window.Product = function() {
     var self = this;
@@ -259,5 +294,34 @@ window.Product = function() {
     };
     this.getIconsInfo = function() {
         return iconsInfo;
+    };
+};
+window.ProductsListFilter = function() {
+    var id;
+    var title;
+    var type;
+    var optionsInfo;
+
+    this.getId = function() {
+        return id;
+    };
+
+    this.getTitle = function() {
+        return title;
+    };
+
+    this.getType = function() {
+        return type;
+    };
+
+    this.getOptionsInfo = function() {
+        return optionsInfo;
+    };
+
+    this.importData = function(newData) {
+        id = newData.id;
+        title = newData.title;
+        type = newData.type;
+        optionsInfo = newData.options;
     };
 };

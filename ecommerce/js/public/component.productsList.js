@@ -29,7 +29,8 @@ window.ProductsListComponent = function(componentElement) {
             if (productsListData = window.productLogics.getProductsList(id)) {
                 updatePagers();
                 if (filtersComponent) {
-                    filtersComponent.updateData(productsListData.filters);
+                    filtersComponent.updateData(productsListData.getFilters());
+                    filtersComponent.rebuildFilters();
                 }
                 renderProductsHtml();
                 createProductComponents();
@@ -76,11 +77,6 @@ window.ProductsListComponent = function(componentElement) {
             pagers[i].updateData(pagerData);
         }
     };
-    var updateProductsFilter = function() {
-        if (filtersComponent) {
-            filtersComponent.updateData(productsListData.filters);
-        }
-    };
 
     var createPagers = function() {
         var elements, i;
@@ -117,7 +113,7 @@ window.ProductsListComponent = function(componentElement) {
         var element = componentElement.querySelector('.products_filter');
         if (element) {
             filtersComponent = new ProductsFilterComponent(element, self);
-            filtersComponent.updateData(productsListData.filters);
+            filtersComponent.updateData(productsListData.getFilters());
             filtersComponent.initFilters();
         }
     };

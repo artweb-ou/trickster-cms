@@ -13,75 +13,64 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
     this.initFilters = function() {
         var element, i;
         for (i = 0; i < filtersData.length; i++) {
-            if (element = componentElement.querySelector('select.products_filter_dropdown.products_filter_' + filtersData[i].id)) {
+            if (element = componentElement.querySelector('.products_filter_item.products_filter_' + filtersData[i].getId())) {
                 var filter = new ProductsDropdownFilterComponent(element, filtersData[i], self, listComponent);
                 filters.push(filter);
             }
         }
-
 
         // elements = componentElement.querySelectorAll('input.products_filter_radio');
         // for (i = elements.length; i--;) {
         //     filters.push(new ProductsRadioFilterComponent(elements[i], self.refresh));
         // }
     };
-    this.refresh = function() {
-        // var arguments = {};
-        // for (var i = filters.length; i--;) {
-        //     filters[i].modifyFilterArguments(arguments);
-        // }
-        // document.location.href = window.currentElementURL + generateQueryString(arguments);
+    this.rebuildFilters = function() {
+        while (componentElement.firstChild) {
+            componentElement.removeChild(componentElement.firstChild);
+        }
+        filters = [];
+        var html = '';
+        for (var i = 0; i < filtersData.length; i++) {
+            var data = {
+                'filter': filtersData[i],
+            };
+            html += smartyRenderer.fetch('component.filterdropdown.tpl', data);
+        }
+        componentElement.innerHTML = html;
+        dropDownManager.initDropdowns(componentElement);
+        self.initFilters();
     };
-
-    // var generateQueryString = function(arguments) {
-    //     var queryString = '';
-    //     for (var key in arguments) {
-    //         queryString += key + ':' + arguments[key].join(',') + '/';
-    //     }
-    //     // workaround for retaining order
-    //     var currentUrl = document.location.href;
-    //     var sortArgumentPosition = currentUrl.indexOf('sort:');
-    //     if (sortArgumentPosition > 0) {
-    //         var sortSlice = currentUrl.slice(sortArgumentPosition);
-    //         if (sortSlice.indexOf('limit:') <= 0) {
-    //             var limitArgumentPosition = currentUrl.indexOf('limit:');
-    //             if (limitArgumentPosition > 0) {
-    //                 sortSlice = currentUrl.slice(limitArgumentPosition);
-    //             }
-    //         }
-    //         queryString += sortSlice;
-    //     }
-    //     return encodeURI(queryString);
-    // };
 
     init();
 };
 
 window.ProductsDropdownFilterComponent = function(componentElement, filterData, parentComponent, listComponent) {
+    var selectElement;
     var init = function() {
-        if (componentElement) {
+        if (!componentElement) {
 
+            // <div class="products_filter_item"><div class="products_filter_label">
+            //         Kõik kaubamärgid:
+            //         </div><select autocomplete="off" class="products_filter_dropdown products_filter_dropdown_type_brand products_filter_brand dropdown_placeholder" style="display: none;"><option value="">Kõik </option><option value="5279">
+            //         Holden Decor Ltd.
+            //     </option></select></div>
+        } else {
+            selectElement = componentElement.querySelector('select.products_filter_dropdown');
         }
-        eventsManager.addHandler(componentElement, 'change', change);
+        if (selectElement) {
+            eventsManager.addHandler(selectElement, 'change', change);
+        }
     };
 
     var change = function(event) {
-        listComponent.changeFilterValue(filterData.id, getValue());
+        listComponent.changeFilterValue(filterData.getId(), getValue());
     };
-
-    // this.modifyFilterArguments = function(arguments) {
-    //     var myValue;
-    //     if (myValue = self.getValue()) {
-    //         if (typeof arguments[type] == 'undefined') {
-    //             arguments[type] = [];
-    //         }
-    //         arguments[type][arguments[type].length] = myValue;
-    //     }
-    // };
-
+    this.getComponentElement = function() {
+        return componentElement;
+    };
     var getValue = function() {
-        if (componentElement.options && componentElement.options[componentElement.selectedIndex].value) {
-            return componentElement.options[componentElement.selectedIndex].value;
+        if (selectElement.options && selectElement.options[selectElement.selectedIndex].value) {
+            return selectElement.options[selectElement.selectedIndex].value;
         }
         return '';
     };

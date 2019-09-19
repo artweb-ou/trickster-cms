@@ -6,6 +6,8 @@
     'product.code' => true,
     'product.details_must_select_options' => true,
 
+    'products.filter_select' => true,
+
     'productgallery.price' => true,
     'productgallery.readmore' => true,
 
