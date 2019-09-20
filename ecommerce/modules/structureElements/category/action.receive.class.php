@@ -29,7 +29,6 @@ class receiveCategory extends structureElementAction
     public function setExpectedFields(&$expectedFields)
     {
         $expectedFields = [
-            //category.form.info.tpl fields:
             'title',
             'image',
             'introduction',
