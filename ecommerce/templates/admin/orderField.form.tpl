@@ -19,5 +19,5 @@
 			</tbody>
 		</table>
 	</div>
-	{include file=$theme->template('block.controls.tpl') action="receive"}
+	{include file=$theme->template('component.controls.tpl') action="receive"}
 </form>

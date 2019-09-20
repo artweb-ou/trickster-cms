@@ -50,9 +50,5 @@ class fileApplication extends controllerApplication
             $this->mode = $controller->getParameter('mode');
         }
     }
-
-    public function deprecatedParametersRedirection() {
-        return true;
-    }
 }
 

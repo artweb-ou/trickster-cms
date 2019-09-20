@@ -12,13 +12,11 @@ class DiscountProductFilter extends ProductFilter
                 $argumentMap = $this->getArguments();
 
                 foreach ($discounts as &$discount) {
-                    if (!empty($discount->hidden) && !$discount->hidden) {
-                        $this->optionsInfo[] = [
-                            'title' => $discount->title,
-                            'selected' => isset($argumentMap[$discount->id]) || $discount->requested,
-                            'id' => $discount->id,
-                        ];
-                    }
+                    $this->optionsInfo[] = [
+                        'title' => $discount->title,
+                        'selected' => isset($argumentMap[$discount->id]),
+                        'id' => $discount->id,
+                    ];
                 }
             }
         }

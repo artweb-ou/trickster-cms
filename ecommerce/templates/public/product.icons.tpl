@@ -1,11 +1,17 @@
 {function productIconsCell}
     <span class="product_icons_cell {$cellLocation}">
+        {*{var_dump($iconsInfo)}*}
         {foreach $iconsInfo as $iconInfo}
             {if $iconInfo.iconLocation == $cellLocation}
                 {if !empty($iconInfo.image)}
                     <img class='product_icon product_icon_image {$iconInfo.iconRole}'
-                         {if !empty($iconInfo.width)}
-                            style="width:{$iconInfo.width * 2}%;"
+                         {if !empty($iconSize) && $iconSize=='product' && !empty($iconInfo.widthOnProduct)}
+                             {$showedWidth= 'widthOnProduct'}
+                         {else}
+                             {$showedWidth= 'width'}
+                         {/if}
+                         {if !empty($iconInfo.$showedWidth)}
+                            style="width:{$iconInfo.$showedWidth * 2}%;"
                             src='{$controller->baseURL}image/type:productIconDynamic/id:{$iconInfo.image}/filename:{$iconInfo.fileName}'
                          {else}
                             src='{$controller->baseURL}image/type:productIcon/id:{$iconInfo.image}/filename:{$iconInfo.fileName}'

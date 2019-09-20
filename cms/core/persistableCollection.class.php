@@ -212,7 +212,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
 
     public function loadObject($fields, $strict = true)
     {
-        if ($objects = $this->load($fields)) {
+        if ($objects = $this->load($fields, [], false, 1)) {
             if (count($objects) == 1 || !$strict) {
                 return reset($objects);
             }

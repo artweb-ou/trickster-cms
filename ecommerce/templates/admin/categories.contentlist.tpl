@@ -10,9 +10,12 @@
 
             {include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedTypes()}
 		</div>
-        {assign var='formNames' value=$rootElement->getFormNames()}
-        {if $currentElement->getChildrenList()}
-            {*  __ data table *}
+		{assign var='formNames' value=$rootElement->getFormNames()}
+		{if !isset($contentList)}
+			{assign 'contentList' $currentElement->getChildrenList()}
+		{/if}
+		{if $contentList}
+			{*  __ data table *}
 			<table class='content_list'>
 				<thead>
 				<tr>
@@ -28,6 +31,11 @@
                                 {translations name='label.image'}
                             {/if}
                         {/if}
+					</th>
+					<th class='image_column'>
+							{if method_exists ($contentList[0], 'getImageUrl')}
+									{translations name='label.image'}
+							{/if}
 					</th>
 					<th class="name_column">
                         {translations name='label.categoryid'}
@@ -48,57 +56,57 @@
                         {translations name='label.delete'}
 					</th>
 				</tr>
-				</thead>
-				<tbody>
-                {foreach from=$currentElement->getFullChildrenList() item=contentItem}
-                    {if $contentItem->structureType != 'positions'}
-                        {assign var='typeName' value=$contentItem->structureType}
-                        {assign var='typeLowered' value=$contentItem->structureType|strtolower}
-                        {assign var='type' value="element."|cat:$typeLowered}
-                        {assign var='privilege' value=$privileges.$typeName}
-						<tr class="content_list_item elementid_{$contentItem->id}">
-							<td class="checkbox_cell">
-								<input class='singlebox checkbox_placeholder' type="checkbox" name="{$formNames.elements}[{$contentItem->id}]" value="1" />
-							</td>
-							<td class='name_column'>
-                                {assign var='level' value=$contentItem->level-3}
-								<a href="{$contentItem->URL}" style='padding-left: {$level*20}px'>
-									<span class='icon icon_{$contentItem->structureType}'></span>{$contentItem->getTitle()}
-								</a>
-							</td>
-                            {if method_exists ($contentItem, 'getImageUrl')}
-								<td class='image_column'>
-                                    {if $contentItem->image}
-										<img src='{$contentItem->getImageUrl()}' alt=" " />
-                                    {/if}
-								</td>
-                            {/if}
-							<td class=''>
-                                {$contentItem->id}
-							</td>
-							<td class="edit_column">
-                                {if $privilege.showForm}
-									<a href="{$contentItem->URL}id:{$contentItem->id}/action:showForm" class='icon icon_edit'></a>
-                                {/if}
-							</td>
-							<td>
-								<a href="{$contentItem->URL}type:category/action:showForm/" class='icon icon_addnew category'></a>
-							</td>
-							<td class='type_column'>
-                                {translations name=$type}
-							</td>
-							<td>
-                                {$contentItem->dateModified}
-							</td>
-							<td class="delete_column">
-                                {if $privilege.delete}
-									<a href="{$contentItem->URL}id:{$contentItem->id}/action:delete" class='icon icon_delete content_item_delete_button'></a>
-                                {/if}
-							</td>
-						</tr>
-                    {/if}
-                {/foreach}
-				</tbody>
+			</thead>
+			<tbody>
+			{foreach from=$currentElement->getFullChildrenList() item=contentItem}
+				{if $contentItem->structureType != 'positions'}
+				{assign var='typeName' value=$contentItem->structureType}
+				{assign var='typeLowered' value=$contentItem->structureType|strtolower}
+				{assign var='type' value="element."|cat:$typeLowered}
+				{assign var='privilege' value=$privileges.$typeName}
+				<tr class="content_list_item elementid_{$contentItem->id}">
+					<td class="checkbox_cell">
+						<input class='singlebox checkbox_placeholder' type="checkbox" name="{$formNames.elements}[{$contentItem->id}]" value="1" />
+					</td>
+					<td class='name_column'>
+						{assign var='level' value=$contentItem->level-3}
+						<a href="{$contentItem->URL}" style='padding-left: {$level*20}px' >
+							<span class='icon icon_{$contentItem->structureType}'></span>{$contentItem->getTitle()}
+						</a>
+					</td>
+								{if method_exists ($contentItem, 'getImageUrl')}
+									<td class='image_column'>
+										{if $contentItem->image}
+											<img src='{$contentItem->getImageUrl()}' alt=" " />
+										{/if}
+									</td>
+								{/if}
+					<td class=''>
+						{$contentItem->id}
+					</td>
+					<td class="edit_column">
+						{if $privilege.showForm}
+							<a href="{$contentItem->URL}id:{$contentItem->id}/action:showForm" class='icon icon_edit'></a>
+						{/if}
+					</td>
+					<td>
+						<a href="{$contentItem->URL}type:category/action:showForm/" class='icon icon_addnew category'></a>
+					</td>
+					<td class='type_column'>
+							{translations name=$type}
+					</td>
+					<td>
+						{$contentItem->dateModified}
+					</td>
+					<td class="delete_column">
+						{if $privilege.delete}
+							<a href="{$contentItem->URL}id:{$contentItem->id}/action:delete" class='icon icon_delete content_item_delete_button'></a>
+						{/if}
+					</td>
+				</tr>
+				{/if}
+			{/foreach}
+			</tbody>
 			</table>
 			<div class="content_list_bottom">
                 {if isset($pager)}

@@ -598,4 +598,16 @@
         ],
     ],
 
+    'subArticleShortImage' => [
+        'filters' => [
+            [
+                'reduce',
+                'width=1200',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+        ],
+    ],
 ];

@@ -534,4 +534,18 @@
             80,
         ],
     ],
+    'productParameterIcon' => [
+        'filters' => [
+            [
+                'reduce',
+                'width=100,height=100',
+            ],
+        ],
+        'format' => [
+            null,
+            'jpg',
+            '',
+            80,
+        ],
+    ],
 ];

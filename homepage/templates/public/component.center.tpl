@@ -1,3 +1,3 @@
 <div class='center_block'>
-	{include file=$theme->template($currentLayout)}
+    {include file=$theme->template($currentLayout)}
 </div>

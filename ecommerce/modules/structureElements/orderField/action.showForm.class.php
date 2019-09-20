@@ -8,6 +8,11 @@ class showFormOrderField extends structureElementAction
             $fieldsList = [];
             if ($fieldsElement = $structureManager->getElementByMarker('basketFields')) {
                 $fieldsList = $structureManager->getElementsChildren($fieldsElement->id);
+                foreach ($fieldsList as &$field) {
+                    if($structureElement->fieldId == $field->id) {
+                        $field->selected = true;
+                    }
+                }
             }
             $structureElement->setTemplate('shared.content.tpl');
             $renderer = $this->getService('renderer');

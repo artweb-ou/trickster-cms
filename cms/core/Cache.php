@@ -41,8 +41,8 @@ class Cache extends errorLogger
 
 
             $this->reading = $reading;
-//            $this->writing = $writing && !((new CrawlerDetect())->isCrawler());
-            $this->writing = $writing;
+            $this->writing = $writing && !((new CrawlerDetect())->isCrawler());
+//            $this->writing = $writing;
             $this->deleting = $deleting;
 
         }

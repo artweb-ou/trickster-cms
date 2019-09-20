@@ -1,5 +1,5 @@
 {foreach from=$formData.$fieldName key=languageId item=valueTextarea}
-	<div class="form_items {if !empty($item.class)}{$item.class}{/if}" style="{if !empty($item.style)}{$item.style}{/if}">
+	<div class="form_items{if !empty($item.class)} {$item.class}{/if}"{if !empty($item.style)} style="{$item.style}"{/if}>
 		<span class="form_label">
 			{$languageNames.$languageId}
 		</span>

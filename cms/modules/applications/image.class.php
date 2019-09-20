@@ -9,7 +9,7 @@ class imageApplication extends controllerApplication
     protected $fileName;
     protected $layoutType;
     protected $angle;
-    protected $save;
+    protected $multiplier;
     public $rendererName = 'imageProcess';
 
     public function initialize()
@@ -50,6 +50,9 @@ class imageApplication extends controllerApplication
                 }
                 if (!empty($imagePreset['filters'])) {
                     foreach ($imagePreset['filters'] as &$filter) {
+                        if (isset($filter[1])){
+                            $filter[1] = $this->applyMultiplier($filter[1]);
+                        }
                         $this->renderer->assign('registerFilter', $filter);
                     }
                 }
@@ -94,17 +97,39 @@ class imageApplication extends controllerApplication
         if ($controller->getParameter('angle')) {
             $this->angle = $controller->getParameter('angle');
         }
+        $this->multiplier = (float)$controller->getParameter('multiplier');
+        if ($this->multiplier > 3) {
+            $this->multiplier = 3;
+        }
         if ($controller->getParameter('filename')) {
             $this->fileName = $controller->getParameter('filename');
+        } elseif (!empty($controller->requestedPath)) {
+            $this->fileName = last($controller->requestedPath);
         }
         if ($controller->getParameter('type')) {
             $this->layoutType = $controller->getParameter('type');
         }
-        $this->save = !!$controller->getParameter('save');
     }
 
-    public function deprecatedParametersRedirection()
+    protected function applyMultiplier($filterValue)
     {
-        return true;
+        if ($this->multiplier && ($this->multiplier > 1)) {
+            //preparse filter values
+            if (!is_array($filterValue)) {
+                $parameterStrings = explode(',', $filterValue);
+                $filterValue = [];
+                foreach ($parameterStrings as $parameterString) {
+                    if ($string = explode('=', $parameterString)) {
+                        $filterValue[trim($string[0])] = trim($string[1]);
+                    }
+                }
+            }
+            foreach ($filterValue as $name => $value) {
+                if ($name == 'width' || $name == 'height') {
+                    $filterValue[$name] = $value * $this->multiplier;
+                }
+            }
+        }
+        return $filterValue;
     }
 }

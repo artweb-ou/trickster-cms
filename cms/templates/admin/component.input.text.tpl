@@ -13,8 +13,7 @@
 {if !empty($item.additionalFormat)}
 	{if !empty($item.additionalFormat.labelBefore)}
 		{$labelBefore = $item.additionalFormat.labelBefore}
-	{/if}
-	{if empty($labelBefore)}
+	{else}
 		{$labelBefore = $fieldName}
 	{/if}
     {$labelAfter  = $item.additionalFormat.labelAfter}

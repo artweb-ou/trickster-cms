@@ -116,8 +116,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
 
         foreach ($this->getOrderProducts() as &$element) {
-            $productsPrice += $element->getTotalPrice(false);
+            $productsPrice += $element->getTotalPrice();
             $this->totalFullPrice += $element->getTotalFullPrice();
+            $this->vatRate = $element->vatRate;
         }
         $this->productsPrice = $productsPrice;
         $totalPrice = (float)$this->totalFullPrice + (float)$this->deliveryPrice;
@@ -359,13 +360,13 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 "payerEmail" => $this->payerEmail,
                 "payerPhone" => $this->payerPhone,
                 "currency" => $this->currency,
-                "productsPrice" => $this->getTotalFullPrice(),
+                "productsPrice" => $this->getTotalFullPrice(true),
                 "deliveryType" => $this->deliveryType,
                 "deliveryPrice" => $currencySelector->formatPrice($this->deliveryPrice),
                 "deliveryTitle" => $this->deliveryTitle,
                 "noVatAmount" => $this->getNoVatAmount(),
                 "vatAmount" => $this->getVatAmount(),
-                "totalPrice" => $this->getTotalPrice(),
+                "totalPrice" => $this->getTotalPrice(true),
                 "invoiceNumber" => $this->invoiceNumber,
                 "advancePaymentInvoiceNumber" => $this->advancePaymentInvoiceNumber,
                 "orderConfirmationNumber" => $this->orderConfirmationNumber,
@@ -421,7 +422,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $this->orderData['addedProducts'][] = [
                     'code' => $product->code,
                     'title' => $product->title,
-                    'price' => $product->getFullPrice(),
+                    'price' => $product->getFullPrice(true),
                     'variation' => $product->variation,
                     'emptyPrice' => $product->isEmptyPrice(),
                     'amount' => $product->amount,
@@ -1069,10 +1070,14 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $currencySelector->formatPrice($this->noVatAmount);
     }
 
-    public function getTotalFullPrice()
+    public function getTotalFullPrice($formated = false)
     {
         if (empty($this->totalFullPrice)) {
             $this->recalculate();
+        }
+        if($formated) {
+            $currencySelector = $this->getService('CurrencySelector');
+            return $currencySelector->formatPrice($this->totalFullPrice);
         }
         return $this->totalFullPrice;
     }
