@@ -22,12 +22,13 @@ window.MapComponent = function(componentElement, id) {
             componentElement.innerHTML = mapCode;
         } else {
             var coordinates = info.getCoordinates();
+            var zoomLevel = info.getZoomLevel();
             if (coordinates) {
                 var styles = info.getStyles();
                 if (styles) {
                     latlng = new google.maps.LatLng(coordinates[0], coordinates[1]);
                     var options = {
-                        zoom: 14,
+                        zoom: zoomLevel,
                         //disableDefaultUI: true,
                         center: latlng,
                         mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -52,11 +53,13 @@ window.MapComponent = function(componentElement, id) {
                     });
                     google.maps.event.addListener(marker, 'click', onMarkerClick);
                 } else {
-                    var title = info.getTitle() ? '&q=+(' + info.getTitle() + ')' : '';
+                    // var title = info.getTitle() ? '&q=+(' + info.getTitle() + ')' : '';
+                    var title = info.getTitle() ? '&q=+' + info.getTitle() + '' : '';
 
                     var iframe = document.createElement('iframe');
                     componentElement.classList.add('googlemap_iframe');
-                    var src = 'https://maps.google.com/?q=' + coordinates + title + '&hl=' + window.mapsLogics.getShortLanguageCode() + '&z=' + 14 + '&output=embed';
+                    // var src = 'https://maps.google.com/?q=' + coordinates + title + '&hl=' + window.mapsLogics.getShortLanguageCode() + '&z=' + 14 + '&output=embed';
+                    var src = 'https://maps.google.com/?q=' + title + '&ll='+ coordinates + '&hl=' + window.mapsLogics.getShortLanguageCode() + '&z=' + zoomLevel + '&output=embed';
                     iframe.setAttribute('src', src);
                     iframe.setAttribute('allowfullscreen', true);
                     componentElement.appendChild(iframe);
@@ -81,7 +84,7 @@ window.MapComponent = function(componentElement, id) {
         componentElement.style.height = '';
 
         var parentHeight = componentElement.parentNode.offsetHeight;
-        var minHeight = componentElement.offsetWidth * info.getGalleryHeight();
+        var minHeight = componentElement.offsetWidth * info.getHeight();
         if (minHeight > parentHeight) {
             componentHeight = minHeight;
         } else {
@@ -110,6 +113,7 @@ window.iframeMapComponent = function(componentElement, id, lang) {
     var adjustHeight = function() {
         info = window.mapsLogics.getMapInfo(id);
         var coordinates = info.getCoordinates();
+        var zoomLevel = info.getZoomLevel();
 
         componentElement.style.minHeight = componentElement.offsetWidth / 2 + 'px';
         componentElement.style.height = '';

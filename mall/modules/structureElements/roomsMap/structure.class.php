@@ -26,7 +26,7 @@ class roomsMapElement extends structureElement
         if ($result === null) {
             $result = false;
             $structureManager = $this->getService('structureManager');
-            $languageId = $this->getService('languagesManager')->getCurrentLanguageId();
+            $languageId = $this->getService('LanguagesManager')->getCurrentLanguageId();
             foreach ($structureManager->getElementsByType('shopCatalogue', $languageId) as $shopCatalogue) {
                 $result = $shopCatalogue;
                 break;
@@ -159,7 +159,7 @@ class roomsMapElement extends structureElement
     {
         if ($this->categories === null) {
             $structureManager = $this->getService('structureManager');
-            $languageId = languagesManager::getInstance()->getCurrentLanguageId();
+            $languageId = $this->getService('LanguagesManager')->getCurrentLanguageId();
             foreach ($structureManager->getElementsByType('shopCatalogue', $languageId) as $shopCatalogue) {
                 $this->categories = $shopCatalogue->getCategoriesList();
                 break;
@@ -172,13 +172,16 @@ class roomsMapElement extends structureElement
     {
         if ($this->icons === null) {
             $this->icons = [];
+            /**
+             * @var structureManager $structureManager
+             */
             $structureManager = $this->getService('structureManager');
             $iconsElementId = $structureManager->getElementIdByMarker('icons');
             if ($iconsElementId) {
                 $iconsElementsIds = $this->getService('linksManager')
                     ->getConnectedIdList($iconsElementId, 'structure', 'parent');
                 if ($iconsElementsIds) {
-                    $structureManager->getElementsByIdList($iconsElementsIds, $this->id);
+                    $structureManager->getElementsByIdList($iconsElementsIds, $this->id, true);
                     foreach ($iconsElementsIds as $iconElementId) {
                         if ($element = $structureManager->getElementById($iconElementId)) {
                             $this->icons[] = $element;

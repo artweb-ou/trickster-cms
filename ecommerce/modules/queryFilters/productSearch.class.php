@@ -39,7 +39,7 @@ class productSearchQueryFilter extends searchQueryFilter
 //        if ($result === null) {
 //            $result = [];
 //            $parentsIds = [];
-//            $languageId = $this->getService('languagesManager')->getCurrentLanguageId();
+//            $languageId = $this->getService('LanguagesManager')->getCurrentLanguageId();
 //            $structureManager = $this->getService('structureManager');
 //            $catalogues = $structureManager->getElementsByType('productCatalogue', $languageId);
 //            foreach ($catalogues as $catalogue) {

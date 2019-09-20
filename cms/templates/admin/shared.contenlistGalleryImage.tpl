@@ -17,6 +17,9 @@
 		<th class="generic">
 			{translations name='label.alt'}
 		</th>
+		<th class='type_column'>
+			{translations name='label.type'}
+		</th>
 		<th class='edit_column'>
 			{translations name='label.edit'}
 		</th>
@@ -48,6 +51,9 @@
 				</td>
 				<td class="generic gallery_form_image_alt">
 					{$contentItem->alt}
+				</td>
+				<td class='type_column'>
+				{translations name=$type}
 				</td>
 				<td class='edit_column'>
 					{if isset($privilege.showForm) && $privilege.showForm}

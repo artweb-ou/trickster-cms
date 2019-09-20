@@ -37,6 +37,8 @@ class eventsListElement extends menuDependantStructureElement implements Configu
         $moduleStructure['date_from'] = 'date';
         $moduleStructure['date_to'] = 'date';
         $moduleStructure['sort'] = 'text';
+
+        $moduleStructure['colorLayout'] = 'text';
     }
 
     protected function getTabsList()
@@ -91,52 +93,44 @@ class eventsListElement extends menuDependantStructureElement implements Configu
         return $this->baseEventsIdList;
     }
 
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getEvents()
+    public function getSearchTitle()
     {
-        $this->logError('deprecated method getEventsElements used');
-        return $this->getEventsElements();
+        $title = $this->getTitle();
+
+        if ($parentGroup = $this->getCurrentParentElement()) {
+            $title = $parentGroup->getTitle() . ' / ' . $title;
+        }
+        return $title;
     }
 
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getEventsToDisplay()
+    public function getConnectedEventsInfo()
     {
-        $this->logError('deprecated method getEventsToDisplay used');
-        return $this->getEventsElements();
+        $info = [];
+        foreach ($this->getConnectedEvents() as $element) {
+            $item['title'] = $element->getTitle();
+            $item['select'] = true;
+            $item['id'] = $element->id;
+
+            $info [] = $item;
+        }
+        return $info;
     }
 
-    /**
-     * @param $monthStartStamp
-     * @return array
-     *
-     * @deprecated
-     */
-    public function getFilteredEvents($monthStartStamp)
+    public function getEventsElements()
     {
-        $this->logError('deprecated method getFilteredEvents used');
-        if (is_null($this->filteredEvents)) {
-            $this->filteredEvents = [];
-            if ($events = $this->getEvents()) {
-                $selectedMonth = date('n', $monthStartStamp);
-                $selectedYear = date('Y', $monthStartStamp);
-                foreach ($events as $key => &$event) {
-                    $eventStartStamp = strtotime('first day of this month ' . $event->startDate);
-                    if (date('n', $eventStartStamp) != $selectedMonth || date('Y', $eventStartStamp) != $selectedYear
-                    ) {
-                        unset($events[$key]);
+        if ($this->t_events === null) {
+            if ($eventIds = $this->getCurrentEventsIdList()) {
+                /**
+                 * @var structureManager
+                 */
+                $structureManager = $this->getService('structureManager');
+                foreach ($eventIds as $eventId) {
+                    if ($element = $structureManager->getElementById($eventId, $this->id)) {
+                        $this->t_events[] = $element;
                     }
                 }
-                $this->filteredEvents = $events;
             }
         }
-        return $this->filteredEvents;
+        return $this->t_events;
     }
 }
-
-

@@ -4,6 +4,12 @@ class receiveEvent extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param structureElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
@@ -11,9 +17,22 @@ class receiveEvent extends structureElementAction
             if ($structureElement->structureName == '') {
                 $structureElement->structureName = $structureElement->title;
             }
+            /**
+             * @var $structureElement structureElement
+             */
             if (!is_null($structureElement->getDataChunk("image")->originalName)) {
                 $structureElement->image = $structureElement->id;
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
+            }
+            $additionalImages = [
+                2=>'image2',
+            ];
+            foreach($additionalImages as $imageKey=>$imageCode) {
+                if (!is_null($structureElement->getDataChunk($imageCode)->originalName)) {
+                    $structureElement->$imageCode = $structureElement->id . "_$imageKey";
+                    $field = $imageCode . 'Name';
+                    $structureElement->$field = $structureElement->getDataChunk($imageCode)->originalName;
+                }
             }
 
             // Connect event to selected eventsLists
@@ -50,6 +69,7 @@ class receiveEvent extends structureElementAction
             'description',
             'introduction',
             'image',
+            'image2',
             'startDate',
             'endDate',
             'startTime',
@@ -59,6 +79,7 @@ class receiveEvent extends structureElementAction
             'city',
             'address',
             'mapCode',
+            'mapUrl',
             'link',
             'connectedEventsLists',
         ];

@@ -7,8 +7,9 @@ class ordersElement extends structureElement
     public $dataResourceName = 'module_generic';
     protected $allowedTypes = ['order'];
     public $defaultActionName = 'showFullList';
-    public $deliveryPrice = 0;
-    public $payedAmount = 0;
+    public $deliveryTotal = 0;
+    public $payedTotal = 0;
+    public $totalPricesTotal = 0;
     public $newOrdersAmount = 0;
     public $PDFFileName = '';
     public $XLSXFileName = '';
@@ -31,7 +32,7 @@ class ordersElement extends structureElement
     {
         $structureManager = $this->getService('structureManager');
         $settingsManager = $this->getService('settingsManager');
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $languageId = $languagesManager->getCurrentLanguageId('adminLanguages');
         $settings = $settingsManager->getSettingsList($languageId);
     }
@@ -89,20 +90,23 @@ class ordersElement extends structureElement
             }
         }
 
-        $deliveryPrice = 0;
-        $payedAmount = 0;
+        $totalPricesTotal = 0;
+        $deliveryTotal = 0;
+        $payedTotal = 0;
         $newOrdersAmount = 0;
-
-        $contentList = $structureManager->getElementsByIdList($idList, $this->id);
+        /**
+         * @var orderElement[] $contentList
+         */
+        $contentList = $structureManager->getElementsByIdList($idList, $this->id, true);
         $sortParameter = [];
         $filteredArray = [];
 
         foreach ($contentList as $key => &$element) {
-            $x = $element->getOrderStatus();
             if (in_array($element->getOrderStatus(), $filterTypes)) {
-                $deliveryPrice = $deliveryPrice + $element->deliveryPrice;
+                $deliveryTotal = $deliveryTotal + $element->deliveryPrice;
 
-                $payedAmount = $payedAmount + $element->getPayedPrice();
+                $payedTotal = $payedTotal + $element->getPayedPrice(false);
+                $totalPricesTotal = $totalPricesTotal + $element->getTotalPrice(false);
 
                 if ($element->getOrderStatus() == 'new') {
                     $newOrdersAmount++;
@@ -113,9 +117,10 @@ class ordersElement extends structureElement
         }
         array_multisort($sortParameter, SORT_DESC, $filteredArray);
         $this->contentList = $filteredArray;
-
-        $this->deliveryPrice = $deliveryPrice;
-        $this->payedAmount = $payedAmount;
+        $currencySelector = $this->getService('CurrencySelector');
+        $this->deliveryTotal = $currencySelector->formatPrice($deliveryTotal);
+        $this->payedTotal = $currencySelector->formatPrice($payedTotal);
+        $this->totalPricesTotal = $currencySelector->formatPrice($totalPricesTotal);
         $this->newOrdersAmount = $newOrdersAmount;
     }
 
@@ -255,8 +260,8 @@ class ordersElement extends structureElement
         $footer = [
             '',
             '',
-            $this->payedAmount,
-            $this->deliveryPrice,
+            $this->payedTotal,
+            $this->deliveryTotal,
             '',
             '',
             '',
@@ -277,6 +282,9 @@ class ordersElement extends structureElement
         $data = [
             'startDate' => $this->startDate,
             'endDate' => $this->endDate,
+            'deliveryTotal' => $this->deliveryTotal,
+            'payedTotal' => $this->payedTotal,
+            'totalPricesTotal' => $this->totalPricesTotal,
             'newOrdersAmount' => $this->newOrdersAmount,
             'PDFDownloadURL' => $this->URL . 'id:' . $this->id . '/action:downloadPDF/types:' . $this->filterTypes . '/start:' . $this->startDate . '/end:' . $this->endDate . '/' . $this->PDFFileName,
             'PDFDisplayURL' => $this->URL . 'id:' . $this->id . '/action:displayPDF/types:' . $this->filterTypes . '/start:' . $this->startDate . '/end:' . $this->endDate . '/' . $this->PDFFileName,

@@ -12,37 +12,6 @@ class folderElement extends menuDependantStructureElement implements Configurabl
 {
     use ConfigurableLayoutsProviderTrait;
     public $dataResourceName = 'module_folder';
-    protected $allowedTypes = [
-        'folder',
-        'article',
-        'gallery',
-        'service',
-        'production',
-        'brandsList',
-        'personnelList',
-        'feedback',
-        'map',
-        'productCatalogue',
-        'linkList',
-        'selectedProducts',
-        'selectedGalleries',
-        'registration',
-        'passwordReminder',
-        'purchaseHistory',
-        'bannerCategory',
-        'latestNews',
-        'eventsList',
-        'newsList',
-        'productSearch',
-        'tabsWidget',
-        'discountsList',
-        'campaignsList',
-        'selectedCampaigns',
-        'shopCatalogue',
-        'roomsMap',
-        'productGallery',
-        'selectedEvents',
-    ];
     public $defaultActionName = 'show';
     public $role = 'container';
 
@@ -98,6 +67,7 @@ class folderElement extends menuDependantStructureElement implements Configurabl
         $moduleStructure['formRelativesInput'] = 'array';
         $moduleStructure['hidden'] = 'checkbox';
 
+        $moduleStructure['layout'] = 'text';
         $moduleStructure['colorLayout'] = 'text';
     }
 
@@ -139,4 +109,23 @@ class folderElement extends menuDependantStructureElement implements Configurabl
     {
         return $this->columns;
     }
+
+    /**
+     * Get allowed children structure elements type according to settings, current user's privileges and selected type
+     *
+     * @param string $currentAction
+     * @return string[]
+     */
+    public function getAllowedTypes($currentAction = 'showFullList')
+    {
+        if ($this->allowedTypes === null) {
+            /**
+             * @var ConfigManager $configManager
+             */
+            $configManager = $this->getService('ConfigManager');
+            $this->allowedTypes = $configManager->getMerged('folder-allowedTypes.content');
+        }
+        return parent::getAllowedTypes($currentAction);
+    }
+
 }

@@ -46,27 +46,17 @@ class sendFeedback extends structureElementAction
                 ];
                 foreach ($groupElement->getFormFields() as $formField) {
                     if ($formField->fieldType == 'fileinput') {
-                        if ($dataChunk = $structureElement->getDataChunk($formField->fieldName)) {
-                            if (!empty($dataChunk->originalName)) {
-                                $storageName = $structureElement->id . '_' . $formField->id . '_' . time();
-                                $answerFiles[$formField->id] = [
-                                    'originalName' => $dataChunk->originalName,
-                                    'storageName' => $storageName,
-                                ];
-                                if ($dataChunk instanceof StorageValueHolderInterface) {
-                                    $dataChunk->setStorageValue($storageName);
-                                }
-                                if ($dataChunk instanceof ExtraDataHolderDataChunkInterface) {
-                                    $dataChunk->persistExtraData();
+                        $fileInputFieldName = $formField->fieldName;
+                        if ($dataChunk = $structureElement->getDataChunk($fileInputFieldName)) {
+                            $formFiles = $dataChunk->getStorageValue();
+                            if (is_array($formFiles) && !empty($formFiles)) {
+                                foreach ($formFiles as $file) {
+                                    $answerFiles[$formField->id][] = [
+                                        'originalName' => $file['name'],
+                                        'tmp_name' => $file['tmp_name'],
+                                    ];
                                 }
                             }
-                            $configurationManager = controller::getInstance()->getConfigManager();
-                            $uploadsPath = $configurationManager->get('paths.uploads');
-                            $files[] = [
-
-                                'fullName' => $uploadsPath . $dataChunk->getStorageValue(),
-                                'originalName' => $dataChunk->originalName,
-                            ];
                         }
                     } else {
                         $fieldName = $formField->fieldName;
@@ -108,52 +98,40 @@ class sendFeedback extends structureElementAction
                 $data['groups'][] = $groupInfo;
             }
             $visitorManager = $this->getService('VisitorsManager');
-            $visitor = $visitorManager->getCurrentVisitor();
-            if ($firstName && $lastName) {
-                $visitor->firstName = $firstName;
-                $visitor->lastName = $lastName;
-                $fromName = $firstName . ' ' . $lastName;
-            } elseif ($fullName) {
-                $visitor->firstName = $fullName;
-                $fromName = $fullName;
-            } elseif ($company) {
-                $fromName = $company;
+            if ($visitor = $visitorManager->getCurrentVisitor()) {
+                if ($firstName && $lastName) {
+                    $visitor->firstName = $firstName;
+                    $visitor->lastName = $lastName;
+                    $fromName = $firstName . ' ' . $lastName;
+                } elseif ($fullName) {
+                    $visitor->firstName = $fullName;
+                    $fromName = $fullName;
+                } elseif ($company) {
+                    $fromName = $company;
+                }
+                $visitor->email = $fromEmail;
+                $visitor->phone = $phone;
+                $visitorManager->updateVisitor($visitor);
             }
-            $visitor->email = $fromEmail;
-            $visitor->phone = $phone;
-            $visitorManager->updateVisitor($visitor);
-
             $spamChecker = $this->getService('SpamChecker');
             if ($emailToCheck && !$spamChecker->checkEmail($emailToCheck)) {
                 $structureElement->errorMessage = $translationsManager->getTranslationByName('feedback.emailsendingfailed');
             } else {
-                $emailDispatcher = $this->getService('EmailDispatcher');
-                $newDispatchment = $emailDispatcher->getEmptyDispatchment();
-                $newDispatchment->setFromName($fromName);
-                $newDispatchment->setFromEmail($fromEmail);
-                $newDispatchment->setSubject($subject);
-                $newDispatchment->setData($data);
-                if ($files) {
-                    foreach ($files as $file) {
-                        $newDispatchment->registerAttachment($file['fullName'], $file['originalName']);
-                    }
-                }
-                $newDispatchment->setReferenceId($structureElement->id);
-                $newDispatchment->setType('feedback');
-                $newDispatchment->registerReceiver($receiverEmail, null);
-
-                $answerElement = $structureManager->createElement('feedbackAnswer', 'show', $structureElement->id, false, 'feedbackAnswer');
+                $answerElement = $structureManager->createElement('feedbackAnswer', 'show', $structureElement->id,
+                    false, 'feedbackAnswer');
 
                 if ($answerElement) {
                     $answerElement->prepareActualData();
                     $answerElement->title = $answerElementTitle;
                     $answerElement->persistElementData();
-                    $event = new Event();
-                    $event->setType('feedback');
-                    $event->setVisitorId($visitor->id);
-                    $event->setElementId($answerElement->id);
-                    $eventLogger = $this->getService('eventsLog');
-                    $eventLogger->saveEvent($event);
+                    if ($visitor) {
+                        $event = new Event();
+                        $event->setType('feedback');
+                        $event->setVisitorId($visitor->id);
+                        $event->setElementId($answerElement->id);
+                        $eventLogger = $this->getService('eventsLog');
+                        $eventLogger->saveEvent($event);
+                    }
                     foreach ($answerFieldValues as $fieldId => $fieldValue) {
                         if (is_array($fieldValue)) {
                             foreach ($fieldValue as $value) {
@@ -163,22 +141,52 @@ class sendFeedback extends structureElementAction
                             $answerElement->addGenericValue($fieldId, $fieldValue);
                         }
                     }
-                    foreach ($answerFiles as $fieldId => $fileInfo) {
-                        $answerElement->addFile($fieldId, $fileInfo);
-                    }
-                }
 
-                if ($emailDispatcher->startDispatchment($newDispatchment)) {
-                    $structureElement->resultMessage = $translationsManager->getTranslationByName('feedback.emailsendingsuccess');
-                    $this->ajaxFormSuccess = true;
-                } else {
-                    $structureElement->errorMessage = $translationsManager->getTranslationByName('feedback.emailsendingfailed');
+                    $pathsManager = $this->getService('PathsManager');
+                    $uploadsPath = $pathsManager->getPath('uploads');
+                    $cachePath = $pathsManager->getPath('uploadsCache');
+                    $files = [];
+                    foreach ($answerFiles as $fieldId => $fileInfo) {
+                        if (is_array($fileInfo)) {
+                            foreach ($fileInfo as $file) {
+                                $temporaryFile = $cachePath . basename($file['tmp_name']);
+                                $fileElement = $structureManager->createElement('file', 'show', $answerElement->getId(),
+                                    false, 'feedbackAnswerFile');
+                                $fileElement->file = $fileElement->getId();
+                                $fileElement->fileName = $file['originalName'];
+                                $fileElement->title = $file['originalName'];
+                                $fileElement->persistElementData();
+                                copy($temporaryFile, $uploadsPath . $fileElement->file);
+                                unlink($temporaryFile);
+                                $files[] = $fileElement;
+                            }
+                        }
+                    }
+                    $emailDispatcher = $this->getService('EmailDispatcher');
+                    $newDispatchment = $emailDispatcher->getEmptyDispatchment();
+                    $newDispatchment->setFromName($fromName);
+                    $newDispatchment->setFromEmail($fromEmail);
+                    $newDispatchment->setSubject($subject);
+                    $newDispatchment->setData($data);
+                    if ($files) {
+                        foreach ($files as $file) {
+                            $newDispatchment->registerAttachment($uploadsPath . $file->id, $file->getFileName());
+                        }
+                    }
+                    $newDispatchment->setReferenceId($structureElement->id);
+                    $newDispatchment->setType('feedback');
+                    $newDispatchment->registerReceiver($receiverEmail, null);
+
+                    if ($emailDispatcher->startDispatchment($newDispatchment)) {
+                        $structureElement->resultMessage = $translationsManager->getTranslationByName('feedback.emailsendingsuccess');
+                        $this->ajaxFormSuccess = true;
+                    } else {
+                        $structureElement->errorMessage = $translationsManager->getTranslationByName('feedback.emailsendingfailed');
+                    }
                 }
             }
         }
-
         $this->sendAjaxFormResponse($structureElement);
-        //        $structureElement->setViewName('form');
     }
 
     public function getExtraModuleFields()
@@ -186,15 +194,13 @@ class sendFeedback extends structureElementAction
         return $this->structureElement->getCustomModuleFields();
     }
 
-    public function setValidators(
-        &$validators
-    ) {
+    public function setValidators(&$validators)
+    {
         $validators = $this->structureElement->getCustomValidators();
     }
 
-    public function setExpectedFields(
-        &$expectedFields
-    ) {
+    public function setExpectedFields(&$expectedFields)
+    {
         $expectedFields = array_merge($expectedFields, $this->structureElement->getCustomExpectedFields());
     }
 }

@@ -7,4 +7,6 @@ interface ConfigurableLayoutsProviderInterface
     public function getDefaultLayout($layout = "layout");
 
     public function getCurrentLayout();
+
+    public function getLayoutTypes();
 }

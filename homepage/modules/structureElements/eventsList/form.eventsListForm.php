@@ -16,6 +16,7 @@ class EventsListFormStructure extends ElementForm
         ],
         'mode' => [
             'type' => 'select.index',
+            'class' => 'eventslist_mode_select',
             'options' => [
                 'auto' => 'mode_auto',
                 'custom' => 'mode_custom',
@@ -23,9 +24,10 @@ class EventsListFormStructure extends ElementForm
         ],
         'receivedEventsIds' => [
             'type' => 'select.universal_options_multiple',
+            'trClass' => 'eventslist_mode_manual_setting',
             'class' => 'eventslist_connected_events_select',
             'name' => 'receivedEventsIds',
-            'method' => 'getConnectedEvents',
+            'method' => 'getConnectedEventsInfo',
         ],
         'dates_type' => [
             'type' => 'select.index',

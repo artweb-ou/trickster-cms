@@ -23,7 +23,7 @@ class receivePayment extends structureElementAction
              * @var paymentsMethod $paymentMethod
              */
             if ($paymentMethod = $paymentsManager->getPaymentMethod($methodElement->getName())) {
-                $paymentMethod->setAttributes($methodElement->getSpecialData($this->getService('languagesManager')
+                $paymentMethod->setAttributes($methodElement->getSpecialData($this->getService('LanguagesManager')
                     ->getCurrentLanguageId()));
                 $pathsManager = $this->getService('PathsManager');
                 $paymentMethod->setCertificatesPath($pathsManager->getPath('uploads'));

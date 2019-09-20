@@ -54,7 +54,7 @@ class paymentsElement extends structureElement
                     }
                 }
 
-                $this->paymentsPageList = $structureManager->getElementsByIdList($paymentsIdFilter, $this->id);
+                $this->paymentsPageList = $structureManager->getElementsByIdList($paymentsIdFilter, $this->id, true);
 
                 $sort = [];
                 foreach ($this->paymentsPageList as &$element) {

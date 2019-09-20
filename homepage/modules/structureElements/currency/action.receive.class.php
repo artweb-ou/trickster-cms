@@ -4,21 +4,28 @@ class receiveCurrency extends structureElementAction
 {
     protected $loggable = true;
 
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param currencyElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
-            $structureElement->prepareActualData();
             $structureElement->structureName = $structureElement->title;
 
-            $maxDecimalsAmount = '3.00';
-            if($structureElement->decimals > $maxDecimalsAmount) {
+            $maxDecimalsAmount = 3;
+            if ($structureElement->decimals > $maxDecimalsAmount) {
                 $structureElement->decimals = $maxDecimalsAmount;
             }
 
             $structureElement->persistElementData();
-            $parent = $structureManager->getElementsFirstParent($structureElement->id);
-            if ($parent) {
-                $parent->executeAction("generate");
+            /**
+             * @var currenciesElement $parent
+             */
+            if ($parent = $structureManager->getElementsFirstParent($structureElement->id)) {
+                $parent->generateConfigs();
             }
 
             $controller->redirect($structureElement->URL);

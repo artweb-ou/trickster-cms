@@ -23,7 +23,7 @@ class alsoImportPluginElement extends importPluginElement
     public function getWarehouse()
     {
         if ($this->warehouse === null) {
-            $specialData = $this->getSpecialData($this->getService('languagesManager')->getCurrentLanguageId());
+            $specialData = $this->getSpecialData($this->getService('LanguagesManager')->getCurrentLanguageId());
             if ($specialData && !empty($specialData['username']) && !empty($specialData['password'])
                 && !empty($specialData['clientId'])
             ) {

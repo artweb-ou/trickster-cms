@@ -7,14 +7,18 @@
  * @property string $startTime
  * @property string $endDate
  * @property string $endTime
+ * @property string $image
+ * @property string $image2
  */
 class eventElement extends structureElement implements MetadataProviderInterface, ImageUrlProviderInterface
 {
     use MetadataProviderTrait;
     use ImageUrlProviderTrait;
-
+    use GalleryInfoProviderTrait;
+    use ImagesElementTrait;
+    use CacheOperatingElement;
     public $dataResourceName = 'module_event';
-    protected $allowedTypes = [];
+    protected $allowedTypes = ['galleryImage'];
     public $defaultActionName = 'show';
     public $role = 'content';
     protected $startDayStamp;
@@ -36,8 +40,11 @@ class eventElement extends structureElement implements MetadataProviderInterface
         $moduleStructure['city'] = 'text';
         $moduleStructure['address'] = 'text';
         $moduleStructure['image'] = 'image';
-        $moduleStructure['originalName'] = 'text';
+        $moduleStructure['originalName'] = 'fileName';
+        $moduleStructure['image2'] = 'image';
+        $moduleStructure['image2Name'] = 'fileName';
         $moduleStructure['mapCode'] = 'code';
+        $moduleStructure['mapUrl'] = 'url';
         $moduleStructure['link'] = 'url';
         $moduleStructure['metaTitle'] = 'text';
         $moduleStructure['h1'] = 'text';
@@ -70,6 +77,7 @@ class eventElement extends structureElement implements MetadataProviderInterface
             'showLayoutForm',
             'showPositions',
             'showPrivileges',
+            'showImages',
         ];
     }
 
@@ -139,19 +147,108 @@ class eventElement extends structureElement implements MetadataProviderInterface
         return gmdate('Y-m-d\TH:i\Z', strtotime($date . " " . $time));
     }
 
+    /**
+     * @return eventsListElement[]
+     */
     public function getConnectedEventsLists()
     {
-        $connectedEventsLists = [];
         $structureManager = $this->getService('structureManager');
-        if ($eventElements = $structureManager->getElementsParents($this->id, 'eventsListEvent', false)) {
-            foreach ($eventElements as $eventElement) {
-                $elem = $structureManager->getElementById($eventElement->id);
-                $item['id'] = $elem->id;
-                $item['title'] = $elem->getTitle();
-                $item['select'] = true;
-                $connectedEventsLists[] = $item;
+        $connectedEventsLists = $structureManager->getElementsParents($this->id, 'eventsListEvent');
+        return $connectedEventsLists;
+    }
+
+    /**
+     * @return eventsListElement[]
+     */
+    public function getConnectedEventsListsInfo()
+    {
+        /**
+         * @var structureManager $structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        /**
+         * @var linksManager $linksManager
+         */
+        $linksManager = $this->getService('linksManager');
+
+        $connectedIdIndex = $linksManager->getConnectedIdIndex($this->id, 'eventsListEvent', 'child');
+        $allEventsLists = $structureManager->getElementsByType('eventsList');
+        $connectedEventsListsInfo = [];
+
+        foreach ($allEventsLists as $eventsList) {
+            $item['id'] = $eventsList->id;
+            $item['title'] = $eventsList->getSearchTitle();
+            $item['select'] = isset($connectedIdIndex[$eventsList->id]);
+            $connectedEventsListsInfo[] = $item;
+        }
+        return $connectedEventsListsInfo;
+    }
+
+    public function getImagesLinkType()
+    {
+        //legacy-support, use trait's method instead
+        return 'structure';
+    }
+
+    public function getJsonInfo($galleryOptions = [], $imagePresetBase = 'gallery')
+    {
+        return $this->getGalleryJsonInfo($galleryOptions, $imagePresetBase);
+    }
+
+    public function getImageId($mobile = false)
+    {
+        if ($this->image2) {
+            return $this->image2;
+        }
+        return $this->image;
+    }
+
+    public function getEventById($id) {
+        $structureManager = $this->getService('structureManager');
+        if ($event = $structureManager->getElementById($id)) {
+            return $event;
+        }
+        return false;
+    }
+
+    public function getSameEventsListsEvents($amount = 4)
+    {
+        $result = [];
+        if ($eventsLists = $this->getConnectedEventsLists()) {
+            $idList = [];
+            foreach ($eventsLists as $eventsList) {
+                $idList = array_merge($idList, $eventsList->getCurrentEventsIdList());
+            }
+            $idList = array_unique($idList);
+            $eventExcludeIds = [];
+
+            $currentDate = date_create();
+            $currentTimestamp =  date_timestamp_get($currentDate);
+
+            foreach ($idList as $eventKey => $eventId) {
+                if($event = $this->getEventById($eventId)) {
+                    if ($currentTimestamp > $event->getEndDayStamp() || $this->id === $eventId) {
+                        $eventExcludeIds[] = $eventId;
+                    }
+                }
+            }
+
+            $idList = array_diff($idList, $eventExcludeIds);
+
+            /**
+             * @var structureManager $structureManager
+             */
+            $structureManager = $this->getService('structureManager');
+            shuffle($idList);
+            while ($amount) {
+                if ($id = array_pop($idList)) {
+                    if ($element = $structureManager->getElementById($id)) {
+                        $result[] = $element;
+                        $amount--;
+                    }
+                }
             }
         }
-        return $connectedEventsLists;
+        return $result;
     }
 }

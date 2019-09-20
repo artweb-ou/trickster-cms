@@ -7,7 +7,6 @@ class receiveSeoCategory extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
-            $structureElement->prepareActualData();
             if ($structureElement->structureName == '') {
                 $structureElement->structureName = $structureElement->title;
             }
@@ -29,12 +28,8 @@ class receiveSeoCategory extends structureElementAction
             'metaDenyIndex',
             'metaDescriptionTemplate',
             'metaTitleTemplate',
+            'metaSubTitleTemplate',
             'metaH1Template',
         ];
-    }
-
-    public function setValidators(&$validators)
-    {
-        $validators['title'][] = 'notEmpty';
     }
 }

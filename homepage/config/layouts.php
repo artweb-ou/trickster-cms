@@ -20,19 +20,21 @@
     'personnelList.layout.options' => [
         'short',
         'details',
+        'table',
     ],
     'personnelList.layout.default' => 'short',
 
     'eventsList.layouts' => [
         'layout',
         'listLayout',
+        'colorLayout',
     ],
     'eventsList.layout.options' => [
         'short',
         'calendar',
         'list',
         'listaggregated',
-        'details',
+        'detailed',
     ],
     'eventsList.layout.default' => 'short',
     'eventsList.listLayout.options' => [
@@ -62,10 +64,11 @@
     ],
     'linkList.layout.options' => [
         'thumbnails',
-        'details',
+        'detailed',
         'list',
         'tabbed',
         'buttons',
+        'thumbnails_custom_cols',
     ],
     'linkList.layout.default' => 'thumbnails',
 
@@ -80,13 +83,14 @@
     'selectedEvents.layouts' => [
         'layout',
         'listLayout',
+        'colorLayout',
     ],
     'selectedEvents.layout.options' => [
         'short',
         'calendar',
         'list',
         'listaggregated',
-        'details',
+        'detailed',
     ],
     'selectedEvents.layout.default' => 'short',
     'selectedEvents.listLayout.options' => [
@@ -97,6 +101,7 @@
 
     'article.layouts' => [
         'layout',
+        'subLayout',
     ],
     'article.layout.options' => [
         'default',
@@ -104,10 +109,22 @@
         'image_right',
     ],
     'article.layout.default' => 'default',
+    'article.subLayout.options' => [
+        'simple',
+        'faq',
+        'accordeon',
+    ],
+    'article.subLayout.default' => 'simple',
 
     'service.layouts' => [
         'galleries',
+        'layout',
+        'colorLayout',
     ],
+    'service.layout.options' => [
+        'short',
+    ],
+    'service.layout.default' => 'short',
     'service.galleries.options' => [
         'short',
     ],
@@ -120,9 +137,16 @@
         'details',
         'wide',
         'short',
+        'cards',
     ],
-
+    'newsList.layout.default' => 'short',
+    
     'folder.layouts' => [
+        'layout',
+        'colorLayout',
+    ],
+    'feedback.layouts' => [
+        'layout',
         'colorLayout',
     ],
 

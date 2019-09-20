@@ -8,7 +8,7 @@
 					</span>
 					<span class="filtration_form_item_field">
 						<span class="date_container">
-							<input class='input_component input_date' type="text" name="start" value="{$start}""/>
+							<input class='input_component input_date' type="text" name="start" value="{$start}" autocomplete="off"/>
 							<span class="icon icon_calendar"></span>
 						</span>
 					</span>
@@ -19,7 +19,7 @@
 					</span>
 					<span class="filtration_form_item_field">
 						<span class="date_container">
-							<input class='input_component input_date' type="text" name="end" value="{$end}" />
+							<input class='input_component input_date' type="text" name="end" value="{$end}" autocomplete="off" />
 							<span class="icon icon_calendar"></span>
 						</span>
 					</span>

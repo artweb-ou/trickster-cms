@@ -4,7 +4,7 @@ class redirectionManagerServiceContainer extends DependencyInjectionServiceConta
 {
     public function makeInstance()
     {
-        return new redirectionManager();
+        return new RedirectionManager();
     }
 
     public function makeInjections($instance)

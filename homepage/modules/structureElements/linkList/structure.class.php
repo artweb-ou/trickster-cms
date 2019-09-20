@@ -20,6 +20,7 @@ class linkListElement extends menuDependantStructureElement implements Configura
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['fixedId'] = 'text';
         $moduleStructure['content'] = 'html';
+        $moduleStructure['cols'] = 'naturalNumber';
     }
 
     protected function getTabsList()

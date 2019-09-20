@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class currencyElement
+ *
+ * @property int $decimals
+ */
 class currencyElement extends structureElement
 {
     public $dataResourceName = 'module_currency';
@@ -13,7 +18,7 @@ class currencyElement extends structureElement
         $moduleStructure['rate'] = 'floatNumber';
         $moduleStructure['title'] = 'text';
         $moduleStructure['symbol'] = 'text';
-        $moduleStructure['decimals'] = 'floatNumber';
+        $moduleStructure['decimals'] = 'text';
         $moduleStructure['decPoint'] = 'text';
         $moduleStructure['thousandsSep'] = 'text';
     }

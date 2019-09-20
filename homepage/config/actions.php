@@ -12,6 +12,7 @@
     'selectedNews' => 'showForm',
     'shortcut' => 'showForm',
     'article' => 'showForm',
+    'subArticle' => 'showForm',
     'news' => 'showForm',
     'widget' => 'showForm',
     'banner' => 'showForm',
@@ -56,4 +57,6 @@
     'newsMailTextSubContent' => 'showForm',
     'file' => 'showForm',
     'genericIcon' => 'showForm',
+    'facebookSocialPlugin' => 'showForm',
+    'googleSocialPlugin' => 'showForm',
 ];

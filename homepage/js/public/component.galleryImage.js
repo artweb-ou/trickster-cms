@@ -1,4 +1,4 @@
-window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType) {
+window.GalleryImageComponent = function(imageInfo, parentObject, galleryInfo) {
     var self = this;
 
     this.title = null;
@@ -14,7 +14,6 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
     var mediaElement;
     var sourceElement;
     var infoElement;
-    var hovered = false;
     var clickable = false;
     var videoLoadStarted = false;
     var autoStart = false;
@@ -25,10 +24,6 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
         if (clickable) {
             componentElement.className += ' gallery_image_clickable';
             eventsManager.addHandler(componentElement, eventsManager.getPointerStartEventName(), touchStart);
-        }
-        if (descriptionType === 'overlay' && infoElement) {
-            eventsManager.addHandler(componentElement, 'mouseenter', onMouseOver);
-            eventsManager.addHandler(componentElement, 'mouseleave', onMouseOut);
         }
         if (typeof parentObject.videoAutoStart != 'undefined') {
             if (parentObject.videoAutoStart()) {
@@ -89,23 +84,20 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
         componentElement.style.display = 'none';
 
         createMediaElement();
-
-        if (descriptionType === 'overlay' &&
-            (imageInfo.getDescription() || imageInfo.getTitle())) {
-            infoElement = self.makeElement('div', 'gallery_image_info',
-                componentElement);
-            self.makeElement('div', 'gallery_image_info_background', infoElement);
-
-            var info;
-            if (info = imageInfo.getTitle()) {
-                var titleElement = self.makeElement('div', 'gallery_image_title',
-                    infoElement);
-                titleElement.innerHTML = info;
+        var description = imageInfo.getDescription();
+        var title = imageInfo.getTitle();
+        if (galleryInfo.getDescriptionType() === 'overlay' && (description || title)) {
+            infoElement = self.makeElement('div', 'gallery_image_info gallery_description html_content', componentElement);
+            if (title) {
+                var titleElement = self.makeElement('div', 'gallery_image_title gallery_description_title', infoElement);
+                titleElement.innerHTML = title;
             }
-            if (info = imageInfo.getDescription()) {
-                var descriptionElement = self.makeElement('div',
-                    'gallery_image_description', infoElement);
-                descriptionElement.innerHTML = info;
+            if (description) {
+                var descriptionElement = self.makeElement('div', 'gallery_image_description gallery_descripion_description', infoElement);
+                descriptionElement.innerHTML = description;
+            }
+            if (galleryInfo.getDescriptionEffect() === 'none') {
+                showInfo();
             }
         }
     };
@@ -136,10 +128,8 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
         }
     };
     var showInfo = function() {
-        if (hovered) {
-            domHelper.addClass(infoElement, 'gallery_image_info_visible');
-            TweenLite.to(infoElement, 0.5, {'css': {'opacity': 1}});
-        }
+        domHelper.addClass(infoElement, 'gallery_image_info_visible');
+        TweenLite.to(infoElement, 0.5, {'css': {'opacity': 1}});
     };
 
     var hideInfo = function() {
@@ -150,24 +140,9 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
         });
     };
 
-    var onMouseOver = function() {
-        hovered = true;
-        if (infoElement) {
-            executeAfterImageHasLoaded(showInfo);
-        }
-    };
-
-    var onMouseOut = function() {
-        hovered = false;
-        if (infoElement) {
-            hideInfo();
-        }
-    };
-
     this.checkPreloadImage = null;
 
     var checkPreloadImage = function(callBack) {
-        test = mediaElement.style.width;
         if (!mediaElement.src) {
             mediaElement.src = imageInfo.getBigImageUrl(window.mobileLogics.isPhoneActive());
             mediaElement.style.visibility = 'hidden';
@@ -231,6 +206,13 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
                 mediaElement.pause();
             }
         }
+        if (galleryInfo.getDescriptionEffect() === 'opacity') {
+            if (newImage.getId() === imageInfo.getId()) {
+                showInfo();
+            } else {
+                hideInfo();
+            }
+        }
     };
     var videoPlayCallback = function() {
         mediaElement.play();
@@ -290,14 +272,6 @@ window.GalleryImageComponent = function(imageInfo, parentObject, descriptionType
                     mediaElement.style.top = positionTop + 'px';
                 }
             }
-        }
-    };
-
-    var executeAfterImageHasLoaded = function(callBack) {
-        if (mediaElement.complete) {
-            callBack();
-        } else {
-            window.setTimeout(executeAfterImageHasLoaded, 100);
         }
     };
 

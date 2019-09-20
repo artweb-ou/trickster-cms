@@ -17,7 +17,7 @@
 		</span>
 	{/if}
 
-	{if count($element->linkItems)}
+	{if $element->linkItems}
 		<div class='linklist_items'>
 			{stripdomspaces}
 				{foreach $element->linkItems as $linkItem}
@@ -29,6 +29,6 @@
 		</div>
 	{/if}
 {/capture}
-{assign moduleClass "linklist linklist_{$element->getCurrentLayout()}"}F
+{assign moduleClass "linklist linklist_{$element->getCurrentLayout()}"}
 {assign moduleTitleClass "linklist_title"}
 {include file=$theme->template("component.contentmodule.tpl")}

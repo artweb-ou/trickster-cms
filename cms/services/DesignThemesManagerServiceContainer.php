@@ -35,6 +35,7 @@ class DesignThemesManagerServiceContainer extends DependencyInjectionServiceCont
                 $currentThemeCode = $configManager->get('main.publicTheme');
             }
         }
+        $this->injectService($instance, 'ServerSessionManager');
         $instance->setCurrentThemeCode($currentThemeCode);
         return $instance;
     }

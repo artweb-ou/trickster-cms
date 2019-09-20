@@ -9,6 +9,7 @@ class SelectedEventsFormStructure extends ElementForm
         ],
         'mode' => [
             'type' => 'select.index',
+            'class' => 'selectedevents_mode_select',
             'options' => [
                 'auto' => 'mode_auto',
                 'custom' => 'mode_custom',
@@ -16,13 +17,15 @@ class SelectedEventsFormStructure extends ElementForm
         ],
         'receivedEventsListsIds' => [
             'type' => 'select.universal_options_multiple',
+            'trClass' => 'selectedevents_manual_setting',
             'class' => 'selectedevents_connected_eventslists_select',
-            'method' => 'getConnectedEventsLists',
+            'method' => 'getConnectedEventsListsInfo',
         ],
         'receivedEventsIds' => [
             'type' => 'select.universal_options_multiple',
+            'trClass' => 'selectedevents_manual_setting',
             'class' => 'selectedevents_connected_events_select',
-            'method' => 'getConnectedEvents',
+            'method' => 'getConnectedEventsInfo',
         ],
         'dates_type' => [
             'type' => 'select.index',
@@ -51,11 +54,42 @@ class SelectedEventsFormStructure extends ElementForm
         'enableFilter' => [
             'type' => 'input.checkbox',
         ],
+
+
         'displayMenus' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getDisplayMenusInfo',
             'condition' => 'checkDisplayMenus',
         ],
     ];
+
+    protected $additionalContent = 'shared.contentlist.tpl';
+
+    protected function getSearchTypes()
+    {
+//        return $this->element->getSearchTypesString('admin');
+        return "folder,news,gallery,newsList,production,service,Event,EventsList";
+    }
+
+    public function getFormComponents()
+    {
+        $structure = [];
+        $structure['gotoHeading'] = [
+            'type' => 'block.heading',
+            'class' => 'block_heading',
+        ];
+
+        $structure['gotoButtonTitle'] = [
+            'type' => 'input.text',
+        ];
+
+        $structure['fixedId'] = [
+            'type' => 'ajaxsearch',
+            'class' => 'selectedevents_form_search',
+            'property' => 'connectedMenu',
+            'types' => $this->getSearchTypes(),
+        ];
+        return  $this->structure + $structure;
+    }
 
 }

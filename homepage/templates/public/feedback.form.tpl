@@ -8,6 +8,7 @@
 			{$element->title}
 		{/capture}
 	{/if}
+	<div class='feedback_block'>
 	<form action="{$currentElement->URL}" class='feedback_form' method="post" enctype="multipart/form-data" role="form">
 		<div class='feedback_form_container'>
 
@@ -20,33 +21,27 @@
 				{/if}
 			{/if}
 
-			<div class='feedback_form_block'>
-
-				<div class='form_result_message ajax_form_success_message'>
+			<div class='feedback_content heading_3 feedback_message_wrapper'><span class="form_result_message ajax_form_success_message"></span>
 				</div>
 
 				<div class='form_error_message ajax_form_error_message' role="alert">
 				</div>
 
+			<div class="feedback_form_block">
 				{if !$element->resultMessage}
 					<div class="ajax_form_hide_on_success">
-						<div class='feedback_form_groups'>
+						<div class='feedback_form_groups form_fields'>
 							{foreach from=$element->getCustomFieldsGroups() item=groupElement name=groups}
-								{include file=$theme->template("feedback.form.group.tpl") element=$groupElement}
+								{include file=$theme->template("feedback.form.group.div.tpl") element=$groupElement placeholders=false}
 							{/foreach}
 						</div>
-						<div class='form_controls'>
 
-							<table class='form_table'>
-								<tr class=''>
-									<td class='form_label'></td>
-									<td class='form_star'></td>
-									<td class='form_field'>
-										<span tabindex="0" class="button ajax_form_submit feedback_submit"><span class='button_text'>{if $element->buttonTitle}{$element->buttonTitle}{else}{translations name="feedback.send"}{/if}</span></span>
-									</td>
-									<td class='form_extra'></td>
-								</tr>
-							</table>
+						<div class="feedback_controls">
+							<div class="form_element">
+								<a href="" class="button ajax_form_submit form_submit feedback_submit">
+									<span class='button_text'>{if $element->buttonTitle}{$element->buttonTitle}{else}{translations name="feedback.send"}{/if}</span>
+								</a>
+							</div>
 						</div>
 					</div>
 				{/if}
@@ -55,9 +50,10 @@
 			</div>
 		</div>
 	</form>
+</div>
 {/capture}
 
-{assign moduleClass "feedback_block"}
+{assign moduleClass "{if $referral}referral_{$referral} {/if}feedback_block_container{if !empty($element->getCurrentLayout('colorLayout'))} bg_color bg_color_{$element->getCurrentLayout('colorLayout')}{/if}{if !empty($currentElement->getCurrentLayout('layout'))} bg_img bg_img_{$currentElement->getCurrentLayout('layout')}{/if}"}
 {assign moduleTitleClass "feedback_heading"}
 {assign moduleAttributes "id=\"feedback-form-{$element->id}\""}
 {include file=$theme->template("component.contentmodule.tpl")}

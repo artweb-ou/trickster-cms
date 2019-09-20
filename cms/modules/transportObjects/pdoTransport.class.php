@@ -11,6 +11,9 @@ class pdoTransport extends errorLogger implements transportObject
     protected $tablesPrefix;
     protected $connection;
     protected $debug = false;
+    /**
+     * @var PDO
+     */
     protected $pdo;
     protected $lastOperation;
     protected $columnsString;
@@ -20,9 +23,7 @@ class pdoTransport extends errorLogger implements transportObject
     protected $limitString;
     protected $dataLines;
     protected $resourceName;
-    public $queriesCounter;
-    public $queriesHistory = [];
-    public $queriesOverallTime = 0;
+    protected $queriesHistory = [];
     public $lastInsertedID;
 
     public static function getInstance($config)
@@ -33,6 +34,10 @@ class pdoTransport extends errorLogger implements transportObject
         return self::$instance;
     }
 
+    /**
+     * pdoTransport constructor.
+     * @param Config $config
+     */
     public function __construct($config)
     {
         $this->hostAddress = $config->get('mysqlHost');
@@ -70,8 +75,10 @@ class pdoTransport extends errorLogger implements transportObject
             if ($result = $statement->execute()) {
                 if ($this->debug) {
                     $end = microtime(true);
-                    $this->queriesHistory[] = sprintf("%.2f", ($end - $start) * 1000) . "\t" . $sqlQuery;
-                    $this->queriesOverallTime += $end - $start;
+                    $this->queriesHistory[] = [
+                        'time' => sprintf("%.2f", ($end - $start) * 1000),
+                        'query' => $sqlQuery,
+                    ];
                 }
                 return $statement;
             }
@@ -88,7 +95,11 @@ class pdoTransport extends errorLogger implements transportObject
             foreach ($searchLines as $searchFieldName => &$searchFieldValue) {
                 if (is_array($searchFieldValue)) {
                     $searchFieldValue = $this->escapeArray($searchFieldValue);
-                    $fieldsStrings[] = "`" . $searchFieldName . "` IN ('" . implode("','", $searchFieldValue) . "')";
+                    if (count($searchFieldValue) > 1) {
+                        $fieldsStrings[] = "`" . $searchFieldName . "` IN ('" . implode("','", $searchFieldValue) . "')";
+                    } else {
+                        $fieldsStrings[] = "`" . $searchFieldName . "` = '" . reset($searchFieldValue) . "'";
+                    }
                 } else {
                     $fieldsStrings[] = "`" . $searchFieldName . "`='" . $this->escape($searchFieldValue) . "'";
                 }
@@ -109,7 +120,7 @@ class pdoTransport extends errorLogger implements transportObject
         $limitString = '';
         if ($limitParameters !== null) {
             if (is_numeric($limitParameters)) {
-                $limitString = ' LIMIT 0,' . $limitParameters;
+                $limitString = ' LIMIT ' . $limitParameters;
             } elseif (count($limitParameters) == 2) {
                 if (is_numeric($limitParameters[0]) && is_numeric($limitParameters[1])) {
                     $limitString = ' LIMIT ' . $limitParameters[0] . ',' . $limitParameters[1];
@@ -132,35 +143,35 @@ class pdoTransport extends errorLogger implements transportObject
 
     public function setOrderFields($orderLines, $literal = false)
     {
+        $this->orderString = '';
         if (is_array($orderLines)) {
-            $count = count($orderLines);
-            if ($count > 0) {
-                $orderString = ' ORDER BY ';
-                foreach ($orderLines as $key => &$line) {
-                    if ($line == '2' || $line === 'rand' || $line === 'RAND') {
-                        $orderString .= ' RAND()';
-                    } elseif ($line == '1' || $line === 'asc' || $line === 'ASC') {
+            if ($orderLines) {
+                $strings = [];
+                foreach ($orderLines as $column => $order) {
+                    if (is_array($order)) {
+                        if (count($order) > 1) {
+                            $strings[] = ' FIELD(`' . $column . '`,' . implode(',', $order) . ')';
+                        }
+                    } elseif ($order == '2' || $order === 'rand' || $order === 'RAND') {
+                        $strings[] = ' RAND()';
+                    } elseif ($order == '1' || $order === 'asc' || $order === 'ASC') {
                         if ($literal) {
-                            $orderString .= $key . ' ASC';
+                            $strings[] = $column . ' ASC';
                         } else {
-                            $orderString .= $this->escape($key) . ' ASC';
+                            $strings[] = $this->escape($column) . ' ASC';
                         }
                     } else {
                         if ($literal) {
-                            $orderString .= $key . ' DESC';
+                            $strings[] = $column . ' DESC';
                         } else {
-                            $orderString .= $this->escape($key) . ' DESC';
+                            $strings[] = $this->escape($column) . ' DESC';
                         }
                     }
-                    $count--;
-                    if ($count != 0) {
-                        $orderString .= ',';
-                    }
                 }
-            } else {
-                $orderString = '';
+                if ($strings) {
+                    $this->orderString = ' ORDER BY ' . implode(',', $strings);
+                }
             }
-            $this->orderString = $orderString;
         }
     }
 

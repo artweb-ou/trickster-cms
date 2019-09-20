@@ -22,7 +22,9 @@ class openingHoursInfoElement extends menuDependantStructureElement
             $structureManager = $this->getService('structureManager');
             $connectedIds = $linksManager->getConnectedIdList($this->id, 'openingHoursInfoGroup', 'parent');
             foreach ($connectedIds as $connectedId) {
-                $this->groups[] = $structureManager->getElementById($connectedId);
+                if ($group = $structureManager->getElementById($connectedId)) {
+                    $this->groups[] = $group;
+                }
             }
         }
         return $this->groups;

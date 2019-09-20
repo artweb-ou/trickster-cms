@@ -13,72 +13,72 @@ window.SelectedProductsScrollComponent = function(componentElement) {
     var leftButton;
     var rightButton;
     var itemsPerPage = 0;
+    var touchStartX = 0;
+    var touchCurrentX = 0;
+    var touchStartY = 0;
+    var touchCurrentY = 0;
     var init = function() {
         if (containerElement = componentElement.querySelector('.selectedproducts_scroll')) {
             leftButton = componentElement.querySelector('.selectedproducts_scrollbutton_left');
             if (leftButton) {
-                leftButton.addEventListener('click', previousClick);
+                window.touchManager.addEventListener(leftButton, 'start', previousClick);
+                window.touchManager.setTouchAction(leftButton, 'pan-y');
             }
             rightButton = componentElement.querySelector('.selectedproducts_scrollbutton_right');
             if (rightButton) {
-                rightButton.addEventListener('click', nextClick);
+                window.touchManager.addEventListener(rightButton, 'start', nextClick);
+                window.touchManager.setTouchAction(rightButton, 'pan-y');
             }
             reset();
             window.addEventListener('resize', resize);
             // temporarily turned off because of iphones
-            // window.touchManager.addEventListener(componentElement, 'start', touchStart);
-            // window.touchManager.addEventListener(componentElement, 'end', touchEnd);
-            // window.touchManager.addEventListener(componentElement, 'cancel', touchCancel);
+            window.touchManager.setTouchAction(containerElement, 'pan-y');
+            window.touchManager.addEventListener(containerElement, 'start', touchStart);
+            window.touchManager.addEventListener(containerElement, 'end', touchEnd);
+            window.touchManager.addEventListener(containerElement, 'cancel', touchCancel);
         }
     };
-    var touchStartX = 0;
-    var previousMoveX = 0;
-    var moveDirectionRight;
     var touchStart = function(event, touchInfo) {
-        eventsManager.preventDefaultAction(event);
         touchStartX = touchInfo.clientX;
-        previousMoveX = 0;
+        touchStartY = touchInfo.clientY;
+
+        touchCurrentX = touchStartX;
+        touchCurrentY = touchStartY;
         window.touchManager.addEventListener(componentElement, 'move', touchMove);
     };
-    var touchCancel = function(event, touchInfo) {
-        eventsManager.preventDefaultAction(event);
-        touchStartX = 0;
-        previousMoveX = 0;
+    var touchMove = function(event, touchInfo) {
+        var difference = touchCurrentX - touchInfo.clientX;
+
+        touchCurrentX = touchInfo.clientX;
+        touchCurrentY = touchInfo.clientY;
+
+        if (Math.abs(touchStartX - touchCurrentX) > Math.abs(touchStartY - touchCurrentY)) {
+            eventsManager.preventDefaultAction(event);
+            containerElement.scrollTo(containerElement.scrollLeft + difference, 0);
+        }
     };
     var touchEnd = function(event, touchInfo) {
-        eventsManager.preventDefaultAction(event);
-        if (touchStartX) {
-            var moveDifference = Math.abs(touchStartX - touchInfo.clientX);
-            if (moveDifference > 5) {
+        var limit = 5;
+        var xOffset = Math.abs(touchStartX - touchCurrentX);
+        var yOffset = Math.abs(touchStartY - touchCurrentY);
+        if ((xOffset > limit) || (yOffset > limit)) {
+            eventsManager.preventDefaultAction(event);
+            if (xOffset > yOffset) {
+                var difference = touchStartX - touchCurrentX;
                 clearInterval(interval);
-                if (moveDirectionRight) {
+
+                if (difference > 0) {
                     showNextPage(1);
                 } else {
                     showPreviousPage(1);
                 }
-            } else {
-                //......
             }
         }
-        previousMoveX = 0;
         window.touchManager.removeEventListener(componentElement, 'move', touchMove);
     };
-    var touchMove = function(event, touchInfo) {
+    var touchCancel = function(event, touchInfo) {
         eventsManager.preventDefaultAction(event);
-        if (!previousMoveX) {
-            previousMoveX = touchStartX;
-        }
-        var difference = previousMoveX - touchInfo.clientX;
-        if (difference > 0) {
-            moveDirectionRight = 1;
-        } else {
-            moveDirectionRight = 0;
-        }
-        containerElement.scrollTo(containerElement.scrollLeft + difference, 0);
-
-        previousMoveX = touchInfo.clientX;
     };
-
     var showNextPage = function(withoutRedirectToEnd) {
         if (typeof withoutRedirectToEnd == 'undefined') {
             withoutRedirectToEnd = useInactiveButtons;
@@ -119,11 +119,13 @@ window.SelectedProductsScrollComponent = function(componentElement) {
 
         TweenLite.to(containerElement, effectSpeed / 1000, {'scrollLeft': endScrollLeft});
     };
-    var previousClick = function() {
+    var previousClick = function(event) {
+        event.stopPropagation();
         clearInterval(interval);
         showPreviousPage();
     };
-    var nextClick = function() {
+    var nextClick = function(event) {
+        event.stopPropagation();
         clearInterval(interval);
         showNextPage();
     };

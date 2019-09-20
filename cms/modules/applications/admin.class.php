@@ -16,6 +16,10 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $this->createRenderer();
     }
 
+    /**
+     * @param controller $controller
+     * @return mixed|void
+     */
     public function execute($controller)
     {
         /**
@@ -25,20 +29,22 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $cache->enable(false, false, true);
 
         /**
-         * @var $redirectionManager redirectionManager
+         * @var $redirectionManager RedirectionManager
          */
-        $redirectionManager = $this->getService('redirectionManager');
+        $redirectionManager = $this->getService('RedirectionManager');
         $redirectionManager->checkProtocolRedirection();
         $redirectionManager->checkDomainRedirection();
-
+        /**
+         * @var DesignThemesManager $designThemesManager
+         */
         $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
 
-        $languagesManager = $this->getService('languagesManager');
-        if ($controller->getParameter('lang')) {
-            $languagesManager->setCurrentLanguageCode($controller->getParameter('lang'), 'adminLanguages');
+        $languagesManager = $this->getService('LanguagesManager');
+        if ($langCode = $controller->getParameter('lang')) {
+            $languagesManager->setCurrentLanguageCode($langCode, 'adminLanguages');
             //change the public language as well, so all public-languages dependent data in admin would be displayed in a same language where possible
-            $languagesManager->setCurrentLanguageCode($controller->getParameter('lang'));
+            $languagesManager->setCurrentLanguageCode($langCode);
         }
         $currentLanguageId = $languagesManager->getCurrentLanguageId("adminLanguages");
 
@@ -92,14 +98,14 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $this->renderer->assign('user', $user);
         $this->renderer->assign('settings', $this->getService('settingsManager')->getSettingsList());
 
-        $configManager = $this->getService('ConfigManager');
-
         $allowedSearchTypes = $this->getService('ConfigManager')->getMerged('searchtypes-admin.search');
         $this->renderer->assign('allowedSearchTypes', implode(',', $allowedSearchTypes));
 
         $resourcesUniterHelper = $this->getService('ResourcesUniterHelper', ['currentThemeCode' => $currentTheme->getCode()]);
         $this->renderer->assign('JSFileName', $this->getJsScripts($resourcesUniterHelper));
         $this->renderer->assign('CSSFileName', $resourcesUniterHelper->getResourceCacheFileName('css'));
+
+        $this->renderer->assign('currentFullUrl', $this->getCurrentFullUrl());
 
         $this->renderer->template = $currentTheme->template('index.tpl');
         $this->renderer->setCacheControl('no-cache');
@@ -165,5 +171,22 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
             $jsScripts = array_merge($jsScripts, $currentElement->getClientScripts());
         }
         return $jsScripts;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCurrentFullUrl()
+    {
+        $excludedParameters = ['lang'];
+        $controller = controller::getInstance();
+        $parameters = $controller->getParameters();
+
+        $structureManager = $this->getService('structureManager');
+        $currentElement = ($structureManager->getCurrentElement()) ? : $structureManager->getRootElement();
+
+        $fullUrl = new UrlBuilder();
+
+        return $fullUrl->getUrlParametersString($parameters,$currentElement->URL, $excludedParameters);
     }
 }

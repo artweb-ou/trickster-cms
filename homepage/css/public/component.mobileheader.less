@@ -141,11 +141,13 @@
 
 .mobileheader_control_menu {
     .svg-bg(mobileheader_menu, @mobileheader_text_color, @mobileheader_text_color);
-    background-size: 31% auto;
+    .bg_params(no-repeat, 20px, auto, 50%, 50%); // @repeat,@width,@height,@posX,@posY
 }
 
 .mobileheader_control_search {
-    .svg-bg(mobileheader_search, @mobileheader_text_color, @mobileheader_text_color);
+    .svg-bg(@trick_search_01, @mobileheader_text_color, false);
+    .bg_params(no-repeat, 24px, auto, 50%, 50%); // @repeat,@width,@height,@posX,@posY
+    //.svg-bg(mobileheader_search, @mobileheader_text_color, @mobileheader_text_color);
 }
 
 .mobileheader_control_user {

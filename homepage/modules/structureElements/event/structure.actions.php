@@ -2,8 +2,9 @@
 $moduleActions = [];
 $moduleActions[] = 'delete';
 $moduleActions[] = 'deleteFile';
-$moduleActions[] = 'receive';
-$moduleActions[] = 'show';
-$moduleActions[] = 'showForm';
 $moduleActions[] = 'showSeoForm';
 $moduleActions[] = 'receiveSeo';
+$moduleActions[] = 'receive';
+$moduleActions[] = 'showImages';
+$moduleActions[] = 'show';
+$moduleActions[] = 'showForm';

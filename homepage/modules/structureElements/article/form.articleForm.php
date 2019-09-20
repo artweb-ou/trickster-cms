@@ -6,6 +6,9 @@ class ArticleFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'hideTitle' => [
+            'type' => 'input.checkbox'
+        ],
         'content' => [
             'type' => 'input.html',
         ],
@@ -23,5 +26,5 @@ class ArticleFormStructure extends ElementForm
             'condition' => 'checkDisplayMenus',
         ],
     ];
-
+    protected $additionalContent = 'shared.contentlist.tpl';
 }

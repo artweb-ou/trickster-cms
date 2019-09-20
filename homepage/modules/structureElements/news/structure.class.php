@@ -30,6 +30,8 @@ class newsElement extends structureElement implements MetadataProviderInterface,
         $moduleStructure['content'] = 'html';
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'fileName';
+        $moduleStructure['thumbImage'] = 'image';
+        $moduleStructure['thumbImageOriginalName'] = 'fileName';
         $moduleStructure['metaTitle'] = 'text';
         $moduleStructure['h1'] = 'text';
         $moduleStructure['metaDescription'] = 'text';
@@ -48,6 +50,28 @@ class newsElement extends structureElement implements MetadataProviderInterface,
             'showPrivileges',
             'showLanguageForm',
         ];
+    }
+
+    public function getTruncatedText($text, $start, $limit, $suffix)
+    {
+        return mb_substr($text, $start, $limit, 'UTF-8') . $suffix;
+    }
+
+    public function clearTextTags($text, $allowedTags = '') // $allowedTags like '<p><a>'
+    {
+        if (!empty($allowedTags)) {
+            return strip_tags($text, $allowedTags);
+        }
+        else {
+            return strip_tags($text);
+        }
+    }
+
+    public function getCleanedText($text, $start, $limit, $suffix, $allowedTags = '')
+    {
+        $clenedText = $this->clearTextTags($text, $allowedTags);
+        $clenedText = $this->getTruncatedText($clenedText, $start, $limit, $suffix);
+        return $clenedText;
     }
 
     public function getParent()

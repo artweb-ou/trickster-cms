@@ -67,7 +67,7 @@ abstract class ProductsListElement extends menuStructureElement
          * @var Connection $db
          */
         $db = $this->getService('db');
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
 
         //basic query to get all non-hidden products available in stock
         $query = $db->table('module_product');
@@ -113,9 +113,6 @@ abstract class ProductsListElement extends menuStructureElement
             $this->filteredProductsQuery = false;
 
             $filteredProductsQuery = clone $this->getProductsListBaseOptimizedQuery();
-            /**
-             * @var structureManager $structureManager
-             */
             $structureManager = $this->getService('structureManager');
             if ($categoryIds = $this->getFilterCategoryIds()) {
                 $deepCategoryIds = [];
@@ -173,21 +170,40 @@ abstract class ProductsListElement extends menuStructureElement
                 $ids = null;
                 /**
                  * @var Connection $db
+                 * @var $parameterElement productParameterElement
                  */
-                $db = $this->getService('db');
-                foreach ($parameterValues as $counter => $parameterValue) {
-                    $query = $db->table('module_product_parameter_value')
-                        ->select('productId')
-                        ->where('value', '=', $parameterValue);
-                    if ($ids !== null) {
-                        $query->whereIn('productId', $ids);
-                    }
-                    $records = $query->get();
-                    $ids = array_column($records, 'productId');
-                    if (!$ids) {
-                        break;
+                $structureManager = $this->getService('structureManager');
+                foreach ($parameterValues as $parameter) {
+                    $parameterElement = $structureManager->getElementById($parameter);
+                    if ($parameterElement) {
+                        $paramaterSelections[$parameterElement->getParentElement()->id][] = $parameter;
                     }
                 }
+                $ids = [];
+                $filteredIds = [];
+                $db = $this->getService('db');
+                $x = 0;
+                foreach ($paramaterSelections as $parameterId => $paramaterSelection) {
+                    $filteredIds[$x] = [];
+                    foreach ($paramaterSelection as $key => $value) {
+                        $query = $db->table('module_product_parameter_value')
+                            ->select('productId')
+                            ->where('value', '=', $value);
+                        $records = $query->get();
+                        $filteredIds[$x] = array_merge($filteredIds[$x], array_column($records, 'productId'));
+                        if (!$filteredIds) {
+                            break;
+                        }
+                    }
+                    $x++;
+                }
+
+                if(count($paramaterSelections) > 1) {
+                    $ids = call_user_func_array('array_intersect', $filteredIds);
+                } else {
+                    $ids = $filteredIds[0];
+                }
+
                 $filteredProductsQuery->whereIn('baseproducts.id', $ids);
             }
 
@@ -195,7 +211,23 @@ abstract class ProductsListElement extends menuStructureElement
                 $filteredProductsQuery->where('baseproducts.price', '>=', $price[0]);
                 $filteredProductsQuery->where('baseproducts.price', '<=', $price[1]);
             }
-            $filteredProductsQuery->select('*');
+
+            $sort = $this->getFilterSort();
+            $order = $this->getFilterOrder();
+            if ($sort && $sort == 'manual') {
+                $this->applyManualSorting($filteredProductsQuery, $filteredProductsQuery);
+            } elseif ($sort == 'date') {
+                $filteredProductsQuery->join('structure_elements', 'baseproducts.id', '=', 'structure_elements.id', 'left');
+                $filteredProductsQuery->orderBy('structure_elements.dateCreated', $order);
+            } elseif ($sort == 'brand') {
+                $filteredProductsQuery->join('module_brand', 'baseproducts.brandId', '=', 'module_brand.id', 'left');
+                $filteredProductsQuery->orderBy('module_brand.title', $order);
+            } else {
+                $filteredProductsQuery->orderBy($sort, $order);
+            }
+
+            $filteredProductsQuery->select(['baseproducts.id', 'baseproducts.title', 'baseproducts.brandId', 'baseproducts.availability', 'baseproducts.price']);
+
             /**
              * @var Connection $db
              */
@@ -213,6 +245,9 @@ abstract class ProductsListElement extends menuStructureElement
      */
     public function getProductsList()
     {
+        $sessionManager = $this->getService('ServerSessionManager');
+        $sessionManager->setEnabled(true);
+        $sessionManager->set('fromProductList', $this->id);
         if ($this->productsList !== null) {
             return $this->productsList;
         }
@@ -224,29 +259,12 @@ abstract class ProductsListElement extends menuStructureElement
 
         $this->productsList = [];
         if ($filteredProductsQuery = clone $this->getFilteredProductsQuery()) {
-            $sort = $this->getFilterSort();
-            $order = $this->getFilterOrder();
-            if ($sort && $sort == 'manual') {
-                $this->applyManualSorting($filteredProductsQuery, $filteredProductsQuery);
-            } elseif ($sort == 'date') {
-                $filteredProductsQuery->join('structure_elements', 'filteredproducts.id', '=', 'structure_elements.id', 'left');
-                $filteredProductsQuery->orderBy('structure_elements.dateCreated', $order);
-            } elseif ($sort == 'brand') {
-                $filteredProductsQuery->join('module_brand', 'filteredproducts.brandId', '=', 'module_brand.id', 'left');
-                $filteredProductsQuery->orderBy('module_brand.title', $order);
-            } else {
-                $filteredProductsQuery->orderBy($sort, $order);
-            }
-
             $pager = $this->getProductsPager();
 
-            $filteredProductsQuery->skip($pager->startElement)->take($this->getFilterLimit())->groupBy('id');
+            $filteredProductsQuery->skip($pager->startElement)->take($this->getFilterLimit());
             if ($records = $filteredProductsQuery->get()) {
                 $productIds = array_column($records, 'id');
                 $parentRestrictionId = $this->getProductsListParentRestrictionId();
-                /**
-                 * @var structureManager $structureManager
-                 */
                 $structureManager = $this->getService('structureManager');
                 foreach ($productIds as &$productId) {
                     if ($product = $structureManager->getElementById($productId, $parentRestrictionId)) {
@@ -269,7 +287,7 @@ abstract class ProductsListElement extends menuStructureElement
             $cache = $this->getService('Cache');
             $key = $this->getProductsListElement()->getCacheKey();
             if (($this->filteredProductsAmount = $cache->get($this->id . ':famount:' . $key)) === false) {
-                if ($query = $this->getFilteredProductsQuery()) {
+                if ($query = clone $this->getFilteredProductsQuery()) {
                     $this->filteredProductsAmount = $query->count('filteredproducts.id');
                     $cache->set($this->id . ':famount:' . $key, $this->filteredProductsAmount);
                 }
@@ -323,7 +341,7 @@ abstract class ProductsListElement extends menuStructureElement
 
     protected function getProductsListParentRestrictionId()
     {
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         return $languagesManager->getCurrentLanguageId();
     }
 
@@ -565,7 +583,7 @@ abstract class ProductsListElement extends menuStructureElement
         $controller = controller::getInstance();
         $url = $controller->pathURL;
         foreach ($controller->getParameters() as $key => $value) {
-            if (!is_array($value) && $key !== 'sort' && $value !== '') {
+            if (!is_array($value) && $key !== 'sort' && $key !== 'page' && $value !== '') {
                 $url .= $key . ':' . $value . '/';
             }
         }
@@ -660,14 +678,11 @@ abstract class ProductsListElement extends menuStructureElement
                  * @var structureManager $structureManager
                  */
                 $structureManager = $this->getService('structureManager');
-                $sort = [];
                 foreach ($selectionsValuesIndex[$selectionId] as $selectionValuesId) {
                     if ($valueElement = $structureManager->getElementById($selectionValuesId)) {
                         $valueElements[] = $valueElement;
-                        $sort[] = $valueElement->getTitle();
                     }
                 }
-                array_multisort($sort, SORT_ASC, $valueElements);
             }
         }
 
@@ -678,28 +693,73 @@ abstract class ProductsListElement extends menuStructureElement
     {
         if ($this->selectionsValuesIndex === null) {
             $this->selectionsValuesIndex = [];
+            /**
+             * @var Connection $db
+             */
+            $db = $this->getService('db');
 
             if ($selectionsIds = $this->getSelectionIdsForFiltering()) {
-                $productIdsQuery = clone $this->getFilteredProductsQuery();
-                /**
-                 * @var Connection $db
-                 */
-                $db = $this->getService('db');
-                $query = $db->table('module_product_parameter_value')
-                    ->whereIn('parameterId', $selectionsIds);
-                $query->whereIn('productId', $productIdsQuery);
-                $query->select(['parameterId', 'value'])->distinct();
-                if ($records = $query->get()) {
-                    foreach ($records as &$record) {
-                        if (!isset($this->selectionsValuesIndex[$record['parameterId']])) {
-                            $this->selectionsValuesIndex[$record['parameterId']] = [];
-                        }
-                        $this->selectionsValuesIndex[$record['parameterId']][] = $record['value'];
+                $activeSelectionsIds = [];
+                if ($parameterValues = $this->getFilterParameterValueIds()) {
+                    $query = $db->table('module_product_parameter_value')
+                        ->whereIn('value', $parameterValues)
+                        ->select(['parameterId'])->distinct();
+                    if ($records = $query->get()) {
+                        $activeSelectionsIds = array_column($records, 'parameterId');
                     }
                 }
+                if ($activeSelectionsIds) {
+                    $this->loadSelectionsValuesIndex($activeSelectionsIds);
+                }
+                $this->loadSelectionsValuesIndex($selectionsIds, $activeSelectionsIds);
             }
         }
         return $this->selectionsValuesIndex;
+    }
+
+    protected function loadSelectionsValuesIndex($selectionsIds, $excludeSelectionsIds = null)
+    {
+        /**
+         * @var Connection $db
+         */
+        $db = $this->getService('db');
+
+
+//
+//        select `links`.`parentStructureId`, `values`.`id` from `engine_module_product_selection_value` AS `values`
+//left join `engine_structure_links` AS links on `values`.`id` = `links`.`childStructureId` and `links`.`type` = 'structure'
+//where `links`.`parentStructureId` in ('29146', '29135', '29122', '11107')
+//group by `values`.id
+//order by `links`.`position` asc
+//    ;
+
+        $query = $db->table('module_product_parameter_value')
+            ->select(['parameterId', 'value'])->distinct()
+            ->whereIn('parameterId', $selectionsIds);
+        if ($excludeSelectionsIds) {
+            $query->whereIn('productId', clone $this->getFilteredProductsQuery());
+            $query->whereNotIn('parameterId', $excludeSelectionsIds);
+        } else {
+            $query->whereIn('productId', clone $this->getProductsListBaseOptimizedQuery());
+        }
+        if ($records = $query->get()) {
+            if ($idList = array_column($records, 'value')) {
+                if ($positions = $db->table('structure_links')
+                    ->select('childStructureId')
+                    ->where('type', '=', 'structure')
+                    ->whereIn('childStructureId', $idList)
+                    ->orderBy('position', 'asc')
+                    ->get()) {
+                    $positions = array_flip(array_column($positions, 'childStructureId'));
+                }
+            }
+            foreach ($records as $record) {
+                if (!isset($this->selectionsValuesIndex[$record['parameterId']])) {
+                    $this->selectionsValuesIndex[$record['parameterId']] = [];
+                }
+                $this->selectionsValuesIndex[$record['parameterId']][$positions[$record['value']]] = $record['value'];
+            }
+        }
     }
 
     public function getCanonicalUrl()
@@ -724,7 +784,7 @@ abstract class ProductsListElement extends menuStructureElement
     {
         $result = ['previous' => false, 'next' => false];
         $structureManager = $this->getService('structureManager');
-        $query = $this->getProductsListBaseOptimizedQuery();
+        $query = clone $this->getFilteredProductsQuery();
         $productsIds = [];
         if ($records = $query->get('id')) {
             $productsIds = array_column($records, 'id');
@@ -967,6 +1027,7 @@ abstract class ProductsListElement extends menuStructureElement
             $this->cacheKey .= $this->getFilterOrder();
             $this->cacheKey .= $this->getFilterSort();
             $this->cacheKey .= $this->getFilterLimit();
+            $this->cacheKey .= (int)controller::getInstance()->getParameter('page');
         }
         return $this->cacheKey;
     }

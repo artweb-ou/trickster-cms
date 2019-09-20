@@ -11,8 +11,9 @@
 {assign var="formFieldCols" value=""}
 {assign var='primColor' value=''}
 {if !empty($item.additionalFormat)}
-	{$labelBefore = $item.additionalFormat.labelBefore}
-	{if empty($labelBefore)}
+	{if !empty($item.additionalFormat.labelBefore)}
+		{$labelBefore = $item.additionalFormat.labelBefore}
+	{else}
 		{$labelBefore = $fieldName}
 	{/if}
     {$labelAfter  = $item.additionalFormat.labelAfter}
@@ -34,7 +35,7 @@
 			{translations name="{$translationGroup}.{$labelBefore}"}
 		</span>
         <div class="form_field{$formFieldCols}">
-			<input class="input_component{if $item.textClass} {$item.textClass}{/if}" type="{if !empty($item.inputType)}{$item.inputType}{else}text{/if}" value="{$formData.$fieldName}"
+			<input class="input_component{if $item.textClass} {$item.textClass}{/if}"{if !empty($item.stepValue)} step="{$item.stepValue}"{/if}{if !empty($item.minValue)} min="{$item.minValue}"{/if}{if !empty($item.maxValue)} max="{$item.maxValue}"{/if}  type="{if !empty($item.inputType)}{$item.inputType}{else}text{/if}" value="{$formData.$fieldName}"
 		   name="{$formNames.$fieldName}"/>
 			{if !empty($labelAfter)}
 				<span class="form_label_after">

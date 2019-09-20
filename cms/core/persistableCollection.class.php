@@ -47,11 +47,14 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
                     $cache->set($keyName, $this->primaryFields);
                 }
             } else {
-                if (!empty($_SESSION[$keyName])) {
-                    $this->primaryFields = $_SESSION[$keyName];
-                } else {
+                /**
+                 * @var ServerSessionManager $serverSessionManager
+                 */
+                $serverSessionManager = $this->getService('ServerSessionManager');
+
+                if (!$this->primaryFields = $serverSessionManager->get($keyName)) {
                     $this->primaryFields = $this->transportObject->loadPrimaryFields();
-                    $_SESSION[$keyName] = $this->primaryFields;
+                    $serverSessionManager->set($keyName, $this->primaryFields);
                 }
             }
 
@@ -80,11 +83,14 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
                     $cache->set($keyName, $this->columnNames);
                 }
             } else {
-                if (isset($_SESSION[$keyName]) && $_SESSION[$keyName]) {
-                    $this->columnNames = $_SESSION[$keyName];
-                } else {
+                /**
+                 * @var ServerSessionManager $serverSessionManager
+                 */
+                $serverSessionManager = $this->getService('ServerSessionManager');
+
+                if (!$this->columnNames = $serverSessionManager->get($keyName)) {
                     $this->columnNames = $this->transportObject->loadColumnNames();
-                    $_SESSION[$keyName] = $this->columnNames;
+                    $serverSessionManager->set($keyName, $this->columnNames);
                 }
             }
         }
@@ -206,7 +212,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
 
     public function loadObject($fields, $strict = true)
     {
-        if ($objects = $this->load($fields)) {
+        if ($objects = $this->load($fields, [], false, 1)) {
             if (count($objects) == 1 || !$strict) {
                 return reset($objects);
             }
@@ -287,8 +293,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $limitFields = [],
         $groupFields = [],
         $literal = false
-    )
-    {
+    ) {
         $this->transportObject->setResourceName($this->resourceName);
         $this->transportObject->setReturnColumns(null, $literal);
         $this->transportObject->setConditions($conditions);
@@ -318,8 +323,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $limitFields = [],
         $groupFields = [],
         $literal = false
-    )
-    {
+    ) {
         $this->transportObject->setResourceName($this->resourceName);
         $this->transportObject->setReturnColumns($returnColumns, $literal);
         $this->transportObject->setConditions($conditions);
@@ -337,8 +341,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $limitFields = [],
         $groupFields = [],
         $literal = false
-    )
-    {
+    ) {
         $this->transportObject->setResourceName($this->resourceName);
         $this->transportObject->setReturnColumns($returnColumns, $literal);
         $this->transportObject->setOrConditions($conditions);

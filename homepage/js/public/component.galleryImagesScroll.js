@@ -44,7 +44,7 @@ window.GalleryImagesScrollComponent = function(galleryInfo, parentComponent) {
 
         var imagesInfoList = galleryInfo.getImagesList();
         for (var i = 0; i < imagesInfoList.length; i++) {
-            var imageItem = new GalleryImageComponent(imagesInfoList[i], self, galleryInfo.getDescriptionType());
+            var imageItem = new GalleryImageComponent(imagesInfoList[i], self, galleryInfo);
             componentElement.appendChild(imageItem.getComponentElement());
             imageComponentElements.push(imageItem.getComponentElement());
             imagesList.push(imageItem);

@@ -42,6 +42,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
     protected $vatAmount = 0;
     protected $selectedServicesPrice = 0;
     protected $message = '';
+    protected $vatRate = 0;
 
     /**
      * @deprecated - architecture should be changed to avoid heavy initializing and to use calculations on demand
@@ -182,6 +183,20 @@ class shoppingBasket implements DependencyInjectionContextInterface
         $this->recalculate();
     }
 
+    public function setVatRate($vatRate)
+    {
+        $user = $this->getService('user');
+        $user->setStorageAttribute('vatRate', $vatRate);
+    }
+
+    public function getVatRate()
+    {
+        $user = $this->getService('user');
+        $vatRate = $user->getStorageAttribute('vatRate');
+
+        return $vatRate;
+    }
+
     public function selectDeliveryCity($targetId)
     {
         $shoppingBasketDeliveryTargets = $this->getService('ShoppingBasketDeliveryTargets');
@@ -313,7 +328,13 @@ class shoppingBasket implements DependencyInjectionContextInterface
             $vatRateSetting = $this->getService('ConfigManager')->get('main.vatRate');
             if ($vatRateSetting) {
                 $this->vatAmount = $totalPrice - $totalPrice / $vatRateSetting;;
-                $this->vatLessTotalPrice = $totalPrice / $vatRateSetting;
+                $this->vatLessTotalPrice = $totalPrice - $this->vatAmount;
+            }
+
+            $vatRate = $this->getVatRate();
+            if (!empty($vatRate) && $vatRate !== $vatRateSetting) {
+                $this->vatAmount = $this->vatLessTotalPrice * $vatRate - $this->vatLessTotalPrice;
+                $totalPrice = $this->vatLessTotalPrice * $vatRate;
             }
 
             $currencySelector = $this->getService('CurrencySelector');
@@ -324,6 +345,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
             } else {
                 $this->deliveryPrice = $deliveryPrice;
             }
+
             $this->selectedServicesPrice = $currencySelector->convertPrice($servicesPrice, false);
             $this->totalPrice = $currencySelector->convertPrice($totalPrice, false);
             $this->vatLessTotalPrice = $currencySelector->convertPrice($this->vatLessTotalPrice, false);
@@ -790,7 +812,6 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
 }
 
 
-
 class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -830,7 +851,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 
     public function saveStorage()
     {
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data = [];
@@ -852,7 +873,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
     {
         $user = $this->getService('user');
 
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data = $user->getStorageAttribute('deliveryTypesData');
@@ -878,6 +899,9 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 
     protected function loadDeliveryTypesData()
     {
+        /**
+         * @var structureManager $structureManager
+         */
         $structureManager = $this->getService('structureManager');
         $linksManager = $this->getService('linksManager');
         $data = [];
@@ -886,8 +910,8 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
             /**
              * @var deliveryTypeElement[] $deliveryTypeElements
              */
-            $deliveryTypeElements = $structureManager->getElementsByIdList($connectedIds, false, true);
-            foreach ($deliveryTypeElements as &$deliveryTypeElement) {
+            $deliveryTypeElements = $structureManager->getElementsByIdList($connectedIds, null, true);
+            foreach ($deliveryTypeElements as $deliveryTypeElement) {
                 $elementData = [];
                 $elementData['id'] = $deliveryTypeElement->id;
                 $elementData['code'] = $deliveryTypeElement->code;
@@ -899,27 +923,26 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                     foreach ($pricesIndex as &$record) {
                         $elementData['deliveryTargetsInfo'][] = [
                             'targetId' => $record->targetId,
-                            'price'    => $record->price,
+                            'price' => $record->price,
                         ];
                     }
                 }
 
                 $elementData['deliveryFormFields'] = [];
                 if ($fieldsList = $deliveryTypeElement->getFieldsList()) {
-                    foreach ($fieldsList as &$record) {
-                        if ($fieldElement = $structureManager->getElementById($record->fieldId,
-                            $deliveryTypeElement->id)) {
+                    foreach ($fieldsList as $record) {
+                        if ($fieldElement = $structureManager->getElementById($record->fieldId, $deliveryTypeElement->id, true)) {
                             $fieldInfo = [
-                                'id'           => $fieldElement->id,
-                                'title'        => $fieldElement->title,
-                                'fieldName'    => $fieldElement->fieldName,
-                                'fieldType'    => $fieldElement->fieldType,
-                                'dataChunk'    => $fieldElement->dataChunk,
-                                'required'     => (int)$record->required,
-                                'validator'    => $fieldElement->validator,
+                                'id' => $fieldElement->id,
+                                'title' => $fieldElement->title,
+                                'fieldName' => $fieldElement->fieldName,
+                                'fieldType' => $fieldElement->fieldType,
+                                'dataChunk' => $fieldElement->dataChunk,
+                                'required' => (int)$record->required,
+                                'validator' => $fieldElement->validator,
                                 'autocomplete' => $fieldElement->autocomplete,
-                                'error'        => false,
-                                'value'        => $fieldElement->getAutoCompleteValue(),
+                                'error' => false,
+                                'value' => $fieldElement->getAutoCompleteValue(),
                             ];
                             if ($fieldElement->fieldType == 'select') {
                                 $fieldInfo['options'] = [];
@@ -927,7 +950,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
                                 foreach ($options as &$option) {
                                     $fieldInfo['options'][] = [
                                         'value' => $option->title,
-                                        'text'  => $option->title,
+                                        'text' => $option->title,
                                     ];
                                 }
                             } elseif ($fieldElement->fieldType == 'input') {
@@ -1199,7 +1222,7 @@ class shoppingBasketServices implements DependencyInjectionContextInterface
 
     public function saveStorage()
     {
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data['languageId'] = $currentLanguageId;
@@ -1221,7 +1244,7 @@ class shoppingBasketServices implements DependencyInjectionContextInterface
     {
         $user = $this->getService('user');
 
-        $languagesManager = $this->getService('languagesManager');;
+        $languagesManager = $this->getService('LanguagesManager');;
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data = $user->getStorageAttribute('servicesData');
@@ -1247,12 +1270,15 @@ class shoppingBasketServices implements DependencyInjectionContextInterface
 
     protected function loadServicesData()
     {
+        /**
+         * @var structureManager $structureManager
+         */
         $structureManager = $this->getService('structureManager');
         $linksManager = $this->getService('linksManager');
         $data = [];
         if ($servicesElementId = $structureManager->getElementIdByMarker('shoppingBasketServices')) {
             $connectedIds = $linksManager->getConnectedIdList($servicesElementId, 'structure', 'parent');
-            $serviceElements = $structureManager->getElementsByIdList($connectedIds, false, true);
+            $serviceElements = $structureManager->getElementsByIdList($connectedIds, null, true);
             foreach ($serviceElements as &$serviceElement) {
                 $elementData = [];
                 $elementData['id'] = $serviceElement->id;

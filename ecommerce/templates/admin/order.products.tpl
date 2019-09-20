@@ -57,7 +57,7 @@
 				</td>
 
 				<td>
-					{$contentItem->price} {$element->currency}
+					{$contentItem->getPrice()} {$element->currency}
 				</td>
 				<td>
 					{$contentItem->amount}

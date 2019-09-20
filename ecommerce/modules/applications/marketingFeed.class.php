@@ -15,12 +15,12 @@ class marketingFeedApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $configManager = $this->getService('configManager');
+        $configManager = $this->getService('ConfigManager');
         $structureManager = $this->getService('structureManager', [
             'rootUrl' => $controller->baseURL,
             'rootMarker'  => $configManager->get('main.rootMarkerPublic')
         ], true);
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         if ($language = $controller->getParameter('language')) {
             $languagesManager->setCurrentLanguageCode($language);
         }

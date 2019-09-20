@@ -11,7 +11,7 @@ trait GalleryInfoProviderTrait
             'galleryHeight' => false,
             'imageResizeType' => 'resize',
             'changeDelay' => 6000,
-            'imageAspectRatio' => 0.8,
+            'imageAspectRatio' => false,
             'thumbnailsSelectorEnabled' => true,
             'thumbnailsSelectorHeight' => '15%',
             'imagesButtonsEnabled' => false,
@@ -20,6 +20,7 @@ trait GalleryInfoProviderTrait
             'fullScreenGalleryEnabled' => true,
             'fullScreenButtonEnabled' => false,
             'descriptionType' => 'overlay',
+            'descriptionEffect' => 'none',
             'imagesPrevNextButtonsSeparated' => false,
             'videoAutoStart' => true,
 
@@ -43,7 +44,7 @@ trait GalleryInfoProviderTrait
                 'externalLink' => $imageElement->externalLink,
                 'id' => $imageElement->id,
                 'filename' => $imageElement->originalName,
-                'fileUrl' => $controller->baseURL . 'file/id:' . $imageElement->id . '/filename:' . $imageElement->originalName,
+                'fileUrl' => $controller->baseURL . 'file/id:' . $imageElement->id . '/' . $imageElement->originalName,
             ];
             if ($imageElement instanceof ImageUrlProviderInterface) {
                 $imageInfo['fullImageUrl'] = $imageElement->getImageUrl($imagePresetBase . 'FullImage');

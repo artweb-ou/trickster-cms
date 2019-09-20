@@ -24,7 +24,7 @@ window.GalleryButtonComponent = function(imageInfo, galleryInfo) {
     var createDomStructure = function() {
         componentElement = self.makeElement('div', 'gallery_button');
         numberElement = self.makeElement('span', 'gallery_button_text');
-        numberElement.innerHTML = number + 1;
+        numberElement.innerHTML = "<small>" + number + 1 + "</small>";
         componentElement.appendChild(numberElement);
     };
     var onClick = function() {

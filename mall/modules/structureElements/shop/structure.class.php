@@ -104,12 +104,12 @@ class shopElement extends structureElement implements MetadataProviderInterface
         return $this->getService('linksManager')->getConnectedIdList($this->id, self::LINK_TYPE_ROOM, 'parent');
     }
 
-    public function getConnectedCategories($forceUpdate = false)
+    public function getConnectedCategories()
     {
         $structureManager = $this->getService('structureManager');
 
         $categories = [];
-        if ($parentsList = $structureManager->getElementsParents($this->id, $forceUpdate, 'shopCategory')) {
+        if ($parentsList = $structureManager->getElementsParents($this->id, 'shopCategory')) {
             foreach ($parentsList as &$parentElement) {
                 if ($parentElement->structureType == 'shopCategory') {
                     $categories[] = $parentElement;
@@ -238,7 +238,7 @@ class shopElement extends structureElement implements MetadataProviderInterface
     public function getMapUrl()
     {
         $result = '';
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         $structureManager = $this->getService('structureManager');
 
         $roomsIds = $this->getConnectedRoomsIds();
@@ -285,9 +285,7 @@ class shopElement extends structureElement implements MetadataProviderInterface
         $structureManager = $this->getService('structureManager');
         $openingHoursGroupId = $this->getConnectedOpeningHoursGroupId();
         if ($openingHoursGroupId) {
-            foreach ($structureManager->getElementsByIdList($openingHoursGroupId, $this->id) as $result) {
-                break;
-            }
+            $result = $structureManager->getElementById($openingHoursGroupId, $this->id, true);
         }
         return $result;
     }

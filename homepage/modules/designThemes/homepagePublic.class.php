@@ -38,7 +38,7 @@ class homepagePublicDesignTheme extends DesignTheme
             'logics.textarea.js',
             'logics.banner.js',
             'logics.input.js',
-            'logics.accordeonMenu.js',
+            'logics.accordeon.js',
             'logics.fancyTitle.js',
             'logics.formSubmitLink.js',
             'logics.linkList.js',
@@ -51,6 +51,7 @@ class homepagePublicDesignTheme extends DesignTheme
             'logics.mobileMenu.js',
             'logics.mobileCommonMenu.js',
             'logics.smoothScrollTo.js',
+            'logics.spoiler.js',
             'mixin.LazyLoading.js',
             'mixin.slides.js',
             'mixin.scrollPages.js',
@@ -82,7 +83,7 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.darkLayer.js',
             'component.textarea.js',
             'component.banner.js',
-            'component.accordeonMenu.js',
+            'component.accordeon.js',
             'component.dropDown.js',
             'component.fancyTitle.js',
             'component.formSubmitLink.js',
@@ -111,6 +112,9 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.SubMenusPopupItemComponent.js',
             'component.SubmenuItemPopupComponent.js',
             'component.SubMenuItemComponent.js',
+            'component.socialMediaShare.js',
+            'component.spoiler.js',
+            'mixin.scrollAttaching.js',
         ];
     }
 }

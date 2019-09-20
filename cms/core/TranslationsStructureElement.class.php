@@ -87,7 +87,7 @@ abstract class TranslationsStructureElement extends structureElement
         if (is_null($this->incompleteTranslations)) {
             $this->incompleteTranslations = [];
             $translationsGroups = $this->getChildrenList();
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
 
             $languages = $languagesManager->getLanguagesList($this->translationsLanguagesGroup);
             $languagesIndex = [];

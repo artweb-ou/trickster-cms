@@ -96,6 +96,9 @@ class userElement extends structureElement
     public function checkSubscription($subscribeOrNot)
     {
         if ($email = $this->email) {
+            /**
+             * @var structureManager $structureManager
+             */
             $structureManager = $this->getService('structureManager');
 
             $linksManager = $this->getService('linksManager');
@@ -117,8 +120,7 @@ class userElement extends structureElement
 
             if (!$mailExists && $subscribeOrNot) {
                 if ($mailsElementId = $structureManager->getElementIdByMarker('newsMailsAddresses')) {
-                    $structureManager->getElementsByIdList([$mailsElementId], $this->id);
-                    if ($mailsElement = $structureManager->getElementById($mailsElementId)) {
+                    if ($mailsElement = $structureManager->getElementById($mailsElementId, null, true)) {
                         if ($newAddress = $structureManager->createElement('newsMailAddress', 'showForm', $mailsElementId)
                         ) {
                             $newAddress->prepareActualData();
@@ -161,11 +163,11 @@ class userElement extends structureElement
                 }
             } elseif ($mailExists && !$subscribeOrNot) {
                 if ($mailsElementId = $structureManager->getElementIdByMarker('newsMailsAddresses')) {
-                    $structureManager->getElementsByIdList([$mailsElementId], $this->id);
-
-                    foreach ($result as &$row) {
-                        if ($address = $structureManager->getElementById($row['id'])) {
-                            $address->deleteElementData();
+                    if ($structureManager->getElementById($mailsElementId, $this->id, true)) {
+                        foreach ($result as &$row) {
+                            if ($address = $structureManager->getElementById($row['id'], $mailsElementId, true)) {
+                                $address->deleteElementData();
+                            }
                         }
                     }
                 }
@@ -195,9 +197,9 @@ class userElement extends structureElement
     public function getElementData()
     {
         return [
-            'userId'    => $this->id,
+            'userId' => $this->id,
             'firstName' => $this->firstName,
-            'lastName'  => $this->firstName
+            'lastName' => $this->firstName,
         ];
     }
 

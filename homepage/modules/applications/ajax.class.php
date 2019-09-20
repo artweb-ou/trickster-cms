@@ -17,7 +17,7 @@ class ajaxApplication extends controllerApplication
          * @var Cache $cache
          */
         $cache = $this->getService('Cache');
-        $cache->enable(true, false, true);
+        $cache->enable();
 
         $currentElement = false;
         $this->renderer->assign('responseData', []);
@@ -31,7 +31,7 @@ class ajaxApplication extends controllerApplication
 
             $this->processRequestParameters();
 
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $elementId = $controller->getParameter('id');
 
             if (is_numeric($elementId)) {

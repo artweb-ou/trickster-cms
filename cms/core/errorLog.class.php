@@ -14,70 +14,54 @@ class errorLog
         $this->logFilePath = $pathsManager->getPath('logs') . $todayDate . '.txt';
     }
 
-    public function __destruct()
+    protected function writeLogContents($newMessage)
     {
-        $this->writeLogContents();
-    }
+        $myUrl = "unknown";
+        $referer = "unknown";
+        $ip = "unknown";
 
-    protected function writeLogContents()
-    {
-        if (count($this->messageLogArray)) {
-            $contents = $this->getLogContents();
-
-            $use_server = true;
-            $required_server_variables = ["HTTP_HOST", "REQUEST_URI"];
-            foreach ($required_server_variables as $var) {
-                if (empty($_SERVER[$var])) {
-                    $use_server = false;
-                }
-            }
-            $myUrl = "unknown";
-            if ($use_server) {
-                // Get HTTP/HTTPS (the possible values for this vary from server to server)
-                $myUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && !in_array(strtolower($_SERVER['HTTPS']), [
-                        'off',
-                        'no',
-                    ])) ? 'https' : 'http';
-                // Get domain portion
+        if (!empty($_SERVER) && !empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['REQUEST_URI'])) {
+            // Get HTTP/HTTPS (the possible values for this vary from server to server)
+            $myUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && !in_array(strtolower($_SERVER['HTTPS']), [
+                    'off',
+                    'no',
+                ])) ? 'https' : 'http';
+            // Get domain portion
+            if (!empty($_SERVER['HTTP_HOST'])) {
                 $myUrl .= '://' . $_SERVER['HTTP_HOST'];
-                // Get path to script
+            }
+            // Get path to script
+            if (!empty($_SERVER['REQUEST_URI'])) {
                 $myUrl .= $_SERVER['REQUEST_URI'];
-                // Add path info, if any
-                if (!empty($_SERVER['PATH_INFO'])) {
-                    $myUrl .= $_SERVER['PATH_INFO'];
-                }
-                // Add query string, if any (some servers include a ?, some don't)
-                if (!empty($_SERVER['QUERY_STRING'])) {
-                    $myUrl .= '?' . ltrim($_SERVER['REQUEST_URI'], '?');
-                }
+            }
+            // Add path info, if any
+            if (!empty($_SERVER['PATH_INFO'])) {
+                $myUrl .= $_SERVER['PATH_INFO'];
+            }
+            // Add query string, if any (some servers include a ?, some don't)
+            if (!empty($_SERVER['QUERY_STRING'])) {
+                $myUrl .= '?' . ltrim($_SERVER['REQUEST_URI'], '?');
             }
 
-            $referer = "unknown";
             if (!empty($_SERVER['HTTP_REFERER'])) {
                 $referer = $_SERVER['HTTP_REFERER'];
             }
 
-            foreach ($this->messageLogArray as &$item) {
-                $contents .= $item['date'] . "\n\r"
-                    . "- " . $item['locationName'] . ': ' . $item['errorText'] . "\n\r"
-                    . "- REQUEST_URI: " . $myUrl . "\n\r"
-                    . "- HTTP_REFERER: " . $referer . "\n\r\n\r";
+            if (!empty($_SERVER['REMOTE_ADDR'])) {
+                $ip = $_SERVER['REMOTE_ADDR'];
             }
-            $pathsManager = controller::getInstance()->getPathsManager();
-            $pathsManager->ensureDirectory($pathsManager->getPath('logs'));
-            file_put_contents($this->logFilePath, $contents);
-            $this->messageLogArray = [];
         }
-    }
 
-    protected function getLogContents()
-    {
-        if (file_exists($this->logFilePath)) {
-            return file_get_contents($this->logFilePath);
-        } else {
-            $empty = '';
-            return $empty;
-        }
+
+        $contents = $newMessage['date'] . "\r\n"
+            . "- " . $newMessage['locationName'] . ': ' . $newMessage['errorText'] . "\r\n"
+            . "- REQUEST_URI: " . $myUrl . "\r\n"
+            . "- IP: " . $ip . "\r\n"
+            . "- HTTP_REFERER: " . $referer . "\r\n\r\n";
+
+        $pathsManager = controller::getInstance()->getPathsManager();
+        $pathsManager->ensureDirectory($pathsManager->getPath('logs'));
+        file_put_contents($this->logFilePath, $contents, FILE_APPEND);
     }
 
     public static function getInstance()
@@ -93,24 +77,33 @@ class errorLog
         return $this->messageLogArray;
     }
 
-    public function logMessage($locationName, $errorText, $level = null)
+    public function logMessage($locationName, $errorText, $level = null, $throwException = true)
     {
         $newMessage = [];
 
         $newMessage['stamp'] = time();
-        $newMessage['date'] = date('Y-m-d H:i', $newMessage['stamp']);
+        $newMessage['date'] = date('Y-m-d H:i:s', $newMessage['stamp']);
         $newMessage['locationName'] = $locationName;
-        if ($level) {
-            $newMessage['errorText'] = "[" . $level . "] " . $errorText;
-        } else {
-            $newMessage['errorText'] = $errorText;
+        switch ($level) {
+            case E_ERROR:
+                $errorText = "[Error] " . $errorText;
+                break;
+            case E_WARNING:
+                $errorText = "[Warning] " . $errorText;
+                break;
+            case E_NOTICE:
+                $errorText = "[Notice] " . $errorText;
+                break;
+            default:
+                $errorText = "[" . $level . "] " . $errorText;
+                break;
         }
-        $this->messageLogArray[] = $newMessage;
+        $newMessage['errorText'] = $errorText;
 
-        if ($level == E_ERROR || $level == E_COMPILE_ERROR || $level == E_CORE_ERROR) {
-            //__destruct is not guaranteed to happen after E_ERROR
-            $this->writeLogContents();
+        $this->writeLogContents($newMessage);
+        if ($throwException && controller::getInstance()->getDebugMode()) {
+            throw new Exception($errorText);
         }
+
     }
 }
-

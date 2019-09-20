@@ -9,3 +9,5 @@ $moduleActions[] = 'showPositions';
 $moduleActions[] = 'receivePositions';
 $moduleActions[] = 'answers';
 $moduleActions[] = 'export';
+$moduleActions[] = 'showLayoutForm';
+$moduleActions[] = 'receiveLayout';

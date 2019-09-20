@@ -2,12 +2,23 @@
 
 class showRegistration extends structureElementAction
 {
+    /**
+     * @param structureManager $structureManager
+     * @param controller $controller
+     * @param registrationElement $structureElement
+     * @return mixed|void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         $user = $this->getService('user');
         $registeredHere = $user->userName != 'anonymous' && $structureElement->type == 'registration';
-        if ($registeredHere && ($controller->getParameter('success') || !empty($_SESSION['showSuccessMessage' . $structureElement->id]))) {
-            unset($_SESSION['showSuccessMessage' . $structureElement->id]);
+
+        /**
+         * @var ServerSessionManager $serverSessionManager
+         */
+        $serverSessionManager = $this->getService('ServerSessionManager');
+        if ($registeredHere && ($controller->getParameter('success') || ($serverSessionManager->get('showSuccessMessage' . $structureElement->id)))) {
+            $serverSessionManager->delete('showSuccessMessage' . $structureElement->id);
             $translationsManager = $this->getService('translationsManager');
             if ($structureElement->type == 'registration') {
                 $structureElement->resultMessage = $translationsManager->getTranslationByName('userdata.registrationsuccess');
@@ -21,9 +32,7 @@ class showRegistration extends structureElementAction
             if ($structureElement->requested) {
                 if ($structureElement->type == 'userdata' && $user->userName != 'anonymous') {
                     $dynamicFieldsData = [];
-                    $elements = $structureManager->getElementsByIdList($user->id);
-                    $userElement = reset($elements);
-                    if ($userElement) {
+                    if ($userElement = $structureManager->getElementById($user->id, null, true)) {
                         $additionalDataRecords = $userElement->getAdditionalData();
                         foreach ($structureElement->getConnectedFields() as $field) {
                             if (isset($additionalDataRecords[$field->id])) {

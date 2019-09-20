@@ -59,7 +59,7 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
                 }
                 $marker = $rootMarkerPublic;
             }
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $languageId = $languagesManager->getCurrentLanguageId($marker);
         }
         if (!isset($this->translationsList[$sectionName]) || !isset($this->translationsList[$sectionName][$languageId]) || is_null(
@@ -107,7 +107,7 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
     public function generateTranslationsFile($sectionName)
     {
         $allData = [];
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
         foreach ($languagesManager->getLanguagesIdList() as $languageId) {
             // we need to ensure that all languages are used.
             // otherwise no cache file would be created for empty language and this method is called many hundreds of times.
@@ -165,7 +165,7 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
             } else {
                 if ($required) {
                     if ($loggable) {
-                        $this->logError('Missing translation ' . $name);
+                        $this->logError('Missing translation ' . $name, E_NOTICE, false);
                     }
                     return '#' . $name . '#';
                 } else {

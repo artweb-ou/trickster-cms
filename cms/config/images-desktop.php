@@ -83,4 +83,10 @@
             'png',
         ],
     ],
+    'original' => [
+        'format' => [
+            null,
+            'png',
+        ],
+    ],
 ];

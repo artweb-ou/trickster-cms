@@ -96,6 +96,7 @@ window.MapInfo = function(info) {
     var zoomControlEnabled = false;
     var streetViewControlEnabled = false;
     var height;
+    var zoomLevel;
 
     var init = function() {
         coordinates = info.coordinates.replace('"', '').split(',');
@@ -107,6 +108,11 @@ window.MapInfo = function(info) {
             height = info.height;
         } else {
             height = 0.5;
+        }
+        if (typeof info.zoomLevel != 'undefined') {
+            zoomLevel = info.zoomLevel;
+        } else {
+            zoomLevel = 14;
         }
         mapTypeControlEnabled = !!info.mapTypeControlEnabled;
         zoomControlEnabled = !!info.zoomControlEnabled;
@@ -130,6 +136,9 @@ window.MapInfo = function(info) {
     };
     this.getHeight = function() {
         return height;
+    };
+    this.getZoomLevel = function() {
+        return zoomLevel;
     };
     this.getMapCode = function() {
         return mapCode;

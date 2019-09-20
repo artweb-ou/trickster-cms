@@ -5,6 +5,7 @@ class CategorySeoStructure extends ElementForm
     protected $structure = [
         'structureName' => [
             'type' => 'input.text',
+            'translationGroup' => 'seo',
         ],
         'metaTitle' => [
             'type' => 'input.multi_language_text',
@@ -17,6 +18,7 @@ class CategorySeoStructure extends ElementForm
         ],
         'canonicalUrl' => [
             'type' => 'input.text',
+            'translationGroup' => 'seo',
         ],
         'metaDenyIndex' => [
             'type' => 'input.checkbox',
@@ -28,6 +30,9 @@ class CategorySeoStructure extends ElementForm
             'type' => 'input.multi_language_text',
         ],
         'metaH1Template' => [
+            'type' => 'input.multi_language_text',
+        ],
+        'metaSubTitleTemplate' => [
             'type' => 'input.multi_language_text',
         ],
         'metaDescriptionTemplate' => [

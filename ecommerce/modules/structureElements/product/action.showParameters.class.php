@@ -29,7 +29,7 @@ class showParametersProduct extends structureElementAction
                 }
             }
 
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $valuesCollection = persistableCollection::getInstance('module_product_parameter_value');
             $searchFields = ['productId' => $structureElement->id];
             $valuesList = $valuesCollection->load($searchFields);

@@ -48,7 +48,7 @@ class exportTranslationsExport extends structureElementAction
                 }
             }
         } else {
-            $languagesManager = $this->getService('languagesManager');
+            $languagesManager = $this->getService('LanguagesManager');
             $languagesList = $languagesManager->getLanguagesList();
             foreach ($languagesList as $languagesItem) {
                 $languageCodes[$languagesItem->id] = $languagesItem->iso6393;

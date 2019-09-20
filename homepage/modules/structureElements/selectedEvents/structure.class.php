@@ -2,12 +2,20 @@
 
 class selectedEventsElement extends menuDependantStructureElement implements ConfigurableLayoutsProviderInterface, EventsListFilterInterface
 {
-    use ConfigurableLayoutsProviderTrait, ConnectedEventsProviderTrait, EventsListFilterTrait;
+    use ConfigurableLayoutsProviderTrait;
+    use ConnectedEventsProviderTrait;
+    use EventsListFilterTrait;
+    use SearchTypesProviderTrait;
+
     public $dataResourceName = 'module_selectedevents';
     public $defaultActionName = 'show';
     public $role = 'content';
     protected $eventsToDisplay;
     protected $baseEventsIdList;
+    public $connectedMenu;
+    protected $fixedElement;
+    protected $allowedTypes = [];
+
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -21,6 +29,8 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         $moduleStructure['layout'] = 'text';
         $moduleStructure['listLayout'] = 'text';
         $moduleStructure['enableFilter'] = 'checkbox';
+        $moduleStructure['gotoButtonTitle'] = 'text';
+        $moduleStructure['fixedId'] = 'text';
 
         $moduleStructure['dates_type'] = 'text';
         $moduleStructure['date_from'] = 'date';
@@ -29,6 +39,8 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
 
         $moduleStructure['receivedEventsIds'] = 'array'; // temporary
         $moduleStructure['receivedEventsListsIds'] = 'array'; // temporary
+
+        $moduleStructure['colorLayout'] = 'text';
     }
 
     protected function getTabsList()
@@ -84,15 +96,6 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         return $this->baseEventsIdList;
     }
 
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getEventsToDisplay()
-    {
-        $this->logError('deprecated method getEventsToDisplay used');
-        return $this->getEventsElements();
-    }
 
     public function getEventsListsEventsIds()
     {
@@ -106,4 +109,87 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
         }
         return $eventIds;
     }
+
+    public function getConnectedEventsListsInfo()
+    {
+        $info = [];
+        foreach ($this->getConnectedEventsLists() as $element) {
+            $item['title'] = $element->getTitle();
+            $item['select'] = true;
+            $item['id'] = $element->id;
+
+            $info [] = $item;
+        }
+        return $info;
+    }
+
+    public function getConnectedEventsInfo()
+    {
+        $info = [];
+        foreach ($this->getConnectedEvents() as $element) {
+            $item['title'] = $element->getTitle();
+            $item['select'] = true;
+            $item['id'] = $element->id;
+
+            $info [] = $item;
+        }
+        return $info;
+    }
+
+    public function getEventsElements()
+    {
+        if ($this->t_events === null) {
+            if ($eventIds = $this->getCurrentEventsIdList()) {
+                //we need to ensure all connected events lists are loaded.
+                //Then events will be taken through the right events list, not from anywhere in language
+                $this->getConnectedEventsLists();
+                /**
+                 * @var structureManager
+                 */
+                $structureManager = $this->getService('structureManager');
+                foreach ($eventIds as $eventId) {
+                    if ($element = $structureManager->getElementById($eventId)) {
+                        $this->t_events[] = $element;
+                    }
+                }
+            }
+        }
+        return $this->t_events;
+    }
+
+
+
+    public function getFixedElement()
+    {
+        if ($this->fixedElement === null && $this->fixedId) {
+            $structureManager = $this->getService('structureManager');
+            $this->fixedElement = $structureManager->getElementById($this->fixedId);
+        }
+        return $this->fixedElement;
+    }
+
+    public function getFixedElementURL()
+    {
+        if ($fixedElement = $this->getFixedElement()) {
+            return $fixedElement->URL;
+        }
+        return false;
+    }
+
+    public function gotoButtonTitle()
+    {
+        if ($gotoButtonTitle = $this->gotoButtonTitle) {
+            return $gotoButtonTitle;
+        }
+        else {
+            $translationsManager = $this->getService('translationsManager');
+            return $translationsManager->getTranslationByName('events.look_calendar');
+        }
+    }
+
+    public function getAllowedTypes($currentAction = 'showForm')
+    {
+        return $this->allowedTypes;
+    }
+
 }

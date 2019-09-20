@@ -132,26 +132,12 @@ window.ProductsCheckboxesFilterComponent = function(componentElement, onChange) 
 
     var init = function() {
         var titleElement = _('.productsearch_field_label', componentElement)[0];
-        eventsManager.addHandler(titleElement, 'click', titleClick);
         type = componentElement.className.slice(componentElement.className.indexOf('products_filter_type_') + 21);
         if (type.indexOf(' ') >= 0) {
             type = type.slice(0, type.indexOf(' '));
         }
         checkboxElements = _('input.products_filter_checkbox', componentElement);
         eventsManager.addHandler(componentElement, 'change', change);
-    };
-
-    var titleClick = function(event) {
-        toggle();
-    };
-
-    var toggle = function() {
-        if (hidden) {
-            domHelper.removeClass(componentElement, 'products_filter_checkboxes_collapsed');
-        } else {
-            domHelper.addClass(componentElement, 'products_filter_checkboxes_collapsed');
-        }
-        hidden = !hidden;
     };
 
     var change = function(event) {

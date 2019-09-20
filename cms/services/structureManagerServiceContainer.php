@@ -30,10 +30,10 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
             $structureManager->setLinksManager($this->registry->getService('linksManager'));
         }
 
-        if ($languagesManager = $this->getOption('languagesManager')) {
+        if ($languagesManager = $this->getOption('LanguagesManager')) {
             $structureManager->setLanguagesManager($languagesManager);
         } else {
-            $languagesManager = $this->registry->getService('languagesManager');
+            $languagesManager = $this->registry->getService('LanguagesManager');
             $structureManager->setLanguagesManager($languagesManager);
         }
 
@@ -60,13 +60,7 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
             $structureManager->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.adminAllowed'));
         } else {
             $structureManager->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.publicAllowed'));
-            //we only need to restrict globally path search by current language if we have cache enabled.
-            //otherwise this makes a huge performance hit which has to be investigated (todo: investigate)
-            if ($cache = $this->registry->getService('Cache')){
-                if ($cache->isEnabled()){
-                    $structureManager->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
-                }
-            }
+            $structureManager->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
         }
 
 

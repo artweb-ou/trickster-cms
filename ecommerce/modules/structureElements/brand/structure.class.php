@@ -108,7 +108,7 @@ class brandElement extends ProductsListElement implements ImageUrlProviderInterf
                 ], $conditions)
                 ) {
                     $structureManager = $this->getService('structureManager');
-                    $languagesManager = $this->getService('languagesManager');
+                    $languagesManager = $this->getService('LanguagesManager');
                     $languageId = $languagesManager->getCurrentLanguageId();
                     foreach ($records as &$record) {
                         // check if the category/catalogue is available in current language

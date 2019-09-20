@@ -47,16 +47,12 @@ class feedbackAnswerElement extends dynamicGroupFieldsStructureElement
                         $fieldInfo['value'] = '';
                     }
                 } else {
-                    if (!empty($files[$field->id]) && !empty($files[$field->id]['originalName'])) {
-                        $fileName = $files[$field->id]['originalName'];
-                        $fieldInfo['originalName'] = $fileName;
-                        $controller = controller::getInstance();
-                        $fieldInfo['link'] = $controller->baseURL
-                            . 'file/id:' . $files[$field->id]['storageName']
-                            . '/filename:' . urlencode($fileName) . '/';
-                    } else {
-                        $fieldInfo['originalName'] = '';
-                        $fieldInfo['link'] = '';
+                    if (!empty($files)) {
+                        foreach ($files as $file) {
+                            $item['originalName'] = $file['originalName'];
+                            $item['link'] = $file['link'];
+                            $fieldInfo['fileInput'][] = $item;
+                        }
                     }
                 }
                 $groupInfo['fields'][] = $fieldInfo;
@@ -113,22 +109,19 @@ class feedbackAnswerElement extends dynamicGroupFieldsStructureElement
     public function getFiles()
     {
         $result = [];
-        $collection = persistableCollection::getInstance("module_feedback_answer_files");
-        $conditions = [
-            [
-                "answerId",
-                "=",
-                $this->id,
-            ],
-        ];
-        $records = $collection->conditionalLoad([
-            'fieldId',
-            'originalName',
-            'storageName',
-        ], $conditions, [], []);
-        $records = $records ? $records : [];
-        foreach ($records as $record) {
-            $result[$record['fieldId']] = $record;
+        /**
+         * @var structureManager $structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        $connectedFiles = $structureManager->getElementsChildren($this->id, null, 'feedbackAnswerFile');
+        if(!empty($connectedFiles)) {
+            foreach ($connectedFiles as $fileElement) {
+                if(!empty($fileElement)) {
+                    $item['originalName'] = $fileElement->getFileName();
+                    $item['link'] = $fileElement->getDownloadUrl();
+                    $result[] = $item;
+                }
+            }
         }
         return $result;
     }
@@ -171,9 +164,6 @@ class feedbackAnswerElement extends dynamicGroupFieldsStructureElement
         parent::deleteElementData();
     }
 
-    public function getTitle()
-    {
-        return $this->structureName;
-    }
+    public function getInheritedCustomFieldsList(){}
 }
 

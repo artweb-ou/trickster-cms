@@ -390,7 +390,7 @@ PHP;
 
     protected function getLanguageCode($languageId)
     {
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
 
         $publicLanguages = $languagesManager->getLanguagesList($this->getService('ConfigManager')
             ->get('main.rootMarkerPublic'));

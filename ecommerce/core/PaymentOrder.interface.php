@@ -6,7 +6,7 @@ interface PaymentOrderInterface
 
     public function getOrderStatus();
 
-    public function getTotalPrice();
+    public function getTotalPrice($formatted = false);
 
     public function getInvoiceNumber($type = 'invoice');
 }

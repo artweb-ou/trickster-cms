@@ -95,7 +95,7 @@ window.googleAnalyticsLogics = new function() {
                     'price': parameters.products[i].price,
                     'variant': parameters.products[i].variation_dl,
                     'quantity': parameters.products[i].amount,
-                    'category': parameters.products[i].category,
+                    'category': parameters.products[i].category_dl,
                 });
             }
             gtag('event', 'begin_checkout', {
@@ -184,7 +184,7 @@ window.googleAnalyticsLogics = new function() {
                     'price': parameters.products[i].price,
                     'variant': parameters.products[i].variation_dl,
                     'quantity': parameters.products[i].amount,
-                    'category': parameters.products[i].category,
+                    'category': parameters.products[i].category_dl,
                 });
             }
             gtag('event', 'checkout_progress', {

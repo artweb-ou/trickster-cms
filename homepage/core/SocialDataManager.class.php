@@ -51,12 +51,11 @@ class SocialDataManager extends errorLogger
             $socialPluginsElement = null;
             $socialPluginsElementId = $structureManager->getElementIdByMarker('socialPlugins');
             if ($socialPluginsElementId) {
-                $privilegesChecked = $structureManager->getPrivilegeChecking();
                 $linksManager = $this->getService('linksManager');
-                $socialPluginsIds = $linksManager->getConnectedIdList($socialPluginsElementId, 'structure', 'parent');
-                $structureManager->setPrivilegeChecking(false);
-                $this->socialPlugins = $structureManager->getElementsByIdList($socialPluginsIds);
-                $structureManager->setPrivilegeChecking($privilegesChecked);
+                $structureManager->getRootElement();
+                if ($socialPluginsIds = $linksManager->getConnectedIdList($socialPluginsElementId, 'structure', 'parent')) {
+                    $this->socialPlugins = $structureManager->getElementsByIdList($socialPluginsIds, null, true);
+                }
             }
         }
         return $this->socialPlugins;
