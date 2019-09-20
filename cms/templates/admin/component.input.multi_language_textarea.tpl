@@ -4,7 +4,7 @@
 			{$languageNames.$languageId}
 		</span>
 		<div class="form_field">
-			<textarea class="textarea_component" type="text" name="{$formNames.$fieldName.$languageId}" >{$valueTextarea}</textarea>
+			<textarea class="textarea_component{if !empty($item.textarea_class)} {$item.textarea_class}{/if}" type="text" name="{$formNames.$fieldName.$languageId}" >{$valueTextarea}</textarea>
 		</div>
 		{include file=$theme->template('component.form_help.tpl') structureType=$element->structureType name=$fieldName}
 	</div>
