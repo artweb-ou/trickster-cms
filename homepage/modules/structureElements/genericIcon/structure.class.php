@@ -48,6 +48,7 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['iconLocation'] = 'naturalNumber';
         $moduleStructure['iconBgColor'] = 'text';
         $moduleStructure['iconTextColor'] = 'text';
+        $moduleStructure['selectedIcons'] = 'text';
         $moduleStructure['iconRole'] = 'naturalNumber';
         $moduleStructure['applicableToAllProducts'] = 'checkbox';
         $moduleStructure['iconProductAvail'] = 'serializedIndex';
