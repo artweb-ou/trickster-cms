@@ -13,20 +13,5 @@ class showLinkList extends structureElementAction
         }
         $structureElement->setViewName($structureElement->getCurrentLayout());
         $structureElement->linkItems = $structureManager->getElementsChildren($structureElement->id);
-
-        //        $structureElement->setViewName('short');
-        $structureElement->setViewName($structureElement->getCurrentLayout());
-//        if ($structureElement->final) {
-//            $structureElement->setViewName('details');
-//
-//            if ($structureElement->final) {
-//                if ($feedbackElement = $structureManager->getElementById($structureElement->feedbackId)) {
-//                    if ($parents = $structureManager->getElementsParents($feedbackElement->id)) {
-//                        $firstParent = reset($parents);
-//                        $structureElement->feedbackURL = $firstParent->URL . 'service:' . $structureElement->id . '/';
-//                    }
-//                }
-//            }
-//        }
     }
 }
