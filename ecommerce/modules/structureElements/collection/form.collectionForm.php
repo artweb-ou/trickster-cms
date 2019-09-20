@@ -2,6 +2,7 @@
 
 class CollectionFormStructure extends ElementForm
 {
+    protected $formClass = 'product_form';
     protected $structure = [
         'title' => [
             'type' => 'input.multi_language_text',
@@ -46,6 +47,11 @@ class CollectionFormStructure extends ElementForm
             'type' => 'select.universal_options_multiple',
             'property' => 'collectionsListsList',
             'class' => 'select_multiple_categories',
+        ],
+        'connectedProducts' => [
+            'type' => 'select.universal_options_multiple',
+            'property' => 'connectedProducts',
+            'class' => 'connectedproducts_select',
         ],
     ];
 
