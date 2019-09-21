@@ -19,9 +19,22 @@ window.productLogics = new function() {
                 productsListComponents.push(productsListComponent);
             }
         }
+        elements = document.querySelectorAll('.productsearch');
+        for (i = 0; i < elements.length; i++) {
+            new ProductSearchComponent(elements[i]);
+        }
         elements = document.querySelectorAll('.product_details');
         for (i = 0; i < elements.length; i++) {
             new ProductDetailsComponent(elements[i]);
+        }
+
+        elements = _('.selectedproducts_content_scrolltype');
+        for (i = elements.length; i--;) {
+            new SelectedProductsScrollComponent(elements[i]);
+        }
+        elements = _('.selectedproducts_column');
+        for (i = elements.length; i--;) {
+            new SelectedProductsColumnComponent(elements[i]);
         }
     };
     var importProductsLists = function(data) {

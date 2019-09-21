@@ -25,7 +25,7 @@
 
 		<div class="productsearch_categories">
 			{foreach $element->getFiltersByType('category') as $filter}
-					{include $theme->template('productSearch.dropdownfilter.tpl')}
+					{include $theme->template('productSearch.dropdownfilter.tpl') class="productsearch_field" titleType="option"}
 					<script>
 
 						{foreach $filter->getOptionsInfo() as $optionInfo}
@@ -37,28 +37,28 @@
 		</div>
 
 		{foreach $element->getFiltersByType('brand') as $filter}
-			{include $theme->template('productSearch.dropdownfilter.tpl')}
+			{include $theme->template('productSearch.dropdownfilter.tpl') class="productsearch_field" titleType="option"}
 		{/foreach}
 
 		{foreach $element->getFiltersByType('parameter') as $filter}
 				{if $element->checkboxesForParameters}
 					{include $theme->template('productSearch.checkboxesfilter.tpl')}
 				{else}
-					{include $theme->template('productSearch.dropdownfilter.tpl')}
+					{include $theme->template('productSearch.dropdownfilter.tpl') class="productsearch_field" titleType="option"}
 				{/if}
 		{/foreach}
 
 		{foreach $element->getFiltersByType('discount') as $filter}
-				{include $theme->template('productSearch.dropdownfilter.tpl')}
+				{include $theme->template('productSearch.dropdownfilter.tpl') class="productsearch_field" titleType="option"}
 		{/foreach}
 
 		{foreach $element->getFiltersByType('availability') as $filter}
-				{include $theme->template('productSearch.dropdownfilter.tpl')}
+				{include $theme->template('productSearch.dropdownfilter.tpl') class="productsearch_field" titleType="option"}
 		{/foreach}
 
 		{foreach $element->getFiltersByType('price') as $filter}
 				{if $element->pricePresets}
-					{include $theme->template('productSearch.dropdownfilter.tpl')}
+					{include $theme->template('productSearch.dropdownfilter.tpl') class="productsearch_field" titleType="option"}
 				{else}
 					{include $theme->template('productSearch.pricefilter.tpl')}
 				{/if}

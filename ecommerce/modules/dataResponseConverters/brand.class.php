@@ -26,6 +26,13 @@ class brandDataResponseConverter extends StructuredDataResponseConverter
             },
             'products' => 'getProductsData',
             'filters' => 'getFiltersData',
+            'filteredProductsAmount' => 'getFilteredProductsAmount',
+            'filterLimit' => 'getFilterLimit',
+            'filterOrder' => 'getFilterOrder',
+            'filterSort' => 'getFilterSort',
+            'currentPage' => function (ProductsListElement $element) {
+                return $element->getProductsPager()->getCurrentPage();
+            },
         ];
     }
 
@@ -57,6 +64,10 @@ class brandDataResponseConverter extends StructuredDataResponseConverter
                 'filters',
                 'filteredProductsAmount',
                 'filterLimit',
+                'filterOrder',
+                'filterSort',
+                'currentPage',
+                'productsLayout',
             ],
         ];
     }

@@ -6,28 +6,29 @@ window.ProductSearchComponent = function(componentElement) {
     var self = this;
 
     var init = function() {
-        var elements = _('select.products_filter_dropdown_dropdown', componentElement);
-        for (var i = elements.length; i--;) {
-            filters[filters.length] = new ProductsDropdownFilterComponent(elements[i], self.refresh);
+        var elements, i;
+        elements = componentElement.querySelectorAll('select.products_filter_dropdown_dropdown');
+        for (i = elements.length; i--;) {
+            filters[filters.length] = new ProductsDropdownFilterComponent(elements[i], filtersData[i], self, listComponent);
         }
-        var elements = _('.products_filter_checkboxes', componentElement);
-        for (var i = elements.length; i--;) {
-            filters[filters.length] = new ProductsCheckboxesFilterComponent(elements[i], self.refresh);
+        elements = componentElement.querySelectorAll('.products_filter_checkboxes');
+        for (i = elements.length; i--;) {
+            filters[filters.length] = new ProductsCheckboxesFilterComponent(elements[i], self);
         }
-        var elements = _('.products_filter_price', componentElement);
-        for (var i = elements.length; i--;) {
-            filters[filters.length] = new ProductsFilterPriceComponent(elements[i], self.refresh);
+        elements = componentElement.querySelectorAll('.products_filter_price');
+        for (i = elements.length; i--;) {
+            filters[filters.length] = new ProductsFilterPriceComponent(elements[i], self);
         }
-        sortSelectElement = _('select.productsearch_sortselect', componentElement)[0];
+        sortSelectElement = componentElement.querySelector('select.productsearch_sortselect');
         if (sortSelectElement) {
             eventsManager.addHandler(sortSelectElement, 'change', sortChange);
         }
-        var resetElement = _('.productsearch_reset', componentElement)[0];
+        var resetElement = componentElement.querySelector('.productsearch_reset');
         if (resetElement) {
             eventsManager.addHandler(resetElement, 'click', reset);
         }
 
-        var submitElement = _('.productsearch_submit', componentElement)[0];
+        var submitElement = componentElement.querySelector('.productsearch_submit');
         if (submitElement) {
             eventsManager.addHandler(submitElement, 'click', submitForm);
         }
@@ -42,7 +43,7 @@ window.ProductSearchComponent = function(componentElement) {
         }
     };
 
-    var sortChange = function(event) {
+    var sortChange = function() {
         self.refresh();
     };
 
@@ -54,14 +55,14 @@ window.ProductSearchComponent = function(componentElement) {
     this.refresh = function(changedFilter) {
         var arguments = {};
         var baseUrl = '';
-
-        for (var i = filters.length; i--;) {
-            if (filters[i].getType() != 'category') {
+        var i, value;
+        for (i = filters.length; i--;) {
+            if (filters[i].getType() !== 'category') {
                 filters[i].modifyFilterArguments(arguments);
             }
         }
-        if (changedFilter && changedFilter.getType() == 'category') {
-            var value = changedFilter.getValue();
+        if (changedFilter && changedFilter.getType() === 'category') {
+            value = changedFilter.getValue();
             //if category was selected, we should move into selected category
             if (value && window.categoriesUrls[value]) {
                 baseUrl = window.categoriesUrls[value];
@@ -72,9 +73,9 @@ window.ProductSearchComponent = function(componentElement) {
         }
 
         if (!baseUrl) {
-            for (var i = filters.length; i--;) {
-                if (filters[i].getType() == 'category') {
-                    var value = filters[i].getValue();
+            for (i = filters.length; i--;) {
+                if (filters[i].getType() === 'category') {
+                    value = filters[i].getValue();
                     if (value && window.categoriesUrls[value]) {
                         baseUrl = window.categoriesUrls[value];
                     }
@@ -118,10 +119,12 @@ window.ProductSearchComponent = function(componentElement) {
     var generateQueryString = function(arguments) {
         var queryString = '';
         for (var key in arguments) {
-            if (typeof arguments[key] != 'string') {
-                queryString += key + ':' + arguments[key].join(',') + '/';
-            } else {
-                queryString += key + ':' + arguments[key] + '/';
+            if (arguments.hasOwnProperty(key)) {
+                if (typeof arguments[key] != 'string') {
+                    queryString += key + ':' + arguments[key].join(',') + '/';
+                } else {
+                    queryString += key + ':' + arguments[key] + '/';
+                }
             }
         }
         return encodeURI(queryString);

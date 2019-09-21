@@ -24,7 +24,13 @@ class discountDataResponseConverter extends StructuredDataResponseConverter
             },
             'products' => 'getProductsData',
             'filters' => 'getFiltersData',
-        ];
+            'filteredProductsAmount' => 'getFilteredProductsAmount',
+            'filterLimit' => 'getFilterLimit',
+            'filterOrder' => 'getFilterOrder',
+            'filterSort' => 'getFilterSort',
+            'currentPage' => function (ProductsListElement $element) {
+                return $element->getProductsPager()->getCurrentPage();
+            },        ];
     }
 
     protected function getPresetsStructure()
@@ -55,6 +61,10 @@ class discountDataResponseConverter extends StructuredDataResponseConverter
                 'filters',
                 'filteredProductsAmount',
                 'filterLimit',
+                'filterOrder',
+                'filterSort',
+                'currentPage',
+                'productsLayout',
             ],
         ];
     }
