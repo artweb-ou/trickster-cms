@@ -77,7 +77,6 @@
         window.templates['component.elementimage.tpl'] = {$theme->getTemplateSource('component.elementimage.tpl', true)};
         window.templates['product.icons.tpl'] = {$theme->getTemplateSource('product.icons.tpl', true)};
         window.templates['component.productslimit.tpl'] = {$theme->getTemplateSource('component.productslimit.tpl', true)};
-        window.templates['component.productssorter.tpl'] = {$theme->getTemplateSource('component.productssorter.tpl', true)};
         window.templates['component.filterdropdown.tpl'] = {$theme->getTemplateSource('component.filterdropdown.tpl', true)};
     </script>
 {/if}

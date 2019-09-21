@@ -65,7 +65,7 @@ window.productLogics = new function() {
             }
         }
     };
-    this.requestProductsListData = function(productsListId, page, filters) {
+    this.requestProductsListData = function(productsListId, page, filters, sorting) {
         var reqUrl = '/ajaxProductsList/';
         var parameters = {
             'listElementId': productsListId,
@@ -86,6 +86,9 @@ window.productLogics = new function() {
                 }
             }
         }
+        if (typeof sorting !== 'undefined') {
+            parameters['sort'] = sorting;
+        }
         var request = new JsonRequest(reqUrl, receiveData, 'ajaxProductsList', parameters);
         request.send();
     };
@@ -103,6 +106,8 @@ window.ProductsList = function() {
     this.title = null;
     this.url = null;
     this.filteredProductsAmount = 0;
+    this.filterOrder = null;
+    this.filterSort = null;
     this.filterLimit = 0;
     this.currentPage = 1;
     this.productsLayout = 'thumbnail';
@@ -116,6 +121,8 @@ window.ProductsList = function() {
         self.id = data.id;
         self.url = data.url;
         self.filteredProductsAmount = data.filteredProductsAmount;
+        self.filterOrder = data.filterOrder;
+        self.filterSort = data.filterSort;
         self.filterLimit = data.filterLimit;
         self.currentPage = data.currentPage;
         self.productsLayout = data.productsLayout;
@@ -146,13 +153,19 @@ window.ProductsList = function() {
     };
     this.changePage = function(newPageNumber) {
         if (self.currentPage !== newPageNumber) {
+            var sorting = generateSortingString();
             var filtersInfo = gatherFilterValues();
-            productLogics.requestProductsListData(self.id, newPageNumber, filtersInfo);
+            productLogics.requestProductsListData(self.id, newPageNumber, filtersInfo, sorting);
         }
     };
     this.changeFilter = function(filterId, value) {
+        var sorting = generateSortingString();
         var filtersInfo = gatherFilterValues(filterId, value);
-        productLogics.requestProductsListData(self.id, 0, filtersInfo);
+        productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting);
+    };
+    this.changeSorting = function(sorting) {
+        var filtersInfo = gatherFilterValues();
+        productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting);
     };
     var gatherFilterValues = function(filterId, value) {
         var filtersInfo = [];
@@ -178,6 +191,9 @@ window.ProductsList = function() {
             }
         }
         return filtersInfo;
+    };
+    var generateSortingString = function() {
+        return self.filterSort + ';' + self.filterOrder;
     };
     this.getCurrentPageProducts = function() {
         if (typeof productsByPages[self.currentPage] !== 'undefined') {

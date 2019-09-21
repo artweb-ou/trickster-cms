@@ -33,6 +33,8 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
             'filters' => 'getFiltersData',
             'filteredProductsAmount' => 'getFilteredProductsAmount',
             'filterLimit' => 'getFilterLimit',
+            'filterOrder' => 'getFilterOrder',
+            'filterSort' => 'getFilterSort',
             'currentPage' => function (ProductsListElement $element) {
                 return $element->getProductsPager()->getCurrentPage();
             },
@@ -68,6 +70,8 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
                 'filters',
                 'filteredProductsAmount',
                 'filterLimit',
+                'filterOrder',
+                'filterSort',
                 'currentPage',
                 'productsLayout',
             ],

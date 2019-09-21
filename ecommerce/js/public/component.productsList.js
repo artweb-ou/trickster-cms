@@ -4,6 +4,7 @@ window.ProductsListComponent = function(componentElement) {
     var productsListData;
     var productsListElement;
     var filtersComponent;
+    var sorterComponent;
     var amountTextElement;
     var productComponents = [];
     var pagers = [];
@@ -18,6 +19,7 @@ window.ProductsListComponent = function(componentElement) {
             if (productsListElement = componentElement.querySelector('.productslist_products')) {
                 createProductComponents();
             }
+            createProductsSorterComponent();
             createProductsFilterComponent();
             createPagers();
             amountTextElement = componentElement.querySelector('.products_filter_amount');
@@ -122,8 +124,19 @@ window.ProductsListComponent = function(componentElement) {
         }
     };
 
+    var createProductsSorterComponent = function() {
+        var element = componentElement.querySelector('.products_sorter');
+        if (element) {
+            sorterComponent = new ProductsDropdownSorterComponent(element, self);
+        }
+    };
+
     this.changeFilterValue = function(type, value) {
         productsListData.changeFilter(type, value);
+    };
+
+    this.changeSorting = function(sorting) {
+        productsListData.changeSorting(sorting);
     };
 
     init();

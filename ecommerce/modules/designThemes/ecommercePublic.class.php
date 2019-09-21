@@ -28,6 +28,7 @@ class ecommercePublicDesignTheme extends DesignTheme
             'logics.product.js',
             'component.ProductsList.js',
             'component.ProductsDropdownFilter.js',
+            'component.ProductsDropdownSorter.js',
             'component.basketButton.js',
             'component.productDetails.js',
             'component.productsFilter.js',
