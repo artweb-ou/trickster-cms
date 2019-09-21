@@ -18,17 +18,22 @@ window.PagerComponent = function(componentElement) {
                 componentElement.removeChild(componentElement.firstChild);
             }
         }
+        if (pagerData.pagesList.length > 1) {
+            pagerButton = new PagerPreviousComponent(pagerData.previousPage, pagerData.callBack);
+            componentElement.appendChild(pagerButton.getComponentElement());
 
-        pagerButton = new PagerPreviousComponent(pagerData.previousPage, pagerData.callBack);
-        componentElement.appendChild(pagerButton.getComponentElement());
+            for (var i = 0; i < pagerData.pagesList.length; i++) {
+                var pageData = pagerData.pagesList[i];
+                var page = new PagerPageComponent(pageData, pagerData.callBack);
+                componentElement.appendChild(page.getComponentElement());
+            }
+            pagerButton = new PagerNextComponent(pagerData.nextPage, pagerData.callBack);
+            componentElement.appendChild(pagerButton.getComponentElement());
 
-        for (var i = 0; i < pagerData.pagesList.length; i++) {
-            var pageData = pagerData.pagesList[i];
-            var page = new PagerPageComponent(pageData, pagerData.callBack);
-            componentElement.appendChild(page.getComponentElement());
+            componentElement.style.display = '';
+        } else {
+            componentElement.style.display = 'none';
         }
-        pagerButton = new PagerNextComponent(pagerData.nextPage, pagerData.callBack);
-        componentElement.appendChild(pagerButton.getComponentElement());
     };
 };
 window.PagerPageComponent = function(data, callBack) {

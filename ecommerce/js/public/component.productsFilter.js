@@ -44,40 +44,6 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
     init();
 };
 
-window.ProductsDropdownFilterComponent = function(componentElement, filterData, parentComponent, listComponent) {
-    var selectElement;
-    var init = function() {
-        if (!componentElement) {
-
-            // <div class="products_filter_item"><div class="products_filter_label">
-            //         Kõik kaubamärgid:
-            //         </div><select autocomplete="off" class="products_filter_dropdown products_filter_dropdown_type_brand products_filter_brand dropdown_placeholder" style="display: none;"><option value="">Kõik </option><option value="5279">
-            //         Holden Decor Ltd.
-            //     </option></select></div>
-        } else {
-            selectElement = componentElement.querySelector('select.products_filter_dropdown');
-        }
-        if (selectElement) {
-            eventsManager.addHandler(selectElement, 'change', change);
-        }
-    };
-
-    var change = function(event) {
-        listComponent.changeFilterValue(filterData.getId(), getValue());
-    };
-    this.getComponentElement = function() {
-        return componentElement;
-    };
-    var getValue = function() {
-        if (selectElement.options && selectElement.options[selectElement.selectedIndex].value) {
-            return selectElement.options[selectElement.selectedIndex].value;
-        }
-        return '';
-    };
-
-    init();
-};
-
 // window.ProductsRadioFilterComponent = function(componentElement, onChange) {
 //     var type;
 //     var self = this;

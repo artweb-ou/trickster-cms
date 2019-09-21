@@ -46,6 +46,7 @@ class defaultDesignTheme extends DesignTheme
             'logics.radioButton.js',
             'logics.analytics.js',
             'logics.calendarSelector.js',
+            'logics.translations.js',
             'component.ajaxSearch.js',
             'component.ajaxSelect.js',
             'component.checkbox.js',

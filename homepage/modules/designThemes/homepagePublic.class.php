@@ -20,7 +20,6 @@ class homepagePublicDesignTheme extends DesignTheme
             'logics.maps.js',
             'logics.search.js',
             'logics.tabs.js',
-            'logics.translations.js',
             'logics.subscription.js',
             'logics.ajaxForm.js',
             'logics.feedbackForm.js',

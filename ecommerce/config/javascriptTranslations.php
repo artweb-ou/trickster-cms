@@ -1,4 +1,6 @@
 <?php return [
+    'category.productsamount' => true,
+
     'product.addedtobasket' => true,
     'product.quantityunavailable' => true,
     'product.viewproduct' => true,

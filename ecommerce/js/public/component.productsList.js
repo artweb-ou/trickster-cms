@@ -4,6 +4,7 @@ window.ProductsListComponent = function(componentElement) {
     var productsListData;
     var productsListElement;
     var filtersComponent;
+    var amountTextElement;
     var productComponents = [];
     var pagers = [];
 
@@ -19,7 +20,7 @@ window.ProductsListComponent = function(componentElement) {
             }
             createProductsFilterComponent();
             createPagers();
-
+            amountTextElement = componentElement.querySelector('.products_filter_amount');
             controller.addListener('productsListUpdated', updateHandler);
         }
     };
@@ -31,6 +32,9 @@ window.ProductsListComponent = function(componentElement) {
                 if (filtersComponent) {
                     filtersComponent.updateData(productsListData.getFilters());
                     filtersComponent.rebuildFilters();
+                }
+                if (amountTextElement) {
+                    amountTextElement.innerHTML = translationsLogics.get('category.productsamount', {'s':productsListData.filteredProductsAmount});
                 }
                 renderProductsHtml();
                 createProductComponents();
