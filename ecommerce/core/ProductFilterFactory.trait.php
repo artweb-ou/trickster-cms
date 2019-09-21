@@ -77,14 +77,15 @@ trait ProductFilterFactoryTrait
 
     public function addFilter(ProductFilter $filter)
     {
-        $this->filters[] = $filter;
-        $type = $filter->getType();
-        if (!isset($this->filtersIndex[$type])) {
-            $this->filtersIndex[$type] = [];
+        if ($filter->isRelevant()) {
+            $this->filters[] = $filter;
+            $type = $filter->getType();
+            if (!isset($this->filtersIndex[$type])) {
+                $this->filtersIndex[$type] = [];
+            }
+            $this->filtersIndex[$type][] = $filter;
+            $this->filtersIdIndex[$filter->getId()] = $filter;
         }
-        $this->filtersIndex[$type][] = $filter;
-        $this->filtersIdIndex[$filter->getId()] = $filter;
-
     }
 
     /**

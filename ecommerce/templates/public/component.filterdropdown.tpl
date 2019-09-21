@@ -6,7 +6,7 @@
 		<option value=''>{translations name="products.filter_select"}</option>
 		{foreach $filter->getOptionsInfo() as $optionInfo}
 			<option value="{$optionInfo.id}"{if $optionInfo.selected} selected="selected"{/if}>
-				{$optionInfo.title} {$optionInfo.selected}
+				{$optionInfo.title}
 			</option>
 		{/foreach}
 	</select>

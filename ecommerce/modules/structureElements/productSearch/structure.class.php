@@ -211,9 +211,7 @@ class productSearchElement extends menuDependantStructureElement
         }
         foreach ($filterTypes as $type) {
             foreach ($this->getFiltersByType($type) as $filter) {
-                if ($filter->isRelevant()) {
-                    return true;
-                }
+                return true;
             }
         }
         return false;

@@ -26,7 +26,6 @@
 
 		<div class="productsearch_categories">
 			{foreach $element->getFiltersByType('category') as $filter}
-				{*{if $filter->isRelevant()}*}
 				{include $theme->template('productSearch.dropdownfilter.tpl')}
 				<script>
 
@@ -35,14 +34,11 @@
 					{/foreach}
 
 				</script>
-				{*{/if}*}
 			{/foreach}
 		</div>
 
 		{foreach $element->getFiltersByType('brand') as $filter}
-			{if $filter->isRelevant()}
-				{include $theme->template('productSearch.dropdownfilter.tpl')}
-			{/if}
+			{include $theme->template('productSearch.dropdownfilter.tpl')}
 		{/foreach}
 
 		{if $element->canActLikeFilter()}
@@ -51,36 +47,28 @@
 
 		{if $element->canActLikeFilter() || !$element->pageDependent}
 			{foreach $element->getFiltersByType('price') as $filter}
-				{if $filter->isRelevant()}
-					{if $element->pricePresets}
-						{include $theme->template('productSearch.dropdownfilter.tpl')}
-					{else}
-						{include $theme->template('productSearch.pricefilter.tpl')}
-					{/if}
+				{if $element->pricePresets}
+					{include $theme->template('productSearch.dropdownfilter.tpl')}
+				{else}
+					{include $theme->template('productSearch.pricefilter.tpl')}
 				{/if}
 			{/foreach}
 		{/if}
 
 		{foreach $element->getFiltersByType('parameter') as $filter}
-			{if $filter->isRelevant()}
-				{if $element->checkboxesForParameters}
-					{include $theme->template('productSearch.checkboxesfilter.tpl')}
-				{else}
-					{include $theme->template('productSearch.dropdownfilter.tpl')}
-				{/if}
+			{if $element->checkboxesForParameters}
+				{include $theme->template('productSearch.checkboxesfilter.tpl')}
+			{else}
+				{include $theme->template('productSearch.dropdownfilter.tpl')}
 			{/if}
 		{/foreach}
 
 		{foreach $element->getFiltersByType('discount') as $filter}
-			{if $filter->isRelevant()}
-				{include $theme->template('productSearch.dropdownfilter.tpl')}
-			{/if}
+			{include $theme->template('productSearch.dropdownfilter.tpl')}
 		{/foreach}
 
 		{foreach $element->getFiltersByType('availability') as $filter}
-			{if $filter->isRelevant()}
-				{include $theme->template('productSearch.dropdownfilter.tpl')}
-			{/if}
+			{include $theme->template('productSearch.dropdownfilter.tpl')}
 		{/foreach}
 
 		{if $element->canActLikeFilter() || !$element->pageDependent}
