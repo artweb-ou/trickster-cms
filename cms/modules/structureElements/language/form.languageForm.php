@@ -14,15 +14,18 @@ class LanguageFormStructure extends ElementForm
         ],
         'image' => [
             'type' => 'input.image',
+            'filename' => 'originalName',
         ],
         'logoImage' => [
             'type' => 'input.image',
+            'filename' => 'logoImageOriginalName',
         ],
         'promoText' => [
             'type' => 'input.text',
         ],
         'backgroundImage' => [
             'type' => 'input.image',
+            'filename' => 'backgroundImageOriginalName',
         ],
     ];
 }
