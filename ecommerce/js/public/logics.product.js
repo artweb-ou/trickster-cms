@@ -65,7 +65,7 @@ window.productLogics = new function() {
             }
         }
     };
-    this.requestProductsListData = function(productsListId, page, filters, sorting) {
+    this.requestProductsListData = function(productsListId, page, filters, sorting, limit) {
         var reqUrl = '/ajaxProductsList/';
         var parameters = {
             'listElementId': productsListId,
@@ -88,6 +88,9 @@ window.productLogics = new function() {
         }
         if (typeof sorting !== 'undefined') {
             parameters['sort'] = sorting;
+        }
+        if (typeof limit !== 'undefined') {
+            parameters['limit'] = limit;
         }
         var request = new JsonRequest(reqUrl, receiveData, 'ajaxProductsList', parameters);
         request.send();
@@ -155,17 +158,22 @@ window.ProductsList = function() {
         if (self.currentPage !== newPageNumber) {
             var sorting = generateSortingString();
             var filtersInfo = gatherFilterValues();
-            productLogics.requestProductsListData(self.id, newPageNumber, filtersInfo, sorting);
+            productLogics.requestProductsListData(self.id, newPageNumber, filtersInfo, sorting, self.filterLimit);
         }
     };
     this.changeFilter = function(filterId, value) {
         var sorting = generateSortingString();
         var filtersInfo = gatherFilterValues(filterId, value);
-        productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting);
+        productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting, self.filterLimit);
     };
     this.changeSorting = function(sorting) {
         var filtersInfo = gatherFilterValues();
-        productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting);
+        productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting, self.filterLimit);
+    };
+    this.changeLimit = function(limit) {
+        var sorting = generateSortingString();
+        var filtersInfo = gatherFilterValues();
+        productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting, limit);
     };
     var gatherFilterValues = function(filterId, value) {
         var filtersInfo = [];

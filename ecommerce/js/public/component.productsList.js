@@ -5,6 +5,7 @@ window.ProductsListComponent = function(componentElement) {
     var productsListElement;
     var filtersComponent;
     var sorterComponent;
+    var limitComponent;
     var amountTextElement;
     var productComponents = [];
     var pagers = [];
@@ -20,6 +21,7 @@ window.ProductsListComponent = function(componentElement) {
                 createProductComponents();
             }
             createProductsSorterComponent();
+            createProductsLimitComponent();
             createProductsFilterComponent();
             createPagers();
             amountTextElement = componentElement.querySelector('.products_filter_amount');
@@ -36,7 +38,7 @@ window.ProductsListComponent = function(componentElement) {
                     filtersComponent.rebuildFilters();
                 }
                 if (amountTextElement) {
-                    amountTextElement.innerHTML = translationsLogics.get('category.productsamount', {'s':productsListData.filteredProductsAmount});
+                    amountTextElement.innerHTML = translationsLogics.get('category.productsamount', {'s': productsListData.filteredProductsAmount});
                 }
                 renderProductsHtml();
                 createProductComponents();
@@ -130,6 +132,12 @@ window.ProductsListComponent = function(componentElement) {
             sorterComponent = new ProductsDropdownSorterComponent(element, self);
         }
     };
+    var createProductsLimitComponent = function() {
+        var element = componentElement.querySelector('.products_limit');
+        if (element) {
+            limitComponent = new ProductsDropdownLimitComponent(element, self);
+        }
+    };
 
     this.changeFilterValue = function(type, value) {
         productsListData.changeFilter(type, value);
@@ -137,6 +145,10 @@ window.ProductsListComponent = function(componentElement) {
 
     this.changeSorting = function(sorting) {
         productsListData.changeSorting(sorting);
+    };
+
+    this.changeLimit = function(limit) {
+        productsListData.changeLimit(limit);
     };
 
     init();

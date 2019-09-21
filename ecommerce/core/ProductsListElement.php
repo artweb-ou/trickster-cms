@@ -813,17 +813,9 @@ abstract class ProductsListElement extends menuStructureElement
             $this->amountSelectionOptions = [];
 
             if ($this->isAmountSelectionEnabled()) {
-                $controller = controller::getInstance();
-                $url = $controller->pathURL;
-                foreach ($controller->getParameters() as $key => $value) {
-                    if (!is_array($value) && $key !== 'page' && $key !== 'limit' && $value !== '') {
-                        $url .= $key . ':' . $value . '/';
-                    }
-                }
-
                 foreach ($this->getService('ConfigManager')->get('main.availablePageAmountProducts') as $limit) {
                     $this->amountSelectionOptions[$limit] = [
-                        'url' => $url . 'limit:' . $limit . '/',
+                        'value' => $limit,
                         'selected' => false,
                     ];
                 }

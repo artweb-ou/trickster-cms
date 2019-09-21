@@ -75,9 +75,8 @@
         window.templates['component.subcontentmodule_wide.tpl'] = {$theme->getTemplateSource('component.subcontentmodule_wide.tpl', true)};
         window.templates['component.subcontentmodule_square.tpl'] = {$theme->getTemplateSource('component.subcontentmodule_square.tpl', true)};
         window.templates['component.elementimage.tpl'] = {$theme->getTemplateSource('component.elementimage.tpl', true)};
-        window.templates['product.icons.tpl'] = {$theme->getTemplateSource('product.icons.tpl', true)};
-        window.templates['component.productslimit.tpl'] = {$theme->getTemplateSource('component.productslimit.tpl', true)};
         window.templates['component.filterdropdown.tpl'] = {$theme->getTemplateSource('component.filterdropdown.tpl', true)};
+        window.templates['product.icons.tpl'] = {$theme->getTemplateSource('product.icons.tpl', true)};
     </script>
 {/if}
 

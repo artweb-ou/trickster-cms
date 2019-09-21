@@ -5,7 +5,7 @@
         </div>
         <select class="products_limit_dropdown dropdown_placeholder products_filter_dropdown" autocomplete="off">
             {foreach $amountSelectionOptions as $limitValue => $limit}
-                <option value="{$limit.url}"{if $limit.selected} selected="selected"{/if}>
+                <option value="{$limit.value}"{if $limit.selected} selected="selected"{/if}>
                     {$limitValue}
                 </option>
             {/foreach}

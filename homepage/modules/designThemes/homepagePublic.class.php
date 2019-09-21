@@ -117,7 +117,7 @@ class homepagePublicDesignTheme extends DesignTheme
 
             'logics.pager.js',
             'component.pager.js',
-            'basic.urlParameters.js',
+//            'basic.urlParameters.js',
 
         ];
     }
