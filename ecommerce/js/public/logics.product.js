@@ -7,7 +7,7 @@ window.productLogics = new function() {
         if (typeof window.productsLists !== 'undefined') {
             importProductsLists(window.productsLists);
         }
-        trackImpressions(productsLists);
+        trackImpressions(productsListComponents);
     };
     var initComponents = function() {
         var elements, i;
@@ -51,7 +51,7 @@ window.productLogics = new function() {
     };
     var trackImpressions = function(productsLists) {
         for (var i = 0; i < productsLists.length; i++) {
-            tracking.impressionTracking(productsLists[i].products, productsLists[i].title);
+            tracking.impressionTracking(productsLists[i].getCurrentPageProducts(), productsLists[i].title);
         }
     };
     var receiveData = function(responseStatus, requestName, responseData) {
@@ -153,6 +153,7 @@ window.ProductsList = function() {
             }
         }
         controller.fireEvent('productsListUpdated', self.id);
+        tracking.impressionTracking(self.getCurrentPageProducts(), self.title);
     };
     this.changePage = function(newPageNumber) {
         if (self.currentPage !== newPageNumber) {
