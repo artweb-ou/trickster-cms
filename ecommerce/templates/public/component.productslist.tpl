@@ -3,7 +3,8 @@
 {if $layout != "hide"}
     {$template = "product.{$layout}.tpl"}
     <div class="productslist_component{if !empty($componentClass)} {$componentClass}{/if}" data-id="{$element->id}">
-        {include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=true}
+        {include file=$theme->template('component.productsfilter_top.tpl')}
+        {include file=$theme->template('component.productsfilter.tpl')}
         {if $pager && count($pager->pagesList)>1 || $element->isSortable()}
             <div class="products_top_pager">
                 {include file=$theme->template('pager.tpl') pager=$pager}
@@ -79,4 +80,3 @@
         window.templates['product.icons.tpl'] = {$theme->getTemplateSource('product.icons.tpl', true)};
     </script>
 {/if}
-

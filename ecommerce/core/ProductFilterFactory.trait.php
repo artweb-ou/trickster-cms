@@ -164,6 +164,20 @@ trait ProductFilterFactoryTrait
         return $this->sortingOptions;
     }
 
+    public function getFiltersData()
+    {
+        $data = [];
+        foreach ($this->getFilters() as $filter) {
+            $data[] = [
+                'type' => $filter->getType(),
+                'id' => $filter->getId(),
+                'title' => $filter->getTitle(),
+                'options' => $filter->getOptionsInfo(),
+            ];
+        }
+        return $data;
+    }
+
 
     abstract public function isFilterableByType($filterType);
 

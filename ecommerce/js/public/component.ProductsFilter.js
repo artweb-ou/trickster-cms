@@ -1,6 +1,7 @@
 window.ProductsFilterComponent = function(componentElement, listComponent) {
     var filters = [];
     var self = this;
+    var titleType = 'label';
     var filtersData = [];
 
     var init = function() {
@@ -8,6 +9,10 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
     };
     this.updateData = function(newData) {
         filtersData = newData;
+    };
+
+    this.setTitleType = function(newTitleType) {
+        titleType = newTitleType;
     };
 
     this.initFilters = function() {
@@ -32,6 +37,7 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
         var html = '';
         for (var i = 0; i < filtersData.length; i++) {
             var data = {
+                'titleType': titleType,
                 'filter': filtersData[i],
             };
             html += smartyRenderer.fetch('component.filterdropdown.tpl', data);

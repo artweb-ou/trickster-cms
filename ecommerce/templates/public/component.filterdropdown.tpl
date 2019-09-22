@@ -1,6 +1,6 @@
 {if empty($titleType)}{$titleType = 'label'}{/if}
 <div class="products_filter_item products_filter_{$filter->getId()} {if !empty($class)}{$class}{/if}">
-	{if $titleType == 'label'}
+	{if $titleType === 'label'}
 		<div class="products_filter_label">{$filter->getTitle()}:</div>
 	{/if}
 	<select autocomplete="off" class="products_filter_dropdown products_filter_dropdown_type_{$filter->getType()} dropdown_placeholder">

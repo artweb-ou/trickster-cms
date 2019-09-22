@@ -31,19 +31,17 @@ window.ProductsListComponent = function(componentElement) {
 
     var updateHandler = function(updatedId) {
         if (updatedId === id) {
-            if (productsListData = window.productLogics.getProductsList(id)) {
-                updatePagers();
-                if (filtersComponent) {
-                    filtersComponent.updateData(productsListData.getFilters());
-                    filtersComponent.rebuildFilters();
-                }
-                if (amountTextElement) {
-                    amountTextElement.innerHTML = translationsLogics.get('category.productsamount', {'s': productsListData.filteredProductsAmount});
-                }
-                renderProductsHtml();
-                createProductComponents();
-                controller.fireEvent('initLazyImages');
+            updatePagers();
+            if (filtersComponent) {
+                filtersComponent.updateData(productsListData.getFilters());
+                filtersComponent.rebuildFilters();
             }
+            if (amountTextElement) {
+                amountTextElement.innerHTML = translationsLogics.get('category.productsamount', {'s': productsListData.filteredProductsAmount});
+            }
+            renderProductsHtml();
+            createProductComponents();
+            controller.fireEvent('initLazyImages');
         }
     };
 
@@ -132,6 +130,7 @@ window.ProductsListComponent = function(componentElement) {
             sorterComponent = new ProductsDropdownSorterComponent(element, self);
         }
     };
+
     var createProductsLimitComponent = function() {
         var element = componentElement.querySelector('.products_limit');
         if (element) {

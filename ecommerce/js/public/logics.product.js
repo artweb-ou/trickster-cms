@@ -1,19 +1,28 @@
 window.productLogics = new function() {
     var self = this;
     var productsIndex = {};
+
+    var productSearchFormsIndex = {};
+    var productSearchComponents = {};
+
     var productsListsIndex = {};
     var productsListComponents = [];
+
     var initLogics = function() {
         if (typeof window.productsLists !== 'undefined') {
             importProductsLists(window.productsLists);
         }
+        if (typeof window.productSearchForms !== 'undefined') {
+            importProductSearchForms(window.productSearchForms);
+        }
         trackImpressions(productsListComponents);
     };
+
     var initComponents = function() {
-        var elements, i;
+        var elements, i, id;
         elements = document.querySelectorAll('.productslist_component');
         for (i = 0; i < elements.length; i++) {
-            var id = elements[i].dataset.id;
+            id = elements[i].dataset.id;
             if (typeof productsListsIndex[id] !== 'undefined') {
                 var productsListComponent = new ProductsListComponent(elements[i]);
                 productsListComponents.push(productsListComponent);
@@ -21,6 +30,12 @@ window.productLogics = new function() {
         }
         elements = document.querySelectorAll('.productsearch');
         for (i = 0; i < elements.length; i++) {
+            id = elements[i].dataset.id;
+            if (typeof productsListsIndex[id] !== 'undefined') {
+                var productSearch = new ProductSearchComponent(elements[i]);
+                productSearchComponents.push(productSearch);
+            }
+
             new ProductSearchComponent(elements[i]);
         }
         elements = document.querySelectorAll('.product_details');
@@ -37,6 +52,7 @@ window.productLogics = new function() {
             new SelectedProductsColumnComponent(elements[i]);
         }
     };
+
     var importProductsLists = function(data) {
         var productsList;
         for (var i = 0; i < data.length; i++) {
@@ -50,34 +66,63 @@ window.productLogics = new function() {
             productsList.importData(data[i]);
         }
     };
+
+    var importProductSearchForms = function(data) {
+        var productSearchForm;
+        for (var i = 0; i < data.length; i++) {
+            var id = data[i].id;
+            if (typeof productSearchFormsIndex[id] === 'undefined') {
+                productSearchForm = new ProductSearch(self);
+                productSearchFormsIndex[id] = productSearchForm;
+            } else {
+                productSearchForm = productSearchFormsIndex[id];
+            }
+            productSearchForm.importData(data[i]);
+        }
+    };
+
     this.getProduct = function(id) {
         if (typeof productsIndex[id] !== 'undefined') {
             return productsIndex[id];
         }
         return false;
     };
+
     this.getProductsList = function(id) {
         if (typeof productsListsIndex[id] !== 'undefined') {
             return productsListsIndex[id];
         }
         return false;
     };
+
+    this.getProductSearchForm = function(id) {
+        if (typeof productSearchFormsIndex[id] !== 'undefined') {
+            return productSearchFormsIndex[id];
+        }
+        return false;
+    };
+
     var trackImpressions = function(productsLists) {
         for (var i = 0; i < productsLists.length; i++) {
             tracking.impressionTracking(productsLists[i].getCurrentPageProducts(), productsLists[i].title);
         }
     };
+
     var receiveData = function(responseStatus, requestName, responseData) {
         if (requestName === 'ajaxProductsList') {
             if (responseStatus === 'success' && responseData) {
                 if (typeof responseData.productsList !== 'undefined') {
                     importProductsLists([responseData.productsList]);
                 }
+                if (typeof responseData.productSearch !== 'undefined') {
+                    importProductSearchForms(responseData.productSearch);
+                }
             } else {
                 controller.fireEvent('ajaxSearchResultsFailure', responseData);
             }
         }
     };
+
     this.requestProductsListData = function(productsListId, page, filters, sorting, limit) {
         var reqUrl = '/ajaxProductsList/';
         var parameters = {
@@ -108,6 +153,14 @@ window.productLogics = new function() {
         var request = new JsonRequest(reqUrl, receiveData, 'ajaxProductsList', parameters);
         request.send();
     };
+
+    this.getMainProductsList = function() {
+        for (var i in productsListsIndex) {
+            return productsListsIndex[i];
+        }
+        return false;
+    };
+
     this.importProduct = function(product) {
         productsIndex[product.getId()] = product;
     };
@@ -248,6 +301,38 @@ window.ProductsList = function() {
     // };
 
 };
+
+window.ProductSearch = function() {
+    var self = this;
+    this.id = null;
+    this.title = null;
+    this.url = null;
+
+    var filters = [];
+
+    this.importData = function(data) {
+        var i;
+        self.id = data.id;
+        self.url = data.url;
+
+        if (typeof data.title != 'undefined') {
+            self.title = data.title;
+        }
+        if (typeof data.filters != 'undefined') {
+            filters = [];
+            for (i = 0; i < data.filters.length; i++) {
+                var filter = new ProductsListFilter();
+                filter.importData(data.filters[i]);
+                filters.push(filter);
+            }
+        }
+        controller.fireEvent('productsSearchFormUpdated', self.id);
+    };
+    this.getFilters = function() {
+        return filters;
+    };
+};
+
 window.Product = function() {
     var self = this;
     var data;

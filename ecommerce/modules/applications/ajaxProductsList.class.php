@@ -35,10 +35,17 @@ class ajaxProductsListApplication extends controllerApplication
         $status = 'fail';
 
         if ($listElementId = $controller->getParameter('listElementId')) {
-            if ($element = $structureManager->getElementById($listElementId)) {
-                if ($element instanceof ProductsListElement) {
+            if ($productsListElement = $structureManager->getElementById($listElementId)) {
+                if ($productsListElement instanceof ProductsListElement) {
                     $status = 'success';
-                    $response->setResponseData("productsList", $element->getElementData('list'));
+                    $response->setResponseData("productsList", $productsListElement->getElementData('list'));
+                    if ($elements = $structureManager->getElementsByType('productSearch', $languagesManager->getCurrentLanguageId())){
+                        foreach ($elements as $element){
+                            $element->setProductsListElement($productsListElement);
+                        }
+                        $response->setPreset('list');
+                        $response->setResponseData("productSearch", $elements);
+                    }
                 }
             }
         }

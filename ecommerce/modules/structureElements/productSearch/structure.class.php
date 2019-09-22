@@ -14,6 +14,8 @@
 class productSearchElement extends menuDependantStructureElement
 {
     use ProductFilterFactoryTrait;
+    use JsonDataProviderElement;
+
     public $dataResourceName = 'module_productsearch';
     public $defaultActionName = 'show';
     protected $allowedTypes = [];
@@ -132,6 +134,11 @@ class productSearchElement extends menuDependantStructureElement
     public function getCurrentElement()
     {
         return $this->getService('structureManager')->getCurrentElement(controller::getInstance()->requestedPath);
+    }
+
+    public function setProductsListElement(ProductsListElement $productsListElement)
+    {
+        $this->productsListElement = $productsListElement;
     }
 
     public function getProductsListElement()

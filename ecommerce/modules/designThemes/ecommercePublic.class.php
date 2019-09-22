@@ -29,7 +29,7 @@ class ecommercePublicDesignTheme extends DesignTheme
             'component.ProductsDropdownLimit.js',
             'component.basketButton.js',
             'component.productDetails.js',
-            'component.productsFilter.js',
+            'component.ProductsFilter.js',
             'component.shoppingBasketPaymentMethodTracking.js',
             'component.ProductSearch.js',
             'component.priceFilter.js',
