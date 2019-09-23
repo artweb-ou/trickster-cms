@@ -18,28 +18,7 @@ window.ProductSearchComponent = function(componentElement) {
             }
         }
 
-        if (productsListData = productLogics.getMainProductsList()) {
-
-            // elements = componentElement.querySelectorAll('.products_filter_checkboxes');
-            // for (i = elements.length; i--;) {
-            //     filters[filters.length] = new ProductsCheckboxesFilterComponent(elements[i], self);
-            // }
-            // elements = componentElement.querySelectorAll('.products_filter_price');
-            // for (i = elements.length; i--;) {
-            //     filters[filters.length] = new ProductsFilterPriceComponent(elements[i], self);
-            // }
-            // sortSelectElement = componentElement.querySelector('select.productsearch_sortselect');
-            // if (sortSelectElement) {
-            //     eventsManager.addHandler(sortSelectElement, 'change', sortChange);
-            // }
-
-            // var submitElement = componentElement.querySelector('.productsearch_submit');
-            // if (submitElement) {
-            //     eventsManager.addHandler(submitElement, 'click', submitForm);
-            // }
-            // controller.addListener('TabsComponent.tabActivated', tabActivated);
-        }
-
+        productsListData = productLogics.getMainProductsList();
     };
     var updateHandler = function(updatedId) {
         if (updatedId === productSearchData.id) {
@@ -49,7 +28,6 @@ window.ProductSearchComponent = function(componentElement) {
             }
         }
     };
-
 
     var createProductsFilterComponent = function() {
         var element = componentElement.querySelector('.products_filter');

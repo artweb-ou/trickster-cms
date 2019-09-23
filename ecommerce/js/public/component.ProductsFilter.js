@@ -23,7 +23,14 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
                 filters.push(filter);
             }
         }
-
+        // elements = componentElement.querySelectorAll('.products_filter_checkboxes');
+        // for (i = elements.length; i--;) {
+        //     filters[filters.length] = new ProductsCheckboxesFilterComponent(elements[i], self);
+        // }
+        // elements = componentElement.querySelectorAll('.products_filter_price');
+        // for (i = elements.length; i--;) {
+        //     filters[filters.length] = new ProductsFilterPriceComponent(elements[i], self);
+        // }
         // elements = componentElement.querySelectorAll('input.products_filter_radio');
         // for (i = elements.length; i--;) {
         //     filters.push(new ProductsRadioFilterComponent(elements[i], self.refresh));
