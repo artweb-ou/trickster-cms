@@ -3,6 +3,8 @@
 {/if}
 {if !empty($item.translationGroup)}
 {$translationGroup = $item.translationGroup}
+{elseif !empty($translationGroup)}
+	{$translationGroup = $translationGroup}
 {else}
 	{$translationGroup = $structureType}
 {/if}
