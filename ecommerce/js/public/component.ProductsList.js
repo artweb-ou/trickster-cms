@@ -138,16 +138,28 @@ window.ProductsListComponent = function(componentElement) {
         }
     };
 
-    this.changeFilterValue = function(type, value) {
-        productsListData.changeFilter(type, value);
+    this.changeFilters = function() {
+        if (filtersComponent) {
+            var filtersInfo = filtersComponent.getFiltersInfo();
+            productsListData.changeFilters(filtersInfo);
+        }
     };
 
     this.changeSorting = function(sorting) {
-        productsListData.changeSorting(sorting);
+        var filtersInfo;
+        if (filtersComponent) {
+            filtersInfo = filtersComponent.getFiltersInfo();
+        }
+
+        productsListData.changeSorting(sorting, filtersInfo);
     };
 
     this.changeLimit = function(limit) {
-        productsListData.changeLimit(limit);
+        var filtersInfo;
+        if (filtersComponent) {
+            filtersInfo = filtersComponent.getFiltersInfo();
+        }
+        productsListData.changeLimit(limit, filtersInfo);
     };
 
     init();

@@ -12,15 +12,14 @@ window.ProductSearchComponent = function(componentElement) {
 
             createProductsSorterComponent();
             createProductsFilterComponent();
+            var resetElement = componentElement.querySelector('.productsearch_reset');
+            if (resetElement) {
+                eventsManager.addHandler(resetElement, 'click', reset);
+            }
         }
 
         if (productsListData = productLogics.getMainProductsList()) {
 
-            // var elements, i;
-            // elements = componentElement.querySelectorAll('select.products_filter_dropdown_dropdown');
-            // for (i = elements.length; i--;) {
-            //     filters[filters.length] = new ProductsDropdownFilterComponent(elements[i], filtersData[i], self, listComponent);
-            // }
             // elements = componentElement.querySelectorAll('.products_filter_checkboxes');
             // for (i = elements.length; i--;) {
             //     filters[filters.length] = new ProductsCheckboxesFilterComponent(elements[i], self);
@@ -32,10 +31,6 @@ window.ProductSearchComponent = function(componentElement) {
             // sortSelectElement = componentElement.querySelector('select.productsearch_sortselect');
             // if (sortSelectElement) {
             //     eventsManager.addHandler(sortSelectElement, 'change', sortChange);
-            // }
-            // var resetElement = componentElement.querySelector('.productsearch_reset');
-            // if (resetElement) {
-            //     eventsManager.addHandler(resetElement, 'click', reset);
             // }
 
             // var submitElement = componentElement.querySelector('.productsearch_submit');
@@ -73,34 +68,26 @@ window.ProductSearchComponent = function(componentElement) {
         }
     };
 
-    this.changeFilterValue = function(type, value) {
-        productsListData.changeFilter(type, value);
+    this.changeFilters = function() {
+        if (filtersComponent) {
+            var filtersInfo = filtersComponent.getFiltersInfo();
+            productsListData.changeFilters(filtersInfo);
+        }
     };
 
     this.changeSorting = function(sorting) {
-        productsListData.changeSorting(sorting);
+        var filtersInfo;
+        if (filtersComponent) {
+            filtersInfo = filtersComponent.getFiltersInfo();
+        }
+
+        productsListData.changeSorting(sorting, filtersInfo);
     };
 
-    this.changeLimit = function(limit) {
-        productsListData.changeLimit(limit);
+
+    var reset = function() {
+
     };
-
-    // var tabActivated = function() {
-    //     for (var i = filters.length; i--;) {
-    //         if (filters[i] instanceof ProductsFilterPriceComponent) {
-    //             filters[i].refresh();
-    //         }
-    //     }
-    // };
-
-    // var sortChange = function() {
-    //     self.refresh();
-    // };
-
-    // var reset = function() {
-    //     // document.location.href = window.productsListElementUrl + 'productsearch:1/';
-    //     // document.location.href = window.productsListElementUrl;
-    // };
 
     // this.refresh = function(changedFilter) {
     //     var arguments = {};
@@ -157,39 +144,6 @@ window.ProductSearchComponent = function(componentElement) {
     //     if (typeof window.productSearchLogics.useAutoSubmit == 'undefined' || window.productSearchLogics.useAutoSubmit()) {
     //         submitForm();
     //     }
-    // };
-
-    // var submitForm = function() {
-    //     if (!submitLocation) {
-    //         self.refresh();
-    //     }
-    //     document.location.href = submitLocation;
-    // };
-    //
-    // var generateQueryString = function(arguments) {
-    //     var queryString = '';
-    //     for (var key in arguments) {
-    //         if (arguments.hasOwnProperty(key)) {
-    //             if (typeof arguments[key] != 'string') {
-    //                 queryString += key + ':' + arguments[key].join(',') + '/';
-    //             } else {
-    //                 queryString += key + ':' + arguments[key] + '/';
-    //             }
-    //         }
-    //     }
-    //     return encodeURI(queryString);
-    // };
-    //
-    // var onButtonClick = function(event) {
-    //     eventsManager.preventDefaultAction(event);
-    //     document.location.href = searchBaseUrl + generateQueryString();
-    // };
-    //
-    // var getSelectElementValue = function(element) {
-    //     if (element && element.options[element.selectedIndex].value) {
-    //         return element.options[element.selectedIndex].value;
-    //     }
-    //     return '';
     // };
     init();
 };

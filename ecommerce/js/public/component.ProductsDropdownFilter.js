@@ -1,4 +1,4 @@
-window.ProductsDropdownFilterComponent = function(componentElement, filterData, parentComponent, listComponent) {
+window.ProductsDropdownFilterComponent = function(componentElement, filterData, listComponent) {
     var selectElement;
     var init = function() {
         if (componentElement) {
@@ -9,17 +9,22 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
         }
     };
 
-    var change = function(event) {
-        listComponent.changeFilterValue(filterData.getId(), getValue());
+    var change = function() {
+        listComponent.changeFilters();
     };
+
     this.getComponentElement = function() {
         return componentElement;
     };
-    var getValue = function() {
+
+    this.getValue = function() {
         if (selectElement.options && selectElement.options[selectElement.selectedIndex].value) {
             return selectElement.options[selectElement.selectedIndex].value;
         }
         return '';
+    };
+    this.getType = function() {
+        return filterData.getType();
     };
 
     init();

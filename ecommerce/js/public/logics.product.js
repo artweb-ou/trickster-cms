@@ -221,51 +221,22 @@ window.ProductsList = function() {
         controller.fireEvent('productsListUpdated', self.id);
         tracking.impressionTracking(self.getCurrentPageProducts(), self.title);
     };
-    this.changePage = function(newPageNumber) {
+    this.changePage = function(newPageNumber, filtersInfo) {
         if (self.currentPage !== newPageNumber) {
             var sorting = generateSortingString();
-            var filtersInfo = gatherFilterValues();
             productLogics.requestProductsListData(self.id, newPageNumber, filtersInfo, sorting, self.filterLimit);
         }
     };
-    this.changeFilter = function(filterId, value) {
+    this.changeFilters = function(filtersInfo) {
         var sorting = generateSortingString();
-        var filtersInfo = gatherFilterValues(filterId, value);
         productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting, self.filterLimit);
     };
-    this.changeSorting = function(sorting) {
-        var filtersInfo = gatherFilterValues();
+    this.changeSorting = function(sorting, filtersInfo) {
         productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting, self.filterLimit);
     };
-    this.changeLimit = function(limit) {
+    this.changeLimit = function(limit, filtersInfo) {
         var sorting = generateSortingString();
-        var filtersInfo = gatherFilterValues();
         productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting, limit);
-    };
-    var gatherFilterValues = function(filterId, value) {
-        var filtersInfo = [];
-        var i, j;
-        var options;
-        for (i = 0; i < filters.length; i++) {
-            var filter = filters[i];
-            options = filter.getOptionsInfo();
-            if (filter.getId() == filterId) {
-                for (j = 0; j < options.length; j++) {
-                    if (options[j].id == value) {
-                        filtersInfo.push([filter.getType(), options[j].id]);
-                        break;
-                    }
-                }
-            } else {
-                for (j = 0; j < options.length; j++) {
-                    if (options[j].selected) {
-                        filtersInfo.push([filter.getType(), options[j].id]);
-                        break;
-                    }
-                }
-            }
-        }
-        return filtersInfo;
     };
     var generateSortingString = function() {
         return self.filterSort + ';' + self.filterOrder;

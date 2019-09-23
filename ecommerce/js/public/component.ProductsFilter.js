@@ -19,7 +19,7 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
         var element, i;
         for (i = 0; i < filtersData.length; i++) {
             if (element = componentElement.querySelector('.products_filter_item.products_filter_' + filtersData[i].getId())) {
-                var filter = new ProductsDropdownFilterComponent(element, filtersData[i], self, listComponent);
+                var filter = new ProductsDropdownFilterComponent(element, filtersData[i], listComponent);
                 filters.push(filter);
             }
         }
@@ -46,6 +46,20 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
         dropDownManager.initDropdowns(componentElement);
         self.initFilters();
     };
+
+    self.getFiltersInfo = function() {
+        var filtersInfo = [];
+        var i;
+        for (i = 0; i < filters.length; i++) {
+            var filter = filters[i];
+            var value = filter.getValue();
+            if (value) {
+                filtersInfo.push([filter.getType(), value]);
+            }
+        }
+        return filtersInfo;
+    };
+
 
     init();
 };
