@@ -2006,14 +2006,19 @@ class productElement extends structureElement implements
         return parent::getNewElementUrl();
     }
 
-    /**
-     * @return string
-     */
-    public function getNewElementUrl()
+    public function getGenericIconList()
     {
-        if ($this->actionName == 'showTexts') {
-            return parent::getNewElementUrl() . 'linkType:subArticle/';
+        $genericIconList = [];
+        $structureManager = $this->getService('structureManager');
+        $connectedIcons = $this->getConnectedGenericIconList();
+        $genericIcons = $structureManager->getElementsByType('genericIcon');
+        foreach ($genericIcons as $genericIcon) {
+            $genericIconList[] = [
+                'id'     => $genericIcon->id,
+                'title'  => $genericIcon->getTitle(),
+                'select' => in_array($genericIcon->id, $connectedIcons)
+            ];
         }
-        return parent::getNewElementUrl();
+        return $genericIconList;
     }
 }
