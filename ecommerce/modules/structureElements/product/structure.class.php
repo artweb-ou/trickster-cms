@@ -1963,6 +1963,7 @@ class productElement extends structureElement implements
         //        else {
         if ($currentAction == 'showIconForm') {
             $this->allowedTypes = ['genericIcon'];
+            return parent::getAllowedTypes($currentAction);
         } else {
             if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
                 return $this->allowedProductTypesByAction[$currentAction];
