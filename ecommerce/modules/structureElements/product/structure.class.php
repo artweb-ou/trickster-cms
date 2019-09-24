@@ -2025,7 +2025,7 @@ class productElement extends structureElement implements
     public function getConnectedGenericIconList()
     {
         $linksManager = $this->getService('linksManager');
-        $connectedIds = $linksManager->getConnectedIdList($this->id, 'genericIconCategory');
+        $connectedIds = $linksManager->getConnectedIdList($this->id, 'genericIconProduct');
         return $connectedIds;
     }
 }
