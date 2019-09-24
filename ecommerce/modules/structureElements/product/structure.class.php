@@ -1997,6 +1997,15 @@ class productElement extends structureElement implements
             return $this->getParentCategory()->getTitle();
         }
     }
+
+    public function getNewElementUrl()
+    {
+        if ($this->actionName == 'showTexts') {
+            return parent::getNewElementUrl() . 'linkType:subArticle/';
+        }
+        return parent::getNewElementUrl();
+    }
+
     /**
      * @return string
      */
