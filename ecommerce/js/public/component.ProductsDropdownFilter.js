@@ -23,9 +23,13 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
         }
         return '';
     };
+
     this.getType = function() {
         return filterData.getType();
     };
 
+    this.resetValue = function() {
+        selectElement.value = '';
+    };
     init();
 };

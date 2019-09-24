@@ -64,7 +64,10 @@ window.ProductSearchComponent = function(componentElement) {
 
 
     var reset = function() {
-
+        if (filtersComponent) {
+            filtersComponent.resetFilters();
+            self.changeFilters();
+        }
     };
 
     // this.refresh = function(changedFilter) {
