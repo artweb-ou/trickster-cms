@@ -1,5 +1,7 @@
 <?php
 
+use Mpdf\Tag\P;
+
 /**
  * Class productElement
  *
@@ -1959,12 +1961,14 @@ class productElement extends structureElement implements
         //            return array_unique($fullListAllowed);
         //        }
         //        else {
-        if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
-            return $this->allowedProductTypesByAction[$currentAction];
-        } elseif ($currentAction == 'showIconForm') {
+        if ($currentAction == 'showIconForm') {
             $this->allowedTypes = ['genericIcon'];
         } else {
-            return [];
+            if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
+                return $this->allowedProductTypesByAction[$currentAction];
+            } else {
+                return [];
+            }
         }
         //        }
     }
