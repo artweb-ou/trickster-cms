@@ -2021,4 +2021,11 @@ class productElement extends structureElement implements
         }
         return $genericIconList;
     }
+
+    public function getConnectedGenericIconList()
+    {
+        $linksManager = $this->getService('linksManager');
+        $connectedIds = $linksManager->getConnectedIdList($this->id, 'genericIconCategory');
+        return $connectedIds;
+    }
 }
