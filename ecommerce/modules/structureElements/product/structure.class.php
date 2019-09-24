@@ -128,12 +128,12 @@ class productElement extends structureElement implements
     protected $iconsInfo;
 
     protected $allowedTypes = ['product'];
-//    protected $allowedTypes = ['subArticle'];
+    //    protected $allowedTypes = ['subArticle'];
     protected $allowedProductTypesByAction = [
-        'showImages'    => ['galleryImage'],
-        'showTexts'     => ['subArticle'],
-        'showFiles'     => ['file'],
-        'showFullList'  => ['galleryImage'],
+        'showImages'   => ['galleryImage'],
+        'showTexts'    => ['subArticle'],
+        'showFiles'    => ['file'],
+        'showFullList' => ['galleryImage'],
     ];
 
     protected function setModuleStructure(&$moduleStructure)
@@ -479,55 +479,55 @@ class productElement extends structureElement implements
             $search[] = '{' . $result . '}';
             switch ($result) {
                 case 'title':
-                    {
-                        $replace[] = $this->title;
-                        break;
-                    }
+                {
+                    $replace[] = $this->title;
+                    break;
+                }
                 case 'category':
-                    {
-                        if ($category = $this->getRequestedParentCategory()) {
-                            $replace[] = $category->title;
-                        }
-                        break;
+                {
+                    if ($category = $this->getRequestedParentCategory()) {
+                        $replace[] = $category->title;
                     }
+                    break;
+                }
                 case 'topCategory':
-                    {
-                        if ($category = $this->getRequestedTopCategory()) {
-                            $replace[] = $category->title;
-                        }
-                        break;
+                {
+                    if ($category = $this->getRequestedTopCategory()) {
+                        $replace[] = $category->title;
                     }
+                    break;
+                }
                 case 'brand':
-                    {
-                        $brand = $this->getBrandElement();
-                        $replace[] = $brand->title;
-                        break;
-                    }
+                {
+                    $brand = $this->getBrandElement();
+                    $replace[] = $brand->title;
+                    break;
+                }
                 case 'price':
-                    {
-                        $replace[] = $this->getPrice();
-                        break;
-                    }
+                {
+                    $replace[] = $this->getPrice();
+                    break;
+                }
                 case 'availability':
-                    {
-                        $replace[] = $translationsManager->getTranslationByName('product.' . $this->availability);
-                        break;
-                    }
+                {
+                    $replace[] = $translationsManager->getTranslationByName('product.' . $this->availability);
+                    break;
+                }
                 case 'deliveryStatus':
-                    {
-                        $replace[] = $this->getDeliveryStatus();
-                        break;
-                    }
+                {
+                    $replace[] = $this->getDeliveryStatus();
+                    break;
+                }
                 case (stripos($result, 'parameterValue:') !== false):
-                    {
-                        $id = (int)substr($result, 15);
-                        if ($value = $this->getParameterValueById($id)) {
-                            $replace[] = mb_strtolower($value);
-                        } else {
-                            $replace[] = '';
-                        }
-                        break;
+                {
+                    $id = (int)substr($result, 15);
+                    if ($value = $this->getParameterValueById($id)) {
+                        $replace[] = mb_strtolower($value);
+                    } else {
+                        $replace[] = '';
                     }
+                    break;
+                }
                 default:
                     $replace[] = '';
             }
@@ -993,7 +993,7 @@ class productElement extends structureElement implements
      */
     public function getIconsCompleteList()
     {
-//        $this->logError('deprecated method getIconsCompleteList used');
+        //        $this->logError('deprecated method getIconsCompleteList used');
         if ($this->iconsCompleteList === null) {
             $productIconsManager = $this->getService('ProductIconsManager');
             $this->iconsCompleteList = $productIconsManager->getProductIcons($this);
@@ -1015,13 +1015,13 @@ class productElement extends structureElement implements
                 if ($icons = $productIconsManager->getProductIcons($this)) {
                     foreach ($icons as $icon) {
                         $iconInfo = [
-                            'title' => $icon->title,
-                            'image' => $icon->image,
-                            'width' => $icon->iconWidth,
+                            'title'          => $icon->title,
+                            'image'          => $icon->image,
+                            'width'          => $icon->iconWidth,
                             'widthOnProduct' => $icon->iconWidthOnProduct,
-                            'fileName' => $icon->originalName,
-                            'iconRole' => '',
-                            'iconLocation' => $this->productIconLocationTypes[0],
+                            'fileName'       => $icon->originalName,
+                            'iconRole'       => '',
+                            'iconLocation'   => $this->productIconLocationTypes[0],
                         ];
                         if ($icon->structureType == 'genericIcon') {
                             if ($icon->iconLocation) {
@@ -1043,13 +1043,13 @@ class productElement extends structureElement implements
                         //only show discount with icon applied
                         if (!empty($discount->icon)) {
                             $this->iconsInfo[] = [
-                                'title' => $discount->title,
-                                'image' => $discount->icon,
-                                'width' => $discount->iconWidth,
+                                'title'          => $discount->title,
+                                'image'          => $discount->icon,
+                                'width'          => $discount->iconWidth,
                                 'widthOnProduct' => $discount->iconWidthOnProduct,
-                                'fileName' => $discount->iconOriginalName,
-                                'iconRole' => '',
-                                'iconLocation' => $this->productIconLocationTypes[0],
+                                'fileName'       => $discount->iconOriginalName,
+                                'iconRole'       => '',
+                                'iconLocation'   => $this->productIconLocationTypes[0],
                             ];
                         }
                     }
@@ -1461,7 +1461,7 @@ class productElement extends structureElement implements
         $sessionManager = $this->getService('ServerSessionManager');
         $fromCategory = $sessionManager->get('fromProductList');
         $structureManager = $this->getService('structureManager');
-        if(!empty($fromCategory)) {
+        if (!empty($fromCategory)) {
             $category = $structureManager->getElementById($fromCategory);
         } else {
             $category = $this->getRequestedParentCategory();
@@ -1951,21 +1951,22 @@ class productElement extends structureElement implements
 
     public function getAllowedTypes($currentAction = 'showFullList')
     {
-//        if ($currentAction == 'showFullList') {
-//            $fullListAllowed = [];
-//            foreach ($this->allowedProductTypesByAction as $action=>$value) {
-//                $fullListAllowed  = array_merge($fullListAllowed, $value);
-//            }
-//            return array_unique($fullListAllowed);
-//        }
-//        else {
-            if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
-                return $this->allowedProductTypesByAction[$currentAction];
-            }
-            else {
-                return [];
-            }
-//        }
+        //        if ($currentAction == 'showFullList') {
+        //            $fullListAllowed = [];
+        //            foreach ($this->allowedProductTypesByAction as $action=>$value) {
+        //                $fullListAllowed  = array_merge($fullListAllowed, $value);
+        //            }
+        //            return array_unique($fullListAllowed);
+        //        }
+        //        else {
+        if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
+            return $this->allowedProductTypesByAction[$currentAction];
+        } elseif ($currentAction == 'showIconForm') {
+            $this->allowedTypes = ['genericIcon'];
+        } else {
+            return [];
+        }
+        //        }
     }
 
     public function getNewElementAction()
@@ -1981,7 +1982,7 @@ class productElement extends structureElement implements
 
         $structureManager = $this->getService('structureManager');
         $subArticles = $structureManager->getElementsChildren($this->id, null, 'subArticle');
-//
+        //
         return $subArticles;
     }
 
