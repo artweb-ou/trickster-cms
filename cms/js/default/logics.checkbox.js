@@ -3,11 +3,15 @@ window.checkBoxManager = new function() {
     var checkBoxObjects = [];
 
     var init = function() {
-        var inputElements = _('.checkbox_placeholder');
+        self.initCheckboxes(document);
+    };
+    this.initCheckboxes = function(element) {
+        var inputElements = element.querySelectorAll('.checkbox_placeholder');
         for (var i = 0; i < inputElements.length; i++) {
             self.createCheckBox(inputElements[i]);
         }
     };
+
     this.createCheckBox = function(inputElement) {
         var found = false;
         for (var i = 0; i < checkBoxObjects.length; i++) {

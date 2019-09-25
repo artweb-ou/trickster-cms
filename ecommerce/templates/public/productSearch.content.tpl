@@ -18,46 +18,29 @@
 {*    {/if}*}
 </script>
 
-{include file=$theme->template('component.productsfilter.tpl') titleType="option"}
+{if $element->checkboxesForParameters}
+    {include file=$theme->template('component.productsfilter.tpl') titleType="label" selectorType='checkbox'}
+{else}
+    {include file=$theme->template('component.productsfilter.tpl') titleType="option" selectorType='dropdown'}
+{/if}
 {if $element->sortingEnabled}
     {include file=$theme->template('component.productssorter.tpl') titleType="option"}
 {/if}
 
-{*        <div class="productsearch_categories">*}
-{*            {foreach $element->getFiltersByType('category') as $filter}*}
-{*                {include $theme->template('component.filterdropdown.tpl') class="productsearch_field" titleType="option"}*}
-{*                <script>*}
-
-{*                    {foreach $filter->getOptionsInfo() as $optionInfo}*}
-{*                    window.categoriesUrls[{$optionInfo.id}] = '{$optionInfo.url}';*}
-{*                    {/foreach}*}
-
-{*                </script>*}
-{*            {/foreach}*}
-{*        </div>*}
-{*        {foreach $element->getFiltersByType('brand') as $filter}*}
-{*            {include $theme->template('component.filterdropdown.tpl') class="productsearch_field" titleType="option"}*}
-{*        {/foreach}*}
-
 {*        {foreach $element->getFiltersByType('parameter') as $filter}*}
-{*            {if $element->checkboxesForParameters}*}
-{*                {include $theme->template('productSearch.checkboxesfilter.tpl')}*}
-{*            {else}*}
-{*                {include $theme->template('component.filterdropdown.tpl') class="productsearch_field" titleType="option"}*}
-{*            {/if}*}
 {*        {/foreach}*}
 
 {*        {foreach $element->getFiltersByType('discount') as $filter}*}
-{*            {include $theme->template('component.filterdropdown.tpl') class="productsearch_field" titleType="option"}*}
+{*            {include $theme->template('component.productsfilter_item.tpl') class="productsearch_field" titleType="option"}*}
 {*        {/foreach}*}
 
 {*        {foreach $element->getFiltersByType('availability') as $filter}*}
-{*            {include $theme->template('component.filterdropdown.tpl') class="productsearch_field" titleType="option"}*}
+{*            {include $theme->template('component.productsfilter_item.tpl') class="productsearch_field" titleType="option"}*}
 {*        {/foreach}*}
 
 {*        {foreach $element->getFiltersByType('price') as $filter}*}
 {*            {if $element->pricePresets}*}
-{*                {include $theme->template('component.filterdropdown.tpl') class="productsearch_field" titleType="option"}*}
+{*                {include $theme->template('component.productsfilter_item.tpl') class="productsearch_field" titleType="option"}*}
 {*            {else}*}
 {*                {include $theme->template('productSearch.pricefilter.tpl')}*}
 {*            {/if}*}

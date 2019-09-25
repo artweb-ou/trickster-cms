@@ -17,6 +17,7 @@ class productSearchDataResponseConverter extends StructuredDataResponseConverter
             'dateModified' => function ($element) {
                 return $element->getValue('dateModified');
             },
+            'checkboxesForParameters' => 'checkboxesForParameters',
             'filters' => 'getFiltersData',
         ];
     }
@@ -35,6 +36,7 @@ class productSearchDataResponseConverter extends StructuredDataResponseConverter
                 'id',
                 'title',
                 'url',
+                'checkboxesForParameters',
                 'filters',
             ],
         ];

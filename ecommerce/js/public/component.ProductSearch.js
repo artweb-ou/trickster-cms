@@ -33,7 +33,13 @@ window.ProductSearchComponent = function(componentElement) {
         var element = componentElement.querySelector('.products_filter');
         if (element) {
             filtersComponent = new ProductsFilterComponent(element, self);
-            filtersComponent.setTitleType('option');
+            if (productSearchData.checkboxesForParameters){
+                filtersComponent.setTitleType('label');
+                filtersComponent.setSelectorType('checkbox');
+            } else{
+                filtersComponent.setTitleType('option');
+                filtersComponent.setSelectorType('dropdown');
+            }
             filtersComponent.updateData(productSearchData.getFilters());
             filtersComponent.initFilters();
         }

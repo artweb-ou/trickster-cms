@@ -1,11 +1,19 @@
-window.ProductsDropdownFilterComponent = function(componentElement, filterData, listComponent) {
+window.ProductsDropdownFilterComponent = function(componentElement, filterData, selectorType, listComponent) {
     var selectElement;
+    var checkboxElements;
     var init = function() {
         if (componentElement) {
-            selectElement = componentElement.querySelector('select.products_filter_dropdown');
-        }
-        if (selectElement) {
-            eventsManager.addHandler(selectElement, 'change', change);
+            if (selectorType === 'dropdown') {
+                if (selectElement = componentElement.querySelector('select.products_filter_dropdown')) {
+                    eventsManager.addHandler(selectElement, 'change', change);
+                }
+            } else if (selectorType === 'checkbox') {
+                if (checkboxElements = componentElement.querySelectorAll('input.products_filter_checkbox')) {
+                    for (var i = 0; i < checkboxElements.length; i++) {
+                        eventsManager.addHandler(checkboxElements[i], 'change', change);
+                    }
+                }
+            }
         }
     };
 
@@ -18,8 +26,20 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
     };
 
     this.getValue = function() {
-        if (selectElement.options && selectElement.options[selectElement.selectedIndex].value) {
-            return selectElement.options[selectElement.selectedIndex].value;
+        if (selectorType === 'dropdown') {
+            if (selectElement.options && selectElement.options[selectElement.selectedIndex].value) {
+                return selectElement.options[selectElement.selectedIndex].value;
+            }
+        } else if (selectorType === 'checkbox') {
+            var values = [];
+            for (var i = 0; i < checkboxElements.length; i++) {
+                if (checkboxElements[i].checked) {
+                    values.push(checkboxElements[i].value);
+                }
+            }
+            if (values.length) {
+                return values;
+            }
         }
         return '';
     };
@@ -29,7 +49,14 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
     };
 
     this.resetValue = function() {
-        selectElement.value = '';
+        if (selectorType === 'dropdown') {
+            selectElement.value = '';
+        } else if (selectorType === 'checkbox') {
+            for (var i = 0; i < checkboxElements.length; i++) {
+                checkboxElements[i].checked = false;
+            }
+        }
+
     };
     init();
 };

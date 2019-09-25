@@ -278,6 +278,7 @@ window.ProductSearch = function() {
     this.id = null;
     this.title = null;
     this.url = null;
+    this.checkboxesForParameters = false;
 
     var filters = [];
 
@@ -286,6 +287,9 @@ window.ProductSearch = function() {
         self.id = data.id;
         self.url = data.url;
 
+        if (typeof data.checkboxesForParameters != 'undefined') {
+            self.checkboxesForParameters = data.checkboxesForParameters;
+        }
         if (typeof data.title != 'undefined') {
             self.title = data.title;
         }
