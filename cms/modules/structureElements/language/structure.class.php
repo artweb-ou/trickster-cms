@@ -312,6 +312,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
 
         $linksManager = $this->getService('linksManager');
         $structureManager = $this->getService('structureManager');
+        $rootId = $structureManager->getRootElementId();
         $shownInMenuIdList = [];
         if ($possibleElements = $linksManager->getConnectedIdList($this->id, $type, 'parent')) {
             if ($element = $structureManager->getElementById($menuId)) {
@@ -320,7 +321,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
                         $shownInMenuIdList = array_merge($shownInMenuIdList, $levelLinks);
                     }
                     $element = $structureManager->getElementsRequestedParent($element->id);
-                } while ($element && ($element->id !== $this->id));
+                } while ($element && ($element->id !== $rootId));
             }
             if ($resultIdList = array_intersect($possibleElements, $shownInMenuIdList)) {
                 $result = $structureManager->getElementsByIdList($resultIdList, $this->id, true);
