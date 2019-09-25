@@ -369,23 +369,28 @@ window.shoppingBasketLogics = new function() {
     };
 
     var receiveData = function(responseStatus, requestName, parsedData) {
-        if (responseStatus == 'success') {
+        if (responseStatus === 'success') {
             if (typeof parsedData.shoppingBasketData != 'undefined') {
                 importData(parsedData.shoppingBasketData);
             }
-            if (requestName == 'addProduct') {
+            if (requestName === 'addProduct') {
                 controller.fireEvent('shoppingBasketProductAdded');
                 var products = parsedData.shoppingBasketData.productsList;
                 var lastAddedProduct = parsedData.shoppingBasketData.productsList[products.length - 1];
                 tracking.addToBasketTracking(lastAddedProduct, self.amount);
             }
-
-        } else if (responseStatus == 'fail') {
-            if (requestName == 'addProduct') {
+            if (requestName === 'setPromoCode') {
+                controller.fireEvent('shoppingBasketPromoCodeSuccess');
+            }
+        } else if (responseStatus === 'fail') {
+            if (requestName === 'addProduct') {
                 controller.fireEvent('shoppingBasketProductAddFailure', 'product.quantityunavailable');
             }
-            if (requestName == 'changeAmount') {
+            if (requestName === 'changeAmount') {
                 controller.fireEvent('shoppingBasketProductChangeFailure', 'product.quantityunavailable');
+            }
+            if (requestName === 'setPromoCode') {
+                controller.fireEvent('shoppingBasketPromoCodeFailure');
             }
         }
     };
