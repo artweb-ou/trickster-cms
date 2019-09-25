@@ -10,6 +10,9 @@
 {else}
 	{assign var='condition' value=true}
 {/if}
+{if isset($item.translationGroup)}
+	{assign var='translationGroup' value=$item.translationGroup}
+{/if}
 
 {if $condition}
 	<div class="form_items{if $formErrors.$fieldName} form_error{/if}{if !empty($item.trClass)} {$item.trClass}{/if}">

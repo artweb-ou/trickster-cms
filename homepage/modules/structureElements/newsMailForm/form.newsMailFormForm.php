@@ -13,6 +13,7 @@ class NewsMailFormFormStructure extends ElementForm
             'type'      => 'select.universal_options_multiple',
             'method'    => 'getDisplayMenusInfo',
             'condition' => 'checkDisplayMenus',
+            'translationGroup' => 'shared',
         ],
     ];
 
