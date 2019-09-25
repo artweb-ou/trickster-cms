@@ -202,7 +202,9 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             $this->setFormValue('payerPhone', $formData['payerPhone']);
 
             $this->setFormValue('receiverIsPayer', $formData['receiverIsPayer']);
-            $this->setFormValue('paymentMethodId', $formData['paymentMethodId']);
+            if (isset($formData['paymentMethodId'])) {
+                $this->setFormValue('paymentMethodId', $formData['paymentMethodId']);
+            }
         } else {
             $user = $this->getService('user');
             if ($user->userName != 'anonymous') {

@@ -73,15 +73,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $this->renderer->assign('deviceType', 'desktop');
 
         $socialDataManager = $this->getService('SocialDataManager');
-        $socialPlugins = $socialDataManager->getSocialPlugins();
-        $this->renderer->assign('socialPlugins', $socialPlugins);
-
-        $facebookAppId = '';
-        $facebookSocialPlugin = $socialDataManager->getSocialPluginByName('facebook');
-        if ($facebookSocialPlugin) {
-            $facebookAppId = $facebookSocialPlugin->getSpecialDataByKey('appId');
-        }
-        $this->renderer->assign('facebookAppId', $facebookAppId);
+        $this->renderer->assign('socialDataManager', $socialDataManager);
 
         $pageNotFound = $controller->requestedFile;
 

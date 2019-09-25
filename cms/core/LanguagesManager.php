@@ -147,11 +147,14 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
 
     protected function detectCurrentLanguageCode($groupName = null)
     {
-        $groupName = $groupName ?: $this->getService('ConfigManager')
-            ->get('main.rootMarkerPublic');
-        $languageCode = $this->getCodeFromURI();
-        if ($this->checkLanguageCode($languageCode, $groupName)) {
-            goto finish;
+        $publicGroup = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        $groupName = $groupName ?: $publicGroup;
+
+        if ($groupName === $publicGroup) {
+            $languageCode = $this->getCodeFromURI();
+            if ($this->checkLanguageCode($languageCode, $groupName)) {
+                goto finish;
+            }
         }
         $languageCode = $this->getCodeFromSession($groupName);
         if ($this->checkLanguageCode($languageCode, $groupName)) {
