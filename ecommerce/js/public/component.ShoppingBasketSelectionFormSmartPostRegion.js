@@ -53,10 +53,15 @@ window.ShoppingBasketSelectionFormSmartPostRegion = function(info, fieldsBaseNam
         var dropdown = dropDownManager.getDropDown(selectElement);
         fieldElement.appendChild(dropdown.componentElement);
 
-        self.componentElement = componentElement;
     };
     var changeHandler = function() {
         smartPostLogics.setCurrentRegion(selectElement.value);
+    };
+    this.getComponentElement = function() {
+        return componentElement;
+    };
+    this.getId = function() {
+        return info.id;
     };
     init();
 };

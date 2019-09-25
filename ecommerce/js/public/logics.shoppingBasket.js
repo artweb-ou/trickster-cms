@@ -468,7 +468,7 @@ window.ShoppingBasketCountry = function() {
         self.citiesIndex = {};
         self.citiesList = [];
         for (var i = 0; i < data.citiesList.length; i++) {
-            var city = new shoppingBasketCountryCity();
+            var city = new ShoppingBasketCountryCity();
             self.citiesIndex[data.citiesList[i].id] = city;
             self.citiesList.push(city);
             city.updateData(data.citiesList[i]);
@@ -483,7 +483,7 @@ window.ShoppingBasketCountry = function() {
     this.citiesList = [];
     this.citiesIndex = {};
 };
-window.shoppingBasketCountryCity = function() {
+window.ShoppingBasketCountryCity = function() {
     var self = this;
 
     this.id = false;
@@ -497,6 +497,14 @@ window.shoppingBasketCountryCity = function() {
     };
 };
 window.ShoppingBasketDelivery = function() {
+    var self = this;
+
+    this.id = false;
+    this.price = 0;
+    this.title = '';
+    this.code = '';
+    this.deliveryFormFields = [];
+
     this.updateData = function(data) {
         importData(data);
     };
@@ -507,16 +515,37 @@ window.ShoppingBasketDelivery = function() {
         self.code = data.code;
         self.deliveryFormFields = data.deliveryFormFields;
         self.hasNeededReceiverFields = data.hasNeededReceiverFields;
+        updateAutomates();
     };
+    var updateAutomates = function() {
+        for (var i = 0; i < self.deliveryFormFields.length; i++) {
+            if (self.deliveryFormFields[i].value) {
+                var autocomplete = self.deliveryFormFields[i].autocomplete;
+                if (autocomplete === 'dpdRegion') {
+                    if (typeof window.dpdLogics !== 'undefined') {
+                        dpdLogics.setCurrentRegion(self.deliveryFormFields[i].value);
+                    }
+                } else if (autocomplete === 'post24Region') {
+                    if (typeof window.post24Logics !== 'undefined') {
+                        post24Logics.setCurrentRegion(self.deliveryFormFields[i].value);
+                    }
+                } else if (autocomplete === 'smartPostRegion') {
+                    if (typeof window.smartPostLogics !== 'undefined') {
+                        smartPostLogics.setCurrentRegion(self.deliveryFormFields[i].value);
+                    }
+                }
+            }
+        }
+    };
+};
+window.ShoppingBasketDiscount = function() {
     var self = this;
 
     this.id = false;
     this.price = 0;
     this.title = '';
     this.code = '';
-    this.deliveryFormFields = [];
-};
-window.ShoppingBasketDiscount = function() {
+
     this.updateData = function(data) {
         importData(data);
     };
@@ -526,14 +555,18 @@ window.ShoppingBasketDiscount = function() {
         self.title = data.title;
         self.code = data.code;
     };
+};
+window.ShowInBasketDiscount = function() {
     var self = this;
 
     this.id = false;
-    this.price = 0;
     this.title = '';
     this.code = '';
-};
-window.ShowInBasketDiscount = function() {
+    this.basketText = '';
+    this.displayText = false;
+    this.displayProductsInBasket = false;
+    this.products = [];
+
     this.updateData = function(data) {
         importData(data);
     };
@@ -546,17 +579,15 @@ window.ShowInBasketDiscount = function() {
         self.displayProductsInBasket = data.displayProductsInBasket;
         self.products = data.products;
     };
+};
+window.ShoppingBasketService = function() {
     var self = this;
 
     this.id = false;
+    this.price = 0;
     this.title = '';
-    this.code = '';
-    this.basketText = '';
-    this.displayText = false;
-    this.displayProductsInBasket = false;
-    this.products = [];
-};
-window.ShoppingBasketService = function() {
+    this.selected = false;
+
     this.updateData = function(data) {
         importData(data);
     };
@@ -566,10 +597,4 @@ window.ShoppingBasketService = function() {
         self.title = data.title;
         self.selected = data.selected;
     };
-    var self = this;
-
-    this.id = false;
-    this.price = 0;
-    this.title = '';
-    this.selected = false;
 };
