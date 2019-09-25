@@ -320,7 +320,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         // todo: this now only supports the direct children of current menu. We should somehow allow any level to be used
         if ($currentMainPage = $this->getCurrentMainMenu()) {
             if (!$currentMainPage->final) {
-                if ($subPages = $currentMainPage->getChildrenList()){
+                if ($subPages = $currentMainPage->getChildrenList()) {
                     foreach ($subPages as $subPage) {
                         if ($subPage->requested) {
                             $shownInMenuIdList = array_merge($shownInMenuIdList, (array)($linksManager->getConnectedIdList($subPage->id, $linkType, 'parent')));
@@ -494,18 +494,22 @@ class languageElement extends structureElement implements MetadataProviderInterf
 
     public function getBreadcrumbsTitle()
     {
-        $firstPageElement = $this->getFirstPageElement();
-        if ($firstPageElement) {
-            return $firstPageElement->getTitle();
+        if ($this->getService('controllerApplication')->getApplicationName() !== 'admin') {
+            $firstPageElement = $this->getFirstPageElement();
+            if ($firstPageElement) {
+                return $firstPageElement->getTitle();
+            }
         }
         return $this->getTitle();
     }
 
     public function getBreadcrumbsUrl()
     {
-        $firstPageElement = $this->getFirstPageElement();
-        if ($firstPageElement) {
-            return $firstPageElement->getUrl();
+        if ($this->getService('controllerApplication')->getApplicationName() !== 'admin') {
+            $firstPageElement = $this->getFirstPageElement();
+            if ($firstPageElement) {
+                return $firstPageElement->getUrl();
+            }
         }
         return $this->getUrl();
     }
