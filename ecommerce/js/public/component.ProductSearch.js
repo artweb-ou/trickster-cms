@@ -20,6 +20,7 @@ window.ProductSearchComponent = function(componentElement) {
 
         productsListData = productLogics.getMainProductsList();
     };
+
     var updateHandler = function(updatedId) {
         if (updatedId === productSearchData.id) {
             if (filtersComponent) {
@@ -39,6 +40,11 @@ window.ProductSearchComponent = function(componentElement) {
             } else{
                 filtersComponent.setTitleType('option');
                 filtersComponent.setSelectorType('dropdown');
+            }
+            if (productSearchData.pricePresets){
+                filtersComponent.setPriceSelectorType('presets');
+            } else {
+                filtersComponent.setPriceSelectorType('interval');
             }
             filtersComponent.updateData(productSearchData.getFilters());
             filtersComponent.initFilters();

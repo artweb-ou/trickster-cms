@@ -3,6 +3,7 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
     var self = this;
     var titleType = 'label';
     var selectorType = 'dropdown';
+    var priceSelectorType = 'presets';
     var filtersData = [];
 
     var init = function() {
@@ -20,11 +21,19 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
         selectorType = newSelectorType;
     };
 
+    this.setPriceSelectorType = function(newPriceSelectorType) {
+        priceSelectorType = newPriceSelectorType;
+    };
+
     this.initFilters = function() {
-        var element, i;
+        var element, i, filter;
         for (i = 0; i < filtersData.length; i++) {
             if (element = componentElement.querySelector('.products_filter_item.products_filter_' + filtersData[i].getId())) {
-                var filter = new ProductsDropdownFilterComponent(element, filtersData[i], selectorType, listComponent);
+                if ((filtersData[i].getType() === 'price') && (priceSelectorType === 'interval')) {
+                    filter = new ProductsPriceFilterComponent(element, filtersData[i], listComponent);
+                } else {
+                    filter = new ProductsDropdownFilterComponent(element, filtersData[i], selectorType, listComponent);
+                }
                 filters.push(filter);
             }
         }
@@ -44,10 +53,9 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
             html += smartyRenderer.fetch('component.productsfilter_item.tpl', data);
         }
         componentElement.innerHTML = html;
-        if (selectorType === 'dropdown'){
+        if (selectorType === 'dropdown') {
             dropDownManager.initDropdowns(componentElement);
-        }
-        else if (selectorType === 'checkbox'){
+        } else if (selectorType === 'checkbox') {
             checkBoxManager.initCheckboxes(componentElement);
         }
         self.initFilters();

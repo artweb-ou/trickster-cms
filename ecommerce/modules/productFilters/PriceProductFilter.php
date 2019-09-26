@@ -77,4 +77,12 @@ class PriceProductFilter extends ProductFilter
         }
         return $this->getRange();
     }
+
+    public function getData()
+    {
+        $data = parent::getData();
+        $data['range'] = $this->getRange();
+        $data['selectedRange'] = $this->getSelectedRange();
+        return $data;
+    }
 }

@@ -41,5 +41,15 @@ abstract class ProductFilter implements DependencyInjectionContextInterface
         return $this->type;
     }
 
+    public function getData()
+    {
+        return [
+            'type' => $this->getType(),
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'options' => $this->getOptionsInfo(),
+        ];
+    }
+
     abstract protected function getArguments();
 }

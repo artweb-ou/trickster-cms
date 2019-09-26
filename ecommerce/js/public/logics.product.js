@@ -279,6 +279,7 @@ window.ProductSearch = function() {
     this.title = null;
     this.url = null;
     this.checkboxesForParameters = false;
+    this.pricePresets = false;
 
     var filters = [];
 
@@ -289,6 +290,9 @@ window.ProductSearch = function() {
 
         if (typeof data.checkboxesForParameters != 'undefined') {
             self.checkboxesForParameters = data.checkboxesForParameters;
+        }
+        if (typeof data.pricePresets != 'undefined') {
+            self.pricePresets = data.pricePresets;
         }
         if (typeof data.title != 'undefined') {
             self.title = data.title;
@@ -394,11 +398,16 @@ window.Product = function() {
         return iconsInfo;
     };
 };
+
 window.ProductsListFilter = function() {
     var id;
     var title;
     var type;
     var optionsInfo;
+
+    var range;
+    var selectedRange;
+
 
     this.getId = function() {
         return id;
@@ -416,10 +425,20 @@ window.ProductsListFilter = function() {
         return optionsInfo;
     };
 
+    this.getRange = function() {
+        return range;
+    };
+
+    this.getSelectedRange = function() {
+        return selectedRange;
+    };
+
     this.importData = function(newData) {
         id = newData.id;
         title = newData.title;
         type = newData.type;
+        optionsInfo = newData.options;
+
         optionsInfo = newData.options;
     };
 };

@@ -56,7 +56,6 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
                 checkboxElements[i].checked = false;
             }
         }
-
     };
     init();
 };

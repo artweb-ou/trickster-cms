@@ -10,9 +10,9 @@
 				<span class="productsearch_pricefilter_field_currency">{$selectedCurrencyItem->symbol}</span>
 			</div>
 		{/stripdomspaces}
-		<script>
-			window.priceRange = {$range|json_encode};
-			window.selectedPriceRange = {$selectedRange|json_encode};
-		</script>
+{*		<script>*}
+{*			window.priceRange = {$range|json_encode};*}
+{*			window.selectedPriceRange = {$selectedRange|json_encode};*}
+{*		</script>*}
 	</div>
 {/if}

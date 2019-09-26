@@ -168,12 +168,7 @@ trait ProductFilterFactoryTrait
     {
         $data = [];
         foreach ($this->getFilters() as $filter) {
-            $data[] = [
-                'type' => $filter->getType(),
-                'id' => $filter->getId(),
-                'title' => $filter->getTitle(),
-                'options' => $filter->getOptionsInfo(),
-            ];
+            $data[] = $filter->getData();
         }
         return $data;
     }
