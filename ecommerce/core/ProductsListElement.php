@@ -247,7 +247,6 @@ abstract class ProductsListElement extends menuStructureElement
     public function getProductsList()
     {
         $sessionManager = $this->getService('ServerSessionManager');
-        $sessionManager->setEnabled(true);
         $sessionManager->set('fromProductList', $this->id);
         if ($this->productsList !== null) {
             return $this->productsList;
@@ -852,6 +851,9 @@ abstract class ProductsListElement extends menuStructureElement
                     $this->selectionsValuesIndex[$record['parameterId']] = [];
                 }
                 $this->selectionsValuesIndex[$record['parameterId']][$positions[$record['value']]] = $record['value'];
+            }
+            foreach ($this->selectionsValuesIndex as $key=>$values){
+                ksort($this->selectionsValuesIndex[$key]);
             }
         }
     }

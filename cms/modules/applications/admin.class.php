@@ -46,7 +46,6 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
             //change the public language as well, so all public-languages dependent data in admin would be displayed in a same language where possible
             $languagesManager->setCurrentLanguageCode($langCode);
         }
-        $currentLanguageId = $languagesManager->getCurrentLanguageId("adminLanguages");
 
         // list of languages for the language selector
         $languagesList = $languagesManager->getLanguagesList("adminLanguages");
@@ -89,7 +88,9 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
             $this->renderer->assign('userElement', $userElement);
         }
 
-        $this->renderer->assign('currentLanguageId', $currentLanguageId);
+        $currentLanguage = $languagesManager->getCurrentLanguage("adminLanguages");
+        $this->renderer->assign('currentLanguage', $currentLanguage);
+        $this->renderer->assign('currentLanguageId', $currentLanguage->id);
         $this->renderer->assign('currentLocation', $currentLocation);
 
         $this->renderer->assign('theme', $currentTheme);

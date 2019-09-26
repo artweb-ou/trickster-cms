@@ -8,8 +8,6 @@ window.ShoppingBasketSelectionFormSmartPostAutomate = function(info, fieldsBaseN
     var selectElement;
     var dropdown;
 
-    this.componentElement = null;
-
     var init = function() {
         componentElement = document.createElement('tr');
         if (info.error != '0' && info.error) {
@@ -37,11 +35,8 @@ window.ShoppingBasketSelectionFormSmartPostAutomate = function(info, fieldsBaseN
         selectElement = document.createElement('select');
         selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
         fieldElement.appendChild(selectElement);
-        eventsManager.addHandler(selectElement, 'change', changeHandler);
         dropdown = dropDownManager.getDropDown(selectElement);
         fieldElement.appendChild(dropdown.componentElement);
-
-        self.componentElement = componentElement;
 
         fillSelect();
 
@@ -78,8 +73,11 @@ window.ShoppingBasketSelectionFormSmartPostAutomate = function(info, fieldsBaseN
             dropdown.update();
         }
     };
-    var changeHandler = function() {
-
+    this.getComponentElement = function() {
+        return componentElement;
+    };
+    this.getId = function() {
+        return info.id;
     };
     init();
 };

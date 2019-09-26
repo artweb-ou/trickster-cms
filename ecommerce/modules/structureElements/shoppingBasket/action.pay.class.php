@@ -19,8 +19,7 @@ class payShoppingBasket extends structureElementAction
         if ($structureElement->shoppingBasket->getProductsList()) {
             $selectedMethodId = (int)$structureElement->paymentMethodId;
             if (!$selectedMethodId) {
-                $selectedMethodId = (int)$controller->getParameter('bank');
-                if ($selectedMethodId) {
+                if ($selectedMethodId = (int)$controller->getParameter('bank')) {
                     $this->logError('Deprecated parameter "bank" used');
                 }
             }

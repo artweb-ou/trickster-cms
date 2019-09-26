@@ -283,6 +283,25 @@ class structureManager implements DependencyInjectionContextInterface
     }
 
     /**
+     * Returns the requested parent of element specified by id
+     *
+     * @param int $elementId
+     * @param null $linkType
+     * @return bool|structureElement
+     */
+    public function getElementsRequestedParent($elementId, $linkType = null)
+    {
+        if ($parentsList = $this->getElementsParents($elementId, $linkType)) {
+            foreach ($parentsList as $parentElement) {
+                if ($parentElement->requested) {
+                    return $parentElement;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Deprecated, use setRequestedPath and getRootElement instead
      *
      * @param string[] $controllerRequestedPath

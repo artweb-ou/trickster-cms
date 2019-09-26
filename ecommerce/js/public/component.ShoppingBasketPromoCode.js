@@ -3,9 +3,11 @@ window.ShoppingBasketPromoCodeComponent = function(componentElement) {
     var codeInputElement;
     var submitButton;
     var statusElement;
+    var errorElement;
     var titleElement;
     var resetButton;
     var init = function() {
+        errorElement = componentElement.querySelector('.shoppingbasket_promocode_error');
         if (formElement = componentElement.querySelector('.shoppingbasket_promocode_form')) {
             if (codeInputElement = formElement.querySelector('.shoppingbasket_promocode_input')) {
                 if (submitButton = formElement.querySelector('.shoppingbasket_promocode_button')) {
@@ -21,7 +23,8 @@ window.ShoppingBasketPromoCodeComponent = function(componentElement) {
 
             }
         }
-        controller.addListener('shoppingBasketUpdated', updateData);
+        controller.addListener('shoppingBasketPromoCodeSuccess', updateData);
+        controller.addListener('shoppingBasketPromoCodeFailure', failureHandler);
         updateData();
     };
     var submitClickHandler = function() {
@@ -34,6 +37,7 @@ window.ShoppingBasketPromoCodeComponent = function(componentElement) {
         shoppingBasketLogics.setPromoCode('');
     };
     var updateData = function() {
+        errorElement.style.display = 'none';
         var discount = shoppingBasketLogics.getPromoCodeDiscount();
         if (discount) {
             formElement.style.display = 'none';
@@ -43,6 +47,11 @@ window.ShoppingBasketPromoCodeComponent = function(componentElement) {
             formElement.style.display = '';
             statusElement.style.display = 'none';
             titleElement.innerHTML = '';
+        }
+    };
+    var failureHandler = function() {
+        if (errorElement) {
+            errorElement.style.display = 'block';
         }
     };
     init();
