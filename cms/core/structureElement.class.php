@@ -56,18 +56,18 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         $this->languagesParentElementMarker = $this->languagesParentElementMarker
             ?: $this->getService('ConfigManager')->get('main.rootMarkerPublic');
         $this->childrenLoadStatus = [
-            'content'   => [],
+            'content' => [],
             'container' => [],
         ];
 
         $this->structureFields = [
-            'id'            => 'structure',
+            'id' => 'structure',
             'structureType' => 'structure',
             'structureName' => 'structureName',
             'structureRole' => 'structure',
-            'dateCreated'   => 'dateTime',
-            'dateModified'  => 'dateTime',
-            'marker'        => 'text',
+            'dateCreated' => 'dateTime',
+            'dateModified' => 'dateTime',
+            'marker' => 'text',
         ];
         $this->setModuleStructure($this->moduleFields);
         $this->initialize();
@@ -529,6 +529,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
      * Error log entry generation. Also provides classname as a location
      *
      * @param $errorText
+     * @throws Exception
      */
     protected function logError($errorText)
     {
@@ -537,7 +538,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         $errorLogObject->logMessage($locationName, $errorText);
     }
 
-    protected function getMultiLanguageFields()
+    public function getMultiLanguageFields()
     {
         if ($this->multiLanguageFields === null) {
             if (method_exists($this, 'setMultiLanguageFields')) {
@@ -581,7 +582,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
                 ];
             } else {
                 $conditions = [
-                    'id'         => $this->id,
+                    'id' => $this->id,
                     'languageId' => $languageId,
                 ];
             }
