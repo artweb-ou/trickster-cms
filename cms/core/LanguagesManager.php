@@ -61,6 +61,28 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
         return false;
     }
 
+    public function getCurrentLanguage($groupName = null)
+    {
+        $groupName = $groupName ?: $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        foreach ($this->getLanguagesList($groupName) as $language) {
+            if ($language->id == $this->getCurrentLanguageId($groupName)) {
+                return $language;
+            }
+        }
+        return false;
+    }
+
+    public function getLanguageByCode($code, $groupName = null)
+    {
+        $groupName = $groupName ?: $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        foreach ($this->getLanguagesList($groupName) as $language) {
+            if ($language->iso6393 == $code) {
+                return $language;
+            }
+        }
+        return false;
+    }
+
     public function getCurrentLanguageId($groupName = null)
     {
         $groupName = $groupName ?: $this->getService('ConfigManager')
@@ -125,11 +147,14 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
 
     protected function detectCurrentLanguageCode($groupName = null)
     {
-        $groupName = $groupName ?: $this->getService('ConfigManager')
-            ->get('main.rootMarkerPublic');
-        $languageCode = $this->getCodeFromURI();
-        if ($this->checkLanguageCode($languageCode, $groupName)) {
-            goto finish;
+        $publicGroup = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        $groupName = $groupName ?: $publicGroup;
+
+        if ($groupName === $publicGroup) {
+            $languageCode = $this->getCodeFromURI();
+            if ($this->checkLanguageCode($languageCode, $groupName)) {
+                goto finish;
+            }
         }
         $languageCode = $this->getCodeFromSession($groupName);
         if ($this->checkLanguageCode($languageCode, $groupName)) {

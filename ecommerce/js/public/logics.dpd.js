@@ -70,8 +70,11 @@ window.dpdLogics = new function() {
         controller.fireEvent('dpdRegionSelected', currentRegionId);
     };
     this.getCurrentRegion = function() {
+        if (regionsList == null) {
+            importData();
+        }
         var currentRegion = false;
-        if (regionsIndex[currentRegionId] != undefined) {
+        if (typeof regionsIndex[currentRegionId] !== 'undefined') {
             currentRegion = regionsIndex[currentRegionId];
         }
         return currentRegion;

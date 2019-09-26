@@ -345,8 +345,10 @@ class VisitorsManager extends errorLogger
     protected function getUserIdByEmail($userEmail = null)
     {
         if (!empty($userEmail)) {
-            $result = $this->statsDb->table('module_user')->where('email', '=', $userEmail)->select('id')->limit(1)->get();
+            if ($result = $this->statsDb->table('module_user')->where('email', '=', $userEmail)->select('id')->limit(1)->get()) {
+                return $result[0];
+            }
         }
-        return $result[0];
+        return false;
     }
 }

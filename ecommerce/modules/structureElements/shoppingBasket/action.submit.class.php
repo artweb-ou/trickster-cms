@@ -114,8 +114,7 @@ class submitShoppingBasket extends structureElementAction
             }
             if ($structureElement->isLastStep()) {
                 if ($paymentMethodId = $shoppingBasket->getPaymentMethodId()) {
-                    $controller->redirect($structureElement->URL . 'id:' . $structureElement->id
-                        . '/action:pay/bank:' . $paymentMethodId . '/');
+                    $structureElement->executeAction('pay');
                 } else {
                     $structureElement->setViewName('selection');
                 }
