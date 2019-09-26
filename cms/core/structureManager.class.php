@@ -787,17 +787,15 @@ class structureManager implements DependencyInjectionContextInterface
             }
 
             if ($idListToLoad) {
-                //get allowed children elements types list according to the privilegies
                 if ($this->privilegeChecking) {
-                    $allowedElements = $this->privilegesManager->getAllowedElements($parentElementId, $idListToLoad);
-                    if (!is_null($allowedTypes)) {
-                        $allowedElements = array_intersect($allowedTypes, $allowedElements);
-                    }
+                    //calculate required privileges for a postcheck
+                    $this->privilegesManager->getAllowedElements($parentElementId, $idListToLoad);
+                }
+
+                if ($allowedTypes !== null) {
+                    $allowedElements = $allowedTypes;
                 } else {
                     $allowedElements = [];
-                    if (!is_null($allowedTypes)) {
-                        $allowedElements = $allowedTypes;
-                    }
                 }
 
                 foreach ($rolesToLoad as &$role) {

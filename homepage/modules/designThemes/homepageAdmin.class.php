@@ -58,6 +58,8 @@ class homepageAdminDesignTheme extends DesignTheme
             'component.selectedEventsForm.js',
             'logics.showFilters.js',
             'component.showFilters.js',
+            'logics.actionsButtons.js',
+            'component.actionsButtons.js',
         ];
     }
 }

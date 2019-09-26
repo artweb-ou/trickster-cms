@@ -105,6 +105,8 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $this->renderer->assign('JSFileName', $this->getJsScripts($resourcesUniterHelper));
         $this->renderer->assign('CSSFileName', $resourcesUniterHelper->getResourceCacheFileName('css'));
 
+        $this->renderer->assign('currentFullUrl', $this->getCurrentFullUrl());
+
         $this->renderer->template = $currentTheme->template('index.tpl');
         $this->renderer->setCacheControl('no-cache');
         $this->renderer->setContentType('text/html');
@@ -169,5 +171,22 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
             $jsScripts = array_merge($jsScripts, $currentElement->getClientScripts());
         }
         return $jsScripts;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCurrentFullUrl()
+    {
+        $excludedParameters = ['lang'];
+        $controller = controller::getInstance();
+        $parameters = $controller->getParameters();
+
+        $structureManager = $this->getService('structureManager');
+        $currentElement = ($structureManager->getCurrentElement()) ? : $structureManager->getRootElement();
+
+        $fullUrl = new UrlBuilder();
+
+        return $fullUrl->getUrlParametersString($parameters,$currentElement->URL, $excludedParameters);
     }
 }

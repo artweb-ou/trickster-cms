@@ -3,21 +3,27 @@
 trait DbLoggableApplication
 {
     protected $logFilePath;
+    /**
+     * @var \Illuminate\Database\Connection
+     */
     protected $connection;
+    /**
+     * @var transportObject
+     */
     protected $transportObject;
 
     protected function startDbLogging()
     {
         if ($controller = controller::getInstance()) {
-            $pathsManager = $controller->getPathsManager();
             if ($controller->getDebugMode()) {
+                $pathsManager = $this->getService('PathsManager');
+
                 $this->connection = $this->getService('db');
                 $this->logFilePath = $pathsManager->getPath('logs') . 'db_' . time() . '.log';
 
                 $this->connection->enableQueryLog();
 
                 if (!class_exists('pdoTransport')) {
-                    $pathsManager = $this->getService('PathsManager');
                     $path = $pathsManager->getIncludeFilePath('modules/transportObjects/pdoTransport.class.php');
                     include_once($path);
                 }
@@ -30,11 +36,13 @@ trait DbLoggableApplication
     protected function saveDbLog()
     {
         if ($this->logFilePath) {
+            $overall = 0;
             $text = '';
             if ($this->transportObject) {
                 if ($log = $this->transportObject->getQueriesHistory()) {
                     foreach ($log as $item) {
-                        $text .= $item . ";\r\n";
+                        $text .= $item['time'] . "\t" . $item['query'] . "\r\n";
+                        $overall += $item['time'];
                     }
                 }
             }
@@ -47,9 +55,11 @@ trait DbLoggableApplication
                             $query = substr_replace($query, $binding, stripos($query, '?'), 1);
                         }
                         $text .= $item['time'] . "\t" . $query . ";\r\n";
+                        $overall += $item['time'];
                     }
                 }
             }
+            $text .= 'Overall SQL time:' . $overall;
             file_put_contents($this->logFilePath, $text);
         }
     }
