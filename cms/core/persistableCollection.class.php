@@ -252,7 +252,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $persistedData = [];
         foreach ($this->getColumnNames() as $column) {
             if (isset($data[$column])) {
-                $persistedData[$column] = $data[$column];
+                $persistedData[$column] = trim($data[$column]);
             }
         }
 

@@ -13,6 +13,7 @@ class articleElement extends menuDependantStructureElement
     {
         $moduleStructure['title'] = 'text';
         $moduleStructure['hideTitle'] = 'checkbox';
+        $moduleStructure['subTitle'] = 'code';
         $moduleStructure['content'] = 'html';
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['image'] = 'image';

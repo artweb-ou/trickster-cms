@@ -10,6 +10,10 @@ class ArticleFormStructure extends ElementForm
             'type' => 'input.checkbox',
             'translationGroup' => 'shared',
         ],
+        'subTitle' => [
+            'type' => 'input.textarea',
+            'textarea_class' => 'short_textarea',
+        ],
         'content' => [
             'type' => 'input.html',
         ],

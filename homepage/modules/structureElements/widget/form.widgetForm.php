@@ -15,6 +15,11 @@ class WidgetFormStructure extends ElementForm
             'preset'   => 'adminImage',
             'filename' => 'originalName',
         ],
+        'image2'   => [
+            'type'     => 'input.image',
+            'preset'   => 'adminImage',
+            'filename' => 'image2OriginalName',
+        ],
         'content' => [
             'type' => 'input.html'
         ],

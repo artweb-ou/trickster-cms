@@ -15,7 +15,16 @@ class receiveWidget extends structureElementAction
                 $structureElement->image = $structureElement->id;
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
             }
-
+            $additionalImages = [
+                2=>'image2',
+            ];
+            foreach($additionalImages as $imageKey=>$imageCode) {
+                if (!is_null($structureElement->getDataChunk($imageCode)->originalName)) {
+                    $structureElement->$imageCode = $structureElement->id . "_$imageKey";
+                    $field = $imageCode . 'OriginalName';
+                    $structureElement->$field = $structureElement->getDataChunk($imageCode)->originalName;
+                }
+            }
             $structureElement->persistElementData();
 
             $structureElement->persistDisplayMenusLinks();
@@ -35,6 +44,7 @@ class receiveWidget extends structureElementAction
             'content',
             'code',
             'image',
+            'image2',
             'displayMenus',
             'marker',
         ];
