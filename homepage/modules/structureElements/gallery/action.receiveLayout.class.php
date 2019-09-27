@@ -19,6 +19,7 @@ class receiveLayoutGallery extends structureElementAction
             'layout',
             'listLayout',
             'columns',
+            'gap',
             'captionLayout',
             'slideType',
         ];

@@ -46,6 +46,7 @@
     'gallery.layouts' => [
         'layout',
         'listLayout',
+        'colorLayout',
     ],
     'gallery.layout.options' => [
         'table',
@@ -81,6 +82,7 @@
 
     'map.layouts' => [
         'layout',
+        'colorLayout',
     ],
     'map.layout.options' => [
         'details',

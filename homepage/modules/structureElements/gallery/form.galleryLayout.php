@@ -5,6 +5,17 @@ class GalleryLayoutStructure extends ElementForm
     protected $structure = [
         'columns' => [
             'type' => 'input.text',
+            'inputType' => 'number',
+        ],
+        'gap' => [
+            'type' => 'input.text',
+            'inputType' => 'number',
+            'minValue'  => '0',
+            'maxValue'  => '5',
+            'stepValue' => '1',
+            'additionalFormat' => [
+                'labelAfter'  => 'percent_of_row_width',
+            ],
         ],
         'captionLayout' => [
             'type' => 'select.index',

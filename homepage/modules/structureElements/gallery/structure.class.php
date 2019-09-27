@@ -26,8 +26,11 @@ class galleryElement extends menuDependantStructureElement implements Configurab
         $moduleStructure['canonicalUrl'] = 'url';
         $moduleStructure['metaDenyIndex'] = 'checkbox';
         $moduleStructure['columns'] = 'naturalNumber';
+        $moduleStructure['gap'] = 'naturalNumber';
         $moduleStructure['captionLayout'] = 'text';
         $moduleStructure['slideType'] = 'text';
+        
+        $moduleStructure['colorLayout'] = 'text';
     }
 
     protected function getTabsList()

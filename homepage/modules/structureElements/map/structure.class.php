@@ -28,6 +28,7 @@ class mapElement extends menuDependantStructureElement implements ConfigurableLa
         $moduleStructure['zoomLevel'] = 'text';
         $moduleStructure['streetViewControlEnabled'] = 'checkbox';
         $moduleStructure['mapTypeControlEnabled'] = 'checkbox';
+        $moduleStructure['colorLayout'] = 'text';
     }
 
     protected function getTabsList()
@@ -68,6 +69,28 @@ class mapElement extends menuDependantStructureElement implements ConfigurableLa
         return $fullAddress;
     }
 
+    public function getAdvancedAddressItems($itemTag='em', $items)
+    {
+        $fullAddress = '';
+        if ($this->address && in_array('address', $items)) {
+            $fullAddress .= "<{$itemTag} class='address'>" . $this->address . "</{$itemTag}>";
+        }
+
+        if ($this->zip && in_array('zip', $items)) {
+            $fullAddress .=  "<{$itemTag} class='zip'>" . $this->zip . "</{$itemTag}>";
+        }
+        if ($this->city && in_array('city', $items)) {
+            $fullAddress .= "<{$itemTag} class='city'>" . $this->city . "</{$itemTag}>";
+        }
+        if ($this->region && in_array('region', $items)) {
+            $fullAddress .= "<{$itemTag} class='region'>" . $this->region . "</{$itemTag}>";
+        }
+        if ($this->country && in_array('country', $items)) {
+            $fullAddress .= "<{$itemTag} class='country'>" . $this->country. "</{$itemTag}>";
+        }
+
+        return $fullAddress;
+    }
     public function getJsonMapInfo()
     {
         return json_encode([
