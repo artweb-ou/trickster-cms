@@ -18,10 +18,12 @@ class NewsFormStructure extends ElementForm
         'image' => [
             'type' => 'input.image',
             'preset' => 'adminImage',
+            'filename' => 'originalName',
         ],
         'thumbImage' => [
             'type' => 'input.image',
             'preset' => 'adminImage',
+            'filename' => 'thumbImageOriginalName',
         ],
     ];
 

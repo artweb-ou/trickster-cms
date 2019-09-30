@@ -19,6 +19,7 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
         $moduleStructure['formNewsListsLimitIds'] = 'numbersArray';
         $moduleStructure['itemsOnPage'] = 'text';
         $moduleStructure['layout'] = 'text';
+        $moduleStructure['colorLayout'] = 'text';
         $moduleStructure['column'] = 'text';
         $moduleStructure['orderType'] = 'text';
         $moduleStructure['buttonTitle'] = 'text';

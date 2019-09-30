@@ -2,6 +2,7 @@
     'latestNews.layouts' => [
         'layout',
         'column',
+        'colorLayout',
     ],
     'latestNews.layout.options' => [
         'short',

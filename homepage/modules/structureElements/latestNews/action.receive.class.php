@@ -12,9 +12,9 @@ class receiveLatestNews extends structureElementAction
             //persist latestNews data
             $structureElement->prepareActualData();
 
-            if ($structureElement->structureName == '') {
+         //   if ($structureElement->structureName == '') {
                 $structureElement->structureName = $structureElement->title;
-            }
+         //   }
 
             $structureElement->persistElementData();
 
@@ -72,7 +72,7 @@ class receiveLatestNews extends structureElementAction
             'orderType',
             'buttonTitle',
             'buttonUrl',
-            'buttonConnectedMenu'
+            'buttonConnectedMenu',
         ];
     }
 
