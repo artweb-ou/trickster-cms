@@ -7,6 +7,10 @@ class receiveLatestNews extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
+            if (!$structureElement->newsViewType)
+            {
+                $structureElement->newsViewType = "big";
+            }
             $linksManager = $this->getService('linksManager');
 
             //persist latestNews data
@@ -66,6 +70,7 @@ class receiveLatestNews extends structureElementAction
             'newsDisplayType',
             'newsDisplayAmount',
             'newsManualSearch',
+            'newsViewType',
             'displayMenus',
             'formNewsListsLimitIds',
             'itemsOnPage',

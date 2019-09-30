@@ -25,6 +25,7 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
         $moduleStructure['buttonTitle'] = 'text';
         $moduleStructure['buttonUrl'] = 'url';
         $moduleStructure['buttonConnectedMenu'] = 'text';
+        $moduleStructure['newsViewType'] = 'text';
     }
 
     protected function getTabsList()
