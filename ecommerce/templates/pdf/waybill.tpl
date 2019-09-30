@@ -86,7 +86,7 @@
 	</tr>
 	<tr>
 		<td style="vertical-align: top; padding: 1em 1.5em; text-align: left; border-collapse: collapse; border-bottom: 1px solid #e0e0e0;border-right: 1px solid #e0e0e0;">
-			<div>Andrese Klaasistuudio OÜ</div>
+			<div>{translations name='waybill.company_name'}</div>
 		</td>
 		<td style="vertical-align: top; padding: 1em 1.5em; text-align: left; border-collapse: collapse; border-bottom: 1px solid #e0e0e0;"></td>
 	</tr>
