@@ -4,7 +4,7 @@
 	{$moduleAttributes = "data-color='colorlayout_bg_color'"}
 {/if}
 {if $newsList}
-	{if $element->title}
+	{if $element->hideTitle==0 && !empty($element->title)}
 		{capture assign="moduleTitle"}
 			{$element->title}
 		{/capture}

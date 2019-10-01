@@ -13,6 +13,7 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['hideTitle'] = 'checkbox';
         $moduleStructure['newsDisplayType'] = 'text';
         $moduleStructure['newsDisplayAmount'] = 'text';
         $moduleStructure['newsManualSearch'] = 'numbersArray';

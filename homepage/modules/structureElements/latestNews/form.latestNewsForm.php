@@ -7,6 +7,10 @@ class LatestNewsFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'hideTitle' => [
+            'type' => 'input.checkbox',
+            'translationGroup' => 'shared',
+        ],
         'orderType' => [
             'type' => 'select.index',
             'options' => [

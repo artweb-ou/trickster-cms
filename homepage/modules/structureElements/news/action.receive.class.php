@@ -39,6 +39,7 @@ class receiveNews extends structureElementAction
         $expectedFields = [
             'date',
             'title',
+            'subTitle',
             'introduction',
             'content',
             'image',

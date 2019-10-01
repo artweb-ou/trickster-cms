@@ -25,6 +25,7 @@ class newsElement extends structureElement implements MetadataProviderInterface,
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['subTitle'] = 'code';
         $moduleStructure['introduction'] = 'html';
         $moduleStructure['date'] = 'date';
         $moduleStructure['content'] = 'html';

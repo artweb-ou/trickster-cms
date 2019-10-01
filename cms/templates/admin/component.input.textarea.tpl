@@ -4,7 +4,7 @@
     </span>
     <div class="form_field">
         <div class="textarea_container">
-            <textarea class="textarea_component" name="{$formNames.$fieldName}">{$formData.$fieldName}</textarea>
+            <textarea class="textarea_component{if !empty($item.textarea_class)} {$item.textarea_class}{/if}" name="{$formNames.$fieldName}">{$formData.$fieldName}</textarea>
         </div>
     </div>
 </div>

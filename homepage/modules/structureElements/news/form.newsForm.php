@@ -6,6 +6,10 @@ class NewsFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'subTitle' => [
+            'type' => 'input.textarea',
+            'textarea_class' => 'short_textarea',
+        ],
         'date' => [
             'type' => 'input.date',
         ],
