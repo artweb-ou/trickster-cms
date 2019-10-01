@@ -107,17 +107,15 @@ class submitShoppingBasket extends structureElementAction
 
                 $structureElement->saveShoppingBasketForm();
             }
+            //payment method id is sent from form, update it.
             if ($structureElement->paymentMethodId) {
                 $shoppingBasket->updateBasketFormData([
                     'paymentMethodId' => $structureElement->paymentMethodId,
                 ]);
             }
             if ($structureElement->isLastStep()) {
-                if ($paymentMethodId = $shoppingBasket->getPaymentMethodId()) {
-                    $structureElement->executeAction('pay');
-                } else {
-                    $structureElement->setViewName('selection');
-                }
+                //last step was submitted, try to pay
+                $structureElement->executeAction('pay');
             } else {
                 $nextStep = $structureElement->getNextStep();
                 $controller->redirect($structureElement->URL . 'step:' . $nextStep->structureName . '/');
