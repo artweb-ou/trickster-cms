@@ -25,7 +25,13 @@
 				<option value=''></option>
 				{if is_array($options)}
 					{foreach $options as $option}
-						<option value='{$option.id}'{if !empty($option.select)} selected="selected"{/if}>
+						<option{if !empty($option.additionalAttrs)}
+							{foreach $option.additionalAttrs as $addAttrKey=>$addAttrVal}
+								{if !empty($addAttrVal)}
+									data-attr-{$addAttrKey}="{$addAttrVal}"
+								{/if}
+							{/foreach}
+							{/if} value='{$option.id}'{if !empty($option.select)} selected="selected"{/if}>
 							{if !empty($option.level)}{section name="level" start=0 loop=$option.level}&nbsp;&nbsp;{/section}{/if}
 								{$option.title}{if !empty($option.group_title)} ({$option.group_title}){/if}
 						</option>

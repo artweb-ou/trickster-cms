@@ -21,6 +21,20 @@
 			background-color: mix(#6bbbff, #e2e2e5, 50%);
 		}
 
+		&[data-attr-inactive="1"]{
+			text-decoration: line-through;
+			&:after {
+				content:' (inactive)';
+				color:#FF9800;
+			}
+		}
+		&[data-attr-hidetitle="1"]{
+			opacity: .5;
+			&:after {
+				content:' (title is hidden)';
+				color:#FF9800;
+			}
+		}
 	}
 }
 
