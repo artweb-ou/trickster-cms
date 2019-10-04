@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<account>
-		<bankURL>https://www2.danskebank.ee/ibank/pizza/pizza</bankURL>
+		<bankURL>https://i.cooppank.ee/pay</bankURL>
 		<protocolVersion>008</protocolVersion>
 	</account>
 	<services>
