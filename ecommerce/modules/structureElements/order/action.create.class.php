@@ -81,8 +81,6 @@ class createOrder extends structureElementAction
                 }
             }
         }
-        $vatRate = $this->getService('ConfigManager')->get('main.vatRate');
-        $shoppingBasket->setVatRate($vatRate);
     }
 }
 
