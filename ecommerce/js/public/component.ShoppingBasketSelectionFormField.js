@@ -62,6 +62,9 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
                 checkButton.className = 'button check_vat_button';
                 fieldElement.appendChild(checkButton);
                 eventsManager.addHandler(checkButton, 'click', checkVatHandler);
+
+                controller.addListener('shoppingBasketVatCheckFailure', shoppingBasketVatCheckFailure);
+                controller.addListener('shoppingBasketVatCheckSuccess', shoppingBasketVatCheckSuccess);
             }
             eventsManager.addHandler(fieldComponent.inputElement, 'keydown', checkKey);
             if (info.helpLinkUrl && info.helpLinkText) {
@@ -70,10 +73,20 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
             }
         }
     };
+
     var checkVatHandler = function(event) {
         event.preventDefault();
         shoppingBasketLogics.checkVatNumber(fieldComponent.componentElement.value);
     };
+
+    var shoppingBasketVatCheckSuccess = function() {
+        componentElement.classList.remove('form_error');
+    };
+
+    var shoppingBasketVatCheckFailure = function() {
+        componentElement.classList.add('form_error');
+    };
+
     this.getComponentElement = function() {
         return componentElement;
     };
