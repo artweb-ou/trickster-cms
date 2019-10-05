@@ -22,5 +22,3 @@ class cloneProduct extends structureElementAction
         }
     }
 }
-
-

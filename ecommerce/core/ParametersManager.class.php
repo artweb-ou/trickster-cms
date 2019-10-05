@@ -283,10 +283,12 @@ class ParametersManager extends errorLogger
                 }
                 //sort every product's parameters positions according to product parents settings
                 foreach ($parameterPositions as $productId => $sortList) {
-                    array_multisort($sortList, SORT_ASC, $result['parameters'][$productId]);
+                    //todo: investigate error message here
+                    @array_multisort($sortList, SORT_ASC, $result['parameters'][$productId]);
                 }
                 foreach ($selectionPositions as $productId => $sortList) {
-                    array_multisort($sortList, SORT_ASC, $result['basketSelections'][$productId]);
+                    //todo: investigate error message here
+                    @array_multisort($sortList, SORT_ASC, $result['basketSelections'][$productId]);
                 }
             }
         }

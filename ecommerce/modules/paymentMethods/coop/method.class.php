@@ -1,6 +1,6 @@
 <?php
 
-class danskebankPaymentsMethod extends iPizzaPaymentsMethod
+class coopPaymentsMethod extends iPizzaPaymentsMethod
 {
     protected function setClassFilePath()
     {

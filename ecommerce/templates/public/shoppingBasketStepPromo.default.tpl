@@ -1,6 +1,7 @@
 {if $shoppingBasketElement->hasPromoDiscounts()}
 <div class="shoppingbasket_promocode shoppingbasket_aside">
 	<div class='shoppingbasket_form_heading'>{translations name='shoppingbasket.promocode'}</div>
+	<div class='shoppingbasket_promocode_error'>{translations name='shoppingbasket.promocode_failed'}</div>
 	<table class='shoppingbasket_promocode_form form_table'>
 		<tr>
 			<td class='form_label'>

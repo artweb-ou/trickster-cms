@@ -70,7 +70,7 @@
 			<div class="info_block">
 				{include file=$theme->template('block.currentlocation.tpl')}
 				<div class="pipe"></div>
-				<div class="page_link"><a class="page_link_item" href="{$controller->baseURL}" target="_blank">GO TO WEBSITE</a><span class="icon icon_page_link"></span></div>
+				<div class="page_link"><a class="page_link_item" href="{$controller->baseURL}redirect/type:element/id:{$currentElement->id}/code:{$currentLanguage->iso6393}/" target="_blank">{translations name='header.open_in_public'}</a><span class="icon icon_page_link"></span></div>
 			</div>
 			<div class="header_user_info">
 				{if !empty($userElement)}

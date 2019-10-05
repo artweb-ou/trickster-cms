@@ -14,13 +14,16 @@ class payShoppingBasket extends structureElementAction
     {
         $user = $this->getService('user');
         $linksManager = $this->getService('linksManager');
-        $structureElement->shoppingBasket = $this->getService('shoppingBasket');
-
-        if ($structureElement->shoppingBasket->getProductsList()) {
-            $selectedMethodId = (int)$structureElement->paymentMethodId;
+        /**
+         * @var shoppingBasket $shoppingBasket
+         */
+        $shoppingBasket = $this->getService('shoppingBasket');
+        if ($shoppingBasket->getProductsList()) {
+            $selectedMethodId = $shoppingBasket->getPaymentMethodId();
             if (!$selectedMethodId) {
-                $selectedMethodId = (int)$controller->getParameter('bank');
-                if ($selectedMethodId) {
+                //deprecated link support
+                //todo: remove in 2021
+                if ($selectedMethodId = (int)$controller->getParameter('bank')) {
                     $this->logError('Deprecated parameter "bank" used');
                 }
             }
@@ -98,8 +101,8 @@ class payShoppingBasket extends structureElementAction
                     $controller->redirect($structureElement->URL);
                 }
             } else {
-                $structureElement->setViewName('checkout');
                 $structureElement->setFormError('paymentMethodId');
+                $structureElement->executeAction('show');
             }
         } else {
             // session may have expired

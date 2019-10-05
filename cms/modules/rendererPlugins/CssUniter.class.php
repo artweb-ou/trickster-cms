@@ -86,13 +86,13 @@ class cssUniterRendererPlugin extends rendererPlugin
             // trimColorHash for colors css keys
             $this->lessCompiler->registerFunction('trimColorHash', function ($arg) {
                 list($type, $color) = $arg;
-                
+
                 if ($type == 'raw_color') {
                     return ltrim($color, "#");
-                }
-                else {
+                } else {
                     $this->logError("Wrong arguments and type:  type is $type, argument is $color");
                 }
+                return '';
             });
 
             // min max are Less features not supported by this compiler
@@ -104,7 +104,11 @@ class cssUniterRendererPlugin extends rendererPlugin
                 list($type, $delimiter, $values) = $arg;
                 return max($values);
             });
-            $allFilesContent = $this->lessCompiler->compile($allFilesContent);
+            try {
+                $allFilesContent = $this->lessCompiler->compile($allFilesContent);
+            } catch (Exception $exception) {
+                $this->logError($exception->getMessage());
+            }
 
             // MINIFY
             $compressor = new \tubalmartin\CssMin\Minifier();
@@ -235,7 +239,7 @@ class cssUniterRendererPlugin extends rendererPlugin
          */
 
         $designThemesManager = $this->getService('DesignThemesManager');
-        if($subfolder != "false") {
+        if ($subfolder != "false") {
             $svgFile = $subfolder . "/" . $svgFile;
         }
         if ($svgFileURL = $designThemesManager->getCurrentTheme()->getImageUrl($svgFile . '.svg', false, false)) {

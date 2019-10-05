@@ -4,6 +4,9 @@ class SocialDataManager extends errorLogger
     implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
+    /**
+     * @var socialPluginElement[]
+     */
     protected $socialPlugins;
 
     public function getCmsUserId($socialNetwork, $socialId)
@@ -52,7 +55,6 @@ class SocialDataManager extends errorLogger
             $socialPluginsElementId = $structureManager->getElementIdByMarker('socialPlugins');
             if ($socialPluginsElementId) {
                 $linksManager = $this->getService('linksManager');
-                $structureManager->getRootElement();
                 if ($socialPluginsIds = $linksManager->getConnectedIdList($socialPluginsElementId, 'structure', 'parent')) {
                     $this->socialPlugins = $structureManager->getElementsByIdList($socialPluginsIds, null, true);
                 }
@@ -63,17 +65,17 @@ class SocialDataManager extends errorLogger
 
     public function getSocialPluginByName($name)
     {
-        static $index;
-
-        if ($index === null) {
-            $index = [];
-            foreach ($this->getSocialPlugins() as $plugin) {
-                $index[$plugin->getName()] = $plugin;
+        foreach ($this->getSocialPlugins() as $plugin) {
+            if ($plugin->getName() === $name) {
+                return $plugin;
             }
         }
-        return isset($index[$name]) ? $index[$name] : null;
+        return false;
     }
 
+    /**
+     * @return \Illuminate\Database\Query\Builder
+     */
     protected function queryUsers()
     {
         return $this->getService('db')->table('social_users');

@@ -57,26 +57,7 @@ abstract class menuDependantStructureElement extends structureElement implements
             if ($languagesList = $structureManager->getElementsChildren($publicRoot->id)) {
                 foreach ($languagesList as &$languageElement) {
                     if ($languageElement->requested) {
-                        $menusInfo[] = $this->generateInfoItem($languageElement, $linksIndex);
-                        if ($menus = $structureManager->getElementsChildren($languageElement->id, null, [
-                            'structure',
-                            'catalogue',
-                        ])
-                        ) {
-                            foreach ($menus as &$menu) {
-                                $menusInfo[] = $this->generateInfoItem($menu, $linksIndex);
-                                // support for binding second level page elements
-                                if ($subMenus = $structureManager->getElementsChildren($menu->id, [
-                                    'container',
-                                    'hybrid',
-                                ])
-                                ) {
-                                    foreach ($subMenus as &$subMenu) {
-                                        $menusInfo[] = $this->generateInfoItem($subMenu, $linksIndex);
-                                    }
-                                }
-                            }
-                        }
+                        $this->processMenuInfoItem($languageElement, $linksIndex, $menusInfo);
                         break;
                     }
                 }
@@ -88,9 +69,9 @@ abstract class menuDependantStructureElement extends structureElement implements
     /**
      * @param structureElement $element
      * @param $linksIndex
-     * @return array
+     * @param $menusInfo
      */
-    protected function generateInfoItem($element, $linksIndex)
+    protected function processMenuInfoItem($element, $linksIndex, &$menusInfo)
     {
         $info = [
             'title' => $element->getTitle(),
@@ -101,7 +82,13 @@ abstract class menuDependantStructureElement extends structureElement implements
         if (isset($linksIndex[$element->id])) {
             $info['select'] = true;
         }
-        return $info;
+        $menusInfo[] = $info;
+        $structureManager = $this->getService('structureManager');
+        if ($subMenus = $structureManager->getElementsChildren($element->id, ['container', 'hybrid'], ['structure', 'catalogue'])) {
+            foreach ($subMenus as &$subMenu) {
+                $this->processMenuInfoItem($subMenu, $linksIndex, $menusInfo);
+            }
+        }
     }
 
     public function persistDisplayMenusLinks()

@@ -9,7 +9,8 @@ class ShopCatalogueControlsFormStructure extends ElementForm
         'displayMenus' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getDisplayMenusInfo',
-            'class' => '',
+            'condition' => 'checkDisplayMenus',
+            'translationGroup' => 'shared',
         ],
     ];
     protected $controls = 'controls';

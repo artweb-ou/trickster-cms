@@ -7,8 +7,6 @@ window.ShoppingBasketSelectionFormPost24Region = function(info, fieldsBaseName) 
     var fieldElement;
     var selectElement;
 
-    this.componentElement = null;
-
     var init = function() {
         componentElement = document.createElement('tr');
         if (info.error != '0' && info.error) {
@@ -55,11 +53,15 @@ window.ShoppingBasketSelectionFormPost24Region = function(info, fieldsBaseName) 
 
         var dropdown = dropDownManager.getDropDown(selectElement);
         fieldElement.appendChild(dropdown.componentElement);
-
-        self.componentElement = componentElement;
     };
     var changeHandler = function() {
         post24Logics.setCurrentRegion(selectElement.value);
+    };
+    this.getComponentElement = function() {
+        return componentElement;
+    };
+    this.getId = function() {
+        return info.id;
     };
     init();
 };

@@ -4,6 +4,6 @@
     'smartPostEnabled' => false,
     'pageAmountProducts' => 40,
     'availablePageAmountProducts' => [20, 40, 60, 100],
-    'vatCheckEnable' => false,
+    'vatCheckEnable' => true,
     'vatCheckCurrentCountry' => 'EE'
 ];

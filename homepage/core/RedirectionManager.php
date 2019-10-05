@@ -6,16 +6,38 @@ class RedirectionManager implements DependencyInjectionContextInterface
 
     public function redirectToElement($elementId, $languageCode = '')
     {
-        if (!$languageCode) {
-            $languageCode = $this->getService('LanguagesManager')->getCurrentLanguageCode();
+        $languagesManager = $this->getService('LanguagesManager');
+        $languageId = null;
+        if ($languageCode) {
+            if ($language = $languagesManager->getLanguageByCode($languageCode)) {
+                $languageId = $language->id;
+            }
         }
         $configManager = $this->getService('ConfigManager');
         $structureManager = $this->getService('structureManager', [
             'rootMarker' => $configManager->get('main.rootMarkerPublic'),
             'requestedPath' => [$languageCode],
         ], true);
-        $element = $structureManager->getElementById($elementId);
-        $this->redirect($element->URL);
+
+        //if language was provided, then try to get the element through requested language
+        if ($languageId) {
+            if ($element = $structureManager->getElementById($elementId, $languageId)) {
+                $this->redirect($element->URL);
+                return true;
+            }
+        }
+        //try to get the element through any language
+        if ($element = $structureManager->getElementById($elementId, $structureManager->getRootElementId())) {
+            $this->redirect($element->URL);
+            return true;
+        }
+
+        //just redirect to current language
+        if ($element = $structureManager->getElementById($languageId, $structureManager->getRootElementId())) {
+            $this->redirect($element->URL);
+            return true;
+        }
+        return false;
     }
 
     public function switchLanguage($newLanguageCode, $referrerElementId = 0, $application = '')
@@ -29,23 +51,6 @@ class RedirectionManager implements DependencyInjectionContextInterface
         $httpStatus = '302';
         $url = $uriSwitchLogics->findForeignRelativeUrl($referrerElementId, $httpStatus);
         $this->redirect($url, $httpStatus);
-    }
-
-    public function redirectToMobile($uri, $uriType = 'desktop', $newLanguage = null)
-    {
-        $uriSwitchLogics = $this->getService('uriSwitchLogics');
-        if ($uriType == 'mobile') {
-            $uriSwitchLogics->setCurrentMobileUri($uri);
-        } else {
-            $uriSwitchLogics->setCurrentUri($uri);
-        }
-
-        if (!is_null($newLanguage)) {
-            $uriSwitchLogics->setLanguage($newLanguage);
-        }
-
-        $result = $uriSwitchLogics->getMobileUri();
-        $this->redirect($result, '302');
     }
 
     public function redirectToPublic($uri, $newLanguage = null)
