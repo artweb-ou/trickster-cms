@@ -57,8 +57,8 @@ window.BubbleComponent = function(referralElement, message, additionalContainerC
     };
     this.start = function() {
         componentElement.style.display = 'block';
-
-        var html = document.documentElement;
+        //document.scrollingElement is required for Safari.
+        const html = document.scrollingElement || document.documentElement;
         var htmlScroll = html.scrollTop;
 
         var parentPositionsX;
@@ -95,7 +95,6 @@ window.BubbleComponent = function(referralElement, message, additionalContainerC
         componentElement.style.height = 0;
         componentElement.style.overflow = 'hidden';
         componentElement.style.opacity = 0;
-
         TweenLite.to(componentElement,
             0.5,
             {
