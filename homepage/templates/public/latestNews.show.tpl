@@ -35,6 +35,7 @@
 	{if !empty($moduleAttributes )}{assign moduleAttributes $moduleAttributes}{/if}
 	{assign moduleClass "latestnews latestnews_layout_{$element->getCurrentLayout()}{if !empty($colorLayoutStyle)} {$colorLayoutStyle}{/if}"}
 	{assign moduleContentClass "latestnews_content"}
+	{assign moduleTitleTag "h2"}
 	{assign moduleTitleClass "latestnews_title latestnews_title_{$element->getCurrentLayout()}"}
 	{include file=$theme->template("component.contentmodule.tpl")}
 {/if}

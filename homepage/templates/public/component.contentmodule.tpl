@@ -8,7 +8,7 @@
 				<div class="contentmodule_left_side{if isset($moduleLeftSideClass)} {$moduleLeftSideClass}{/if}"{if isset($moduleLeftSideClassAttributes)} {$moduleLeftSideClassAttributes}{/if}>{$moduleLeftSide}</div>
 		{/if}
 		{if isset($moduleTitle)}
-			<h1 class="contentmodule_title{if isset($moduleTitleClass)} {$moduleTitleClass}{/if}"{if isset($moduleTitleAttributes)} {$moduleTitleAttributes}{/if}>{$moduleTitle}</h1>
+			<{if isset($moduleTitleTag)}{$moduleTitleTag}{else}h1{/if} class="contentmodule_title{if isset($moduleTitleClass)} {$moduleTitleClass}{/if}"{if isset($moduleTitleAttributes)} {$moduleTitleAttributes}{/if}>{$moduleTitle}</{if isset($moduleTitleTag)}{$moduleTitleTag}{else}h1{/if}>
 		{/if}
 		{if isset($moduleContent)}
 			<div class="contentmodule_content{if isset($moduleContentClass)} {$moduleContentClass}{/if}">{$moduleContent}</div>
