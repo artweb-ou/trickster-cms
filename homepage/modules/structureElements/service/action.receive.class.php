@@ -17,19 +17,19 @@ class receiveService extends structureElementAction
                 $structureElement->image = $structureElement->id;
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
             }
-            if (!is_null($structureElement->getDataChunk("icon")->originalName)) {
-                $structureElement->icon = $structureElement->id . "_icon";
-                $structureElement->iconOriginalName = $structureElement->getDataChunk("icon")->originalName;
+            $additionalImages = [
+                'icon',
+                'link_1_icon',
+                'link_2_icon',
+            ];
+
+            foreach($additionalImages as $imageCode) {
+                if (!is_null($structureElement->getDataChunk($imageCode)->originalName)) {
+                    $structureElement->$imageCode = $structureElement->id . "_$imageCode";
+                    $field = $imageCode . 'OriginalName';
+                    $structureElement->$field = $structureElement->getDataChunk($imageCode)->originalName;
+                }
             }
-
-//            foreach($additionalImages as $imageKey=>$imageCode) {
-//                if (!is_null($structureElement->getDataChunk($imageCode)->originalName)) {
-//                    $structureElement->$imageCode = $structureElement->id . "_$imageKey";
-//                    $field = $imageCode . 'OriginalName';
-//                    $structureElement->$field = $structureElement->getDataChunk($imageCode)->originalName;
-//                }
-//            }
-
             $structureElement->persistElementData();
 
             $linksIndex = $linksManager->getElementsLinksIndex($structureElement->id, 'connectedGallery', 'parent');
@@ -58,6 +58,8 @@ class receiveService extends structureElementAction
             'link_2',
             'link_text_1',
             'link_text_2',
+            'link_1_icon',
+            'link_2_icon',
             'introduction',
             'content',
             'galleries',

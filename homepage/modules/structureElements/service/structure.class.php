@@ -18,12 +18,16 @@ class serviceElement extends menuStructureElement implements ConfigurableLayouts
         $moduleStructure['iconOriginalName'] = 'fileName';
         $moduleStructure['introduction'] = 'html';
         $moduleStructure['content'] = 'html';
-        $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['image'] = 'image';
+        $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['link_1'] = 'text';
         $moduleStructure['link_2'] = 'text';
         $moduleStructure['link_text_1'] = 'text';
         $moduleStructure['link_text_2'] = 'text';
+        $moduleStructure['link_1_icon'] = 'image';
+        $moduleStructure['link_1_iconOriginalName'] = 'fileName';
+        $moduleStructure['link_2_icon'] = 'image';
+        $moduleStructure['link_2_iconOriginalName'] = 'fileName';
         $moduleStructure['galleries'] = 'array';
         $moduleStructure['feedbackId'] = 'text';
         $moduleStructure['metaTitle'] = 'text';

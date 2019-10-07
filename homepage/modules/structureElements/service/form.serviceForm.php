@@ -23,11 +23,19 @@ class ServiceFormStructure extends ElementForm
         'link_text_1' => [
             'type' => 'input.text',
         ],
+        'link_1_icon' => [
+            'type' => 'input.image',
+            'filename' => 'link_1_iconOriginalName',
+        ],
         'link_1' => [
             'type' => 'input.text',
         ],
         'link_text_2' => [
             'type' => 'input.text',
+        ],
+        'link_2_icon' => [
+            'type' => 'input.image',
+            'filename' => 'link_2_iconOriginalName',
         ],
         'link_2' => [
             'type' => 'input.text',
