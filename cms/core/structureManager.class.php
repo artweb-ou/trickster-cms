@@ -535,12 +535,8 @@ class structureManager implements DependencyInjectionContextInterface
      * @param null $parentLinkType - all copied top-elements will use this to link with new parents
      * @return array $copiesInformation
      */
-    public function copyElements($idList, $targetId, $linkTypes = null, $parentLinkType = null)
+    public function copyElements($idList, $targetId, $linkTypes = null)
     {
-        if (is_null($parentLinkType) || !$parentLinkType) {
-            $parentLinkType = 'structure';
-        }
-
         //by default copy only elements via "structure" links
         if (is_null($linkTypes)) {
             $linkTypes = ['structure'];
@@ -549,7 +545,19 @@ class structureManager implements DependencyInjectionContextInterface
         //copy all the elements including their structure children tree
         $copiesInformation = [];
         foreach ($idList as $sourceId) {
-            $this->copyElement($sourceId, $targetId, $parentLinkType, $linkTypes, $copiesInformation);
+            $parentLinkType = false;
+            if ($elementLinks = $this->linksManager->getElementsLinks($sourceId, null, 'child')) {
+                foreach ($elementLinks as $elementLink) {
+                    if (in_array($elementLink->type, $linkTypes)) {
+                        $parentLinkType = $elementLink->type;
+                        break;
+                    }
+                }
+
+                if ($parentLinkType) {
+                    $this->copyElement($sourceId, $targetId, $parentLinkType, $linkTypes, $copiesInformation);
+                }
+            }
         }
 
         //replicate all copied elements links using the information from old elements to maintain same connections

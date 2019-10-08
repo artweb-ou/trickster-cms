@@ -127,13 +127,12 @@ class productElement extends structureElement implements
 
     protected $iconsInfo;
 
-    protected $allowedTypes = ['product'];
-//    protected $allowedTypes = ['subArticle'];
     protected $allowedProductTypesByAction = [
-        'showImages'    => ['galleryImage'],
-        'showTexts'     => ['subArticle'],
-        'showFiles'     => ['file'],
-        'showFullList'  => ['galleryImage'],
+        'showImages' => ['galleryImage'],
+        'showTexts' => ['subArticle'],
+        'showFiles' => ['file'],
+        'showIconForm' => ['galleryImage'],
+        'copyElements' => ['galleryImage', 'subArticle', 'file'],
     ];
 
     protected function setModuleStructure(&$moduleStructure)
@@ -1953,22 +1952,12 @@ class productElement extends structureElement implements
 
     public function getAllowedTypes($currentAction = 'showFullList')
     {
-//        if ($currentAction == 'showFullList') {
-//            $fullListAllowed = [];
-//            foreach ($this->allowedProductTypesByAction as $action=>$value) {
-//                $fullListAllowed  = array_merge($fullListAllowed, $value);
-//            }
-//            return array_unique($fullListAllowed);
-//        }
-//        else {
-            if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
-                return $this->allowedProductTypesByAction[$currentAction];
-            }
-            else {
-                return [];
-            }
-//        }
+        if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
+            return $this->allowedProductTypesByAction[$currentAction];
+        }
+        return [];
     }
+
 
     public function getNewElementAction()
     {
