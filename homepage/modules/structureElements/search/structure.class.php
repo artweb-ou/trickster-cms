@@ -102,7 +102,9 @@ class searchElement extends menuDependantStructureElement
                             'introduction',
                         ], $phrase);
                     }
-                    $foundElement->URL .= "qid:" . $searchId . "/";
+                    if ($searchId) {
+                        $foundElement->URL .= "qid:" . $searchId . "/";
+                    }
                 }
             }
             $this->pager = new pager($this->URL . 'action:perform/id:' . $this->id . '/phrase:' . $this->phrase . '/'

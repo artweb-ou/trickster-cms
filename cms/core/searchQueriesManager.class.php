@@ -36,16 +36,18 @@ class searchQueriesManager implements DependencyInjectionContextInterface
     public function logSearch($phrase, $resultsCount)
     {
         $visitorManager = $this->getService('VisitorsManager');
-        $currentVisitor = $visitorManager->getCurrentVisitor();
-        $record = $this->dataCollection->getEmptyObject();
+        if ($currentVisitor = $visitorManager->getCurrentVisitor()) {
+            $record = $this->dataCollection->getEmptyObject();
 
-        $record->phrase = $phrase;
-        $record->resultsCount = $resultsCount;
-        $record->date = time();
-        $record->bClicked = 0;
-        $record->visitorId = $currentVisitor->id;
-        $record->persist();
-        return $record->id;
+            $record->phrase = $phrase;
+            $record->resultsCount = $resultsCount;
+            $record->date = time();
+            $record->bClicked = 0;
+            $record->visitorId = $currentVisitor->id;
+            $record->persist();
+            return $record->id;
+        }
+        return false;
     }
 
     /** Adds a new log when necessary, otherwise updates an old log. (Meant for usage with Ajax search)
