@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Query\JoinClause;
+
 class ParametersManager extends errorLogger
 {
     protected $productParameters = [];
@@ -197,6 +199,9 @@ class ParametersManager extends errorLogger
                 ->leftJoin('structure_links', 'module_product_parameter_value.parameterId', '=', 'structure_links.childStructureId')
                 //then sorted by position of values inside parameters.
                 ->leftJoin('structure_links as links2', function ($query) {
+                    /**
+                     * @var JoinClause $query
+                     */
                     $query->on('module_product_parameter_value.value', '=', 'links2.childStructureId')
                         ->where('links2.type', '=', 'structure');
                 })
@@ -212,7 +217,7 @@ class ParametersManager extends errorLogger
                 //load all options (product selection values) for all primary product selections
                 if ($optionsIdList = array_unique(array_column($valuesList, 'value'))) {
                     if ($optionsInfoList = $this->db->table('module_product_selection_value')
-                        ->select(['id', 'title', 'image', 'originalName', 'value'])
+                        ->select(['id', 'title', 'image', 'originalName', 'value', 'price'])
                         ->whereIn('id', $optionsIdList)
                         ->where('languageId', '=', $currentLanguageId)
                         ->get()
@@ -384,6 +389,7 @@ class ParametersManager extends errorLogger
         if (!isset($this->productBasketSelections[$productId])) {
             $this->loadParametersForProducts([$productId]);
             foreach ($this->productBasketSelections[$productId] as $key => $productSelection) {
+                //if this selection has no option, the strip it from selections
                 if (!$productSelection['productOptions']) {
                     unset($this->productBasketSelections[$productId][$key]);
                 }

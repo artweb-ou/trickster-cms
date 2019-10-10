@@ -2,23 +2,37 @@
 
 class ProductOptionsPricesManager extends errorLogger
 {
+    /**
+     * @var \Illuminate\Database\Connection
+     */
     protected $db;
+    /**
+     * @var ParametersManager
+     */
+    protected $parametersManager;
 
     public function setDb($db)
     {
         $this->db = $db;
     }
 
+    public function setParametersManager($parametersManager)
+    {
+        $this->parametersManager = $parametersManager;
+    }
+
     public function getData($productId)
     {
-        $result = [];
+        //load all combination prices from values combination tables
         $records = $this->queryDb()
             ->select('combo', 'price')
             ->where('productId', '=', $productId)
             ->get();
         foreach ($records as $record) {
-            $result[$record['combo']] = $record['price'];
+            $price = $record['price'];
+            $result[$record['combo']] = $price;
         }
+
         return $result;
     }
 

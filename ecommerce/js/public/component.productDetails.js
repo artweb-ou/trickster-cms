@@ -5,7 +5,6 @@ window.ProductDetailsComponent = function(componentElement) {
     var amountMinusElement;
     var amountPlusElement;
     var amountInput;
-    var productSelectors = [];
     var minimumOrder;
     var priceElements = [];
     var oldPriceElements = [];
@@ -78,11 +77,6 @@ window.ProductDetailsComponent = function(componentElement) {
             var selection = new ProductDetailsSelectionComponent(self, selectionElements[i]);
             selections.push(selection);
         }
-        if (selectionElements.length === 0) {
-            // deprecated since 18.10.16
-            productSelectors = _('select.product_details_option_selector', componentElement);
-            productSelectorsText = _('.product_details_option_text', componentElement);
-        }
         if (window.productParametersHintsInfo) {
             var parameterElements = _('.product_details_parameter', componentElement);
             for (i = parameterElements.length; i--;) {
@@ -112,18 +106,6 @@ window.ProductDetailsComponent = function(componentElement) {
             return;
         }
         var optionsArgument = selectedOptions;
-        var optionsText = selectedOptionsText;
-        if (productSelectors.length > 0) {
-            // deprecated since 18.10.16
-            var selections = [];
-            var selectedVariants = [];
-            for (var i = 0; i < productSelectors.length; i++) {
-                if (productSelectors[i].tagName.toLowerCase() === 'select') {
-                    selections.push(productSelectors[i].value);
-                }
-            }
-            optionsArgument = selections.join(', ');
-        }
         var amount = amountInput ? amountInput.value : minimumOrder;
         if (amount % minimumOrder != 0) {
             amount = minimumOrder;
@@ -161,6 +143,7 @@ window.ProductDetailsComponent = function(componentElement) {
     };
     var refresh = function() {
         var i;
+        var j;
         optionsSelected = true;
         selectedOptions = [];
         selectedOptionsText = [];
@@ -181,29 +164,43 @@ window.ProductDetailsComponent = function(componentElement) {
                 selectedOptionsText.push(text);
             }
         }
+        var price = parseFloat(productData.price);
+        var oldPrice = parseFloat(productData.oldPrice);
+
         if (influentialOptions.length > 0) {
             influentialOptions.sort(function(a, b) {
                 return a - b;
             });
             var comboCode = influentialOptions.join(';') + ';';
 
-            if (priceElements) {
-                var price = productData.price;
-                if (productData.selectionsPricings[comboCode]) {
-                    price = productData.selectionsPricings[comboCode];
-                }
-                for (i = priceElements.length; i--;) {
-                    priceElements[i].innerHTML = price;
+            if (productData.selectionsPricings[comboCode]) {
+                price = parseFloat(productData.selectionsPricings[comboCode]);
+            }
+            if (productData.selectionsOldPricings[comboCode]) {
+                oldPrice = parseFloat(productData.selectionsOldPricings[comboCode]);
+            }
+        }
+        if (typeof productData.basketSelectionsInfo !== 'undefined') {
+            for (i = 0; i < productData.basketSelectionsInfo.length; i++) {
+                for (j = 0; j < productData.basketSelectionsInfo[i]['productOptions'].length; j++) {
+                    var option = productData.basketSelectionsInfo[i]['productOptions'][j];
+                    if (selectedOptions.indexOf(option.id) >= 0) {
+                        price += option.price;
+                        oldPrice += option.price;
+                    }
                 }
             }
-            if (oldPriceElements) {
-                var oldPrice = productData.oldPrice;
-                if (productData.selectionsOldPricings[comboCode]) {
-                    oldPrice = productData.selectionsOldPricings[comboCode];
-                }
-                for (i = oldPriceElements.length; i--;) {
-                    oldPriceElements[i].innerHTML = oldPrice;
-                }
+        }
+
+        if (priceElements) {
+            for (i = priceElements.length; i--;) {
+                priceElements[i].innerHTML = price;
+            }
+        }
+
+        if (oldPriceElements) {
+            for (i = oldPriceElements.length; i--;) {
+                oldPriceElements[i].innerHTML = oldPrice;
             }
         }
     };
@@ -287,11 +284,11 @@ window.ProductDetailsSelectionComponent = function(detailsComponent, componentEl
     };
     this.getValue = function() {
         if (selectElement) {
-            return selectElement.value;
+            return parseInt(selectElement.value, 10);
         } else if (radioElements) {
             for (var i = radioElements.length; i--;) {
                 if (radioElements[i].checked) {
-                    return radioElements[i].value;
+                    return parseInt(radioElements[i].value, 10);
                 }
             }
         }

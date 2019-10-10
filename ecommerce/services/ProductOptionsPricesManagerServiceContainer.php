@@ -7,10 +7,15 @@ class ProductOptionsPricesManagerServiceContainer extends DependencyInjectionSer
         return new ProductOptionsPricesManager();
     }
 
+    /**
+     * @param ProductOptionsPricesManager $instance
+     * @return mixed
+     */
     public function makeInjections($instance)
     {
-        $service = $instance;
-        $service->setDb($this->registry->getService('db'));
-        return $service;
+        $this->injectService($instance, 'db');
+        $this->injectService($instance, 'ParametersManager');
+        $instance->setDb($this->registry->getService('db'));
+        return $instance;
     }
 }

@@ -46,7 +46,6 @@
  * @property string $comment_captcha
  * @property array $importInfo
  * @property string $unit
- * @property integer $applicableToAllProducts
  */
 class productElement extends structureElement implements
     MetadataProviderInterface,
@@ -1708,6 +1707,7 @@ class productElement extends structureElement implements
             $info['selectionsPricings'] = $selectionsPricings;
             $info['selectionsOldPricings'] = $selectionsOldPricings;
             $info['selectionsImages'] = $this->getOptionsImagesInfo();
+            $info['basketSelectionsInfo'] = $this->getBasketSelectionsInfo();
         }
         return $info;
     }
