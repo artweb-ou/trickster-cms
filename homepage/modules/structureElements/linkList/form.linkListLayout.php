@@ -3,13 +3,40 @@
 class LinkListLayoutStructure extends ElementForm
 {
     protected $structure = [
-        'cols' => [
-            'type' => 'input.text',
-            'inputType' => 'number',
-            'minValue'  => '2',
-            'maxValue'  => '4',
-            'stepValue' => '1',
-        ],
+        'additionalMarkup' => [
+            'cols' => [
+                'type' => 'input.text',
+                'inputType' => 'number',
+                'minValue'  => '2',
+                'maxValue'  => '4',
+                'stepValue' => '1',
+            ],
+            'gapValue' => [
+                'type' => 'input.text',
+                'blockClass' => 'col_2',
+                'inputType' => 'number',
+                'minValue'  => '',
+                'stepValue' => '1',
+            ],
+            'gapUnit' => [
+                'type' => 'select.index',
+                'blockClass' => 'col_2',
+                'options' => [
+                    0   => '',
+                    '%' => '%',
+                    'pt' => 'px',// @pt
+                ],
+            ],
+            'titlePosition' => [
+                'type' => 'select.index',
+                'options' => [
+                    'hidden' =>  'hidden',
+                    'above'  =>  'above',
+                    'below'  =>  'below',
+                    'over'   => 'over',
+                ],
+            ],
+        ]
     ];
 
 
@@ -23,6 +50,10 @@ class LinkListLayoutStructure extends ElementForm
                 'layouts' => $this->element->getLayoutsSelection($type),
             ];
         }
-        return $structure + $this->structure;
+        $structure['additionalMarkupLayout'] = [
+            'type' => 'additional.markup.layout',
+            'layouts' => $this->structure['additionalMarkup'],
+        ];
+        return $structure;
     }
 }

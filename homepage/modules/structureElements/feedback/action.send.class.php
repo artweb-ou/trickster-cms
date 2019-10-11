@@ -24,6 +24,7 @@ class sendFeedback extends structureElementAction
             $company = false;
             $firstName = false;
             $lastName = false;
+            $pageUrl = false;
             $fromName = isset($settings['default_sender_name']) ? $settings['default_sender_name'] : 'noreply';
             $fromEmail = isset($settings['default_sender_email']) ? $settings['default_sender_email'] : 'noreply@noreply.com';
 
@@ -68,6 +69,12 @@ class sendFeedback extends structureElementAction
                             if (count($parts) === 3) {
                                 $value = implode('.', array_reverse($parts));
                             }
+                        }
+                        if ($formField->autocomplete == 'pageUrl') {
+                            /**
+                             * @var $structureElement feedbackElement
+                             */
+                            $value = $this->getCurrentPageUrl($value);
                         }
                         $fieldInfo = [
                             'fieldName' => $fieldName,
@@ -202,5 +209,12 @@ class sendFeedback extends structureElementAction
     public function setExpectedFields(&$expectedFields)
     {
         $expectedFields = array_merge($expectedFields, $this->structureElement->getCustomExpectedFields());
+    }
+
+    public function getCurrentPageUrl($pageUrl)
+    {
+        $structureManager = $this->getService('structureManager');
+        $rootUrl = $structureManager->rootURL;
+        return  mb_substr($pageUrl, mb_strlen($rootUrl));
     }
 }

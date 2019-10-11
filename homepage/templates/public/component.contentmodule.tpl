@@ -11,7 +11,7 @@
 			<{if isset($moduleTitleTag)}{$moduleTitleTag}{else}h1{/if} class="contentmodule_title{if isset($moduleTitleClass)} {$moduleTitleClass}{/if}"{if isset($moduleTitleAttributes)} {$moduleTitleAttributes}{/if}>{$moduleTitle}</{if isset($moduleTitleTag)}{$moduleTitleTag}{else}h1{/if}>
 		{/if}
 		{if isset($moduleContent)}
-			<div class="contentmodule_content{if isset($moduleContentClass)} {$moduleContentClass}{/if}">{$moduleContent}</div>
+			<div class="contentmodule_content{if isset($moduleContentClass)} {$moduleContentClass}{/if}"{if !empty($moduleContentAttributes)} {$moduleContentAttributes}{/if}>{$moduleContent}</div>
 		{/if}
 		{if isset($moduleLeftSide)}
 			</div>

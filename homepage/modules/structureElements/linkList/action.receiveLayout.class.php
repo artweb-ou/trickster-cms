@@ -19,6 +19,9 @@ class receiveLayoutLinkList extends structureElementAction
             'layout',
             'colorLayout',
             'cols',
+            'gapValue',
+            'gapUnit',
+            'titlePosition',
         ];
     }
 

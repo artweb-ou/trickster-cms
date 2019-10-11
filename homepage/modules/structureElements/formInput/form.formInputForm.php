@@ -12,6 +12,10 @@ class FormInputFormStructure extends ElementForm
         'required' => [
             'type' => 'input.checkbox',
         ],
+        'hidden' => [
+            'type' => 'input.checkbox',
+            'class' => 'hide_public',
+        ],
         'validator' => [
             'type' => 'select.index',
             'options' => [

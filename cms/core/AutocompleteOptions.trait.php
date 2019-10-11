@@ -25,6 +25,7 @@ trait AutocompleteOptionsTrait
             'comment',
             'product',
             'vatNumber',
+            'pageUrl',
         ];
         $options = [];
         foreach ($values as $value) {

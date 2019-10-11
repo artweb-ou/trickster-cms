@@ -24,6 +24,9 @@ class linkListElement extends menuDependantStructureElement implements Configura
         $moduleStructure['content'] = 'html';
         $moduleStructure['subTitle'] = 'text';
         $moduleStructure['cols'] = 'naturalNumber';
+        $moduleStructure['gapValue'] = 'naturalNumber';
+        $moduleStructure['gapUnit'] = 'text';
+        $moduleStructure['titlePosition'] = 'text';
     }
 
     protected function getTabsList()
