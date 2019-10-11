@@ -3,37 +3,39 @@
 class GalleryLayoutStructure extends ElementForm
 {
     protected $structure = [
-        'columns' => [
-            'type' => 'input.text',
-            'inputType' => 'number',
-        ],
-        'gap' => [
-            'type' => 'input.text',
-            'inputType' => 'number',
-            'minValue'  => '0',
-            'maxValue'  => '5',
-            'stepValue' => '1',
-            'additionalFormat' => [
-                'labelAfter'  => 'percent_of_row_width',
+        'additionalMarkup' => [
+            'columns' => [
+                'type' => 'input.text',
+                'inputType' => 'number',
             ],
-        ],
-        'captionLayout' => [
-            'type' => 'select.index',
-            'options' => [
-                'hidden' => 'captionlayout_hidden',
-                'above' => 'captionlayout_above',
-                'below' => 'captionlayout_below',
-                'over' => 'captionlayout_over',
+            'gap' => [
+                'type' => 'input.text',
+                'inputType' => 'number',
+                'minValue'  => '0',
+                'maxValue'  => '5',
+                'stepValue' => '1',
+                'additionalFormat' => [
+                    'labelAfter'  => 'percent_of_row_width',
+                ],
             ],
-        ],
-        'slideType' => [
-            'type' => 'select.index',
-            'options' => [
-                'slide' => 'slidetype_slide',
-                'scroll' => 'slidetype_scroll',
-                'carousel' => 'slidetype_carousel',
+            'captionLayout' => [
+                'type' => 'select.index',
+                'options' => [
+                    'hidden' => 'captionlayout_hidden',
+                    'above' => 'captionlayout_above',
+                    'below' => 'captionlayout_below',
+                    'over' => 'captionlayout_over',
+                ],
             ],
-        ],
+            'slideType' => [
+                'type' => 'select.index',
+                'options' => [
+                    'slide' => 'slidetype_slide',
+                    'scroll' => 'slidetype_scroll',
+                    'carousel' => 'slidetype_carousel',
+                ],
+            ],
+        ]
     ];
 
 
@@ -47,6 +49,10 @@ class GalleryLayoutStructure extends ElementForm
                 'layouts' => $this->element->getLayoutsSelection($type),
             ];
         }
-        return $structure + $this->structure;
+        $structure['additionalMarkupLayout'] = [
+            'type' => 'additional.markup.layout',
+            'layouts' => $this->structure['additionalMarkup'],
+        ];
+        return $structure;
     }
 }

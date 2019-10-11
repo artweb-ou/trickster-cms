@@ -22,8 +22,8 @@ class LinkListLayoutStructure extends ElementForm
                 'type' => 'select.index',
                 'blockClass' => 'col_2',
                 'options' => [
-                    0   => '',
-                    '%' => '%',
+                    0 => 'none',
+                    '%' => 'pct',
                     'pt' => 'px',// @pt
                 ],
             ],
