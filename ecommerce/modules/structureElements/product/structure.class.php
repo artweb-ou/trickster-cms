@@ -1450,15 +1450,16 @@ class productElement extends structureElement implements
 
     protected function loadResidingProducts()
     {
+        /**
+         * @var $category categoryElement
+         */
         $sessionManager = $this->getService('ServerSessionManager');
-        $fromCategory = $sessionManager->get('fromProductList');
+        $fromCategory = $sessionManager->get('currentProductsList');
         $structureManager = $this->getService('structureManager');
-        if(!empty($fromCategory)) {
-            $category = $structureManager->getElementById($fromCategory);
-        } else {
+        if (!($category = $structureManager->getElementById($fromCategory))) {
             $category = $this->getRequestedParentCategory();
         }
-        if (!empty($category)) {
+        if ($category) {
             if ($result = $category->getResidingProducts($this->id)) {
                 if ($result['next']) {
                     $this->nextProduct = $result['next'];
