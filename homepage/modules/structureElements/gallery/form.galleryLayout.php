@@ -4,18 +4,34 @@ class GalleryLayoutStructure extends ElementForm
 {
     protected $structure = [
         'additionalMarkup' => [
+            'clickDisable' => [
+                'type' => 'input.checkbox',
+            ],
+            'freeImageWidth' => [
+                'type' => 'input.checkbox',
+            ],
             'columns' => [
                 'type' => 'input.text',
                 'inputType' => 'number',
             ],
-            'gap' => [
+            'gapValue' => [
                 'type' => 'input.text',
+                'blockClass' => 'col_2',
                 'inputType' => 'number',
                 'minValue'  => '0',
                 'maxValue'  => '5',
                 'stepValue' => '1',
                 'additionalFormat' => [
-                    'labelAfter'  => 'percent_of_row_width',
+                    'labelAfter'  => 'depends_on_image_block_width',
+                ],
+            ],
+            'gapUnit' => [
+                'type' => 'select.index',
+                'blockClass' => 'col_2',
+                'options' => [
+                    0 => 'none',
+                    '%' => 'pct',
+                    'rem' => 'rem',// @pt
                 ],
             ],
             'captionLayout' => [

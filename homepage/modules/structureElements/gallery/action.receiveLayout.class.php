@@ -17,9 +17,13 @@ class receiveLayoutGallery extends structureElementAction
     {
         $expectedFields = [
             'layout',
+            'colorLayout',
             'listLayout',
             'columns',
-            'gap',
+            'gapValue',
+            'gapUnit',
+            'clickDisable',
+            'freeImageWidth',
             'captionLayout',
             'slideType',
         ];

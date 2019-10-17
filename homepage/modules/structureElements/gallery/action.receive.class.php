@@ -28,6 +28,7 @@ class receiveGallery extends structureElementAction
     {
         $expectedFields = [
             'title',
+            'hideTitle',
             'content',
             'displayMenus',
         ];

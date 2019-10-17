@@ -6,6 +6,10 @@ class GalleryFormStructure extends ElementForm
         'title' => [
             'type' => 'input.text',
         ],
+        'hideTitle' => [
+            'type' => 'input.checkbox',
+            'translationGroup' => 'shared',
+        ],
 //        'service' => [
 //            'type' => 'select.array',
 //        ],

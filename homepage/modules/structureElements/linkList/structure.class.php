@@ -47,4 +47,36 @@ class linkListElement extends menuDependantStructureElement implements Configura
         }
         return $this->fixedElement;
     }
+
+    public function getLinkListItemStyle()
+    {
+        $itemWidth = false;
+        $itemPadding = false;
+        if ($this->cols> 0 && $this->freeImageWidth==0) {
+            $itemWidth = 100 / $this->cols . '%';
+        }
+        else {
+            $itemWidth = 'auto';
+        }
+        if ($this->gapValue > -1 && !empty($this->gapUnit)) {
+            if ($this->gapValue > 0) {
+                if ($this->gapUnit == 'pt') {
+                    $itemPadding = ($this->gapValue)/2 / 20 . 'rem';
+                }
+                else {
+                    $itemPadding = ($this->gapValue)/2 . $this->gapUnit;
+                }
+            }
+            else {
+                $itemPadding = '0';
+            }
+        }
+
+        return [
+            'itemWidth' => $itemWidth,
+            'itemPadding' => $itemPadding,
+        ];
+    }
+
+
 }

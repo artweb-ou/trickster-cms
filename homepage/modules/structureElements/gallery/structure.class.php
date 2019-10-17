@@ -17,6 +17,7 @@ class galleryElement extends menuDependantStructureElement implements Configurab
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['hideTitle'] = 'checkbox';
         $moduleStructure['content'] = 'html';
         $moduleStructure['listLayout'] = 'text';
         $moduleStructure['layout'] = 'text';
@@ -26,7 +27,10 @@ class galleryElement extends menuDependantStructureElement implements Configurab
         $moduleStructure['canonicalUrl'] = 'url';
         $moduleStructure['metaDenyIndex'] = 'checkbox';
         $moduleStructure['columns'] = 'naturalNumber';
-        $moduleStructure['gap'] = 'naturalNumber';
+        $moduleStructure['gapValue'] = 'naturalNumber';
+        $moduleStructure['gapUnit'] = 'text';
+        $moduleStructure['clickDisable'] = 'checkbox';
+        $moduleStructure['freeImageWidth'] = 'checkbox';
         $moduleStructure['captionLayout'] = 'text';
         $moduleStructure['slideType'] = 'text';
         
@@ -59,6 +63,31 @@ class galleryElement extends menuDependantStructureElement implements Configurab
     public function getColumns()
     {
         return $this->columns;
+    }
+
+    public function getFigureStyle()
+    {
+        $figureWidth = false;
+        $figurePadding = false;
+        if ($this->columns > 0 && $this->freeImageWidth==0) {
+            $figureWidth = 100 / $this->columns . '%';
+        }
+        else {
+            $figureWidth = 'auto';
+        }
+        if ($this->gapValue > -1 && !empty($this->gapUnit)) {
+            if ($this->gapValue > 0) {
+                $figurePadding = ($this->gapValue)/2 . $this->gapUnit;
+            }
+            else {
+                $figurePadding = '0';
+            }
+        }
+        
+        return [
+            'figureWidth' => $figureWidth,
+            'figurePadding' => $figurePadding,
+        ];
     }
 
     public function getSlideType()
