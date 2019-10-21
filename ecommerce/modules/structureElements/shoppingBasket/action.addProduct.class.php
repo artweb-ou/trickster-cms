@@ -48,6 +48,7 @@ class addProductShoppingBasket extends structureElementAction
                         $variations[] = $selection['title'] . ': ' . $option['title'];
                         if ($option['price'] > 0) {
                             $variations[$selection['id']] .= ' (' . $currencySelector->convertPrice($option['price'], true, true) . ')';
+                            $optionsAdditionalPrices += $option['price'];
                         }
                         $variations_dl[] = ($select ?
                                 $select->getValue('title', $defaultLanguage->id) : '') . ': '
