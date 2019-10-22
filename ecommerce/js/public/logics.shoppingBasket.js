@@ -181,13 +181,13 @@ window.shoppingBasketLogics = new function() {
         for (var i = 0; i < elements.length; i++) {
             new ShoppingBasketStatusComponent(elements[i]);
         }
-        var elements = _('.shoppingbasket_selection');
+        var elements = document.querySelector('.shoppingbasket_selection');
         for (var i = 0; i < elements.length; i++) {
             new ShoppingBasketSelectionComponent(elements[i]);
         }
     };
     this.trackingPurchase = function() {
-        if ((paymentStatus || paymentStatus == 'undefined') && orderId) {
+        if ((paymentStatus || paymentStatus === 'undefined') && orderId) {
             tracking.buyTracking(orderId);
         }
     };
