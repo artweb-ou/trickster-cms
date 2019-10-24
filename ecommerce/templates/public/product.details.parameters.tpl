@@ -13,13 +13,14 @@
 					{foreach from=$parametersGroupInfo.parametersList item=parameterInfo name=parametersList}
 						{if $parameterInfo['primary'] != '2'}
 							<div class="product_details_parameter{if $smarty.foreach.parametersList.last} product_details_parameter_last{/if}">
+                                <span class="product_details_parameter_key{if $parameterInfo.type == 'color'} product_details_parameter_key_forcolor{/if}">
 								{if $parameterInfo.title || $parameterInfo.originalName}
-									<span class="product_details_parameter_key{if $parameterInfo.type == 'color'} product_details_parameter_key_forcolor{/if}">
-													{$parameterInfo.title}{if $parameterInfo.originalName != ''}
-									<img class='product_details_parameter_image' src='{$controller->baseURL}image/type:productParameter/id:{$parameterInfo.image}/filename:{$parameterInfo.originalName}' alt='{$parameterInfo.title}' />
-										{/if}:
-												</span>
+                                    {$parameterInfo.title}
+                                    {if $parameterInfo.originalName != ''}
+                                        <img class='product_details_parameter_image' src='{$controller->baseURL}image/type:productParameter/id:{$parameterInfo.image}/filename:{$parameterInfo.originalName}' alt='{$parameterInfo.title}' />
+                                    {/if}:
 								{/if}
+                                </span>
 								<div class="product_details_parameter_values">
 									{if $parameterInfo.structureType == 'productParameter'}
 										<div>{$parameterInfo.value}</div>

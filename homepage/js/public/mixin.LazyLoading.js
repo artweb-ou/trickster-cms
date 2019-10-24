@@ -1,38 +1,62 @@
 window.LazyLoadingMixin = function() {
     this.scrollCheckInterval = null;
     this.hasScrolled = false;
+    this.lazyLoadingObserver = false;
     this.componentElement = null;
     this.displayCallback = null;
 
     this.initLazyLoading = function(options) {
         this.componentElement = options.componentElement;
         this.displayCallback = options.displayCallback;
-        var onScreen = checkOnScreen.bind(this)();
-        if (!onScreen) {
-            window.addEventListener('scroll', scrollHandler.bind(this));
-            this.scrollCheckInterval = setInterval(checkIfScrolled.bind(this), 250);
+        let isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+        if (isIE11) {
+            if (!(checkOnScreen.bind(this)())) {
+                window.addEventListener('scroll', scrollHandler.bind(this));
+                this.scrollCheckInterval = setInterval(checkIfScrolled.bind(this), 250);
+            }
+        } else {
+            this.lazyLoadingObserver = new IntersectionObserver(checkObserver.bind(this), {threshold: 0.01});
+            this.lazyLoadingObserver.observe(this.componentElement);
         }
     };
-    var scrollHandler = function() {
+
+    const scrollHandler = function() {
         this.hasScrolled = true;
     };
-    var checkIfScrolled = function() {
+
+    const checkIfScrolled = function() {
         if (this.hasScrolled) {
             this.hasScrolled = false;
             checkOnScreen.bind(this)();
         }
     };
 
-    var checkOnScreen = function() {
+    const checkOnScreen = function() {
         var isOnScreen = this.isOnScreen(this.componentElement, 1.2);
         if (isOnScreen) {
-            if (this.scrollCheckInterval) {
-                window.removeEventListener('scroll', scrollHandler);
-                clearInterval(this.scrollCheckInterval);
-            }
-            this.displayCallback();
+            display();
         }
         return isOnScreen;
     };
+
+    const checkObserver = function(entries) {
+        for (entry of entries) {
+            if (entry.isIntersecting) {
+                display.bind(this)();
+                break;
+            }
+        }
+    };
+    const display = function() {
+        if (this.lazyLoadingObserver) {
+            this.lazyLoadingObserver.unobserve(this.componentElement);
+        }
+        if (this.scrollCheckInterval) {
+            window.removeEventListener('scroll', scrollHandler);
+            clearInterval(this.scrollCheckInterval);
+        }
+        this.displayCallback();
+    };
+
     DomHelperMixin.call(this);
 };
