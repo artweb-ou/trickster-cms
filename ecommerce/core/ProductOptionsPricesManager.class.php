@@ -23,6 +23,7 @@ class ProductOptionsPricesManager extends errorLogger
 
     public function getData($productId)
     {
+        $result = [];
         //load all combination prices from values combination tables
         $records = $this->queryDb()
             ->select('combo', 'price')
