@@ -34,14 +34,14 @@ window.LazyLoadingMixin = function() {
     const checkOnScreen = function() {
         var isOnScreen = this.isOnScreen(this.componentElement, 1.2);
         if (isOnScreen) {
-            display();
+            display.bind(this)();
         }
         return isOnScreen;
     };
 
     const checkObserver = function(entries) {
-        for (entry of entries) {
-            if (entry.isIntersecting) {
+        for (let i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting) {
                 display.bind(this)();
                 break;
             }
