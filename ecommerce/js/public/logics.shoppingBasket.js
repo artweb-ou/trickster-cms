@@ -181,7 +181,7 @@ window.shoppingBasketLogics = new function() {
         for (var i = 0; i < elements.length; i++) {
             new ShoppingBasketStatusComponent(elements[i]);
         }
-        var elements = document.querySelector('.shoppingbasket_selection');
+        var elements = document.querySelectorAll('.shoppingbasket_selection');
         for (var i = 0; i < elements.length; i++) {
             new ShoppingBasketSelectionComponent(elements[i]);
         }
