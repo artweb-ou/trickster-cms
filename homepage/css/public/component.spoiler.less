@@ -1,92 +1,82 @@
 .spoiler_component {
-	position: relative
+    position: relative;
 }
 
 .spoiler_component_content_wrapper {
-	overflow: hidden;
-	position: relative;
-	&.hide_content {
-		height: 0;
-		min-height: 0;
-	}
-	&.show_content {
+    overflow: hidden;
+    position: relative;
 
-	}
+    .spoiler_hidden & {
+        height: 0;
+        min-height: 0;
+    }
 }
 
 .spoiler_component_title {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .spoiler_component_content {
-	padding-top: @26pt;
+    padding-top: @26pt;
 }
 
 .spoiler_partly_hidden_gradient {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	top: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
 }
 
 .spoiler_component_plus {
-	position: absolute;
-	width: 20px;
-	height: 20px;
-	top: 0;
-	right: 0;
+    display: block;
+    position: absolute;
+    width: @20pt;
+    height: @20pt;
+    top: 0;
+    right: 0;
+    .rotate(45deg);
 
-	&:before,
-	&:after {
-		content: "";
-		position: absolute;
-		background-color: black;
-		border-radius: 2px;
-		transition: transform 0.5s ease-out;
-	}
+    .spoiler_hidden & {
+        .rotate(0);
+    }
 
-	/* Vertical line */
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        background-color: black;
+        border-radius: 2px;
+        transition: transform 0.5s ease-out;
+    }
 
-	&:before {
-		top: 0;
-		left: 50%;
-		width: 4px;
-		height: 100%;
-		margin-left: -2px;
-	}
+    /* Vertical line */
 
-	/* horizontal line */
+    &:before {
+        top: 0;
+        left: 50%;
+        width: @4pt;
+        height: 100%;
+        margin-left: -@2pt;
+    }
 
-	&:after {
-		top: 50%;
-		left: 0;
-		width: 100%;
-		height: 4px;
-		margin-top: -2px;
-	}
+    /* horizontal line */
 
-	&:hover {
-		cursor: pointer;
-	}
+    &:after {
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: @4pt;
+        margin-top: -@2pt;
+    }
 
-	&.show {
-		&:before {
-			transform: rotate(45deg);
-		}
+    .rotate (@deg) {
+        &:before {
+            transform: rotate(@deg);
+        }
 
-		&:after {
-			transform: rotate(45deg);
-		}
-	}
-
-	&.hide {
-		&:before {
-			transform: rotate(90deg);
-		}
-
-		&:after {
-			transform: rotate(90deg);
-		}
-	}
+        &:after {
+            transform: rotate(@deg);
+        }
+    }
 }

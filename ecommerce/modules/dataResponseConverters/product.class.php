@@ -18,7 +18,6 @@ class productDataResponseConverter extends StructuredDataResponseConverter
                 /**
                  * @var productElement $element
                  */
-
                 if ($element->image && $element->originalName) {
                     return $element->getCustomImageUrl('productGalleryImage', 'originalName');
                 }
@@ -29,7 +28,9 @@ class productDataResponseConverter extends StructuredDataResponseConverter
             // new
             'code' => 'code',
             'languageId' => 'languageId',
-            'price' => 'price',
+            'price' => function ($element) {
+                return $element->getPrice(true);
+            },
             'oldPrice' => 'oldPrice',
             'discount' => function ($element) {
                 /**

@@ -8,7 +8,7 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
     var textareaElement;
 
     var init = function() {
-        var fieldElement;
+        var fieldElement, helper, parameters;
 
         componentElement = document.createElement('tr');
         if (info.error != '0' && info.error) {
@@ -22,8 +22,8 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
             starElement.innerHTML = '*';
         }
         labelElement.innerHTML = info.title;
-        if (info.fieldType == 'select') {
-            var parameters = {};
+        if (info.fieldType === 'select') {
+            parameters = {};
             parameters.className = 'shoppingbasket_delivery_form_dropdown';
             parameters.optionsData = info.options;
             parameters.name = fieldsBaseName + '[' + info.fieldName + ']';
@@ -32,7 +32,7 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
                 fieldComponent.setValue(info.value);
             }
             fieldElement.appendChild(fieldComponent.componentElement);
-        } else if (info.fieldType == 'textarea') {
+        } else if (info.fieldType === 'textarea') {
             textareaElement = document.createElement('textarea');
             textareaElement.className = 'textarea_component';
             textareaElement.setAttribute('name', fieldsBaseName + '[' + info.fieldName + ']');
@@ -42,11 +42,11 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
             new TextareaComponent(textareaElement);
             fieldElement.appendChild(textareaElement);
             if (info.helpLinkUrl && info.helpLinkText) {
-                var helper = new ShoppingBasketSelectionFormFieldHelperComponent(info.helpLinkUrl, info.helpLinkText);
+                helper = new ShoppingBasketSelectionFormFieldHelperComponent(info.helpLinkUrl, info.helpLinkText);
                 fieldElement.appendChild(helper.getComponentElement());
             }
         } else {
-            var parameters = {
+            parameters = {
                 'name': fieldsBaseName + '[' + info.fieldName + ']',
                 'value': info.value,
             };
@@ -62,23 +62,39 @@ window.ShoppingBasketSelectionFormField = function(info, fieldsBaseName, formEle
                 checkButton.className = 'button check_vat_button';
                 fieldElement.appendChild(checkButton);
                 eventsManager.addHandler(checkButton, 'click', checkVatHandler);
+
+                controller.addListener('shoppingBasketVatCheckFailure', shoppingBasketVatCheckFailure);
+                controller.addListener('shoppingBasketVatCheckSuccess', shoppingBasketVatCheckSuccess);
             }
             eventsManager.addHandler(fieldComponent.inputElement, 'keydown', checkKey);
             if (info.helpLinkUrl && info.helpLinkText) {
-                var helper = new ShoppingBasketSelectionFormFieldHelperComponent(info.helpLinkUrl, info.helpLinkText);
+                helper = new ShoppingBasketSelectionFormFieldHelperComponent(info.helpLinkUrl, info.helpLinkText);
                 fieldElement.appendChild(helper.getComponentElement());
             }
         }
     };
+
     var checkVatHandler = function(event) {
         event.preventDefault();
         shoppingBasketLogics.checkVatNumber(fieldComponent.componentElement.value);
     };
+
+    var shoppingBasketVatCheckSuccess = function() {
+        componentElement.classList.remove('form_error');
+    };
+
+    var shoppingBasketVatCheckFailure = function() {
+        componentElement.classList.add('form_error');
+    };
+
     this.getComponentElement = function() {
         return componentElement;
     };
+    this.getId = function() {
+        return info.id;
+    };
     var checkKey = function(event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode === 13) {
             formElement.submit();
         }
     };

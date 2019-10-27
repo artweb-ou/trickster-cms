@@ -1,6 +1,9 @@
 body {
 	background-color: @background_color;
 }
+.main_block {
+	.wrap();
+}
 
 .language_pattern_background {
 	background-repeat: repeat;
@@ -20,7 +23,7 @@ body {
 	overflow: hidden;
 }
 
-.header {
+.header_block {
 	position: relative;
 	display: none;
 	min-height: 5.86em;
@@ -122,9 +125,6 @@ body {
 	overflow: hidden;
 }
 
-.content {
-}
-
 .columns_table .left_column {
 	padding: @37px 0 1.95em 2.05em;
 	width: 21.3%;
@@ -144,7 +144,7 @@ body {
 		min-width: 980px;
 		width: 95%;
 	}
-	.header,
+	.header_block,
 	.header_links {
 		display: block;
 	}

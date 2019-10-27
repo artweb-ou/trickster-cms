@@ -421,7 +421,7 @@
             null,
             'jpg',
             '',
-            80,
+            90,
         ],
     ],
     'productGallerySmallThumbnailImage' => [
@@ -439,7 +439,7 @@
             null,
             'jpg',
             '',
-            80,
+            100,
         ],
     ],
     'productGalleryFullImage' => [
@@ -453,7 +453,7 @@
             null,
             'jpg',
             null,
-            80,
+            90,
         ],
     ],
     'productGalleryImageMobile' => [
@@ -467,7 +467,7 @@
             null,
             'jpg',
             '',
-            80,
+            90,
         ],
     ],
     'productGallerySmallThumbnailImageMobile' => [
@@ -485,7 +485,7 @@
             null,
             'jpg',
             '',
-            80,
+            100,
         ],
     ],
     'productGalleryFullImageMobile' => [
@@ -499,7 +499,7 @@
             null,
             'jpg',
             null,
-            80,
+            90,
         ],
     ],
     'productGallery' => [
@@ -517,7 +517,7 @@
             null,
             'jpg',
             '',
-            80,
+            100,
         ],
     ],
     'productGalleryProduct' => [
@@ -531,7 +531,7 @@
             null,
             'jpg',
             '',
-            80,
+            100,
         ],
     ],
     'productParameterIcon' => [
@@ -545,7 +545,7 @@
             null,
             'jpg',
             '',
-            80,
+            100,
         ],
     ],
 ];

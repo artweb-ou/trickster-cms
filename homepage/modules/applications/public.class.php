@@ -49,6 +49,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             'rootUrl' => $controller->rootURL,
             'rootMarker' => $this->configManager->get('main.rootMarkerPublic'),
         ], true);
+        $this->processRequestParameters();
         $this->renderer->assign('js_translations', $this->loadJsTranslations());
 
         $resourcesUniterHelper = $this->getService('ResourcesUniterHelper', ['currentThemeCode' => $currentTheme->getCode()], true);
@@ -70,16 +71,9 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $this->renderer->assign('themeColor', $themeColor);
         $this->renderer->assign('applicationName', $this->applicationName);
         $this->renderer->assign('deviceType', 'desktop');
-        $socialDataManager = $this->getService('SocialDataManager');
-        $socialPlugins = $socialDataManager->getSocialPlugins();
-        $this->renderer->assign('socialPlugins', $socialPlugins);
 
-        $facebookAppId = '';
-        $facebookSocialPlugin = $socialDataManager->getSocialPluginByName('facebook');
-        if ($facebookSocialPlugin) {
-            $facebookAppId = $facebookSocialPlugin->getSpecialDataByKey('appId');
-        }
-        $this->renderer->assign('facebookAppId', $facebookAppId);
+        $socialDataManager = $this->getService('SocialDataManager');
+        $this->renderer->assign('socialDataManager', $socialDataManager);
 
         $pageNotFound = $controller->requestedFile;
 
@@ -90,7 +84,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             if ($controller->getParameter('qid')) {
                 $this->getService('searchQueriesManager')->markLogAsClicked($controller->getParameter('qid'));
             }
-            $this->processRequestParameters();
+
             if ($currentElement = $structureManager->getCurrentElement()) {
                 /**
                  * @var $redirectionManager RedirectionManager

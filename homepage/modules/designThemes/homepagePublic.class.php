@@ -64,7 +64,6 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.cookiePolicy.js',
             'component.subscriptionForm.js',
             'component.tabs.js',
-         //   'component.tipPopup.js',
             'component.toolTip.js',
             'component.ajaxForm.js',
             'component.commentForm.js',

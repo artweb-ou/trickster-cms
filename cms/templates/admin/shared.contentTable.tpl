@@ -10,7 +10,7 @@
 				<th class='checkbox_column'>
 					<input class='groupbox checkbox_placeholder' type="checkbox" value='1' />
 				</th>
-				{if method_exists ($contentList[0], 'getImageUrl')}
+				{if method_exists(reset($contentList), 'getImageUrl')}
 					<th class='image_column'>
 						{translations name='label.image'}
 					</th>

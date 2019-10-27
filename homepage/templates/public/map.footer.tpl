@@ -6,7 +6,6 @@
 		</div>
 	{elseif $element->coordinates}
 		<script>
-			/*<![CDATA[*/
 			{if !empty($element->styles|trim)}
 			window.mapsInfo = window.mapsInfo || {ldelim}{rdelim};
 			window.mapsInfo['{$element->id}'] = {ldelim}
@@ -25,7 +24,6 @@
 			window.mapsIframe['{$element->id}'] = {$element->getJsonMapIframeInfo()};
 			window.mapsIframe['{$element->id}']['height'] = 0.185;
 			{/if}
-			/*]]>*/
 		</script>
 	{/if}
 </div>

@@ -16,15 +16,17 @@ class redirectApplication extends controllerApplication
         if ($type = $controller->getParameter('type')) {
             $redirectionManager = $this->getService('RedirectionManager');
             if ($type == 'language') {
-                if (!($application = $controller->getParameter('application'))){
+                if (!($application = $controller->getParameter('application'))) {
                     $application = 'public';
                 }
                 $sourceElementId = $controller->getParameter('element');
-                $newLanguageCode = $controller->getParameter('code');
+                $languageCode = $controller->getParameter('code');
 
-                $redirectionManager->switchLanguage($newLanguageCode, $sourceElementId, $application);
+                $redirectionManager->switchLanguage($languageCode, $sourceElementId, $application);
             } elseif ($type == 'element') {
-                $redirectionManager->redirectToElement($controller->getParameter('id'));
+                $sourceElementId = $controller->getParameter('id');
+                $languageCode = $controller->getParameter('code');
+                $redirectionManager->redirectToElement($sourceElementId, $languageCode);
             }
         }
         $this->renderer->fileNotFound();

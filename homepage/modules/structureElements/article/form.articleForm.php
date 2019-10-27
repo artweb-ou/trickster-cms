@@ -24,6 +24,7 @@ class ArticleFormStructure extends ElementForm
             'type' => 'select.universal_options_multiple',
             'method' => 'getDisplayMenusInfo',
             'condition' => 'checkDisplayMenus',
+            'translationGroup' => 'shared',
         ],
     ];
     protected $additionalContent = 'shared.contentlist.tpl';

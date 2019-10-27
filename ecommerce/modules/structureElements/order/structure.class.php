@@ -117,8 +117,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
 
         foreach ($this->getOrderProducts() as &$element) {
-            $productsPrice += $element->getTotalPrice(false);
+            $productsPrice += $element->getTotalPrice();
             $this->totalFullPrice += $element->getTotalFullPrice();
+            $this->vatRate = $element->vatRate;
         }
         $this->productsPrice = $productsPrice;
         $totalPrice = $this->totalFullPrice + $this->deliveryPrice;
@@ -360,13 +361,13 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 "payerEmail" => $this->payerEmail,
                 "payerPhone" => $this->payerPhone,
                 "currency" => $this->currency,
-                "productsPrice" => $this->getTotalFullPrice(),
+                "productsPrice" => $this->getTotalFullPrice(true),
                 "deliveryType" => $this->deliveryType,
                 "deliveryPrice" => $currencySelector->formatPrice($this->deliveryPrice),
                 "deliveryTitle" => $this->deliveryTitle,
                 "noVatAmount" => $this->getNoVatAmount(),
                 "vatAmount" => $this->getVatAmount(),
-                "totalPrice" => $this->getTotalPrice(),
+                "totalPrice" => $this->getTotalPrice(true),
                 "invoiceNumber" => $this->invoiceNumber,
                 "advancePaymentInvoiceNumber" => $this->advancePaymentInvoiceNumber,
                 "orderConfirmationNumber" => $this->orderConfirmationNumber,
@@ -422,7 +423,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $this->orderData['addedProducts'][] = [
                     'code' => $product->code,
                     'title' => $product->title,
-                    'price' => $product->getFullPrice(),
+                    'price' => $product->getFullPrice(true),
                     'variation' => $product->variation,
                     'emptyPrice' => $product->isEmptyPrice(),
                     'amount' => $product->amount,
@@ -498,51 +499,51 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function sendOrderStatusNotificationEmail()
     {
-	//todo: make configurable?
-	return;
-        if ($this->orderStatus !== 'undefined' && $this->orderStatus !== 'deleted') {
+        $configManager = $this->getService('ConfigManager');
+        if ($enabledNotificationStatuses = $configManager->get('order.enabledNotificationStatuses')) {
+            if (in_array($this->orderStatus, $enabledNotificationStatuses)) {
+                $languagesManager = $this->getService('LanguagesManager');
+                $languagesManager->setCurrentLanguageCode($this->payerLanguage);
 
-            $languagesManager = $this->getService('LanguagesManager');
-            $languagesManager->setCurrentLanguageCode($this->payerLanguage);
+                $administratorEmail = $this->getAdministratorEmail();
+                $data = $this->getOrderData();
+                $data['documentType'] = 'Notification';
+                $data['orderStatus'] = $this->orderStatus;
 
-            $administratorEmail = $this->getAdministratorEmail();
-            $data = $this->getOrderData();
-            $data['documentType'] = 'Notification';
-            $data['orderStatus'] = $this->orderStatus;
+                $translationsManager = $this->getService('translationsManager');
 
-            $translationsManager = $this->getService('translationsManager');
+                $settings = $this->getService('settingsManager')->getSettingsList();
+                /**
+                 * @var EmailDispatcher $emailDispatcher
+                 */
+                $emailDispatcher = $this->getService('EmailDispatcher');
+                $newDispatchment = $emailDispatcher->getEmptyDispatchment();
+                $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
+                if ($administratorEmail) {
+                    $newDispatchment->setFromEmail($administratorEmail);
+                    $newDispatchment->registerReceiver($administratorEmail, null);
+                }
+                $newDispatchment->registerReceiver($this->payerEmail, null);
 
-            $settings = $this->getService('settingsManager')->getSettingsList();
-            /**
-             * @var EmailDispatcher $emailDispatcher
-             */
-            $emailDispatcher = $this->getService('EmailDispatcher');
-            $newDispatchment = $emailDispatcher->getEmptyDispatchment();
-            $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
-            if ($administratorEmail) {
-                $newDispatchment->setFromEmail($administratorEmail);
-                $newDispatchment->registerReceiver($administratorEmail, null);
+                // if !shop_title in translation, try check default_sender_name in settings, else display shop_title field name
+                $shopTitle =
+                    $translationsManager->getTranslationByName('company.shop_title', 'public_translations') ?:
+                        !empty($settings['default_sender_name']) ? $settings['default_sender_name'] : $translationsManager->getTranslationByName('company.shop_title',
+                            'public_translations');
+
+                $notification = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification',
+                    'public_translations');
+                $orderNumberText = $translationsManager->getTranslationByName('invoice.order_nr', 'public_translations');
+                $orderNumber = $this->getInvoiceNumber();
+                $statusText = $this->getOrderStatusText($this->orderStatus);
+                $subject = $shopTitle . '. ' . $notification . ' (' . $orderNumberText . ' ' . $orderNumber . ': ' . $statusText . ')';
+                $newDispatchment->setSubject($subject);
+                $newDispatchment->setData($data);
+                $newDispatchment->setReferenceId($this->id);
+                $newDispatchment->setType('orderStatus');
+
+                $emailDispatcher->startDispatchment($newDispatchment);
             }
-            $newDispatchment->registerReceiver($this->payerEmail, null);
-
-            // if !shop_title in translation, try check default_sender_name in settings, else display shop_title field name
-            $shopTitle =
-                $translationsManager->getTranslationByName('company.shop_title', 'public_translations') ?:
-                    !empty($settings['default_sender_name']) ? $settings['default_sender_name'] : $translationsManager->getTranslationByName('company.shop_title',
-                        'public_translations');
-
-            $notification = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification',
-                'public_translations');
-            $orderNumberText = $translationsManager->getTranslationByName('invoice.order_nr', 'public_translations');
-            $orderNumber = $this->getInvoiceNumber();
-            $statusText = $this->getOrderStatusText($this->orderStatus);
-            $subject = $shopTitle . '. ' . $notification . ' (' . $orderNumberText . ' ' . $orderNumber . ': ' . $statusText . ')';
-            $newDispatchment->setSubject($subject);
-            $newDispatchment->setData($data);
-            $newDispatchment->setReferenceId($this->id);
-            $newDispatchment->setType('orderStatus');
-
-            $emailDispatcher->startDispatchment($newDispatchment);
         }
     }
 
@@ -1032,13 +1033,18 @@ class orderElement extends structureElement implements PaymentOrderInterface
         return $currencySelector->formatPrice($this->noVatAmount);
     }
 
-    public function getTotalFullPrice()
+    public function getTotalFullPrice($formated = false)
     {
         if (empty($this->totalFullPrice)) {
             $this->recalculate();
         }
+        if ($formated) {
+            $currencySelector = $this->getService('CurrencySelector');
+            return $currencySelector->formatPrice($this->totalFullPrice);
+        }
         return $this->totalFullPrice;
     }
+
     public function getDiscountAmount()
     {
         if (empty($this->discountAmount)) {

@@ -438,6 +438,8 @@ window.ProductsListFilter = function() {
         title = newData.title;
         type = newData.type;
         optionsInfo = newData.options;
+        selectedRange = newData.selectedRange;
+        range = newData.range;
 
         optionsInfo = newData.options;
     };

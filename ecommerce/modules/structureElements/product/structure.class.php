@@ -46,7 +46,6 @@
  * @property string $comment_captcha
  * @property array $importInfo
  * @property string $unit
- * @property integer $applicableToAllProducts
  */
 class productElement extends structureElement implements
     MetadataProviderInterface,
@@ -128,12 +127,12 @@ class productElement extends structureElement implements
 
     protected $iconsInfo;
 
-    protected $allowedTypes = ['product'];
     protected $allowedProductTypesByAction = [
         'showImages' => ['galleryImage'],
         'showTexts' => ['subArticle'],
         'showFiles' => ['file'],
-        'showFullList' => ['galleryImage'],
+        'showIconForm' => ['galleryImage'],
+        'copyElements' => ['galleryImage', 'subArticle', 'file'],
     ];
 
     protected function setModuleStructure(&$moduleStructure)
@@ -1465,7 +1464,16 @@ class productElement extends structureElement implements
 
     protected function loadResidingProducts()
     {
-        if ($category = $this->getRequestedParentCategory()) {
+        /**
+         * @var $category categoryElement
+         */
+        $sessionManager = $this->getService('ServerSessionManager');
+        $fromCategory = $sessionManager->get('currentProductsList');
+        $structureManager = $this->getService('structureManager');
+        if (!($category = $structureManager->getElementById($fromCategory))) {
+            $category = $this->getRequestedParentCategory();
+        }
+        if ($category) {
             if ($result = $category->getResidingProducts($this->id)) {
                 if ($result['next']) {
                     $this->nextProduct = $result['next'];
@@ -1763,6 +1771,7 @@ class productElement extends structureElement implements
                 ];
             }
             $parametersInfo[$info['id']] = ['groupTitle' => $info['title'], 'parametersList' => $parametersList];
+            $info['basketSelectionsInfo'] = $this->getBasketSelectionsInfo();
         }
         return $parametersInfo;
     }
@@ -2023,10 +2032,10 @@ class productElement extends structureElement implements
     {
         if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
             return $this->allowedProductTypesByAction[$currentAction];
-        } else {
-            return [];
         }
+        return [];
     }
+
 
     public function getNewElementAction()
     {

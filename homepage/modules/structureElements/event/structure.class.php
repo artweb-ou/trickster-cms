@@ -235,13 +235,11 @@ class eventElement extends structureElement implements MetadataProviderInterface
              */
             $structureManager = $this->getService('structureManager');
             shuffle($idList);
-            while ($amount) {
-                if ($id = array_pop($idList)) {
+                while ($amount && ($id = array_pop($idList))) {
                     if ($element = $structureManager->getElementById($id)) {
                         $result[] = $element;
                         $amount--;
                     }
-                }
             }
         }
         return $result;

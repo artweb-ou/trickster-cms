@@ -67,18 +67,14 @@ class paymentsManager extends errorLogger implements DependencyInjectionContextI
         } elseif (isset($_REQUEST['VK_SND_ID'])) {
             if ($_REQUEST['VK_SND_ID'] == 'SAMPOPANK') {
                 $methodName = 'danskebank';
-            }
-            //this check doesn't work anymore, "act" is coming even for a live environment
-            //			elseif ($_REQUEST['VK_SND_ID'] == 'EYP' && $_REQUEST['act'] == 'UPOSTEST2')
-            //			{
-            //				$methodName = 'sebtest';
-            //			}
-            elseif ($_REQUEST['VK_SND_ID'] == 'EYP') {
+            } elseif ($_REQUEST['VK_SND_ID'] == 'EYP') {
                 $methodName = 'seb';
             } elseif ($_REQUEST['VK_SND_ID'] == 'LHV') {
                 $methodName = 'lhv';
             } elseif ($_REQUEST['VK_SND_ID'] == 'HP') {
                 $methodName = 'swedbank';
+            } elseif ($_REQUEST['VK_SND_ID'] == 'COOP') {
+                $methodName = 'coop';
             }
         }
         return $methodName;

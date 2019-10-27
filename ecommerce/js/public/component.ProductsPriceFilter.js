@@ -1,4 +1,4 @@
-window.ProductsPriceFilterComponent = function(componentElement, filterData, selectorType, listComponent) {
+window.ProductsPriceFilterComponent = function(componentElement, filterData, listComponent) {
     var barElement, startInputElement, endInputElement;
     var knobLeft, knobRight;
     var scaleSize;
@@ -83,15 +83,6 @@ window.ProductsPriceFilterComponent = function(componentElement, filterData, sel
         selectPriceRange(selectionMin, selectionMax);
     };
 
-    this.modifyFilterArguments = function(arguments) {
-        if (selectionMin != min || selectionMax != max) {
-            if (typeof arguments['price'] == 'undefined') {
-                arguments['price'] = [];
-            }
-            arguments['price'][arguments['price'].length] = selectionMin + '-' + selectionMax;
-        }
-    };
-
     var selectPriceRange = function(startPrice, endPrice) {
         knobLeft.position((startPrice - min) / scaleSize);
         knobRight.position((endPrice - min) / scaleSize);
@@ -149,16 +140,8 @@ window.ProductsPriceFilterComponent = function(componentElement, filterData, sel
         return componentElement;
     };
 
-    this.hide = function() {
-        domHelper.addClass(componentElement, 'products_filter_price_control_hidden');
-    };
-
-    this.show = function() {
-        domHelper.removeClass(componentElement, 'products_filter_price_control_hidden');
-    };
-
     this.getValue = function() {
-        return '';
+        return startInputElement.value + '-' + endInputElement.value;
     };
 
     this.getType = function() {
@@ -166,7 +149,7 @@ window.ProductsPriceFilterComponent = function(componentElement, filterData, sel
     };
 
     this.resetValue = function() {
-        alert('reset')
+        alert('reset');
     };
 
     init();

@@ -12,19 +12,16 @@ class pasteElementsRoot extends structureElementAction
             $structureManager->setNewElementLinkType($contentType);
         }
         if ($navigateId = $controller->getParameter('navigateId')) {
-            $copyInformation = $user->getStorageAttribute('copyInformation');
-            $moveInformation = $user->getStorageAttribute('moveInformation');
-
             if ($navigatedElement = $structureManager->getElementById($navigateId)) {
                 $targetUrl = $navigatedElement->URL;
                 if ($contentType) {
                     $targetUrl .= 'view:' . $contentType . '/';
                 }
 
-                if ($copyInformation && count($copyInformation['elementsToCopy']) > 0
-                ) {
+                if (($copyInformation = $user->getStorageAttribute('copyInformation')) && !empty($copyInformation['elementsToCopy'])) {
                     if ($copyData = $structureManager->copyElements($copyInformation['elementsToCopy'], $navigateId, [
                         'structure',
+                        'subArticle',
                         'headerContent',
                         'leftColumn',
                         'rightColumn',
@@ -36,10 +33,10 @@ class pasteElementsRoot extends structureElementAction
                         }
                     }
                     $controller->redirect($targetUrl);
-                } elseif ($moveInformation && count($moveInformation['elementsToMove']) > 0
-                ) {
+                } elseif (($moveInformation = $user->getStorageAttribute('moveInformation')) && !empty($moveInformation['elementsToMove'])) {
                     if ($structureManager->moveElements($moveInformation['elementsToMove'], $navigateId, [
                         'structure',
+                        'subArticle',
                         'headerContent',
                         'leftColumn',
                         'rightColumn',

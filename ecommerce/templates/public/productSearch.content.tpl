@@ -27,36 +27,4 @@
     {include file=$theme->template('component.productssorter.tpl') titleType="option"}
 {/if}
 
-{*        {foreach $element->getFiltersByType('parameter') as $filter}*}
-{*        {/foreach}*}
-
-{*        {foreach $element->getFiltersByType('discount') as $filter}*}
-{*            {include $theme->template('component.productsfilter_item.tpl') class="productsearch_field" titleType="option"}*}
-{*        {/foreach}*}
-
-{*        {foreach $element->getFiltersByType('availability') as $filter}*}
-{*            {include $theme->template('component.productsfilter_item.tpl') class="productsearch_field" titleType="option"}*}
-{*        {/foreach}*}
-
-{*        {foreach $element->getFiltersByType('price') as $filter}*}
-{*            {if $element->pricePresets}*}
-{*                {include $theme->template('component.productsfilter_item.tpl') class="productsearch_field" titleType="option"}*}
-{*            {else}*}
-{*                {include $theme->template('productSearch.pricefilter.tpl')}*}
-{*            {/if}*}
-{*        {/foreach}*}
-
-{*        {if $element->canActLikeFilter() || !$element->pageDependent}*}
-{*            {if $element->sortingEnabled}*}
-{*                <div class="productsearch_field">*}
-{*                    <select class="productsearch_sortselect dropdown_placeholder">*}
-{*                        {foreach $element->getSortingOptions() as $sortParameter}*}
-{*                            <option value='{$sortParameter.value}'{if $controller->getParameter('sort') == $sortParameter.value} selected="selected"{/if}>*}
-{*                                {$sortParameter.label}*}
-{*                            </option>*}
-{*                        {/foreach}*}
-{*                    </select>*}
-{*                </div>*}
-{*            {/if}*}
-{*        {/if}*}
 <div class="productsearch_reset button"><span class="button_text">{translations name="productsearch.reset"}</span></div>

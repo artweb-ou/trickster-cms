@@ -12,21 +12,16 @@
 /********************************************************/
 .product_thumbnail {
     display: inline-block;
+    position: relative;
     text-decoration: none;
     vertical-align: top;
     .grid_item(4);
 }
 
-.product_thumbnail_link {
-    color: inherit;
-    display: block;
-    position: relative;
-    text-decoration: none;
-}
-
 .product_thumbnail_image_container {
     overflow: hidden;
     position: relative;
+    display: block;
 }
 
 .product_thumbnail_image {
@@ -223,7 +218,8 @@
     display: inline-block;
     text-decoration: none;
     vertical-align: top;
-    .grid_item(6);
+    position: relative;
+    .grid_item(6, @default_grid_spacing, @default_grid_spacing_mobile, 3, 2, 1);
 }
 
 .product_thumbnail_status {
@@ -232,13 +228,6 @@
     bottom: 0.5em;
     right: 0.5em;
     font-style: normal;
-}
-
-.product_thumbnailsmall_link {
-    color: inherit;
-    display: block;
-    text-decoration: none;
-    position: relative;
 }
 
 .product_thumbnailsmall_image_container {

@@ -1,7 +1,9 @@
 {assign moduleTitle $element->title}
 {if $element->originalName}
 	{capture assign="moduleSideContent"}
-		{include file=$theme->template('component.elementimage.tpl') type='subArticleShortImage' class='subarticle_simple_image' lazy=true}
+        {if $element->originalName}
+            {include file=$theme->template('component.elementimage.tpl') type='subArticleShortImage' class='subarticle_simple_image' lazy=false}
+        {/if}
 	{/capture}
 {/if}
 {capture assign="moduleContent"}

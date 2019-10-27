@@ -4,7 +4,22 @@
 	{if $titleType === 'label'}
 		<div class="products_filter_label">{$filter->getTitle()}:</div>
 	{/if}
-	{if $selectorType == 'checkbox'}
+	{if $filter->getType() === 'price' && !$element->pricePresets}
+		{$range = $filter->getRange()}
+		{if $range}
+			{$selectedRange = $filter->getSelectedRange()}
+			<div class="productsearch_field productsearch_pricefilter products_filter_price">
+				<div class="productsearch_pricefilter_field">
+					<input class="input_component" name="min" value="{$selectedRange.0}" />
+					<span class="productsearch_pricefilter_field_currency">{$selectedCurrencyItem->symbol}</span>
+				</div>
+				<div class="productsearch_pricefilter_field">
+					<input class="input_component" name="max" value="{$selectedRange.1}" />
+					<span class="productsearch_pricefilter_field_currency">{$selectedCurrencyItem->symbol}</span>
+				</div>
+			</div>
+		{/if}
+	{elseif $selectorType == 'checkbox'}
 	    {foreach $filter->getOptionsInfo() as $optionInfo}
 			<div class="productsearch_field_checkbox products_filter_checkboxes_option">
 				<input type="checkbox" class="products_filter_checkbox checkbox_placeholder" value="{$optionInfo.id}"{if $optionInfo.selected} checked="checked"{/if} id="products_filter_checkbox_{$optionInfo.id}"/>
