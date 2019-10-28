@@ -1,7 +1,7 @@
 window.ProductsDropdownFilterComponent = function(componentElement, filterData, selectorType, listComponent) {
-    var selectElement;
-    var checkboxElements;
-    var init = function() {
+    let selectElement;
+    let checkboxElements;
+    const init = function() {
         if (componentElement) {
             if (selectorType === 'dropdown') {
                 if (selectElement = componentElement.querySelector('select.products_filter_dropdown')) {
@@ -9,7 +9,7 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
                 }
             } else if (selectorType === 'checkbox') {
                 if (checkboxElements = componentElement.querySelectorAll('input.products_filter_checkbox')) {
-                    for (var i = 0; i < checkboxElements.length; i++) {
+                    for (let i = 0; i < checkboxElements.length; i++) {
                         eventsManager.addHandler(checkboxElements[i], 'change', change);
                     }
                 }
@@ -17,22 +17,22 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
         }
     };
 
-    var change = function() {
-        listComponent.changeFilters();
+    const change = function() {
+        listComponent.changeFilter(filterData.getId(), getValue());
     };
 
     this.getComponentElement = function() {
         return componentElement;
     };
 
-    this.getValue = function() {
+    const getValue = function() {
         if (selectorType === 'dropdown') {
             if (selectElement.options && selectElement.options[selectElement.selectedIndex].value) {
-                return selectElement.options[selectElement.selectedIndex].value;
+                return [selectElement.options[selectElement.selectedIndex].value];
             }
         } else if (selectorType === 'checkbox') {
-            var values = [];
-            for (var i = 0; i < checkboxElements.length; i++) {
+            let values = [];
+            for (let i = 0; i < checkboxElements.length; i++) {
                 if (checkboxElements[i].checked) {
                     values.push(checkboxElements[i].value);
                 }
@@ -41,7 +41,7 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
                 return values;
             }
         }
-        return '';
+        return [];
     };
 
     this.getType = function() {
@@ -52,7 +52,7 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
         if (selectorType === 'dropdown') {
             selectElement.value = '';
         } else if (selectorType === 'checkbox') {
-            for (var i = 0; i < checkboxElements.length; i++) {
+            for (let i = 0; i < checkboxElements.length; i++) {
                 checkboxElements[i].checked = false;
             }
         }

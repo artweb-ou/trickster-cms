@@ -34,14 +34,14 @@ window.ProductSearchComponent = function(componentElement) {
         var element = componentElement.querySelector('.products_filter');
         if (element) {
             filtersComponent = new ProductsFilterComponent(element, self);
-            if (productSearchData.checkboxesForParameters){
+            if (productSearchData.checkboxesForParameters) {
                 filtersComponent.setTitleType('label');
                 filtersComponent.setSelectorType('checkbox');
-            } else{
+            } else {
                 filtersComponent.setTitleType('option');
                 filtersComponent.setSelectorType('dropdown');
             }
-            if (productSearchData.pricePresets){
+            if (productSearchData.pricePresets) {
                 filtersComponent.setPriceSelectorType('presets');
             } else {
                 filtersComponent.setPriceSelectorType('interval');
@@ -58,27 +58,17 @@ window.ProductSearchComponent = function(componentElement) {
         }
     };
 
-    this.changeFilters = function() {
-        if (filtersComponent) {
-            var filtersInfo = filtersComponent.getFiltersInfo();
-            productsListData.changeFilters(filtersInfo);
-        }
+    this.changeFilter = function(id, value) {
+        productsListData.changeFilter(id, value);
     };
 
     this.changeSorting = function(sorting) {
-        var filtersInfo;
-        if (filtersComponent) {
-            filtersInfo = filtersComponent.getFiltersInfo();
-        }
-
-        productsListData.changeSorting(sorting, filtersInfo);
+        productsListData.changeSorting(sorting);
     };
-
 
     var reset = function() {
         if (filtersComponent) {
             filtersComponent.resetFilters();
-            self.changeFilters();
         }
     };
 
