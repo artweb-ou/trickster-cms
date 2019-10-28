@@ -61,5 +61,4 @@ class ProductSearchFormStructure extends ElementForm
             'translationGroup' => 'shared',
         ],
     ];
-
 }
