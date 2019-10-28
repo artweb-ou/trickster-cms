@@ -15,6 +15,9 @@ class ProductSearchFormStructure extends ElementForm
             'type' => 'select.element',
             'property' => 'productCataloguesInfo',
         ],
+        'filterParameters' => [
+            'type' => 'input.checkbox',
+        ],
         'filterCategory' => [
             'type' => 'input.checkbox',
         ],

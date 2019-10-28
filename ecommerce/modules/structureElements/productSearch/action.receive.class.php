@@ -58,6 +58,7 @@ class receiveProductSearch extends structureElementAction
     {
         $expectedFields = [
             'title',
+            'filterParameters',
             'filterCategory',
             'filterBrand',
             'filterDiscount',
