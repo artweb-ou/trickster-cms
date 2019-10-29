@@ -10,6 +10,10 @@
 {else}
 	{assign var='condition' value=true}
 {/if}
+{if isset($item.translationGroup)}
+	{assign var='translationGroup' value=$item.translationGroup}
+{/if}
+
 {if isset($item.size) && $item.size == 'single'}
 	{$multiple = ''}
 {else}

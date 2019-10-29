@@ -34,7 +34,7 @@ class breadcrumbsManager implements DependencyInjectionContextInterface
         $minAmount = $this->getMinAmount();
         foreach ($structureManager->getElementsChain($controller->requestedPath) as $crumb) {
             if (!$useMinLevel || $crumb->level >= $minLevel) {
-                if($crumb instanceof BreadcrumbsInfoProvider) {
+                if ($crumb instanceof BreadcrumbsInfoProvider) {
                     $title = $crumb->getBreadcrumbsTitle();
                     $url = $crumb->getBreadcrumbsUrl();
                 } else {
@@ -97,11 +97,12 @@ class breadcrumbsManager implements DependencyInjectionContextInterface
             $result["itemListElement"][] = [
                 "@type" => "ListItem",
                 "position" => $key + 1,
-                "name" => $item['title'],
-                "item" => $item['URL'],
+                "item" => [
+                    "@id" => $item['URL'],
+                    "name" => $item['title'],
+                ],
             ];
         }
         return json_encode($result);
     }
 }
-

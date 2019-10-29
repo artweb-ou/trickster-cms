@@ -46,7 +46,6 @@
  * @property string $comment_captcha
  * @property array $importInfo
  * @property string $unit
- * @property integer $applicableToAllProducts
  */
 class productElement extends structureElement implements
     MetadataProviderInterface,
@@ -127,13 +126,12 @@ class productElement extends structureElement implements
 
     protected $iconsInfo;
 
-    protected $allowedTypes = ['product'];
-//    protected $allowedTypes = ['subArticle'];
     protected $allowedProductTypesByAction = [
-        'showImages'    => ['galleryImage'],
-        'showTexts'     => ['subArticle'],
-        'showFiles'     => ['file'],
-        'showFullList'  => ['galleryImage'],
+        'showImages' => ['galleryImage'],
+        'showTexts' => ['subArticle'],
+        'showFiles' => ['file'],
+        'showIconForm' => ['galleryImage'],
+        'copyElements' => ['galleryImage', 'subArticle', 'file'],
     ];
 
     protected function setModuleStructure(&$moduleStructure)
@@ -1452,15 +1450,16 @@ class productElement extends structureElement implements
 
     protected function loadResidingProducts()
     {
+        /**
+         * @var $category categoryElement
+         */
         $sessionManager = $this->getService('ServerSessionManager');
-        $fromCategory = $sessionManager->get('fromProductList');
+        $fromCategory = $sessionManager->get('currentProductsList');
         $structureManager = $this->getService('structureManager');
-        if(!empty($fromCategory)) {
-            $category = $structureManager->getElementById($fromCategory);
-        } else {
+        if (!($category = $structureManager->getElementById($fromCategory))) {
             $category = $this->getRequestedParentCategory();
         }
-        if (!empty($category)) {
+        if ($category) {
             if ($result = $category->getResidingProducts($this->id)) {
                 if ($result['next']) {
                     $this->nextProduct = $result['next'];
@@ -1709,6 +1708,7 @@ class productElement extends structureElement implements
             $info['selectionsPricings'] = $selectionsPricings;
             $info['selectionsOldPricings'] = $selectionsOldPricings;
             $info['selectionsImages'] = $this->getOptionsImagesInfo();
+            $info['basketSelectionsInfo'] = $this->getBasketSelectionsInfo();
         }
         return $info;
     }
@@ -1953,22 +1953,12 @@ class productElement extends structureElement implements
 
     public function getAllowedTypes($currentAction = 'showFullList')
     {
-//        if ($currentAction == 'showFullList') {
-//            $fullListAllowed = [];
-//            foreach ($this->allowedProductTypesByAction as $action=>$value) {
-//                $fullListAllowed  = array_merge($fullListAllowed, $value);
-//            }
-//            return array_unique($fullListAllowed);
-//        }
-//        else {
-            if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
-                return $this->allowedProductTypesByAction[$currentAction];
-            }
-            else {
-                return [];
-            }
-//        }
+        if (key_exists($currentAction, $this->allowedProductTypesByAction)) {
+            return $this->allowedProductTypesByAction[$currentAction];
+        }
+        return [];
     }
+
 
     public function getNewElementAction()
     {

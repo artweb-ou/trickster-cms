@@ -26,7 +26,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     protected $singleLanguageChunks = [];
     protected $structureFields = [];
     protected $moduleFields = [];
-    protected $multiLanguageFields = [];
+    protected $multiLanguageFields = null;
     public $languagesParentElementMarker = '';
     public $defaultActionName = 'showElement';
     public $actionName = '';
@@ -70,11 +70,6 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
             'marker' => 'text',
         ];
         $this->setModuleStructure($this->moduleFields);
-        if (method_exists($this, 'setMultiLanguageFields')) {
-            $this->setMultiLanguageFields($this->multiLanguageFields);
-            $this->multiLanguageFields = array_flip($this->multiLanguageFields);
-        }
-
         $this->initialize();
     }
 
@@ -493,7 +488,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     public function getCurrentLanguage()
     {
         if ($this->currentLanguage === null) {
-            if ($this->multiLanguageFields) {
+            if ($this->getMultiLanguageFields()) {
                 $this->currentLanguage = $this->getService('LanguagesManager')
                     ->getCurrentLanguageId($this->languagesParentElementMarker);
             } else {
@@ -510,7 +505,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
      */
     public function getLanguagesList()
     {
-        if ($this->multiLanguageFields) {
+        if ($this->getMultiLanguageFields()) {
             $languagesManager = $this->getService('LanguagesManager');
             $languages = $languagesManager->getLanguagesIdList($this->languagesParentElementMarker);
         } else {
@@ -534,6 +529,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
      * Error log entry generation. Also provides classname as a location
      *
      * @param $errorText
+     * @throws Exception
      */
     protected function logError($errorText)
     {
@@ -542,9 +538,29 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         $errorLogObject->logMessage($locationName, $errorText);
     }
 
-    protected function setMultiLanguageFields(&$multiLanguageFields)
+    public function getMultiLanguageFields()
     {
+        if ($this->multiLanguageFields === null) {
+            if (method_exists($this, 'setMultiLanguageFields')) {
+                $this->setMultiLanguageFields($this->multiLanguageFields);
+                if (!empty($this->multiLanguageFields)) {
+                    $this->multiLanguageFields = array_flip($this->multiLanguageFields);
+                }
+            } else {
+                $this->multiLanguageFields = [];
+            }
+        }
+        return $this->multiLanguageFields;
     }
+
+    protected function isFieldMultiLanguage($dataChunk)
+    {
+        if ($multiLanguageFields = $this->getMultiLanguageFields()) {
+            return isset($multiLanguageFields[$dataChunk]);
+        }
+        return false;
+    }
+
 
     /**
      * Load and get module data object for the provided language
@@ -601,7 +617,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     protected function getModuleDataObjects()
     {
         $moduleDataObjects = [];
-        if ($this->multiLanguageFields) {
+        if ($this->getMultiLanguageFields()) {
             $languagesManager = $this->getService('LanguagesManager');
             if ($languages = $languagesManager->getLanguagesIdList($this->languagesParentElementMarker)) {
                 foreach ($languages as &$languageId) {
@@ -635,7 +651,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         foreach ($languages as &$languageId) {
             if ($filteredLanguageId === false || $filteredLanguageId == $languageId) {
                 foreach ($expectedFields as &$dataChunkName) {
-                    if (isset($this->multiLanguageFields[$dataChunkName])) {
+                    if ($this->isFieldMultiLanguage($dataChunkName)) {
                         if ($dataChunk = $this->getDataChunk($dataChunkName, $languageId)) {
                             if (!isset($externalData[$languageId][$dataChunkName])) {
                                 $externalData[$languageId][$dataChunkName] = null;
@@ -656,7 +672,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         }
 
         foreach ($expectedFields as &$dataChunkName) {
-            if (!isset($this->multiLanguageFields[$dataChunkName])) {
+            if (!$this->isFieldMultiLanguage($dataChunkName)) {
                 if ($dataChunk = $this->getDataChunk($dataChunkName)) {
                     if (!isset($externalData[$dataChunkName])) {
                         $externalData[$dataChunkName] = null;
@@ -676,7 +692,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
 
         if ($validated) {
             foreach ($expectedFields as &$dataChunkName) {
-                if (isset($this->multiLanguageFields[$dataChunkName])) {
+                if ($this->isFieldMultiLanguage($dataChunkName)) {
                     foreach ($languages as &$languageId) {
                         if ($filteredLanguageId === false || $filteredLanguageId == $languageId) {
                             if ($dataChunk = $this->getDataChunk($dataChunkName, $languageId)) {
@@ -1006,7 +1022,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
                     //some data chunks do not exist in database directly.
                     $chunkObject->setElementStorageValue($moduleDataObject->$propertyName);
                 }
-                if (isset($this->multiLanguageFields[$propertyName])) {
+                if ($this->isFieldMultiLanguage($propertyName)) {
                     $this->multiLanguageChunks[$languageId][$propertyName] = $chunkObject;
                 } else {
                     $this->singleLanguageChunks[$propertyName] = $chunkObject;
@@ -1204,11 +1220,16 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
      * @param bool $restrictLinkTypes
      * @return structureElement[]
      */
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
-    {
+    public function getChildrenList(
+        $roles = null,
+        $linkType = 'structure',
+        $allowedTypes = null,
+        $restrictLinkTypes = false
+    ) {
         $structureManager = $this->getService('structureManager');
         //is it possible that we should always use blacklist when loading children?
-        $childrenList = $structureManager->getElementsChildren($this->id, $roles, $linkType, $allowedTypes, $restrictLinkTypes);
+        $childrenList = $structureManager->getElementsChildren($this->id, $roles, $linkType, $allowedTypes,
+            $restrictLinkTypes);
 
         return $childrenList;
     }
@@ -1350,11 +1371,6 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     public function getParentLanguagesGroupName()
     {
         return $this->languagesParentElementMarker;
-    }
-
-    public function getMultiLanguageFields()
-    {
-        return $this->multiLanguageFields;
     }
 
     /**

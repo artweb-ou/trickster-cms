@@ -215,28 +215,28 @@ class linksManager extends errorLogger
     /**
      * @param $elementId
      * @param string $types
-     * @param string[]|string|null $elementRoles - : are we looking for child or parent elements?
+     * @param string[]|string|null $sourceElementRoles - : are we looking for child or parent elements?
      * @return mixed
      */
     public function getConnectedIdList(
         $elementId,
         $types = 'structure',
-        $elementRoles = null
+        $sourceElementRoles = null
     )
     {
         if (!is_array($types)) {
             $types = (array)$types;
         }
-        if (is_null($elementRoles) || $elementRoles == '') {
-            $elementRoles = [
+        if (is_null($sourceElementRoles) || $sourceElementRoles == '') {
+            $sourceElementRoles = [
                 'child',
                 'parent',
             ];
-        } elseif (!is_array($elementRoles)) {
-            $elementRoles = [$elementRoles];
+        } elseif (!is_array($sourceElementRoles)) {
+            $sourceElementRoles = [$sourceElementRoles];
         }
         $result = [];
-        foreach ($elementRoles as &$elementRole) {
+        foreach ($sourceElementRoles as &$elementRole) {
             foreach ($types as &$type) {
                 if (!isset($this->elementsConnectedId[$elementRole][$elementId])) {
                     $this->elementsConnectedId[$elementRole][$elementId] = [];

@@ -37,7 +37,6 @@ window.ShoppingBasketSelectionFormDpdPoint = function(info, fieldsBaseName) {
         selectElement = document.createElement('select');
         selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
         fieldElement.appendChild(selectElement);
-        eventsManager.addHandler(selectElement, 'change', changeHandler);
 
         dropdown = dropDownManager.getDropDown(selectElement);
         fieldElement.appendChild(dropdown.componentElement);
@@ -77,8 +76,11 @@ window.ShoppingBasketSelectionFormDpdPoint = function(info, fieldsBaseName) {
             dropdown.update();
         }
     };
-    var changeHandler = function() {
-
+    this.getComponentElement = function() {
+        return componentElement;
+    };
+    this.getId = function() {
+        return info.id;
     };
     init();
 };

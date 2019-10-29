@@ -1,14 +1,10 @@
 window.ShoppingBasketSelectionFormPost24Automate = function(info, fieldsBaseName) {
-    var self = this;
-
     var componentElement;
     var labelElement;
     var starElement;
     var fieldElement;
     var selectElement;
     var dropdown;
-
-    this.componentElement = null;
 
     var init = function() {
         componentElement = document.createElement('tr');
@@ -37,12 +33,9 @@ window.ShoppingBasketSelectionFormPost24Automate = function(info, fieldsBaseName
         selectElement = document.createElement('select');
         selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
         fieldElement.appendChild(selectElement);
-        eventsManager.addHandler(selectElement, 'change', changeHandler);
 
         dropdown = dropDownManager.getDropDown(selectElement);
         fieldElement.appendChild(dropdown.componentElement);
-
-        self.componentElement = componentElement;
 
         fillSelect();
         if (info.value) {
@@ -77,8 +70,11 @@ window.ShoppingBasketSelectionFormPost24Automate = function(info, fieldsBaseName
             dropdown.update();
         }
     };
-    var changeHandler = function() {
-
+    this.getComponentElement = function() {
+        return componentElement;
+    };
+    this.getId = function() {
+        return info.id;
     };
     init();
 };

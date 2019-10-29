@@ -273,9 +273,9 @@ class languageElement extends structureElement implements MetadataProviderInterf
         $this->elementsList[$context] = [];
         $this->elementsIndex[$context] = [];
         $elements = &$this->elementsList[$context];
-        $currentMainMenu = $this->getCurrentMainMenu();
-        if ($currentMainMenu) {
-            $elements = $this->getEnabledElementsByType($currentMainMenu->id, $context);
+        $structureManager = $this->getService('structureManager');
+        if ($currentElement = $structureManager->getCurrentElement()) {
+            $elements = $this->getEnabledElementsByType($currentElement->id, $context);
         }
         foreach ($elements as $element) {
             if (!isset($this->elementsIndex[$context][$element->structureType])) {
@@ -319,27 +319,20 @@ class languageElement extends structureElement implements MetadataProviderInterf
 
         $linksManager = $this->getService('linksManager');
         $structureManager = $this->getService('structureManager');
-
-        $allElementsIdList = $linksManager->getConnectedIdList($this->id, $type, 'parent');
-        $shownInLanguageIdList = $linksManager->getConnectedIdList($this->id, $linkType, 'parent');
-        $shownInMenuIdList = $linksManager->getConnectedIdList($menuId, $linkType, 'parent');
-
-        // todo: this now only supports the direct children of current menu. We should somehow allow any level to be used
-        if ($currentMainPage = $this->getCurrentMainMenu()) {
-            if (!$currentMainPage->final) {
-                if ($subPages = $currentMainPage->getChildrenList()){
-                    foreach ($subPages as $subPage) {
-                        if ($subPage->requested) {
-                            $shownInMenuIdList = array_merge($shownInMenuIdList, (array)($linksManager->getConnectedIdList($subPage->id, $linkType, 'parent')));
-                            break;
-                        }
+        $rootId = $structureManager->getRootElementId();
+        $shownInMenuIdList = [];
+        if ($possibleElements = $linksManager->getConnectedIdList($this->id, $type, 'parent')) {
+            if ($element = $structureManager->getElementById($menuId)) {
+                do {
+                    if ($levelLinks = $linksManager->getConnectedIdList($element->id, $linkType, 'parent')) {
+                        $shownInMenuIdList = array_merge($shownInMenuIdList, $levelLinks);
                     }
-                }
+                    $element = $structureManager->getElementsRequestedParent($element->id);
+                } while ($element && ($element->id !== $rootId));
             }
-        }
-
-        if ($resultIdList = array_intersect($allElementsIdList, array_merge($shownInLanguageIdList, $shownInMenuIdList))) {
-            $result = $structureManager->getElementsByIdList($resultIdList, $this->id, true);
+            if ($resultIdList = array_intersect($possibleElements, $shownInMenuIdList)) {
+                $result = $structureManager->getElementsByIdList($resultIdList, $this->id, true);
+            }
         }
         return $result;
     }
@@ -501,18 +494,22 @@ class languageElement extends structureElement implements MetadataProviderInterf
 
     public function getBreadcrumbsTitle()
     {
-        $firstPageElement = $this->getFirstPageElement();
-        if ($firstPageElement) {
-            return $firstPageElement->getTitle();
+        if ($this->getService('controllerApplication')->getApplicationName() !== 'admin') {
+            $firstPageElement = $this->getFirstPageElement();
+            if ($firstPageElement) {
+                return $firstPageElement->getTitle();
+            }
         }
         return $this->getTitle();
     }
 
     public function getBreadcrumbsUrl()
     {
-        $firstPageElement = $this->getFirstPageElement();
-        if ($firstPageElement) {
-            return $firstPageElement->getUrl();
+        if ($this->getService('controllerApplication')->getApplicationName() !== 'admin') {
+            $firstPageElement = $this->getFirstPageElement();
+            if ($firstPageElement) {
+                return $firstPageElement->getUrl();
+            }
         }
         return $this->getUrl();
     }

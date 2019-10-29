@@ -39,17 +39,17 @@ class CurrencySelector implements DependencyInjectionContextInterface
         return $this->getCurrencyObjectsList();
     }
 
-    public function convertPrice($price, bool $format = true)
+    public function convertPrice($price, bool $format = true, $addCurrencySign = false)
     {
         $value = floatval(str_replace([" ", ','], ["", '.'], $price)) * $this->getSelectedCurrencyRate();
 
         if ($format) {
-            return $this->formatPrice($value);
+            return $this->formatPrice($value, $addCurrencySign);
         }
         return $value;
     }
 
-    public function formatPrice($price)
+    public function formatPrice($price, $addCurrencySign = false)
     {
         $formattedPrice = '0';
         $currentFormat = $this->getCurrentCurrencyFormat();
@@ -68,6 +68,9 @@ class CurrencySelector implements DependencyInjectionContextInterface
             }
         } else {
             $formattedPrice = $stringPrice;
+        }
+        if ($addCurrencySign) {
+            $formattedPrice .= ' ' . $this->getSelectedCurrencyItem()->symbol;
         }
         return $formattedPrice;
     }

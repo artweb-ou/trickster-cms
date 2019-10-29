@@ -89,6 +89,7 @@ class SelectedProductsFormStructure extends ElementForm
             'type' => 'select.universal_options_multiple',
             'method' => 'getDisplayMenusInfo',
             'condition' => 'checkDisplayMenus',
+            'translationGroup' => 'shared',
         ],
         'button_module' => [
             'type' => 'show.heading',

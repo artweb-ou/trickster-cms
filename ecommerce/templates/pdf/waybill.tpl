@@ -31,37 +31,12 @@
                             {else}
                                 {$data.receiverFields.firstName.value} {$data.receiverFields.lastName.value}
                             {/if}
-							{elseif !empty($data.receiverFields.firstName.value)}
-                            	{$data.receiverFields.firstName.value}
-							{elseif !empty($data.receiverFields.lastName.value)}
-                            	{$data.receiverFields.lastName.value}
+						{elseif !empty($data.receiverFields.firstName.value)}
+							{$data.receiverFields.firstName.value}
+						{elseif !empty($data.receiverFields.lastName.value)}
+							{$data.receiverFields.lastName.value}
 						{/if}
 					</div>
-                    {if !empty($data.receiverFields.address.value)}
-						<div class="invoice_top_payer_row">
-                            {$data.receiverFields.address.value}{if $data.receiverFields.city.value}, {$data.receiverFields.city.value}{/if}{if $data.receiverFields.postIndex.value}, {$data.receiverFields.postIndex.value}{/if}
-						</div>
-                    {/if}
-                    {if !empty($data.receiverFields.country.value)}
-						<div class="invoice_top_payer_row">
-                            {$data.receiverFields.country.value}
-						</div>
-                    {/if}
-                    {if !empty($data.receiverFields.email.value)}
-						<div class="invoice_top_payer_row">
-                            {$data.receiverFields.email.value}
-						</div>
-                    {/if}
-                    {if !empty($data.receiverFields.phone.value)}
-						<div class="invoice_top_payer_row">
-                            {$data.receiverFields.phone.value}
-						</div>
-                    {/if}
-                    {if !empty($data.receiverFields.other)}
-                        {foreach from=$data.receiverFields.other item=field}
-							<div class="invoice_top_payer_row">{nl2br($field.value)}</div>
-                        {/foreach}
-                    {/if}
                 {/if}
 			</td>
 			<td class="invoice_top_delimiter"></td>
@@ -85,13 +60,13 @@
 	<tbody class="order_productstable_data">
     {foreach from=$data.addedProducts item=productInfo}
 		<tr>
-			<td>
+			<td style="border-left: 1px solid #e0e0e0;">
                 {$productInfo.code}
 			</td>
-			<td>
+			<td style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;">
                 {$productInfo.title} {if $productInfo.variation}({$productInfo.variation}){/if}
 			</td>
-			<td>
+			<td style="border-right: 1px solid #e0e0e0;">
                 {$productInfo.amount}
 			</td>
 		</tr>
@@ -99,21 +74,21 @@
 	</tbody>
 </table>
 
-<table class="waybill_bottom_table" style="width: 100%;margin-top: 100px;border: 1px solid #e0e0e0;border-collapse: collapse">
+<table class="waybill_bottom_table" style="width: 100%;margin-top: 50px;border: 1px solid #e0e0e0;border-collapse: collapse">
 	<tr>
-		<td style="vertical-align: top; padding: .5em 1.5em; text-align: left; border-collapse: collapse;border-right: 1px solid #e0e0e0;width: 50%;">
+		<td style="vertical-align: top; padding: .5em 1.5em; text-align: left; border-collapse: collapse;border-right: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; width: 50%;">
 			<div>{translations name='waybill.from'}</div>
 
 		</td>
-		<td style="vertical-align: top; padding: .5em 1.5em; text-align: left; border-collapse: collapse;width: 50%; ">
+		<td style="vertical-align: top; padding: .5em 1.5em; text-align: left; border-collapse: collapse;width: 50%; border-bottom: 1px solid #e0e0e0;">
 			<span style="text-align: left">{translations name='waybill.payer'}</span>
 		</td>
 	</tr>
 	<tr>
-		<td style="vertical-align: top; padding: .5em 1.5em; text-align: left; border-collapse: collapse; border-bottom: 1px solid #e0e0e0;border-right: 1px solid #e0e0e0;">
-			<div>Andrese Klaasistuudio OÜ</div>
+		<td style="vertical-align: top; padding: 1em 1.5em; text-align: left; border-collapse: collapse; border-bottom: 1px solid #e0e0e0;border-right: 1px solid #e0e0e0;">
+			<div>{translations name='waybill.company_name'}</div>
 		</td>
-		<td style="vertical-align: top; padding: .5em 1.5em; text-align: left; border-collapse: collapse; border-bottom: 1px solid #e0e0e0;"></td>
+		<td style="vertical-align: top; padding: 1em 1.5em; text-align: left; border-collapse: collapse; border-bottom: 1px solid #e0e0e0;"></td>
 	</tr>
 	<tr>
 		<td style="vertical-align: top; padding: .5em 1.5em; text-align: left; border-collapse: collapse; border-bottom: 1px solid #e0e0e0;border-right: 1px solid #e0e0e0;">
@@ -123,8 +98,8 @@
 		</td>
 	</tr>
 	<tr class="waybill_reciever_side">
-		<td style="padding: .5em 1.5em; border-collapse: collapse;border-right: 1px solid #e0e0e0;">&nbsp;</td>
-		<td style="padding: .5em 1.5em; border-collapse: collapse;">&nbsp;</td>
+		<td style="padding: 1em 1.5em; border-collapse: collapse;border-right: 1px solid #e0e0e0;">&nbsp;</td>
+		<td style="padding: 1em 1.5em; border-collapse: collapse;">&nbsp;</td>
 	</tr>
 </table>
 

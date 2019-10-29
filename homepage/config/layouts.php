@@ -155,10 +155,13 @@
         'layout',
         'colorLayout',
     ],
+    'folder.layout.default' => 'content',
+
     'feedback.layouts' => [
         'layout',
         'colorLayout',
     ],
+    'feedback.layout.default' => 'form',
     'widget.layouts' => [
         'layout',
         'colorLayout',

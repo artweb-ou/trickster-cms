@@ -93,13 +93,19 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
 
     public function saveStorage()
     {
+        $serverSessionManager = $this->getService('ServerSessionManager');
+        if ($this->currentPromoCode) {
+            $serverSessionManager->set('currentPromoCode', $this->currentPromoCode);
+        } else {
+            $serverSessionManager->delete('currentPromoCode');
+        }
+
         $languagesManager = $this->getService('LanguagesManager');
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
 
         $data = [];
         $data['languageId'] = $currentLanguageId;
         $data['discountsData'] = $this->discountsData;
-        $data['currentPromoCode'] = $this->currentPromoCode;
 
         $cache = $this->getService('cache');
         $cache->set('discountsData' . $currentLanguageId, $data, 600);
@@ -107,6 +113,9 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
 
     protected function loadStorage()
     {
+        $serverSessionManager = $this->getService('ServerSessionManager');
+        $this->currentPromoCode = $serverSessionManager->get('currentPromoCode');
+
         $cache = $this->getService('cache');
         $languagesManager = $this->getService('LanguagesManager');
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
@@ -117,9 +126,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
             $this->discountsData = $this->loadDiscountsData();
             $this->saveStorage();
         }
-        if (isset($data['currentPromoCode'])) {
-            $this->currentPromoCode = $data['currentPromoCode'];
-        }
+
         foreach ($this->discountsData as &$storageData) {
             $discount = new ShoppingBasketDiscount($storageData, $this);
             $this->instantiateContext($discount);
@@ -143,7 +150,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
                 }
             }
 
-            foreach ($discountElements as &$discountElement) {
+            foreach ($discountElements as $discountElement) {
                 $elementData = [];
                 $elementData['id'] = $discountElement->id;
                 $elementData['code'] = $discountElement->code;
@@ -166,6 +173,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
                 $elementData['showInBasket'] = $discountElement->showInBasket;
                 $elementData['basketText'] = $discountElement->basketText;
                 $elementData['displayText'] = $discountElement->displayText;
+                $elementData['reference'] = $discountElement->reference;
                 $elementData['displayProductsInBasket'] = $discountElement->displayProductsInBasket;
                 $data[] = $elementData;
             }
@@ -206,7 +214,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
     public function getApplicableDiscountsIdList()
     {
         $discountsIdList = [];
-        foreach ($this->discountsList as &$discount) {
+        foreach ($this->discountsList as $discount) {
             if ($discount->hasApplicableProductsIds()) {
                 $discountsIdList[] = $discount->id;
             }
@@ -254,7 +262,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
         $this->appliedDiscountsList = [];
         $this->discountAmountsIndex = [];
         if ($discountsList = $this->getDiscountsList()) {
-            foreach ($discountsList as &$discount) {
+            foreach ($discountsList as $discount) {
                 if (!isset($this->discountAmountsIndex[$discount->id])) {
                     $this->discountAmountsIndex[$discount->id] = 0;
                 }
@@ -276,7 +284,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
             $useSmallest = 0;
 
             //check all discounts to be able to decide after what should be used
-            foreach ($discountsList as &$discount) {
+            foreach ($discountsList as $discount) {
                 if ($discountAmount = $discount->getDeliveryDiscountAmount($selectedDeliveryTypeId, $deliveryPrice, $productsList)) {
                     //do we have at least one discount with "useSmallest" discount?
                     if ($discount->groupBehaviour == 'useSmallest') {
@@ -310,7 +318,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
             } //we have only "cooperate" discounts, lets use their sum and mark them all as active
             else {
                 $deliveryDiscountAmount = $cooperateDiscountAmount;
-                foreach ($discountsList as &$discount) {
+                foreach ($discountsList as $discount) {
                     if ($discount->groupBehaviour == 'cooperate' && ($discountAmount = $discount->getDeliveryDiscountAmount($selectedDeliveryTypeId, $deliveryPrice, $productsList))) {
                         $this->discountAmountsIndex[$discount->id] = $discountAmount;
                     }
@@ -335,7 +343,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
                 }
             }
 
-            foreach ($discountsList as &$discount) {
+            foreach ($discountsList as $discount) {
                 if ($discount->active) {
                     $this->appliedDiscountsList[] = $discount;
                 }
@@ -362,7 +370,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
             $useSmallest = 0;
 
             //check all discounts to be able to decide after what should be used
-            foreach ($discountsList as &$discount) {
+            foreach ($discountsList as $discount) {
                 if (($discountAmount = $discount->getProductDiscountAmount($productId, $productTotalPrice, $productAmount)) !== false) {
                     //do we have at least one discount with "useSmallest" discount?
                     if ($discount->groupBehaviour == 'useSmallest') {
@@ -400,7 +408,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
             } //we have only "cooperate" discounts, lets use their sum and mark them all as active
             else {
                 $productDiscount = $cooperateDiscountAmount;
-                foreach ($discountsList as &$discount) {
+                foreach ($discountsList as $discount) {
                     if ($discount->groupBehaviour == 'cooperate' && ($discountAmount = $discount->getProductDiscountAmount($productId, $productTotalPrice)) && isset($this->discountAmountsIndex[$discount->id])) {
                         $this->discountAmountsIndex[$discount->id] += $discountAmount;
                     }
@@ -439,6 +447,7 @@ class ShoppingBasketDiscount extends errorLogger implements DependencyInjectionC
     public $showInBasket;
     public $basketText;
     public $displayText;
+    public $reference;
     public $displayProductsInBasket = false;
     public $active = false;
     public $appliedLast = true;
@@ -489,6 +498,7 @@ class ShoppingBasketDiscount extends errorLogger implements DependencyInjectionC
 
         $this->showInBasket = $discountData['showInBasket'];
         $this->basketText = $discountData['basketText'];
+        $this->reference = $discountData['reference'];
         $this->displayText = true;
         $this->displayProductsInBasket = $discountData['displayProductsInBasket'];
     }

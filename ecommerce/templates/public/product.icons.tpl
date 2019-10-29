@@ -1,6 +1,5 @@
 {function productIconsCell}
     <span class="product_icons_cell {$cellLocation}">
-        {*{var_dump($iconsInfo)}*}
         {foreach $iconsInfo as $iconInfo}
             {if $iconInfo.iconLocation == $cellLocation}
                 {if !empty($iconInfo.image)}

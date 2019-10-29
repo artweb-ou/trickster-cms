@@ -6,6 +6,7 @@ window.ShoppingBasketSelectionForm = function(componentElement, formElement) {
     var deliveryDataElement;
     var fieldsBaseName;
     var controlsBlock;
+    var deliveryFieldsIndex = {};
     var init = function() {
         if (controlsBlock = componentElement.querySelector('.shoppingbasket_payer_data_controls')) {
             if (payerCheckBoxElement = controlsBlock.querySelector('input.checkbox_placeholder')) {
@@ -50,79 +51,63 @@ window.ShoppingBasketSelectionForm = function(componentElement, formElement) {
             }
         }
         if (deliveryType) {
+            var order = [
+                'dpdRegion',
+                'dpdPoint',
+                'post24Region',
+                'post24Automate',
+                'smartPostRegion',
+                'smartPostAutomate',
+            ];
+            var field;
+            var newIndex = {};
+
+            //remove all dom elements
             while (deliveryDataElement.firstChild) {
                 deliveryDataElement.removeChild(deliveryDataElement.firstChild);
             }
+            deliveryType.deliveryFormFields.sort(function(a, b) {
+                var aOrder = order.indexOf(a.autocomplete);
+                var bOrder = order.indexOf(b.autocomplete);
+                if ((aOrder < 0) && (bOrder < 0)) {
+                    return 0;
+                }
+                if (aOrder < 0) {
+                    return 1;
+                }
+                if (bOrder < 0) {
+                    return -1;
+                }
+                return aOrder - bOrder;
 
-            // add delivery fields, make sure post24/smartpost ones come first
-            var dpdPointField, dpdRegionField, post24automatField, post24regionField, smartPostAutomatField,
-                smartPostRegionField;
+            });
             for (var i = 0; i < deliveryType.deliveryFormFields.length; i++) {
-                var autocomplete = deliveryType.deliveryFormFields[i].autocomplete;
-                if (typeof window.dpdLogics !== 'undefined') {
+                var fieldInfo = deliveryType.deliveryFormFields[i];
+                if (typeof deliveryFieldsIndex[fieldInfo.id] !== 'undefined') {
+                    field = deliveryFieldsIndex[fieldInfo.id];
+                } else {
+                    var autocomplete = fieldInfo.autocomplete;
                     if (autocomplete === 'dpdRegion') {
-                        dpdRegionField = deliveryType.deliveryFormFields[i];
-                        if (deliveryType.deliveryFormFields[i].value) {
-                            dpdLogics.setCurrentRegion(deliveryType.deliveryFormFields[i].value);
-                        }
+                        field = new ShoppingBasketSelectionFormDpdRegion(fieldInfo, fieldsBaseName);
                     } else if (autocomplete === 'dpdPoint') {
-                        dpdPointField = deliveryType.deliveryFormFields[i];
-                    }
-                }
-                if (typeof window.post24Logics !== 'undefined') {
-                    if (autocomplete === 'post24Region') {
-                        post24regionField = deliveryType.deliveryFormFields[i];
-                        if (deliveryType.deliveryFormFields[i].value) {
-                            post24Logics.setCurrentRegion(deliveryType.deliveryFormFields[i].value);
-                        }
+                        field = new ShoppingBasketSelectionFormDpdPoint(fieldInfo, fieldsBaseName);
+                    } else if (autocomplete === 'post24Region') {
+                        field = new ShoppingBasketSelectionFormPost24Region(fieldInfo, fieldsBaseName);
                     } else if (autocomplete === 'post24Automate') {
-                        post24automatField = deliveryType.deliveryFormFields[i];
-                    }
-                }
-                if (typeof window.smartPostLogics !== 'undefined') {
-                    if (autocomplete === 'smartPostRegion') {
-                        smartPostRegionField = deliveryType.deliveryFormFields[i];
-                        if (deliveryType.deliveryFormFields[i].value) {
-                            smartPostLogics.setCurrentRegion(deliveryType.deliveryFormFields[i].value);
-                        }
+                        field = new ShoppingBasketSelectionFormPost24Automate(fieldInfo, fieldsBaseName);
+                    } else if (autocomplete === 'smartPostRegion') {
+                        field = new ShoppingBasketSelectionFormSmartPostRegion(fieldInfo, fieldsBaseName);
                     } else if (autocomplete === 'smartPostAutomate') {
-                        smartPostAutomatField = deliveryType.deliveryFormFields[i];
+                        field = new ShoppingBasketSelectionFormSmartPostAutomate(fieldInfo, fieldsBaseName);
+                    } else {
+                        field = new ShoppingBasketSelectionFormField(fieldInfo, fieldsBaseName, formElement);
                     }
                 }
+                deliveryDataElement.appendChild(field.getComponentElement());
+                newIndex[field.getId()] = field;
             }
-            var field;
-            if (dpdRegionField) {
-                field = new ShoppingBasketSelectionFormDpdRegion(dpdRegionField, fieldsBaseName);
-                deliveryDataElement.appendChild(field.componentElement);
-                if (dpdPointField) {
-                    field = new ShoppingBasketSelectionFormDpdPoint(dpdPointField, fieldsBaseName);
-                    deliveryDataElement.appendChild(field.componentElement);
-                }
-            }
-            if (smartPostRegionField) {
-                field = new ShoppingBasketSelectionFormSmartPostRegion(smartPostRegionField, fieldsBaseName);
-                deliveryDataElement.appendChild(field.componentElement);
-                if (smartPostAutomatField) {
-                    field = new ShoppingBasketSelectionFormSmartPostAutomate(smartPostAutomatField, fieldsBaseName);
-                    deliveryDataElement.appendChild(field.componentElement);
-                }
-            }
-            if (post24regionField) {
-                field = new ShoppingBasketSelectionFormPost24Region(post24regionField, fieldsBaseName);
-                deliveryDataElement.appendChild(field.componentElement);
-                if (post24automatField) {
-                    field = new ShoppingBasketSelectionFormPost24Automate(post24automatField, fieldsBaseName);
-                    deliveryDataElement.appendChild(field.componentElement);
-                }
-            }
-            for (var j = 0; j < deliveryType.deliveryFormFields.length; j++) {
-                var autocomplete2 = deliveryType.deliveryFormFields[j].autocomplete;
-                if (autocomplete2 != 'dpdPoint' && autocomplete2 != 'dpdRegion' && autocomplete2 != 'post24Automate' && autocomplete2 != 'post24Region' && autocomplete2 != 'smartPostRegion' &&
-                    autocomplete2 != 'smartPostAutomate') {
-                    field = new ShoppingBasketSelectionFormField(deliveryType.deliveryFormFields[j], fieldsBaseName, formElement);
-                    deliveryDataElement.appendChild(field.getComponentElement());
-                }
-            }
+            deliveryFieldsIndex = newIndex;
+
         }
         updatePayerData();
     };
