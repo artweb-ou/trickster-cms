@@ -28,7 +28,6 @@ class languageElement extends structureElement implements MetadataProviderInterf
     protected $mainMenuElements;
     protected $firstPageElement;
 
-
     protected function getTabsList()
     {
         return [
@@ -119,7 +118,6 @@ class languageElement extends structureElement implements MetadataProviderInterf
         $moduleStructure['backgroundImage'] = 'image';
         $moduleStructure['logoImageOriginalName'] = 'fileName';
         $moduleStructure['logoImage'] = 'image';
-        $moduleStructure['promoText'] = 'text';
         $moduleStructure['hidden'] = 'checkbox';
         $moduleStructure['patternBackground'] = 'checkbox';
     }
@@ -188,11 +186,6 @@ class languageElement extends structureElement implements MetadataProviderInterf
     {
         return $this->getElementsFromContextByType('bottomMenu', $structureType);
     }
-
-
-
-
-
 
     public function getSecondaryElements()
     {

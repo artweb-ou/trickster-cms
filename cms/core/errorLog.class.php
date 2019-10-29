@@ -101,9 +101,9 @@ class errorLog
         $newMessage['errorText'] = $errorText;
 
         $this->writeLogContents($newMessage);
-//        if ($throwException && controller::getInstance()->getDebugMode()) {
-//            throw new Exception($errorText);
-//        }
+        if ($throwException && controller::getInstance()->getDebugMode()) {
+            throw new Exception($errorText);
+        }
 
     }
 }

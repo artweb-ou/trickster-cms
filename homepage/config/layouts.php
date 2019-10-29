@@ -76,10 +76,8 @@
     'linkList.layout.default' => 'thumbnails',
 
     'linkListItem.layouts' => [
-//        'layout',
         'colorLayout',
     ],
-//    'linkListItem.layout.default' => 'thumbnails',
 
     'map.layouts' => [
         'layout',
