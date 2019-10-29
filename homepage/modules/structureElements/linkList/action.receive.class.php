@@ -13,6 +13,17 @@ class receiveLinkList extends structureElementAction
                 $structureElement->image = $structureElement->id . '_1';
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
             }
+            $additionalImages = [
+                'icon',
+            ];
+
+            foreach($additionalImages as $imageCode) {
+                if (!is_null($structureElement->getDataChunk($imageCode)->originalName)) {
+                    $structureElement->$imageCode = $structureElement->id . "_$imageCode";
+                    $field = $imageCode . 'OriginalName';
+                    $structureElement->$field = $structureElement->getDataChunk($imageCode)->originalName;
+                }
+            }
 
             $structureElement->persistElementData();
 
@@ -31,6 +42,7 @@ class receiveLinkList extends structureElementAction
             'title',
             'hideTitle',
             'image',
+            'icon',
             'marker',
             'content',
             'subTitle',

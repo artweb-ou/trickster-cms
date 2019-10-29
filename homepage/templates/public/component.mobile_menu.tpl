@@ -4,7 +4,7 @@
 			<div class="mobilemenu_closeicon"></div>
 			{include file=$theme->template('component.languages_selector_in_row.tpl')}
 			{foreach $currentLanguage->getMobileMenuElementsList() as $element}
-				{include file=$theme->template($element->getTemplate("mobileMenu")) element=$element}
+				{include file=$theme->template($element->getTemplate("mobileMenu")) usePopup=$element->popup element=$element}
 			{/foreach}
 		</div>
 	</div>

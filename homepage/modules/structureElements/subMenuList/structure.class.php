@@ -130,6 +130,7 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
             'id' => $this->id,
             'URL' => $this->URL,
             'parentId' => 0,
+        //    'isRequested' => $this->requested,
         ];
         if ($subMenuList = $this->getSubMenuList()) {
             foreach ($subMenuList as &$menuItem) {
@@ -138,6 +139,32 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
         }
         return $menusInfo;
     }
+
+
+    public function getChildsRequests()
+    {
+        $menusInfo = [];
+        if ($subMenuList = $this->getSubMenuList()) {
+            foreach ($subMenuList as $menuItem) {
+                $this->getChildItemRequests($menuItem, 1, 0);
+            }
+        }
+    }
+
+    protected function getChildItemRequests($menuItem, $level, $requests=0)
+    {
+        if ($subMenuList = $menuItem->getSubMenuList()) {
+            $requests = 0;
+            foreach ($subMenuList as &$subMenuItem) {
+                $requests = $requests + (int)$subMenuItem->requested;
+                if ($this->levels > $level) {
+                    $this->getChildItemRequests($subMenuItem, $level + 1, 0);
+                }
+            }
+        }
+        $menuItem->isChildsRequested = $requests;
+    }
+
 
     protected function getMenuItemInfo($menuItem, &$menusInfo, $level)
     {

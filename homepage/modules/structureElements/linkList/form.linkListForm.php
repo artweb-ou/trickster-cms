@@ -11,15 +11,22 @@ class LinkListFormStructure extends ElementForm
             'type' => 'input.checkbox',
             'translationGroup' => 'shared',
         ],
-        'content' => [
-            'type' => 'input.html',
-        ],
         'subTitle' => [
             'type' => 'input.text',
+            'translationGroup' => 'shared',
+        ],
+        'icon' => [
+            'type' => 'input.image',
+            'preset' => 'adminImage',
+            'filename' => 'iconOriginalName',
+        ],
+        'content' => [
+            'type' => 'input.html',
         ],
         'image' => [
             'type' => 'input.image',
             'preset' => 'adminImage',
+            'filename' => 'originalName',
         ],
         'displayMenus' => [
             'type' => 'select.universal_options_multiple',

@@ -19,6 +19,8 @@ class receiveLayoutLinkList extends structureElementAction
             'layout',
             'colorLayout',
             'cols',
+            'colWidthValue',
+            'colWidthUnit',
             'gapValue',
             'gapUnit',
             'titlePosition',

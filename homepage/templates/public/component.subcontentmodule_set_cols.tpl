@@ -3,6 +3,10 @@
         class="subcontentmodule_component subcontentmodule_cols{if isset($colsOnRow)} cols_{$colsOnRow}{/if}
         {if isset($moduleClass)} {$moduleClass}{/if}"
         {if isset($moduleAttributes)}{$moduleAttributes}{/if}>
+
+    {if !empty($itemModuleInnerWrapper)}
+        <div{if !empty($itemModuleInnerWrapperClass)} class="{$itemModuleInnerWrapperClass}"{/if}>
+    {/if}
     {if isset($moduleTitle) && $moduleTitle !=""}
         <h2 class="subcontentmodule_title{if isset($moduleTitleClass)} {$moduleTitleClass}{/if}"
                 {if isset($moduleTitleAttributes)} {$moduleTitleAttributes}{/if}>
@@ -12,9 +16,14 @@
     <div class="subcontentmodule_content{if isset($moduleContentClass)} {$moduleContentClass}{/if}">
         {if isset($moduleContent)} {$moduleContent}{/if}
     </div>
-    <div class="subcontentmodule_image{if isset($moduleImageBlockClass)} {$moduleImageBlockClass}{/if}">
-        {if isset($moduleImageBlock)} {$moduleImageBlock}{/if}
-    </div>
+    {if !empty($moduleImageBlock)}
+        <div class="subcontentmodule_image{if isset($moduleImageBlockClass)} {$moduleImageBlockClass}{/if}">
+        {$moduleImageBlock}
+        </div>
+    {/if}
+    {if !empty($itemModuleInnerWrapper)}
+        </div>
+    {/if}
 
 </{if isset($moduleTag)}{$moduleTag}{else}section{/if}>
 {/stripdomspaces}

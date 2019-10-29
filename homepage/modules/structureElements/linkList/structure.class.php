@@ -20,10 +20,14 @@ class linkListElement extends menuDependantStructureElement implements Configura
         $moduleStructure['colorLayout'] = 'text';
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'fileName';
+        $moduleStructure['icon'] = 'image';
+        $moduleStructure['iconOriginalName'] = 'fileName';
         $moduleStructure['fixedId'] = 'text';
         $moduleStructure['content'] = 'html';
         $moduleStructure['subTitle'] = 'text';
         $moduleStructure['cols'] = 'naturalNumber';
+        $moduleStructure['colWidthValue'] = 'naturalNumber';
+        $moduleStructure['colWidthUnit'] = 'text';
         $moduleStructure['gapValue'] = 'naturalNumber';
         $moduleStructure['gapUnit'] = 'text';
         $moduleStructure['titlePosition'] = 'text';
@@ -50,13 +54,14 @@ class linkListElement extends menuDependantStructureElement implements Configura
 
     public function getLinkListItemStyle()
     {
-        $itemWidth = false;
+        $itemPercentageWidth = false;
+        $itemFixedWidth = false;
         $itemPadding = false;
         if ($this->cols> 0 && $this->freeImageWidth==0) {
-            $itemWidth = 100 / $this->cols . '%';
+            $itemPercentageWidth = 100 / $this->cols . '%';
         }
         else {
-            $itemWidth = 'auto';
+            $itemPercentageWidth = 'auto';
         }
         if ($this->gapValue > -1 && !empty($this->gapUnit)) {
             if ($this->gapValue > 0) {
@@ -72,9 +77,21 @@ class linkListElement extends menuDependantStructureElement implements Configura
             }
         }
 
+        if ($this->colWidthValue > 0 && !empty($this->colWidthUnit)) {
+            if ($this->colWidthValue > 0) {
+                if ($this->colWidthUnit == 'pt') {
+                    $itemFixedWidth = ($this->colWidthValue) / 20 . 'rem';
+                }
+                else {
+                    $itemFixedWidth = ($this->colWidthValue) . $this->colWidthUnit;
+                }
+            }
+        }
+
         return [
-            'itemWidth' => $itemWidth,
+            'itemPercentageWidth' => $itemPercentageWidth,
             'itemPadding' => $itemPadding,
+            'itemFixedWidth' => $itemFixedWidth,
         ];
     }
 

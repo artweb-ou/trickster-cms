@@ -1,7 +1,7 @@
-{if !empty($item.translationGrupp)}
-    {$translationGrupp = $item.translationGrupp}
+{if !empty($item.translationGroup)}
+	{$translationGroup = $item.translationGroup}
 {else}
-    {$translationGrupp = $structureType}
+	{$translationGroup = $structureType}
 {/if}
 {assign addClass ""}
 {if !empty($item.class)}
@@ -11,7 +11,7 @@
 	<div class="form_label"></div>
 	<div class="form_label heading">
 		<h2 class="content_list_title">
-			{translations name="{$translationGrupp}.{$fieldName}"}
+			{translations name="{$translationGroup}.{$fieldName}"}
 		</h2>
 	</div>
 </div>
