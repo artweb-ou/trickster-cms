@@ -1,15 +1,16 @@
 window.ShoppingBasketSelectionFormSmartPostRegion = function(info, fieldsBaseName) {
-    var self = this;
+    let self = this;
 
-    var componentElement;
-    var labelElement;
-    var starElement;
-    var fieldElement;
-    var selectElement;
-
+    let componentElement;
+    let labelElement;
+    let starElement;
+    let fieldElement;
+    let selectElement;
+    let lastCountry;
+    let dropdown;
     this.componentElement = null;
 
-    var init = function() {
+    const init = function() {
         componentElement = document.createElement('tr');
         if (info.error != '0' && info.error) {
             componentElement.className = 'form_error';
@@ -32,31 +33,48 @@ window.ShoppingBasketSelectionFormSmartPostRegion = function(info, fieldsBaseNam
         }
 
         labelElement.innerHTML = info.title + ':';
-
-        selectElement = document.createElement('select');
-        selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
-
-        var regionsList = window.smartPostLogics.getRegionsList();
-        for (var i = 0; i < regionsList.length; i++) {
-            var smartPostInfo = regionsList[i];
-            var option = document.createElement('option');
-            option.text = smartPostInfo.getName();
-            option.value = smartPostInfo.getName();
-            selectElement.options.add(option);
-            if (info.value && option.value == info.value) {
-                selectElement.selectedIndex = i;
-            }
-        }
-        fieldElement.appendChild(selectElement);
-        eventsManager.addHandler(selectElement, 'change', changeHandler);
-
-        var dropdown = dropDownManager.getDropDown(selectElement);
-        fieldElement.appendChild(dropdown.componentElement);
-
+        self.refresh();
     };
-    var changeHandler = function() {
+
+    this.refresh = function() {
+        let selectedCountry = shoppingBasketLogics.getSelectedCountry();
+
+        if (lastCountry !== selectedCountry) {
+            if (selectElement) {
+                selectElement.parentNode.removeChild(selectElement);
+            }
+            if (dropdown) {
+                dropdown.componentElement.parentNode.removeChild(dropdown.componentElement);
+            }
+
+            selectElement = document.createElement('select');
+            selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
+            if (selectedCountry) {
+                let regionsList = window.smartPostLogics.getCountryRegionsList(selectedCountry.iso3166_1a2);
+                for (let i = 0; i < regionsList.length; i++) {
+                    let smartPostInfo = regionsList[i];
+                    let option = document.createElement('option');
+                    option.text = smartPostInfo.getName();
+                    option.value = smartPostInfo.getName();
+                    selectElement.options.add(option);
+                    if (info.value && option.value == info.value) {
+                        selectElement.selectedIndex = i;
+                    }
+                }
+            }
+            fieldElement.appendChild(selectElement);
+            eventsManager.addHandler(selectElement, 'change', changeHandler);
+
+            dropdown = dropDownManager.getDropDown(selectElement);
+            fieldElement.appendChild(dropdown.componentElement);
+            changeHandler();
+        }
+    };
+
+    const changeHandler = function() {
         smartPostLogics.setCurrentRegion(selectElement.value);
     };
+
     this.getComponentElement = function() {
         return componentElement;
     };
