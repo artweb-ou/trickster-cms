@@ -9,6 +9,7 @@ class paymentMethodsElement extends structureElement
         'swedbankPaymentMethod',
         'danskebankPaymentMethod',
         'sebPaymentMethod',
+        'coopPaymentMethod',
         'lhvPaymentMethod',
         'liisiPaymentMethod',
         'estcardPaymentMethod',
