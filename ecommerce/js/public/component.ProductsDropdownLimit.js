@@ -9,7 +9,7 @@ window.ProductsDropdownLimitComponent = function(componentElement, listComponent
         }
     };
 
-    var change = function(event) {
+    var change = function() {
         listComponent.changeLimit(getValue());
     };
     this.getComponentElement = function() {

@@ -60,27 +60,13 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
         }
         self.initFilters();
     };
-
-    self.getFiltersInfo = function() {
-        var filtersInfo = [];
-        var i;
-        for (i = 0; i < filters.length; i++) {
-            var filter = filters[i];
-            var value = filter.getValue();
-            if (value) {
-                filtersInfo.push([filter.getType(), value]);
-            }
-        }
-        return filtersInfo;
-    };
-
+    
     self.resetFilters = function() {
         var i;
         for (i = 0; i < filters.length; i++) {
             filters[i].resetValue();
         }
     };
-
 
     init();
 };

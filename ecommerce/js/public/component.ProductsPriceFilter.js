@@ -44,7 +44,7 @@ window.ProductsPriceFilterComponent = function(componentElement, filterData, lis
         if (changedInput.value === '') {
             return;
         }
-        var inputValue = +changedInput.value;
+        var inputValue = changedInput.value;
         if (inputValue !== inputValue) {
             inputValue = 0;
         }
@@ -69,7 +69,7 @@ window.ProductsPriceFilterComponent = function(componentElement, filterData, lis
     };
 
     var applyInputs = function() {
-        listComponent.changeFilters();
+        listComponent.changeFilter(filterData.getId(), getValue());
     };
 
     var applyDelayedly = function() {
@@ -140,7 +140,7 @@ window.ProductsPriceFilterComponent = function(componentElement, filterData, lis
         return componentElement;
     };
 
-    this.getValue = function() {
+    const getValue = function() {
         return startInputElement.value + '-' + endInputElement.value;
     };
 
