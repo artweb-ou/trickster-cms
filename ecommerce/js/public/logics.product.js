@@ -175,6 +175,7 @@ window.ProductsList = function() {
     this.filterCategoryIds = [];
     this.filterParameterValueIds = [];
     this.filterAvailability = [];
+    this.filterPrice = [];
     this.currentPage = 1;
     this.productsLayout = 'thumbnail';
 
@@ -216,6 +217,11 @@ window.ProductsList = function() {
         } else {
             self.filterAvailability = [];
         }
+        if (data.filterPrice) {
+            self.filterPrice = data.filterPrice;
+        } else {
+            self.filterPrice = [];
+        }
         self.currentPage = data.currentPage;
         self.productsLayout = data.productsLayout;
 
@@ -254,6 +260,11 @@ window.ProductsList = function() {
     const getFiltersInfo = function(id, value) {
         let filtersInfo = {};
 
+        if (id === 'price') {
+            filtersInfo[id] = value;
+        } else if (self.filterPrice.length) {
+            filtersInfo['price'] = self.filterPrice;
+        }
         if (id === 'discount') {
             filtersInfo[id] = value;
         } else if (self.filterDiscountIds.length) {
