@@ -276,6 +276,20 @@ window.ProductsList = function() {
         }
         if (!isNaN(id)) {
             filtersInfo['parameter'] = self.filterParameterValueIds.concat(value);
+
+            for (let i = 0; i < filters.length; i++) {
+                let filter = filters[i];
+                if (filter.getType() === 'parameter' && filter.getId() == id) {
+                    for (let j = 0; j < filter.getOptionsInfo().length; j++) {
+                        let optionId = filter.getOptionsInfo()[j].id;
+                        if (value.indexOf(optionId) === -1){
+                            filtersInfo['parameter'] = filtersInfo['parameter'].filter(function(value, index, arr) {
+                                return value != optionId;
+                            });
+                        }
+                    }
+                }
+            }
         } else if (self.filterParameterValueIds.length) {
             filtersInfo['parameter'] = self.filterParameterValueIds;
         }

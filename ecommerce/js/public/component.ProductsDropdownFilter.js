@@ -27,8 +27,12 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
 
     const getValue = function() {
         if (selectorType === 'dropdown') {
-            if (selectElement.options && selectElement.options[selectElement.selectedIndex].value) {
-                return [selectElement.options[selectElement.selectedIndex].value];
+            if (selectElement.selectedIndex) {
+                let value = selectElement.options[selectElement.selectedIndex].value;
+                if (filterData.getType() === 'parameter') {
+                    return [parseInt(value, 10)];
+                }
+                return [value];
             }
         } else if (selectorType === 'checkbox') {
             let values = [];
