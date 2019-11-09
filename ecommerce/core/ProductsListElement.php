@@ -184,7 +184,6 @@ abstract class ProductsListElement extends menuStructureElement
                         $paramaterSelections[$parameterElement->getParentElement()->id][] = $parameter;
                     }
                 }
-                $ids = [];
                 $filteredIds = [];
                 $db = $this->getService('db');
                 $x = 0;
@@ -534,14 +533,6 @@ abstract class ProductsListElement extends menuStructureElement
     protected function getProductsListFixedLimit()
     {
         return false;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getFilterArguments()
-    {
-        return $this->filterArguments;
     }
 
     public function getProductsListPriceRangeSets()

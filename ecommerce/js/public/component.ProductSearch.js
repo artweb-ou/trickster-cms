@@ -41,11 +41,9 @@ window.ProductSearchComponent = function(componentElement) {
                 filtersComponent.setTitleType('option');
                 filtersComponent.setSelectorType('dropdown');
             }
-            if (productSearchData.pricePresets) {
-                filtersComponent.setPriceSelectorType('presets');
-            } else {
-                filtersComponent.setPriceSelectorType('interval');
-            }
+
+            filtersComponent.setPricePresets(productSearchData.pricePresets);
+
             filtersComponent.updateData(productSearchData.getFilters());
             filtersComponent.initFilters();
         }

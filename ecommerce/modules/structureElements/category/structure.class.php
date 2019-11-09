@@ -498,35 +498,6 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return $residingCategories;
     }
 
-    public function getTreeFilters()
-    {
-        $filters = [];
-        for ($category = $this; $category != false; $category = $category->getParentCategory()) {
-            $filters[] = $category->makeCategoryFilters($category);
-        }
-        $filters = array_reverse($filters);
-        if ($children = $this->getChildCategories()) {
-            $filters[] = $children[0]->makeCategoryFilters($children[0]);
-        }
-        return $filters;
-    }
-
-    public function makeCategoryFilters($category)
-    {
-        $arguments = $this->getFilterArguments();
-
-        $categoriesIds = [];
-        $categoriesIds[] = $category->id;
-
-        if ($neighbours = $category->getResidingCategories()) {
-            foreach ($neighbours as &$neighbour) {
-                $categoriesIds[] = $neighbour->id;
-            }
-        }
-        $categoryArguments = array_intersect($arguments['category'], $categoriesIds);
-        return $this->createProductFilter('category', $categoryArguments, $categoriesIds);
-    }
-
     public function getDiscounts()
     {
         if (is_null($this->discountsList)) {

@@ -4,7 +4,7 @@
 	{if $titleType === 'label'}
 		<div class="products_filter_label">{$filter->getTitle()}:</div>
 	{/if}
-	{if $filter->getType() === 'price' && !$element->pricePresets}
+	{if $filter->getType() === 'price' && !$pricePresets}
 		{$range = $filter->getRange()}
 		{if $range}
 			{$selectedRange = $filter->getSelectedRange()}

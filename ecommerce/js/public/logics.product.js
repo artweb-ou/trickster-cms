@@ -132,11 +132,7 @@ window.productLogics = new function() {
         if (typeof filters !== 'undefined') {
             for (let i in filters) {
                 if (filters.hasOwnProperty(i)) {
-                    if (i === 'price' || i === 'brand' || i === 'availability') {
-                        parameters[i] = filters[i].join(',');
-                    } else {
-                        parameters['parameter'] = filters[i].join(',');
-                    }
+                    parameters[i] = filters[i].join(',');
                 }
             }
         }
@@ -174,6 +170,11 @@ window.ProductsList = function() {
     this.filterOrder = null;
     this.filterSort = null;
     this.filterLimit = 0;
+    this.filterDiscountIds = [];
+    this.filterBrandIds = [];
+    this.filterCategoryIds = [];
+    this.filterParameterValueIds = [];
+    this.filterAvailability = [];
     this.currentPage = 1;
     this.productsLayout = 'thumbnail';
 
@@ -189,6 +190,32 @@ window.ProductsList = function() {
         self.filterOrder = data.filterOrder;
         self.filterSort = data.filterSort;
         self.filterLimit = data.filterLimit;
+
+        if (data.filterDiscountIds) {
+            self.filterDiscountIds = data.filterDiscountIds;
+        } else {
+            self.filterDiscountIds = [];
+        }
+        if (data.filterBrandIds) {
+            self.filterBrandIds = data.filterBrandIds;
+        } else {
+            self.filterBrandIds = [];
+        }
+        if (data.filterCategoryIds) {
+            self.filterCategoryIds = data.filterCategoryIds;
+        } else {
+            self.filterCategoryIds = [];
+        }
+        if (data.filterParameterValueIds) {
+            self.filterParameterValueIds = data.filterParameterValueIds;
+        } else {
+            self.filterParameterValueIds = [];
+        }
+        if (data.filterAvailability) {
+            self.filterAvailability = data.filterAvailability;
+        } else {
+            self.filterAvailability = [];
+        }
         self.currentPage = data.currentPage;
         self.productsLayout = data.productsLayout;
 
@@ -226,15 +253,33 @@ window.ProductsList = function() {
     };
     const getFiltersInfo = function(id, value) {
         let filtersInfo = {};
-        for (let i = 0; i < filters.length; i++) {
-            let filterValue = filters[i].getValue();
-            let filterId = filters[i].getId();
-            if (filterId == id) {
-                filtersInfo[filterId] = value;
-            } else if (filterValue.length) {
-                filtersInfo[filterId] = filterValue;
-            }
+
+        if (id === 'discount') {
+            filtersInfo[id] = value;
+        } else if (self.filterDiscountIds.length) {
+            filtersInfo['discount'] = self.filterDiscountIds;
         }
+        if (id === 'brand') {
+            filtersInfo[id] = value;
+        } else if (self.filterBrandIds.length) {
+            filtersInfo['brand'] = self.filterBrandIds;
+        }
+        if (id === 'category') {
+            filtersInfo[id] = value;
+        } else if (self.filterCategoryIds.length) {
+            filtersInfo['brand'] = self.filterCategoryIds;
+        }
+        if (id === 'availability') {
+            filtersInfo[id] = value;
+        } else if (self.filterAvailability.length) {
+            filtersInfo['availability'] = self.filterAvailability;
+        }
+        if (!isNaN(id)) {
+            filtersInfo['parameter'] = self.filterParameterValueIds.concat(value);
+        } else if (self.filterParameterValueIds.length) {
+            filtersInfo['parameter'] = self.filterParameterValueIds;
+        }
+
         return filtersInfo;
     };
     this.changeFilter = function(filtersId, filterValues) {

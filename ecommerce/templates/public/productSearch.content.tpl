@@ -19,9 +19,9 @@
 </script>
 
 {if $element->checkboxesForParameters}
-    {include file=$theme->template('component.productsfilter.tpl') titleType="label" selectorType='checkbox'}
+    {include file=$theme->template('component.productsfilter.tpl') titleType="label" selectorType='checkbox' pricePresets=$element->pricePresets}
 {else}
-    {include file=$theme->template('component.productsfilter.tpl') titleType="option" selectorType='dropdown'}
+    {include file=$theme->template('component.productsfilter.tpl') titleType="option" selectorType='dropdown' pricePresets=$element->pricePresets}
 {/if}
 {if $element->sortingEnabled}
     {include file=$theme->template('component.productssorter.tpl') titleType="option"}

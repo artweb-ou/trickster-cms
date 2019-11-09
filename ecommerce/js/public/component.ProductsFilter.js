@@ -1,12 +1,12 @@
 window.ProductsFilterComponent = function(componentElement, listComponent) {
-    var filters = [];
-    var self = this;
-    var titleType = 'label';
-    var selectorType = 'dropdown';
-    var priceSelectorType = 'presets';
-    var filtersData = [];
+    let filters = [];
+    let self = this;
+    let titleType = 'label';
+    let selectorType = 'dropdown';
+    let pricePresets = true;
+    let filtersData = [];
 
-    var init = function() {
+    const init = function() {
 
     };
     this.updateData = function(newData) {
@@ -21,15 +21,15 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
         selectorType = newSelectorType;
     };
 
-    this.setPriceSelectorType = function(newPriceSelectorType) {
-        priceSelectorType = newPriceSelectorType;
+    this.setPricePresets = function(newPriceSelectorType) {
+        pricePresets = newPriceSelectorType;
     };
 
     this.initFilters = function() {
         var element, i, filter;
         for (i = 0; i < filtersData.length; i++) {
             if (element = componentElement.querySelector('.products_filter_item.products_filter_' + filtersData[i].getId())) {
-                if ((filtersData[i].getType() === 'price') && (priceSelectorType === 'interval')) {
+                if ((filtersData[i].getType() === 'price') && !pricePresets) {
                     filter = new ProductsPriceFilterComponent(element, filtersData[i], listComponent);
                 } else {
                     filter = new ProductsDropdownFilterComponent(element, filtersData[i], selectorType, listComponent);
@@ -48,6 +48,7 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
             var data = {
                 'titleType': titleType,
                 'selectorType': selectorType,
+                'pricePresets': pricePresets,
                 'filter': filtersData[i],
             };
             html += smartyRenderer.fetch('component.productsfilter_item.tpl', data);
