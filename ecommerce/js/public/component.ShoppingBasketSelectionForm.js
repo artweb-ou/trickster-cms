@@ -79,12 +79,14 @@ window.ShoppingBasketSelectionForm = function(componentElement, formElement) {
                     return -1;
                 }
                 return aOrder - bOrder;
-
             });
             for (var i = 0; i < deliveryType.deliveryFormFields.length; i++) {
                 var fieldInfo = deliveryType.deliveryFormFields[i];
                 if (typeof deliveryFieldsIndex[fieldInfo.id] !== 'undefined') {
                     field = deliveryFieldsIndex[fieldInfo.id];
+                    if (typeof field.refresh !== 'undefined'){
+                        field.refresh();
+                    }
                 } else {
                     var autocomplete = fieldInfo.autocomplete;
                     if (autocomplete === 'dpdRegion') {

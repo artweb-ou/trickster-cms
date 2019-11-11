@@ -1,13 +1,14 @@
 window.ShoppingBasketSelectionFormPost24Region = function(info, fieldsBaseName) {
-    var self = this;
+    let self = this;
 
-    var componentElement;
-    var labelElement;
-    var starElement;
-    var fieldElement;
-    var selectElement;
-
-    var init = function() {
+    let componentElement;
+    let labelElement;
+    let starElement;
+    let fieldElement;
+    let selectElement;
+    let lastCountry;
+    let dropdown;
+    const init = function() {
         componentElement = document.createElement('tr');
         if (info.error != '0' && info.error) {
             componentElement.className = 'form_error';
@@ -30,31 +31,46 @@ window.ShoppingBasketSelectionFormPost24Region = function(info, fieldsBaseName) 
         }
 
         labelElement.innerHTML = info.title + ':';
+        self.refresh();
+    };
 
-        selectElement = document.createElement('select');
-        selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
-        var selectedCountry = shoppingBasketLogics.getSelectedCountry();
-        if (selectedCountry) {
-            var regionsList = window.post24Logics.getCountryRegionsList(selectedCountry.iso3166_1a2);
-            for (var i = 0; i < regionsList.length; i++) {
-                var post24Info = regionsList[i];
-                var option = document.createElement('option');
-                option.text = post24Info.getName();
-                option.value = post24Info.getName();
-                selectElement.options.add(option);
-                if (info.value && option.value == info.value) {
-                    selectElement.selectedIndex = i;
+    this.refresh = function() {
+        let selectedCountry = shoppingBasketLogics.getSelectedCountry();
+
+        if (lastCountry !== selectedCountry) {
+            if (selectElement) {
+                selectElement.parentNode.removeChild(selectElement);
+            }
+            if (dropdown) {
+                dropdown.componentElement.parentNode.removeChild(dropdown.componentElement);
+            }
+
+            selectElement = document.createElement('select');
+            selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
+            if (selectedCountry) {
+                let regionsList = window.post24Logics.getCountryRegionsList(selectedCountry.iso3166_1a2);
+                for (let i = 0; i < regionsList.length; i++) {
+                    let post24Info = regionsList[i];
+                    let option = document.createElement('option');
+                    option.text = post24Info.getName();
+                    option.value = post24Info.getName();
+                    selectElement.options.add(option);
+                    if (info.value && option.value == info.value) {
+                        selectElement.selectedIndex = i;
+                    }
                 }
             }
+
+            fieldElement.appendChild(selectElement);
+            eventsManager.addHandler(selectElement, 'change', changeHandler);
+
+            dropdown = dropDownManager.getDropDown(selectElement);
+            fieldElement.appendChild(dropdown.componentElement);
+            changeHandler();
         }
-
-        fieldElement.appendChild(selectElement);
-        eventsManager.addHandler(selectElement, 'change', changeHandler);
-
-        var dropdown = dropDownManager.getDropDown(selectElement);
-        fieldElement.appendChild(dropdown.componentElement);
     };
-    var changeHandler = function() {
+
+    const changeHandler = function() {
         post24Logics.setCurrentRegion(selectElement.value);
     };
     this.getComponentElement = function() {
