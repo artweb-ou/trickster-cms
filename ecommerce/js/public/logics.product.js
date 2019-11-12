@@ -284,7 +284,7 @@ window.ProductsList = function() {
         if (id === 'category') {
             filtersInfo[id] = value;
         } else if (self.filterCategoryIds.length) {
-            filtersInfo['brand'] = self.filterCategoryIds;
+            filtersInfo['category'] = self.filterCategoryIds;
         }
         if (id === 'availability') {
             filtersInfo[id] = value;
