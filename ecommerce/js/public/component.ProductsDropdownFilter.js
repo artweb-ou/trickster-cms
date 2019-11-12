@@ -38,7 +38,11 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
             let values = [];
             for (let i = 0; i < checkboxElements.length; i++) {
                 if (checkboxElements[i].checked) {
-                    values.push(checkboxElements[i].value);
+                    if (filterData.getType() === 'price') {
+                        values.push(checkboxElements[i].value);
+                    } else {
+                        values.push(parseInt(checkboxElements[i].value, 10));
+                    }
                 }
             }
             if (values.length) {

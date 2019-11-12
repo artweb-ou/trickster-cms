@@ -187,10 +187,14 @@ window.ProductsList = function() {
         var i;
         self.id = data.id;
         self.url = data.url;
-        self.filteredProductsAmount = data.filteredProductsAmount;
         self.filterOrder = data.filterOrder;
         self.filterSort = data.filterSort;
         self.filterLimit = data.filterLimit;
+        if (data.filteredProductsAmount) {
+            self.filteredProductsAmount = data.filteredProductsAmount;
+        } else {
+            self.filteredProductsAmount = 0;
+        }
 
         if (data.filterDiscountIds) {
             self.filterDiscountIds = data.filterDiscountIds;
@@ -238,6 +242,8 @@ window.ProductsList = function() {
                 productsIndex[product.getId()] = product;
                 window.productLogics.importProduct(product);
             }
+        } else {
+            productsByPages[self.currentPage] = [];
         }
         if (typeof data.filters != 'undefined') {
             filters = [];
@@ -293,7 +299,7 @@ window.ProductsList = function() {
                 if (filter.getType() === 'parameter' && filter.getId() == id) {
                     for (let j = 0; j < filter.getOptionsInfo().length; j++) {
                         let optionId = filter.getOptionsInfo()[j].id;
-                        if (value.indexOf(optionId) === -1){
+                        if (value.indexOf(optionId) === -1) {
                             filtersInfo['parameter'] = filtersInfo['parameter'].filter(function(value, index, arr) {
                                 return value != optionId;
                             });

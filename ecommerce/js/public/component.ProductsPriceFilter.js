@@ -141,7 +141,7 @@ window.ProductsPriceFilterComponent = function(componentElement, filterData, lis
     };
 
     const getValue = function() {
-        return startInputElement.value + '-' + endInputElement.value;
+        return [startInputElement.value + ',' + endInputElement.value];
     };
 
     this.getType = function() {

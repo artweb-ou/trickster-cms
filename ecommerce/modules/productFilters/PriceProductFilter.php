@@ -28,7 +28,7 @@ class PriceProductFilter extends ProductFilter
                     foreach ($rangeSets as $rangeSet) {
                         $min = floor($currencySelector->convertPrice($rangeSet[0]));
                         $max = ceil($currencySelector->convertPrice($rangeSet[1]));
-                        $id = $min . '-' . $max;
+                        $id = $min . ',' . $max;
                         $this->optionsInfo[] = [
                             'title' => $min . ' - ' . $max . ' ' . $currencyItem->symbol,
                             'selected' => $argument == $id,
@@ -72,7 +72,7 @@ class PriceProductFilter extends ProductFilter
     public function getSelectedRange()
     {
         if ($string = $this->productsListElement->getFilterPriceString()) {
-            $parts = explode('-', $string);
+            $parts = explode(',', $string);
             return $parts;
         }
         return $this->getRange();

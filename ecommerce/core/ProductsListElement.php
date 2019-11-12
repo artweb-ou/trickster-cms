@@ -479,8 +479,8 @@ abstract class ProductsListElement extends menuStructureElement
     public function getFilterPrice()
     {
         if ($this->filterPrice === null) {
-            if (($priceString = $this->getFilterPriceString()) && strpos($priceString, '-') !== false) {
-                $this->filterPrice = explode('-', $priceString);
+            if (($priceString = $this->getFilterPriceString()) && strpos($priceString, ',') !== false) {
+                $this->filterPrice = explode(',', $priceString);
             }
         }
         return $this->filterPrice;

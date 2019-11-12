@@ -2,6 +2,8 @@
 
 class ajaxProductsListApplication extends controllerApplication
 {
+    use DbLoggableApplication;
+
     public $rendererName = 'json';
     protected $applicationName = 'ajaxProductsList';
     protected $mode = 'public';
@@ -17,6 +19,7 @@ class ajaxProductsListApplication extends controllerApplication
 
     public function execute($controller)
     {
+        $this->startDbLogging();
         /**
          * @var Cache $cache
          */
@@ -54,6 +57,7 @@ class ajaxProductsListApplication extends controllerApplication
 
         $this->renderer->setCacheControl('no-cache');
         $this->renderer->display();
+        $this->saveDbLog();
     }
 
     public function getUrlName()
