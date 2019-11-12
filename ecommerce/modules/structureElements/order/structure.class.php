@@ -39,7 +39,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
     protected $servicesList;
     protected $orderData;
     protected $totalFullPrice;
-    protected $vatRate;
     protected $discountAmount;
 
     protected function setModuleStructure(&$moduleStructure)
@@ -55,6 +54,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $moduleStructure['deliveryType'] = 'text';
         $moduleStructure['deliveryTitle'] = 'text';
         $moduleStructure['deliveryPrice'] = 'text';
+        $moduleStructure['deliveryVatLess'] = 'text';
 
         $moduleStructure['receiverCompany'] = 'text';
         $moduleStructure['receiverFirstName'] = 'text';
@@ -90,6 +90,8 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $moduleStructure['invoiceSent'] = 'checkbox';
 
         $moduleStructure['userId'] = 'text';
+        $moduleStructure['vatRate'] = 'text';
+        $moduleStructure['ordererVatRate'] = 'text';
     }
 
     protected function getTabsList()
@@ -118,10 +120,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
         foreach ($this->getOrderProducts() as &$element) {
             $productsPrice += $element->getTotalPrice();
             $this->totalFullPrice += $element->getTotalFullPrice();
-            $this->vatRate = $element->vatRate;
         }
         $this->productsPrice = $productsPrice;
-        $totalPrice = $this->totalFullPrice + $this->deliveryPrice;
+        $totalPrice = $this->totalFullPrice + $this->getDeliveryPrice();
         if ($services = $this->getServicesList()) {
             foreach ($services as &$service) {
                 $totalPrice += $service->price;
@@ -362,7 +363,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 "currency" => $this->currency,
                 "productsPrice" => $this->getTotalFullPrice(true),
                 "deliveryType" => $this->deliveryType,
-                "deliveryPrice" => $currencySelector->formatPrice($this->deliveryPrice),
+                "deliveryPrice" => $currencySelector->formatPrice($this->getDeliveryPrice()),
                 "deliveryTitle" => $this->deliveryTitle,
                 "noVatAmount" => $this->getNoVatAmount(),
                 "vatAmount" => $this->getVatAmount(),
@@ -691,7 +692,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
             'dateCreated' => $this->dateCreated,
             'currency' => $this->currency,
             'payedPrice' => $this->getPayedPrice(),
-            'deliveryPrice' => $this->deliveryPrice,
+            'deliveryPrice' => $this->getDeliveryPrice(),
             'deliveryTitle' => $this->deliveryTitle,
             'deliveryType' => $this->deliveryType,
             'URL' => $this->URL,
@@ -1105,5 +1106,14 @@ class orderElement extends structureElement implements PaymentOrderInterface
             }
         }
         return $this->vatRate;
+    }
+
+    protected function getDeliveryPrice() {
+        if(!empty($this->ordererVatRate)) {
+            if($this->getVatRate() != $this->ordererVatRate) {
+                $this->deliveryPrice = $this->deliveryVatLess * $this->ordererVatRate;
+            }
+        }
+        return $this->deliveryPrice;
     }
 }

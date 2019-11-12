@@ -18,6 +18,7 @@ class createOrder extends structureElementAction
         $currencySelector = $this->getService('CurrencySelector');
         $currentCurrencyItem = $currencySelector->getDefaultCurrencyItem();
         $currentCurrencyName = $currentCurrencyItem->symbol;
+        $vatRate = $this->getService('ConfigManager')->getConfig('main')->get('vatRate');
         /**
          * @var shoppingBasket $shoppingBasket
          */
@@ -38,6 +39,7 @@ class createOrder extends structureElementAction
 
         if ($deliveryInfo = $shoppingBasket->getSelectedDeliveryType()) {
             $structureElement->deliveryPrice = $deliveryInfo->getPrice(false, false);
+            $structureElement->deliveryVatLess = $deliveryInfo->getPrice(false, false) / $vatRate;
             $structureElement->deliveryType = $deliveryInfo->id;
             $structureElement->deliveryTitle = $deliveryInfo->title;
         }
@@ -52,7 +54,8 @@ class createOrder extends structureElementAction
         $structureElement->payerCity = $formData['payerCity'];
         $structureElement->payerCountry = $formData['payerCountry'];
         $structureElement->currency = $currentCurrencyName;
-
+        $structureElement->vatRate = $vatRate;
+        $structureElement->ordererVatRate = $shoppingBasket->getVatRate();
         /**
          * @var LanguagesManager $languagesManager
          */
