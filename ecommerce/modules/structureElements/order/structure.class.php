@@ -135,7 +135,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
             }
         }
         $totalPrice = $totalPrice - $this->discountAmount;
-        $this->noVatAmount = ($totalPrice) / $this->getVatRate();
+        $this->noVatAmount = ($totalPrice) / $this->getOrdererVatRate();
         $this->vatAmount = $totalPrice - $this->noVatAmount;
         if ($totalPrice < 0) {
             $totalPrice = 0;
@@ -1106,6 +1106,14 @@ class orderElement extends structureElement implements PaymentOrderInterface
             }
         }
         return $this->vatRate;
+    }
+
+    protected function getOrdererVatRate() {
+        if(!empty($this->ordererVatRate)) {
+            return $this->ordererVatRate;
+        } else {
+            return $this->getVatRate();
+        }
     }
 
     protected function getDeliveryPrice() {
