@@ -16,17 +16,15 @@ class checkVatShoppingBasket extends structureElementAction
         $vatCheckCurrentCountry = $this->getService('ConfigManager')->get('main.vatCheckCurrentCountry');
         $structureElement->shoppingBasket = $shoppingBasket;
         $responseStatus = 'fail';
-        if (true) {
+        if ($vatCheckEnable) {
             if (!empty($vatNumber)) {
-//                $result = $structureElement->validateVatNumber($vatNumber);
-//                if ($result['valid']) {
-//                    $responseStatus = 'success';
-//                    if ($result['country_code'] != $vatCheckCurrentCountry) {
-//                        $vatRate = 1;
-//                    }
-//                }
-                $responseStatus = 'success';
-                $vatRate = 1;
+                $result = $structureElement->validateVatNumber($vatNumber);
+                if ($result['valid']) {
+                    $responseStatus = 'success';
+                    if ($result['country_code'] != $vatCheckCurrentCountry) {
+                        $vatRate = 1;
+                    }
+                }
                 $shoppingBasket->setVatRate($vatRate);
                 $shoppingBasket->recalculate();
                 $renderer->assignResponseData('shoppingBasketData', $structureElement->getElementData());
