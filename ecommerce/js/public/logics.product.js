@@ -173,7 +173,7 @@ window.ProductsList = function() {
     this.filterDiscountIds = [];
     this.filterBrandIds = [];
     this.filterCategoryIds = [];
-    this.filterParameterValueIds = [];
+    this.filterActiveParametersInfo = false;
     this.filterAvailability = [];
     this.filterPrice = [];
     this.currentPage = 1;
@@ -211,10 +211,10 @@ window.ProductsList = function() {
         } else {
             self.filterCategoryIds = [];
         }
-        if (data.filterParameterValueIds) {
-            self.filterParameterValueIds = data.filterParameterValueIds;
+        if (data.filterActiveParametersInfo) {
+            self.filterActiveParametersInfo = data.filterActiveParametersInfo;
         } else {
-            self.filterParameterValueIds = [];
+            self.filterActiveParametersInfo = false;
         }
         if (data.filterAvailability) {
             self.filterAvailability = data.filterAvailability;
@@ -291,24 +291,20 @@ window.ProductsList = function() {
         } else if (self.filterAvailability.length) {
             filtersInfo['availability'] = self.filterAvailability;
         }
-        if (!isNaN(id)) {
-            filtersInfo['parameter'] = self.filterParameterValueIds.concat(value);
 
-            for (let i = 0; i < filters.length; i++) {
-                let filter = filters[i];
-                if (filter.getType() === 'parameter' && filter.getId() == id) {
-                    for (let j = 0; j < filter.getOptionsInfo().length; j++) {
-                        let optionId = filter.getOptionsInfo()[j].id;
-                        if (value.indexOf(optionId) === -1) {
-                            filtersInfo['parameter'] = filtersInfo['parameter'].filter(function(value, index, arr) {
-                                return value != optionId;
-                            });
-                        }
+        if (!isNaN(id)){
+            filtersInfo['parameter'] = value;
+        } else {
+            filtersInfo['parameter'] = [];
+        }
+        if (self.filterActiveParametersInfo) {
+            for (let i in self.filterActiveParametersInfo) {
+                if (self.filterActiveParametersInfo.hasOwnProperty(i)) {
+                    if (i != id) {
+                        filtersInfo['parameter'] = filtersInfo['parameter'].concat(self.filterActiveParametersInfo[i]);
                     }
                 }
             }
-        } else if (self.filterParameterValueIds.length) {
-            filtersInfo['parameter'] = self.filterParameterValueIds;
         }
 
         return filtersInfo;

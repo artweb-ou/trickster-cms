@@ -179,15 +179,16 @@ abstract class ProductsListElement extends menuStructureElement
                  */
                 $structureManager = $this->getService('structureManager');
                 foreach ($parameterValues as $parameter) {
-                    $parameterElement = $structureManager->getElementById($parameter);
-                    if ($parameterElement) {
-                        $paramaterSelections[$parameterElement->getParentElement()->id][] = $parameter;
+                    if ($parameterElement = $structureManager->getElementById($parameter)) {
+                        if ($parentElement = $parameterElement->getParentElement()) {
+                            $parameterSelections[$parentElement->id][] = $parameter;
+                        }
                     }
                 }
                 $filteredIds = [];
                 $db = $this->getService('db');
                 $x = 0;
-                foreach ($paramaterSelections as $parameterId => $paramaterSelection) {
+                foreach ($parameterSelections as $parameterId => $paramaterSelection) {
                     $filteredIds[$x] = [];
                     foreach ($paramaterSelection as $key => $value) {
                         $query = $db->table('module_product_parameter_value')
@@ -202,7 +203,7 @@ abstract class ProductsListElement extends menuStructureElement
                     $x++;
                 }
 
-                if (count($paramaterSelections) > 1) {
+                if (count($parameterSelections) > 1) {
                     $ids = call_user_func_array('array_intersect', $filteredIds);
                 } else {
                     $ids = $filteredIds[0];
@@ -415,6 +416,29 @@ abstract class ProductsListElement extends menuStructureElement
             $this->filterParameterValueIds = $this->getArgumentForFilter('parameter');
         }
         return $this->filterParameterValueIds;
+    }
+
+    public function getFilterActiveParametersInfo()
+    {
+        $result = [];
+        if ($valuesIds = $this->getFilterParameterValueIds()) {
+            /**
+             * @var Connection $db
+             */
+            $db = $this->getService('db');
+            if ($records = $db->table('structure_links')
+                ->select(['parentStructureId', 'childStructureId'])
+                ->whereIn('childStructureId', $valuesIds)
+                ->get()) {
+                foreach ($records as $record) {
+                    if (!isset($result[$record['parentStructureId']])) {
+                        $result[$record['parentStructureId']] = [];
+                    }
+                    $result[$record['parentStructureId']][] = $record['childStructureId'];
+                }
+            }
+        }
+        return $result;
     }
 
     /**

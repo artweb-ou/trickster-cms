@@ -21,9 +21,9 @@
 		{/if}
 	{elseif $selectorType == 'checkbox'}
 	    {foreach $filter->getOptionsInfo() as $optionInfo}
-			<div class="productsearch_field_checkbox products_filter_checkboxes_option">
+			<div class="products_filter_checkbox products_filter_checkboxes_option">
 				<input type="checkbox" class="products_filter_checkbox checkbox_placeholder" value="{$optionInfo.id}"{if $optionInfo.selected} checked="checked"{/if} id="products_filter_checkbox_{$optionInfo.id}"/>
-				<label class="productsearch_field_checkbox_label products_filter_checkbox_label" for="products_filter_checkbox_{$optionInfo.id}">{$optionInfo.title}</label>
+				<label class="products_filter_checkbox_label products_filter_checkbox_label" for="products_filter_checkbox_{$optionInfo.id}">{$optionInfo.title}</label>
 			</div>
 		{/foreach}
 	{elseif $selectorType == 'dropdown'}
