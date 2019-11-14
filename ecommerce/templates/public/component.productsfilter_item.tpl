@@ -8,14 +8,14 @@
 		{$range = $filter->getRange()}
 		{if $range}
 			{$selectedRange = $filter->getSelectedRange()}
-			<div class="productsearch_field productsearch_pricefilter products_filter_price">
-				<div class="productsearch_pricefilter_field">
+			<div class="products_filter_price_top">
+				<div class="products_filter_price_field">
 					<input class="input_component" name="min" value="{$selectedRange.0}" />
-					<span class="productsearch_pricefilter_field_currency">{$selectedCurrencyItem->symbol}</span>
+					<span class="products_filter_price_field_currency">{$selectedCurrencyItem->symbol}</span>
 				</div>
-				<div class="productsearch_pricefilter_field">
+				<div class="products_filter_price_field">
 					<input class="input_component" name="max" value="{$selectedRange.1}" />
-					<span class="productsearch_pricefilter_field_currency">{$selectedCurrencyItem->symbol}</span>
+					<span class="products_filter_price_field_currency">{$selectedCurrencyItem->symbol}</span>
 				</div>
 			</div>
 		{/if}
