@@ -61,13 +61,6 @@ window.ProductsFilterComponent = function(componentElement, listComponent) {
         }
         self.initFilters();
     };
-    
-    self.resetFilters = function() {
-        var i;
-        for (i = 0; i < filters.length; i++) {
-            filters[i].resetValue();
-        }
-    };
 
     init();
 };

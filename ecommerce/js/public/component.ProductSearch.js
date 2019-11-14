@@ -65,9 +65,7 @@ window.ProductSearchComponent = function(componentElement) {
     };
 
     var reset = function() {
-        if (filtersComponent) {
-            filtersComponent.resetFilters();
-        }
+        productsListData.reset();
     };
 
     // this.refresh = function(changedFilter) {

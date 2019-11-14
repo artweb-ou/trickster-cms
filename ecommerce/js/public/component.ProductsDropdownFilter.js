@@ -56,14 +56,5 @@ window.ProductsDropdownFilterComponent = function(componentElement, filterData, 
         return filterData.getType();
     };
 
-    this.resetValue = function() {
-        if (selectorType === 'dropdown') {
-            selectElement.value = '';
-        } else if (selectorType === 'checkbox') {
-            for (let i = 0; i < checkboxElements.length; i++) {
-                checkboxElements[i].checked = false;
-            }
-        }
-    };
     init();
 };

@@ -292,7 +292,7 @@ window.ProductsList = function() {
             filtersInfo['availability'] = self.filterAvailability;
         }
 
-        if (!isNaN(id)){
+        if (!isNaN(id)) {
             filtersInfo['parameter'] = value;
         } else {
             filtersInfo['parameter'] = [];
@@ -334,6 +334,10 @@ window.ProductsList = function() {
     };
     this.getFilters = function() {
         return filters;
+    };
+
+    this.reset = function() {
+        productLogics.requestProductsListData(self.id, 0);
     };
     // var generateQueryString = function(arguments) {
     //     var queryString = '';

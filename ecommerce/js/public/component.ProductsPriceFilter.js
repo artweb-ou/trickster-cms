@@ -148,10 +148,6 @@ window.ProductsPriceFilterComponent = function(componentElement, filterData, lis
         return filterData.getType();
     };
 
-    this.resetValue = function() {
-        alert('reset');
-    };
-
     init();
 };
 DomElementMakerMixin.call(ProductsPriceFilterComponent.prototype);
