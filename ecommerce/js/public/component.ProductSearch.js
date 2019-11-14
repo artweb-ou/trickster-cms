@@ -27,6 +27,9 @@ window.ProductSearchComponent = function(componentElement) {
                 filtersComponent.updateData(productSearchData.getFilters());
                 filtersComponent.rebuildFilters();
             }
+            if (sorterComponent) {
+                sorterComponent.updateData(productsListData.filterSort+';'+productsListData.filterOrder);
+            }
         }
     };
 

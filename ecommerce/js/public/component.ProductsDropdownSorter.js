@@ -9,17 +9,24 @@ window.ProductsDropdownSorterComponent = function(componentElement, listComponen
         }
     };
 
-    var change = function(event) {
+    var change = function() {
         listComponent.changeSorting(getValue());
     };
+
     this.getComponentElement = function() {
         return componentElement;
     };
+
     var getValue = function() {
         if (selectElement.options && selectElement.options[selectElement.selectedIndex].value) {
             return selectElement.options[selectElement.selectedIndex].value;
         }
         return '';
+    };
+
+    this.updateData = function(value) {
+        selectElement.value = value;
+        dropDownManager.updateDropDown(selectElement);
     };
 
     init();

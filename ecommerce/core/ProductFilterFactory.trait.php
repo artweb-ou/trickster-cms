@@ -109,7 +109,7 @@ trait ProductFilterFactoryTrait
                 $this->sortingOptions[] = [
                     'active' => $activeSortArgument == 'manual',
                     'label' => $translationsManager->getTranslationByName('products.sort_by_manual'),
-                    'value' => '',
+                    'value' => 'manual;asc',
                 ];
             }
             if ($this->isFieldSortable('price')) {
