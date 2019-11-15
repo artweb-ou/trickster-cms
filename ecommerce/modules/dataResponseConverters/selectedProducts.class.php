@@ -23,15 +23,25 @@ class selectedProductsDataResponseConverter extends StructuredDataResponseConver
             'imageUrl' => function ($element) {
                 return controller::getInstance()->baseURL . "image/type:brandWidgetItem/id:" . $element->image . "/filename:" . $element->originalName;
             },
+            'productsLayout' => function ($element) {
+                return $element->getCurrentLayout('productsLayout');
+            },
             'products' => 'getProductsData',
             'filters' => 'getFiltersData',
+            'filterDiscountIds' => 'getFilterDiscountIds',
+            'filterBrandIds' => 'getFilterBrandIds',
+            'filterCategoryIds' => 'getFilterCategoryIds',
+            'filterActiveParametersInfo' => 'getFilterActiveParametersInfo',
+            'filterAvailability' => 'getFilterAvailability',
+            'filterPrice' => 'getFilterPrice',
             'filteredProductsAmount' => 'getFilteredProductsAmount',
             'filterLimit' => 'getFilterLimit',
             'filterOrder' => 'getFilterOrder',
             'filterSort' => 'getFilterSort',
             'currentPage' => function (ProductsListElement $element) {
                 return $element->getProductsPager()->getCurrentPage();
-            },        ];
+            },
+        ];
     }
 
     protected function getPresetsStructure()
@@ -61,6 +71,12 @@ class selectedProductsDataResponseConverter extends StructuredDataResponseConver
                 'products',
                 'filters',
                 'filteredProductsAmount',
+                'filterDiscountIds',
+                'filterBrandIds',
+                'filterCategoryIds',
+                'filterActiveParametersInfo',
+                'filterAvailability',
+                'filterPrice',
                 'filterLimit',
                 'filterOrder',
                 'filterSort',

@@ -2,7 +2,7 @@
 {capture assign="moduleContent"}
 		{if $element->originalName != ""}
 			<div class="product_thumbnailsmall_image_container">
-				{include file=$theme->template('component.elementimage.tpl') type='productSmallThumb' class='product_thumbnailsmall_image' lazy=true}
+				{include file=$theme->template('component.elementimage.tpl') jsfix=1 type='productSmallThumb' class='product_thumbnailsmall_image' lazy=true}
 				{if $iconsInfo = $element->getIconsInfo()}
 					{include file=$theme->template('product.icons.tpl') class='product_thumbnailsmall_icons'}
 				{/if}

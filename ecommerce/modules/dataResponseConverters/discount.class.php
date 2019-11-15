@@ -22,15 +22,25 @@ class discountDataResponseConverter extends StructuredDataResponseConverter
             'dateModified' => function ($element) {
                 return $element->getValue('dateModified');
             },
+            'productsLayout' => function ($element) {
+                return $element->getCurrentLayout('productsLayout');
+            },
             'products' => 'getProductsData',
             'filters' => 'getFiltersData',
+            'filterDiscountIds' => 'getFilterDiscountIds',
+            'filterBrandIds' => 'getFilterBrandIds',
+            'filterCategoryIds' => 'getFilterCategoryIds',
+            'filterActiveParametersInfo' => 'getFilterActiveParametersInfo',
+            'filterAvailability' => 'getFilterAvailability',
+            'filterPrice' => 'getFilterPrice',
             'filteredProductsAmount' => 'getFilteredProductsAmount',
             'filterLimit' => 'getFilterLimit',
             'filterOrder' => 'getFilterOrder',
             'filterSort' => 'getFilterSort',
             'currentPage' => function (ProductsListElement $element) {
                 return $element->getProductsPager()->getCurrentPage();
-            },        ];
+            },
+        ];
     }
 
     protected function getPresetsStructure()
@@ -60,6 +70,12 @@ class discountDataResponseConverter extends StructuredDataResponseConverter
                 'products',
                 'filters',
                 'filteredProductsAmount',
+                'filterDiscountIds',
+                'filterBrandIds',
+                'filterCategoryIds',
+                'filterActiveParametersInfo',
+                'filterAvailability',
+                'filterPrice',
                 'filterLimit',
                 'filterOrder',
                 'filterSort',

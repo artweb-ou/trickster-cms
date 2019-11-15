@@ -451,6 +451,10 @@ window.Product = function() {
         return self.price;
     };
 
+    this.isEmptyPrice = function() {
+        return (self.price === '');
+    };
+
     this.getQuantity = function() {
         if (data.quantity) {
             return data.quantity;

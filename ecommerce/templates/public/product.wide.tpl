@@ -1,7 +1,7 @@
 {assign moduleTitle $element->title}
 {capture assign="moduleSideContent"}
 	{if $element->originalName != ""}
-		{include file=$theme->template('component.elementimage.tpl') type='productWide' class='product_wide_image' lazy=true}
+		{include file=$theme->template('component.elementimage.tpl') jsfix=1 type='productWide' class='product_wide_image' lazy=true}
 	{/if}
 	{if $iconsInfo = $element->getIconsInfo()}
 		{include file=$theme->template('product.icons.tpl') class='product_wide_icons'}

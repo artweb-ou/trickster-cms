@@ -21,7 +21,7 @@
 			<div class="selectedproducts_scrollbutton scroll_pages_button selectedproducts_scrollbutton_left scroll_pages_previous"></div>
 			<div class="selectedproducts_scrollbutton scroll_pages_button selectedproducts_scrollbutton_right scroll_pages_next"></div>
 		{else}
-			{include file=$theme->template('component.productslist.tpl') layout=$element->element->getCurrentLayout('productsLayout') componentClass="selected_products_container"}
+			{include file=$theme->template('component.productslist.tpl') layout=$element->getCurrentLayout('productsLayout') componentClass="selected_products_container"}
 		{/if}
 		{if !empty($element->buttonTitle) && (!empty($element->buttonUrl) || !empty($element->getButtonConnectedMenuUrl()))}
 			{if $element->getButtonConnectedMenuUrl()}
