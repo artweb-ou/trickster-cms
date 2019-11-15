@@ -162,7 +162,7 @@ window.productLogics = new function() {
 };
 
 window.ProductsList = function() {
-    var self = this;
+    const self = this;
     this.id = null;
     this.title = null;
     this.url = null;
@@ -178,10 +178,11 @@ window.ProductsList = function() {
     this.filterPrice = [];
     this.currentPage = 1;
     this.productsLayout = 'thumbnail';
+    let affectsPublicUrl = false;
 
-    var filters = [];
-    var productsByPages = {};
-    var productsIndex = {};
+    let filters = [];
+    let productsByPages = {};
+    let productsIndex = {};
 
     this.importData = function(data) {
         var i;
@@ -195,7 +196,6 @@ window.ProductsList = function() {
         } else {
             self.filteredProductsAmount = 0;
         }
-
         if (data.filterDiscountIds) {
             self.filterDiscountIds = data.filterDiscountIds;
         } else {
@@ -226,6 +226,11 @@ window.ProductsList = function() {
         } else {
             self.filterPrice = [];
         }
+        if (data.affectsPublicUrl) {
+            affectsPublicUrl = data.affectsPublicUrl;
+        } else {
+            affectsPublicUrl = false;
+        }
         self.currentPage = data.currentPage;
         self.productsLayout = data.productsLayout;
 
@@ -255,12 +260,8 @@ window.ProductsList = function() {
         }
         controller.fireEvent('productsListUpdated', self.id);
         tracking.impressionTracking(self.getCurrentPageProducts(), self.title);
-    };
-    this.changePage = function(newPageNumber) {
-        if (self.currentPage !== newPageNumber) {
-            var sorting = generateSortingString();
-            let filtersInfo = getFiltersInfo();
-            productLogics.requestProductsListData(self.id, newPageNumber, filtersInfo, sorting, self.filterLimit);
+        if (affectsPublicUrl) {
+            window.addEventListener('popstate', historyUpdateHandler);
         }
     };
     const getFiltersInfo = function(id, value) {
@@ -309,22 +310,62 @@ window.ProductsList = function() {
 
         return filtersInfo;
     };
+    this.changePage = function(newPageNumber) {
+        if (self.currentPage !== newPageNumber) {
+            var sorting = generateSortingString();
+            let filtersInfo = getFiltersInfo();
+            updateProductsListState(newPageNumber, filtersInfo, sorting, self.filterLimit);
+        }
+    };
     this.changeFilter = function(filtersId, filterValues) {
         let sorting = generateSortingString();
         let filtersInfo = getFiltersInfo(filtersId, filterValues);
-        productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting, self.filterLimit);
+        updateProductsListState(0, filtersInfo, sorting, self.filterLimit);
     };
     this.changeSorting = function(sorting) {
         let filtersInfo = getFiltersInfo();
-        productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting, self.filterLimit);
+        updateProductsListState(0, filtersInfo, sorting, self.filterLimit);
     };
     this.changeLimit = function(limit) {
         var sorting = generateSortingString();
         let filtersInfo = getFiltersInfo();
-        productLogics.requestProductsListData(self.id, 0, filtersInfo, sorting, limit);
+        updateProductsListState(0, filtersInfo, sorting, limit);
     };
-    var generateSortingString = function() {
+    const generateSortingString = function() {
         return self.filterSort + ';' + self.filterOrder;
+    };
+    const updateProductsListState = function(page, filters, sorting, limit) {
+        if (affectsPublicUrl) {
+            changeCurrentUrl(page, filters, sorting, limit);
+        }
+        productLogics.requestProductsListData(self.id, page, filters, sorting, limit);
+    };
+    const changeCurrentUrl = function(page, filters, sorting, limit) {
+        var reqUrl = self.url;
+        if (page > 1) {
+            reqUrl += 'page:' + page + '/';
+        }
+        if (typeof filters !== 'undefined') {
+            for (let i in filters) {
+                if (filters.hasOwnProperty(i)) {
+                    if (filters[i].length > 0) {
+                        reqUrl += i + ':' + filters[i].join(',') + '/';
+                    }
+                }
+            }
+        }
+        if (typeof sorting !== 'undefined') {
+            reqUrl += 'sort:' + sorting + '/';
+        }
+        if (typeof limit !== 'undefined') {
+            reqUrl += 'limit:' + limit + '/';
+        }
+        window.history.pushState([page, filters, sorting, limit], null, reqUrl);
+    };
+    const historyUpdateHandler = function(event) {
+        if (typeof event.state != 'undefined') {
+            productLogics.requestProductsListData(self.id, event.state[0], event.state[1], event.state[2], event.state[3]);
+        }
     };
     this.getCurrentPageProducts = function() {
         if (typeof productsByPages[self.currentPage] !== 'undefined') {
@@ -339,27 +380,6 @@ window.ProductsList = function() {
     this.reset = function() {
         productLogics.requestProductsListData(self.id, 0);
     };
-    // var generateQueryString = function(arguments) {
-    //     var queryString = '';
-    //     for (var key in arguments) {
-    //         queryString += key + ':' + arguments[key].join(',') + '/';
-    //     }
-    //     // workaround for retaining order
-    //     var currentUrl = document.location.href;
-    //     var sortArgumentPosition = currentUrl.indexOf('sort:');
-    //     if (sortArgumentPosition > 0) {
-    //         var sortSlice = currentUrl.slice(sortArgumentPosition);
-    //         if (sortSlice.indexOf('limit:') <= 0) {
-    //             var limitArgumentPosition = currentUrl.indexOf('limit:');
-    //             if (limitArgumentPosition > 0) {
-    //                 sortSlice = currentUrl.slice(limitArgumentPosition);
-    //             }
-    //         }
-    //         queryString += sortSlice;
-    //     }
-    //     return encodeURI(queryString);
-    // };
-
 };
 
 window.ProductSearch = function() {

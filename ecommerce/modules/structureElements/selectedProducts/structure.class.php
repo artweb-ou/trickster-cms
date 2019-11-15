@@ -24,7 +24,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
     public $dataResourceName = 'module_selected_products';
     public $defaultActionName = 'show';
     public $role = 'content';
-    
+
     protected $connectedBrands;
     protected $connectedBrandsIds;
     protected $connectedDiscounts;
@@ -440,29 +440,35 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
         return $this->amount;
     }
 
-    public function getConnectedButtonMenu() {
+    public function getConnectedButtonMenu()
+    {
         $linksManager = $this->getService('linksManager');
         $buttonConnectedMenuId = $linksManager->getConnectedIdList($this->id, "buttonConnectedMenu", "parent");
         $menus = $this->getDisplayMenusInfo();
         foreach ($menus as &$menu) {
-            if($buttonConnectedMenuId[0] === $menu['id']) {
+            if ($buttonConnectedMenuId[0] === $menu['id']) {
                 $menu['select'] = true;
             }
         }
         return $menus;
     }
 
-    public function getButtonConnectedMenuUrl() {
+    public function getButtonConnectedMenuUrl()
+    {
         $linksManager = $this->getService('linksManager');
         $connectedProductsIds = $linksManager->getConnectedIdList($this->id, "buttonConnectedMenu", "parent");
-        if(!empty($connectedProductsIds)) {
+        if (!empty($connectedProductsIds)) {
             $structureManager = $this->getService('structureManager');
             $element = $structureManager->getElementById($connectedProductsIds[0]);
-            if($element) {
+            if ($element) {
                 return $element->URL;
             }
         }
+        return false;
+    }
+
+    public function affectsPublicUrl()
+    {
+        return false;
     }
 }
-
-

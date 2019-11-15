@@ -1075,4 +1075,9 @@ abstract class ProductsListElement extends menuStructureElement
         }
         return $data;
     }
+
+    public function affectsPublicUrl()
+    {
+        return true;
+    }
 }

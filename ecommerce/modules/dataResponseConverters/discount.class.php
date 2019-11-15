@@ -37,6 +37,7 @@ class discountDataResponseConverter extends StructuredDataResponseConverter
             'filterLimit' => 'getFilterLimit',
             'filterOrder' => 'getFilterOrder',
             'filterSort' => 'getFilterSort',
+            'affectsPublicUrl' => 'affectsPublicUrl',
             'currentPage' => function (ProductsListElement $element) {
                 return $element->getProductsPager()->getCurrentPage();
             },
@@ -81,6 +82,7 @@ class discountDataResponseConverter extends StructuredDataResponseConverter
                 'filterSort',
                 'currentPage',
                 'productsLayout',
+                'affectsPublicUrl',
             ],
         ];
     }
