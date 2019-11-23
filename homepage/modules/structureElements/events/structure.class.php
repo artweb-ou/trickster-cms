@@ -8,6 +8,7 @@ class eventsElement extends structureElement
     protected $allowedTypes = ['event'];
     public $defaultActionName = 'showFullList';
     public $role = 'container';
+    protected $pager;
 
     protected function setModuleStructure(&$moduleStructure)
     {
@@ -24,18 +25,18 @@ class eventsElement extends structureElement
         if (is_null($this->contentList)) {
             $tableName = 'module_event';
             $db = $this->getService('db');
-            $query = $db->table($tableName);
+            $query = $db->table($tableName)->distinct();
 
             $this->contentList = [];
-            if ($elementsCount = $query->count()) {
+            if ($elementsCount = $query->count('id')) {
                 $pagerURL = $this->URL;
-                $elementsOnPage = 20;
+                $elementsOnPage = 100;
                 $page = (int)controller::getInstance()->getParameter('page');
-                $pager = new pager($pagerURL, $elementsCount, $elementsOnPage, $page, 'page');
+                $this->pager = new pager($pagerURL, $elementsCount, $elementsOnPage, $page, 'page');
 
                 $query = $db->table($tableName)->distinct()->select('id');
 
-                if ($records = $query->skip($pager->startElement)->take($elementsOnPage)->get()) {
+                if ($records = $query->skip($this->pager->startElement)->take($elementsOnPage)->get()) {
                     $eventsIds = [];
                     foreach ($records as &$record) {
                         $eventsIds[] = $record['id'];
@@ -46,11 +47,18 @@ class eventsElement extends structureElement
                             $sort[] = strtotime($element->startDate);
                         }
                         array_multisort($sort, SORT_DESC, $this->contentList);
-                        $this->getService('renderer')->assign("pager", $pager);
                     }
                 }
             }
         }
         return $this->contentList;
+    }
+
+    public function getPager()
+    {
+        if ($this->pager === null) {
+            $this->getContentList();
+        }
+        return $this->pager;
     }
 }

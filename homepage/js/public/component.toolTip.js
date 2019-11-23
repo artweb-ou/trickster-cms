@@ -1,29 +1,29 @@
 window.ToolTipComponent = function(parameters, popupText_deprecated, excludedElements_deprecated, classNameExtra_deprecated) {
-    var self = this;
-    var referralElement;
-    var componentElement;
-    var contentElement;
-    var popupText;
-    var popupOffset = 12;
-    var displayDelay = 100;
-    var displayed = false;
-    var displayAllowed;
-    var displayTimeout;
-    var hideOnClick;
-    var hideOnLeave;
-    var fixedX = false;
-    var fixedY = false;
-    var excludedElements;
-    var classNameExtra;
-    var behaviourType;
-    var beforeDisplay;
-    var behaviourTypeDefault = 'mouseover';
-    var elementsCreated = false;
-    var attached = false;
-    var popupPointerStyle;
-    var classNameReferralSelected;
+    let self = this;
+    let referralElement;
+    let componentElement;
+    let contentElement;
+    let popupText;
+    let popupOffset = 12;
+    let displayDelay = 100;
+    let displayed = false;
+    let displayAllowed;
+    let displayTimeout;
+    let hideOnClick;
+    let hideOnLeave;
+    let fixedX = false;
+    let fixedY = false;
+    let excludedElements;
+    let classNameExtra;
+    let behaviourType;
+    let beforeDisplay;
+    let behaviourTypeDefault = 'mouseover';
+    let elementsCreated = false;
+    let attached = false;
+    let popupPointerStyle;
+    let classNameReferralSelected;
 
-    var init = function() {
+    const init = function() {
         //backward compatibility with old arguments, comes first
         if (typeof parameters == 'object') {
             parseParameters(parameters);
@@ -42,7 +42,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 
         addMouseHandlers();
     };
-    var parseParameters = function(parameters) {
+    const parseParameters = function(parameters) {
         if (typeof parameters.referralElement !== 'undefined') {
             referralElement = parameters.referralElement;
         }
@@ -88,7 +88,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
             hideOnLeave = true;
         }
     };
-    var createDomElements = function() {
+    const createDomElements = function() {
         elementsCreated = true;
         componentElement = document.createElement('div');
         componentElement.className = 'tip_popup';
@@ -104,7 +104,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 
         contentElement.innerHTML = popupText;
     };
-    var attach = function() {
+    const attach = function() {
         if (!attached) {
             if (!elementsCreated) {
                 createDomElements();
@@ -113,27 +113,27 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
             document.body.appendChild(componentElement);
         }
     };
-    var detach = function() {
+    const detach = function() {
         if (attached) {
             attached = false;
             document.body.removeChild(componentElement);
         }
     };
-    var moveHandler = function() {
+    const moveHandler = function() {
         updatePosition();
     };
-    var resizeHandler = function() {
+    const resizeHandler = function() {
         if (behaviourType === 'mouseover' || behaviourType === 'click') {
             // handle zoom changes
             updatePosition();
         }
     };
-    var enterHandler = function() {
+    const enterHandler = function() {
         if (popupText && displayAllowed && !displayed) {
             displayTimeout = window.setTimeout(self.displayComponent, displayDelay);
         }
     };
-    var overHandler = function(event) {
+    const overHandler = function(event) {
         displayAllowed = checkExcluded(event.target);
         if (beforeDisplay) {
             displayAllowed &= beforeDisplay();
@@ -146,7 +146,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
             self.hideComponent();
         }
     };
-    var clickHandler = function(event) {
+    const clickHandler = function(event) {
         displayAllowed = checkExcluded(event.target);
         if (popupText && (displayAllowed)) {
             if (!displayed) {
@@ -156,10 +156,10 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
             }
         }
     };
-    var checkExcluded = function(element) {
-        var result = true;
+    const checkExcluded = function(element) {
+        let result = true;
         if (excludedElements) {
-            for (var i = 0; i < excludedElements.length; i++) {
+            for (let i = 0; i < excludedElements.length; i++) {
                 if ((excludedElements[i] === element) || isAChildOf(excludedElements[i], element)) {
                     result = false;
                     break;
@@ -168,7 +168,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
         }
         return result;
     };
-    var leaveHandler = function() {
+    const leaveHandler = function() {
         window.clearTimeout(displayTimeout);
         TweenLite.to(componentElement, 0.5, {
             'css': {'opacity': 0},
@@ -202,24 +202,24 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
             callBack();
         }
     };
-    var updatePosition = function(e) {
+    const updatePosition = function(e) {
         if (!displayed) {
             return;
         }
-        var verticalMouseCoord = window.mouseTracker.mouseX;
-        var verticalOffsetWidth = window.innerWidth;
+        let verticalMouseCoord = window.mouseTracker.mouseX;
+        let verticalOffsetWidth = window.innerWidth;
 
-        var referralStyle = getComputedStyle(referralElement);
-        var referralPosition = referralElement.getBoundingClientRect();
+        let referralStyle = getComputedStyle(referralElement);
+        let referralPosition = referralElement.getBoundingClientRect();
 
-        var popupStyle = getComputedStyle(componentElement);
-        var popupHeight = parseFloat(popupStyle.height);
-        var popupWidth = parseFloat(popupStyle.width);
-
+        let popupStyle = getComputedStyle(componentElement);
+        let popupHeight = parseFloat(popupStyle.height);
+        let popupWidth = parseFloat(popupStyle.width);
+        let maxWidth = parseFloat(window.innerWidth);
         if (hintPointer) {
             popupPointerStyle = getComputedStyle(componentElement, ':before');
         }
-        var xPosition = 0;
+        let xPosition = 0;
         if (fixedX) {
             xPosition = fixedX;
         } else if (!fixedX && !hintPointer) {
@@ -234,7 +234,8 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
             let referralRight = referralPosition.right;
             xPosition = referralRight - referralWidth / 2 - popupWidth + popupPointerWidth / 2 + popupPointerRight;
         }
-        var yPosition = 0;
+
+        let yPosition = 0;
         if (fixedY) {
             yPosition = fixedY - popupHeight;
         } else if (!fixedY && !hintPointer) {
@@ -250,7 +251,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
         componentElement.style.left = xPosition + 'px';
         componentElement.style.top = yPosition + 'px';
     };
-    var isAChildOf = function(_parent, _child) {
+    const isAChildOf = function(_parent, _child) {
         if (_parent === _child) {
             return false;
         }
@@ -260,7 +261,7 @@ window.ToolTipComponent = function(parameters, popupText_deprecated, excludedEle
 
         return _child === _parent;
     };
-    var addMouseHandlers = function() {
+    const addMouseHandlers = function() {
         if (behaviourType === 'mouseover') {
             window.eventsManager.addHandler(window, 'resize', resizeHandler);
             window.eventsManager.addHandler(referralElement, 'mousemove', moveHandler);

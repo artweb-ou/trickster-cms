@@ -33,11 +33,11 @@ window.ShoppingBasketSelectionFormPost24Automate = function(info, fieldsBaseName
         selectElement = document.createElement('select');
         selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
         fieldElement.appendChild(selectElement);
-
         dropdown = dropDownManager.getDropDown(selectElement);
         fieldElement.appendChild(dropdown.componentElement);
 
         fillSelect();
+
         if (info.value) {
             for (var i = selectElement.options.length; i--;) {
                 if (selectElement.options[i].value == info.value) {
@@ -48,6 +48,10 @@ window.ShoppingBasketSelectionFormPost24Automate = function(info, fieldsBaseName
             }
         }
         controller.addListener('post24RegionSelected', post24RegionSelectedHandler);
+    };
+
+    this.refresh = function() {
+        fillSelect();
     };
     var post24RegionSelectedHandler = function() {
         fillSelect();

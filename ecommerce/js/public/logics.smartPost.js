@@ -9,14 +9,10 @@ window.smartPostLogics = new function() {
         automatesList = [];
         regionsList = [];
         regionsIndex = {};
-
         if (typeof window.places_info != 'undefined') {
             var info = window.places_info;
 
             for (var i = 0, length = info.length; i < length; i++) {
-                if (info[i].active == 0) {
-                    continue;
-                }
                 var automate = new SmartPostAutomate(info[i]);
                 automatesList.push(automate);
 
@@ -51,6 +47,19 @@ window.smartPostLogics = new function() {
         }
         return regionsList;
     };
+    this.getCountryRegionsList = function(countryCode) {
+        var countryRegions = [];
+        if (regionsList == null) {
+            importData();
+        }
+        for (var i = 0; i < regionsList.length; i++) {
+            if (regionsList[i].getCountry().toLowerCase() == countryCode.toLowerCase()) {
+                countryRegions.push(regionsList[i]);
+            }
+        }
+        return countryRegions;
+    };
+
     this.getRegion = function(regionId) {
         if (regionsList == null) {
             importData();
@@ -59,6 +68,7 @@ window.smartPostLogics = new function() {
         if (regionsIndex[regionId] != undefined) {
             result = regionsIndex[regionId];
         }
+
         return result;
     };
     this.setCurrentRegion = function(regionId) {
@@ -83,12 +93,13 @@ window.SmartPostRegion = function(info) {
     var name;
     var groupSort;
     var automatesList;
-
+    var country;
     var init = function() {
         automatesList = [];
         id = info.group_id;
         name = info.group_name;
         groupSort = info.group_sort;
+        country = info.country
     };
     this.registerAutomate = function(info) {
         automatesList.push(info);
@@ -104,6 +115,9 @@ window.SmartPostRegion = function(info) {
     };
     this.getGroupSort = function() {
         return groupSort;
+    };
+    this.getCountry = function() {
+        return country;
     };
     init();
 };

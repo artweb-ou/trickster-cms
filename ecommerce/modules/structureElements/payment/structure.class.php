@@ -124,9 +124,10 @@ class paymentElement extends structureElement
     {
         if ($orderElement = $this->getOrderElement()) {
             if ($this->paymentStatus == 'success') {
-                $amountPaid = $this->amount;
-                $orderPrice = $orderElement->getTotalPrice(false);
-                $partlyPaid = $amountPaid != $orderPrice;
+                //convert both to string, so there wont be float precision problems
+                $amountPaid = (string)$this->amount;
+                $orderPrice = (string)$orderElement->getTotalPrice(false);
+                $partlyPaid = ($amountPaid != $orderPrice);
                 if ($partlyPaid) {
                     $orderElement->setOrderStatus('paid_partial');
                 } else {

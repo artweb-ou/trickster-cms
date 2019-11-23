@@ -28,7 +28,6 @@ window.SpoilerComponent = function(componentElement) {
 			showLessText = window.translationsLogics.get('spoiler.view_less_info');
 			maxHeight = computedStyles.height;
 			contentElement.style.height = maxHeight;
-			contentElement.classList.add('partly_hidden_content_hidden');
 			showMoreText = buttonElement.innerHTML;
 			addHandlers();
 		}
