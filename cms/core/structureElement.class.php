@@ -344,13 +344,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
 
     public function persistElementData()
     {
-        /**
-         * @var structureManager $structureManager
-         */
         $structureManager = $this->getService('structureManager');
-
-        $linksManager = $this->getService('linksManager');
-        $linksObjects = $linksManager->getElementsLinks($this->id, null, 'child');
 
         //save structure object to update dateModified and ensure that element has numeric ID already
         $this->persistStructureData();
@@ -364,11 +358,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         //now save module table records
         $this->persistModuleData();
 
-        foreach ($linksObjects as $linkObject) {
-            $linkObject->childStructureId = $this->id;
-            $linkObject->persist();
-            $structureManager->clearElementCache($linkObject->parentStructureId);
-        }
+        $this->persistStructureLinks();
 
         foreach ($this->getAllDataChunks() as $languageChunks) {
             foreach ($languageChunks as $dataChunk) {
@@ -386,8 +376,17 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         }
         $structureManager->regenerateStructureInfo($this);
         $structureManager->clearElementCache($this->id);
+    }
+
+    public function persistStructureLinks()
+    {
+        $structureManager = $this->getService('structureManager');
+        $linksManager = $this->getService('linksManager');
+        $linksObjects = $linksManager->getElementsLinks($this->id, null, 'child');
 
         foreach ($linksObjects as $linkObject) {
+            $linkObject->childStructureId = $this->id;
+            $linkObject->persist();
             $structureManager->clearElementCache($linkObject->parentStructureId);
         }
     }

@@ -68,6 +68,7 @@ class productElement extends structureElement implements
     use ProductIconRoleOptionsTrait;
     use ConnectedParametersProviderTrait;
     use CacheOperatingElement;
+    use LdJsonProvider;
 
     public $dataResourceName = 'module_product';
     public $defaultActionName = 'show';
@@ -1746,15 +1747,6 @@ class productElement extends structureElement implements
     public function isEmptyPrice()
     {
         return ($this->price === '') ? true : false;
-    }
-
-    public function getLdJsonScriptHtml()
-    {
-        $tagText = '';
-        if ($ldJsonData = $this->getLdJsonScriptData()) {
-            $tagText = '<script type="application/ld+json">' . json_encode($ldJsonData) . '</script>';
-        }
-        return $tagText;
     }
 
     public function getLdJsonScriptData()
