@@ -498,51 +498,51 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
     public function sendOrderStatusNotificationEmail()
     {
-	//todo: make configurable?
-	return;
-        if ($this->orderStatus !== 'undefined' && $this->orderStatus !== 'deleted') {
+        $configManager = $this->getService('ConfigManager');
+        if ($enabledNotificationStatuses = $configManager->get('order.enabledNotificationStatuses')) {
+            if (in_array($this->orderStatus, $enabledNotificationStatuses)) {
+                $languagesManager = $this->getService('LanguagesManager');
+                $languagesManager->setCurrentLanguageCode($this->payerLanguage);
 
-            $languagesManager = $this->getService('LanguagesManager');
-            $languagesManager->setCurrentLanguageCode($this->payerLanguage);
+                $administratorEmail = $this->getAdministratorEmail();
+                $data = $this->getOrderData();
+                $data['documentType'] = 'Notification';
+                $data['orderStatus'] = $this->orderStatus;
 
-            $administratorEmail = $this->getAdministratorEmail();
-            $data = $this->getOrderData();
-            $data['documentType'] = 'Notification';
-            $data['orderStatus'] = $this->orderStatus;
+                $translationsManager = $this->getService('translationsManager');
 
-            $translationsManager = $this->getService('translationsManager');
+                $settings = $this->getService('settingsManager')->getSettingsList();
+                /**
+                 * @var EmailDispatcher $emailDispatcher
+                 */
+                $emailDispatcher = $this->getService('EmailDispatcher');
+                $newDispatchment = $emailDispatcher->getEmptyDispatchment();
+                $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
+                if ($administratorEmail) {
+                    $newDispatchment->setFromEmail($administratorEmail);
+                    $newDispatchment->registerReceiver($administratorEmail, null);
+                }
+                $newDispatchment->registerReceiver($this->payerEmail, null);
 
-            $settings = $this->getService('settingsManager')->getSettingsList();
-            /**
-             * @var EmailDispatcher $emailDispatcher
-             */
-            $emailDispatcher = $this->getService('EmailDispatcher');
-            $newDispatchment = $emailDispatcher->getEmptyDispatchment();
-            $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
-            if ($administratorEmail) {
-                $newDispatchment->setFromEmail($administratorEmail);
-                $newDispatchment->registerReceiver($administratorEmail, null);
+                // if !shop_title in translation, try check default_sender_name in settings, else display shop_title field name
+                $shopTitle =
+                    $translationsManager->getTranslationByName('company.shop_title', 'public_translations') ?:
+                        !empty($settings['default_sender_name']) ? $settings['default_sender_name'] : $translationsManager->getTranslationByName('company.shop_title',
+                            'public_translations');
+
+                $notification = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification',
+                    'public_translations');
+                $orderNumberText = $translationsManager->getTranslationByName('invoice.order_nr', 'public_translations');
+                $orderNumber = $this->getInvoiceNumber();
+                $statusText = $this->getOrderStatusText($this->orderStatus);
+                $subject = $shopTitle . '. ' . $notification . ' (' . $orderNumberText . ' ' . $orderNumber . ': ' . $statusText . ')';
+                $newDispatchment->setSubject($subject);
+                $newDispatchment->setData($data);
+                $newDispatchment->setReferenceId($this->id);
+                $newDispatchment->setType('orderStatus');
+
+                $emailDispatcher->startDispatchment($newDispatchment);
             }
-            $newDispatchment->registerReceiver($this->payerEmail, null);
-
-            // if !shop_title in translation, try check default_sender_name in settings, else display shop_title field name
-            $shopTitle =
-                $translationsManager->getTranslationByName('company.shop_title', 'public_translations') ?:
-                    !empty($settings['default_sender_name']) ? $settings['default_sender_name'] : $translationsManager->getTranslationByName('company.shop_title',
-                        'public_translations');
-
-            $notification = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification',
-                'public_translations');
-            $orderNumberText = $translationsManager->getTranslationByName('invoice.order_nr', 'public_translations');
-            $orderNumber = $this->getInvoiceNumber();
-            $statusText = $this->getOrderStatusText($this->orderStatus);
-            $subject = $shopTitle . '. ' . $notification . ' (' . $orderNumberText . ' ' . $orderNumber . ': ' . $statusText . ')';
-            $newDispatchment->setSubject($subject);
-            $newDispatchment->setData($data);
-            $newDispatchment->setReferenceId($this->id);
-            $newDispatchment->setType('orderStatus');
-
-            $emailDispatcher->startDispatchment($newDispatchment);
         }
     }
 
@@ -1075,12 +1075,13 @@ class orderElement extends structureElement implements PaymentOrderInterface
         if (empty($this->totalFullPrice)) {
             $this->recalculate();
         }
-        if($formated) {
+        if ($formated) {
             $currencySelector = $this->getService('CurrencySelector');
             return $currencySelector->formatPrice($this->totalFullPrice);
         }
         return $this->totalFullPrice;
     }
+
     public function getDiscountAmount()
     {
         if (empty($this->discountAmount)) {

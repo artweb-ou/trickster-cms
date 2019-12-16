@@ -84,9 +84,10 @@
                     <div class="invoice_top_to">{translations name='invoice.receiver'}:</div>
                     <div class="invoice_top_payer_row">
                         {if !empty($data.receiverFields.company.value)}
-                            {$data.receiverFields.company.value} ({$data.receiverFields.firstName.value} {$data.receiverFields.lastName.value})
+                            {$data.receiverFields.company.value}
+                            ({if !empty($data.receiverFields.firstName)}{$data.receiverFields.firstName.value}{/if} {if !empty($data.receiverFields.lastName)}{$data.receiverFields.lastName.value}{/if})
                         {else}
-                            {$data.receiverFields.firstName.value} {$data.receiverFields.lastName.value}
+                            {if !empty($data.receiverFields.firstName)}{$data.receiverFields.firstName.value}{/if} {if !empty($data.receiverFields.lastName)}{$data.receiverFields.lastName.value}{/if}
                         {/if}
                     </div>
                     {if !empty($data.receiverFields.address.value)}

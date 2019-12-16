@@ -3,8 +3,9 @@
 @mobileheader_height: 3.5em;
 
 .mobileheader {
-    position: relative;
-    padding-top: @mobileheader_height;
+    position: sticky;
+    top: 0;
+    background-color: @header_background_color;
     z-index: 32;
     @media (min-width: @screen_breakpoint_md) {
         & {
@@ -15,14 +16,6 @@
     .breadcrumbs_block {
         padding: 0.25em 1em;
     }
-}
-
-.mobileheader_inner {
-    background-color: @header_background_color;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
 }
 
 .mobileheader_drawer {

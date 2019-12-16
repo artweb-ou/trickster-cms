@@ -18,6 +18,9 @@ class ProductSelectionValueFormStructure extends ElementForm
         'value' => [
             'type' => 'input.text',
         ],
+        'price' => [
+            'type' => 'input.text',
+        ],
         'image' => [
             'type' => 'input.image',
         ],

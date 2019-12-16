@@ -181,13 +181,13 @@ window.shoppingBasketLogics = new function() {
         for (var i = 0; i < elements.length; i++) {
             new ShoppingBasketStatusComponent(elements[i]);
         }
-        var elements = _('.shoppingbasket_selection');
+        var elements = document.querySelectorAll('.shoppingbasket_selection');
         for (var i = 0; i < elements.length; i++) {
             new ShoppingBasketSelectionComponent(elements[i]);
         }
     };
     this.trackingPurchase = function() {
-        if ((paymentStatus || paymentStatus == 'undefined') && orderId) {
+        if ((paymentStatus || paymentStatus === 'undefined') && orderId) {
             tracking.buyTracking(orderId);
         }
     };
@@ -378,18 +378,20 @@ window.shoppingBasketLogics = new function() {
                 var products = parsedData.shoppingBasketData.productsList;
                 var lastAddedProduct = parsedData.shoppingBasketData.productsList[products.length - 1];
                 tracking.addToBasketTracking(lastAddedProduct, self.amount);
+            } else if (requestName === 'checkVat') {
+                controller.fireEvent('shoppingBasketVatCheckSuccess');
             }
-            if (requestName === 'setPromoCode') {
+            else if (requestName === 'setPromoCode') {
                 controller.fireEvent('shoppingBasketPromoCodeSuccess');
             }
         } else if (responseStatus === 'fail') {
             if (requestName === 'addProduct') {
                 controller.fireEvent('shoppingBasketProductAddFailure', 'product.quantityunavailable');
-            }
-            if (requestName === 'changeAmount') {
+            } else if (requestName === 'changeAmount') {
                 controller.fireEvent('shoppingBasketProductChangeFailure', 'product.quantityunavailable');
-            }
-            if (requestName === 'setPromoCode') {
+            } else if (requestName === 'checkVat') {
+                controller.fireEvent('shoppingBasketVatCheckFailure');
+            } else if (requestName === 'setPromoCode') {
                 controller.fireEvent('shoppingBasketPromoCodeFailure');
             }
         }

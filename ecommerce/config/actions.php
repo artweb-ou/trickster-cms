@@ -50,6 +50,7 @@
     'danskebankPaymentMethod' => 'showForm',
     'sebPaymentMethod' => 'showForm',
     'lhvPaymentMethod' => 'showForm',
+    'coopPaymentMethod' => 'showForm',
     'estcardPaymentMethod' => 'showForm',
     'paypalPaymentMethod' => 'showForm',
     'moneybookersPaymentMethod' => 'showForm',

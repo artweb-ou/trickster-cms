@@ -82,7 +82,7 @@ class copyElementsRoot extends structureElementAction
     protected function checkAllowedTypes(structureElement $destinationElement, array $typesList)
     {
         $result = true;
-        $allowedTypes = $destinationElement->getAllowedTypes();
+        $allowedTypes = $destinationElement->getAllowedTypes('copyElements');
         foreach ($typesList as &$type) {
             if (!in_array($type, $allowedTypes)) {
                 $result = false;

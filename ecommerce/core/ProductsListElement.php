@@ -199,7 +199,7 @@ abstract class ProductsListElement extends menuStructureElement
                     $x++;
                 }
 
-                if(count($paramaterSelections) > 1) {
+                if (count($paramaterSelections) > 1) {
                     $ids = call_user_func_array('array_intersect', $filteredIds);
                 } else {
                     $ids = $filteredIds[0];
@@ -246,10 +246,14 @@ abstract class ProductsListElement extends menuStructureElement
      */
     public function getProductsList()
     {
-        $sessionManager = $this->getService('ServerSessionManager');
-        $sessionManager->set('fromProductList', $this->id);
         if ($this->productsList !== null) {
             return $this->productsList;
+        }
+
+        //only update last used category session variable if it's really opened.
+        if ($this->final) {
+            $sessionManager = $this->getService('ServerSessionManager');
+            $sessionManager->set('currentProductsList', $this->id);
         }
         $cacheKey = $this->getCacheKey();
         $cache = $this->getElementsListCache('prList:' . $cacheKey, 3600);
@@ -852,7 +856,7 @@ abstract class ProductsListElement extends menuStructureElement
                 }
                 $this->selectionsValuesIndex[$record['parameterId']][$positions[$record['value']]] = $record['value'];
             }
-            foreach ($this->selectionsValuesIndex as $key=>$values){
+            foreach ($this->selectionsValuesIndex as $key => $values) {
                 ksort($this->selectionsValuesIndex[$key]);
             }
         }

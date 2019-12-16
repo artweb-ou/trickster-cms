@@ -1,12 +1,15 @@
 window.LazyImageComponent = function(componentElement) {
-    var self = this;
-    var init = function() {
+    let self = this;
+    let init = function() {
         self.initLazyLoading({
             'componentElement': componentElement,
             'displayCallback': lazyLoadingCallback
         });
     };
-    var lazyLoadingCallback = function() {
+    const lazyLoadingCallback = function() {
+        requestAnimationFrame(display);
+    };
+    const display = function() {
         componentElement.src = componentElement.dataset.lazysrc;
         delete componentElement.dataset.lazysrc;
         if (componentElement.dataset.lazysrcset) {

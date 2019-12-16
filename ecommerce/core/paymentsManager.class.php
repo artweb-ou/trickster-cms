@@ -39,48 +39,4 @@ class paymentsManager extends errorLogger implements DependencyInjectionContextI
 
         return $paymentMethodElement;
     }
-
-    public function detectPaymentMethod()
-    {
-        $methodName = false;
-        if (isset($_REQUEST['action'])) {
-            if ($_REQUEST['action'] == 'afb') {
-                $methodName = 'estcard';
-            }
-        }
-        if (isset($_POST['mb_transaction_id']) && isset($_POST['md5sig'])) {
-            $methodName = 'moneybookers';
-        }
-        if (isset($_POST['LMI_HASH'])) {
-            if (isset($_POST['LMI_MODE']) && $_POST['LMI_MODE'] == '1') {
-                $methodName = 'webmoneytest';
-            } else {
-                $methodName = 'webmoney';
-            }
-        }
-        if (isset($_POST['verify_sign']) && isset($_POST['txn_type'])) {
-            if (isset($_POST['test_ipn']) && $_POST['test_ipn'] == '1') {
-                $methodName = 'paypaltest';
-            } else {
-                $methodName = 'paypal';
-            }
-        } elseif (isset($_REQUEST['VK_SND_ID'])) {
-            if ($_REQUEST['VK_SND_ID'] == 'SAMPOPANK') {
-                $methodName = 'danskebank';
-            }
-            //this check doesn't work anymore, "act" is coming even for a live environment
-            //			elseif ($_REQUEST['VK_SND_ID'] == 'EYP' && $_REQUEST['act'] == 'UPOSTEST2')
-            //			{
-            //				$methodName = 'sebtest';
-            //			}
-            elseif ($_REQUEST['VK_SND_ID'] == 'EYP') {
-                $methodName = 'seb';
-            } elseif ($_REQUEST['VK_SND_ID'] == 'LHV') {
-                $methodName = 'lhv';
-            } elseif ($_REQUEST['VK_SND_ID'] == 'HP') {
-                $methodName = 'swedbank';
-            }
-        }
-        return $methodName;
-    }
 }

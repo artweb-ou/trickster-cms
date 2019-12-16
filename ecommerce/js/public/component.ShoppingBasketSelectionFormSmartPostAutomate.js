@@ -49,8 +49,11 @@ window.ShoppingBasketSelectionFormSmartPostAutomate = function(info, fieldsBaseN
                 }
             }
         }
-
         controller.addListener('smartPostRegionSelected', smartPostRegionSelectedHandler);
+    };
+
+    this.refresh = function() {
+        fillSelect();
     };
     var smartPostRegionSelectedHandler = function() {
         fillSelect();
