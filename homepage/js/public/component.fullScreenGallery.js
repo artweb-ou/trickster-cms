@@ -174,20 +174,8 @@ window.FullScreenGalleryCenterComponent = function(
             ? window.innerHeight
             : document.documentElement.offsetHeight;
 
-        var imageOriginalWidth = currentImageComponent.getImageWidth();
-        var imageOriginalHeight = currentImageComponent.getImageHeight();
-
-        var elementWidth = imageOriginalWidth;
-        var elementHeight = imageOriginalHeight;
-
-        if (elementWidth > viewPortWidth * widthCoeff) {
-            elementWidth = viewPortWidth * widthCoeff;
-            elementHeight = imageOriginalHeight * elementWidth / imageOriginalWidth;
-        }
-        if (elementHeight > viewPortHeight * heightCoeff) {
-            elementHeight = viewPortHeight * heightCoeff;
-            elementWidth = (imageOriginalWidth / imageOriginalHeight) * elementHeight;
-        }
+        var elementWidth = viewPortWidth * widthCoeff;
+        var elementHeight = viewPortHeight * heightCoeff;
 
         imagesElement.style.width = elementWidth + 'px';
         imagesElement.style.height = elementHeight + 'px';
@@ -345,10 +333,9 @@ window.FullScreenGalleryImageComponent = function(
                 self.preloaded = true;
                 self.resize();
             }
-        }
-
-        if (callBack) {
-            callBack();
+            if (callBack) {
+                callBack();
+            }
         }
     };
 
@@ -406,19 +393,29 @@ window.FullScreenGalleryImageComponent = function(
         var imagesContainerWidth = componentElement.parentNode.offsetWidth;
         var imagesContainerHeight = componentElement.parentNode.offsetHeight;
 
-        if (imageWidth > imagesContainerWidth) {
+        var logic = imageInfo.getImageResizeType(window.mobileLogics.isPhoneActive());
+        if (logic === 'contain') {
             imageWidth = imagesContainerWidth;
             imageHeight = imageWidth / aspectRatio;
-        }
 
-        if (imageHeight > imagesContainerHeight) {
-            imageHeight = imagesContainerHeight;
-            imageWidth = imageHeight * aspectRatio;
+            if (imageHeight > imagesContainerHeight) {
+                imageHeight = imagesContainerHeight;
+                imageWidth = imageHeight * aspectRatio;
+            }
+        } else {
+            if (imageWidth > imagesContainerWidth) {
+                imageWidth = imagesContainerWidth;
+                imageHeight = imageWidth / aspectRatio;
+            }
+
+            if (imageHeight > imagesContainerHeight) {
+                imageHeight = imagesContainerHeight;
+                imageWidth = imageHeight * aspectRatio;
+            }
         }
 
         var imageLeft = (imagesContainerWidth - imageWidth) / 2;
         var imageTop = (imagesContainerHeight - imageHeight) / 2;
-
 
         mediaElement.style.width = imageWidth + 'px';
         mediaElement.style.height = imageHeight + 'px';

@@ -4,7 +4,6 @@
 		<title></title>
 		<meta name="robots" content="noindex, nofollow"/>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-		<meta name="author" content="ArtWeb OÜ" />
 		<link rel="stylesheet" type="text/css" href="{$controller->baseURL}css/set:{$theme->getCode()}/file:index.css"/>
 	</head>
 	<body>

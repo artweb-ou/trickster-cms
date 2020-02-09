@@ -459,6 +459,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
                 if (!$result) {
                     //this shouldn't be switched to 'getConnectedIds' because of speed issues. benchmark first
+                    //todo: to join?
                     $connectedLinks = $this->linksManager->getElementsLinks($parentElementId, $this->getPathSearchAllowedLinks(), 'parent');
                     $connectedIds = [];
                     foreach ($connectedLinks as $link) {

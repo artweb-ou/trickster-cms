@@ -249,6 +249,21 @@ window.GalleryImageComponent = function(imageInfo, parentObject, galleryInfo) {
                     if (imageWidth > galleryWidth) {
                         positionLeft = (imageWidth - galleryWidth) / -2;
                     }
+                }
+                else if (logic === 'contain') {
+                    imageHeight = galleryHeight;
+                    imageWidth = imageHeight * aspectRatio;
+                    if (imageWidth > galleryWidth) {
+                        imageWidth = galleryWidth;
+                        imageHeight = imageWidth / aspectRatio;
+                    }
+                    // centering
+                    if (imageHeight > galleryHeight) {
+                        positionTop = (imageHeight - galleryHeight) / -2;
+                    }
+                    if (imageWidth > galleryWidth) {
+                        positionLeft = (imageWidth - galleryWidth) / -2;
+                    }
                 } else {
                     imageWidth = mediaOriginalWidth;
                     imageHeight = mediaOriginalHeight;

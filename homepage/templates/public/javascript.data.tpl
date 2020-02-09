@@ -28,16 +28,9 @@
 		window.addToBasketButtonAction = '{$shoppingBasket->addToBasketButtonAction}';
 	{/if}
 </script>
-{*
-addToBasketButtonAction
-'0' => 'action_none',
-'1' => 'action_tooltip',
-'2' => 'action_modal',
-*}
 {if isset($shoppingBasket)}
 	{include file=$theme->template('javascript.shoppingBasket.tpl') element=$shoppingBasket}
 {/if}
 {include file=$theme->template('javascript.translations.tpl')}
-{include file=$theme->template('javascript.mainMenu.tpl')}
 {include file=$theme->template('javascript.gtag.tpl')}
 {include file=$theme->template('javascript.yandexMetrika.tpl')}
