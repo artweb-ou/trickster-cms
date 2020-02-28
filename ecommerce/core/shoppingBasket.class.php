@@ -316,7 +316,7 @@ class shoppingBasket implements DependencyInjectionContextInterface
                     $deliveryPrice = $delivery->getPrice(false, false);
                 }
             }
-            $totalPrice = $productsPrice + $deliveryPrice;
+            $totalPrice = $productsPrice + (float)$deliveryPrice;
 
             $shoppingBasketDiscounts = $this->getService('shoppingBasketDiscounts');
             $shoppingBasketDiscounts->calculateProductsListDiscounts($this->productsList, $this->selectedDeliveryTypeId,
