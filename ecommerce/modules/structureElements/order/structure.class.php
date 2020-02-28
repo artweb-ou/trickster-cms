@@ -362,7 +362,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 "currency" => $this->currency,
                 "productsPrice" => $this->getTotalFullPrice(true),
                 "deliveryType" => $this->deliveryType,
-                "deliveryPrice" => $currencySelector->formatPrice($this->deliveryPrice),
                 "deliveryTitle" => $this->deliveryTitle,
                 "noVatAmount" => $this->getNoVatAmount(),
                 "vatAmount" => $this->getVatAmount(),
@@ -377,6 +376,11 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 'payment' => [],
                 'pricesIncludeVat' => $pricesIncludeVat,
             ];
+            if ($this->deliveryPrice === '') {
+                $this->orderData["deliveryPrice"] = '';
+            } else {
+                $this->orderData["deliveryPrice"] = $currencySelector->formatPrice($this->deliveryPrice);
+            }
 
             if ($paymentElement = $this->getPaymentElement()) {
                 $this->orderData['payment'] = [

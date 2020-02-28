@@ -1,5 +1,5 @@
 window.BasketButtonComponent = function(componentElement, onClick, id) {
-    var productId =null;
+    var productId = null;
     var addToBasketButtonAction = window.addToBasketButtonAction;
     /*
         in settings in admin
@@ -10,7 +10,7 @@ window.BasketButtonComponent = function(componentElement, onClick, id) {
     */
 
     var init = function() {
-        if(id !== undefined) {
+        if (id !== undefined) {
             productId = id;
         }
         eventsManager.addHandler(componentElement, 'click', clickHandler);
@@ -40,7 +40,9 @@ window.BasketButtonComponent = function(componentElement, onClick, id) {
             var additionalClassName = 'notice_basket';
             var currentProduct = document.createElement('span');
             currentProduct.className = 'notice_product_name';
-            currentProduct.textContent = window.productDetailsData.name || window.productDetailsData.name_ga;
+            if (typeof window.productDetailsData !== 'undefined') {
+                currentProduct.textContent = window.productDetailsData.name || window.productDetailsData.name_ga;
+            }
             var currentAmount = document.createElement('em');
             currentAmount.className = 'notice_product_amount';
 
