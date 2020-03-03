@@ -13,21 +13,24 @@ window.EventsListComponent = function(componentElement) {
             presetInputs.push(new EventsListRadioComponent(elements[i], self));
         }
     };
-    this.applyFilters = function() {
+    this.applyFilters = function(type) {
         var url = window.currentElementURL;
         var filterValue;
-        for (var i = 0; i < presetInputs.length; i++) {
-            if (filterValue = presetInputs[i].getValue()) {
-                url += 'preset:' + filterValue + '/';
-            }
-        }
-        if (!filterValue && periodSelector) {
+        if (periodSelector && (type === 'selector')) {
             if (filterValue = periodSelector.getValue()) {
                 if (filterValue != 'none') {
                     url += 'period:' + periodSelector.getValue() + '/';
                 }
             }
+        } else if (type === 'radio') {
+            for (var i = 0; i < presetInputs.length; i++) {
+                if (filterValue = presetInputs[i].getValue()) {
+                    url += 'preset:' + filterValue + '/';
+                    break;
+                }
+            }
         }
+
         document.location.href = url;
     };
     init();
@@ -43,7 +46,7 @@ window.EventsListSelectorComponent = function(componentElement, eventsListObject
     };
     var changeHandler = function() {
         if (self.getValue() != initialValue) {
-            eventsListObject.applyFilters();
+            eventsListObject.applyFilters('selector');
         }
     };
     this.getValue = function() {
@@ -62,7 +65,7 @@ window.EventsListRadioComponent = function(componentElement, eventsListObject) {
     };
     var changeHandler = function() {
         if (self.getValue() != initialValue) {
-            eventsListObject.applyFilters();
+            eventsListObject.applyFilters('radio');
         }
     };
     this.getValue = function() {

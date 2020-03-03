@@ -310,6 +310,7 @@ trait EventsListFilterTrait
             } elseif ($stamps = $this->getSelectedPresetStamps()) {
                 if ($this->getSelectedEventsPreset() === 'past') {
                     $query->where('endDate', '<=', $stamps[1]);
+                    $query->where('endDate', '!=', 0);
                 } else {
                     $query->where(function ($query) use ($stamps) {
                         $query->where('startDate', '<=', $stamps[1])

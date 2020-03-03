@@ -7,9 +7,11 @@
         'gallery',
         'event',
         'brand',
+        'collectionsList',
         'discount',
         'brandsList',
         'discountsList',
         'newsList',
+        'collectionsList'
     ],
 ];

@@ -3,6 +3,7 @@
 {/if}
 {if !empty($form)}
 	{$buttons = $form->getControls()}
+    {$element = $form->getElement()}
 {else}
 	{$buttons = [
 			'save' => [

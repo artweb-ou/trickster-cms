@@ -1,14 +1,14 @@
 <div class="content_list_block">
-	{if isset($pager)}
-		{include file=$theme->template("pager.tpl") pager=$pager}
-	{/if}
+    {if isset($pager)}
+        {include file=$theme->template("pager.tpl") pager=$pager}
+    {/if}
 
 	<form class="content_list_form" action="{$currentElement->getFormActionURL()}" method="post" enctype="multipart/form-data">
 		<div class='controls_block content_list_controls'>
 			<input type="hidden" class="content_list_form_id" value="{$rootElement->id}" name="id" />
 			<input type="hidden" class="content_list_form_action" value="deleteElements" name="action" />
 
-			{include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedTypes()}
+            {include file=$theme->template('block.buttons.tpl') allowedTypes=$currentElement->getAllowedTypes()}
 		</div>
 		{assign var='formNames' value=$rootElement->getFormNames()}
 		{if !isset($contentList)}
@@ -17,13 +17,20 @@
 		{if $contentList}
 			{*  __ data table *}
 			<table class='content_list'>
-			<thead>
+				<thead>
 				<tr>
 					<th class='checkbox_column'>
 						<input class='groupbox checkbox_placeholder' type="checkbox" value='1' />
 					</th>
 					<th class="name_column">
-						{translations name='label.name'}
+                        {translations name='label.name'}
+					</th>
+					<th class='image_column'>
+                        {if !empty($contentList[0])}
+                            {if method_exists ($contentList[0], 'getImageUrl')}
+                                {translations name='label.image'}
+                            {/if}
+                        {/if}
 					</th>
 					<th class='image_column'>
 							{if method_exists ($contentList[0], 'getImageUrl')}
@@ -31,22 +38,22 @@
 							{/if}
 					</th>
 					<th class="name_column">
-						{translations name='label.categoryid'}
+                        {translations name='label.categoryid'}
 					</th>
 					<th class='edit_column'>
-						{translations name='label.edit'}
+                        {translations name='label.edit'}
 					</th>
 					<th class='add_column'>
-						{translations name='label.addsubcategory'}
+                        {translations name='label.addsubcategory'}
 					</th>
 					<th class='type_column'>
-						{translations name='label.type'}
+                        {translations name='label.type'}
 					</th>
 					<th class='date_column'>
-						{translations name='label.date'}
+                        {translations name='label.date'}
 					</th>
 					<th class='delete_column'>
-						{translations name='label.delete'}
+                        {translations name='label.delete'}
 					</th>
 				</tr>
 			</thead>
@@ -102,11 +109,11 @@
 			</tbody>
 			</table>
 			<div class="content_list_bottom">
-				{if isset($pager)}
-					{include file=$theme->template("pager.tpl") pager=$pager}
-				{/if}
+                {if isset($pager)}
+                    {include file=$theme->template("pager.tpl") pager=$pager}
+                {/if}
 			</div>
-		{/if}
+        {/if}
 	</form>
 
 </div>

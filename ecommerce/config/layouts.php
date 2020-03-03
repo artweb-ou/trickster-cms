@@ -56,6 +56,7 @@
         'categoryLayout',
         'productsLayout',
         'colorLayout',
+        'collectionLayout',
         'search',
     ],
     'category.categoryLayout.options' => [
@@ -78,7 +79,15 @@
         'table',
         'wide',
     ],
+
     'category.productsLayout.default' => 'thumbnail',
+    'category.collectionLayout.options' => [
+        'hide',
+        'thumbnailsmall',
+        'detailed',
+        'scroll'
+    ],
+    'category.collectionLayout.default' => 'thumbnailsmall',
     'category.search.default' => 'thumbnail',
 
     'discountsList.layouts' => [
@@ -227,5 +236,22 @@
         'default',
     ],
     'shoppingBasketStepPromo.layout.default' => 'default',
+
+    'collectionsList.layouts' => [
+        'productsLayout',
+        'collection'
+    ],
+    'collectionsList.productsLayout.options' => [
+        'thumbnailsmall',
+        'thumbnail',
+        'detailed',
+    ],
+    'collectionsList.collection.options' => [
+        'thumbnailsmall',
+        'detailed',
+        'scroll'
+    ],
+    'collectionsList.productsLayout.default' => 'thumbnail',
+    'collectionsList.collection.default' => 'detailed',
 
 ];

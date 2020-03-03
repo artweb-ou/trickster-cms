@@ -14,6 +14,8 @@ class banklinkApplication extends controllerApplication
 
     public function execute($controller)
     {
+//        $_GET = $_POST = $_REQUEST = json_decode('', true);
+
         /**
          * @var structureManager $structureManager
          */

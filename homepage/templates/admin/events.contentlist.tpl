@@ -1,9 +1,6 @@
+{assign 'pager' $currentElement->getPager()}
 {assign 'contentList' $currentElement->getContentList()}
 <div class="content_list_block">
-	{if isset($pager)}
-		{include file=$theme->template("pager.tpl") pager=$pager}
-	{/if}
-
 	<form class="content_list_form" action="{$currentElement->getFormActionURL()}" method="post" enctype="multipart/form-data">
 
 		{if $currentElement->getAllowedTypes()}
@@ -98,15 +95,10 @@
 				</tbody>
 			</table>
 		{/if}
-
-
-
 	</form>
-	{if $currentElement->getChildrenList()}
-		<div class="content_list_bottom">
-			{if isset($pager)}
-				{include file=$theme->template("pager.tpl") pager=$pager}
-			{/if}
-		</div>
-	{/if}
+	<div class="content_list_bottom">
+		{if isset($pager)}
+			{include file=$theme->template("pager.tpl") pager=$pager}
+		{/if}
+	</div>
 </div>

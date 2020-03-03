@@ -1,5 +1,7 @@
 <?php
 
+use Mpdf\Tag\P;
+
 /**
  * Class productElement
  *
@@ -126,6 +128,7 @@ class productElement extends structureElement implements
 
     protected $iconsInfo;
 
+    protected $allowedTypes = ['product'];
     protected $allowedProductTypesByAction = [
         'showImages' => ['galleryImage'],
         'showTexts' => ['subArticle'],
@@ -188,6 +191,8 @@ class productElement extends structureElement implements
 
         $moduleStructure['unit'] = 'text';
         $moduleStructure['subTitle'] = 'text';
+        $moduleStructure['connectedIconIds'] = 'array';
+        $moduleStructure['collectionsListId'] = 'array';
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -915,7 +920,8 @@ class productElement extends structureElement implements
                     $this->deepParentCategoriesIdList[] = $category->id;
 
                     $levelCategory = $category;
-                    while (method_exists($levelCategory, 'getParentCategory') && ($parentElement = $levelCategory->getParentCategory())) {
+                    while (method_exists($levelCategory,
+                            'getParentCategory') && ($parentElement = $levelCategory->getParentCategory())) {
                         $this->deepParentCategoriesIdList[] = $parentElement->id;
                         $levelCategory = $parentElement;
                     }
@@ -988,7 +994,7 @@ class productElement extends structureElement implements
      */
     public function getIconsCompleteList()
     {
-        $this->logError('deprecated method getIconsCompleteList used');
+        //        $this->logError('deprecated method getIconsCompleteList used');
         if ($this->iconsCompleteList === null) {
             $productIconsManager = $this->getService('ProductIconsManager');
             $this->iconsCompleteList = $productIconsManager->getProductIcons($this);
@@ -1167,6 +1173,9 @@ class productElement extends structureElement implements
         return false;
     }
 
+    /**
+     * @return categoryElement[]
+     */
     public function getProductConnectedCategories()
     {
         if (is_null($this->connectedProductCategories)) {
@@ -1719,15 +1728,6 @@ class productElement extends structureElement implements
         return $this->getSelectionPriceByCombo($combo);
     }
 
-    public function getTitle()
-    {
-        if (!empty($this->title)) {
-            return $this->title;
-        } else {
-            return '';
-        }
-    }
-
     public function isOptionsPricingTabAvailable()
     {
         return count($this->getSelectionInfoForPricingForm(0)) > 0;
@@ -1827,7 +1827,8 @@ class productElement extends structureElement implements
             $deliveryTypeElementsIds = $this->getService('linksManager')
                 ->getConnectedIdList($deliveryTypesElementId, 'structure', 'parent');
 
-            if ($deliveryTypeElementsIds && $deliveryTypeElements = $structureManager->getElementsByIdList($deliveryTypeElementsIds, null, true)) {
+            if ($deliveryTypeElementsIds && $deliveryTypeElements = $structureManager->getElementsByIdList($deliveryTypeElementsIds,
+                    false, true)) {
                 $inactiveDeliveriesRecords = $this->getDisabledDeliveryTypesRecords();
                 $currencySelector = $this->getService('CurrencySelector');
 
@@ -1836,8 +1837,8 @@ class productElement extends structureElement implements
                         $deliveryTypeInfo = [];
                         $deliveryTypeInfo["element"] = $deliveryTypeElement;
                         $priceExtra = (float)$this->getDeliveryPriceExtra($deliveryTypeElement->id);
-                        $deliveryTypeInfo["minPrice"] = $currencySelector->convertPrice($deliveryTypeElement->getMinPrice() + $priceExtra);
-                        $deliveryTypeInfo["maxPrice"] = $currencySelector->convertPrice($deliveryTypeElement->getMaxPrice() + $priceExtra);
+                        $deliveryTypeInfo["minPrice"] = $currencySelector->convertPrice((float)$deliveryTypeElement->getMinPrice() + $priceExtra);
+                        $deliveryTypeInfo["maxPrice"] = $currencySelector->convertPrice((float)$deliveryTypeElement->getMaxPrice() + $priceExtra);
                         $this->deliveryTypesInfo[] = $deliveryTypeInfo;
                     }
                 }
@@ -1973,7 +1974,7 @@ class productElement extends structureElement implements
 
         $structureManager = $this->getService('structureManager');
         $subArticles = $structureManager->getElementsChildren($this->id, null, 'subArticle');
-//
+        //
         return $subArticles;
     }
 
@@ -1987,7 +1988,6 @@ class productElement extends structureElement implements
                 return $templatedSubTitle;
             }
             return $this->getParentCategory()->getTitle();
-
         }
     }
 
@@ -1997,5 +1997,28 @@ class productElement extends structureElement implements
             return parent::getNewElementUrl() . 'linkType:subArticle/';
         }
         return parent::getNewElementUrl();
+    }
+
+    public function getGenericIconList()
+    {
+        $genericIconList = [];
+        $structureManager = $this->getService('structureManager');
+        $connectedIcons = $this->getConnectedGenericIconList();
+        $genericIcons = $structureManager->getElementsByType('genericIcon');
+        foreach ($genericIcons as $genericIcon) {
+            $genericIconList[] = [
+                'id' => $genericIcon->id,
+                'title' => $genericIcon->getTitle(),
+                'select' => in_array($genericIcon->id, $connectedIcons),
+            ];
+        }
+        return $genericIconList;
+    }
+
+    public function getConnectedGenericIconList()
+    {
+        $linksManager = $this->getService('linksManager');
+        $connectedIds = $linksManager->getConnectedIdList($this->id, 'genericIconProduct');
+        return $connectedIds;
     }
 }
