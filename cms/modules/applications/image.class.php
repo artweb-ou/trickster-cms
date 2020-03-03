@@ -50,7 +50,7 @@ class imageApplication extends controllerApplication
                 }
                 if (!empty($imagePreset['filters'])) {
                     foreach ($imagePreset['filters'] as &$filter) {
-                        if (isset($filter[1])){
+                        if (isset($filter[1])) {
                             $filter[1] = $this->applyMultiplier($filter[1]);
                         }
                         $this->renderer->assign('registerFilter', $filter);
@@ -63,7 +63,7 @@ class imageApplication extends controllerApplication
                      */
                     $requestHeadersManager = $this->getService('requestHeadersManager');
                     if ($contentTypes = $requestHeadersManager->getAcceptedTypes()) {
-                        if (isset ($contentTypes['image/webp']) && $requestHeadersManager->getBrowserType() !== 'Safari') {
+                        if (isset($contentTypes['image/webp']) && $requestHeadersManager->getBrowserType() !== 'Safari') {
                             $imagePreset['format'][1] = 'webp';
                         }
                     }
