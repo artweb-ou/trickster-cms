@@ -2,7 +2,7 @@
 
 trait ImageUrlGenerator
 {
-    protected static $srcSetPresets = ['1.5', '2', '3'];
+    protected static $srcSetPresets = ['1.25', '1.5', '1.75', '2', '3'];
 
     public function generateImageUrl($imageId, $fileName, $type, $multiplier = false)
     {
