@@ -2,6 +2,8 @@
 
 abstract class DesignTheme extends errorLogger
 {
+    use ImageUrlGenerator;
+
     protected $inheritedThemes = [];
     protected $cssResourcesIdIndex = [];
     protected $javascriptResourcesIdIndex = [];
@@ -29,7 +31,6 @@ abstract class DesignTheme extends errorLogger
      * @var DesignThemesManager
      */
     protected $designThemesManager;
-    protected static $srcSetPresets = ['1.5', '2', '3'];
 
     /**
      * @param DesignThemesManager $designThemesManager
@@ -696,23 +697,4 @@ abstract class DesignTheme extends errorLogger
         }
     }
 
-    public function generateImageUrl($imageId, $fileName, $type, $multiplier = false)
-    {
-        $result = controller::getInstance()->baseURL . 'image/type:' . $type
-            . '/id:' . $imageId;
-        if ($multiplier) {
-            $result .= '/multiplier:' . $multiplier;
-        }
-        $result .= '/' . $fileName;
-        return $result;
-    }
-
-    public function generateImageSrcSet($imageId, $fileName, $type)
-    {
-        $urls = [];
-        foreach (self::$srcSetPresets as $preset) {
-            $urls[] = $this->generateImageUrl($imageId, $fileName, $type, $preset) . ' ' . $preset . 'x';
-        }
-        return implode(',', $urls);
-    }
 }
