@@ -450,15 +450,15 @@ window.GalleryImage = function(info, galleryObject) {
         return bigImageUrl;
     };
     this.getBigImageSrcSet = function(mobile) {
-        if (mobile) {
-            return mobileBigImageSrcSet;
-        }
+        // if (mobile) {
+        //     return mobileBigImageSrcSet;
+        // }
         return bigImageSrcSet;
     };
     this.getThumbnailImageUrl = function(mobile) {
-        if (mobile) {
-            return mobileFullImageUrl;
-        }
+        // if (mobile) {
+        //     return mobileFullImageUrl;
+        // }
         return thumbnailImageUrl;
     };
     this.getFileUrl = function() {
