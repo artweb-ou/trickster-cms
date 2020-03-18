@@ -50,7 +50,6 @@ CKEDITOR.addTemplates( 'default',
 							'<p>- Line 1</p>' +
 							'<p>- Line 2</p>' +
 							'<p>- Line 3</p>' +
-							'<p><strong class="template_sideimage_wow">WOW FACTOR: </strong></p>' +
 						'</div>' +
 					'</div>' +
 					'<p></p>'
@@ -66,7 +65,6 @@ CKEDITOR.addTemplates( 'default',
 							'<p>- Line 1</p>' +
 							'<p>- Line 2</p>' +
 							'<p>- Line 3</p>' +
-							'<p><strong class="template_sideimage_wow">WOW FACTOR: </strong></p>' +
 						'</div>' +
 						'<div class="template_sideimage_cell template_sideimage_cell_graphic">' +
 							'<img src="/vendor/artweb-ou/trickster-cms/cms/images/admin/layout_default.png" />' +
