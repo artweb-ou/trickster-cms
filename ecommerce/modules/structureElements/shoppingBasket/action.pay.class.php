@@ -73,7 +73,7 @@ class payShoppingBasket extends structureElementAction
                     $paymentElement->methodId = $selectedMethodId;
                     $paymentElement->orderId = $orderElement->id;
                     $paymentElement->description = $orderElement->getInvoiceNumber();
-                    $paymentElement->amount = $orderElement->getTotalPrice();
+                    $paymentElement->amount = $orderElement->getTotalPrice(false);
                     $paymentElement->paymentStatus = 'undefined';
                     $paymentElement->persistElementData();
 
