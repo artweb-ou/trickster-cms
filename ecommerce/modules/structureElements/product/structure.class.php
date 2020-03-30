@@ -128,12 +128,11 @@ class productElement extends structureElement implements
 
     protected $iconsInfo;
 
-    protected $allowedTypes = ['product'];
     protected $allowedProductTypesByAction = [
         'showImages' => ['galleryImage'],
         'showTexts' => ['subArticle'],
         'showFiles' => ['file'],
-        'showIconForm' => ['galleryImage'],
+//        'showIconForm' => ['galleryImage'],
         'copyElements' => ['galleryImage', 'subArticle', 'file'],
     ];
 
@@ -920,8 +919,7 @@ class productElement extends structureElement implements
                     $this->deepParentCategoriesIdList[] = $category->id;
 
                     $levelCategory = $category;
-                    while (method_exists($levelCategory,
-                            'getParentCategory') && ($parentElement = $levelCategory->getParentCategory())) {
+                    while (method_exists($levelCategory, 'getParentCategory') && ($parentElement = $levelCategory->getParentCategory())) {
                         $this->deepParentCategoriesIdList[] = $parentElement->id;
                         $levelCategory = $parentElement;
                     }
@@ -994,7 +992,7 @@ class productElement extends structureElement implements
      */
     public function getIconsCompleteList()
     {
-        //        $this->logError('deprecated method getIconsCompleteList used');
+        $this->logError('deprecated method getIconsCompleteList used');
         if ($this->iconsCompleteList === null) {
             $productIconsManager = $this->getService('ProductIconsManager');
             $this->iconsCompleteList = $productIconsManager->getProductIcons($this);
@@ -1480,6 +1478,18 @@ class productElement extends structureElement implements
         }
     }
 
+    protected function getTopParentCategory()
+    {
+        /**
+         * @var $parentCategory categoryElement
+         */
+        $parentCategory = $this->getParentCategory();
+        while ($parentCategory->getParentCategory()) {
+            $parentCategory = $parentCategory->getParentCategory();
+        }
+        return $parentCategory;
+    }
+
     private function getFirstDataFromParents($parameterName)
     {
         $categories = [];
@@ -1680,7 +1690,7 @@ class productElement extends structureElement implements
 
         $info = [
             'id' => $this->id,
-            'price' => $this->getPrice(),
+            'price' => $this->getPrice(false),
             'name' => $this->getTitle(),
             'oldPrice' => $this->getOldPrice(),
             'name_ga' => $this->getValue('title', $defaultLanguage->id),
@@ -1704,13 +1714,13 @@ class productElement extends structureElement implements
                         $this->vatIncluded = true;
                     }
 
-                    $selectionsOldPricings[$combo] = $currencySelector->formatPrice($price);
+                    $selectionsOldPricings[$combo] = $price;
 
                     $discountAmount = $discountsManager->getProductDiscount($this->id, $price);
                     if ($discountAmount) {
                         $price -= $discountAmount;
                     }
-                    $selectionsPricings[$combo] = $currencySelector->formatPrice($price);
+                    $selectionsPricings[$combo] = $price;
                 }
             }
 
@@ -1726,6 +1736,15 @@ class productElement extends structureElement implements
     {
         $combo = $this->generateOptionsComboCode($options);
         return $this->getSelectionPriceByCombo($combo);
+    }
+
+    public function getTitle()
+    {
+        if (!empty($this->title)) {
+            return $this->title;
+        } else {
+            return '';
+        }
     }
 
     public function isOptionsPricingTabAvailable()
@@ -1960,7 +1979,6 @@ class productElement extends structureElement implements
         return [];
     }
 
-
     public function getNewElementAction()
     {
         return 'showForm';
@@ -1974,7 +1992,6 @@ class productElement extends structureElement implements
 
         $structureManager = $this->getService('structureManager');
         $subArticles = $structureManager->getElementsChildren($this->id, null, 'subArticle');
-        //
         return $subArticles;
     }
 
@@ -2001,6 +2018,11 @@ class productElement extends structureElement implements
 
     public function getGenericIconList()
     {
+        /**
+         * @var $linksManager linksManager
+         * @var $structureManager structureManager
+         * @var $element genericIconElement
+         */
         $genericIconList = [];
         $structureManager = $this->getService('structureManager');
         $connectedIcons = $this->getConnectedGenericIconList();
