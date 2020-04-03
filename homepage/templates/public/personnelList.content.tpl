@@ -12,6 +12,7 @@
                 <tr>
                     <th>{translations name='personnel.position'}</th>
                     <th>{translations name='personnel.name'}</th>
+                    {if $element->hasPersonnelProperty(['link', 'linkTitle'])}<th>{translations name='personnel.link'}</th>{/if}
                     <th>{translations name='personnel.phone'}</th>
                 </tr>
                 </thead>
@@ -24,6 +25,11 @@
                         <td>
                             {if $personnel->email != ''}<a href="mailto:{$personnel->email}">{/if}{$personnel->title}{if $personnel->email != ''}</a>{/if}
                         </td>
+                        {if $element->hasPersonnelProperty(['link', 'linkTitle'])}
+                        <td>
+                            {if $personnel->link}<a href="{$personnel->link}">{/if}{$personnel->linkTitle}{if $personnel->link != ''}</a>{/if}
+                        </td>
+                        {/if}
                         <td>
                             {if $personnel->phone}<a href="tel:{$personnel->phone}">{$personnel->phone}</a>{/if}
                             {if $personnel->mobilePhone}<a href="tel:{$personnel->mobilePhone}">{$personnel->mobilePhone}</a>{/if}

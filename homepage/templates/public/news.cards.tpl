@@ -78,11 +78,8 @@
 </div>
 <div class="news_card_about">
 	{if $element->introduction}
-		<div class='news_card_content html_content html_content_cleaned'>
-			{* getTruncatedText($text, $start, $limit, $suffix) *}
-			{* getCleanedText($text, $start, $limit, $suffix, $allowedTags = '') *}
+		<div class='news_card_content html_content_cleaned'>
 			<a href="{$element->URL}" class='content_readmore'>
-				{* {$element->getTruncatedText($element->introduction, 0, 180, '&hellip;')}      *}
 				{$element->getCleanedText($element->introduction, 0, 180, '&hellip;')}
 			</a>
 		</div>

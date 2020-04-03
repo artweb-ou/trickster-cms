@@ -24,6 +24,12 @@ class PersonnelFormStructure extends ElementForm
         'mobilePhone' => [
             'type' => 'input.text',
         ],
+        'link' => [
+            'type' => 'input.text',
+        ],
+        'linkTitle' => [
+            'type' => 'input.text',
+        ],
         'content' => [
             'type' => 'input.html',
         ],

@@ -18,7 +18,7 @@ class personnelElement extends menuDependantStructureElement
         $moduleStructure['image'] = 'image';
         $moduleStructure['originalName'] = 'fileName';
         $moduleStructure['content'] = 'html';
+        $moduleStructure['link'] = 'url';
+        $moduleStructure['linkTitle'] = 'text';
     }
 }
-
-

@@ -29,6 +29,20 @@ class personnelListElement extends structureElement
     {
         return $this->getChildrenList();
     }
+
+    public function hasPersonnelProperty($properties)
+    {
+        if ($personnelList = $this->getPersonnelList()) {
+            foreach ($personnelList as $personnel) {
+                foreach ($properties as $property) {
+                    if (!empty($personnel->$property)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
 
 
