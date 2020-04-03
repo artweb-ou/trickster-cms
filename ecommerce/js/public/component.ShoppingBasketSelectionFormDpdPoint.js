@@ -37,7 +37,6 @@ window.ShoppingBasketSelectionFormDpdPoint = function(info, fieldsBaseName) {
         selectElement = document.createElement('select');
         selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
         fieldElement.appendChild(selectElement);
-
         dropdown = dropDownManager.getDropDown(selectElement);
         fieldElement.appendChild(dropdown.componentElement);
 
@@ -54,6 +53,10 @@ window.ShoppingBasketSelectionFormDpdPoint = function(info, fieldsBaseName) {
             }
         }
         controller.addListener('dpdRegionSelected', dpdRegionSelectedHandler);
+    };
+
+    this.refresh = function() {
+        fillSelect();
     };
     var dpdRegionSelectedHandler = function() {
         fillSelect();

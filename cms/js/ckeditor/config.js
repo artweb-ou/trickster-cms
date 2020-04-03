@@ -44,8 +44,10 @@ CKEDITOR.editorConfig = function(config) {
     config.ignoreEmptyParagraph = true;
     config.contentsCss = '/css/set:ckeditor/15072013.css';
     config.bodyClass = 'html_content';
-    // config.templates_files = [ CKEDITOR.getUrl( '/../../../project/js/ckeditor/project.templates.js') ];
-    config.templates_files = ['/project/js/ckeditor/project.templates.js'];
+    config.templates_files = [
+        '/vendor/artweb-ou/trickster-cms/cms/js/ckeditor/templates.js',
+        '/project/js/ckeditor/templates.js'
+    ];
     config.templates_replaceContent = false;
     config.allowedContent = true;
     config.resize_dir = 'both';

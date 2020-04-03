@@ -33,11 +33,9 @@ class controller
 
     protected $formData = [];
     protected $forceDebug = false;
-    protected $debugMode = null;
+    protected $debugMode = false;
     /** @var controller */
     private static $instance;
-    protected $projectPath;
-    protected $includePaths = [];
     protected $enabledPlugins = [];
     /**
      * @var PathsManager

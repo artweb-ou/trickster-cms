@@ -428,11 +428,11 @@
         'filters' => [
             [
                 'fit',
-                'width=110, height=85',
+                'width=150, height=90',
             ],
             [
                 'crop',
-                'width=110, height=85, color=#ffffff',
+                'width=150, height=90, color=#ffffff',
             ],
         ],
         'format' => [

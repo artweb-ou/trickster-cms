@@ -5,6 +5,7 @@
 
     .embed-content.responsive {
         position: relative;
+
         iframe {
             position: absolute;
             height: 100% !important;
@@ -13,8 +14,12 @@
         }
     }
 
-    img:not(.cke_reset) { 
-        max-width: 100%; 
+    img:not(.cke_reset) {
+        max-width: 100%;
         height: auto !important;
+    }
+
+    td img:not(.cke_reset) {
+        max-width: none;
     }
 }

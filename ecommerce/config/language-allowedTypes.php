@@ -7,6 +7,7 @@ return [
             'brandsList',
             'discountsList',
             'campaignsList',
+            'collectionsList',
         ],
     'header' =>
         [

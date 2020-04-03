@@ -1,13 +1,15 @@
 window.ShoppingBasketSelectionFormDpdRegion = function(info, fieldsBaseName) {
-    var self = this;
+    let self = this;
 
-    var componentElement;
-    var labelElement;
-    var starElement;
-    var fieldElement;
-    var selectElement;
+    let componentElement;
+    let labelElement;
+    let starElement;
+    let fieldElement;
+    let selectElement;
+    let lastCountry;
+    let dropdown;
 
-    var init = function() {
+    const init = function() {
         componentElement = document.createElement('tr');
         if (info.error != '0' && info.error) {
             componentElement.className = 'form_error';
@@ -30,28 +32,45 @@ window.ShoppingBasketSelectionFormDpdRegion = function(info, fieldsBaseName) {
         }
 
         labelElement.innerHTML = info.title + ':';
+        self.refresh();
+    };
 
-        selectElement = document.createElement('select');
-        selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
-        var selectedCountry = shoppingBasketLogics.getSelectedCountry();
-        if (selectedCountry) {
-            var regionsList = window.dpdLogics.getCountryRegionsList(selectedCountry.iso3166_1a2);
-            for (var i = 0; i < regionsList.length; i++) {
-                var dpdInfo = regionsList[i];
-                var option = document.createElement('option');
-                option.text = dpdInfo.getName();
-                option.value = dpdInfo.getId();
-                selectElement.options.add(option);
-                if (info.value && option.value == info.value) {
-                    selectElement.selectedIndex = i;
+    this.refresh = function() {
+        let selectedCountry = shoppingBasketLogics.getSelectedCountry();
+
+        if (lastCountry !== selectedCountry) {
+            if (selectElement) {
+                selectElement.parentNode.removeChild(selectElement);
+            }
+            if (dropdown) {
+                dropdown.componentElement.parentNode.removeChild(dropdown.componentElement);
+            }
+
+            selectElement = document.createElement('select');
+            selectElement.name = fieldsBaseName + '[' + info.fieldName + ']';
+            if (selectedCountry) {
+                let regionsList = window.dpdLogics.getCountryRegionsList(selectedCountry.iso3166_1a2);
+                for (let i = 0; i < regionsList.length; i++) {
+                    let dpdInfo = regionsList[i];
+                    let option = document.createElement('option');
+                    option.text = dpdInfo.getName();
+                    option.value = dpdInfo.getId();
+                    selectElement.options.add(option);
+                    if (info.value && option.value == info.value) {
+                        selectElement.selectedIndex = i;
+                    }
                 }
             }
-        }
-        fieldElement.appendChild(selectElement);
-        eventsManager.addHandler(selectElement, 'change', changeHandler);
+            fieldElement.appendChild(selectElement);
+            eventsManager.addHandler(selectElement, 'change', changeHandler);
 
-        var dropdown = dropDownManager.getDropDown(selectElement);
-        fieldElement.appendChild(dropdown.componentElement);
+            dropdown = dropDownManager.getDropDown(selectElement);
+            fieldElement.appendChild(dropdown.componentElement);
+            changeHandler();
+        }
+    };
+    const changeHandler = function() {
+        dpdLogics.setCurrentRegion(selectElement.value);
     };
     this.getComponentElement = function() {
         return componentElement;
@@ -59,8 +78,6 @@ window.ShoppingBasketSelectionFormDpdRegion = function(info, fieldsBaseName) {
     this.getId = function() {
         return info.id;
     };
-    var changeHandler = function() {
-        dpdLogics.setCurrentRegion(selectElement.value);
-    };
+
     init();
 };

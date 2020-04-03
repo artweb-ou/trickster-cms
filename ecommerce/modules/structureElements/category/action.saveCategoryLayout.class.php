@@ -22,6 +22,7 @@ class saveCategoryLayoutCategory extends structureElementAction
             'categoriesMobileLayout',
             'colorLayout',
             'productsLayout',
+            'collectionLayout'
         ];
     }
 

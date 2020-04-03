@@ -24,11 +24,13 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     protected $currentProductCatalogue;
     public $feedbackFormsList = [];
     public $columns;
+    public $level = 0;
     protected $parametersGroups;
     protected $discountsList;
     protected $iconsList;
     protected $iconsCompleteList;
     protected $parentCategory;
+    protected $parentCategories;
     protected $topProductsList;
     protected $mainParentCategory;
     protected $usedParametersIds;
@@ -51,6 +53,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $moduleStructure['layout'] = 'text';
         $moduleStructure['productsLayout'] = 'text';
         $moduleStructure['colorLayout'] = 'text';
+        $moduleStructure['collectionLayout'] = 'text';
         $moduleStructure['productsMobileLayout'] = 'text';
         $moduleStructure['categoriesMobileLayout'] = 'text';
 
@@ -85,6 +88,8 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $moduleStructure['parentCategoriesIds'] = 'array';
         $moduleStructure['importInfo'] = 'array';
 
+        $moduleStructure['connectedIconIds'] = 'array';
+
         $moduleStructure['unit'] = 'text';
 
         $moduleStructure['metaDescriptionTemplate'] = 'text';
@@ -116,7 +121,8 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     {
         return [
             'showForm',
-            'showSettingsForm',
+            'showTexts',
+            'showSortingFilter',
             'showLayoutForm',
             'showSubCategoriesForm',
             'showProductsForm',
@@ -440,7 +446,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 ];
                 $orderFields = [
                     'showincategory' => 'desc',
-                    'purchaseCount' => 'desc',
+                    'purchaseCount'  => 'desc',
                 ];
                 $productIdFilter = [];
 
@@ -466,6 +472,10 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         return $this->topProductsList;
     }
 
+    /**
+     * @param null $limit
+     * @return categoryElement[]
+     */
     public function getChildCategories($limit = null)
     {
         $childCategories = [];
@@ -540,23 +550,39 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     }
 
     /**
+     * @return categoryElement[]
+     */
+    public function getParentCategories()
+    {
+        if ($this->parentCategories === null) {
+            $this->parentCategories = [];
+            $structureManager = $this->getService('structureManager');
+            if ($parentElements = $structureManager->getElementsParents($this->id)) {
+                foreach ($parentElements as &$parent) {
+                    if ($parent->structureType == "category") {
+                        $this->parentCategories[] = $parent;
+                    }
+                }
+            }
+        }
+        return $this->parentCategories;
+    }
+
+    /**
      * @return bool|categoryElement
      */
     public function getParentCategory()
     {
         if ($this->parentCategory === null) {
             $this->parentCategory = false;
-            $structureManager = $this->getService('structureManager');
-            if ($parentElements = $structureManager->getElementsParents($this->id)) {
-                foreach ($parentElements as &$parent) {
-                    if ($parent->structureType == "category") {
-                        if (!$this->parentCategory) {
-                            $this->parentCategory = $parent;
-                        }
-                        if ($parent->requested) {
-                            $this->parentCategory = $parent;
-                            break;
-                        }
+            if ($parentElements = $this->getParentCategories()) {
+                foreach ($parentElements as $parent) {
+                    if (!$this->parentCategory) {
+                        $this->parentCategory = $parent;
+                    }
+                    if ($parent->requested) {
+                        $this->parentCategory = $parent;
+                        break;
                     }
                 }
             }
@@ -798,7 +824,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
     {
         $controller = controller::getInstance();
         $this->requestArguments = [
-            'page' => (int)$controller->getParameter('page'),
+            'page'  => (int)$controller->getParameter('page'),
             'order' => false,
         ];
         $orderParameter = $controller->getParameter("order");
@@ -812,12 +838,12 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 $orderArgument = 'asc';
             }
             $this->requestArguments['order'] = [
-                'field' => $orderField,
+                'field'    => $orderField,
                 'argument' => $orderArgument,
             ];
         } else {
             $this->requestArguments['order'] = [
-                'field' => 'id',
+                'field'    => 'id',
                 'argument' => 'desc',
             ];
         }
@@ -921,8 +947,152 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         if ($currentAction == 'showProductsForm') {
             $this->allowedTypes = ['product'];
         } elseif ($currentAction == 'showIconForm') {
-            $this->allowedTypes = [];
+            $this->allowedTypes = ['genericIcon'];
         }
         return parent::getAllowedTypes($currentAction);
+    }
+
+    public function getConnectedGenericIconList()
+    {
+        $linksManager = $this->getService('linksManager');
+        $connectedIds = $linksManager->getConnectedIdList($this->id, 'genericIconCategory');
+        return $connectedIds;
+    }
+
+    public function getGenericIconList()
+    {
+        $genericIconList = [];
+        $structureManager = $this->getService('structureManager');
+        $connectedIcons = $this->getConnectedGenericIconList();
+        $genericIcons = $structureManager->getElementsByType('genericIcon');
+        foreach ($genericIcons as $genericIcon) {
+            $genericIconList[] = [
+                'id'     => $genericIcon->id,
+                'title'  => $genericIcon->getTitle(),
+                'select' => in_array($genericIcon->id, $connectedIcons)
+            ];
+        }
+        return $genericIconList;
+    }
+
+    public function getFeedbackFormList()
+    {
+        $structureManager = $this->getService('structureManager');
+        $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        $publicRoot = $structureManager->getElementByMarker($marker);
+        $languages = $structureManager->getElementsChildren($publicRoot->id);
+        $feedbackFormsList = array();
+        foreach ($languages as &$languageElement) {
+            $selectedId = $this->getValue('feedbackId', $languageElement->id);
+            $feedbackFormsList[$languageElement->id] = [];
+            $elementsList = $structureManager->getElementsByType("feedback", $languageElement->id);
+            foreach ($elementsList as &$element) {
+                if ($element->structureType == 'feedback') {
+                    $field = [];
+                    $field['id'] = $element->id;
+                    $field['title'] = $element->getTitle();
+                    $field['select'] = $selectedId;
+
+                    $feedbackFormsList[$languageElement->id][] = $field;
+                }
+            }
+        }
+        return $feedbackFormsList;
+    }
+
+    public function getProductCataloguesIds()
+    {
+        $structureManager = $this->getService('structureManager');
+        $productCataloguesIds = [];
+        $connectedFoldersIds = $this->getConnectedCatalogueFoldersIds();
+        $allCatalogues = $structureManager->getElementsByType('productCatalogue');
+        if ($allCatalogues) {
+            foreach ($allCatalogues as &$catalogueElement) {
+                if ($catalogueElement->categorized && !$catalogueElement->connectAllCategories) {
+                    if ($parentElement = $catalogueElement->getContainerElement()) {
+                        $field = [];
+                        $field['id'] = $catalogueElement->id;
+                        $field['title'] = $catalogueElement->getTitle();
+                        $field['select'] = in_array($parentElement->id, $connectedFoldersIds);
+
+                        $productCataloguesIds[] = $field;
+                    }
+                }
+            }
+        }
+        return $productCataloguesIds;
+    }
+
+    public function getExpectedField($type)
+    {
+        if ($type === 'texts') {
+            return [
+                'content',
+                'introduction',
+            ];
+        }
+    }
+
+    public function getCollectionLists()
+    {
+        /**
+         * @var $structureManager structureManager
+         */
+        $structureManager = $this->getService('structureManager');
+        $collectionLists = $structureManager->getElementsByType('collection');
+        foreach ($collectionLists as &$collection) {
+            $collection->URL = $collection->URL . 'category:' . $this->id;
+        }
+        return $collectionLists;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLevel()
+    {
+        return str_repeat('&nbsp;&nbsp;&nbsp;', $this->level);
+    }
+
+    /**
+     * @param int $level
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+    }
+
+    public function isHiddenCollection() {
+        $x = $this->getCurrentLayout('collectionLayout') == 'hide';
+        return $this->getCurrentLayout('collectionLayout') == 'hide';
+    }
+
+    public function isFilterableByType($filterType)
+    {
+        switch ($filterType) {
+            case 'category':
+                $result = $this->categoryFilterEnable;
+                break;
+            case 'brand':
+                $result = $this->brandFilterEnabled;
+                break;
+            case 'discount':
+                $result = $this->discountFilterEnabled;
+                break;
+            case 'parameter':
+                $result = $this->parameterFilterEnabled;
+                break;
+            case 'price':
+                //todo: implement checkbox in admin form
+                $result = false;
+                break;
+            case 'availability':
+                $result = $this->availabilityFilterEnabled;
+                break;
+            default:
+                $result = true;
+        }
+
+        return $result;
     }
 }

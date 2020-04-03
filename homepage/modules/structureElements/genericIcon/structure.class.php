@@ -14,7 +14,9 @@
  */
 class genericIconElement extends structureElement implements ImageUrlProviderInterface
 {
-    use ConnectedProductsProviderTrait;
+    use ConnectedProductsProviderTrait {
+        getConnectedProductsIds as getConnectedProductsIdsTrait;
+    }
     use ConnectedBrandsProviderTrait;
     use ConnectedCategoriesProviderTrait;
     use ConnectedParametersProviderTrait;
@@ -46,10 +48,13 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         $moduleStructure['iconLocation'] = 'naturalNumber';
         $moduleStructure['iconBgColor'] = 'text';
         $moduleStructure['iconTextColor'] = 'text';
+        $moduleStructure['selectedIcons'] = 'text';
         $moduleStructure['iconRole'] = 'naturalNumber';
         $moduleStructure['applicableToAllProducts'] = 'checkbox';
         $moduleStructure['iconProductAvail'] = 'serializedIndex';
         $moduleStructure['iconProductParameters'] = 'numbersArray';
+        $moduleStructure['selectedIcons'] = 'numbersArray';
+
     }
 
     protected function setMultiLanguageFields(&$multiLanguageFields)
@@ -70,4 +75,13 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
         return $variableValue;
     }
 
+    public function getConnectedProductsIds()
+    {
+        if(!empty($this->productIconId)) {
+            $productsIconId = array($this->productIconId);
+            array_merge($productsIconId, $this->getConnectedProductsIdsTrait());
+            return $productsIconId;
+        }
+        return $this->getConnectedProductsIdsTrait();
+    }
 }
