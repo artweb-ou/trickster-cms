@@ -34,6 +34,8 @@ class receivePersonnel extends structureElementAction
             'position',
             'content',
             'displayMenus',
+            'link',
+            'linkTitle',
         ];
     }
 }

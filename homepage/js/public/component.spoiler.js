@@ -40,8 +40,7 @@ window.SpoilerComponent = function(componentElement) {
                 showLessText = window.translationsLogics.get('spoiler.view_less_info');
                 showMoreText = buttonElement.innerHTML;
             }
-            visible = !(contentWrapperElement.classList.contains(hideContentClass));
-
+            visible = !(componentElement.classList.contains(hideContentClass));
             if (visible) {
                 if (maxHeight === '0px') {
                     maxHeight = 'auto';

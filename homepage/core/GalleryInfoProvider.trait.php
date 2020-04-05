@@ -2,6 +2,7 @@
 
 trait GalleryInfoProviderTrait
 {
+    use ImageUrlGenerator;
     public function getGalleryJsonInfo($galleryOptions = [], $imagePresetBase = 'gallery')
     {
         $galleryData = [
@@ -45,6 +46,7 @@ trait GalleryInfoProviderTrait
                 'id' => $imageElement->id,
                 'filename' => $imageElement->originalName,
                 'fileUrl' => $controller->baseURL . 'file/id:' . $imageElement->id . '/' . $imageElement->originalName,
+                'bigImageSrcSet' => $this->generateImageSrcSet($imageElement->id, $imageElement->originalName, $imagePresetBase . 'Image'),
             ];
             if ($imageElement instanceof ImageUrlProviderInterface) {
                 $imageInfo['fullImageUrl'] = $imageElement->getImageUrl($imagePresetBase . 'FullImage');

@@ -18,6 +18,7 @@ $moduleActions[] = 'showOptionsPricingForm';
 $moduleActions[] = 'receiveOptionsPricingForm';
 $moduleActions[] = 'showOptionsImagesForm';
 $moduleActions[] = 'receiveOptionsImagesForm';
+$moduleActions[] = 'receiveIcon';
 
 $moduleActions[] = 'showTexts';
 $moduleActions[] = 'receiveTexts';

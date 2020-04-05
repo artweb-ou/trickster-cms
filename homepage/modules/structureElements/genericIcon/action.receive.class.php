@@ -15,7 +15,7 @@ class receiveGenericIcon extends structureElementAction
 
         if ($this->validated) {
             $structureElement->prepareActualData();
-
+            $x = $structureElement->id;
             foreach ($structureElement->getMultilanguageDataChunk('image') as $languageId => $dataChunk) {
                 if ($dataChunk->originalName) {
                     $structureElement->setValue('image', $structureElement->id . '_' . $languageId, $languageId);
@@ -57,6 +57,7 @@ class receiveGenericIcon extends structureElementAction
             'applicableToAllProducts',
             'iconProductAvail',
             'iconProductParameters',
+            'selectedIcons'
         ];
     }
 }

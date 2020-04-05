@@ -29,6 +29,18 @@ abstract class ElementForm implements DependencyInjectionContextInterface
         $this->element = $element;
     }
 
+    /**
+     * @return structureElement
+     */
+    public function getElement(): structureElement
+    {
+        if(!empty($this->element)) {
+            return $this->element;
+        }
+        return false;
+    }
+
+
     public function getPreset()
     {
         return $this->preset;

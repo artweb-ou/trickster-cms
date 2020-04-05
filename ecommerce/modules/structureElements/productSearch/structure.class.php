@@ -219,5 +219,3 @@ class productSearchElement extends menuDependantStructureElement
         return false;
     }
 }
-
-

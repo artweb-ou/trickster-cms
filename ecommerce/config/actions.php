@@ -24,6 +24,8 @@
     'paymentMethodsInfo' => 'showForm',
     'brand' => 'showForm',
     'brandsList' => 'showForm',
+    'collection' => 'showForm',
+    'collectionsList' => 'showForm',
     'discountsList' => 'showForm',
     'shoppingBasketStatus' => 'showForm',
     'shoppingBasketStep' => 'showFullList',

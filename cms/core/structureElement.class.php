@@ -1432,20 +1432,6 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         return $privileges[$this->structureType];
     }
 
-    public function generateImageUrl($type, $fileField = 'originalName', $idField = 'image', $multiplier = false)
-    {
-        if (!$this->$fileField) {
-            return '';
-        }
-        $controller = $this->getService('controller');
-        $result = $controller->baseURL . 'image/type:' . $type
-            . '/id:' . $this->$idField;
-        if ($multiplier) {
-            $result .= '/multiplier:' . $multiplier;
-        }
-        $result .= '/filename:' . $this->$fileField;
-        return $result;
-    }
 
     public function serialize()
     {

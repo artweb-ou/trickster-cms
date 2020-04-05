@@ -144,7 +144,9 @@ window.GalleryImageComponent = function(imageInfo, parentObject, galleryInfo) {
 
     var checkPreloadImage = function(callBack) {
         if (!mediaElement.src) {
+            mediaElement.srcset = imageInfo.getBigImageSrcSet(window.mobileLogics.isPhoneActive());
             mediaElement.src = imageInfo.getBigImageUrl(window.mobileLogics.isPhoneActive());
+
             mediaElement.style.visibility = 'hidden';
             componentElement.style.display = '';
         }

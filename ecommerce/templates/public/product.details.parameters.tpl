@@ -2,14 +2,13 @@
 {if $parametersGroupsInfo = $element->getParametersGroupsInfo()}
 	<div class='product_details_parameter_groups'>
 		{foreach from=$parametersGroupsInfo item=parametersGroupInfo}
-			<div class="product_details_parameter_group spoiler_component">
+			<div class="product_details_parameter_group">
 				{if $parametersGroupInfo.title}
-					<div class="product_details_parameter_group_header spoiler_component_title">
+					<div class="product_details_parameter_group_header">
 						{$parametersGroupInfo.title}
 					</div>
 				{/if}
-				<div class="spoiler_component_content_wrapper{if $parametersGroupInfo.isMinimized} spoiler_hidden{/if}">
-					<div class="product_details_parameters spoiler_component_content">
+					<div class="product_details_parameters">
 					{foreach from=$parametersGroupInfo.parametersList item=parameterInfo name=parametersList}
 						{if $parameterInfo['primary'] != '2'}
 							<div class="product_details_parameter{if $smarty.foreach.parametersList.last} product_details_parameter_last{/if}">
@@ -44,7 +43,6 @@
 						{/if}
 					{/foreach}
 					</div>
-				</div>
 			</div>
 		{/foreach}
 	</div>

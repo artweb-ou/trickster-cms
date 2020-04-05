@@ -377,6 +377,7 @@ window.GalleryItem = function(info) {
 window.GalleryImage = function(info, galleryObject) {
     var self = this;
     var id;
+    var bigImageSrcSet;
     var fullImageUrl;
     var bigImageUrl;
     var thumbnailImageUrl;
@@ -400,6 +401,8 @@ window.GalleryImage = function(info, galleryObject) {
         fullImageUrl = info.fullImageUrl;
         bigImageUrl = info.bigImageUrl;
         thumbnailImageUrl = info.thumbnailImageUrl;
+        bigImageSrcSet = info.bigImageSrcSet;
+
         if (typeof info.mobileFullImageUrl !== 'undefined') {
             mobileFullImageUrl = info.mobileFullImageUrl;
         }
@@ -446,10 +449,16 @@ window.GalleryImage = function(info, galleryObject) {
         }
         return bigImageUrl;
     };
+    this.getBigImageSrcSet = function(mobile) {
+        // if (mobile) {
+        //     return mobileBigImageSrcSet;
+        // }
+        return bigImageSrcSet;
+    };
     this.getThumbnailImageUrl = function(mobile) {
-        if (mobile) {
-            return mobileFullImageUrl;
-        }
+        // if (mobile) {
+        //     return mobileFullImageUrl;
+        // }
         return thumbnailImageUrl;
     };
     this.getFileUrl = function() {

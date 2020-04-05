@@ -167,5 +167,5 @@
 			</td>
 		</tr>
 	</table>
-	{include file=$theme->template('component.controls.tpl') action="receiveSettingsForm"}
+	{include file=$theme->template('component.controls.tpl') action="receiveSettingsForm" element=$element}
 </form>

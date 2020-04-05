@@ -17,15 +17,4 @@
 		], 'productGallery', 'desktop')};
 
 	</script>
-
-	<script>
-
-		window.urlList = [];
-		{foreach from=$element->getImagesList() item=image name=gallery}
-		{if $image->originalName != ""}
-		urlList['full_image{$image->id}'] = '{$controller->baseURL}image/type:galleryFullImage/id:{$image->image}/filename:{$image->originalName}';
-		{/if}
-		{/foreach}
-
-	</script>
 </div>
