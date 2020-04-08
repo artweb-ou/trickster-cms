@@ -23,7 +23,7 @@ window.CatalogueMassEditFormComponent = function(componentElement) {
         targetsInputElement.value = '';
         if (!targetAllCheckboxElement.checked) {
             var targetsIds = [];
-            var checkboxElements = componentElement.querySelector('input[type=checkbox]');
+            var checkboxElements = document.querySelectorAll('input[type=checkbox]');
             for (var i = checkboxElements.length; i--;) {
                 if (!checkboxElements[i].checked) {
                     continue;
