@@ -2,35 +2,35 @@
 /*  FORM TABLE
 /********************************************************/
 .form_table {
-	margin: 0 auto;
-	padding: 0;
-	border-style: none;
-	border-collapse: collapse;
-	width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    border-style: none;
+    border-collapse: collapse;
+    width: 100%;
 }
 
 .form_table td {
-	border-style: none;
-	border-collapse: collapse;
+    border-style: none;
+    border-collapse: collapse;
 
 }
 
 .form_label {
-	text-align: right;
-	width: 30%;
-	box-sizing: border-box;
+    text-align: right;
+    width: 30%;
+    box-sizing: border-box;
 }
 
 .form_star {
-	color: red;
-	max-width: 2%;
-	text-align: center;
-	box-sizing: border-box;
+    color: red;
+    max-width: 2%;
+    text-align: center;
+    box-sizing: border-box;
 }
 
 .form_field {
-	width: 40%;
-	vertical-align: middle;
+    width: 40%;
+    vertical-align: middle;
 }
 
 .form_field .ajaxselect_container,
@@ -38,12 +38,13 @@
 .form_field .input_component,
 .form_field .textarea_component,
 .form_field .dropdown_block {
-	box-sizing: border-box;
-	width: 100%;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 30rem;
 }
 
 .form_extra {
-	width: 30%;
+    width: 30%;
 }
 
 .form_table .form_text {
@@ -59,9 +60,9 @@
 }
 
 .form_controls {
-	text-align: center;
-	margin: 1.5em auto 0 auto;
-	width: 100%;
+    text-align: center;
+    margin: 1.5em auto 0 auto;
+    width: 100%;
 }
 
 .form_controls .button {
@@ -69,27 +70,32 @@
 }
 
 @media (max-width: @screen_breakpoint_md_max) {
-	.form_table,
-	.form_table > tbody,
-	.form_table > tbody > tr {
-		display: block;
-	}
+    .form_table,
+    .form_table > tbody,
+    .form_table > tbody > tr {
+        display: block;
+    }
 
-	.form_table > tbody > tr > td {
-		display: inline-block;
-		vertical-align: top;
-		padding: 0.5em 0 0;
-		width: auto !important;
-	}
+    .form_table > tbody > tr > td {
+        display: inline-block;
+        vertical-align: top;
+        padding: 0.5em 0 0;
+        width: auto !important;
+    }
 
-	.form_table > tbody > tr > td.form_field {
-		padding-top: 0;
-		width: 100% !important;
-	}
+    .form_table > tbody > tr > td.form_label {
+        display: block;
+        text-align: left;
+    }
 
-	.form_extra {
-		display: none !important;
-	}
+    .form_table > tbody > tr > td.form_field {
+        padding-top: 0;
+        width: 100% !important;
+    }
+
+    .form_extra {
+        display: none !important;
+    }
 }
 
 /********************************************************
@@ -99,11 +105,11 @@
 }
 
 .form_error_message {
-	color: @trick_text_color_11;
+    color: @trick_text_color_11;
 }
 
 .form_error,
 .form_error .form_label {
-	color: @trick_text_color_11;
+    color: @trick_text_color_11;
 }
 
