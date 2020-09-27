@@ -32,7 +32,7 @@ class receiveProductParameter extends structureElementAction
                     }
                 }
             }
-            foreach ($structureElement->categoriesIds as &$idToConnect) {
+            foreach ($structureElement->categoriesIds as $idToConnect) {
                 if (!in_array($idToConnect, $connectedIds)) {
                     $linksManager->linkElements($idToConnect, $structureElement->getId(), 'categoryParameter');
                 }
