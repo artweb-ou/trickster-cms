@@ -258,8 +258,7 @@ class controller
                 exit;
             }
         } catch (Exception $exception) {
-            echo '<h1>'.$exception->getMessage() . '</h1>';
-            echo '<pre>'.$exception->getTraceAsString().'</pre>';
+            errorLog::getInstance()->logMessage('controller', $exception->getMessage() . "\n". $exception->getTraceAsString());
         }
     }
 

@@ -48,14 +48,14 @@ abstract class searchQueryFilter extends queryFilter
                 foreach ($titleFields as $field) {
                     foreach ($argument as $argumentWord) {
                         $finalQuery->orWhere($field, 'like', '%' . $argumentWord . '%');
-                        $query->orderByRaw($query->raw('INSTR(`' . $field . '`, "' . $argumentWord . '")'));
+                        $query->orderByRaw('INSTR(?, ?)', [$field, $argumentWord]);
                     }
                 }
                 if ($contentFields) {
                     foreach ($contentFields as $field) {
                         foreach ($argument as $argumentWord) {
                             $finalQuery->orWhere($field, 'like', '%' . $argumentWord . '%');
-                            $query->orderByRaw($query->raw('INSTR(`' . $field . '`, "' . $argumentWord . '")'));
+                            $query->orderByRaw('INSTR(?, ?)', [$field, $argumentWord]);
                         }
                     }
                 }
