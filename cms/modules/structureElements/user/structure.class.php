@@ -2,6 +2,7 @@
 
 class userElement extends structureElement
 {
+    use JsonDataProviderElement;
     public $dataResourceName = 'module_user';
     public $defaultActionName = 'show';
     public $role = 'content';
@@ -192,19 +193,5 @@ class userElement extends structureElement
     {
         $this->getService('SocialDataManager')->removeSocialUser($this->id);
         parent::deleteElementData();
-    }
-
-    public function getElementData()
-    {
-        return [
-            'userId' => $this->id,
-            'firstName' => $this->firstName,
-            'lastName' => $this->firstName,
-        ];
-    }
-
-    public function setTrackingCode()
-    {
-
     }
 }

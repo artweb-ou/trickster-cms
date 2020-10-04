@@ -8,7 +8,7 @@
 	{if $products}
 		{assign 'pager' $element->getProductsPager()}
 		{include file=$theme->template('pager.tpl') pager=$pager}
-		<div class="productcatalogue_products products_list">
+		<div class="productcatalogue_products productslist_products">
 			{foreach $products as $product}
 				{include file=$theme->template("product.{$element->getCurrentLayout('productsLayout')}.tpl") element=$product}
 			{/foreach}

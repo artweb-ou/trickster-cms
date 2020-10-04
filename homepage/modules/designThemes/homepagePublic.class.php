@@ -20,7 +20,6 @@ class homepagePublicDesignTheme extends DesignTheme
             'logics.maps.js',
             'logics.search.js',
             'logics.tabs.js',
-            'logics.translations.js',
             'logics.subscription.js',
             'logics.ajaxForm.js',
             'logics.feedbackForm.js',
@@ -29,7 +28,6 @@ class homepagePublicDesignTheme extends DesignTheme
             'logics.emailConversion.js',
             'logics.orders.js',
             'logics.googleAnalytics.js',
-            'logics.product.js',
             'logics.passwordReminder.js',
             'logics.lazyImage.js',
             'logics.events.js',
@@ -114,6 +112,12 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.socialMediaShare.js',
             'component.spoiler.js',
             'mixin.scrollAttaching.js',
+            'logics.templatesManager.js',
+
+            'logics.pager.js',
+            'component.pager.js',
+//            'basic.urlParameters.js',
+
         ];
     }
 }

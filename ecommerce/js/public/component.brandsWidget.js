@@ -111,7 +111,7 @@ window.BrandsBannerItemComponent = function(brandInfo, parentComponent) {
 
         imageElement = document.createElement('img');
         imageElement.className = 'brands_widget_item_image';
-        imageElement.src = brandInfo.image;
+        imageElement.src = brandInfo.imageUrl;
         self.componentElement.appendChild(imageElement);
 
         window.setTimeout(checkImage, 100);

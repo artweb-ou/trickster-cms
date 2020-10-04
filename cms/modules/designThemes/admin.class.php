@@ -30,7 +30,6 @@ class adminDesignTheme extends DesignTheme
             'logics.privilegesForm.js',
             'logics.tabsBlock.js',
             'logics.translationForm.js',
-            'logics.translations.js',
             'logics.chart.js',
             'logics.radioTabs.js',
             'logics.mobile_control.js',

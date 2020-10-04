@@ -33,7 +33,10 @@ window.dropDownManager = new function() {
     var init = function() {
         window.eventsManager.addHandler(window, 'click', clickHandler);
 
-        var dropDownElements = _('.dropdown_placeholder');
+        self.initDropdowns(document);
+    };
+    this.initDropdowns = function(element) {
+        var dropDownElements = element.querySelectorAll('.dropdown_placeholder');
         for (var i = 0; i < dropDownElements.length; i++) {
             if (!checkDropDown(dropDownElements[i])) {
                 var referenceElement = dropDownElements[i].nextSibling || null;

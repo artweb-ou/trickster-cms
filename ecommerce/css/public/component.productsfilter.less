@@ -1,55 +1,97 @@
 .products_filter_top {
-  display: flex;
-  margin-bottom: 1rem;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.products_filter_amount {
-}
-
-.products_filter_mobile {
-  margin-left: 1rem;
-}
-
-.products_filter_mobile_amount {
-  margin-left: 0.5rem;
-}
-
-.products_filter {
-  position: relative;
-  margin-bottom: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.products_filter_item {
-  margin-bottom: 1rem;
-  display: inline-block;
-  overflow: hidden;
-  margin-right: 1%;
-  min-width: 48%;
-}
-
-@media (min-width: @screen_breakpoint_lg) {
-  .products_filter_item {
-    margin-bottom: 0.5rem;
-    display: inline-block;
-    overflow: hidden;
-    margin-right: 1%;
-    min-width: 20%;
-  }
+    display: flex;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .products_filter_label {
-  font-size: 0.9em;
-  margin-bottom: 0.5rem;
+    font-size: 0.9em;
+    margin-bottom: 0.5rem;
 }
 
 .products_filter_dropdown {
-  display: block;
+    display: block;
 }
 
-.products_filter_price .input_component {
-  width: 5em;
+.products_filter_checkbox {
+    margin-bottom: 0.3em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+.products_filter_checkbox_label {
+    margin-left: 0.5em;
+}
+
+.productslist_component {
+    .products_filter {
+        position: relative;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .products_filter_item {
+        margin-bottom: 1rem;
+        display: inline-block;
+        overflow: hidden;
+        margin-right: 1%;
+        min-width: 48%;
+    }
+
+    @media (min-width: @screen_breakpoint_lg) {
+        .products_filter_item {
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            overflow: hidden;
+            margin-right: 1%;
+            min-width: 20%;
+        }
+    }
+
+    .products_filter_price .input_component {
+        width: 5em;
+    }
+}
+
+.productsearch {
+    .products_filter_item {
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+}
+
+.productsearch {
+    .products_filter_item {
+        display: block;
+    }
+
+    .dropdown_block {
+        width: auto;
+        display: block;
+    }
+
+    .dropdown_block:hover {
+        text-decoration: none;
+    }
+
+    .mobilemenu & {
+        padding: 0 1rem;
+    }
+}
+
+.products_filter_checkboxes_icon {
+    position: absolute;
+    right: 0.25em;
+    top: 50%;
+}
+
+.products_filter_checkboxes_collapsed {
+    .productsearch_field_controls {
+        display: none;
+    }
+}
+
+

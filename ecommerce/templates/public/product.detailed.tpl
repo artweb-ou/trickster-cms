@@ -2,7 +2,7 @@
 {capture assign="moduleSideContent"}
 		{if $element->originalName != ""}
 			<div class="product_detailed_image_container">
-				{include file=$theme->template('component.elementimage.tpl') type='productDetailed' class='product_detailed_image' lazy=true}
+				{include file=$theme->template('component.elementimage.tpl') jsfix=1 type='productDetailed' class='product_detailed_image' lazy=true}
 				{if $iconsInfo = $element->getIconsInfo()}
 					{include file=$theme->template('product.icons.tpl') class='product_detailed_icons'}
 				{/if}
@@ -58,8 +58,6 @@
 			</div>
 		{/stripdomspaces}
 	{/if}
-	<script>window.products = window.products ? window.products : []</script>
-	<script>window.products.push({$element->getElementData()|json_encode})</script>
 {/capture}
 
 {capture assign="moduleControls"}
@@ -73,10 +71,8 @@
 	</a>
 {/capture}
 
-{assign moduleClass "product_detailed productid_{$element->id}"}
+{assign moduleClass "product_detailed product_short productid_{$element->id}"}
 {assign moduleTitleClass "product_detailed_header_title"}
-
-
-{assign moduleSideContentClass "product_wide_image_container"}
+{assign moduleSideContentClass "product_detailed_image_container"}
 {assign moduleContentClass "product_detailed_column_right"}
 {include file=$theme->template("component.subcontentmodule_wide.tpl")}

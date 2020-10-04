@@ -20,30 +20,7 @@
 			<a class="brand_details_link newwindow_link" href="{$element->link}" title="{$element->title}">{$element->link}</a>
 		{/if}
 	</div>
-	{stripdomspaces}
-	{if count($element->getProductsList())}
-		{include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=true}
-		<div class='brand_details_products'>
-			<div class="products_top_pager">
-				{if $element->isSortable()}
-					{include file=$theme->template('component.productssorter.tpl')}
-				{/if}
-				{include file=$theme->template('component.productslimit.tpl')}
-				{include file=$theme->template('pager.tpl') pager=$element->getProductsPager()}
-			</div>
-			{$template = $theme->template("product.{$element->getProductsLayout()}.tpl", true)}
-			{if !$template}
-				{$template = $theme->template('product.thumbnailsmall.tpl')}
-			{/if}
-			<div class="products_list">
-				{foreach $element->getProductsList() as $product}
-					{include file=$template element=$product}
-				{/foreach}
-			</div>
-			{include file=$theme->template('pager.tpl') pager=$element->getProductsPager()}
-		</div>
-	{/if}
-	{/stripdomspaces}
+	{include file=$theme->template('component.productslist.tpl') layout=$element->getProductsLayout() componentClass="brand_details_products"}
 {/capture}
 
 {assign moduleClass "brand_details"}

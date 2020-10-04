@@ -41,7 +41,7 @@ window.BasketButtonComponent = function(componentElement, onClick, id) {
             var currentProduct = document.createElement('span');
             currentProduct.className = 'notice_product_name';
             if (typeof window.productDetailsData !== 'undefined') {
-                currentProduct.textContent = window.productDetailsData.name || window.productDetailsData.name_ga;
+                currentProduct.textContent = window.productDetailsData.title || window.productDetailsData.title_ga;
             }
             var currentAmount = document.createElement('em');
             currentAmount.className = 'notice_product_amount';
@@ -78,7 +78,7 @@ window.BasketButtonComponent = function(componentElement, onClick, id) {
 
                 case '2': // ModalActionComponent
                     if (Array.isArray(window.productDetailsData)) {
-                        message['title'] = window.productDetailsData[productId].name;
+                        message['title'] = window.productDetailsData[productId].title;
                     } else {
                         message['title'] = currentProduct.innerHTML;
                     }
@@ -95,7 +95,7 @@ window.BasketButtonComponent = function(componentElement, onClick, id) {
         if (addToBasketButtonAction) {
             var message = [];
             var additionalContainerClassName = 'notice_box';
-            message['title'] = window.productDetailsData.name || window.productDetailsData.name_ga;
+            message['title'] = window.productDetailsData.title || window.productDetailsData.title_ga;
             message['content'] = window.translationsLogics.get(argument);
             message['footer'] = '';
             // only modal on error

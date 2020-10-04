@@ -33,30 +33,7 @@
 		</div>
 	</div>
 	{if !$element->targetAllProducts}
-		{stripdomspaces}
-		{assign var="discountProducts" value=$element->getProductsList()}
-		{if count($discountProducts)}
-			<div class='discount_details_products'>
-				{include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=true}
-				<div class="products_top_pager">
-					{if $element->isSortable()}
-						{include file=$theme->template('component.productssorter.tpl')}
-					{/if}
-					{include file=$theme->template('component.productslimit.tpl')}
-					{include file=$theme->template('pager.tpl') pager=$element->getProductsPager()}
-				</div>
-				<div class="products_list">
-					{foreach from=$discountProducts item=product}
-						{include file=$theme->template("product.$productsLayout.tpl") element=$product}
-					{/foreach}
-				</div>
-
-				{include file=$theme->template('pager.tpl') pager=$element->getProductsPager()}
-			</div>
-		{else}
-			{translations name='discount.noproducts'}
-		{/if}
-		{/stripdomspaces}
+		{include file=$theme->template('component.productslist.tpl') layout=$productsLayout componentClass="discount_details_products"}
 	{/if}
 {/capture}
 

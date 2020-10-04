@@ -48,9 +48,13 @@ abstract class categoryStructureElement extends ProductsListElement
         }
     }
 
+    /**
+     * @param $filterType
+     * @return bool
+     */
     public function isFilterableByType($filterType)
     {
-        if ($this->role == 'content' || $this->requested) {
+//        if ($this->role == 'content' || $this->requested) {
             switch ($filterType) {
                 case 'category':
                     $result = $this->isSettingEnabled('categoryFilterEnabled');
@@ -73,7 +77,7 @@ abstract class categoryStructureElement extends ProductsListElement
                 default:
                     $result = true;
             }
-        }
+//        }
         return $result;
     }
 

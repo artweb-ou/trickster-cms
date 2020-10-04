@@ -1,10 +1,8 @@
 {assign moduleTitle $element->title}
 {capture assign="moduleContent"}
-    <script>window.products = window.products ? window.products : [];</script>
-    <script>window.products.push({$element->getElementData()|json_encode});</script>
     <span class="product_thumbnail_image_container">
         {if $element->originalName != ""}
-            {include file=$theme->template('component.elementimage.tpl') type='productThumb' class='product_thumbnail_image' lazy=true}
+            {include file=$theme->template('component.elementimage.tpl') jsfix=1 type='productThumb' class='product_thumbnail_image' lazy=true}
         {/if}
         {if $iconsInfo = $element->getIconsInfo()}
             {include file=$theme->template('product.icons.tpl') class='product_thumbnail_icons'}

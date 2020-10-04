@@ -1,91 +1,52 @@
-.products_filter_price_control {
-	padding-bottom: 2.35em;
-	padding-top: 0.85em;
-	position: relative;
-	display: block;
+.products_filter_price_top {
+    display: flex;
+    flex-wrap: nowrap;
 }
 
-.productsearch_pricefilter_field {
-	.clearfixin();
-	display: inline-block;
-	width: 45%;
-	vertical-align: top;
+.products_filter_price_field {
+    display: flex;
+    flex-basis: 50%;
 
-	&:first-child {
-		margin-right: 10%;
-	}
+    &:first-child {
+        margin-right: 2rem;
+    }
 
-	.input_component {
-		overflow: hidden;
-		width: auto;
-		display: inline-block;
-		vertical-align: middle;
-		input {
-			width: 100%;
-		}
-	}
+    .input_component {
+        overflow: hidden;
+        flex-grow: 1;
+        width: 100%;
+    }
 }
 
-.productsearch_pricefilter_field_input_wrap {
-	overflow: hidden;
-	width: auto;
-	display: block;
+.products_filter_price_field_currency {
+    margin-left: 0.5em;
 }
 
-.productsearch_pricefilter_field_currency {
-	display: inline-block;
-	margin-left: 0.5em;
-	vertical-align: middle;
-}
-
-.products_filter_price_control .products_filter_title {
-	margin-bottom: 1.7em;
-}
-
-.products_filter_price_control_hidden {
-	display: none;
-}
 
 .products_filter_price_control_bar {
-	margin-bottom: 0.5rem;
-	margin-top: 1em;
-	position: relative;
-	background-color: @trick_bg_color_05;
-	border-bottom: 1px solid @trick_brd_color_05;
-	height: 1px;
+    margin-bottom: 0.5rem;
+    margin-top: 1em;
+    position: relative;
+    background-color: @trick_bg_color_05;
+    border-bottom: 1px solid @trick_brd_color_05;
+    height: 1px;
 }
 
 .products_filter_price_control_knob {
-	cursor: pointer;
-	background-color: @trick_bg_color_04;
-	border: 1px solid @trick_brd_color_02;
-	display: block;
-	height: 1em;
-	position: absolute;
-	top: -0.5em;
-	width: 0.5em;
+    cursor: pointer;
+    background-color: @trick_bg_color_04;
+    border: 1px solid @trick_brd_color_02;
+    display: block;
+    height: 1em;
+    position: absolute;
+    top: -0.5em;
+    width: 0.5em;
 }
 
 .products_filter_price_control_knob_left {
-	left: 0;
+    left: 0;
 }
 
 .products_filter_price_control_knob_right {
-	right: 0;
-}
-
-.products_filter_price_control_labels {
-	position: relative;
-	white-space: nowrap;
-}
-
-.products_filter_price_control_label {
-	font-size: 0.92em;
-	display: inline-block;
-	width: 50%;
-	white-space: normal;
-}
-
-.products_filter_price_control_label_right {
-	text-align: right;
+    right: 0;
 }

@@ -8,6 +8,7 @@ class userDataResponseConverter extends StructuredDataResponseConverter
     {
         return [
             'id' => 'id',
+            'userId' => 'id',
             'searchTitle' => 'getTitle',
             'url' => 'getUrl',
             'structureType' => 'structureType',

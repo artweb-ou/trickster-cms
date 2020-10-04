@@ -38,7 +38,7 @@ class galleryElement extends menuDependantStructureElement implements Configurab
             'showLayoutForm',
             'showPositions',
             'showPrivileges',
-            'showImages'
+            'showImages',
         ];
     }
 
@@ -72,6 +72,7 @@ class galleryElement extends menuDependantStructureElement implements Configurab
         //legacy-support, use trait's method instead
         return 'structure';
     }
+
     public function getJsonInfo($galleryOptions = [], $imagePresetBase = 'gallery')
     {
         return $this->getGalleryJsonInfo($galleryOptions, $imagePresetBase);

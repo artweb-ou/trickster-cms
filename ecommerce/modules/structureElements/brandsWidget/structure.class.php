@@ -2,6 +2,7 @@
 
 class brandsWidgetElement extends menuDependantStructureElement
 {
+    use JsonDataProviderElement;
     public $dataResourceName = 'module_generic';
     public $defaultActionName = 'show';
     public $role = 'container';
@@ -26,10 +27,26 @@ class brandsWidgetElement extends menuDependantStructureElement
         return $this->template;
     }
 
-    public function getElementData()
+    public function getBrandsData()
     {
         $data = [];
+        if ($brands = $this->getBrands()) {
+            foreach ($brands as $brand) {
+                if ($brand->originalName) {
+                    $data[] = $brand->getElementData('api');
+                }
+            }
+        }
 
+        return $data;
+    }
+
+    /**
+     * @return brandElement[]
+     */
+    public function getBrands()
+    {
+        $brands = [];
         $structureManager = $this->getService('structureManager');
         $languagesManager = $this->getService('LanguagesManager');
         /**
@@ -38,18 +55,11 @@ class brandsWidgetElement extends menuDependantStructureElement
         if ($brandsListElements = $structureManager->getElementsByType('brandsList', $languagesManager->getCurrentLanguageId())
         ) {
             foreach ($brandsListElements as &$brandsListElement) {
-                /**
-                 * @var brandElement[] $brands
-                 */
-                if ($brands = $brandsListElement->getBrandsList()) {
-                    foreach ($brands as &$brand) {
-                        if ($brand->originalName) {
-                            $data[] = $brand->getElementData();
-                        }
-                    }
+                if ($brandsListBrands = $brandsListElement->getBrandsList()) {
+                    array_merge($brands, $brandsListBrands);
                 }
             }
         }
-        return $data;
+        return $brands;
     }
 }

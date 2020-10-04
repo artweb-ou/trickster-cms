@@ -25,66 +25,7 @@
 		</div>
 	{/if}
 
-	{if $element->productsLayout != "hide" && $element->getProductsList()}
-
-		{include file=$theme->template('component.productsfilter.tpl') displayFilterTopInfo=true}
-		<div class="products_top_pager">
-			{if $element->isSortable()}
-				{include file=$theme->template('component.productssorter.tpl')}
-			{/if}
-			{include file=$theme->template('component.productslimit.tpl')}
-			{include file=$theme->template('pager.tpl') pager=$pager}
-		</div>
-		{* Products *}
-		{if $element->productsLayout != "hide"}
-			{if $element->productsLayout == 'table'}
-                {assign "parameters" $element->getUsedParametersInfo()}
-				<table class="category_products_table table_component">
-					<thead>
-						<th>{translations name='category.title'}</th>
-                        {foreach $parameters as $parameterInfo}
-                                <th>{$parameterInfo.title}</th>
-                        {/foreach}
-						<th>{translations name='product.price'}</th>
-						<th>{translations name='product.discount'}</th>
-						<th></th>
-						<th></th>
-					</thead>
-					<tbody>
-						{foreach $element->getProductsList() as $product}
-							{include file=$theme->template('product.table.tpl') element=$product parameter=$parameters}
-						{/foreach}
-					</tbody>
-				</table>
-			{else}
-				<div class='category_details_products products_list'>
-					{if $element->productsLayout == "thumbnailsmall"}
-						{foreach $element->getProductsList() as $product}
-							{include file=$theme->template('product.thumbnailsmall.tpl') element=$product}
-						{/foreach}
-					{elseif $element->productsLayout == "thumbnail"}
-						{foreach $element->getProductsList() as $product}
-							{include file=$theme->template('product.thumbnail.tpl') element=$product}
-						{/foreach}
-					{elseif $element->productsLayout == "detailed"}
-						{foreach $element->getProductsList() as $product}
-							{include file=$theme->template('product.detailed.tpl') element=$product}
-						{/foreach}
-					{elseif $element->productsLayout == "wide"}
-						{foreach $element->getProductsList() as $product}
-							{include file=$theme->template('product.wide.tpl') element=$product}
-						{/foreach}
-					{else}
-						{foreach $element->getProductsList() as $product}
-							{include file=$theme->template("product.{$element->productsLayout}.tpl") element=$product}
-						{/foreach}
-					{/if}
-				</div>
-			{/if}
-		{/if}
-
-		{include file=$theme->template('pager.tpl') pager=$pager}
-	{/if}
+	{include file=$theme->template('component.productslist.tpl') layout=$element->productsLayout componentClass="brand_details_products"}
 	{/stripdomspaces}
 {/capture}
 

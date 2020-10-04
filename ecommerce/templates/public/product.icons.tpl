@@ -11,9 +11,9 @@
                          {/if}
                          {if !empty($iconInfo.$showedWidth)}
                             style="width:{$iconInfo.$showedWidth * 2}%;"
-                            src='{$controller->baseURL}image/type:productIconDynamic/id:{$iconInfo.image}/filename:{$iconInfo.fileName}'
+                            src='{$theme->generateImageUrl($iconInfo.image, $iconInfo.fileName, 'productIconDynamic')}'
                          {else}
-                            src='{$controller->baseURL}image/type:productIcon/id:{$iconInfo.image}/filename:{$iconInfo.fileName}'
+                            src='{$theme->generateImageUrl($iconInfo.image, $iconInfo.fileName, 'productIcon')}'
                          {/if}
                          alt='{$iconInfo.title}'
                     />

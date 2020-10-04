@@ -1,7 +1,7 @@
 {assign moduleTitle $element->title}
 {capture assign="moduleSideContent"}
 	{if $element->originalName != ""}
-		{include file=$theme->template('component.elementimage.tpl') type='productWide' class='product_wide_image' lazy=true}
+		{include file=$theme->template('component.elementimage.tpl') jsfix=1 type='productWide' class='product_wide_image' lazy=true}
 	{/if}
 	{if $iconsInfo = $element->getIconsInfo()}
 		{include file=$theme->template('product.icons.tpl') class='product_wide_icons'}
@@ -42,7 +42,6 @@
 		{/if}
 	</div>
 {/capture}
-
 {capture assign="moduleControls"}
 	<a href="{$element->URL}" class="product_wide_button product_short_button button">
 		<span class='button_text'>{translations name='product.short_select'}</span>
@@ -59,7 +58,7 @@
 		</div>
 	{/if}
 {/capture}
-{assign moduleClass "product_wide productid_{$element->id}"}
+{assign moduleClass "product_wide product_short productid_{$element->id}"}
 {assign moduleTitleClass "product_wide_title"}
 {assign moduleAttributes ''}
 {assign moduleSideContentClass "product_wide_image_container"}

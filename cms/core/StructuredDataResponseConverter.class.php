@@ -1,6 +1,6 @@
 <?php
 
-abstract class StructuredDataResponseConverter extends dataResponseConverter implements PresetDataResponseConverterInterface
+abstract class StructuredDataResponseConverter extends DataResponseConverter implements PresetDataResponseConverterInterface
 {
     protected $preset;
     protected $defaultPreset;

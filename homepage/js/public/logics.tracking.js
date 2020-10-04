@@ -127,9 +127,10 @@ window.tracking = {
         }
     },
 
-    impressionTracking: function(products) {
+    impressionTracking: function(listName, products) {
         if (products) {
             var parameters = {};
+            parameters.list_name = listName;
             parameters.products = products;
             googleAnalyticsLogics.impressionEvent(parameters);
         }

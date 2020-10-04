@@ -28,6 +28,23 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
             'introduction' => 'introduction',
             'content' => 'content',
             'image' => 'image',
+            'productsLayout' => 'getProductsLayout',
+            'products' => 'getProductsData',
+            'filters' => 'getFiltersData',
+            'filterDiscountIds' => 'getFilterDiscountIds',
+            'filterBrandIds' => 'getFilterBrandIds',
+            'filterCategoryIds' => 'getFilterCategoryIds',
+            'filterActiveParametersInfo' => 'getFilterActiveParametersInfo',
+            'filterAvailability' => 'getFilterAvailability',
+            'filterPrice' => 'getFilterPrice',
+            'filteredProductsAmount' => 'getFilteredProductsAmount',
+            'filterLimit' => 'getFilterLimit',
+            'filterOrder' => 'getFilterOrder',
+            'filterSort' => 'getFilterSort',
+            'affectsPublicUrl' => 'affectsPublicUrl',
+            'currentPage' => function (ProductsListElement $element) {
+                return $element->getProductsPager()->getCurrentPage();
+            },
         ];
     }
 
@@ -51,6 +68,26 @@ class categoryDataResponseConverter extends StructuredDataResponseConverter
                 'structureType',
                 'introductionText',
                 'searchAmount',
+            ],
+            'list' => [
+                'id',
+                'title',
+                'url',
+                'products',
+                'filters',
+                'filteredProductsAmount',
+                'filterDiscountIds',
+                'filterBrandIds',
+                'filterCategoryIds',
+                'filterActiveParametersInfo',
+                'filterAvailability',
+                'filterPrice',
+                'filterLimit',
+                'filterOrder',
+                'filterSort',
+                'currentPage',
+                'productsLayout',
+                'affectsPublicUrl',
             ],
         ];
     }

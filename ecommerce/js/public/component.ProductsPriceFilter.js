@@ -1,4 +1,4 @@
-window.ProductsFilterPriceComponent = function(componentElement, onChange) {
+window.ProductsPriceFilterComponent = function(componentElement, filterData, listComponent) {
     var barElement, startInputElement, endInputElement;
     var knobLeft, knobRight;
     var scaleSize;
@@ -11,14 +11,11 @@ window.ProductsFilterPriceComponent = function(componentElement, onChange) {
     var self = this;
 
     var init = function() {
-        if (!window.priceRange) {
-            return;
-        }
         createDomStructure();
-        selectionMin = Math.floor(window.selectedPriceRange[0]);
-        selectionMax = Math.ceil(window.selectedPriceRange[1]);
-        min = Math.floor(Math.min(selectionMin, window.priceRange[0]));
-        max = Math.ceil(Math.max(selectionMax, window.priceRange[1]));
+        selectionMin = Math.floor(filterData.getSelectedRange()[0]);
+        selectionMax = Math.ceil(filterData.getSelectedRange()[1]);
+        min = Math.floor(Math.min(selectionMin, filterData.getRange()[0]));
+        max = Math.ceil(Math.max(selectionMax, filterData.getRange()[1]));
 
         scaleSize = max - min;
 
@@ -47,11 +44,11 @@ window.ProductsFilterPriceComponent = function(componentElement, onChange) {
         if (changedInput.value === '') {
             return;
         }
-        var inputValue = +changedInput.value;
-        if (inputValue != inputValue) {
+        var inputValue = changedInput.value;
+        if (inputValue !== inputValue) {
             inputValue = 0;
         }
-        if (changedInput == startInputElement) {
+        if (changedInput === startInputElement) {
             if (inputValue < min) {
                 selectionMin = min;
             } else if (inputValue > selectionMax) {
@@ -72,27 +69,18 @@ window.ProductsFilterPriceComponent = function(componentElement, onChange) {
     };
 
     var applyInputs = function() {
-        onChange(self);
+        listComponent.changeFilter(filterData.getId(), getValue());
     };
 
     var applyDelayedly = function() {
         window.clearTimeout(applyTimeout);
-        applyTimeout = window.setTimeout(applyInputs, 2000);
+        applyTimeout = window.setTimeout(applyInputs, 1000);
     };
 
     this.refresh = function() {
         knobLeft.refresh();
         knobRight.refresh();
         selectPriceRange(selectionMin, selectionMax);
-    };
-
-    this.modifyFilterArguments = function(arguments) {
-        if (selectionMin != min || selectionMax != max) {
-            if (typeof arguments['price'] == 'undefined') {
-                arguments['price'] = [];
-            }
-            arguments['price'][arguments['price'].length] = selectionMin + '-' + selectionMax;
-        }
     };
 
     var selectPriceRange = function(startPrice, endPrice) {
@@ -140,7 +128,7 @@ window.ProductsFilterPriceComponent = function(componentElement, onChange) {
 
     this.knobRelease = function() {
         if (changed) {
-            onChange(self);
+            applyInputs();
         }
     };
 
@@ -152,20 +140,17 @@ window.ProductsFilterPriceComponent = function(componentElement, onChange) {
         return componentElement;
     };
 
-    this.hide = function() {
-        domHelper.addClass(componentElement, 'products_filter_price_control_hidden');
-    };
-
-    this.show = function() {
-        domHelper.removeClass(componentElement, 'products_filter_price_control_hidden');
+    const getValue = function() {
+        return [startInputElement.value + ',' + endInputElement.value];
     };
 
     this.getType = function() {
-        return 'price';
+        return filterData.getType();
     };
+
     init();
 };
-DomElementMakerMixin.call(ProductsFilterPriceComponent.prototype);
+DomElementMakerMixin.call(ProductsPriceFilterComponent.prototype);
 
 window.ProductsFilterPriceControlKnobComponent = function(priceControlComponent, barElement, type) {
     var value = 0.000000;
@@ -187,7 +172,7 @@ window.ProductsFilterPriceControlKnobComponent = function(priceControlComponent,
         scaleSize = barElement.offsetWidth - componentElement.offsetWidth;
         limit = scaleSize - MAX_PROXIMITY;
         calculateOffset();
-        if (type == 'right') {
+        if (type === 'right') {
             value = 1;
         }
         eventsManager.addHandler(componentElement, 'mousedown', mouseDown);
@@ -199,7 +184,7 @@ window.ProductsFilterPriceControlKnobComponent = function(priceControlComponent,
         if (grasped && !locked) {
             eventsManager.preventDefaultAction(event);
             var dragWidth = graspPosition - event.clientX;
-            if (type == 'right') {
+            if (type === 'right') {
                 dragWidth *= -1;
             }
             var newOffset = offset - dragWidth;
@@ -208,7 +193,7 @@ window.ProductsFilterPriceControlKnobComponent = function(priceControlComponent,
             }
             componentElement.style[type] = Math.max(newOffset, 0) + 'px';
             value = componentElement.offsetLeft / scaleSize;
-            if (type == 'left') {
+            if (type === 'left') {
                 priceControlComponent.adjustMin();
             } else {
                 priceControlComponent.adjustMax();
@@ -225,7 +210,7 @@ window.ProductsFilterPriceControlKnobComponent = function(priceControlComponent,
 
     var mouseUp = function(event) {
         // update the labels and opposite knob if I was moved
-        if (!locked && grasped && graspPosition != event.clientX) {
+        if (!locked && grasped && graspPosition !== event.clientX) {
             priceControlComponent.knobRelease();
         }
         grasped = false;
@@ -233,14 +218,14 @@ window.ProductsFilterPriceControlKnobComponent = function(priceControlComponent,
 
     var calculateOffset = function() {
         offset = componentElement.offsetLeft;
-        if (type == 'right') {
+        if (type === 'right') {
             offset = scaleSize - offset;
         }
     };
 
     this.limit = function(oppositeValue) {
 
-        if (type == 'right') {
+        if (type === 'right') {
             oppositeValue = 1 - oppositeValue;
         }
         limit = Math.max(0, oppositeValue * scaleSize - MAX_PROXIMITY);
@@ -253,7 +238,7 @@ window.ProductsFilterPriceControlKnobComponent = function(priceControlComponent,
 
     this.position = function(newValue) {
         value = newValue;
-        if (type == 'right') {
+        if (type === 'right') {
             newValue = 1 - newValue;
         }
         var position = scaleSize * newValue;

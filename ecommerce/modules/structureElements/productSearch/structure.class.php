@@ -3,6 +3,7 @@
 /**
  * Class productSearchElement
  *
+ * @property int $filterParameters
  * @property int $filterCategory
  * @property int $filterBrand
  * @property int $filterPrice
@@ -14,6 +15,8 @@
 class productSearchElement extends menuDependantStructureElement
 {
     use ProductFilterFactoryTrait;
+    use JsonDataProviderElement;
+
     public $dataResourceName = 'module_productsearch';
     public $defaultActionName = 'show';
     protected $allowedTypes = [];
@@ -27,6 +30,7 @@ class productSearchElement extends menuDependantStructureElement
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';
+        $moduleStructure['filterParameters'] = 'checkbox';
         $moduleStructure['filterCategory'] = 'checkbox';
         $moduleStructure['filterBrand'] = 'checkbox';
         $moduleStructure['filterPrice'] = 'checkbox';
@@ -60,10 +64,11 @@ class productSearchElement extends menuDependantStructureElement
                 $result = $this->filterDiscount;
                 break;
             case 'parameter':
-                if (!$this->pageDependent) {
-                    $result = $this->getConnectedParametersIds();
-                } else {
-                    if ($productsListElement = $this->getProductsListElement()) {
+                $result = false;
+                if ($this->filterParameters) {
+                    if (!$this->pageDependent) {
+                        $result = $this->getConnectedParametersIds();
+                    } elseif ($productsListElement = $this->getProductsListElement()) {
                         $result = $productsListElement->getParameterSelectionsForFiltering();
                     }
                 }
@@ -132,6 +137,11 @@ class productSearchElement extends menuDependantStructureElement
     public function getCurrentElement()
     {
         return $this->getService('structureManager')->getCurrentElement(controller::getInstance()->requestedPath);
+    }
+
+    public function setProductsListElement(ProductsListElement $productsListElement)
+    {
+        $this->productsListElement = $productsListElement;
     }
 
     public function getProductsListElement()
@@ -211,9 +221,7 @@ class productSearchElement extends menuDependantStructureElement
         }
         foreach ($filterTypes as $type) {
             foreach ($this->getFiltersByType($type) as $filter) {
-                if ($filter->isRelevant()) {
-                    return true;
-                }
+                return true;
             }
         }
         return false;

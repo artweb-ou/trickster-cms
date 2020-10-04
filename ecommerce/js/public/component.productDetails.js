@@ -259,7 +259,7 @@ window.ProductDetailsComponent = function(componentElement) {
         }
         return {
             'id': productId,
-            'name': productData.name_ga,
+            'name': productData.title_ga,
             'category': productData.category_ga,
             'variant': selectedOptionsText,
             'price': price,

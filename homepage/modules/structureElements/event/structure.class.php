@@ -190,11 +190,6 @@ class eventElement extends structureElement implements MetadataProviderInterface
         return 'structure';
     }
 
-    public function getJsonInfo($galleryOptions = [], $imagePresetBase = 'gallery')
-    {
-        return $this->getGalleryJsonInfo($galleryOptions, $imagePresetBase);
-    }
-
     public function getImageId($mobile = false)
     {
         if ($this->image2) {

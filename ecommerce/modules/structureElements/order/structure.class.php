@@ -12,6 +12,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
 {
     use EventLoggingElementTrait;
     use SearchTypesProviderTrait;
+    use JsonDataProviderElement;
     public $dataResourceName = 'module_order';
     public $defaultActionName = 'show';
     protected $allowedTypes = [
@@ -671,44 +672,6 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 $paymentElement->approve();
             }
         }
-    }
-
-    public function getElementData()
-    {
-        $products = [];
-        foreach ($this->getOrderProducts() as $product) {
-            $products[] = $product->getElementData();
-        }
-        $data = [
-            'id' => $this->id,
-            'orderNumber' => $this->orderNumber,
-            'orderStatus' => $this->orderStatus,
-            'orderStatusText' => $this->getOrderStatusText(),
-            'invoiceNumber' => $this->getInvoiceNumber('invoice'),
-            'advancePaymentInvoiceNumber' => $this->getInvoiceNumber('advancePaymentInvoice'),
-            'orderConfirmationNumber' => $this->getInvoiceNumber('orderConfirmation'),
-            'totalAmount' => $this->getTotalAmount(),
-            'totalPrice' => $this->getTotalPrice(),
-            'productsPrice' => $this->getProductsPrice(),
-            'discountAmount' => $this->getDiscountAmount(),
-            'vatAmount' => $this->getVatAmount(),
-            'dateCreated' => $this->dateCreated,
-            'currency' => $this->currency,
-            'payedPrice' => $this->getPayedPrice(),
-            'deliveryPrice' => $this->deliveryPrice,
-            'deliveryTitle' => $this->deliveryTitle,
-            'deliveryType' => $this->deliveryType,
-            'URL' => $this->URL,
-            'formURL' => $this->URL . 'id:' . $this->id . '/action:showForm/',
-            'deleteURL' => $this->URL . 'id:' . $this->id . '/action:delete/',
-            'payerName' => $this->payerName,
-            'payerFirstName' => $this->payerFirstName,
-            'payerLastName' => $this->payerLastName,
-            'products' => $products,
-            'discounts' => $this->getDiscounts(),
-        ];
-
-        return $data;
     }
 
     protected function getDiscounts()

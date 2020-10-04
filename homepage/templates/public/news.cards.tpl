@@ -105,7 +105,7 @@
 		{if !empty($elementThumbImagePath)}
 		<a href="{$element->URL}" class='content_readmore'>
 			{assign var="src" value="{$controller->baseURL}image/type:newsCardImage/id:{$elementThumbImagePath}"}
-			{include file=$theme->template('component.elementimage.tpl') src=$src class='news_card_image' alt="{$element->title}" lazy=true}
+			{include file=$theme->template('component.elementimage.tpl') class='news_card_image' alt="{$element->title}" lazy=true}
 		</a>
 		{/if}
 		{*{capture assign="moduleSideContent"}*}

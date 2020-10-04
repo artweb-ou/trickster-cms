@@ -1,9 +1,7 @@
-{if $data = $element->getElementData()}
+{if $data = $element->getJsonInfo('api')}
 	<div class="brands_widget">
 		<script>
-
-			window.brandsList = {$data|json_encode};
-
+			window.brandsWidget = {$data};
 		</script>
 		<div class="brands_widget_left"></div>
 		<div class="brands_widget_right"></div>

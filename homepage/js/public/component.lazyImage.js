@@ -3,13 +3,14 @@ window.LazyImageComponent = function(componentElement) {
     let init = function() {
         self.initLazyLoading({
             'componentElement': componentElement,
-            'displayCallback': lazyLoadingCallback
+            'displayCallback': lazyLoadingCallback,
         });
     };
     const lazyLoadingCallback = function() {
         requestAnimationFrame(display);
     };
     const display = function() {
+        componentElement.classList.remove('lazy_image');
         componentElement.src = componentElement.dataset.lazysrc;
         delete componentElement.dataset.lazysrc;
         if (componentElement.dataset.lazysrcset) {

@@ -50,9 +50,8 @@ trait DbLoggableApplication
                 if ($log = $this->connection->getQueryLog()) {
                     foreach ($log as $item) {
                         $query = $item['query'];
-                        while (($position = stripos($query, '?')) !== false) {
-                            $binding = "'" . array_shift($item['bindings']) . "'";
-                            $query = substr_replace($query, $binding, stripos($query, '?'), 1);
+                        while (($position = strpos($query, '?')) !== false) {
+                            $query = substr_replace($query, "'" . array_shift($item['bindings']) . "'", $position, 1);
                         }
                         $text .= $item['time'] . "\t" . $query . ";\r\n";
                         $overall += $item['time'];

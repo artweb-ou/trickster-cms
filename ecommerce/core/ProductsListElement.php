@@ -16,7 +16,7 @@ abstract class ProductsListElement extends menuStructureElement
 {
     use ProductFilterFactoryTrait;
     use CacheOperatingElement;
-
+    use JsonDataProviderElement;
     protected $productsList;
 
     protected $productsListBaseQuery;
@@ -31,6 +31,8 @@ abstract class ProductsListElement extends menuStructureElement
     protected $amountSelectionOptions;
     protected $filterArguments;
     protected $priceRangeSets;
+    protected $productsListMinPrice;
+    protected $productsListMaxPrice;
     protected $selectionsIdsForFiltering;
     protected $selectionsValuesIndex;
     protected $sortingOptions;
@@ -129,6 +131,9 @@ abstract class ProductsListElement extends menuStructureElement
                 if ($deepCategoryIds) {
                     $deepCategoryIds = array_keys($deepCategoryIds);
                     $filteredProductsQuery->whereIn('baseproducts.id', function ($query) use ($deepCategoryIds) {
+                        /**
+                         * @var Builder $query
+                         */
                         $query->from('structure_links')
                             ->select('childStructureId')
                             ->whereIn('parentStructureId', $deepCategoryIds)
@@ -175,16 +180,16 @@ abstract class ProductsListElement extends menuStructureElement
                  */
                 $structureManager = $this->getService('structureManager');
                 foreach ($parameterValues as $parameter) {
-                    $parameterElement = $structureManager->getElementById($parameter);
-                    if ($parameterElement) {
-                        $paramaterSelections[$parameterElement->getParentElement()->id][] = $parameter;
+                    if ($parameterElement = $structureManager->getElementById($parameter)) {
+                        if ($parentElement = $parameterElement->getParentElement()) {
+                            $parameterSelections[$parentElement->id][] = $parameter;
+                        }
                     }
                 }
-                $ids = [];
                 $filteredIds = [];
                 $db = $this->getService('db');
                 $x = 0;
-                foreach ($paramaterSelections as $parameterId => $paramaterSelection) {
+                foreach ($parameterSelections as $parameterId => $paramaterSelection) {
                     $filteredIds[$x] = [];
                     foreach ($paramaterSelection as $key => $value) {
                         $query = $db->table('module_product_parameter_value')
@@ -199,7 +204,7 @@ abstract class ProductsListElement extends menuStructureElement
                     $x++;
                 }
 
-                if (count($paramaterSelections) > 1) {
+                if (count($parameterSelections) > 1) {
                     $ids = call_user_func_array('array_intersect', $filteredIds);
                 } else {
                     $ids = $filteredIds[0];
@@ -280,6 +285,18 @@ abstract class ProductsListElement extends menuStructureElement
         $cache->save($this->productsList);
 
         return $this->productsList;
+    }
+
+    public function getSingleProduct($singleId)
+    {
+        if ($productsList = $this->getProductsList()) {
+            foreach ($productsList as $productElement) {
+                if ($productElement->id == $singleId) {
+                    return $productElement;
+                }
+            }
+        }
+        return false;
     }
 
     public function getFilteredProductsAmount()
@@ -402,6 +419,29 @@ abstract class ProductsListElement extends menuStructureElement
         return $this->filterParameterValueIds;
     }
 
+    public function getFilterActiveParametersInfo()
+    {
+        $result = [];
+        if ($valuesIds = $this->getFilterParameterValueIds()) {
+            /**
+             * @var Connection $db
+             */
+            $db = $this->getService('db');
+            if ($records = $db->table('structure_links')
+                ->select(['parentStructureId', 'childStructureId'])
+                ->whereIn('childStructureId', $valuesIds)
+                ->get()) {
+                foreach ($records as $record) {
+                    if (!isset($result[$record['parentStructureId']])) {
+                        $result[$record['parentStructureId']] = [];
+                    }
+                    $result[$record['parentStructureId']][] = $record['childStructureId'];
+                }
+            }
+        }
+        return $result;
+    }
+
     /**
      * @return mixed
      */
@@ -464,8 +504,8 @@ abstract class ProductsListElement extends menuStructureElement
     public function getFilterPrice()
     {
         if ($this->filterPrice === null) {
-            if (($priceString = $this->getFilterPriceString()) && strpos($priceString, '-') !== false) {
-                $this->filterPrice = explode('-', $priceString);
+            if (($priceString = $this->getFilterPriceString()) && strpos($priceString, ',') !== false) {
+                $this->filterPrice = explode(',', $priceString);
             }
         }
         return $this->filterPrice;
@@ -518,14 +558,6 @@ abstract class ProductsListElement extends menuStructureElement
     protected function getProductsListFixedLimit()
     {
         return false;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getFilterArguments()
-    {
-        return $this->filterArguments;
     }
 
     public function getProductsListPriceRangeSets()
@@ -918,17 +950,9 @@ abstract class ProductsListElement extends menuStructureElement
             $this->amountSelectionOptions = [];
 
             if ($this->isAmountSelectionEnabled()) {
-                $controller = controller::getInstance();
-                $url = $controller->pathURL;
-                foreach ($controller->getParameters() as $key => $value) {
-                    if (!is_array($value) && $key !== 'page' && $key !== 'limit' && $value !== '') {
-                        $url .= $key . ':' . $value . '/';
-                    }
-                }
-
                 foreach ($this->getService('ConfigManager')->get('main.availablePageAmountProducts') as $limit) {
                     $this->amountSelectionOptions[$limit] = [
-                        'url' => $url . 'limit:' . $limit . '/',
+                        'value' => $limit,
                         'selected' => false,
                     ];
                 }
@@ -1139,5 +1163,19 @@ abstract class ProductsListElement extends menuStructureElement
     public function isFiltrationApplied()
     {
         return $this->getFilterPrice() || $this->getFilterDiscountIds() || $this->getFilterBrandIds() || $this->getFilterCategoryIds() || $this->getFilterParameterValueIds() || $this->getFilterAvailability();
+    }
+
+    public function getProductsData()
+    {
+        $data = [];
+        foreach ($this->getProductsList() as $productElement) {
+            $data[] = $productElement->getElementData('list');
+        }
+        return $data;
+    }
+
+    public function affectsPublicUrl()
+    {
+        return true;
     }
 }

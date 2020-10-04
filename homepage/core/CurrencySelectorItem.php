@@ -18,7 +18,6 @@ class CurrencySelectorItem
         $this->code = strtolower($info['code']);
         $this->symbol = $info['symbol'];
         $this->rate = floatval(str_replace([" ", ','], ["", '.'], $info['rate']));
-        //		$this->image = $info['image'];
         $this->title = $info['title'];
 
         $LocaleInfo = localeconv();

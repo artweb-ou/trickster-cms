@@ -3,6 +3,7 @@
 /**
  * Class brandElement
  *
+ * @property string originalName
  * @property int $amountOnPageEnabled
  * @property int $brandFilterEnabled
  * @property int $discountFilterEnabled
@@ -14,6 +15,7 @@ class brandElement extends ProductsListElement implements ImageUrlProviderInterf
 {
     use ImageUrlProviderTrait;
     use ConfigurableLayoutsProviderTrait;
+    use JsonDataProviderElement;
 
     public $dataResourceName = 'module_brand';
     protected $allowedTypes = [];
@@ -190,16 +192,6 @@ class brandElement extends ProductsListElement implements ImageUrlProviderInterf
             return $brandsList->getCurrentLayout('productsLayout');
         };
         return false;
-    }
-
-    public function getElementData()
-    {
-        $brandInfo = [];
-        $brandInfo["id"] = $this->id;
-        $brandInfo["title"] = $this->title;
-        $brandInfo["URL"] = $this->URL;
-        $brandInfo["image"] = controller::getInstance()->baseURL . "image/type:brandWidgetItem/id:" . $this->image . "/filename:" . $this->originalName;
-        return $brandInfo;
     }
 
     public function isAmountSelectionEnabled()

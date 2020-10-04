@@ -31,6 +31,6 @@ class changeStatusOrder extends structureElementAction
 
         $renderer = $this->getService('renderer');
         $renderer->assign('responseStatus', 'success');
-        $renderer->appendResponseData('order', $structureElement->getElementData());
+        $renderer->appendResponseData('order', $structureElement->getElementData('api'));
     }
 }
