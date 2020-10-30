@@ -20,7 +20,7 @@ class PriceProductFilter extends ProductFilter
                 /**
                  * @var CurrencySelector $currencySelector
                  */
-                $currencySelector = $this->getService('CurrencySelector');
+                $currencySelector = $this->getService(CurrencySelector::class);
                 $currencyItem = $currencySelector->getSelectedCurrencyItem();
                 $argument = $this->getArguments();
 
@@ -40,11 +40,11 @@ class PriceProductFilter extends ProductFilter
                     $minOption = null;
                     $maxOption = null;
                     foreach ($rangeSets as $rangeSet) {
-                        $min = floor($currencySelector->convertPrice($rangeSet[0]));
+                        $min = floor($currencySelector->convertPrice($rangeSet[0], false));
                         if ($minOption === null) {
                             $minOption = $min;
                         }
-                        $max = ceil($currencySelector->convertPrice($rangeSet[1]));
+                        $max = ceil($currencySelector->convertPrice($rangeSet[1], false));
                         if ($maxOption === null || $maxOption < $max) {
                             $maxOption = $max;
                         }
