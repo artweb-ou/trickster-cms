@@ -22,7 +22,23 @@ abstract class paymentsMethod extends errorLogger
     protected $payerEmail;
     protected $paymentDate = false;
     protected $transactionDate = false;
+    protected $visitorIp;
 
+    /**
+     * @return mixed
+     */
+    public function getVisitorIp()
+    {
+        return $this->visitorIp;
+    }
+
+    /**
+     * @param mixed $visitorIp
+     */
+    public function setVisitorIp($visitorIp)
+    {
+        $this->visitorIp = $visitorIp;
+    }
     abstract public function setTransactionCode($value);
 
     abstract public function setPaymentAmount($value);

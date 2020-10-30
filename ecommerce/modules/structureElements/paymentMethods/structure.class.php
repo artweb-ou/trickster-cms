@@ -3,13 +3,13 @@
 class paymentMethodsElement extends structureElement
 {
     use AutoMarkerTrait;
+
     public $languagesParentElementMarker = 'adminLanguages';
     public $dataResourceName = 'module_generic';
-    protected $allowedTypes = [
+    public $allowedTypes = array(
         'swedbankPaymentMethod',
         'danskebankPaymentMethod',
         'sebPaymentMethod',
-        'coopPaymentMethod',
         'lhvPaymentMethod',
         'liisiPaymentMethod',
         'estcardPaymentMethod',
@@ -19,7 +19,11 @@ class paymentMethodsElement extends structureElement
         'queryPaymentMethod',
         'nordeaPaymentMethod',
         'payseraPaymentMethod',
-    ];
+        'coopPaymentMethod',
+        'payanywayPaymentMethod',
+        'everypayPaymentMethod',
+        'maksekeskusePaymentMethod'
+    );
     public $defaultActionName = 'showFullList';
     public $role = 'container';
 
@@ -33,12 +37,12 @@ class paymentMethodsElement extends structureElement
         $multiLanguageFields[] = 'title';
     }
 
-    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $restrictLinkTypes = false)
+    public function getChildrenList($roles = null, $linkType = 'structure', $allowedTypes = null, $useBlackList = false)
     {
         $structureManager = $this->getService('structureManager');
 
         if ($childrenList = $structureManager->getElementsChildren($this->id)) {
-            $sortParameter = [];
+            $sortParameter = array();
             foreach ($childrenList as &$element) {
                 $sortParameter[] = mb_strtolower($element->title);
             }

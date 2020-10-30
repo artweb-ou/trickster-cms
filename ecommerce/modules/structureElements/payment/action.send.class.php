@@ -39,6 +39,8 @@ class sendPayment extends structureElementAction
             $method->setPaymentAmount($structureElement->amount);
             $method->setLanguageCode($languagesManager->getCurrentLanguageCode());
             $method->setReferenceNumber('');
+            $method->setVisitorIp($controller->visitorIP);
+
             if ($orderElement = $structureElement->getOrderElement()) {
                 $method->setExplanationText('Order nr: ' . $orderElement->getInvoiceNumber('advancePaymentInvoice'));
 
@@ -65,10 +67,8 @@ class sendPayment extends structureElementAction
                     $controller->redirect($transactionData);
                 } elseif ($requestType == 'post') {
                     $renderer = $this->getService('renderer');
-
                     $designThemesManager = $this->getService('DesignThemesManager');
                     $theme = $designThemesManager->getCurrentTheme();
-
                     $renderer->assign('formData', $transactionData);
                     $renderer->setTemplate($theme->template('payment.postredirect.tpl'));
                     $renderer->setCacheControl('no-cache');
