@@ -5,19 +5,15 @@ class maksekeskusePaymentMethodElement extends paymentMethodElement
     public function getSpecialFields()
     {
         return array(
-            "projectId"    => array(
+            "shopID"    => array(
                 "format"        => "text",
                 "multiLanguage" => false,
             ),
-            "controlCode"    => array(
+            "keyPublic"    => array(
                 "format"        => "text",
                 "multiLanguage" => false,
             ),
-            "bankURL"    => array(
-                "format"        => "text",
-                "multiLanguage" => false,
-            ),
-            "testMode" => array(
+            "keyPrivate"    => array(
                 "format"        => "text",
                 "multiLanguage" => false,
             ),
