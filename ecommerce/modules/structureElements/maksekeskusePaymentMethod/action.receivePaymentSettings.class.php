@@ -17,10 +17,9 @@ class receivePaymentSettingsMaksekeskusePaymentMethod extends structureElementAc
     public function setExpectedFields(&$expectedFields)
     {
         $expectedFields = array(
-            'projectId',
-            'testMode',
-            'controlCode',
-            'bankURL',
+            'shopID',
+            'keyPublic',
+            'keyPrivate',
         );
     }
 

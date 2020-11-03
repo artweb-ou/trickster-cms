@@ -6,32 +6,26 @@ class maksekeskusePaymentsMethod extends paymentsMethod implements OrderDataPaym
 {
     private $mk;
 
-    private $shopID = '';
-    private $keyPublic = '';
-    private $keyPrivate = '';
-    private $requestType = 'post';
-    private $returnURL;
-    private $defaultCurrency = 'eur';
-    private $orderData;
+    public $shopID = '';
+    public $keyPublic = '';
+    public $keyPrivate = '';
+    public $requestType = 'get';
+    public $returnURL;
+    public $defaultCurrency = 'eur';
+    public $orderData;
 
     public function __construct()
     {
-        $this->setMk(new Maksekeskus($this->shopID, $this->keyPublic, $this->keyPrivate, false));
-    }
 
-    /**
-     * @param Maksekeskus $mk
-     */
-    public function setMk(Maksekeskus $mk)
-    {
-        $this->mk = $mk;
     }
-
     /**
      * @return Maksekeskus
      */
     public function getMk(): Maksekeskus
     {
+        if (!$this->mk){
+            $this->mk = new Maksekeskus($this->shopID, $this->keyPublic, $this->keyPrivate, false);
+        }
         return $this->mk;
     }
 
