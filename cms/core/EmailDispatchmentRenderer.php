@@ -66,7 +66,15 @@ class EmailDispatchmentRenderer extends errorLogger
         $content = false;
         if ($emailType = $this->getEmailDispatchmentType()) {
             $emailCss = $this->renderCss($emailType->getCssFiles(), $emailType->getCssImagesURL());
-            $emailHTML = $this->renderHtml($emailType->getEmailTemplate(), $emailType->getContentTemplate(), $emailType->getDisplayWebLink(), $emailType->getDisplayUnsubscribeLink(), $emailType->getCssImagesURL(), $emailType, $emailType->isLinksTrackingEnabled());
+            $emailHTML = $this->renderHtml(
+                $emailType->getEmailTemplate(),
+                $emailType->getContentTemplate(),
+                $emailType->getDisplayWebLink(),
+                $emailType->getDisplayUnsubscribeLink(),
+                $emailType->getCssImagesURL(),
+                $emailType,
+                $emailType->isLinksTrackingEnabled()
+            );
             $content = $this->applyCssToHtml($emailCss, $emailHTML);
         }
 
@@ -77,12 +85,9 @@ class EmailDispatchmentRenderer extends errorLogger
     {
         $content = false;
         try {
-            $emogrifier = new \Pelago\Emogrifier();
-            $emogrifier->setCSS($emailCss);
-            $emogrifier->setHTML($emailHTML);
-            $emogrifier->disableInvisibleNodeRemoval();
-            //            $emogrifier->enableCssToHtmlMapping();
-            $content = $emogrifier->emogrify();
+            $emogrifier = CssInliner::fromHtml($emailHTML)
+                ->inlineCss($emailCss);
+            $content = $emogrifier->render();
         } catch (exception $ex) {
             $this->logError('emogrifier error: ' . $ex->getMessage());
         }
@@ -97,8 +102,7 @@ class EmailDispatchmentRenderer extends errorLogger
         $imagesUrl,
         EmailDispatchmentType $emailType,
         $trackLinks
-    )
-    {
+    ) {
         $controller = controller::getInstance();
         $htmlRenderer = renderer::getPlugin('smarty');
 

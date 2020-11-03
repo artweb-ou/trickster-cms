@@ -1,5 +1,7 @@
 <?php
 
+use Pelago\Emogrifier\CssInliner;
+
 /**
  * Class orderElement
  *
@@ -12,6 +14,7 @@ class orderElement extends structureElement implements PaymentOrderInterface
 {
     use EventLoggingElementTrait;
     use SearchTypesProviderTrait;
+
     public $dataResourceName = 'module_order';
     public $defaultActionName = 'show';
     protected $allowedTypes = [
@@ -477,8 +480,10 @@ class orderElement extends structureElement implements PaymentOrderInterface
             }
             $newDispatchment->registerReceiver($this->payerEmail, null);
 
-            $subject = $translationsManager->getTranslationByName('invoice.emailsubject_' . strtolower($emailType),
-                'public_translations');
+            $subject = $translationsManager->getTranslationByName(
+                'invoice.emailsubject_' . strtolower($emailType),
+                'public_translations'
+            );
             $subject .= ' (' . $this->getInvoiceNumber($emailType) . ')';
             $newDispatchment->setSubject($subject);
             $data['displayInvoiceLogo'] = false;
@@ -531,12 +536,19 @@ class orderElement extends structureElement implements PaymentOrderInterface
                 // if !shop_title in translation, try check default_sender_name in settings, else display shop_title field name
                 $shopTitle =
                     $translationsManager->getTranslationByName('company.shop_title', 'public_translations') ?:
-                        !empty($settings['default_sender_name']) ? $settings['default_sender_name'] : $translationsManager->getTranslationByName('company.shop_title',
-                            'public_translations');
+                        !empty($settings['default_sender_name']) ? $settings['default_sender_name'] : $translationsManager->getTranslationByName(
+                            'company.shop_title',
+                            'public_translations'
+                        );
 
-                $notification = $translationsManager->getTranslationByName('invoice.emailsubject_order_status_notification',
-                    'public_translations');
-                $orderNumberText = $translationsManager->getTranslationByName('invoice.order_nr', 'public_translations');
+                $notification = $translationsManager->getTranslationByName(
+                    'invoice.emailsubject_order_status_notification',
+                    'public_translations'
+                );
+                $orderNumberText = $translationsManager->getTranslationByName(
+                    'invoice.order_nr',
+                    'public_translations'
+                );
                 $orderNumber = $this->getInvoiceNumber();
                 $statusText = $this->getOrderStatusText($this->orderStatus);
                 $subject = $shopTitle . '. ' . $notification . ' (' . $orderNumberText . ' ' . $orderNumber . ': ' . $statusText . ')';
@@ -620,9 +632,12 @@ class orderElement extends structureElement implements PaymentOrderInterface
 
         $htmlRenderer = renderer::getPlugin('smarty');
         $htmlRenderer->assign('controller', $controller);
-        $htmlRenderer->assign('logo', $this->getService('LanguagesManager')
-            ->getCurrentLanguageElement()
-            ->getLogoImageUrl());
+        $htmlRenderer->assign(
+            'logo',
+            $this->getService('LanguagesManager')
+                ->getCurrentLanguageElement()
+                ->getLogoImageUrl()
+        );
         $htmlRenderer->assign('data', $data);
         $htmlRenderer->assign('contentType', $contentType);
         $htmlRenderer->assign('theme', $theme);
@@ -630,13 +645,9 @@ class orderElement extends structureElement implements PaymentOrderInterface
         $pdfHtml = $htmlRenderer->fetch();
 
         try {
-            $emogrifier = new \Pelago\Emogrifier();
-            $emogrifier->setCSS($pdfCss);
-            $emogrifier->setHTML($pdfHtml);
-            $emogrifier->disableInvisibleNodeRemoval();
-            $pdfHtml = $emogrifier->emogrify();
-//            echo $pdfHtml;
-//            exit;
+            $emogrifier = CssInliner::fromHtml($pdfHtml)
+                ->inlineCss($pdfCss);
+            $pdfHtml = $emogrifier->render();
         } catch (exception $ex) {
             $this->logError('emogrifier error: ' . $ex->getMessage());
         }
@@ -807,7 +818,10 @@ class orderElement extends structureElement implements PaymentOrderInterface
     public function getPdfDownLoadUrl($type = 'invoice')
     {
         $fileProperty = $type . 'File';
-        return controller::getInstance()->baseURL . 'file/id:' . $this->$fileProperty . '/mode:download/filename:' . $this->getInvoiceNumber($type) . '.pdf';
+        return controller::getInstance(
+            )->baseURL . 'file/id:' . $this->$fileProperty . '/mode:download/filename:' . $this->getInvoiceNumber(
+                $type
+            ) . '.pdf';
     }
 
     public function getInvoiceNumber($type = 'invoice')
