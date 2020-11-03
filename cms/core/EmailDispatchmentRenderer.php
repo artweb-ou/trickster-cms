@@ -1,5 +1,5 @@
 <?php
-
+use Pelago\Emogrifier\CssInliner;
 class EmailDispatchmentRenderer extends errorLogger
 {
     protected $receiverEmail;
