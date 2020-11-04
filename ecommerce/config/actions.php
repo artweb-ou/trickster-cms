@@ -69,4 +69,6 @@
     'productGalleryImage' => 'showForm',
     'productGalleryProduct' => 'showForm',
     'productIcons' => 'showFullList',
+    'everypayPaymentMethod' => 'showForm',
+    'maksekeskusePaymentMethod' => 'showForm',
 ];

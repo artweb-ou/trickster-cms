@@ -88,9 +88,9 @@ class everypayPaymentsMethod extends paymentsMethod
                     $this->payerAccount = $data['cc_details']['issuer_country'] . '; ' . $data['cc_details']['issuer'] . '; ' . $data['cc_details']['type'];
                 }
                 $this->paymentDate = $data['payment_created_at'];
-                $this->paymentAmount = $data['payment_amount'] - $data['standing_amount'];
+                $this->paymentAmount = $data['standing_amount'];
                 $this->transactionCode = $data['order_reference'];
-                if ($this->paymentAmount === 0 && $data['payment_state'] === 'settled') {
+                if ($data['payment_state'] === 'settled') {
                     $transactionResult = 'success';
                 } else {
                     $transactionResult = 'failed';
@@ -126,7 +126,6 @@ class everypayPaymentsMethod extends paymentsMethod
 
     public function getTransactionData()
     {
-        $this->returnURL = 'https://klaasistuudio.ee/banklink/pid:27522/';
         $parameters = [
             "timestamp" => date('c'),
             "api_username" => $this->projectId, // API USERNAME FROM GENERAL SETTINGS
