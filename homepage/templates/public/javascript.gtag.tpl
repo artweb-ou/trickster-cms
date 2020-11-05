@@ -27,8 +27,8 @@
 			};
 			{if !empty($googleAD["country"])}
 			gtag('set', {
-				'country': {$googleAD["country"]},
-				'currency': {$googleAD["currency"]}
+				'country': '{$googleAD["country"]}',
+				'currency': '{$googleAD["currency"]}'
 			});
 			{/if}
 		{/if}
@@ -37,8 +37,8 @@
 			gtag('config', '{$analyticsId}');
 			{if !empty($googleAD["country"])}
 			gtag('set', {
-				'country': {$googleAD["country"]},
-				'currency': {$googleAD["currency"]}
+				'country': '{$googleAD["country"]}',
+				'currency': '{$googleAD["currency"]}'
 			});
 			{/if}
 		{/if}
