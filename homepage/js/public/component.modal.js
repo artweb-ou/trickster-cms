@@ -1,78 +1,128 @@
-window.ModalComponent = function(referralElement) {
+window.ModalComponent = function (options) {
     DomElementMakerMixin.call(this);
 
-    var self = this;
-    var modalContainer;
-    var componentElement;
-    var contentElement;
-    var footerElement;
-    var titleElement;
-    var CLASS_OPEN = 'is_open';
-    var UNDER_MODAL = 'under_modal';
-    var MODAL_CONTAINER = 'modal_container';
-    var displayed = false;
-
-    var init = function() {
-        var makeElement = self.makeElement;
-        modalContainer = makeElement('div', MODAL_CONTAINER);
-
-        componentElement = makeElement('div', 'modal', modalContainer);
-
-        var element = makeElement('div', 'modal_header', componentElement);
-        var element_content = makeElement('div', 'modal_content', componentElement);
-
-        titleElement = makeElement('div', 'modal_title', element);
-        contentElement = makeElement('div', 'modal_middle', element_content);
-
-        var buttonElement = makeElement('div', 'modal_closebutton', element);
-        eventsManager.addHandler(buttonElement, 'click', closeClick);
-        footerElement = makeElement('div', 'modal_footer', componentElement);
+    let self = this;
+    let componentElement;
+    let contentElement;
+    let footerElement;
+    let titleElement;
+    let CLASS_OPEN = 'is_open';
+    let displayed = false;
+    let headerEnabled = true;
+    let footerEnabled = true;
+    let componentClassName;
+    let onCloseCallback;
+    const init = function () {
+        if (options) {
+            parseOptions(options);
+        }
+        createDom();
+        controller.addListener('modalsClose', globalCloseHandler);
     };
-    var closeClick = function(event) {
-        eventsManager.preventDefaultAction(event);
+    const parseOptions = function (options) {
+        if (typeof options.headerEnabled !== 'undefined') {
+            headerEnabled = options.headerEnabled;
+        }
+        if (typeof options.footerEnabled !== 'undefined') {
+            footerEnabled = options.footerEnabled;
+        }
+        if (typeof options.componentClassName !== 'undefined') {
+            componentClassName = options.componentClassName;
+        }
+        if (typeof options.onCloseCallback === 'function') {
+            onCloseCallback = options.onCloseCallback;
+        }
+    };
+    const createDom = function () {
+        let makeElement = self.makeElement;
+        componentElement = makeElement('div', 'modal');
+        let closeButton;
+        if (headerEnabled) {
+            let headerElement;
+            headerElement = makeElement('div', 'modal_header', componentElement);
+            titleElement = makeElement('div', 'modal_title', headerElement);
+
+            closeButton = makeElement('div', 'modal_closebutton', headerElement);
+        } else {
+            titleElement = makeElement('div', 'modal_title', componentElement);
+            closeButton = makeElement('div', 'modal_closebutton', componentElement);
+        }
+
+        closeButton.addEventListener('click', self.modalCloseClick);
+        contentElement = makeElement('div', 'modal_content', componentElement);
+
+        if (footerEnabled) {
+            footerElement = makeElement('div', 'modal_footer', componentElement);
+        }
+
+        if (componentClassName) {
+            componentElement.classList.add(componentClassName);
+        }
+    };
+    const globalCloseHandler = function () {
         self.setDisplayed(false);
     };
-    this.addClass = function(newClass) {
+    this.modalCloseClick = function (event) {
+        event.preventDefault();
+        self.setDisplayed(false);
+    };
+    this.addClass = function (newClass) {
         domHelper.addClass(componentElement, newClass);
     };
-    this.removeClass = function(newClass) {
+    this.removeClass = function (newClass) {
         domHelper.removeClass(componentElement, newClass);
     };
-    this.setTitle = function(title) {
-        titleElement.innerHTML = title;
-    };
-    this.setContent = function(content) {
-        contentElement.innerHTML = content;
-    };
-    this.setControls = function(element) {
-        while (footerElement.firstChild) {
-            footerElement.removeChild(footerElement.firstChild);
+    this.setTitle = function (title) {
+        if (titleElement) {
+            titleElement.innerHTML = title;
         }
-        footerElement.appendChild(element);
     };
-    this.setDisplayed = function(newDisplayed) {
-        if (displayed == newDisplayed) {
+    this.setContentElement = function (element) {
+        while (contentElement.firstChild) {
+            contentElement.removeChild(contentElement.firstChild);
+        }
+        contentElement.appendChild(element);
+        contentElement.scrollTop = 0;
+    };
+    this.setContentHtml = function (html) {
+        contentElement.innerHTML = html;
+        contentElement.scrollTop = 0;
+    };
+    this.setControls = function (element) {
+        if (footerElement) {
+            while (footerElement.firstChild) {
+                footerElement.removeChild(footerElement.firstChild);
+            }
+            footerElement.appendChild(element);
+        }
+    };
+    this.setDisplayed = function (newDisplayed) {
+        if (newDisplayed) {
+            controller.fireEvent('modalsClose');
+        }
+        if (displayed === newDisplayed) {
             return;
         }
         displayed = newDisplayed;
         if (displayed) {
-            DarkLayerComponent.showLayer(closeClick, self.displayComponent, true); // onclickFunction, callback, allowClose
-            domHelper.addClass(document.body, UNDER_MODAL);
-            document.body.appendChild(modalContainer);
+            document.documentElement.classList.add('has_modal');
+            document.body.appendChild(componentElement);
             self.addClass(CLASS_OPEN);
         } else {
+            document.documentElement.classList.remove('has_modal');
+            document.body.removeChild(componentElement);
             self.removeClass(CLASS_OPEN);
-            DarkLayerComponent.forceHideLayer();
-            domHelper.removeClass(document.body, UNDER_MODAL);
-            document.body.removeChild(modalContainer);
+            if (onCloseCallback) {
+                onCloseCallback();
+            }
         }
+        contentElement.scrollTop = 0;
     };
-    this.getDisplayed = function() {
-        return displayed;
+    this.toggleDisplay = function () {
+        self.setDisplayed(!displayed);
     };
-    this.getComponentElement = function() {
+    this.getComponentElement = function () {
         return componentElement;
     };
-
     init();
 };

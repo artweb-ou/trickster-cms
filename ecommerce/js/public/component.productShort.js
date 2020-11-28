@@ -1,20 +1,20 @@
-function ProductShortComponent(componentElement) {
-    var productId;
-    var basketButton;
-    var detailsButton;
-    var linkElement;
-    var amountMinusElement;
-    var amountPlusElement;
-    var amountInputElement;
-    var optionSelectElements;
-    var minimumOrder;
+window.ProductShortComponent = function(componentElement) {
+    let productId;
+    let basketButton;
+    let detailsButton;
+    let linkElement;
+    let amountMinusElement;
+    let amountPlusElement;
+    let amountInputElement;
+    let optionSelectElements;
+    let minimumOrder;
 
-    var init = function() {
+    let init = function() {
         productId = parseInt(componentElement.className.split('productid_')[1], 10);
 
-        var controlsElement = componentElement.querySelector('.product_short_controls');
+        let controlsElement = componentElement.querySelector('.product_short_controls');
         if (controlsElement) {
-            var value = controlsElement.dataset.minimumOrder;
+            let value = controlsElement.dataset.minimumOrder;
             if (value) {
                 minimumOrder = parseInt(value, 10);
             } else {
@@ -43,8 +43,8 @@ function ProductShortComponent(componentElement) {
         optionSelectElements = componentElement.querySelector('.select.product_short_option_select');
     };
 
-    var amountChangeHandler = function() {
-        var amount = parseInt(amountInputElement.value, 10);
+    let amountChangeHandler = function() {
+        let amount = parseInt(amountInputElement.value, 10);
         if (amount !== amount) {
             amount = 1;
         }
@@ -53,16 +53,16 @@ function ProductShortComponent(componentElement) {
         }
     };
 
-    var plusClickHandler = function(event) {
+    let plusClickHandler = function(event) {
         eventsManager.preventDefaultAction(event);
-        var amount = parseInt(amountInputElement.value, 10);
+        let amount = parseInt(amountInputElement.value, 10);
         amount = amount + minimumOrder;
         amountInputElement.value = amount;
     };
 
-    var minusClickHandler = function(event) {
+    let minusClickHandler = function(event) {
         eventsManager.preventDefaultAction(event);
-        var amount = parseInt(amountInputElement.value, 10);
+        let amount = parseInt(amountInputElement.value, 10);
         amount = amount - minimumOrder;
 
         if (amount < 1) {
@@ -71,29 +71,20 @@ function ProductShortComponent(componentElement) {
         amountInputElement.value = amount;
     };
 
-    var onBasketButtonClick = function(event) {
-        var amount = amountInputElement ? amountInputElement.value : minimumOrder;
+    let onBasketButtonClick = function() {
+        let amount = amountInputElement ? amountInputElement.value : minimumOrder;
         if (amount % minimumOrder != 0) {
             amount = minimumOrder;
         }
-        var variation = '';
-        if (optionSelectElements) {
-            for (var i = 0; i < optionSelectElements.length; ++i) {
-                if (i != 0) {
-                    variation += ', ';
-                }
-                variation += optionSelectElements[i].value;
-            }
-        }
-        shoppingBasketLogics.addProduct(productId, amount, variation);
+        shoppingBasketLogics.addProduct(productId, amount);
     };
 
-    var clickHandler = function(event) {
+    let clickHandler = function(event) {
         eventsManager.preventDefaultAction(event);
         eventsManager.cancelBubbling(event);
         tracking.productClickTracking(productId, trackingEndCallback);
     };
-    var trackingEndCallback = function() {
+    let trackingEndCallback = function() {
         document.location.href = linkElement.href;
     };
 
@@ -101,7 +92,7 @@ function ProductShortComponent(componentElement) {
 }
 
 function ProductGalleryComponent(componentElement) {
-    var init = function() {
+    let init = function() {
         new ToolTipComponent(componentElement, window.translationsLogics.get('product.viewproduct'));
     };
 
