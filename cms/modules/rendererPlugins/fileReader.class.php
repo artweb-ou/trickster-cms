@@ -66,7 +66,7 @@ class fileReaderRendererPlugin extends rendererPlugin
     {
         $contentTypes = $this->requestHeadersManager->getAcceptedTypes();
 
-        $preferredOrder = [$this->getMimeType($this->fileName)];
+        $preferredOrder = [$this->getMimeType($this->filePath)];
 
         $selectedType = $this->selectHTTPParameter($preferredOrder, $contentTypes, '*/*');
 
