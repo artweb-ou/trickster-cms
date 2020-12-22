@@ -3,6 +3,7 @@
 class queryFiltersManager extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
+
     /** @var queryFiltersManager */
     protected static $instance = false;
 
@@ -91,10 +92,13 @@ class queryFiltersManager extends errorLogger implements DependencyInjectionCont
         if ($parameters) {
             $finalResultsIndex = $this->compileResultsIndex($resultTypes);
             foreach ($parameters as $parametersList) {
-                if ($groupResults = $this->getFilterGroupResults($parametersList, $resultTypes, $optimized)) {
+                if ($groupResultQuery = $this->getFilterGroupResults($parametersList, $resultTypes, $optimized)) {
                     foreach ($finalResultsIndex as $type => $value) {
-                        if ($groupResults[$type] && $records = $groupResults[$type]->get()) {
-                            $finalResultsIndex[$type] = array_merge($finalResultsIndex[$type], array_column($records, 'id'));
+                        if ($groupResultQuery[$type] && $records = $groupResultQuery[$type]->get()) {
+                            $finalResultsIndex[$type] = array_merge(
+                                $finalResultsIndex[$type],
+                                array_column($records, 'id')
+                            );
                         }
                     }
                 }
@@ -102,6 +106,10 @@ class queryFiltersManager extends errorLogger implements DependencyInjectionCont
             $result = $finalResultsIndex;
         }
         return $result;
+    }
+
+    public function getQueries()
+    {
     }
 
     /**
@@ -125,7 +133,12 @@ class queryFiltersManager extends errorLogger implements DependencyInjectionCont
         foreach ($parametersList as $filterName => $filterArgument) {
             if ($filter = $this->getFilter($filterName)) {
                 $incomingType = $filter->getRequiredType();
-                if ($nextFilterData = $this->compileNextFilterData($filterResult, $incomingType, $previousType, $cachedResults)) {
+                if ($nextFilterData = $this->compileNextFilterData(
+                    $filterResult,
+                    $incomingType,
+                    $previousType,
+                    $cachedResults
+                )) {
                     $cachedResults[$incomingType] = $nextFilterData;
                 }
                 if ($filterResult = $filter->getFilteredIdList($filterArgument, $nextFilterData)) {
@@ -161,22 +174,24 @@ class queryFiltersManager extends errorLogger implements DependencyInjectionCont
             $parametersInfo[] = [$type, $value];
         }
 
-        usort($parametersInfo, function ($a, $b) use ($typesIndex) {
-            if (($filter1 = $this->getFilter($a[0])) && ($filter2 = $this->getFilter($b[0]))) {
-                $type1 = $filter1->getRequiredType();
-                $type2 = $filter2->getRequiredType();
-                if (isset($typesIndex[$type1])) {
-                    if (isset($typesIndex[$type2])) {
-                        return strcmp($type1, $type2);
+        usort(
+            $parametersInfo,
+            function ($a, $b) use ($typesIndex) {
+                if (($filter1 = $this->getFilter($a[0])) && ($filter2 = $this->getFilter($b[0]))) {
+                    $type1 = $filter1->getRequiredType();
+                    $type2 = $filter2->getRequiredType();
+                    if (isset($typesIndex[$type1])) {
+                        if (isset($typesIndex[$type2])) {
+                            return strcmp($type1, $type2);
+                        }
+                        return 1;
+                    } elseif (isset($typesIndex[$type2])) {
+                        return -1;
                     }
-                    return 1;
-                } elseif (isset($typesIndex[$type2])) {
-                    return -1;
+                    return strcmp($type1, $type2);
                 }
-                return strcmp($type1, $type2);
+                return 0;
             }
-            return 0;
-        }
         );
 
         $parametersList = [];
@@ -249,6 +264,7 @@ abstract class queryFilter extends errorLogger implements DependencyInjectionCon
 abstract class queryFilterConverter extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
+
     /**
      * @var Illuminate\Database\Query\Builder
      */

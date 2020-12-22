@@ -78,7 +78,11 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
     protected function performFiltration()
     {
         $queryFiltersManager = $this->getService('queryFiltersManager');
-        $this->filteredIdLists = $queryFiltersManager->getFilterIdLists($this->filtrationParameters, $this->resultTypes, $this->optimized);
+        $this->filteredIdLists = $queryFiltersManager->getFilterIdLists(
+            $this->filtrationParameters,
+            $this->resultTypes,
+            $this->optimized
+        );
 
         return $this->filteredIdLists;
     }
@@ -101,15 +105,24 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
             $this->queryResult['start'] = $this->start;
             $this->queryResult['limit'] = $this->limit;
 
-            $filterIdLists = $this->getFilteredIdLists();
-
-            $structureManager = $this->getService('structureManager');
-            foreach ($filterIdLists[$this->exportType] as &$id) {
-                if ($element = $structureManager->getElementById($id)) {
-                    $this->queryResult[$this->exportType][] = $element;
-                }
+            if (!$this->resultTypes) {
+                $this->resultTypes = [$this->exportType];
             }
-            $this->queryResult['totalAmount'] = count($filterIdLists[$this->exportType]);
+
+            //no need to get all IDs for objects if there are no filters
+            $filterIdLists = [$this->exportType => null];
+            if ($this->filtrationParameters) {
+                $filterIdLists = $this->getFilteredIdLists();
+            }
+            $apiQueryResultResolver = $this->getService('ApiQueryResultResolver');
+            $this->queryResult = $apiQueryResultResolver->resolve(
+                $filterIdLists,
+                $this->exportType,
+                $this->resultTypes,
+                $this->order,
+                $this->start,
+                $this->limit
+            );
         }
         return $this->queryResult;
     }
