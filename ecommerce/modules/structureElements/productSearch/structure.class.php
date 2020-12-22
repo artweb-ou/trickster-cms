@@ -12,7 +12,7 @@
  * @property int $pageDependent
  * @property int $sortingEnabled
  */
-class productSearchElement extends menuDependantStructureElement
+class productSearchElement extends menuDependantStructureElement implements JsonDataProvider
 {
     use ProductFilterFactoryTrait;
     use JsonDataProviderElement;

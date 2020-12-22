@@ -11,7 +11,7 @@
  * @property int $amount
  * @property int $productId
  */
-class orderProductElement extends structureElement
+class orderProductElement extends structureElement implements JsonDataProvider
 {
     use SearchTypesProviderTrait;
     use JsonDataProviderElement;

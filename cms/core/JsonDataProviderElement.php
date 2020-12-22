@@ -5,7 +5,7 @@ trait JsonDataProviderElement
 {
     use DataResponseConverterFactory;
 
-    public function getElementData($preset = null)
+    public function getElementData(?string $preset = null): ?array
     {
         if ($converter = $this->getConverter($this->structureType)) {
             if ($converter instanceof PresetDataResponseConverterInterface) {
@@ -15,14 +15,14 @@ trait JsonDataProviderElement
                 return reset($data);
             }
         }
-        return false;
+        return null;
     }
 
-    public function getJsonInfo($preset = null)
+    public function getJsonInfo(?string $preset = null): ?string
     {
         if ($data = $this->getElementData($preset)) {
             return json_encode($data);
         }
-        return false;
+        return null;
     }
 }

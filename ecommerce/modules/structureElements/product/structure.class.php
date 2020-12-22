@@ -53,11 +53,12 @@ class productElement extends structureElement implements
     MetadataProviderInterface,
     LdJsonProviderInterface,
     OpenGraphDataProviderInterface,
-    TwitterDataProviderInterface
+    TwitterDataProviderInterface,
+    JsonDataProvider
 {
     use deprecatedProductElementTrait, GalleryInfoProviderTrait, FilesElementTrait, ImagesElementTrait;
     use MetadataProviderTrait {
-        getTextContent as getTextContentTrait;
+        MetadataProviderTrait::getTextContent as getTextContentTrait;
     }
     use ConfigurableLayoutsProviderTrait;
     use CommentsTrait;
@@ -70,6 +71,7 @@ class productElement extends structureElement implements
     use ConnectedParametersProviderTrait;
     use CacheOperatingElement;
     use JsonDataProviderElement;
+    use LdJsonProvider;
 
     public $dataResourceName = 'module_product';
     public $defaultActionName = 'show';

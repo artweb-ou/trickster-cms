@@ -11,7 +11,7 @@
  * @property int $availabilityFilterEnabled
  */
 
-class brandElement extends ProductsListElement implements ImageUrlProviderInterface
+class brandElement extends ProductsListElement implements ImageUrlProviderInterfacem, JsonDataProvider
 {
     use ImageUrlProviderTrait;
     use ConfigurableLayoutsProviderTrait;

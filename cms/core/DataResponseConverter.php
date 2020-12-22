@@ -3,7 +3,7 @@
 abstract class DataResponseConverter
 {
     /**
-     * @param structureElement[] $data
+     * @param JsonDataProvider[] $data
      * @return array
      */
     abstract function convert($data);

@@ -14,7 +14,7 @@
  * @property int votes
  * @property int approved
  */
-class commentElement extends structureElement implements MetadataProviderInterface, VotesHolderInterface, CommentsHolderInterface
+class commentElement extends structureElement implements MetadataProviderInterface, VotesHolderInterface, CommentsHolderInterface, JsonDataProvider
 {
     use UserElementProviderTrait;
     use MetadataProviderTrait;

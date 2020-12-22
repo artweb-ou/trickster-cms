@@ -1,6 +1,6 @@
 <?php
 
-class brandsWidgetElement extends menuDependantStructureElement
+class brandsWidgetElement extends menuDependantStructureElement implements JsonDataProvider
 {
     use JsonDataProviderElement;
     public $dataResourceName = 'module_generic';

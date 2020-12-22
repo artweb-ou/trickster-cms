@@ -8,7 +8,7 @@
  * @property mixed paymentStatus
  * @property float $deliveryPrice
  */
-class orderElement extends structureElement implements PaymentOrderInterface
+class orderElement extends structureElement implements PaymentOrderInterface, JsonDataProvider
 {
     use EventLoggingElementTrait;
     use SearchTypesProviderTrait;

@@ -1,6 +1,6 @@
 <?php
 
-class userElement extends structureElement
+class userElement extends structureElement implements JsonDataProvider
 {
     use JsonDataProviderElement;
     public $dataResourceName = 'module_user';

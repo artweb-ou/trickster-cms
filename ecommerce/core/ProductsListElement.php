@@ -12,7 +12,7 @@ use Illuminate\Database\Query\Builder;
  * @property int $brandSortingEnabled
  *
  */
-abstract class ProductsListElement extends menuStructureElement
+abstract class ProductsListElement extends menuStructureElement implements JsonDataProvider
 {
     use ProductFilterFactoryTrait;
     use CacheOperatingElement;
