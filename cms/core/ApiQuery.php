@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Query\Builder;
+
 class ApiQuery extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -91,6 +93,14 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
         );
 
         return $this->filterQueries;
+    }
+
+    public function getExportFilterQuery(): ?Builder
+    {
+        if ($filterQuery = $this->getFilterQueries()) {
+            return $filterQuery[$this->exportType];
+        }
+        return null;
     }
 
     public function getFilterQueries()
