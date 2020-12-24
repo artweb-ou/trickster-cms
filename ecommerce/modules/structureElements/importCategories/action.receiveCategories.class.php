@@ -16,7 +16,7 @@ class receiveCategoriesImportCategories extends structureElementAction
                 $collection = persistableCollection::getInstance('module_category');
                 $categoriesIds = [];
                 $records = $collection->conditionalLoad('distinct(id)', [], [], [], [], true);
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $categoriesIds[] = $record['id'];
                 }
                 $importOrigin = $selectedPlugin->getOriginName();

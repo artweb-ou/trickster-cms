@@ -40,7 +40,7 @@ class showParametersProduct extends structureElementAction
                 $parametersList = $structureManager->getElementsChildren($parametersGroup->id);
                 if (count($parametersList) > 0) {
                     $groupParameters = [];
-                    foreach ($parametersList as &$element) {
+                    foreach ($parametersList as $element) {
                         if (!isset($categoriesConnectedParametersIds[$element->id])) {
                             continue;
                         }

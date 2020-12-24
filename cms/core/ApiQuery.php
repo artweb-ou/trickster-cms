@@ -15,7 +15,7 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
         return $this->resultTypes;
     }
 
-    protected $filteredIdLists = false;
+    protected $filterQueries;
     protected $queryResult = false;
     protected $exportType;
     protected $limit;
@@ -63,7 +63,7 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
      * @param $parameters
      * @return $this
      */
-    public function setFiltrationParameters($parameters)
+    public function setFiltrationParameters($parameters): ApiQuery
     {
         $this->filtrationParameters = $parameters;
         return $this;
@@ -77,25 +77,28 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
 
     protected function performFiltration()
     {
-        $queryFiltersManager = $this->getService('queryFiltersManager');
-        $this->filteredIdLists = $queryFiltersManager->getFilterIdLists(
+        if (!$this->resultTypes) {
+            $this->resultTypes = [$this->exportType];
+        }
+        /**
+         * @var QueryFiltersManager $queryFiltersManager
+         */
+        $queryFiltersManager = $this->getService('QueryFiltersManager');
+        $this->filterQueries = $queryFiltersManager->getFilterQueries(
             $this->filtrationParameters,
             $this->resultTypes,
             $this->optimized
         );
 
-        return $this->filteredIdLists;
+        return $this->filterQueries;
     }
 
-    public function getFilteredIdLists()
+    public function getFilterQueries()
     {
-        if (!$this->filteredIdLists) {
-            if (!$this->resultTypes) {
-                $this->resultTypes = [$this->exportType];
-            }
+        if (!isset($this->filterQueries)) {
             $this->performFiltration();
         }
-        return $this->filteredIdLists;
+        return $this->filterQueries;
     }
 
     public function getQueryResult()
@@ -105,18 +108,13 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
             $this->queryResult['start'] = $this->start;
             $this->queryResult['limit'] = $this->limit;
 
-            if (!$this->resultTypes) {
-                $this->resultTypes = [$this->exportType];
-            }
-
-            //no need to get all IDs for objects if there are no filters
-            $filterIdLists = [$this->exportType => null];
-            if ($this->filtrationParameters) {
-                $filterIdLists = $this->getFilteredIdLists();
-            }
+            $filterQueries = $this->getFilterQueries();
+            /**
+             * @var ApiQueryResultResolver $apiQueryResultResolver
+             */
             $apiQueryResultResolver = $this->getService('ApiQueryResultResolver');
             $this->queryResult = $apiQueryResultResolver->resolve(
-                $filterIdLists,
+                $filterQueries,
                 $this->exportType,
                 $this->resultTypes,
                 $this->order,

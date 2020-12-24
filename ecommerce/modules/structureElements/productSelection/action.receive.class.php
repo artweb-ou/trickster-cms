@@ -57,7 +57,7 @@ class receiveProductSelection extends structureElementAction
                             ]
                         );
                         $productsRecordsIndex = [];
-                        foreach ($records as &$record) {
+                        foreach ($records as $record) {
                             if (!isset($productsRecordsIndex[$record->productId])) {
                                 $productsRecordsIndex[$record->productId] = [];
                             }
@@ -111,7 +111,7 @@ class receiveProductSelection extends structureElementAction
                             $newValue->value = $element->id;
                             $newValue->persist();
                         }
-                        foreach ($records as &$record) {
+                        foreach ($records as $record) {
                             $record->delete();
                         }
                     }

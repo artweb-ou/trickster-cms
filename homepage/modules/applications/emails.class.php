@@ -268,7 +268,7 @@ class emailsApplication extends controllerApplication
                 $newsMailsAddressesElementId = $structureManager->getElementIdByMarker("newsMailsAddresses");
                 if ($mailsElement = $structureManager->getElementById($newsMailsAddressesElementId, null, true)) {
                     if ($elements = $structureManager->getElementsByIdList($idList, $mailsElement->id, true)) {
-                        foreach ($elements as &$element) {
+                        foreach ($elements as $element) {
                             $element->deleteElementData();
                         }
                     }

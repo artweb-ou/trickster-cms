@@ -14,7 +14,7 @@ class showFormProduction extends structureElementAction
             foreach ($languages as &$languageElement) {
                 if ($languageElement->requested) {
                     $elementsList = $structureManager->getElementsFlatTree($languageElement->id, null, 'structure');
-                    foreach ($elementsList as &$element) {
+                    foreach ($elementsList as $element) {
                         if ($element->structureType == 'gallery') {
                             $linksIndex = $linksManager->getElementsLinksIndex($structureElement->id, 'connectedGallery', 'parent');
                             $item = [];

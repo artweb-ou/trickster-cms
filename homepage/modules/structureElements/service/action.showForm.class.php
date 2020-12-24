@@ -13,7 +13,7 @@ class showFormService extends structureElementAction
             foreach ($languages as &$languageElement) {
                 if ($languageElement->requested) {
                     $elementsList = $structureManager->getElementsByType('feedback', $languageElement->id);
-                    foreach ($elementsList as &$element) {
+                    foreach ($elementsList as $element) {
                         if ($element->structureType == 'feedback') {
                             $formData = $structureElement->getFormData();
                             $feedbackId = $formData['feedbackId'];
@@ -29,7 +29,7 @@ class showFormService extends structureElementAction
             if ($galleriesList = $structureElement->getConnectedGalleries()) {
                 $galleries = [];
                 $linksIndex = $linksManager->getElementsLinksIndex($structureElement->id, 'connectedGallery', 'child');
-                foreach ($galleriesList as &$element) {
+                foreach ($galleriesList as $element) {
                     $item['id'] = $element->id;
                     $item['title'] = $element->getTitle();
                     $item['select'] = isset($linksIndex[$element->id]);

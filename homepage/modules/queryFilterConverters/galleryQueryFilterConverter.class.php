@@ -1,6 +1,6 @@
 <?php
 
-class galleryQueryFilterConverter extends queryFilterConverter
+class galleryQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 }

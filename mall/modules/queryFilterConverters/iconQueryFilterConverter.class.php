@@ -1,6 +1,6 @@
 <?php
 
-class iconQueryFilterConverter extends queryFilterConverter
+class iconQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 }

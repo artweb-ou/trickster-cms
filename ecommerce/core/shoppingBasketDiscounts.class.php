@@ -144,7 +144,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
         if ($discountsElementId = $structureManager->getElementIdByMarker('discounts')) {
             $discountElements = [];
             $connectedIds = $linksManager->getConnectedIdList($discountsElementId, 'structure', 'parent');
-            foreach ($connectedIds as &$id) {
+            foreach ($connectedIds as $id) {
                 if ($discountElement = $structureManager->getElementById($id)) {
                     $discountElements[] = $discountElement;
                 }
@@ -196,7 +196,7 @@ class shoppingBasketDiscounts implements DependencyInjectionContextInterface
         if ($this->applicableDiscountsList === null) {
             $this->applicableDiscountsList = [];
             if ($idList = $this->getApplicableDiscountsIdList()) {
-                foreach ($idList as &$id) {
+                foreach ($idList as $id) {
                     if ($discount = $this->getDiscount($id)) {
                         $this->applicableDiscountsList[] = $discount;
                     }
@@ -723,13 +723,13 @@ class ShoppingBasketDiscount extends errorLogger implements DependencyInjectionC
                     $collection = persistableCollection::getInstance('structure_links');
 
                     if ($records = $collection->conditionalLoad(['childStructureId'], $conditions)) {
-                        foreach ($records as &$record) {
+                        foreach ($records as $record) {
                             $this->applicableProductIdIndex[$record['childStructureId']] = true;
                         }
                     }
                 }
                 if ($this->discountedProductsIds) {
-                    foreach ($this->discountedProductsIds as &$id) {
+                    foreach ($this->discountedProductsIds as $id) {
                         $this->applicableProductIdIndex[$id] = true;
                     }
                 }

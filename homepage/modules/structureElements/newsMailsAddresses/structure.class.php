@@ -29,7 +29,7 @@ class newsMailsAddressesElement extends structureElement
 
         if ($childrenList = $structureManager->getElementsChildren($this->id, 'content')) {
             $sortParameter = [];
-            foreach ($childrenList as &$element) {
+            foreach ($childrenList as $element) {
                 $sortParameter[] = strtolower($element->email);
             }
             array_multisort($sortParameter, SORT_ASC, $childrenList);
@@ -56,12 +56,12 @@ class newsMailsAddressesElement extends structureElement
                 if ($records = $collection->conditionalLoad('distinct(id)', [], ['email' => 'asc'], $limitFields, [], true)
                 ) {
                     $eventsIds = [];
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $eventsIds[] = $record['id'];
                     }
                     if ($this->contentList = $this->getService('structureManager')->getElementsByIdList($eventsIds, $this->id, true)) {
                         $sort = [];
-                        foreach ($this->contentList as &$element) {
+                        foreach ($this->contentList as $element) {
                             $sort[] = strtolower($element->email);
                         }
                         array_multisort($sort, SORT_ASC, $this->contentList);

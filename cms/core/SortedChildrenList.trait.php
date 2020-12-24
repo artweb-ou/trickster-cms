@@ -8,7 +8,7 @@ trait SortedChildrenListTrait
     {
         if ($childrenList = parent::getChildrenList($roles, $linkType)) {
             $sort = [];
-            foreach ($childrenList as &$element) {
+            foreach ($childrenList as $element) {
                 $sort[] = mb_strtolower($element->getTitle());
             }
             array_multisort($sort, $this->childrenListSortDirection, $childrenList);

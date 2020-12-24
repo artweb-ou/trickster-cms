@@ -143,7 +143,7 @@ abstract class menuDependantStructureElement extends structureElement implements
 
             if ($contentType != 'structure') {
                 $urlString = 'view:' . $contentType . '/';
-                foreach ($childrenList as &$element) {
+                foreach ($childrenList as $element) {
                     $element->URL = str_ireplace($urlString, '', $element->URL);
                 }
             }

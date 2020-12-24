@@ -84,7 +84,7 @@ class deliveryTypeElement extends structureElement
                     ],
                 ];
                 if ($records = $collection->conditionalLoad('price', $conditions)) {
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $this->regionsPrices[] = $record['price'];
                     }
                 }
@@ -140,7 +140,7 @@ class deliveryTypeElement extends structureElement
                 ],
             ];
             $records = $collection->conditionalLoad('distinct(id)', $conditions, [], [], [], true);
-            foreach ($records as &$record) {
+            foreach ($records as $record) {
                 $this->deliveryRegionsIds[] = $record['id'];
             }
         }
@@ -211,7 +211,7 @@ class deliveryTypeElement extends structureElement
             ], $conditions)
             ) {
                 $positionsIndex = [];
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $positionsIndex[$record['childStructureId']] = $record['position'];
                 }
 
@@ -242,7 +242,7 @@ class deliveryTypeElement extends structureElement
             }
             $idsToLink = array_diff($idsToLink, $linkedIds);
         }
-        foreach ($idsToLink as &$idToLink) {
+        foreach ($idsToLink as $idToLink) {
             $linksManager->linkElements($this->id, $idToLink, $linkType);
         }
     }
@@ -279,7 +279,7 @@ class deliveryTypeElement extends structureElement
         if ($records = $collection->conditionalLoad('distinct(id)', [], ['id' => 'desc'], [], [], true)
         ) {
             $paymentMethodsIds = [];
-            foreach ($records as &$record) {
+            foreach ($records as $record) {
                 $paymentMethodsIds[] = $record["id"];
             }
             /**

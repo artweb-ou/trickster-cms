@@ -1,6 +1,6 @@
 <?php
 
-class genericIconQueryFilterConverter extends queryFilterConverter
+class genericIconQueryFilterConverter extends QueryFilterConverter
 {
     public function convert($sourceData, $sourceType)
     {

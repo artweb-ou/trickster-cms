@@ -1,6 +1,6 @@
 <?php
 
-class userGroupQueryFilterConverter extends queryFilterConverter
+class userGroupQueryFilterConverter extends QueryFilterConverter
 {
     public function convert($sourceData, $sourceType)
     {

@@ -173,7 +173,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 'catalogue',
             ];
             if ($records = $collection->conditionalLoad('childStructureId', $conditions)) {
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $this->connectedProductsIds[] = $record['childStructureId'];
                 }
             }
@@ -282,7 +282,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 ];
 
                 if ($records = $collection->conditionalLoad("childStructureId", $conditions)) {
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $filteredIds[] = $record["childStructureId"];
                     }
                 }
@@ -303,7 +303,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             ];
             if ($records = $collection->conditionalLoad('id', $conditions)) {
                 $unavailableProductsIds = [];
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $unavailableProductsIds[] = $record['id'];
                 }
                 $filteredIds = array_diff($filteredIds, $unavailableProductsIds);
@@ -345,7 +345,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 $productIdFilter = [];
 
                 if ($records = $collection->conditionalLoad('id', $conditions, $orderFields, 5)) {
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $productIdFilter[] = $record['id'];
                     }
                 }
@@ -391,7 +391,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 ];
 
                 if ($records = $collection->conditionalLoad("childStructureId", $conditions)) {
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $filteredIds[] = $record["childStructureId"];
                     }
                 }
@@ -413,7 +413,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             ];
             if ($records = $collection->conditionalLoad('id', $conditions)) {
                 $unavailableProductsIds = [];
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $unavailableProductsIds[] = $record['id'];
                 }
                 $filteredIds = array_diff($filteredIds, $unavailableProductsIds);
@@ -451,7 +451,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
                 $productIdFilter = [];
 
                 if ($records = $collection->conditionalLoad('id', $conditions, $orderFields, $limit)) {
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $productIdFilter[] = $record['id'];
                     }
                 }
@@ -481,7 +481,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $childCategories = [];
         $structureManager = $this->getService('structureManager');
         $childrenList = $structureManager->getElementsChildren($this->id, 'container');
-        foreach ($childrenList as &$element) {
+        foreach ($childrenList as $element) {
             if ($element->structureType == 'category') {
                 $childCategories[] = $element;
             }
@@ -498,7 +498,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $structureManager = $this->getService('structureManager');
         if ($parentElement = $this->getCurrentParentElement()) {
             $childrenList = $structureManager->getElementsChildren($parentElement->id);
-            foreach ($childrenList as &$element) {
+            foreach ($childrenList as $element) {
                 if ($element->structureType == 'category' && ($element->level == $this->level) && ($element->id != $this->id)
                 ) {
                     $residingCategories[] = $element;
@@ -594,7 +594,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             $this->categoriesList = [];
             $structureManager = $this->getService('structureManager');
             if ($childrenList = $structureManager->getElementsChildren($this->id, 'container')) {
-                foreach ($childrenList as &$element) {
+                foreach ($childrenList as $element) {
                     if ($element->structureType == 'category' && !$element->hidden) {
                         $this->categoriesList[] = $element;
                     }
@@ -768,7 +768,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
 
                 $structureManager = $this->getService('structureManager');
                 if ($records = $query->get()) {
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         if ($product = $structureManager->getElementById($record['id'])) {
                             $this->productsList[] = $product;
                         }
@@ -881,13 +881,13 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
         $collection = persistableCollection::getInstance('import_origin');
         $searchFields = ['elementId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         $collection = persistableCollection::getInstance('category_import_pricing');
         $searchFields = ['categoryId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         parent::deleteElementData();
@@ -957,7 +957,7 @@ class categoryElement extends categoryStructureElement implements ConfigurableLa
             $selectedId = $this->getValue('feedbackId', $languageElement->id);
             $feedbackFormsList[$languageElement->id] = [];
             $elementsList = $structureManager->getElementsByType("feedback", $languageElement->id);
-            foreach ($elementsList as &$element) {
+            foreach ($elementsList as $element) {
                 if ($element->structureType == 'feedback') {
                     $field = [];
                     $field['id'] = $element->id;

@@ -144,7 +144,7 @@ class showFormProduct extends structureElementAction
                 $brandsList = [];
                 $formData = $structureElement->getFormData();
                 $selectedBrandId = $formData['brandId'];
-                foreach ($structureElement->brandsList as &$element) {
+                foreach ($structureElement->brandsList as $element) {
                     $item = [];
                     $item['id'] = $element->id;
                     $item['title'] = $element->getTitle();
@@ -160,7 +160,7 @@ class showFormProduct extends structureElementAction
                 $sortParameter = [];
                 $discounts = [];
                 $selectedDiscountsId = $structureElement->getAllConnectedDiscounts();
-                foreach ($structureElement->discountsList as &$element) {
+                foreach ($structureElement->discountsList as $element) {
                     $item = [];
                     $item['id'] = $element->id;
                     $item['title'] = $element->getTitle();

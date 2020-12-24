@@ -85,7 +85,7 @@ class ordersElement extends structureElement
 
         $idList = [];
         if ($records = $collection->conditionalLoad('id', $conditions)) {
-            foreach ($records as &$record) {
+            foreach ($records as $record) {
                 $idList[] = $record['id'];
             }
         }
@@ -101,7 +101,7 @@ class ordersElement extends structureElement
         $sortParameter = [];
         $filteredArray = [];
 
-        foreach ($contentList as $key => &$element) {
+        foreach ($contentList as $key => $element) {
             if (in_array($element->getOrderStatus(), $filterTypes)) {
                 $deliveryTotal = $deliveryTotal + $element->deliveryPrice;
 

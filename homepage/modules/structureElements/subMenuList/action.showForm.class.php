@@ -11,7 +11,7 @@ class showFormSubMenuList extends structureElementAction
             if ($languageElement = $structureManager->getElementsFirstParent($structureElement->id)) {
                 $menusList = $structureManager->getElementsFlatTree($languageElement->id, 'container', $structureElement->getMenuLinkTypes(), false);
 
-                foreach ($menusList as &$element) {
+                foreach ($menusList as $element) {
                     if ($element->structureRole == 'container' || $element->structureRole == 'hybrid') {
                         $item = [];
                         $item['id'] = $element->id;

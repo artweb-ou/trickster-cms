@@ -39,7 +39,7 @@ class userElement extends structureElement implements JsonDataProvider
         $fields = [];
         if ($records = $this->getAdditionalData()) {
             $structureManager = $this->getService('structureManager');
-            foreach ($records as $fieldId => &$record) {
+            foreach ($records as $fieldId => $record) {
                 if ($element = $structureManager->getElementById($fieldId)) {
                     $element->value = $record->value;
                     $fields[] = $element;

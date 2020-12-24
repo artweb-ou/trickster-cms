@@ -1,33 +1,12 @@
 <?php
 
-class queryFiltersManager extends errorLogger implements DependencyInjectionContextInterface
+class QueryFiltersManager extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
 
-    /** @var queryFiltersManager */
-    protected static $instance = false;
-
-    public function __construct()
-    {
-        self::$instance = $this;
-    }
-
-    /**
-     * @return queryFiltersManager
-     * @deprecated
-     */
-    public static function getInstance()
-    {
-        if (!self::$instance) {
-            $className = __CLASS__;
-            self::$instance = new $className();
-        }
-        return self::$instance;
-    }
-
     /**
      * @param $filterName
-     * @return bool|queryFilter
+     * @return bool|QueryFilter
      */
     protected function getFilter($filterName)
     {
@@ -54,7 +33,7 @@ class queryFiltersManager extends errorLogger implements DependencyInjectionCont
 
     /**
      * @param $type
-     * @return bool|queryFilterConverter
+     * @return bool|QueryFilterConverter
      */
     public function getConverter($type)
     {
@@ -86,30 +65,18 @@ class queryFiltersManager extends errorLogger implements DependencyInjectionCont
      * @param bool $optimized - enable parameters sorting top optimized result query
      * @return array|bool
      */
-    public function getFilterIdLists($parameters, $resultTypes, $optimized = true)
+    public function getFilterQueries($parameters, $resultTypes, $optimized = true)
     {
-        $result = false;
+        $queries = null;
         if ($parameters) {
-            $finalResultsIndex = $this->compileResultsIndex($resultTypes);
-            foreach ($parameters as $parametersList) {
-                if ($groupResultQuery = $this->getFilterGroupResults($parametersList, $resultTypes, $optimized)) {
-                    foreach ($finalResultsIndex as $type => $value) {
-                        if ($groupResultQuery[$type] && $records = $groupResultQuery[$type]->get()) {
-                            $finalResultsIndex[$type] = array_merge(
-                                $finalResultsIndex[$type],
-                                array_column($records, 'id')
-                            );
-                        }
-                    }
+            $queries = $this->compileResultsIndex($resultTypes);
+            if ($groupResultQuery = $this->getFilterQuery($parameters, $resultTypes, $optimized)) {
+                foreach ($queries as $type => $value) {
+                    $queries[$type] = $groupResultQuery[$type];
                 }
             }
-            $result = $finalResultsIndex;
         }
-        return $result;
-    }
-
-    public function getQueries()
-    {
+        return $queries;
     }
 
     /**
@@ -118,7 +85,7 @@ class queryFiltersManager extends errorLogger implements DependencyInjectionCont
      * @param $optimized - sort the parameters to get less type conversions and simplier query
      * @return array|bool
      */
-    protected function getFilterGroupResults($parametersList, $resultTypes, $optimized)
+    protected function getFilterQuery($parametersList, $resultTypes, $optimized)
     {
         $resultNotFound = false;
 
@@ -240,74 +207,4 @@ class queryFiltersManager extends errorLogger implements DependencyInjectionCont
         }
         return $finalResultsList;
     }
-}
-
-abstract class queryFilter extends errorLogger implements DependencyInjectionContextInterface
-{
-    use DependencyInjectionContextTrait;
-
-    /**
-     * return type of query converter required to provide the right query for the filter
-     *
-     * @return string|boolean
-     */
-    abstract public function getRequiredType();
-
-    /**
-     * @param mixed $argument
-     * @param Illuminate\Database\Query\Builder $query
-     * @return mixed
-     */
-    abstract public function getFilteredIdList($argument, $query);
-}
-
-abstract class queryFilterConverter extends errorLogger implements DependencyInjectionContextInterface
-{
-    use DependencyInjectionContextTrait;
-
-    /**
-     * @var Illuminate\Database\Query\Builder
-     */
-    protected $correctionQuery;
-
-    /**
-     * @return Illuminate\Database\Query\Builder
-     */
-    public function getCorrectionQuery()
-    {
-        return $this->correctionQuery;
-    }
-
-    /**
-     * @param Illuminate\Database\Query\Builder $correctionQuery
-     */
-    public function setCorrectionQuery($correctionQuery)
-    {
-        $this->correctionQuery = $correctionQuery;
-    }
-
-    protected $type;
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @param Illuminate\Database\Query\Builder $sourceData
-     * @param string $sourceType
-     * @return mixed
-     */
-    abstract public function convert($sourceData, $sourceType);
 }

@@ -25,7 +25,7 @@ class currenciesElement extends structureElement
         $childrenList = $structureManager->getElementsChildren($this->id);
 
         $currenciesData = [];
-        foreach ($childrenList as &$element) {
+        foreach ($childrenList as $element) {
             $currenciesDataItem = [];
 
             $currenciesDataItem['code'] = $element->code;

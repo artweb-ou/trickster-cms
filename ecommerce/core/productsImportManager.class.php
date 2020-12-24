@@ -207,7 +207,7 @@ class productsImportManager implements DependencyInjectionContextInterface
                 ];
                 if ($records = $collection->conditionalLoad($columns, $conditions)) {
                     $productsInfo = [];
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         if ($importId = $this->getElementImportId($record['id'], $importOrigin)) {
                             $productsInfo[$importId] = $record;
                         }
@@ -416,7 +416,7 @@ class productsImportManager implements DependencyInjectionContextInterface
         if ($categoryParametersIds) {
             $parameterImportId = $parameterInfo['importId'];
             $relevantParametersIds = $this->getElementsIdsByImportId($parameterImportId, $importOrigin, $categoryParametersIds);
-            foreach ($relevantParametersIds as &$elementId) {
+            foreach ($relevantParametersIds as $elementId) {
                 $element = $this->getService('structureManager')->getElementById($elementId);
                 if ($element) {
                     $results[] = $element;
@@ -678,7 +678,7 @@ class productsImportManager implements DependencyInjectionContextInterface
                 'id',
             ], $conditions);
             if ($records) {
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $elementId = $record['id'];
                     $importId = $this->getElementImportId($elementId, $origin);
                     $element = $structureManager->getElementById($elementId);
@@ -1125,7 +1125,7 @@ class productsImportManager implements DependencyInjectionContextInterface
                 'id',
             ], $conditions)
             ) {
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $importCategoriesIds[] = $record['id'];
                 }
             }
@@ -1141,7 +1141,7 @@ class productsImportManager implements DependencyInjectionContextInterface
                     ['DISTINCT elementId, importOrigin, importId'],
                     $conditions, [], [], [], true);
                 if ($records) {
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $origin = $record['importOrigin'];
                         $importId = $record['importId'];
                         $elementId = $record['elementId'];
@@ -1461,7 +1461,7 @@ class productsImportManager implements DependencyInjectionContextInterface
             ];
         }
         $records = $this->originsCollection->conditionalLoad(['elementId'], $conditions, ['id' => 'desc']);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $elementIds[] = $record['elementId'];
         }
         return $elementIds;
@@ -1484,7 +1484,7 @@ class productsImportManager implements DependencyInjectionContextInterface
         ];
         $records = $this->originsCollection->conditionalLoad(['elementId'], $conditions);
         if ($records) {
-            foreach ($records as &$record) {
+            foreach ($records as $record) {
                 $elementsIds[] = $record['elementId'];
             }
         }
@@ -1508,7 +1508,7 @@ class productsImportManager implements DependencyInjectionContextInterface
         ];
         $records = $this->originsCollection->conditionalLoad(['importId'], $conditions);
         if ($records) {
-            foreach ($records as &$record) {
+            foreach ($records as $record) {
                 $importIds[] = $record['importId'];
             }
         }

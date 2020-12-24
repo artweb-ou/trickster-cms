@@ -1,6 +1,6 @@
 <?php
 
-class bannerCategoryQueryFilterConverter extends queryFilterConverter
+class bannerCategoryQueryFilterConverter extends QueryFilterConverter
 {
     public function convert($sourceData, $sourceType)
     {

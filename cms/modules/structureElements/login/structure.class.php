@@ -26,7 +26,7 @@ class loginElement extends menuDependantStructureElement
             $languagesManager = $this->getService('LanguagesManager');
             if ($elements = $structureManager->getElementsByType('registration', $languagesManager->getCurrentLanguageId())
             ) {
-                foreach ($elements as &$element) {
+                foreach ($elements as $element) {
                     if ($element->type == 'registration') {
                         $this->registrationForm = $element;
                         break;
@@ -53,7 +53,7 @@ class loginElement extends menuDependantStructureElement
             $languagesManager = $this->getService('LanguagesManager');
             if ($elements = $structureManager->getElementsByType('registration', $languagesManager->getCurrentLanguageId())
             ) {
-                foreach ($elements as &$element) {
+                foreach ($elements as $element) {
                     if ($element->type == 'userdata') {
                         $this->userDataForm = $element;
                         break;
@@ -83,7 +83,7 @@ class loginElement extends menuDependantStructureElement
             $languagesManager = $this->getService('LanguagesManager');
             if ($elements = $structureManager->getElementsByType('passwordReminder', $languagesManager->getCurrentLanguageId())
             ) {
-                foreach ($elements as &$element) {
+                foreach ($elements as $element) {
                     $this->passwordReminderForm = $element;
                     break;
                 }

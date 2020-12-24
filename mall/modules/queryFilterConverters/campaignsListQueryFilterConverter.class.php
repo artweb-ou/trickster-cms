@@ -1,6 +1,6 @@
 <?php
 
-class campaignsListQueryFilterConverter extends queryFilterConverter
+class campaignsListQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 

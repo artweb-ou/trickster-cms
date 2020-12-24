@@ -38,12 +38,12 @@ class eventsElement extends structureElement
 
                 if ($records = $query->skip($this->pager->startElement)->take($elementsOnPage)->get()) {
                     $eventsIds = [];
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $eventsIds[] = $record['id'];
                     }
                     if ($this->contentList = $this->getService('structureManager')->getElementsByIdList($eventsIds, $this->id, true)) {
                         $sort = [];
-                        foreach ($this->contentList as &$element) {
+                        foreach ($this->contentList as $element) {
                             $sort[] = strtotime($element->startDate);
                         }
                         array_multisort($sort, SORT_DESC, $this->contentList);

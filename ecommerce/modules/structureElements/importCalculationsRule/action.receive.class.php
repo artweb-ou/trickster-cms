@@ -15,7 +15,7 @@ class receiveImportCalculationsRule extends structureElementAction
                     if ($rule['type'] == 'price') {
                         $titleParts[] = $rule['value'][0] . '-' . $rule['value'][1];
                     } else {
-                        foreach ($rule['value'] as &$elementId) {
+                        foreach ($rule['value'] as $elementId) {
                             if ($element = $structureManager->getElementById($elementId)) {
                                 $titleParts[] = $element->title;
                             }

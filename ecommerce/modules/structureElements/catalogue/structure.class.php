@@ -231,7 +231,7 @@ class catalogueElement extends structureElement
                         $publicLanguageId,
                     ])
                     ) {
-                        foreach ($records as &$record) {
+                        foreach ($records as $record) {
                             $translatedIDs[] = $record['id'];
                         }
                     }
@@ -266,7 +266,7 @@ class catalogueElement extends structureElement
                 $structureManager = $this->getService('structureManager');
                 if ($records) {
                     $productsIds = [];
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $productsIds[] = $record['id'];
                     }
                     $collection = persistableCollection::getInstance('import_origin');
@@ -280,7 +280,7 @@ class catalogueElement extends structureElement
                     $records = $collection->conditionalLoad(['importOrigin', 'elementId'], $conditions);
                     $productsOriginsIndex = [];
                     if ($records) {
-                        foreach ($records as &$record) {
+                        foreach ($records as $record) {
                             $productId = $record['elementId'];
                             $importOrigin = $record['importOrigin'];
                             if (!isset($productsOriginsIndex[$productId])) {

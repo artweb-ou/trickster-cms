@@ -37,7 +37,7 @@ abstract class categoryStructureElement extends ProductsListElement
             if ($records = $query->get()) {
                 if ($groupsIdList = array_column($records, 'parentStructureId')) {
                     if ($elementsList = $structureManager->getElementsByIdList($groupsIdList, $this->id, true)) {
-                        foreach ($elementsList as &$element) {
+                        foreach ($elementsList as $element) {
                             if ($element->structureType == 'productParametersGroup' && !$element->hidden) {
                                 $this->parametersGroups[] = $element;
                             }

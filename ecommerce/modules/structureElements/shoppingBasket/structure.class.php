@@ -272,7 +272,7 @@ class shoppingBasketElement extends dynamicFieldsStructureElement implements cli
             ) {
                 $fieldsList = $deliveryTypeElement->getFieldsList();
 
-                foreach ($fieldsList as &$record) {
+                foreach ($fieldsList as $record) {
                     //if element is not "preloaded" this way, then we have problems with cache,
                     //because its location could be previously cached within other delivery type,
                     //which is not available currently

@@ -52,13 +52,13 @@ class productParameterElement extends structureElement
         $collection = persistableCollection::getInstance('import_origin');
         $searchFields = ['elementId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         $collection = persistableCollection::getInstance('module_product_parameter_value');
         $searchFields = ['parameterId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         parent::deleteElementData();

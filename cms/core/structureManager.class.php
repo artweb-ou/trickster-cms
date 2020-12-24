@@ -113,7 +113,7 @@ class structureManager implements DependencyInjectionContextInterface
         &$usedIds = []
     ) {
         $treeLevel = $this->getElementsChildren($elementId, $roles, $linkType, null, $restrictLinkTypes);
-        foreach ($treeLevel as &$element) {
+        foreach ($treeLevel as $element) {
             if (!in_array($element->id, $usedIds)) {
                 $usedIds[] = $element->id;
                 $flatTree[] = $element;
@@ -130,7 +130,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param structureElement[] $elementsChain
      * @return structureElement[]
      */
-    public function getElementsChain($structurePath = [], $parentElementId = null, &$elementsChain = [])
+    public function getElementsChain($structurePath = [], $parentElementId = null, $elementsChain = [])
     {
         if ($structurePath) {
             if (is_null($parentElementId)) {
@@ -228,7 +228,7 @@ class structureManager implements DependencyInjectionContextInterface
     public function getLoadedElementsByType($type)
     {
         $elements = [];
-        foreach ($this->elementsList as &$element) {
+        foreach ($this->elementsList as $element) {
             if ($element && $element->structureType == $type) {
                 $elements[] = $element;
             }
@@ -451,7 +451,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
 
                 $parentElement = $this->elementsList[$parentElementId];
-                foreach ($parentElement->childrenList as &$element) {
+                foreach ($parentElement->childrenList as $element) {
                     if ($element->structureName == $childElementName) {
                         $result = $this->elementsList[$element->id];
                         break;
@@ -485,7 +485,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
                 if (!$result) {
                     $this->getElementsChildren($parentElement->id);
-                    foreach ($parentElement->childrenList as &$element) {
+                    foreach ($parentElement->childrenList as $element) {
                         if ($element->structureName == $childElementName) {
                             $result = $this->elementsList[$element->id];
                         }
@@ -653,7 +653,7 @@ class structureManager implements DependencyInjectionContextInterface
         if (is_null($linkTypes)) {
             $linkTypes = ['structure'];
         }
-        foreach ($idList as &$elementId) {
+        foreach ($idList as $elementId) {
             foreach ($linkTypes as &$linkType) {
                 if ($parentIdList = $this->linksManager->getConnectedIdList($elementId, $linkType, 'child')) {
                     foreach ($parentIdList as &$parentId) {
@@ -806,7 +806,7 @@ class structureManager implements DependencyInjectionContextInterface
             //make an array of children elements' structure ids
             $idListToLoad = [];
             $idListToReturn = [];
-            foreach ($elementsLinks as &$elementsLink) {
+            foreach ($elementsLinks as $elementsLink) {
                 $childId = $elementsLink->childStructureId;
                 $idListToReturn[] = $childId;
                 if (!isset($this->elementsList[$childId]) || !is_object($this->elementsList[$childId])) {
@@ -925,7 +925,7 @@ class structureManager implements DependencyInjectionContextInterface
 
             //preload all module data for all loaded elements - this is faster and more effective than lazy-loading
             if (count($idList) > 1) { // speed gain improbable if only one element is needed
-                foreach ($loadedModuleTables as $resourceName => &$elementsInfo) {
+                foreach ($loadedModuleTables as $resourceName => $elementsInfo) {
                     if ($elementsInfo['language'] == 0) {
                         if ($rows = persistableCollection::getInstance($resourceName)
                             ->load(['id' => $elementsInfo['id']])
@@ -958,7 +958,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
             }
 
-            foreach ($loadedElements as &$element) {
+            foreach ($loadedElements as $element) {
                 $this->performAction($element);
             }
             return $loadedElements; //return array of loaded elements

@@ -1,6 +1,6 @@
 <?php
 
-class structureSkipIdQueryFilter extends queryFilter
+class structureSkipIdQueryFilter extends QueryFilter
 {
     public function getRequiredType()
     {

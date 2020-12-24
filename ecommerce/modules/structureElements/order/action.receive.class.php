@@ -14,17 +14,17 @@ class receiveOrder extends structureElementAction
     {
         if ($this->validated) {
             if ($fieldElements = $structureElement->getOrderFields()) {
-                foreach ($fieldElements as &$element) {
+                foreach ($fieldElements as $element) {
                     $element->executeAction('receive');
                 }
             }
             if ($discountElements = $structureElement->getDiscountsList()) {
-                foreach ($discountElements as &$element) {
+                foreach ($discountElements as $element) {
                     $element->executeAction('receive');
                 }
             }
             if ($serviceElements = $structureElement->getServicesList()) {
-                foreach ($serviceElements as &$element) {
+                foreach ($serviceElements as $element) {
                     $element->executeAction('receive');
                 }
             }

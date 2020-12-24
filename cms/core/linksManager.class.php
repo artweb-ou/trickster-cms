@@ -74,7 +74,7 @@ class linksManager extends errorLogger
     protected function linksLoadRequired($elementId, $types, $elementRoles)
     {
         //check each role separately
-        foreach ($elementRoles as &$elementRole) {
+        foreach ($elementRoles as $elementRole) {
             //check if at least something was loaded for this role and element id
             if (!isset($this->elementsLinks[$elementRole][$elementId])) {
                 return true;
@@ -100,7 +100,7 @@ class linksManager extends errorLogger
     protected function compileElementLinksList($elementId, $types, $elementRoles)
     {
         $result = [];
-        foreach ($elementRoles as &$elementRole) {
+        foreach ($elementRoles as $elementRole) {
             if (!$types) {
                 $result = array_merge($result, $this->elementsLinks[$elementRole][$elementId]['*']);
             } else {
@@ -114,7 +114,7 @@ class linksManager extends errorLogger
 
     protected function cacheLinks($elementsLinks, $elementId, $type, $elementRoles)
     {
-        foreach ($elementRoles as &$elementRole) {
+        foreach ($elementRoles as $elementRole) {
             $this->cacheLinksByRole($elementsLinks, $elementId, $type, $elementRole);
         }
     }
@@ -170,7 +170,7 @@ class linksManager extends errorLogger
     protected function loadLinks($elementId, $types, $elementRoles)
     {
         $result = [];
-        foreach ($elementRoles as &$elementRole) {
+        foreach ($elementRoles as $elementRole) {
             $searchFields = [];
             if ($elementRole == 'parent') {
                 $searchFields[] = ['parentStructureId', '=', $elementId];
@@ -236,7 +236,7 @@ class linksManager extends errorLogger
             $sourceElementRoles = [$sourceElementRoles];
         }
         $result = [];
-        foreach ($sourceElementRoles as &$elementRole) {
+        foreach ($sourceElementRoles as $elementRole) {
             foreach ($types as &$type) {
                 if (!isset($this->elementsConnectedId[$elementRole][$elementId])) {
                     $this->elementsConnectedId[$elementRole][$elementId] = [];
@@ -389,7 +389,7 @@ class linksManager extends errorLogger
     protected function searchAndUnsetLinks($parentId, $childId, $linkType, &$links)
     {
         if (isset($links[$linkType])) {
-            foreach ($links[$linkType] as $key => &$elementLink) {
+            foreach ($links[$linkType] as $key => $elementLink) {
                 if ($elementLink->parentStructureId == $parentId && $elementLink->childStructureId == $childId) {
                     unset($links[$linkType][$key]);
                 }

@@ -46,7 +46,7 @@ class rssApplication extends controllerApplication
         if ($types = $this->config->getMerged('types')) {
             if ($elements = $structureManager->getElementsByType($types, $languageId, ['dateCreated' => '0'], $limit)
             ) {
-                foreach ($elements as &$element) {
+                foreach ($elements as $element) {
                     if (!$element->hidden && ($element->structureType != 'product' || ($element->inactive == '0' && $element->isPurchasable()))
                     ) {
                         $rssItems[] = $element;

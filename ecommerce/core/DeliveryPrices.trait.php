@@ -35,7 +35,7 @@ trait DeliveryPricesTrait
             $collection = persistableCollection::getInstance('delivery_type_inactive');
             $searchFields = ['targetId' => $this->id];
             $records = $collection->load($searchFields);
-            foreach ($records as &$record) {
+            foreach ($records as $record) {
                 $this->inactiveDeliveryTypesRecords[$record->deliveryTypeId] = $record;
             }
         }

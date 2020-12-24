@@ -1,6 +1,6 @@
 <?php
 
-class registrationInputQueryFilterConverter extends queryFilterConverter
+class registrationInputQueryFilterConverter extends QueryFilterConverter
 {
     public function convert($sourceData, $sourceType)
     {

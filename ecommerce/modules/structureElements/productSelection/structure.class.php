@@ -108,7 +108,7 @@ class productSelectionElement extends structureElement
                 ->conditionalLoad('childStructureId', $conditions, ['position' => 'desc'])
             ) {
                 $connectedOptionsIds = [];
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $connectedOptionsIds[] = $record['childStructureId'];
                 }
                 $conditions = [
@@ -122,7 +122,7 @@ class productSelectionElement extends structureElement
                     ->conditionalLoad('distinct(value)', $conditions, [], [], [], true)
                 ) {
                     $usedOptionsIds = [];
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $usedOptionsIds[] = $record['value'];
                     }
                     $usedOptionsIdsOrdered = array_intersect($connectedOptionsIds, $usedOptionsIds);
@@ -163,7 +163,7 @@ class productSelectionElement extends structureElement
         $collection = persistableCollection::getInstance('import_origin');
         $searchFields = ['elementId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         parent::deleteElementData();

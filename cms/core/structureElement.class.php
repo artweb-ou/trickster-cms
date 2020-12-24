@@ -825,7 +825,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         $structureManager = $this->getService('structureManager');
         $childrenList = $structureManager->getElementsChildren($this->id);
         $exportData['childrenData'] = [];
-        foreach ($childrenList as &$element) {
+        foreach ($childrenList as $element) {
             $exportData['childrenData'][] = $element->getExportData();
         }
 

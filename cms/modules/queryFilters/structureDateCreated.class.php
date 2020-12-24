@@ -1,6 +1,6 @@
 <?php
 
-class structureDateCreatedQueryFilter extends queryFilter
+class structureDateCreatedQueryFilter extends QueryFilter
 {
     public function getRequiredType()
     {

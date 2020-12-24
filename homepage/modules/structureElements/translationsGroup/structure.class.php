@@ -10,7 +10,7 @@ class translationsGroupElement extends TranslationsGroupStructureElement
 
         $childrenList = $structureManager->getElementsChildren($this->id, 'content');
         $sortParameter = [];
-        foreach ($childrenList as &$element) {
+        foreach ($childrenList as $element) {
             $sortParameter[] = $element->structureName;
         }
         array_multisort($sortParameter, SORT_ASC, $childrenList);

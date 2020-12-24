@@ -1,6 +1,6 @@
 <?php
 
-class discountQueryFilterConverter extends queryFilterConverter
+class discountQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 }

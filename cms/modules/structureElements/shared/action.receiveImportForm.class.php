@@ -12,7 +12,7 @@ class receiveImportFormShared extends structureElementAction
                 'elementId' => $structureElement->id,
             ]);
             $existingOriginRecords = [];
-            foreach ($existingRecords as &$record) {
+            foreach ($existingRecords as $record) {
                 if (!isset($existingOriginRecords[$record->importOrigin])) {
                     $existingOriginRecords[$record->importOrigin] = [];
                 }
@@ -37,7 +37,7 @@ class receiveImportFormShared extends structureElementAction
                     $originEntry->persist();
                 }
             }
-            foreach ($existingRecords as &$record) {
+            foreach ($existingRecords as $record) {
                 if (!isset($relevantRecordsIds[$record->id])) {
                     $record->delete();
                 }

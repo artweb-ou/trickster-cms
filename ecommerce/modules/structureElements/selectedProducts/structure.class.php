@@ -250,7 +250,7 @@ class selectedProductsElement extends ProductsListElement implements Configurabl
 //            ];
 //            $result = [];
 //            if ($records = $collection->conditionalLoad('productId', $conditions)) {
-//                foreach ($records as &$record) {
+//                foreach ($records as $record) {
 //                    $result[] = $record['productId'];
 //                }
 //            }

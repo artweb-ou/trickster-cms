@@ -8,7 +8,7 @@ class showFormShortcut extends structureElementAction
             $structureElement->elementsList = [];
             $elementsList = $structureManager->getElementsFlatTree($structureManager->getRootElementId(), 'container');
 
-            foreach ($elementsList as &$element) {
+            foreach ($elementsList as $element) {
                 $flatItem = [];
                 $flatItem['level'] = $element->level;
                 $flatItem['id'] = $element->id;

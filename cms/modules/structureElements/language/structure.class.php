@@ -80,7 +80,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         if ($this->currentMainMenu === null) {
             $this->currentMainMenu = false;
             if ($mainMenuElements = $this->getMainMenuElements(true)) {
-                foreach ($mainMenuElements as &$element) {
+                foreach ($mainMenuElements as $element) {
                     if ($element->requested) {
                         $this->currentMainMenu = $element;
                         break;
@@ -347,7 +347,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
             $childrenList = $structureManager->getElementsByIdList($idList, $this->id, true);
             if ($contentType != 'structure') {
                 $urlString = 'view:' . $contentType . '/';
-                foreach ($childrenList as &$element) {
+                foreach ($childrenList as $element) {
                     if (!stripos($element->URL, $urlString)) {
                         $element->URL .= $urlString;
                     }

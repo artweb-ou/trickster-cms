@@ -1,6 +1,6 @@
 <?php
 
-class structureQueryFilterConverter extends queryFilterConverter
+class structureQueryFilterConverter extends QueryFilterConverter
 {
     public function convert($sourceData, $sourceType)
     {

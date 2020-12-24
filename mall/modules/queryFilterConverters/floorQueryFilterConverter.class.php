@@ -1,6 +1,6 @@
 <?php
 
-class floorQueryFilterConverter extends queryFilterConverter
+class floorQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 }

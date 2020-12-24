@@ -1,6 +1,6 @@
 <?php
 
-class eventsListQueryFilterConverter extends queryFilterConverter
+class eventsListQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 }

@@ -37,7 +37,7 @@ class receiveProduct extends structureElementAction
 
                 //delete all structure links not leading to catalogue element
                 if ($parentIdList = $linksManager->getConnectedIdList($structureElement->id, 'structure', 'child')) {
-                    foreach ($parentIdList as &$id) {
+                    foreach ($parentIdList as $id) {
                         if ($catalogueElement->id != $id) {
                             $linksManager->unLinkElements($id, $structureElement->id, 'structure');
                         }

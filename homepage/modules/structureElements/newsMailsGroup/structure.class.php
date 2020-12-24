@@ -41,7 +41,7 @@ class newsMailsGroupElement extends structureElement
                     ->offset($this->pager->startElement)->limit($elementsOnPage)->orderBy('email', 'asc');
                 if ($records = $query->get()) {
                     $addressesIds = array_column($records, 'id');
-                    foreach ($addressesIds as &$id) {
+                    foreach ($addressesIds as $id) {
                         $this->emailAddresses[] = $structureManager->getElementById($id);
                     }
                 }

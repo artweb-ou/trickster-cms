@@ -1,6 +1,6 @@
 <?php
 
-class userQueryFilterConverter extends queryFilterConverter
+class userQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 }

@@ -1070,7 +1070,7 @@ class productElement extends structureElement implements
         $collection = persistableCollection::getInstance('module_product_parameter_value');
         $searchFields = ['productId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         $pricesManager = $this->getService('ProductOptionsPricesManager');
@@ -1080,13 +1080,13 @@ class productElement extends structureElement implements
         $collection = persistableCollection::getInstance('import_origin');
         $searchFields = ['elementId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         $collection = persistableCollection::getInstance('product_import_categories');
         $searchFields = ['productId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         parent::deleteElementData();
@@ -1397,7 +1397,7 @@ class productElement extends structureElement implements
             ];
             $records = $originsCollection->conditionalLoad(['importOrigin'], $conditions);
             if ($records) {
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $this->xmlSourcesCodeNames[] = $record['importOrigin'];
                 }
             }

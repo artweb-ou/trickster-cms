@@ -1,6 +1,6 @@
 <?php
 
-class mapQueryFilterConverter extends queryFilterConverter
+class mapQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 }

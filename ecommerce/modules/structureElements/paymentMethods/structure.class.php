@@ -39,7 +39,7 @@ class paymentMethodsElement extends structureElement
 
         if ($childrenList = $structureManager->getElementsChildren($this->id)) {
             $sortParameter = [];
-            foreach ($childrenList as &$element) {
+            foreach ($childrenList as $element) {
                 $sortParameter[] = mb_strtolower($element->title);
             }
             array_multisort($sortParameter, SORT_ASC, $childrenList);

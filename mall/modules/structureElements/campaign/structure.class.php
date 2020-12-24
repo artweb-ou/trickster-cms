@@ -35,7 +35,7 @@ class campaignElement extends structureElement
         $linksManager = $this->getService('linksManager');
         $structureManager = $this->getService('structureManager');
         $list = $linksManager->getConnectedIdList($this->id, 'campaigns', 'child');
-        foreach ($list as &$id) {
+        foreach ($list as $id) {
             if ($shop = $structureManager->getElementById($id)) {
                 $shopURL = $shop->URL;
                 break;

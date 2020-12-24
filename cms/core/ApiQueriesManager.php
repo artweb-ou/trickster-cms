@@ -92,9 +92,6 @@ class ApiQueriesManager extends errorLogger implements DependencyInjectionContex
                 }
             }
         }
-        if ($queryParameters) {
-            $queryParameters = [$queryParameters];
-        }
         return [
             'resultTypes' => $resultTypes,
             'limitStart' => $limitStart,

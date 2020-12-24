@@ -32,7 +32,7 @@ class receiveLanguageFormShared extends structureElementAction
     {
         $linksManager = $this->getService('linksManager');
         while ($element1 = array_shift($linkedElements)) {
-            foreach ($linkedElements as &$element2) {
+            foreach ($linkedElements as $element2) {
                 $linksManager->linkElements($element1, $element2, 'foreignRelative', true);
             }
         }

@@ -57,7 +57,7 @@ class productSearchQueryFilter extends searchQueryFilter
 //                ];
 //                $linksCollection = persistableCollection::getInstance("structure_links");
 //                if ($records = $linksCollection->conditionalLoad('distinct(childStructureId)', $conditions, [], [], [], true)) {
-//                    foreach ($records as &$record) {
+//                    foreach ($records as $record) {
 //                        $result[] = $record['childStructureId'];
 //                    }
 //                }

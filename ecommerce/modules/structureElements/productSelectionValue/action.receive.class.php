@@ -38,7 +38,7 @@ class receiveProductSelectionValue extends structureElementAction
                             $selectionElementId = $structureElement->getSelectionElement()->id;
                             $productIdMap = array_flip($structureElement->getConnectedProductsIds());
 
-                            foreach ($targetValueRecords as &$record) {
+                            foreach ($targetValueRecords as $record) {
                                 if (isset($productIdMap[$record->productId])) {
                                     $record->delete();
                                 } else {

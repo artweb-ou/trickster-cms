@@ -110,7 +110,7 @@ abstract class importPluginElement extends structureElement implements specialFi
                 ['categoryId', 'priceModifier'],
                 $conditions
             );
-            foreach ($records as &$record) {
+            foreach ($records as $record) {
                 $priceModifiers[$record['categoryId']] = (int)str_replace('%', '', $record['priceModifier']) / 100;
             }
         }
@@ -164,7 +164,7 @@ abstract class importPluginElement extends structureElement implements specialFi
                 ->conditionalLoad('distinct(id)', [], [], [], [], true);
             if ($records) {
                 $categoriesIds = [];
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $categoriesIds[] = $record['id'];
                 }
                 $this->importIdElementIdIndex = [];
@@ -181,7 +181,7 @@ abstract class importPluginElement extends structureElement implements specialFi
                         $categoriesIds,
                     ],
                 ]);
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $this->importIdElementIdIndex[$record['importId']] = $record['elementId'];
                 }
             }

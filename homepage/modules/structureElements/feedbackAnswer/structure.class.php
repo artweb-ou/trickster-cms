@@ -152,13 +152,13 @@ class feedbackAnswerElement extends dynamicGroupFieldsStructureElement
         $collection = persistableCollection::getInstance('module_feedback_answer_values');
         $searchFields = ['answerId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         $collection = persistableCollection::getInstance('module_feedback_answer_files');
         $searchFields = ['answerId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         parent::deleteElementData();

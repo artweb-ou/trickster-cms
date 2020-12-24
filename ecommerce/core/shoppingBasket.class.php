@@ -712,7 +712,7 @@ class shoppingBasketProduct implements DependencyInjectionContextInterface
             ],
         ];
         if ($records = $collection->conditionalLoad('deliveryTypeId', $conditions)) {
-            foreach ($records as &$record) {
+            foreach ($records as $record) {
                 $result[] = $record['deliveryTypeId'];
             }
         }
@@ -920,7 +920,7 @@ class shoppingBasketDeliveryTypes implements DependencyInjectionContextInterface
 
                 $elementData['deliveryTargetsInfo'] = [];
                 if ($pricesIndex = $deliveryTypeElement->getPricesIndex()) {
-                    foreach ($pricesIndex as &$record) {
+                    foreach ($pricesIndex as $record) {
                         $elementData['deliveryTargetsInfo'][] = [
                             'targetId' => $record->targetId,
                             'price' => $record->price,

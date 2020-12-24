@@ -7,7 +7,7 @@ class generateCurrencies extends structureElementAction
         $childrenList = $structureManager->getElementsChildren($structureElement->id);
 
         $currenciesData = [];
-        foreach ($childrenList as &$element) {
+        foreach ($childrenList as $element) {
             $currenciesDataItem = [];
 
             $currenciesDataItem['code'] = $element->code;

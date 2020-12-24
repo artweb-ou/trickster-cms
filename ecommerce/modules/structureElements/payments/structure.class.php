@@ -49,7 +49,7 @@ class paymentsElement extends structureElement
 
                 $paymentsIdFilter = [];
                 if ($records = $collection->conditionalLoad('id', [], $orderFields, $limitFields)) {
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $paymentsIdFilter[] = $record['id'];
                     }
                 }
@@ -57,7 +57,7 @@ class paymentsElement extends structureElement
                 $this->paymentsPageList = $structureManager->getElementsByIdList($paymentsIdFilter, $this->id, true);
 
                 $sort = [];
-                foreach ($this->paymentsPageList as &$element) {
+                foreach ($this->paymentsPageList as $element) {
                     $sort[] = $element->id;
                 }
                 array_multisort($sort, SORT_DESC, $this->paymentsPageList);

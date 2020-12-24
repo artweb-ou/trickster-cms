@@ -58,7 +58,7 @@ class productParametersGroupElement extends structureElement
         $collection = persistableCollection::getInstance('import_origin');
         $searchFields = ['elementId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         parent::deleteElementData();

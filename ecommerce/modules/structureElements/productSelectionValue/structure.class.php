@@ -88,13 +88,13 @@ class productSelectionValueElement extends structureElement
             'value' => $this->id,
         ];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         $collection = persistableCollection::getInstance('import_origin');
         $searchFields = ['elementId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         $productOptionsImagesManager = $this->getService('ProductOptionsImagesManager');

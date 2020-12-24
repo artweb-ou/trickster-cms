@@ -51,7 +51,7 @@ class sitemapApplication extends controllerApplication
                 ];
                 foreach ($types as &$type) {
                     if ($elements = $structureManager->getElementsByType($type, $languageId)) {
-                        foreach ($elements as &$element) {
+                        foreach ($elements as $element) {
                             if (!$element->hidden && ($type != 'product' || ($element->inactive == '0' && $element->isPurchasable()))
                             ) {
                                 $mapItem = [];

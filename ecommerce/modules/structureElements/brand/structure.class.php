@@ -112,7 +112,7 @@ class brandElement extends ProductsListElement implements ImageUrlProviderInterf
                     $structureManager = $this->getService('structureManager');
                     $languagesManager = $this->getService('LanguagesManager');
                     $languageId = $languagesManager->getCurrentLanguageId();
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         // check if the category/catalogue is available in current language
                         if ($structureManager->checkElementInParent($record['parentStructureId'], $languageId)) {
                             $relevantProductIds[] = $record['childStructureId'];
@@ -148,7 +148,7 @@ class brandElement extends ProductsListElement implements ImageUrlProviderInterf
         $collection = persistableCollection::getInstance('import_origin');
         $searchFields = ['elementId' => $this->id];
         $records = $collection->load($searchFields);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $record->delete();
         }
         parent::deleteElementData();

@@ -1,6 +1,6 @@
 <?php
 
-class productSelectionValueQueryFilterConverter extends queryFilterConverter
+class productSelectionValueQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 

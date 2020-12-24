@@ -571,7 +571,7 @@ abstract class ProductsListElement extends menuStructureElement implements JsonD
                     ->orderBy('price', 'asc');
                 if ($records = $query->get()) {
                     $distinctPrices = [];
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         $distinctPrices[] = $record['price'];
                     }
 

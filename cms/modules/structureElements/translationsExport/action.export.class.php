@@ -41,7 +41,7 @@ class exportTranslationsExport extends structureElementAction
             if ($adminLanguages = $structureManager->getElementByMarker('adminLanguages')) {
                 $structureManager->getElementsChildren($adminLanguages->id);
                 $childElements = $adminLanguages->getChildrenList();
-                foreach ($childElements as &$element) {
+                foreach ($childElements as $element) {
                     if ($element->structureType == 'language') {
                         $languageCodes[$element->id] = $element->iso6393;
                     }

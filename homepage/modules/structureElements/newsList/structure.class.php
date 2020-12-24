@@ -109,12 +109,12 @@ Jaga %s's
                     ], ['date' => 'desc'], $limitFields, [], true)
                     ) {
                         $newsIds = [];
-                        foreach ($records as &$record) {
+                        foreach ($records as $record) {
                             $newsIds[] = $record['id'];
                         }
                         if ($this->newsList = $this->getService('structureManager')->getElementsByIdList($newsIds, $this->id, true)) {
                             $sort = [];
-                            foreach ($this->newsList as &$element) {
+                            foreach ($this->newsList as $element) {
                                 $sort[] = strtotime($element->date);
                             }
                             array_multisort($sort, SORT_DESC, $this->newsList);
@@ -152,18 +152,18 @@ Jaga %s's
                     ], ['date' => 'desc'], $limitFields, [], true)
                     ) {
                         $newsIds = [];
-                        foreach ($records as &$record) {
+                        foreach ($records as $record) {
                             $newsIds[] = $record['id'];
                         }
                         if ($archiveNewsList = $this->getService('structureManager')->getElementsByIdList($newsIds, $this->id, true)) {
                             $sort = [];
-                            foreach ($archiveNewsList as &$element) {
+                            foreach ($archiveNewsList as $element) {
                                 $sort[] = strtotime($element->date);
                             }
                             array_multisort($sort, SORT_DESC, $archiveNewsList);
 
                             $number = $this->pager->startElement;
-                            foreach ($archiveNewsList as &$element) {
+                            foreach ($archiveNewsList as $element) {
                                 $number++;
                                 $this->archiveNewsList[$number] = $element;
                             }
@@ -214,7 +214,7 @@ Jaga %s's
                 ], ['date' => 'desc'], $limitFields, [], true)
                 ) {
                     $structureManager = $this->getService('structureManager');
-                    foreach ($records as &$record) {
+                    foreach ($records as $record) {
                         if ($newsElement = $structureManager->getElementById($record['id'])) {
                             $this->contentList[] = $newsElement;
                         }

@@ -1,6 +1,6 @@
 <?php
 
-class deliveryTypeQueryFilterConverter extends queryFilterConverter
+class deliveryTypeQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 

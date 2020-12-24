@@ -100,10 +100,10 @@ class Search implements DependencyInjectionContextInterface
                 if (!empty($exclusions[$type])) {
                     $queryParameters['structureSkipId'] = $exclusions[$type];
                 }
-                $apiQuery->setFiltrationParameters([$queryParameters]);
-                $queryResult = $apiQuery->getFilteredIdLists();
+                $apiQuery->setFiltrationParameters($queryParameters);
+                $queryResult = $apiQuery->getFilterQueries();
                 if (!empty($queryResult[$type])) {
-                    $idsByType[$type . $typePostfix] = $queryResult[$type];
+                    $idsByType[$type . $typePostfix] = array_column($queryResult[$type]->get(), 'id');
                 }
             }
             if ($idsByType) {

@@ -8,7 +8,7 @@ class showRoot extends structureElementAction
             $languagesList = [];
             $languageNames = [];
             if ($childrenList = $structureElement->getChildrenList()) {
-                foreach ($childrenList as &$element) {
+                foreach ($childrenList as $element) {
                     if ($element->structureType == 'language') {
                         if (!$element->hidden) {
                             $languagesList[] = $element;

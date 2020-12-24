@@ -1,6 +1,6 @@
 <?php
 
-class folderQueryFilterConverter extends queryFilterConverter
+class folderQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 }

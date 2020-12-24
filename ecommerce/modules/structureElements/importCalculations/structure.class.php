@@ -35,7 +35,7 @@ class importCalculationsElement extends structureElement
             'pluginId',
             'priceModifier',
         ], []);
-        foreach ($records as &$record) {
+        foreach ($records as $record) {
             $categoryId = $record['categoryId'];
             if (!isset($categoryId)) {
                 $index[$categoryId] = [];
@@ -49,7 +49,7 @@ class importCalculationsElement extends structureElement
     {
         if ($this->marginClasses === null) {
             if ($records = $this->getMarginClassesRecords()) {
-                foreach ($records as &$record) {
+                foreach ($records as $record) {
                     $code = $record->fromPrice . '-' . $record->toPrice;
                     if (!isset($this->marginClasses[$code])) {
                         $this->marginClasses[$code] = [

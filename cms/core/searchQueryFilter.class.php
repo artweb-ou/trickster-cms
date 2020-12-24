@@ -12,7 +12,7 @@
  *  so the inheriting filter should only implement 3 getters to function,
  *  the rest is implemented by this abstract class
  */
-abstract class searchQueryFilter extends queryFilter
+abstract class searchQueryFilter extends QueryFilter
 {
     /**
      * All search filters implement this method in a same way, so we can use type name for this purpose

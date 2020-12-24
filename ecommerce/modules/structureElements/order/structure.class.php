@@ -116,7 +116,7 @@ class orderElement extends structureElement implements PaymentOrderInterface, Js
         $this->totalFullPrice = 0;
 
 
-        foreach ($this->getOrderProducts() as &$element) {
+        foreach ($this->getOrderProducts() as $element) {
             $productsPrice += $element->getTotalPrice();
             $this->totalFullPrice += $element->getTotalFullPrice();
             $this->vatRate = $element->vatRate;
@@ -215,7 +215,7 @@ class orderElement extends structureElement implements PaymentOrderInterface, Js
             $this->orderFields = [];
             $structureManager = $this->getService('structureManager');
             $childrenElements = $structureManager->getElementsChildren($this->id);
-            foreach ($childrenElements as &$element) {
+            foreach ($childrenElements as $element) {
                 if ($element->structureType == 'orderField') {
                     $this->orderFields[] = $element;
                 }
@@ -233,7 +233,7 @@ class orderElement extends structureElement implements PaymentOrderInterface, Js
             $this->discountsList = [];
             $structureManager = $this->getService('structureManager');
             if ($childrenElements = $structureManager->getElementsChildren($this->id)) {
-                foreach ($childrenElements as &$element) {
+                foreach ($childrenElements as $element) {
                     if ($element->structureType == 'orderDiscount') {
                         $this->discountsList[] = $element;
                     }
@@ -249,7 +249,7 @@ class orderElement extends structureElement implements PaymentOrderInterface, Js
             $this->servicesList = [];
             $structureManager = $this->getService('structureManager');
             if ($childrenElements = $structureManager->getElementsChildren($this->id)) {
-                foreach ($childrenElements as &$element) {
+                foreach ($childrenElements as $element) {
                     if ($element->structureType == 'orderService') {
                         $this->servicesList[] = $element;
                     }
@@ -283,7 +283,7 @@ class orderElement extends structureElement implements PaymentOrderInterface, Js
              */
             $structureManager = $this->getService('structureManager');
             $childrenElements = $structureManager->getElementsChildren($this->id);
-            foreach ($childrenElements as &$element) {
+            foreach ($childrenElements as $element) {
                 if ($element->structureType == 'orderProduct') {
                     $element->executeAction('show'); //recalculation fix
                     $this->orderProducts[] = $element;

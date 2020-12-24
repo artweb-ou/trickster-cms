@@ -69,7 +69,7 @@ class ParametersManager extends errorLogger
             'value',
         ], $searchFields)
         ) {
-            foreach ($valuesList as &$record) {
+            foreach ($valuesList as $record) {
                 $productParameters = &$this->productParametersValues[$record['productId']];
                 if (!isset($productParameters[$record['parameterId']])) {
                     $productParameters[$record['parameterId']] = [];
@@ -93,7 +93,7 @@ class ParametersManager extends errorLogger
                 ['languageId', 'in', [$currentLanguageId, '0']],
             ];
             if ($valuesList = $valuesCollection->conditionalLoad(['parameterId', 'value'], $searchFields)) {
-                foreach ($valuesList as &$record) {
+                foreach ($valuesList as $record) {
                     if (!isset($productParameters[$record['parameterId']])) {
                         $productParameters[$record['parameterId']] = [];
                     }

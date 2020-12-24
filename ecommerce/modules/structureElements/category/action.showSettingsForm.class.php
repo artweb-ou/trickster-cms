@@ -19,7 +19,7 @@ class showSettingsFormCategory extends structureElementAction
                 $selectedId = $structureElement->getValue('feedbackId', $languageElement->id);
                 $structureElement->feedbackFormsList[$languageElement->id] = [];
                 $elementsList = $structureManager->getElementsByType("feedback", $languageElement->id);
-                foreach ($elementsList as &$element) {
+                foreach ($elementsList as $element) {
                     if ($element->structureType == 'feedback') {
                         $field = [];
                         $field['id'] = $element->id;

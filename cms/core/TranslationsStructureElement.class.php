@@ -40,7 +40,7 @@ abstract class TranslationsStructureElement extends structureElement
         if ($translationsIndex = $this->getTranslationsElementsIndex()) {
             $translationsCodesComparer->setTranslationsIndex($translationsIndex);
             $unusedList = $translationsCodesComparer->getUnusedTranslationCodes();
-            foreach ($translationsIndex as $code => &$element) {
+            foreach ($translationsIndex as $code => $element) {
                 if (in_array($code, $unusedList)) {
                     $result[] = $element;
                 }

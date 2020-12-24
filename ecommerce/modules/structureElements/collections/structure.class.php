@@ -28,7 +28,7 @@ class collectionsElement extends structureElement
             if ($children = $structureManager->getElementsChildren($this->id)) {
                 $this->contentList = $children;
                 $sortParameter = [];
-                foreach ($this->contentList as &$element) {
+                foreach ($this->contentList as $element) {
                     $sortParameter[] = mb_strtolower($element->title);
                 }
 

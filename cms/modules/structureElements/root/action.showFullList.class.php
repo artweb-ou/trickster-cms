@@ -13,7 +13,7 @@ class showFullListRoot extends structureElementAction
             $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
             if ($publicRoot = $structureManager->getElementByMarker($marker)) {
                 $childElements = $publicRoot->getChildrenList();
-                foreach ($childElements as &$element) {
+                foreach ($childElements as $element) {
                     if ($element->structureType == 'language') {
                         $languageNames[$element->id] = $element->title;
                     }
@@ -23,7 +23,7 @@ class showFullListRoot extends structureElementAction
             if ($adminLanguages = $structureManager->getElementByMarker('adminLanguages')) {
                 $structureManager->getElementsChildren($adminLanguages->id);
                 $childElements = $adminLanguages->getChildrenList();
-                foreach ($childElements as &$element) {
+                foreach ($childElements as $element) {
                     if ($element->structureType == 'language') {
                         $languageNames[$element->id] = $element->title;
                     }

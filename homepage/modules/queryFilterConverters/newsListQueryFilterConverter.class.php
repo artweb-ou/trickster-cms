@@ -1,6 +1,6 @@
 <?php
 
-class newsListQueryFilterConverter extends queryFilterConverter
+class newsListQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 

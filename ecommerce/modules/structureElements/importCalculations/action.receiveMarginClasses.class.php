@@ -15,7 +15,7 @@ class receiveMarginClassesImportCalculations extends structureElementAction
                     foreach ($pluginsInfo as $pluginId => $priceModifier) {
                         if ($priceModifier != '') {
                             $recordUpdate = false;
-                            foreach ($records as $recordKey => &$record) {
+                            foreach ($records as $recordKey => $record) {
                                 if ($record->fromPrice == $fromPrice && $record->toPrice == $toPrice && $record->pluginId == $pluginId) {
                                     $record->priceModifier = $priceModifier;
                                     $record->persist();
@@ -36,7 +36,7 @@ class receiveMarginClassesImportCalculations extends structureElementAction
                     }
                 }
             }
-            foreach ($records as &$recordToDelete) {
+            foreach ($records as $recordToDelete) {
                 $recordToDelete->delete();
             }
 

@@ -54,7 +54,7 @@ class shopCategoryElement extends structureElement
             $this->shopsList = $structureManager->getElementsChildren($this->id, null,
                 'shopCategory');
             $titles = [];
-            foreach ($this->shopsList as &$element) {
+            foreach ($this->shopsList as $element) {
                 $titles[] = mb_strtolower($element->title);
             }
             array_multisort($titles, SORT_ASC, $this->shopsList);

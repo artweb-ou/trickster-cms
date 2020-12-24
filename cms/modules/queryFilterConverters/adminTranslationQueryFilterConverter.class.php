@@ -3,7 +3,7 @@
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 
-class adminTranslationQueryFilterConverter extends queryFilterConverter
+class adminTranslationQueryFilterConverter extends QueryFilterConverter
 {
     public function convert($sourceData, $sourceType)
     {

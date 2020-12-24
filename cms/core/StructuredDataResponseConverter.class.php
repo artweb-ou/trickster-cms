@@ -10,7 +10,7 @@ abstract class StructuredDataResponseConverter extends DataResponseConverter imp
     public function convert($data)
     {
         $result = [];
-        foreach ($data as &$element) {
+        foreach ($data as $element) {
             $info = [];
             if ($relationStructure = $this->getRelationStructure()) {
                 if (isset($this->preset)) {

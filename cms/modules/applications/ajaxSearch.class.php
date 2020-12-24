@@ -110,7 +110,7 @@ class ajaxSearchApplication extends controllerApplication
             if ($result->count) {
                 if ($this->mode == "public") {
                     $searchId = $this->getService('searchQueriesManager')->logInstantSearch($query, $result->count);
-                    foreach ($result->elements as &$element) {
+                    foreach ($result->elements as $element) {
                         $element->URL .= "qid:" . $searchId . "/";
                     }
                 }

@@ -11,7 +11,7 @@ class showFormSelectedProducts extends structureElementAction
             $structureElement->productsInfo = [];
             if ($connectedProductIds = $linksManager->getConnectedIdList($structureElement->id, 'selectedProducts', 'parent')
             ) {
-                foreach ($connectedProductIds as &$id) {
+                foreach ($connectedProductIds as $id) {
                     if ($product = $structureManager->getElementById($id)) {
                         $productInfo = [];
                         $productInfo['title'] = $product->getTitle();
