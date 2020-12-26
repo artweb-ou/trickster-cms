@@ -1,52 +1,35 @@
 <?php
 
+use Illuminate\Database\Query\Builder;
+
 abstract class QueryFilterConverter extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
 
-    /**
-     * @var Illuminate\Database\Query\Builder
-     */
-    protected $correctionQuery;
+    protected ?Builder $correctionQuery = null;
+    protected array $fields = ['id'];
 
-    /**
-     * @return Illuminate\Database\Query\Builder
-     */
-    public function getCorrectionQuery()
+    public function getCorrectionQuery(): ?Builder
     {
         return $this->correctionQuery;
     }
 
-    /**
-     * @param Illuminate\Database\Query\Builder $correctionQuery
-     */
-    public function setCorrectionQuery($correctionQuery)
+    public function setCorrectionQuery(Builder $correctionQuery)
     {
         $this->correctionQuery = $correctionQuery;
     }
 
-    protected $type;
+    protected string $type;
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
     }
 
-    /**
-     * @param Illuminate\Database\Query\Builder $sourceData
-     * @param string $sourceType
-     * @return mixed
-     */
-    abstract public function convert($sourceData, $sourceType);
+    abstract public function convert(Builder $sourceData, string $sourceType);
 }

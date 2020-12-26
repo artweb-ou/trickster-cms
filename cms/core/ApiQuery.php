@@ -98,6 +98,7 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
     public function getExportFilterQuery(): ?Builder
     {
         if ($filterQuery = $this->getFilterQueries()) {
+
             return $filterQuery[$this->exportType];
         }
         return null;

@@ -1,10 +1,12 @@
 <?php
 
+use Illuminate\Database\Connection;
+
 trait DbLoggableApplication
 {
     protected $logFilePath;
     /**
-     * @var \Illuminate\Database\Connection
+     * @var Connection
      */
     protected $connection;
     /**

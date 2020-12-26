@@ -29,7 +29,6 @@ abstract class ProductsListElement extends menuStructureElement implements JsonD
      */
     protected $productsPager;
     protected $amountSelectionOptions;
-    protected $filterArguments;
     protected $priceRangeSets;
     protected $productsListMinPrice;
     protected $productsListMaxPrice;

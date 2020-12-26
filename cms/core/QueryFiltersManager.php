@@ -65,18 +65,34 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
      * @param bool $optimized - enable parameters sorting top optimized result query
      * @return array|bool
      */
-    public function getFilterQueries($parameters, $resultTypes, $optimized = true)
+    public function getFilterQueries($parameters, $resultTypes, $optimized = true, $wrapTemporaryTables = true)
     {
         $queries = null;
         if ($parameters) {
             $queries = $this->compileResultsIndex($resultTypes);
             if ($groupResultQuery = $this->getFilterQuery($parameters, $resultTypes, $optimized)) {
                 foreach ($queries as $type => $value) {
-                    $queries[$type] = $groupResultQuery[$type];
+                    if ($wrapTemporaryTables) {
+                        $queries[$type] = $this->wrapTemporaryTable($groupResultQuery[$type], $parameters);
+                    } else {
+                        $queries[$type] = $groupResultQuery[$type];
+                    }
                 }
             }
         }
         return $queries;
+    }
+
+    protected function wrapTemporaryTable($query, $parameters)
+    {
+        $tableName = md5(json_encode($parameters));
+        $db = $this->getService('db');
+        $db->insert($db->raw("DROP TABLE IF EXISTS {$db->getTablePrefix()}{$tableName}"));
+        $db->insert(
+            $db->raw("CREATE TEMPORARY TABLE {$db->getTablePrefix()}{$tableName} " . $query->toSql()),
+            $query->getBindings()
+        );
+        return $db->table($tableName);
     }
 
     /**
