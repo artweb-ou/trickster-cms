@@ -3,7 +3,8 @@
 class breadcrumbsManager implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
-    protected $breadcrumbs;
+
+    protected array $breadcrumbs;
     /**
      * @var Config
      */
@@ -19,36 +20,38 @@ class breadcrumbsManager implements DependencyInjectionContextInterface
 
     public function getBreadcrumbs($useMinAmount = true, $useAllowedElementTypes = true, $useMinLevel = true)
     {
-        $this->breadcrumbs = [];
-        /**
-         * @var structureManager $structureManager
-         */
-        $structureManager = $this->getService('structureManager');
-        if ($useAllowedElementTypes && ($currentElement = $structureManager->getCurrentElement())) {
-            if (!in_array($currentElement->structureType, $this->getAllowedElementTypes())) {
-                return [];
-            }
-        }
-        $controller = controller::getInstance();
-        $minLevel = $this->getMinLevel();
-        $minAmount = $this->getMinAmount();
-        foreach ($structureManager->getElementsChain($controller->requestedPath) as $crumb) {
-            if (!$useMinLevel || $crumb->level >= $minLevel) {
-                if ($crumb instanceof BreadcrumbsInfoProvider) {
-                    $title = $crumb->getBreadcrumbsTitle();
-                    $url = $crumb->getBreadcrumbsUrl();
-                } else {
-                    $title = $crumb->getTitle();
-                    $url = $crumb->getUrl();
-                }
-                $this->breadcrumbs[] = [
-                    'URL' => $url,
-                    'title' => $title,
-                ];
-            }
-        }
-        if ($useMinAmount && (count($this->breadcrumbs) < $minAmount)) {
+        if (!isset($this->breadcrumbs)) {
             $this->breadcrumbs = [];
+            /**
+             * @var structureManager $structureManager
+             */
+            $structureManager = $this->getService('structureManager');
+            if ($useAllowedElementTypes && ($currentElement = $structureManager->getCurrentElement())) {
+                if (!in_array($currentElement->structureType, $this->getAllowedElementTypes())) {
+                    return [];
+                }
+            }
+            $controller = controller::getInstance();
+            $minLevel = $this->getMinLevel();
+            $minAmount = $this->getMinAmount();
+            foreach ($structureManager->getElementsChain($controller->requestedPath) as $crumb) {
+                if (!$useMinLevel || $crumb->level >= $minLevel) {
+                    if ($crumb instanceof BreadcrumbsInfoProvider) {
+                        $title = $crumb->getBreadcrumbsTitle();
+                        $url = $crumb->getBreadcrumbsUrl();
+                    } else {
+                        $title = $crumb->getTitle();
+                        $url = $crumb->getUrl();
+                    }
+                    $this->breadcrumbs[] = [
+                        'URL' => $url,
+                        'title' => $title,
+                    ];
+                }
+            }
+            if ($useMinAmount && (count($this->breadcrumbs) < $minAmount)) {
+                $this->breadcrumbs = [];
+            }
         }
 
         return $this->breadcrumbs;

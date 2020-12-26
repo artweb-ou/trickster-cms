@@ -130,10 +130,10 @@ class structureManager implements DependencyInjectionContextInterface
      * @param structureElement[] $elementsChain
      * @return structureElement[]
      */
-    public function getElementsChain($structurePath = [], $parentElementId = null, $elementsChain = [])
+    public function getElementsChain($structurePath = [], $parentElementId = null, &$elementsChain = [])
     {
         if ($structurePath) {
-            if (is_null($parentElementId)) {
+            if ($parentElementId === null) {
                 $parentElementId = $this->getRootElementId();
             }
             //take the first element name from the path array
@@ -252,7 +252,11 @@ class structureManager implements DependencyInjectionContextInterface
         if (!isset($this->elementsParents[$elementId][$linkType])) {
             $this->elementsParents[$elementId][$linkType] = [];
             if ($restrictLinkTypes && !$linkType) {
-                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $this->getPathSearchAllowedLinks(), 'child');
+                $elementsLinks = $this->linksManager->getElementsLinks(
+                    $elementId,
+                    $this->getPathSearchAllowedLinks(),
+                    'child'
+                );
             } else {
                 $elementsLinks = $this->linksManager->getElementsLinks($elementId, $linkType, 'child');
             }
@@ -460,7 +464,11 @@ class structureManager implements DependencyInjectionContextInterface
                 if (!$result) {
                     //this shouldn't be switched to 'getConnectedIds' because of speed issues. benchmark first
                     //todo: to join?
-                    $connectedLinks = $this->linksManager->getElementsLinks($parentElementId, $this->getPathSearchAllowedLinks(), 'parent');
+                    $connectedLinks = $this->linksManager->getElementsLinks(
+                        $parentElementId,
+                        $this->getPathSearchAllowedLinks(),
+                        'parent'
+                    );
                     $connectedIds = [];
                     foreach ($connectedLinks as $link) {
                         $connectedIds[] = $link->childStructureId;
@@ -494,7 +502,6 @@ class structureManager implements DependencyInjectionContextInterface
                 if ($result) {
                     $this->cache->set($cacheKey, $result->id, 600);
                 }
-
             }
         }
 
@@ -637,7 +644,13 @@ class structureManager implements DependencyInjectionContextInterface
                 foreach ($linkTypes as &$linkType) {
                     if ($childrenList = $this->getElementsChildren($sourceElement->id, null, $linkType)) {
                         foreach ($childrenList as $childElement) {
-                            $this->copyElement($childElement->id, $newElement->id, $linkType, $linkTypes, $copiesInformation);
+                            $this->copyElement(
+                                $childElement->id,
+                                $newElement->id,
+                                $linkType,
+                                $linkTypes,
+                                $copiesInformation
+                            );
                         }
                     }
                 }
@@ -876,8 +889,12 @@ class structureManager implements DependencyInjectionContextInterface
      * @param array $allowedRoles
      * @return array|bool
      */
-    protected function loadElementsToParent($idList = [], $parentElementId = 0, $allowedElements = [], $allowedRoles = [])
-    {
+    protected function loadElementsToParent(
+        $idList = [],
+        $parentElementId = 0,
+        $allowedElements = [],
+        $allowedRoles = []
+    ) {
         if (!$parentElementId) {
             $parentElementId = $this->getRootElementId();
         }
@@ -918,7 +935,8 @@ class structureManager implements DependencyInjectionContextInterface
 
                     $loadedElements[$elementId] = $this->elementsList[$elementId];
 
-                    $loadedModuleTables[$loadedElement->dataResourceName]['language'] = $loadedElement->getCurrentLanguage();
+                    $loadedModuleTables[$loadedElement->dataResourceName]['language'] = $loadedElement->getCurrentLanguage(
+                    );
                     $loadedModuleTables[$loadedElement->dataResourceName]['id'][] = $loadedElement->id;
                 }
             }
@@ -1180,7 +1198,10 @@ class structureManager implements DependencyInjectionContextInterface
             $dataCollection = $this->elementsDataCollection->load($searchFields);
             foreach ($dataCollection as &$dataElement) {
                 if (!$parentElementId || $this->checkElementInParent($dataElement->id, $parentElementId)) {
-                    $this->cachedMarkers[$cacheParentElementId][$marker] = $this->getElementById($dataElement->id, $parentElementId);
+                    $this->cachedMarkers[$cacheParentElementId][$marker] = $this->getElementById(
+                        $dataElement->id,
+                        $parentElementId
+                    );
                     break;
                 }
             }
@@ -1197,7 +1218,12 @@ class structureManager implements DependencyInjectionContextInterface
         if ($id == $parentId) {
             $parentFound = true;
         } else {
-            if ($dataCollection = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child', false)) {
+            if ($dataCollection = $this->linksManager->getElementsLinks(
+                $id,
+                $this->getPathSearchAllowedLinks(),
+                'child',
+                false
+            )) {
                 foreach ($dataCollection as &$dataObject) {
                     if ($dataObject->parentStructureId == $parentId) {
                         $parentFound = true;
@@ -1313,7 +1339,9 @@ class structureManager implements DependencyInjectionContextInterface
                         }
                     }
                 } else {
-                    $this->logError('ensureElementAvailability unpredicted problem. id:' . $id . ' parentId:' . $parentId);
+                    $this->logError(
+                        'ensureElementAvailability unpredicted problem. id:' . $id . ' parentId:' . $parentId
+                    );
                 }
             }
         }
@@ -1458,17 +1486,19 @@ class structureManager implements DependencyInjectionContextInterface
         }
         $newName = $currentName;
         if ($parentIds) {
-
             $query = $db->table('structure_elements')
                 ->select('structureName')
                 ->where('structureName', 'like', $currentName . '%')
-                ->whereIn('id', function ($subQuery) use ($elementId, $allowedTypes, $parentIds) {
-                    $subQuery->from('structure_links')
-                        ->select('childStructureId')
-                        ->where('childStructureId', '!=', $elementId)
-                        ->whereIn('type', $allowedTypes)
-                        ->whereIn('parentStructureId', $parentIds);
-                });
+                ->whereIn(
+                    'id',
+                    function ($subQuery) use ($elementId, $allowedTypes, $parentIds) {
+                        $subQuery->from('structure_links')
+                            ->select('childStructureId')
+                            ->where('childStructureId', '!=', $elementId)
+                            ->whereIn('type', $allowedTypes)
+                            ->whereIn('parentStructureId', $parentIds);
+                    }
+                );
 
             if ($rows = $query->get()) {
                 $usedNames = array_column($rows, 'structureName');
