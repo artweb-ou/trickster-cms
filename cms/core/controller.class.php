@@ -423,7 +423,7 @@ class controller
         if (isset($_FILES['formData'])) {
             foreach ($_FILES['formData'] as $fileProperty => $elementsList) {
                 foreach ($elementsList as $elementId => $elementData) {
-                    foreach ($elementData as $propertyName => &$propertyValue) {
+                    foreach ($elementData as $propertyName => $propertyValue) {
                         if (is_array($propertyValue)) {
                             $languageId = $propertyName;
                             foreach ($propertyValue as $fieldName => &$fieldValue) {
@@ -440,7 +440,7 @@ class controller
         }
         if (isset($_POST['formData'])) {
             foreach ($_POST['formData'] as $elementId => $elementData) {
-                foreach ($elementData as $fieldName => &$fieldValue) {
+                foreach ($elementData as $fieldName => $fieldValue) {
                     if (isset($formData[$elementId][$fieldName]) && is_array($formData[$elementId][$fieldName])) {
                         $formData[$elementId][$fieldName] = array_merge($formData[$elementId][$fieldName], $fieldValue);
                     } else {

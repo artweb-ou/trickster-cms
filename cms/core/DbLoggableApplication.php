@@ -17,7 +17,7 @@ trait DbLoggableApplication
     protected function startDbLogging()
     {
         if ($controller = controller::getInstance()) {
-            if (true || $controller->getDebugMode()) {
+            if ($controller->getDebugMode()) {
                 $pathsManager = $this->getService('PathsManager');
 
                 $this->connection = $this->getService('db');
