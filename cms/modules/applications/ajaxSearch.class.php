@@ -118,7 +118,7 @@ class ajaxSearchApplication extends controllerApplication
                 $response->setResponseData('searchTotal', $result->getSearchTotal());
 
                 foreach ($result->sets as $set) {
-                    $response->setResponseData($set->type, $set->elements);
+                    $response->setResponseElements($set->type, $set->elements);
                 }
             }
         }

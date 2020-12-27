@@ -69,8 +69,8 @@ class apiApplication extends controllerApplication
         $uri = $controller->getParametersString();
         if ($apiQuery = $apiQueriesManager->getQueryFromString($uri)) {
             if ($result = $apiQuery->getQueryResult()) {
-                foreach ($apiQuery->getResultTypes() as &$type) {
-                    $response->setResponseData($type, $result[$type]);
+                foreach ($apiQuery->getResultTypes() as $type) {
+                    $response->setResponseElements($type, $result[$type]);
                 }
             }
             $this->renderer->assign("totalAmount", $result['totalAmount']);

@@ -15,20 +15,18 @@ class ajaxResponse
 
     public function setResponseData($type, $data)
     {
+        $this->responseData[$type] = $data;
+    }
+
+    public function setResponseElements($type, $data)
+    {
         if ($converter = $this->getConverter($type)) {
             if ($converter instanceof PresetDataResponseConverterInterface) {
                 $converter->setPreset($this->preset);
             }
             $responseData = $converter->convert($data);
             $this->responseData[$type] = $responseData;
-        } else {
-            $this->responseData[$type] = $data;
         }
-    }
-
-    public function setLiteralResponseData($type, $data)
-    {
-        $this->responseData[$type] = $data;
     }
 
     /**

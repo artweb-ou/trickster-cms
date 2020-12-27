@@ -41,7 +41,7 @@ class jsonElementDataApplication extends controllerApplication
             if ($baseElement = $structureManager->getElementById($baseElementId)) {
                 if ($baseElement instanceof JsonDataProvider) {
                     $status = 'success';
-                    $response->setResponseData("zxProdsList", $baseElement->getElementData($preset));
+                    $response->setResponseData($baseElement->structureType, $baseElement->getElementData($preset));
                 }
             }
         }
