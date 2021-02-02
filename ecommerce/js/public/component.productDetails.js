@@ -218,13 +218,13 @@ window.ProductDetailsComponent = function(componentElement) {
 
         if (priceElements) {
             for (i = priceElements.length; i--;) {
-                priceElements[i].innerHTML = price;
+                priceElements[i].innerHTML = price.toFixed(2);
             }
         }
 
         if (oldPriceElements) {
             for (i = oldPriceElements.length; i--;) {
-                oldPriceElements[i].innerHTML = oldPrice;
+                oldPriceElements[i].innerHTML = oldPrice.toFixed(2);
             }
         }
     };

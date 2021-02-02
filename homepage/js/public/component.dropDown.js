@@ -1,5 +1,5 @@
-window.DropDownComponent = function(importedElement, parameters) {
-    var init = function() {
+window.DropDownComponent = function (importedElement, parameters) {
+    var init = function () {
         if (typeof parameters !== 'undefined') {
             parseParameters(parameters);
         }
@@ -10,7 +10,7 @@ window.DropDownComponent = function(importedElement, parameters) {
 
         refreshStatus();
     };
-    var parseSelectElement = function(importedElement) {
+    var parseSelectElement = function (importedElement) {
         optionsDataList = [];
         if (importedElement.tagName == 'select' || importedElement.tagName == 'SELECT') {
             self.selectorElement = importedElement;
@@ -37,7 +37,7 @@ window.DropDownComponent = function(importedElement, parameters) {
             }
         }
     };
-    var parseParameters = function(parameters) {
+    var parseParameters = function (parameters) {
         if (typeof parameters.optionsData !== 'undefined') {
             optionsDataList = parameters.optionsData;
             for (var i = 0; i < optionsDataList.length; i++) {
@@ -54,7 +54,7 @@ window.DropDownComponent = function(importedElement, parameters) {
             selectName = parameters.name;
         }
     };
-    var prepareDomStructure = function() {
+    var prepareDomStructure = function () {
         var componentClass = 'dropdown_block';
 
         if (customClassName != '') {
@@ -90,7 +90,7 @@ window.DropDownComponent = function(importedElement, parameters) {
         }
         window.eventsManager.addHandler(self.selectorElement, 'change', changeHandler);
     };
-    var fillSelectorElement = function() {
+    var fillSelectorElement = function () {
         for (var i = 0; i < optionsDataList.length; i++) {
             var info = optionsDataList[i];
 
@@ -115,13 +115,13 @@ window.DropDownComponent = function(importedElement, parameters) {
             }
         }
     };
-    var changeHandler = function() {
+    var changeHandler = function () {
         refreshStatus();
         if (changeCallback) {
             changeCallback(self);
         }
     };
-    var clickHandler = function(event) {
+    var clickHandler = function (event) {
         window.eventsManager.preventDefaultAction(event);
         window.eventsManager.cancelBubbling(event);
 
@@ -134,7 +134,7 @@ window.DropDownComponent = function(importedElement, parameters) {
             domHelper.addClass(self.componentElement, 'dropdown_focused');
         }
     };
-    var refreshStatus = function() {
+    var refreshStatus = function () {
         self.selectedIndex = self.selectorElement.selectedIndex;
         if (self.selectedIndex === -1) {
             self.selectedIndex = 0;
@@ -156,7 +156,7 @@ window.DropDownComponent = function(importedElement, parameters) {
             optionsDataComponent.updateScroll(self.selectedIndex);
         }
     };
-    var keyPressHandler = function(event) {
+    var keyPressHandler = function (event) {
         if (event.keyCode == '40') {
             window.eventsManager.preventDefaultAction(event);
             setNextOption();
@@ -185,7 +185,7 @@ window.DropDownComponent = function(importedElement, parameters) {
             setFoundTitle(title);
         }
     };
-    var getCurrentSearchTitle = function(letter) {
+    var getCurrentSearchTitle = function (letter) {
         if (letter === false) {
             currentSearchTitle = currentSearchTitle.substring(0, currentSearchTitle.length - 1);
         } else if (typeof letter !== 'undefined') {
@@ -193,10 +193,10 @@ window.DropDownComponent = function(importedElement, parameters) {
         }
         return currentSearchTitle;
     };
-    var clearSearchTitle = function() {
+    var clearSearchTitle = function () {
         currentSearchTitle = '';
     };
-    var setFoundTitle = function(title) {
+    var setFoundTitle = function (title) {
         var expression = new RegExp('^(\\s)*' + title, 'i');
 
         for (var i = 0; i < optionsDataList.length; i++) {
@@ -208,19 +208,19 @@ window.DropDownComponent = function(importedElement, parameters) {
         window.clearTimeout(searchTitleTimeout);
         searchTitleTimeout = window.setTimeout(clearSearchTitle, 1500);
     };
-    var setFirstOption = function() {
+    var setFirstOption = function () {
         if (optionsDataList.length > 0) {
             self.setSelectedIndex(0);
         }
         clearSearchTitle();
     };
-    var setLastOption = function() {
+    var setLastOption = function () {
         if (optionsDataList.length > 0) {
             self.setSelectedIndex(optionsDataList.length - 1);
         }
         clearSearchTitle();
     };
-    var setNextOption = function() {
+    var setNextOption = function () {
         if (self.selectedIndex !== false) {
             var nextOptionNumber = self.selectedIndex + 1;
             if (nextOptionNumber < optionsDataList.length) {
@@ -231,7 +231,7 @@ window.DropDownComponent = function(importedElement, parameters) {
             setFirstOption();
         }
     };
-    var setPreviousOption = function() {
+    var setPreviousOption = function () {
         if (self.selectedIndex !== false) {
             var previousOptionNumber = self.selectedIndex - 1;
             if (previousOptionNumber >= 0) {
@@ -241,10 +241,10 @@ window.DropDownComponent = function(importedElement, parameters) {
         }
     };
 
-    this.getComponentElement = function() {
+    this.getComponentElement = function () {
         return self.componentElement;
     };
-    this.setSelectedIndex = function(selectedIndex) {
+    this.setSelectedIndex = function (selectedIndex) {
         self.selectorElement.selectedIndex = selectedIndex;
         window.eventsManager.fireEvent(self.selectorElement, 'change');
 
@@ -252,19 +252,19 @@ window.DropDownComponent = function(importedElement, parameters) {
             changeCallback(self);
         }
     };
-    this.getValue = function() {
+    this.getValue = function () {
         var value = self.selectorElement.value;
         if (value == 'defaultTypePlaceHolder') {
             value = '';
         }
         return value;
     };
-    this.setDisabled = function(value) {
+    this.setDisabled = function (value) {
         self.disabled = value;
         self.selectorElement.disabled = value;
         refreshStatus();
     };
-    this.setValue = function(value, ignoreChangeEvent) {
+    this.setValue = function (value, ignoreChangeEvent) {
         self.selectorElement.value = value;
         if (ignoreChangeEvent) {
             refreshStatus();
@@ -272,20 +272,20 @@ window.DropDownComponent = function(importedElement, parameters) {
             window.eventsManager.fireEvent(self.selectorElement, 'change');
         }
     };
-    this.hideList = function() {
+    this.hideList = function () {
         if (optionsDataComponent.displayed) {
             domHelper.removeClass(self.componentElement, 'dropdown_focused');
             optionsDataComponent.hideComponent();
         }
     };
-    this.update = function() {
+    this.update = function () {
         parseSelectElement(self.selectorElement);
         if (optionsDataComponent) {
             optionsDataComponent.updateInfo(optionsDataList);
         }
         refreshStatus();
     };
-    this.updateOptionsData = function(optionsData, callCallback) {
+    this.updateOptionsData = function (optionsData, callCallback) {
         if (typeof callCallback == 'undefined') {
             callCallback = false;
         }
@@ -302,13 +302,13 @@ window.DropDownComponent = function(importedElement, parameters) {
             changeCallback(self);
         }
     };
-    this.displayComponent = function() {
+    this.displayComponent = function () {
         self.componentElement.style.display = 'block';
     };
-    this.hideComponent = function() {
+    this.hideComponent = function () {
         self.componentElement.style.display = 'none';
     };
-    this.setChangeCallback = function(callback) {
+    this.setChangeCallback = function (callback) {
         changeCallback = callback;
     };
     var self = this;
@@ -335,13 +335,14 @@ window.DropDownComponent = function(importedElement, parameters) {
 
     init();
 };
-window.DropDownComponentList = function(parentObject, initOptionsData) {
-    var init = function() {
+window.DropDownComponentList = function (parentObject, initOptionsData) {
+    var init = function () {
         prepareDomStructure();
+        window.addEventListener('scroll', refreshStatus);
     };
     var referralClass = '';
     var requiredClass = '';
-    var prepareDomStructure = function() {
+    var prepareDomStructure = function () {
         self.componentElement = document.createElement('div');
         if (parentObject.selectorElement.dataset.referral) {
             referralClass = ' ' + parentObject.selectorElement.dataset.referral;
@@ -361,99 +362,101 @@ window.DropDownComponentList = function(parentObject, initOptionsData) {
 
         self.updateInfo(initOptionsData);
     };
-    var mouseWheelHandler = function(event) {
+    var mouseWheelHandler = function (event) {
         window.eventsManager.preventDefaultAction(event);
         var delta = window.mouseTracker.getDelta(event);
 
         contentElement.scrollTop = contentElement.scrollTop - listItemHeight * delta;
     };
-    var refreshStatus = function() {
-        if (listItems.length > 0) {
-            listItemHeight = listItems[0].componentElement.offsetHeight;
-        }
-
-        if (self.componentElement.offsetWidth < parentObject.componentElement.offsetWidth) {
-            self.componentElement.style.width = parentObject.componentElement.offsetWidth + 'px';
-        }
-        if (self.componentElement.offsetWidth < self.componentElement.scrollWidth) {
-            self.componentElement.style.width = parentObject.componentElement.scrollWidth + 'px';
-        }
-
-        if (window.pageYOffset) {
-            var viewPortTop = window.pageYOffset;
-        } else {
-            var viewPortTop = document.documentElement.scrollTop;
-        }
-
-        if (window.innerHeight) {
-            var viewPortHeight = window.innerHeight;
-        } else {
-            var viewPortHeight = document.documentElement.offsetHeight;
-        }
-        var dropDownPositions = getElementPositions(parentObject.componentElement);
-        var dropDownLeft = dropDownPositions.x;
-        var dropDownRight = dropDownLeft + parentObject.componentElement.offsetWidth;
-        var dropDownTop = dropDownPositions.y;
-        var dropDownHeight = parentObject.componentElement.offsetHeight;
-
-        //calculate possible list heights
-        contentElement.style.height = 'auto';
-        var fullHeight = contentElement.offsetHeight;
-
-        var maximumHeightAbove = (dropDownTop - viewPortTop) - screenOffset;
-        var maximumHeightBelow = (viewPortTop + viewPortHeight - screenOffset) - (dropDownTop + dropDownHeight);
-
-        var appliedHeight = false;
-        var position = false;
-        if (maximumHeightBelow > maximumHeightAbove || fullHeight < maximumHeightBelow) {
-            position = 'below';
-            if (fullHeight > maximumHeightBelow) {
-                appliedHeight = maximumHeightBelow;
-            } else {
-                appliedHeight = fullHeight;
+    var refreshStatus = function () {
+        if (self.displayed) {
+            if (listItems.length > 0) {
+                listItemHeight = listItems[0].componentElement.offsetHeight;
             }
-        } else {
-            position = 'above';
-            if (fullHeight > maximumHeightAbove) {
-                appliedHeight = maximumHeightAbove;
-            } else {
-                appliedHeight = fullHeight;
+
+            if (self.componentElement.offsetWidth < parentObject.componentElement.offsetWidth) {
+                self.componentElement.style.width = parentObject.componentElement.offsetWidth + 'px';
             }
-        }
-        contentElement.style.height = appliedHeight + 'px';
+            if (self.componentElement.offsetWidth < self.componentElement.scrollWidth) {
+                self.componentElement.style.width = parentObject.componentElement.scrollWidth + 'px';
+            }
 
-        //calculate list position
-        if (position == 'above') {
-            var leftPosition = (dropDownLeft);
-            var topPosition = dropDownTop - appliedHeight;
-            domHelper.addClass(self.componentElement, 'dropdown_list_is_above');
-        } else {
-            var leftPosition = (dropDownLeft);
-            var topPosition = (dropDownTop + dropDownHeight);
-            domHelper.removeClass(self.componentElement, 'dropdown_list_is_above');
-        }
-        if (self.componentElement.offsetWidth + leftPosition > window.innerWidth) {
-            self.componentElement.style.left = dropDownRight - self.componentElement.offsetWidth + 'px';
-        } else {
-            self.componentElement.style.left = leftPosition + 'px';
-        }
+            if (window.pageYOffset) {
+                var viewPortTop = window.pageYOffset;
+            } else {
+                var viewPortTop = document.documentElement.scrollTop;
+            }
 
-        self.componentElement.style.top = topPosition + 'px';
+            if (window.innerHeight) {
+                var viewPortHeight = window.innerHeight;
+            } else {
+                var viewPortHeight = document.documentElement.offsetHeight;
+            }
+            var dropDownPositions = getElementPositions(parentObject.componentElement);
+            var dropDownLeft = dropDownPositions.x;
+            var dropDownRight = dropDownLeft + parentObject.componentElement.offsetWidth;
+            var dropDownTop = dropDownPositions.y;
+            var dropDownHeight = parentObject.componentElement.offsetHeight;
 
-        if (contentElement.scrollHeight > contentElement.offsetHeight) {
-            if (contentElement.offsetHeight + contentElement.scrollTop < parentObject.selectedIndex * listItemHeight + listItemHeight) {
-                contentElement.scrollTop = parentObject.selectedIndex * listItemHeight + listItemHeight - contentElement.offsetHeight;
-            } else if (contentElement.scrollTop > parentObject.selectedIndex * listItemHeight) {
-                contentElement.scrollTop = parentObject.selectedIndex * listItemHeight;
+            //calculate possible list heights
+            contentElement.style.height = 'auto';
+            var fullHeight = contentElement.offsetHeight;
+
+            var maximumHeightAbove = (dropDownTop - viewPortTop) - screenOffset;
+            var maximumHeightBelow = (viewPortTop + viewPortHeight - screenOffset) - (dropDownTop + dropDownHeight);
+
+            var appliedHeight = false;
+            var position = false;
+            if (maximumHeightBelow > maximumHeightAbove || fullHeight < maximumHeightBelow) {
+                position = 'below';
+                if (fullHeight > maximumHeightBelow) {
+                    appliedHeight = maximumHeightBelow;
+                } else {
+                    appliedHeight = fullHeight;
+                }
+            } else {
+                position = 'above';
+                if (fullHeight > maximumHeightAbove) {
+                    appliedHeight = maximumHeightAbove;
+                } else {
+                    appliedHeight = fullHeight;
+                }
+            }
+            contentElement.style.height = appliedHeight + 'px';
+
+            //calculate list position
+            if (position == 'above') {
+                var leftPosition = (dropDownLeft);
+                var topPosition = dropDownTop - appliedHeight;
+                domHelper.addClass(self.componentElement, 'dropdown_list_is_above');
+            } else {
+                var leftPosition = (dropDownLeft);
+                var topPosition = (dropDownTop + dropDownHeight);
+                domHelper.removeClass(self.componentElement, 'dropdown_list_is_above');
+            }
+            if (self.componentElement.offsetWidth + leftPosition > window.innerWidth) {
+                self.componentElement.style.left = dropDownRight - self.componentElement.offsetWidth + 'px';
+            } else {
+                self.componentElement.style.left = leftPosition + 'px';
+            }
+
+            self.componentElement.style.top = topPosition + 'px';
+
+            if (contentElement.scrollHeight > contentElement.offsetHeight) {
+                if (contentElement.offsetHeight + contentElement.scrollTop < parentObject.selectedIndex * listItemHeight + listItemHeight) {
+                    contentElement.scrollTop = parentObject.selectedIndex * listItemHeight + listItemHeight - contentElement.offsetHeight;
+                } else if (contentElement.scrollTop > parentObject.selectedIndex * listItemHeight) {
+                    contentElement.scrollTop = parentObject.selectedIndex * listItemHeight;
+                }
             }
         }
     };
-    this.updateScroll = function(selectedIndex) {
+    this.updateScroll = function (selectedIndex) {
         if (typeof listItems[selectedIndex] !== 'undefined') {
             contentElement.scrollTop = listItems[selectedIndex].componentElement.offsetTop;
         }
     };
-    var getElementPositions = function(domElement) {
+    var getElementPositions = function (domElement) {
         var elementLeft = 0;
         var elementTop = 0;
 
@@ -477,7 +480,7 @@ window.DropDownComponentList = function(parentObject, initOptionsData) {
         */
         return {x: elementLeft, y: elementTop};
     };
-    this.updateInfo = function(updateOptionsData) {
+    this.updateInfo = function (updateOptionsData) {
         optionsData = updateOptionsData;
         listItems = [];
         while (contentElement.firstChild) {
@@ -489,20 +492,20 @@ window.DropDownComponentList = function(parentObject, initOptionsData) {
             listItems.push(listItem);
         }
     };
-    this.itemClicked = function(listItem) {
+    this.itemClicked = function (listItem) {
         self.hideComponent();
         parentObject.setValue(listItem.value);
     };
-    this.displayComponent = function() {
+    this.displayComponent = function () {
         if (self.componentElement) {
             self.componentElement.style.visibility = 'hidden';
             self.componentElement.style.display = 'block';
+            self.displayed = true;
             refreshStatus();
             self.componentElement.style.visibility = 'visible';
-            self.displayed = true;
         }
     };
-    this.hideComponent = function() {
+    this.hideComponent = function () {
         if (self.componentElement) {
             self.componentElement.style.display = 'none';
             self.displayed = false;
@@ -524,8 +527,8 @@ window.DropDownComponentList = function(parentObject, initOptionsData) {
 
     init();
 };
-window.DropDownComponentListItem = function(parentObject, optionData) {
-    var init = function() {
+window.DropDownComponentListItem = function (parentObject, optionData) {
+    var init = function () {
         self.value = optionData.value;
         if (typeof optionData.text !== 'undefined') {
             optionText = optionData.text;
@@ -539,7 +542,7 @@ window.DropDownComponentListItem = function(parentObject, optionData) {
 
         prepareDomStructure();
     };
-    var prepareDomStructure = function() {
+    var prepareDomStructure = function () {
         self.componentElement = document.createElement('span');
         self.componentElement.tabIndex = '0';
 
@@ -557,7 +560,7 @@ window.DropDownComponentListItem = function(parentObject, optionData) {
 
         self.componentElement.innerHTML = optionText;
     };
-    var clickHandler = function(event) {
+    var clickHandler = function (event) {
         window.eventsManager.preventDefaultAction(event);
         window.eventsManager.cancelBubbling(event);
         parentObject.itemClicked(self);
