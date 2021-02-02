@@ -77,8 +77,8 @@ window.BasketButtonComponent = function(componentElement, onClick, id) {
                     break;
 
                 case '2': // ModalActionComponent
-                    if (Array.isArray(window.productDetailsData)) {
-                        message['title'] = window.productDetailsData[productId].name;
+                    if (Array.isArray(window.productData)) {
+                        message['title'] = window.productData[productId].name;
                     } else {
                         message['title'] = currentProduct.innerHTML;
                     }
