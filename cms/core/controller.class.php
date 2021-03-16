@@ -33,7 +33,7 @@ class controller
 
     protected $formData = [];
     protected $forceDebug = false;
-    protected $debugMode = false;
+    protected $debugMode = null;
     /** @var controller */
     private static $instance;
     protected $enabledPlugins = [];

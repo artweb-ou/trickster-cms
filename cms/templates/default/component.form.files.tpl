@@ -33,7 +33,7 @@
     <td class="form_label">
         {translations name=$element->structureType|cat:'.files_upload'}:
     </td>
-    <td>
+    <td class="form_field">
         <input class="fileinput_placeholder" type="file" name="{$formNames.$propertyName}[]" multiple="multiple"/>
     </td>
 </tr>

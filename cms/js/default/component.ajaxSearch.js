@@ -35,19 +35,6 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
         self.inputElement.addEventListener('keydown', keyPressHandler);
         self.inputElement.addEventListener('paste', pasteHandler);
 
-        if (self.inputElement.parentElement.className === 'ajaxselect_container' ||
-            self.inputElement.parentElement.className ===
-            'ajaxitemsearch_container') {
-            self.inputElement.addEventListener('focus', function() {
-                var container = self.inputElement.parentElement;
-                container.style.border = '1px solid #6bbbff';
-            });
-            self.inputElement.addEventListener('focusout', function() {
-                var container = self.inputElement.parentElement;
-                container.style.border = '1px solid #e2e2e5';
-            });
-        }
-
         if (!customResultsElement) {
             window.addEventListener('click', windowClickHandler);
         }
