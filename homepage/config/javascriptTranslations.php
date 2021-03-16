@@ -18,8 +18,4 @@
     'calendar.month_11' => true,
     'calendar.month_12' => true,
     'button.file_upload' => true,
-
-    'product.addtobasket' => true,
-    'product.availability' => true,
-
 ];

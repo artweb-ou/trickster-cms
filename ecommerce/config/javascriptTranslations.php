@@ -13,6 +13,9 @@
     'productgallery.price' => true,
     'productgallery.readmore' => true,
 
+    'product.addtobasket' => true,
+    'product.availability' => true,
+
     'shoppingbasket.status_empty' => true,
     'shoppingbasket.label_price' => true,
     'shoppingbasket.status_amount' => true,
