@@ -25,7 +25,6 @@
     "ext-dom": "*",
     "ext-pdo": "*",
     "maksekeskus/maksekeskus-php": "v1.1",
-    "ext-json": "*",
-    "ext-pdo": "*"
+    "ext-json": "*"
   }
 }
