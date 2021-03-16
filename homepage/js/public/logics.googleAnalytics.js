@@ -1,14 +1,14 @@
 window.googleAnalyticsLogics = new function() {
-    var ecommerceEnabled = false;
-    var gaCallBack;
-    var callbackTimeout;
-    var timeoutInterval = 250;
+    let ecommerceEnabled = false;
+    let gaCallBack;
+    let callbackTimeout;
+    let timeoutInterval = 250;
 
-    var init = function() {
+    const init = function() {
         checkEcommerce();
     };
 
-    var checkEcommerce = function() {
+    const checkEcommerce = function() {
         if (typeof window.google !== 'undefined') {
             if (typeof window.google.ecommerce !== 'undefined') {
                 ecommerceEnabled = window.google.ecommerce.enabled;
@@ -16,22 +16,27 @@ window.googleAnalyticsLogics = new function() {
         }
     }
 
-    var gaCallbackCaller = function() {
+    const gaCallbackCaller = function() {
         clearTimeout(callbackTimeout);
         if (gaCallBack) {
             gaCallBack();
         }
     };
 
-    var gaCallbackSetTimeout = function(callback) {
+    const gaCallbackSetTimeout = function(callback) {
         gaCallBack = callback;
         callbackTimeout = setTimeout(gaCallbackCaller, timeoutInterval);
     };
 
+    const formatPrice = function(price) {
+        price = price.toString();
+        return price.replace(/\s+/g, '');
+    }
+
     this.productClickEvent = function(product, callBack) {
         gaCallbackSetTimeout(callBack);
-        var list_name = '';
-        if (window.currentElementTitle != 'undefined') {
+        let list_name = '';
+        if (window.currentElementTitle !== 'undefined') {
             list_name = window.currentElementTitle;
         }
         if (ecommerceEnabled && product) {
@@ -44,7 +49,7 @@ window.googleAnalyticsLogics = new function() {
                         'brand': product.brand,
                         'category': product.category,
                         'list_name': list_name,
-                        'price': product.price,
+                        'price': formatPrice(product.price),
                     },
                 ],
                 'event_callback': gaCallbackCaller,
@@ -78,7 +83,7 @@ window.googleAnalyticsLogics = new function() {
                         'category': product.category,
                         'variant': product.variant,
                         'quantity': product.quantity,
-                        'price': product.price,
+                        'price': formatPrice(product.price),
                     },
                 ],
             });
@@ -86,13 +91,13 @@ window.googleAnalyticsLogics = new function() {
     };
 
     this.checkoutEvent = function(parameters) {
-        var products = [];
+        let products = [];
         if (ecommerceEnabled && parameters) {
-            for (var i = 0; i < parameters.products.length; i++) {
+            for (let i = 0; i < parameters.products.length; i++) {
                 products.push({
                     'id': parameters.products[i].productId,
                     'name': parameters.products[i].title_dl,
-                    'price': parameters.products[i].price,
+                    'price': formatPrice(parameters.products[i].price),
                     'variant': parameters.products[i].variation_dl,
                     'quantity': parameters.products[i].amount,
                     'category': parameters.products[i].category_dl,
@@ -107,12 +112,12 @@ window.googleAnalyticsLogics = new function() {
 
     this.purchaseEvent = function(order) {
         if (ecommerceEnabled && order) {
-            var products = [];
-            for (var i = 0; i < order.products.length; i++) {
+            let products = [];
+            for (let i = 0; i < order.products.length; i++) {
                 products.push({
                     'id': order.products[i].id,
                     'name': order.products[i].title_ga,
-                    'price': order.products[i].price,
+                    'price': formatPrice(order.products[i].price),
                     'variant': order.products[i].variation_ga,
                     'quantity': order.products[i].amount,
                     'category': order.products[i].category_ga,
@@ -124,7 +129,6 @@ window.googleAnalyticsLogics = new function() {
                 'value': order.revenue,
                 'tax': order.tax,
                 'shipping': order.shipping,
-                'currency': 'EUR',
                 'items': products,
             });
         }
@@ -141,7 +145,7 @@ window.googleAnalyticsLogics = new function() {
                         'category': product.category,
                         'variant': product.variant,
                         'quantity': product.quantity,
-                        'price': product.price,
+                        'price': formatPrice(product.price),
                     },
                 ],
             });
@@ -157,7 +161,7 @@ window.googleAnalyticsLogics = new function() {
                         'id': product.id,
                         'name': product.name,
                         'category': product.category,
-                        'price': product.price,
+                        'price': formatPrice(product.price),
                     },
                 ],
             });
@@ -175,13 +179,13 @@ window.googleAnalyticsLogics = new function() {
     };
 
     this.checkProgressEvent = function(step, parameters) {
-        var products = Array();
+        let products = Array();
         if (ecommerceEnabled && parameters) {
-            for (var i = 0; i < parameters.products.length; i++) {
+            for (let i = 0; i < parameters.products.length; i++) {
                 products.push({
                     'id': parameters.products[i].productId,
                     'name': parameters.products[i].title_dl,
-                    'price': parameters.products[i].price,
+                    'price': formatPrice(parameters.products[i].price),
                     'variant': parameters.products[i].variation_dl,
                     'quantity': parameters.products[i].amount,
                     'category': parameters.products[i].category_dl,
@@ -204,17 +208,17 @@ window.googleAnalyticsLogics = new function() {
     };
 
     this.impressionEvent = function(parameters) {
-        var products = Array();
-        var list_name = '';
-        if (window.currentElementTitle != 'undefined') {
+        let products = Array();
+        let list_name = '';
+        if (window.currentElementTitle !== 'undefined') {
             list_name = window.currentElementTitle;
         }
         if (ecommerceEnabled && parameters) {
-            for (var i = 0; i < parameters.products.length; i++) {
+            for (let i = 0; i < parameters.products.length; i++) {
                 products.push({
                     'id': parameters.products[i].getId(),
                     'name': parameters.products[i].getName(),
-                    'price': parameters.products[i].getPrice(),
+                    'price': formatPrice(parameters.products[i].getPrice()),
                     'list_name': parameters.list_name,
                     'category': parameters.products[i].getCategory(),
                 });

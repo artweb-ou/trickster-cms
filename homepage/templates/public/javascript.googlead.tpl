@@ -7,7 +7,12 @@
 			{literal}function gtag(){dataLayer.push(arguments)}{/literal}
 			gtag('js', new Date());
 			gtag('config', '{$googleAD['main_id']}');
-
+            {if !empty($googleAD["country"])}
+			gtag('set', {
+				'country': '{$googleAD["country"]}',
+				'currency': '{$googleAD["currency"]}'
+			});
+			{/if}
 			window.google = window.google || { } ;
 			window.google.ad = {
 				mainId :'{$googleAD["main_id"]}',

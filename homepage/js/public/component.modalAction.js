@@ -1,5 +1,4 @@
 window.ModalActionComponent = function(checkboxElement, footerElement, elementForPosition, additionalClassName, bubbleCloseTag, message) {
-    //	ModalComponent.call(this);
     var self = this;
     var html = document.documentElement;
     var htmlScrollTopStart;
@@ -16,12 +15,7 @@ window.ModalActionComponent = function(checkboxElement, footerElement, elementFo
         }
 
         var fragment = document.createDocumentFragment();
-        var resetButtonElement, submitButtonElement, footerElements;
-        /*
-                resetButtonElement = makeElement('div', 'cancel button button_outlined', fragment);
-                resetButtonElement.innerHTML = translationsLogics.get('product.quantityunavailable');
-                eventsManager.addHandler(resetButtonElement, 'click', resetClick);
-        */
+        var submitButtonElement, footerElements;
         if (checkboxElement && message && message['footer']) {
             submitButtonElement = makeElement('div', 'submit button', fragment);
             submitButtonElement.innerHTML = message['footer'];
@@ -51,16 +45,7 @@ window.ModalActionComponent = function(checkboxElement, footerElement, elementFo
         selfModalComponent.setDisplayed(false);
 
         formElement.submit();
-        // html.scrollTop = htmlScrollTopStart;
     };
 
-
-    /*
-        var resetClick = function(event) {
-            eventsManager.preventDefaultAction(event);
-            self.setDisplayed(false);
-            return false;
-        };
-    */
     init();
 };

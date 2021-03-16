@@ -16,6 +16,7 @@
 		window.google = window.google || { } ;
 		{literal}function gtag(){dataLayer.push(arguments)}{/literal}
 		gtag('js', new Date());
+
 		{if !empty($googleAdId)}
 			gtag('config', '{$googleAdId}');
 			window.google.ad = {
@@ -24,10 +25,22 @@
 				feedbackId : '{$googleAD["event_feedback_id"]}',
 				emailId : '{$googleAD["event_email_id"]}'
 			};
+			{if !empty($googleAD["country"])}
+			gtag('set', {
+				'country': '{$googleAD["country"]}',
+				'currency': '{$googleAD["currency"]}'
+			});
+			{/if}
 		{/if}
 		{if !empty($analyticsId)}
 			gtag('js', new Date());
 			gtag('config', '{$analyticsId}');
+			{if !empty($googleAD["country"])}
+			gtag('set', {
+				'country': '{$googleAD["country"]}',
+				'currency': '{$googleAD["currency"]}'
+			});
+			{/if}
 		{/if}
 		{if $configManager->get('google.ecommerce.enabled')}
 			window.google.ecommerce = {

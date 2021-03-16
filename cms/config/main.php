@@ -19,8 +19,6 @@
         'tablet' => true,
     ],
     'rssTheme' => 'projectRss',
-    'googleAnalyticsDomain' => '',
-    'googleAnalyticsId' => '',
     'dpdEnabled' => false,
     'timeZone' => 'Europe/Tallinn',
     'newProductLimit' => 7776000,

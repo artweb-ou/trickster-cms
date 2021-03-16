@@ -1,9 +1,9 @@
 window.ordersLogics = new function() {
-    var ordersIndex = {};
-    var init = function() {
+    let ordersIndex = {};
+    const init = function() {
         if (typeof window.orders !== 'undefined') {
-            for (var i = 0; i < window.orders.length; i++) {
-                var order = new Order(window.orders[i]);
+            for (let i = 0; i < window.orders.length; i++) {
+                let order = new Order(window.orders[i]);
                 ordersIndex[order.getId()] = order;
             }
         }
@@ -20,17 +20,17 @@ window.ordersLogics = new function() {
 };
 
 window.Order = function(data) {
-    var id;
-    var currency;
-    var vatAmount;
-    var products = [];
-    var revenue;
-    var shippingPrice;
-    var coupon = '';
-    var invoiceNumber;
-    var discounts;
-    var self = this;
-    var init = function() {
+    let id;
+    let currency;
+    let vatAmount;
+    let products = [];
+    let revenue;
+    let shippingPrice;
+    let coupon = '';
+    let invoiceNumber;
+    let discounts;
+    const self = this;
+    const init = function() {
         self.importData(data);
     };
 
@@ -47,7 +47,7 @@ window.Order = function(data) {
     };
 
     this.getPriceWithoutVat = function() {
-        var price = parseFloat(revenue) - parseFloat(vatAmount);
+        let price = parseFloat(revenue) - parseFloat(vatAmount);
         return price.toFixed(2);
     };
 
@@ -60,7 +60,7 @@ window.Order = function(data) {
     };
 
     this.getPromoCode = function() {
-        for (var i = 0; i < discounts.length; i++) {
+        for (let i = 0; i < discounts.length; i++) {
             coupon += discounts[i]['title'] + ' ';
         }
         return coupon;
@@ -72,9 +72,9 @@ window.Order = function(data) {
     };
 
     this.getCoupon = function() {
-        var coupon;
+        let coupon;
         if (discounts) {
-            for (var i = 0; i < discounts.length; i++) {
+            for (let i = 0; i < discounts.length; i++) {
                 if (discounts.length === 1) {
                     coupon = discounts[i].title + ' (' + discounts[i].id + ')';
                 }
@@ -87,11 +87,17 @@ window.Order = function(data) {
         id = data.id;
         invoiceNumber = data.invoiceNumber;
         currency = data.currency;
-        vatAmount = data.vatAmount;
-        revenue = data.totalPrice;
-        shippingPrice = data.deliveryPrice;
-        discounts = data.discounts;
+        vatAmount = formatPrice(data.vatAmount);
+        revenue = formatPrice(data.totalPrice);
+        shippingPrice = formatPrice(data.deliveryPrice);
+        discounts = formatPrice(data.discounts);
         products = data.products;
     };
+
+    const formatPrice = function(price) {
+        price = price.toString();
+        return price.replace(/\s+/g, '');
+    };
+
     init();
 };

@@ -23,6 +23,8 @@
     "pelago/emogrifier": "^4.0",
     "tedivm/jshrink": "~1.0",
     "ext-dom": "*",
+    "ext-pdo": "*",
+    "maksekeskus/maksekeskus-php": "v1.1",
     "ext-json": "*",
     "ext-pdo": "*"
   }

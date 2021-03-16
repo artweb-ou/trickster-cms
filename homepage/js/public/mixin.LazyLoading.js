@@ -8,7 +8,7 @@ window.LazyLoadingMixin = function() {
     this.initLazyLoading = function(options) {
         this.componentElement = options.componentElement;
         this.displayCallback = options.displayCallback;
-        let isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+        let isIE11 = !!window.MSInputMethodContext && !!document.documentMode || typeof IntersectionObserver === 'undefined';
         if (isIE11) {
             if (!(checkOnScreen.bind(this)())) {
                 window.addEventListener('scroll', scrollHandler.bind(this));

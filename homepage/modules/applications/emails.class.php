@@ -161,6 +161,7 @@ class emailsApplication extends controllerApplication
         $event->setElementId($newsmailId);
         $event->setType($type);
         $event->setVisitorId($visitorManager->getVisitorIdFromEmail($newsMailsAddress));
+        $parameters = [];
         if ($type == 'newsMail_linkClicked') {
             $external = $controller->getParameter('external');
             $targetId = $newsmailId;
