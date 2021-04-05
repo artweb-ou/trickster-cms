@@ -43,7 +43,7 @@ class ApiQueriesManager extends errorLogger implements DependencyInjectionContex
         }
 
         $resultTypes = [];
-        $limitStart = null;
+        $limitStart = 0;
         $limitQuantity = null;
         $exportType = null;
         $limitOrder = null;

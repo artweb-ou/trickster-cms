@@ -4,7 +4,7 @@ class brandsListQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 
-    protected function getTableName()
+    protected function getTable(): string
     {
         return 'module_brands_list';
     }

@@ -38,8 +38,8 @@ abstract class searchQueryFilter extends QueryFilter
         }
         $titleFields = $this->getTitleFieldNames();
         $contentFields = $this->getContentFieldNames();
-
-        $query->where(function ($finalQuery) use ($argument, $query, $titleFields, $contentFields) {
+        $table = $this->getTable();
+        $query->where(function ($finalQuery) use ($argument, $query, $titleFields, $contentFields, $table) {
             /**
              * @var \Illuminate\Database\Query\Builder $finalQuery
              */
@@ -47,22 +47,22 @@ abstract class searchQueryFilter extends QueryFilter
             if ($titleFields) {
                 foreach ($titleFields as $field) {
                     foreach ($argument as $argumentWord) {
-                        $finalQuery->orWhere($field, 'like', '%' . $argumentWord . '%');
-                        $query->orderByRaw('INSTR(?, ?)', [$field, $argumentWord]);
+                        $finalQuery->orWhere($table . '.' . $field, 'like', '%' . $argumentWord . '%');
+                        $query->orderByRaw('INSTR(?, ?)', [$table . '.' . $field, $argumentWord]);
                     }
                 }
                 if ($contentFields) {
                     foreach ($contentFields as $field) {
                         foreach ($argument as $argumentWord) {
-                            $finalQuery->orWhere($field, 'like', '%' . $argumentWord . '%');
-                            $query->orderByRaw('INSTR(?, ?)', [$field, $argumentWord]);
+                            $finalQuery->orWhere($table . '.' . $field, 'like', '%' . $argumentWord . '%');
+                            $query->orderByRaw('INSTR(?, ?)', [$table . '.' . $field, $argumentWord]);
                         }
                     }
                 }
             } elseif ($contentFields) {
                 foreach ($contentFields as $field) {
                     foreach ($argument as $argumentWord) {
-                        $finalQuery->orWhere($field, 'like', '%' . $argumentWord . '%');
+                        $finalQuery->orWhere($table . '.' . $field, 'like', '%' . $argumentWord . '%');
                     }
                 }
             }
@@ -93,20 +93,6 @@ abstract class searchQueryFilter extends QueryFilter
         }
         return $queryStrings;
     }
-
-    protected function getResourceName()
-    {
-        return $this->getTypeName();
-    }
-
-    /**
-     * Type name is used as a query filter's required type and database table name
-     * For example, type name of productSearchQueryFilter is "product"
-     *
-     * @abstract
-     * @return string
-     */
-    abstract protected function getTypeName();
 
     /**
      * Returns an array of database table column names used as "title" columns

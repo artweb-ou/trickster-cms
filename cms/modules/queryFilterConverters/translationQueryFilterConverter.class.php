@@ -5,6 +5,8 @@ use Illuminate\Database\Query\Builder;
 
 class translationQueryFilterConverter extends QueryFilterConverter
 {
+    protected string $table = 'module_translation';
+
     public function convert($sourceData, $sourceType)
     {
         /**
@@ -12,7 +14,7 @@ class translationQueryFilterConverter extends QueryFilterConverter
          */
         $db = $this->getService('db');
         $query = $db
-            ->table($this->getTableName())
+            ->table($this->getTable())
             ->select('id')
             // remove doubles from translations search results in variable langs
             ->distinct()
@@ -29,7 +31,7 @@ class translationQueryFilterConverter extends QueryFilterConverter
         return $query;
     }
 
-    protected function getTableName()
+    protected function getTable(): string
     {
         return 'module_translation';
     }

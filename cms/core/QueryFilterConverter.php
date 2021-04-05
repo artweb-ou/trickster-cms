@@ -7,7 +7,14 @@ abstract class QueryFilterConverter extends errorLogger implements DependencyInj
     use DependencyInjectionContextTrait;
 
     protected ?Builder $correctionQuery = null;
-    protected array $fields = ['id'];
+    protected string $table;
+
+    protected function getFields(): array
+    {
+        return [
+            $this->getTable() . '.id'
+        ];
+    }
 
     public function getCorrectionQuery(): ?Builder
     {
@@ -29,6 +36,16 @@ abstract class QueryFilterConverter extends errorLogger implements DependencyInj
     public function setType(string $type)
     {
         $this->type = $type;
+    }
+
+    protected function getTable(): string
+    {
+        return 'module_' . strtolower($this->getType());
+    }
+
+    protected function getStructureTable(): string
+    {
+        return 'structure_elements';
     }
 
     abstract public function convert(Builder $sourceData, string $sourceType);

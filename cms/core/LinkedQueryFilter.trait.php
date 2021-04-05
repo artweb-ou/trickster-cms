@@ -2,6 +2,8 @@
 
 trait LinkedQueryFilterTrait
 {
+    protected string $links = 'structure_links';
+
     /**
      * @param \Illuminate\Database\Query\Builder|array $sourceQuery
      * @param string $table
@@ -15,31 +17,31 @@ trait LinkedQueryFilterTrait
         $correctionQuery = $this->getCorrectionQuery();
         $query = $this->getService('db')
             ->table($table)
-            ->select($this->fields)
+            ->select($this->getFields())
             ->whereIn(
-                'id',
+                $this->getTable() . '.id',
                 function ($subQuery) use (
                     $sourceQuery,
                     $linkType,
                     $correctionQuery
                 ) {
                     if ($sourceQuery instanceof \Illuminate\Database\Query\Builder) {
-                        $subQuery->select('parentStructureId')
-                            ->from('structure_links')
-                            ->where('type', '=', $linkType)
+                        $subQuery->select($this->links . '.parentStructureId')
+                            ->from($this->links)
+                            ->where($this->links . '.type', '=', $linkType)
                             ->whereRaw('childStructureId in (' . $sourceQuery->toSql() . ')')
                             ->mergeBindings($sourceQuery);
                     } elseif (is_array($sourceQuery)) {
-                        $subQuery->select('parentStructureId')
-                            ->from('structure_links')
-                            ->where('type', '=', $linkType)
-                            ->whereIn('childStructureId', $sourceQuery);
+                        $subQuery->select($this->links . '.parentStructureId')
+                            ->from($this->links)
+                            ->where($this->links . '.type', '=', $linkType)
+                            ->whereIn($this->links . '.childStructureId', $sourceQuery);
                     }
                     if ($correctionQuery instanceof \Illuminate\Database\Query\Builder) {
                         $subQuery->whereRaw('parentStructureId in (' . $correctionQuery->toSql() . ')')
                             ->mergeBindings($correctionQuery);
                     } elseif (is_array($correctionQuery)) {
-                        $subQuery->whereIn('parentStructureId', $correctionQuery);
+                        $subQuery->whereIn($this->links . '.parentStructureId', $correctionQuery);
                     }
                 }
             );
@@ -63,31 +65,31 @@ trait LinkedQueryFilterTrait
         $correctionQuery = $this->getCorrectionQuery();
         $query = $this->getService('db')
             ->table($table)
-            ->select($this->fields)
+            ->select($this->getFields())
             ->whereIn(
-                'id',
+                $this->getTable() . '.id',
                 function ($subQuery) use (
                     $sourceQuery,
                     $linkType,
                     $correctionQuery
                 ) {
                     if ($sourceQuery instanceof \Illuminate\Database\Query\Builder) {
-                        $subQuery->select('childStructureId')
-                            ->from('structure_links')
-                            ->where('type', '=', $linkType)
+                        $subQuery->select($this->links . '.childStructureId')
+                            ->from($this->links)
+                            ->where($this->links . '.type', '=', $linkType)
                             ->whereRaw('parentStructureId in (' . $sourceQuery->toSql() . ')')
                             ->mergeBindings($sourceQuery);
                     } elseif (is_array($sourceQuery)) {
-                        $subQuery->select('childStructureId')
-                            ->from('structure_links')
-                            ->where('type', '=', $linkType)
-                            ->whereIn('parentStructureId', $sourceQuery);
+                        $subQuery->select($this->links . '.childStructureId')
+                            ->from($this->links)
+                            ->where($this->links . '.type', '=', $linkType)
+                            ->whereIn($this->links . '.parentStructureId', $sourceQuery);
                     }
                     if ($correctionQuery instanceof \Illuminate\Database\Query\Builder) {
                         $subQuery->whereRaw('childStructureId in (' . $correctionQuery->toSql() . ')')
                             ->mergeBindings($correctionQuery);
                     } elseif (is_array($correctionQuery)) {
-                        $subQuery->whereIn('childStructureId', $correctionQuery);
+                        $subQuery->whereIn($this->links . '.childStructureId', $correctionQuery);
                     }
                 }
             );

@@ -4,7 +4,7 @@ class deliveryTypeQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 
-    protected function getTableName()
+    protected function getTable(): string
     {
         return 'module_delivery_type';
     }

@@ -17,4 +17,9 @@ abstract class QueryFilter extends errorLogger implements DependencyInjectionCon
      * @return mixed
      */
     abstract public function getFilteredIdList($argument, $query);
+
+    protected function getTable()
+    {
+        return 'module_' . strtolower($this->getRequiredType());
+    }
 }

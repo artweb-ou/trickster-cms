@@ -4,7 +4,7 @@ class productCatalogueQueryFilterConverter extends QueryFilterConverter
 {
     use SimpleQueryFilterConverterTrait;
 
-    protected function getTableName()
+    protected function getTable(): string
     {
         return 'module_catalogue_filter';
     }

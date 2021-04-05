@@ -12,7 +12,7 @@ class adminTranslationQueryFilterConverter extends QueryFilterConverter
          */
         $db = $this->getService('db');
         $query = $db
-            ->table($this->getTableName())
+            ->table($this->getTable())
             ->select('id')
             // remove doubles from translations search results in variable langs
             ->distinct()
@@ -29,7 +29,7 @@ class adminTranslationQueryFilterConverter extends QueryFilterConverter
         return $query;
     }
 
-    protected function getTableName()
+    protected function getTable(): string
     {
         return 'module_translation';
     }

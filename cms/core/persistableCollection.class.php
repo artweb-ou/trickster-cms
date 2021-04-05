@@ -386,11 +386,6 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         return $result;
     }
 
-    public function getResourceName()
-    {
-        return $this->resourceName;
-    }
-
     public function averageValue($column, $conditions = [], $orderFields = [], $limitFields = [])
     {
         $name = 'AVG(`' . $column . '`)';

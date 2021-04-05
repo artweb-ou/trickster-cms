@@ -95,11 +95,10 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
         return $this->filterQueries;
     }
 
-    public function getExportFilterQuery(): ?Builder
+    public function getExportFilteredQuery(): ?Builder
     {
-        if ($filterQuery = $this->getFilterQueries()) {
-
-            return $filterQuery[$this->exportType];
+        if ($filterQueries = $this->getFilterQueries()) {
+            return $filterQueries[$this->exportType];
         }
         return null;
     }
@@ -115,10 +114,6 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
     public function getQueryResult()
     {
         if (!$this->queryResult) {
-            $this->queryResult = [];
-            $this->queryResult['start'] = $this->start;
-            $this->queryResult['limit'] = $this->limit;
-
             $filterQueries = $this->getFilterQueries();
             /**
              * @var ApiQueryResultResolver $apiQueryResultResolver
@@ -132,6 +127,8 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
                 $this->start,
                 $this->limit
             );
+            $this->queryResult['start'] = $this->start;
+            $this->queryResult['limit'] = $this->limit;
         }
         return $this->queryResult;
     }

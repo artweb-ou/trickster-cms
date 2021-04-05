@@ -4,14 +4,7 @@ trait SimpleQueryFilterConverterTrait
 {
     public function convert($sourceData, $sourceType)
     {
-        $query = $this->getService('db')->table($this->getTableName())->select('id')->distinct();
+        $query = $this->getService('db')->table($this->getTable())->select('id')->distinct();
         return $query;
     }
-
-    protected function getTableName()
-    {
-        return 'module_' . strtolower($this->getType());
-    }
-
-    abstract function getType();
 }
