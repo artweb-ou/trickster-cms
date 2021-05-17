@@ -94,6 +94,13 @@
 				</parameter>
 				<parameter>
 					<id>13</id>
+					<name>VK_ENCODING</name>
+					<length>12</length>
+					<relation>charset</relation>
+					<MAC>0</MAC>
+				</parameter>
+				<parameter>
+					<id>14</id>
 					<name>VK_LANG</name>
 					<length>3</length>
 					<relation>languageCode</relation>
@@ -218,13 +225,20 @@
 				</parameter>
 				<parameter>
 					<id>17</id>
+					<name>VK_ENCODING</name>
+					<length>12</length>
+					<relation>charset</relation>
+					<MAC>0</MAC>
+				</parameter>
+				<parameter>
+					<id>18</id>
 					<name>VK_LANG</name>
 					<length>3</length>
 					<relation>languageCode</relation>
 					<MAC>0</MAC>
 				</parameter>
 				<parameter>
-					<id>18</id>
+					<id>19</id>
 					<name>VK_AUTO</name>
 					<length>1</length>
 					<relation>automatic</relation>
@@ -292,14 +306,21 @@
 					<MAC>0</MAC>
 				</parameter>
 				<parameter>
-					<id>11</id>
+					<id>9</id>
+					<name>VK_ENCODING</name>
+					<length>12</length>
+					<relation>charset</relation>
+					<MAC>0</MAC>
+				</parameter>
+				<parameter>
+					<id>10</id>
 					<name>VK_LANG</name>
 					<length>3</length>
 					<relation>languageCode</relation>
 					<MAC>0</MAC>
 				</parameter>
 				<parameter>
-					<id>12</id>
+					<id>11</id>
 					<name>VK_AUTO</name>
 					<length>1</length>
 					<relation>automatic</relation>
