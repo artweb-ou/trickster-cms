@@ -23,7 +23,7 @@ class banklinkApplication extends controllerApplication
             'rootUrl' => $controller->rootURL,
             'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
         ], true);
-        $basketElement = $structureManager->getCurrentElement();
+        $structureManager->getCurrentElement();
         /**
          * @var paymentsManager $paymentsManager
          */
@@ -31,7 +31,8 @@ class banklinkApplication extends controllerApplication
         $paymentMethodElementId = $controller->getParameter('pid');
         $paymentMethod = false;
         $processingResult = false;
-
+        $transactionCode = null;
+        $transactionResult = null;
         if ($paymentMethodElementId && $paymentMethodElement = $structureManager->getElementById($paymentMethodElementId, null, true)
         ) {
             if ($paymentMethod = $paymentsManager->getPaymentMethod($paymentMethodElement->getName())) {
@@ -86,6 +87,10 @@ class banklinkApplication extends controllerApplication
             $user = $this->getService('user');
             if ($URL = $user->getStorageAttribute('banklinkResultURL')) {
                 $controller->redirect($URL);
+            } else {
+                print_r($_SESSION);
+                echo 'banklink result url is missing. transaction id:' . $transactionCode;
+                $this->logError('banklink result url is missing. transaction id:' . $transactionCode);
             }
         }
     }
