@@ -7,7 +7,12 @@ class translationsManagerServiceContainer extends DependencyInjectionServiceCont
         return new translationsManager();
     }
 
+    /**
+     * @param translationsManager $instance
+     */
     public function makeInjections($instance)
     {
+        $configManager = $this->registry->getService('ConfigManager');
+        $instance->enableLogging($configManager->get('main.logMissingTranslations'));
     }
 }

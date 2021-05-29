@@ -3,11 +3,13 @@
 class translationsManager extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
+
     /** @var translationsManager */
     protected static $instance;
     protected $translationsList;
     protected $cachePath;
     protected $defaultSection;
+    protected $logErrors = true;
 
     /**
      * @return translationsManager
@@ -164,7 +166,7 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
                 return $translationsList[$name];
             } else {
                 if ($required) {
-                    if ($loggable) {
+                    if ($loggable && $this->logErrors) {
                         $this->logError('Missing translation ' . $name, E_NOTICE, false);
                     }
                     return '#' . $name . '#';
@@ -179,5 +181,10 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
     public function setDefaultSection($sectionName)
     {
         $this->defaultSection = $sectionName;
+    }
+
+    public function enableLogging($value)
+    {
+        $this->logErrors = $value;
     }
 }

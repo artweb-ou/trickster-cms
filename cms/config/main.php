@@ -29,4 +29,5 @@
     'templateTypeCategorySubCategory' => 'thumbnailsmall',
     'templateTypeCategoryProduct' => 'thumbnail',
     'redirectImagesWithDeprecatedParameters' => false,
+    'logMissingTranslations' => true,
 ];
