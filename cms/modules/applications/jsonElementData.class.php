@@ -40,12 +40,12 @@ class jsonElementDataApplication extends controllerApplication
         );
         $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
         $status = 'fail';
-        $preset = 'details';
+        $preset = $controller->getParameter('preset');
         if ($id = $controller->getParameter('elementId')) {
             if ($baseElement = $structureManager->getElementById($id)) {
                 if ($baseElement instanceof JsonDataProvider) {
                     $status = 'success';
-                    $response->setResponseData($baseElement->structureType, $baseElement->getElementData($preset));
+                    $response->setResponseData('elementData', $baseElement->getElementData($preset));
                 }
             }
         }

@@ -6,6 +6,9 @@
 	{include file=$theme->template("index.head.opengraph.tpl")}
 	{include file=$theme->template("index.head.twitter.tpl")}
 	{include file=$theme->template("index.head.facebook.tpl")}
+	{if $theme->templateExists("index.head.extra.tpl")}
+		{include file=$theme->template("index.head.extra.tpl")}
+	{/if}
 	<link rel="shortcut icon" href="{$controller->baseURL}favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="{$controller->baseURL}css/set:{$theme->getCode()}/{if !empty($CSSFileName)}file:{$CSSFileName}.css{/if}" />
 	{if !empty($jsScripts)}{foreach $jsScripts as $script}<script defer type="text/javascript" src="{$script}"></script>{/foreach}{/if}

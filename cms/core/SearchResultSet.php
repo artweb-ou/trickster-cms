@@ -28,6 +28,18 @@ class SearchResultSet
     {
         return false;
     }
+
+    public function getJsonData()
+    {
+        $data = [
+            'prods' => [],
+            'prodsAmount' => count($this->elements)
+        ];
+        foreach ($this->elements as $element) {
+            $data['prods'][] = $element->getElementData('list');
+        }
+        return json_encode($data);
+    }
 }
 
 

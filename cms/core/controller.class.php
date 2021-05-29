@@ -485,21 +485,6 @@ class controller
         $this->directoryName = $directoryName;
     }
 
-    //deprecated
-
-    /**
-     * @param $parameterName
-     * @return bool
-     *
-     * todo: remove after 2016
-     * @deprecated
-     */
-    public function getRequestParameterValue($parameterName)
-    {
-        errorLog::getInstance()->logMessage('controller', "Deprecated method used: getRequestParameterValue");
-        return $this->getParameter($parameterName);
-    }
-
     /**
      * @return array
      */
