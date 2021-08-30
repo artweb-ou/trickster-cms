@@ -27,7 +27,7 @@ class jsonElementDataApplication extends controllerApplication
         $cache->enable();
 
         $response = new ajaxResponse();
-        $languagesManager = $this->getService('languagesManager');
+        $languagesManager = $this->getService('LanguagesManager');
 
         $structureManager = $this->getService(
             'structureManager',

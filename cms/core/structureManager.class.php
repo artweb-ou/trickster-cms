@@ -24,7 +24,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @var Cache
      */
     protected $cache;
-    protected $cacheLifeTime = 1800;
+    protected $cacheLifeTime = 60 * 60 * 24;
 
     /**
      * @var privilegesManager
@@ -111,7 +111,8 @@ class structureManager implements DependencyInjectionContextInterface
         $restrictLinkTypes = false,
         &$flatTree = [],
         &$usedIds = []
-    ) {
+    )
+    {
         $treeLevel = $this->getElementsChildren($elementId, $roles, $linkType, null, $restrictLinkTypes);
         foreach ($treeLevel as $element) {
             if (!in_array($element->id, $usedIds)) {
@@ -793,7 +794,8 @@ class structureManager implements DependencyInjectionContextInterface
         $linkTypes = 'structure',
         $allowedTypes = null,
         $restrictLinkTypes = false
-    ) {
+    )
+    {
         $returnList = [];
         if ($parentElement = $this->getElementById($parentElementId)) {
             $requestedRoles = $this->getRequestedRoles($allowedRoles);
@@ -894,7 +896,8 @@ class structureManager implements DependencyInjectionContextInterface
         $parentElementId = 0,
         $allowedElements = [],
         $allowedRoles = []
-    ) {
+    )
+    {
         if (!$parentElementId) {
             $parentElementId = $this->getRootElementId();
         }
@@ -931,12 +934,11 @@ class structureManager implements DependencyInjectionContextInterface
             foreach ($dataObjects as &$dataObject) {
                 $elementId = $dataObject->id;
                 if ($loadedElement = $this->manufactureElement($dataObject, $parentElementId)) {
-                    $this->setElementCacheKey($elementId, 'e', $this->elementsList[$elementId], $this->cacheLifeTime);
+                    $this->createElementCache($elementId);
 
                     $loadedElements[$elementId] = $this->elementsList[$elementId];
 
-                    $loadedModuleTables[$loadedElement->dataResourceName]['language'] = $loadedElement->getCurrentLanguage(
-                    );
+                    $loadedModuleTables[$loadedElement->dataResourceName]['language'] = $loadedElement->getCurrentLanguage();
                     $loadedModuleTables[$loadedElement->dataResourceName]['id'][] = $loadedElement->id;
                 }
             }
@@ -1361,7 +1363,8 @@ class structureManager implements DependencyInjectionContextInterface
         $withinParentId = null,
         &$points = 0,
         $chainElements = []
-    ) {
+    )
+    {
         //if we are searching parent within itself then we will get nothing. we should not restrict parent within itself
         if ($withinParentId == $id) {
             $withinParentId = null;
@@ -1665,5 +1668,11 @@ class structureManager implements DependencyInjectionContextInterface
                 $this->cache->delete($key);
             }
         }
+    }
+
+    public function createElementCache($elementId)
+    {
+        if ($this->elementsList[$elementId])
+            $this->setElementCacheKey($elementId, 'e', $this->elementsList[$elementId], $this->cacheLifeTime);
     }
 }

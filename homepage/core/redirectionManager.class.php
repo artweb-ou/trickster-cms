@@ -35,7 +35,7 @@ class redirectionManager implements DependencyInjectionContextInterface
     public function redirectToElement($elementId, $languageCode = '')
     {
         if (!$languageCode) {
-            $languageCode = $this->getService('languagesManager')->getCurrentLanguageCode();
+            $languageCode = $this->getService('LanguagesManager')->getCurrentLanguageCode();
         }
         $configManager = $this->getService('ConfigManager');
         $structureManager = $this->getService('structureManager', [

@@ -17,7 +17,6 @@ class linksManager extends errorLogger
      */
     protected $linksDataCollection;
     protected $db;
-    protected $newElementLinkType;
 
     /**
      *
@@ -30,16 +29,7 @@ class linksManager extends errorLogger
         $this->elementsConnectedId['parent'] = [];
         $this->elementsConnectedId['child'] = [];
     }
-
-    /**
-     * @param Cache $cache
-     * @deprecated
-     */
-    public function setCache($cache)
-    {
-        errorLog::getInstance()->logMessage('linksManager', 'deprecated method setCache is called');
-    }
-
+    
     /**
      * loads all non-loaded links for the query parameters, cache the results, compile and return results from cache
      *
