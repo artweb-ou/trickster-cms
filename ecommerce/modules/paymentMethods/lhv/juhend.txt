@@ -1,3 +1,0 @@
-openssl genrsa -out privkey.pem 2048 
-
-openssl req -new -key privkey.pem -out request.pem -sha256
