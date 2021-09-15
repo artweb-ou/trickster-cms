@@ -4,9 +4,7 @@
   "license": "proprietary",
   "require": {
     "illuminate/database": "5.2.*",
-    "mk-j/php_xlsxwriter": "^0.36",
     "phpmailer/phpmailer": "~5.2",
-    "mpdf/mpdf": "8.*",
     "polyweb-cz/lessphp": "dev-master",
     "moroz1999/image-process": "^2.0",
     "jaybizzle/crawler-detect": "1.2.*",
