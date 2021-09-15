@@ -24,7 +24,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @var Cache
      */
     protected $cache;
-    protected $cacheLifeTime = 60 * 60 * 24;
+    protected $cacheLifeTime = 60 * 60 * 3;
 
     /**
      * @var privilegesManager
