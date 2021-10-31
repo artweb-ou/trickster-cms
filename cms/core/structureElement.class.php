@@ -1439,8 +1439,6 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         $this->getModuleDataObjects();
         $fields = [
             'structureDataObject',
-            'multiLanguageChunks',
-            'singleLanguageChunks',
             'structureFields',
             'moduleFields',
             'multiLanguageFields',

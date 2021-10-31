@@ -3,6 +3,7 @@
 class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInterface, ExtraDataHolderDataChunkInterface
 {
     use ElementHolderDataChunkTrait;
+
     protected $ids;
     protected $role = 'parent';
     protected $linkType;
@@ -109,19 +110,21 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
          * @var linksManager $linksManager
          */
         if ($linksManager = $this->getService('linksManager')) {
-            $linksIndex = $linksManager->getElementsLinksIndex($this->structureElement->getId(), $this->linkType, $this->role);
-            foreach ($this->storageValue as $connectedId) {
-                if (!isset($linksIndex[$connectedId])) {
-                    if ($this->role === 'child') {
-                        $linksManager->linkElements($connectedId, $this->structureElement->getId(), $this->linkType);
-                    } else {
-                        $linksManager->linkElements($this->structureElement->getId(), $connectedId, $this->linkType);
+            if ($this->structureElement) {
+                $linksIndex = $linksManager->getElementsLinksIndex($this->structureElement->getId(), $this->linkType, $this->role);
+                foreach ($this->storageValue as $connectedId) {
+                    if (!isset($linksIndex[$connectedId])) {
+                        if ($this->role === 'child') {
+                            $linksManager->linkElements($connectedId, $this->structureElement->getId(), $this->linkType);
+                        } else {
+                            $linksManager->linkElements($this->structureElement->getId(), $connectedId, $this->linkType);
+                        }
                     }
+                    unset($linksIndex[$connectedId]);
                 }
-                unset($linksIndex[$connectedId]);
-            }
-            foreach ($linksIndex as $key => &$link) {
-                $link->delete();
+                foreach ($linksIndex as $key => &$link) {
+                    $link->delete();
+                }
             }
         }
     }
