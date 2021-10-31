@@ -69,15 +69,6 @@
 						<td class='form_empty' colspan='3'></td>
 					</tr>
 					<tr>
-						<td class="form_label"></td>
-						<td class="form_star"></td>
-						<td class='form_field'>
-							<input type="checkbox" class="checkbox_placeholder" name="{$formNames.subscribe}" value="1" {if $formData.subscribe == "1"}checked="checked"{/if} id="checkbox_subscribe" />
-							<label for="checkbox_subscribe">{translations name='registration.form_subscribe'}</label>
-						</td>
-						<td class='form_extra'></td>
-					</tr>
-					<tr>
 						<td></td>
 						<td></td>
 						<td>

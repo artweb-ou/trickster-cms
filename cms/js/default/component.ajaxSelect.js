@@ -169,7 +169,7 @@ window.AjaxSelectItemComponent = function(ajaxSelectComponent, optionElement, mu
         } else {
             componentElement.className = 'ajaxselect_item';
             descriptionElement.className = 'ajaxselect_item_value';
-            removalElement.className = 'ajaxselect_item_remover icon icon_delete';
+            removalElement.className = 'ajaxselect_item_remover';
         }
 
         componentElement.appendChild(removalElement);
