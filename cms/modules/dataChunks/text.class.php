@@ -6,12 +6,12 @@ class textDataChunk extends DataChunk implements ElementStorageValueHolderInterf
 
     public function setFormValue($value)
     {
-        $this->formValue = htmlspecialchars(html_entity_decode($value, ENT_QUOTES), ENT_QUOTES);
+        $this->formValue = htmlspecialchars(html_entity_decode(trim($value), ENT_QUOTES), ENT_QUOTES);
     }
 
     public function convertStorageToDisplay()
     {
-        $this->displayValue = $this->storageValue;
+        $this->displayValue = trim($this->storageValue);
     }
 
     public function convertStorageToForm()
