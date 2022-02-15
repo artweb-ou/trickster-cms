@@ -3,6 +3,7 @@
 class filesDataChunk extends DataChunk implements ElementStorageValueHolderInterface
 {
     use ElementStorageValueDataChunkTrait;
+
     public $temporaryName;
     public $originalName;
     public $fileReceived = false;
@@ -34,5 +35,7 @@ class filesDataChunk extends DataChunk implements ElementStorageValueHolderInter
 
     public function setExternalValue($value)
     {
+        $this->formValue = $value;
+        $this->convertFormToStorage();
     }
 }

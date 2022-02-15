@@ -1,4 +1,4 @@
-window.AjaxSearchComponent = function(componentElement, parameters) {
+window.AjaxSearchComponent = function (componentElement, parameters) {
     var self = this;
     var ajaxSearchResultsComponent = false;
     var inputCheckDelay = 400;
@@ -23,7 +23,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
     this.componentElement = null;
     this.inputElement = null;
 
-    var init = function() {
+    var init = function () {
         self.componentElement = componentElement;
         self.inputElement = componentElement;
         self.inputElement.autocomplete = 'off';
@@ -40,7 +40,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
         }
         controller.addListener('ajaxSearchResultsReceived', updateData);
     };
-    var parseParameters = function(parameters) {
+    var parseParameters = function (parameters) {
         if (typeof parameters.clickCallback !== 'undefined') {
             clickCallback = parameters.clickCallback;
         }
@@ -84,10 +84,10 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
             customShowedElementComponents = parameters.showedElementComponents;
         }
     };
-    var pasteHandler = function(event) {
+    var pasteHandler = function (event) {
         checkInput();
     };
-    var keyPressHandler = function(event) {
+    var keyPressHandler = function (event) {
         if (ajaxSearchResultsComponent.displayed) {
             if (event.keyCode == '40') {
                 window.eventsManager.preventDefaultAction(event);
@@ -113,12 +113,12 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
             checkInput();
         }
     };
-    var windowClickHandler = function() {
+    var windowClickHandler = function () {
         ajaxSearchResultsComponent.hideComponent();
     };
-    var checkInput = function() {
+    var checkInput = function () {
         window.clearTimeout(keyUpTimeOut);
-        keyUpTimeOut = window.setTimeout(function() {
+        keyUpTimeOut = window.setTimeout(function () {
             if (getValueCallback) {
                 searchString = getValueCallback();
             } else {
@@ -132,7 +132,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
             }
         }, inputCheckDelay);
     };
-    var updateData = function(responseData) {
+    var updateData = function (responseData) {
         var allElements = [];
         for (var type in responseData) {
             if (types.indexOf(type) === -1) {
@@ -144,7 +144,7 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
                 }
             }
 
-            responseData[type].sort(function(a, b) {
+            responseData[type].sort(function (a, b) {
                 var aTitle = a.title.toUpperCase();
                 var bTitle = b.title.toUpperCase();
                 var keyword = searchString.toUpperCase();
@@ -187,28 +187,28 @@ window.AjaxSearchComponent = function(componentElement, parameters) {
         }
     };
 
-    this.setFilters = function(filterString) {
+    this.setFilters = function (filterString) {
         filters = filterString;
     };
-    this.getPosition = function() {
+    this.getPosition = function () {
         return position;
     };
-    this.clickHandler = function(data) {
+    this.clickHandler = function (data) {
         ajaxSearchResultsComponent.hideComponent();
         if (typeof clickCallback == 'function') {
             clickCallback(data);
         }
     };
-    this.getCustomShowedElementComponents = function() {
+    this.getCustomShowedElementComponents = function () {
         return customShowedElementComponents;
     };
-    this.setTypes = function(newTypes) {
+    this.setTypes = function (newTypes) {
         types = newTypes;
     };
 
     init();
 };
-window.AjaxSearchResultsComponent = function(parentObject, customResultsElement) {
+window.AjaxSearchResultsComponent = function (parentObject, customResultsElement) {
     var componentElement;
     var contentElement;
     var resultItems = [];
@@ -218,7 +218,7 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
     this.displayed = false;
 
 
-    var init = function() {
+    var init = function () {
         position = parentObject.getPosition();
         if (customResultsElement) {
             componentElement = customResultsElement;
@@ -241,12 +241,12 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
         eventsManager.addHandler(componentElement, 'click', clickHandler);
         eventsManager.addHandler(window, 'resize', updateSizes);
     };
-    this.reset = function() {
+    this.reset = function () {
         while (contentElement.firstChild) {
             contentElement.removeChild((contentElement.firstChild));
         }
     };
-    this.updateData = function(elementsList) {
+    this.updateData = function (elementsList) {
         self.reset();
         resultItems = [];
 
@@ -258,7 +258,7 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
             resultItems.push(item);
         }
     };
-    this.displayComponent = function() {
+    this.displayComponent = function () {
         if (!self.displayed) {
             self.displayed = true;
             componentElement.style.visibility = 'hidden';
@@ -266,8 +266,8 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
             componentElement.style.position = position;
             componentElement.style.visibility = 'visible';
 
-            if(parentObject.inputElement.dataset.view !==''){
-                domHelper.addClass(componentElement, parentObject.inputElement.dataset.view );
+            if (parentObject.inputElement.dataset.view !== '') {
+                domHelper.addClass(componentElement, parentObject.inputElement.dataset.view);
             }
             domHelper.addClass(componentElement, 'active');
 
@@ -276,7 +276,7 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
         updateSizes();
         updateView();
     };
-    this.hideComponent = function() {
+    this.hideComponent = function () {
         if (self.displayed) {
             self.displayed = false;
             self.reset();
@@ -288,17 +288,17 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
         updateView();
     };
 
-    this.setFirstOption = function() {
+    this.setFirstOption = function () {
         if (resultItems.length > 0) {
             self.setSelectedIndex(0);
         }
     };
-    this.setLastOption = function() {
+    this.setLastOption = function () {
         if (resultItems.length > 0) {
             self.setSelectedIndex(resultItems.length - 1);
         }
     };
-    this.setNextOption = function() {
+    this.setNextOption = function () {
         if (selectedIndex !== false) {
             var nextOptionNumber = selectedIndex + 1;
             if (nextOptionNumber < resultItems.length) {
@@ -308,7 +308,7 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
             self.setFirstOption();
         }
     };
-    this.setPreviousOption = function() {
+    this.setPreviousOption = function () {
         if (selectedIndex !== false) {
             var previousOptionNumber = selectedIndex - 1;
             if (previousOptionNumber >= 0) {
@@ -316,7 +316,7 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
             }
         }
     };
-    this.setSelectedIndex = function(newSelectedIndex) {
+    this.setSelectedIndex = function (newSelectedIndex) {
         selectedIndex = newSelectedIndex;
         for (var i = 0; i < resultItems.length; i++) {
             if (i === selectedIndex) {
@@ -326,14 +326,14 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
             }
         }
     };
-    this.openOption = function() {
+    this.openOption = function () {
         if (typeof resultItems[selectedIndex] !== 'undefined') {
             resultItems[selectedIndex].click();
             return true;
         }
         return false;
     };
-    var updateView = function() {
+    var updateView = function () {
         var formElement = parentObject.inputElement.form;
         var searchElementBoxViewArray = [];
         var searchElementBoxView = [];
@@ -356,7 +356,7 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
         }
     };
 
-    var updateSizes = function() {
+    var updateSizes = function () {
         if (!customResultsElement && position === 'fixed' || position === 'absolute') {
             var inputPositions = domHelper.getElementPositions(
                 parentObject.inputElement.parentElement);
@@ -365,39 +365,39 @@ window.AjaxSearchResultsComponent = function(parentObject, customResultsElement)
             var inputHeight = parentObject.inputElement.offsetHeight;
             var leftPosition = (inputLeft);
             var topPosition = (inputTop + inputHeight);
-            var windowHeight = document.documentElement.offsetHeight;
+            var windowBottom = window.scrollY + window.innerHeight;
             var height;
-            var contentHeight = contentElement.offsetHeight;
-            if (contentHeight > windowHeight - topPosition) {
-                height = windowHeight - topPosition;
+            var contentHeight = contentElement.scrollHeight;
+            if (topPosition + contentHeight > windowBottom) {
+                height = windowBottom - topPosition - 20;
             } else {
                 height = contentHeight;
             }
-
+            console.log(windowBottom, topPosition, contentHeight)
             componentElement.style.left = leftPosition + 'px';
             componentElement.style.top = topPosition + 'px';
-            componentElement.style.height = height +5 + 'px';
+            componentElement.style.height = height + 'px';
         }
     };
-    var clickHandler = function(event) {
+    var clickHandler = function (event) {
         eventsManager.preventDefaultAction(event);
         eventsManager.cancelBubbling(event);
     };
-    this.getCustomShowedElementComponents = function() {
+    this.getCustomShowedElementComponents = function () {
         return parentObject.getCustomShowedElementComponents();
     };
     init();
 };
 DomElementMakerMixin.call(AjaxSearchResultsComponent.prototype);
 
-window.AjaxSearchResultsItemComponent = function(data, parentObject) {
+window.AjaxSearchResultsItemComponent = function (data, parentObject) {
     var self = this;
     var componentElement;
     var total;
     var subTitle;
 
     this.componentElement = null;
-    var init = function() {
+    var init = function () {
         if (typeof data.url !== 'undefined') {
             componentElement = document.createElement('a');
             componentElement.href = data.url;
@@ -439,14 +439,14 @@ window.AjaxSearchResultsItemComponent = function(data, parentObject) {
 
         self.componentElement = componentElement;
     };
-    var clickHandler = function(event) {
+    var clickHandler = function (event) {
         eventsManager.preventDefaultAction(event);
         parentObject.clickHandler(data);
     };
-    this.click = function() {
+    this.click = function () {
         parentObject.clickHandler(data);
     };
-    this.setActive = function(active) {
+    this.setActive = function (active) {
         if (active == true) {
             componentElement.className = 'ajaxsearch_results_item ajaxsearch_results_active';
         } else {
