@@ -363,10 +363,12 @@ class languagesManager extends errorLogger implements DependencyInjectionContext
         }
     }
 
+    /**
+     * @return languageElement
+     */
     public function getCurrentLanguageElement()
     {
         $structureManager = $this->getService('structureManager');
         return $structureManager->getElementById($this->getCurrentLanguageId());
     }
 }
-

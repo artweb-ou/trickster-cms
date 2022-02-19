@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="{$currentLanguage->iso6391}"
+>
 <head>
 	{include file=$theme->template("index.head.meta.tpl")}
 	{include file=$theme->template("index.head.seo.tpl")}
@@ -15,7 +17,7 @@
 	<link rel="alternate" type="application/rss+xml" href="{$controller->baseURL}rss/{$currentLanguage->iso6393}/" title="RSS" />
 	{foreach $languagesList as $language}
 		{if !$language->requested}
-			<link rel="alternate" hreflang="{$language->iso6392}" href="{$controller->baseURL}redirect/type:language/element:{$currentElement->id}/code:{$language->iso6393}/" />
+			<link rel="alternate" hreflang="{$language->iso6391}" href="{$controller->baseURL}redirect/type:language/element:{$currentElement->id}/code:{$language->iso6393}/" />
 		{/if}
 	{/foreach}
 	{if $currentElement instanceof LdJsonProviderInterface}{$currentElement->getLdJsonScriptHtml()}{/if}

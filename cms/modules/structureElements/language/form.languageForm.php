@@ -3,6 +3,9 @@
 class LanguageFormStructure extends ElementForm
 {
     protected $structure = [
+        'iso6391' => [
+            'type' => 'input.text',
+        ],
         'iso6393' => [
             'type' => 'input.text',
         ],

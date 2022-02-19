@@ -19,7 +19,6 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     protected $structureDataObject;
     protected $actionPerformed = false;
     protected $childrenLoadStatus;
-    protected $newElementUrl;
     protected $allowedTypes;
     protected $allowedTypesByAction = [];
     protected $multiLanguageChunks = [];

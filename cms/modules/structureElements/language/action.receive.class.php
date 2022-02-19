@@ -47,6 +47,7 @@ class receiveLanguage extends structureElementAction
     public function setExpectedFields(&$expectedFields)
     {
         $expectedFields = [
+            'iso6391',
             'iso6393',
             'title',
             'hidden',
