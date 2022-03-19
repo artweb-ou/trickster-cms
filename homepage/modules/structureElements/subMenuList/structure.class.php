@@ -47,8 +47,8 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
     {
         if ($this->subMenuList === null) {
             $structureManager = $this->getService('structureManager');
-            if ($currentElement = $structureManager->getCurrentElement()){
-                $key = 'il:'.$currentElement->id;
+            if ($currentElement = $structureManager->getCurrentElement()) {
+                $key = 'il:' . $currentElement->id;
             } else {
                 $key = 'il:0';
             }
@@ -70,7 +70,9 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
                     if ($connectedIds = $linksManager->getConnectedIdList($this->id, 'submenulist', 'parent')) {
                         foreach ($connectedIds as $elementId) {
                             if ($element = $structureManager->getElementById($elementId, $languagesManager->getCurrentLanguageId())) {
-                                $directSubMenuList[] = $element;
+                                if ($element->structureType !== 'search') {
+                                    $directSubMenuList[] = $element;
+                                }
                             }
                         }
                     }
@@ -78,7 +80,7 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
                     //gather all submenus automatically
                     if ($languagesElement = $structureManager->getElementById($currentLanguageId)) {
                         foreach ($structureManager->getElementsChildren($languagesElement->id, 'container', null, null, true) as $childElement) {
-                            if (!$childElement->hidden) {
+                            if (!$childElement->hidden && $childElement->structureType !== 'search') {
                                 $directSubMenuList[] = $childElement;
                             }
                         }

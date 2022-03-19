@@ -373,7 +373,6 @@ window.AjaxSearchResultsComponent = function (parentObject, customResultsElement
             } else {
                 height = contentHeight;
             }
-            console.log(windowBottom, topPosition, contentHeight)
             componentElement.style.left = leftPosition + 'px';
             componentElement.style.top = topPosition + 'px';
             componentElement.style.height = height + 'px';
