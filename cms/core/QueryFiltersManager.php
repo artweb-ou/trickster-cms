@@ -25,8 +25,6 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
             if ($filter instanceof DependencyInjectionContextInterface) {
                 $this->instantiateContext($filter);
             }
-        } else {
-            $this->logError('queryFilter class "' . $className . '" is missing');
         }
         return $filter;
     }
