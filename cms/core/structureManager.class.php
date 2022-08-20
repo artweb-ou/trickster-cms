@@ -1406,7 +1406,6 @@ class structureManager implements DependencyInjectionContextInterface
                             $newPoints += 3;
                         }
                     }
-
                     if ($chain = $this->findShortestParentsChain(
                         $parentId,
                         $withinParentId,

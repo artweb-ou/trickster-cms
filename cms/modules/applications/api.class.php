@@ -49,13 +49,13 @@ class apiApplication extends controllerApplication
                 'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
             ], true);
             $languagesManager = $this->getService('LanguagesManager');
+            if ($controller->getParameter('language')) {
+                $languagesManager->setCurrentLanguageCode($controller->getParameter('language'));
+            }
             $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
+            $structureManager->getElementByPath([$languagesManager->getCurrentLanguageCode()]);
         }
 
-        if ($controller->getParameter('language')) {
-            $languagesManager = $this->getService('LanguagesManager');
-            $languagesManager->setCurrentLanguageCode($controller->getParameter('language'));
-        }
         $preset = 'api';
         if ($controller->getParameter('preset')) {
             $preset = $controller->getParameter('preset');
