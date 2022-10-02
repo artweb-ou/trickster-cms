@@ -4,6 +4,8 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
 {
     use DependencyInjectionContextTrait;
 
+    private $tables = [];
+
     /**
      * @param $filterName
      * @return bool|QueryFilter
@@ -71,7 +73,7 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
             if ($groupResultQuery = $this->getFilterQuery($parameters, $resultTypes, $optimized)) {
                 foreach ($queries as $type => $value) {
                     if ($wrapTemporaryTables) {
-                        $queries[$type] = $this->wrapTemporaryTable($groupResultQuery[$type], $parameters);
+                        $queries[$type] = $this->wrapTemporaryTable($groupResultQuery[$type], $parameters, $type);
                     } else {
                         $queries[$type] = $groupResultQuery[$type];
                     }
@@ -81,15 +83,20 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
         return $queries;
     }
 
-    protected function wrapTemporaryTable($query, $parameters)
+    protected function wrapTemporaryTable($query, $parameters, $type)
     {
-        $tableName = md5(json_encode($parameters));
+        $tableName = md5(json_encode([$parameters, $type]));
         $db = $this->getService('db');
-        $db->insert($db->raw("DROP TABLE IF EXISTS {$db->getTablePrefix()}{$tableName}"));
-        $db->insert(
-            $db->raw("CREATE TEMPORARY TABLE {$db->getTablePrefix()}{$tableName} " . $query->toSql()),
-            $query->getBindings()
-        );
+
+        if (!isset($this->tables[$tableName])) {
+            $this->tables[$tableName] = true;
+
+            $db->insert($db->raw("DROP TABLE IF EXISTS {$db->getTablePrefix()}{$tableName}"));
+            $db->insert(
+                $db->raw("CREATE TEMPORARY TABLE {$db->getTablePrefix()}{$tableName} " . $query->toSql()),
+                $query->getBindings()
+            );
+        }
         return $db->table($tableName);
     }
 

@@ -45,6 +45,7 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
      */
     public function setExportType($exportType)
     {
+        unset($this->filterQueries);
         $this->exportType = $exportType;
         return $this;
     }

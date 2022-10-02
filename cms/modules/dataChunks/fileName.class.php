@@ -6,7 +6,7 @@ class fileNameDataChunk extends DataChunk implements ElementStorageValueHolderIn
 
     public function convertStorageToDisplay()
     {
-        $this->displayValue = $this->storageValue;
+        $this->displayValue = html_entity_decode($this->storageValue, ENT_QUOTES);
     }
 
     public function convertStorageToForm()
