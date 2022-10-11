@@ -313,6 +313,9 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         if ($oldId != $this->id) {
             $structureManager = $this->getService('structureManager');
             $structureManager->reRegisterElement($oldId, $this->id);
+
+            $controller = $this->getService('controller');
+            $controller->reRegisterElement($oldId, $this->id);
         }
     }
 

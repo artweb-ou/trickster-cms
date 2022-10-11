@@ -258,7 +258,7 @@ class controller
                 exit;
             }
         } catch (Exception $exception) {
-            errorLog::getInstance()->logMessage('controller', $exception->getMessage() . "\n". $exception->getTraceAsString());
+            errorLog::getInstance()->logMessage('controller', $exception->getMessage() . "\n" . $exception->getTraceAsString());
         }
     }
 
@@ -606,5 +606,21 @@ class controller
     public function getProtocol()
     {
         return $this->protocol;
+    }
+
+    public function reRegisterElement($oldId, $newId)
+    {
+        if (!is_numeric($oldId)) {
+            foreach ($this->formData as $key => &$data) {
+                if (!is_numeric($key)) {
+                    $this->formData[$newId] = $this->formData[$key];
+                    unset($this->formData[$key]);
+                }
+            }
+        }
+        else if (isset($this->formData[$oldId])) {
+            $this->formData[$newId] = $this->formData[$oldId];
+            unset($this->formData[$oldId]);
+        }
     }
 }
