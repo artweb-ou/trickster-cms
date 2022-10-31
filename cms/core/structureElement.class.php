@@ -378,7 +378,6 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         }
         $structureManager->regenerateStructureInfo($this);
         $structureManager->clearElementCache($this->id);
-        $structureManager->createElementCache($this->id);
     }
 
     public function persistStructureLinks()

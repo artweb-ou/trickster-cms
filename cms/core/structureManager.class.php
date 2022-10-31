@@ -502,6 +502,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
                 if ($result) {
                     $this->cache->set($cacheKey, $result->id, 600);
+                    $this->registerElementCacheKey($result->id, $cacheKey);
                 }
             }
         }
@@ -1666,6 +1667,7 @@ class structureManager implements DependencyInjectionContextInterface
             foreach ($keys as $key => $val) {
                 $this->cache->delete($key);
             }
+            $this->cache->delete($id);
         }
     }
 
