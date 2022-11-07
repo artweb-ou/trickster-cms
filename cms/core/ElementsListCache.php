@@ -114,6 +114,6 @@ class ElementsListCache
             $keys = [];
         }
         $keys[$key] = 1;
-        $this->cache->set($id . ':k', $keys, 3600 * 24);
+        $this->cache->set($id . ':k', $keys, 3600 * 24 * 7);
     }
 }

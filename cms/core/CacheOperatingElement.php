@@ -38,8 +38,8 @@ trait CacheOperatingElement
 
     protected function setCacheKey($key, $value, $lifeTime)
     {
-        $this->getCache()->set($this->id . ':' . $key, $value, $lifeTime);
         $this->registerCacheKey($this->id . ':' . $key);
+        $this->getCache()->set($this->id . ':' . $key, $value, $lifeTime);
     }
 
     protected function registerCacheKey($key)

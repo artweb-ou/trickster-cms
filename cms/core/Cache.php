@@ -98,12 +98,16 @@ class Cache extends errorLogger
         if ($this->enabled && ($this->reading || $forceReading)) {
             try {
                 $value = $this->cache->get($this->cachePrefix . $key);
+//                if (stripos($key, '249588') !== false) {
+//                    file_put_contents(ROOT_PATH . 'log.txt', $key.' '.var_export($value, true) ."\n", FILE_APPEND);
+//                }
                 if ($value == \fluxbb\cache\Cache::NOT_FOUND) {
                     return false;
                 } else {
                     return $value;
                 }
             } catch (\fluxbb\cache\Exception $exception) {
+                $this->logError($exception->getMessage());
             }
         }
         return false;

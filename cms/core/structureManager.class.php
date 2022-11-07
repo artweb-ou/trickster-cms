@@ -1545,27 +1545,6 @@ class structureManager implements DependencyInjectionContextInterface
     }
 
     /**
-     * @param $pathSearchLinksBlacklist
-     *
-     * @deprecated - delete in 04.2021
-     */
-    public function setPathSearchLinksBlacklist($pathSearchLinksBlacklist)
-    {
-        $this->logError('Deprecated method used setPathSearchLinksBlacklist');
-    }
-
-    /**
-     * @return string[]
-     *
-     * @deprecated - delete in 04.2021
-     */
-    protected function getPathSearchLinksBlackList()
-    {
-        $this->logError('Deprecated method used getPathSearchLinksBlackList');
-        return [];
-    }
-
-    /**
      * @return mixed
      */
     public function getPathSearchAllowedLinks()
@@ -1658,16 +1637,17 @@ class structureManager implements DependencyInjectionContextInterface
             $keys = [];
         }
         $keys[$key] = 1;
-        $this->cache->set($id . ':k', $keys, 3600 * 24);
+        $this->cache->set($id . ':k', $keys, 3600 * 24 * 7);
     }
 
     public function clearElementCache($id)
     {
         if ($keys = $this->cache->get($id . ':k', true)) {
+            $this->cache->delete($id . ':k');
+
             foreach ($keys as $key => $val) {
                 $this->cache->delete($key);
             }
-            $this->cache->delete($id);
         }
     }
 
