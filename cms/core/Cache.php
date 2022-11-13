@@ -98,9 +98,6 @@ class Cache extends errorLogger
         if ($this->enabled && ($this->reading || $forceReading)) {
             try {
                 $value = $this->cache->get($this->cachePrefix . $key);
-//                if (stripos($key, '249588') !== false) {
-//                    file_put_contents(ROOT_PATH . 'log.txt', $key.' '.var_export($value, true) ."\n", FILE_APPEND);
-//                }
                 if ($value == \fluxbb\cache\Cache::NOT_FOUND) {
                     return false;
                 } else {
@@ -150,6 +147,17 @@ class Cache extends errorLogger
     {
         if ($this->cachePath) {
             new cachePurge($this->cachePath, 60, 24 * 60 * 60 * 7);
+        }
+    }
+
+    public function clearKeysByType($id, $structureType)
+    {
+        if ($this->enabled && $this->deleting) {
+            if ($keys = $this->configManager->get('cachekeys.' . $structureType)) {
+                foreach ($keys as $key) {
+                    $this->delete($id . ':' . $key);
+                }
+            }
         }
     }
 }
