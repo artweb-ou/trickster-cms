@@ -67,7 +67,10 @@ class imageProcessRendererPlugin extends rendererPlugin
     protected function getContentLength()
     {
         $imageFilePath = $this->exportOperation['cacheFilePath'];
-        return filesize($imageFilePath);
+        if (is_file($imageFilePath)) {
+            return filesize($imageFilePath);
+        }
+        return 0;
     }
 
     protected function getContentType()
@@ -109,7 +112,9 @@ class imageProcessRendererPlugin extends rendererPlugin
         if (!$this->contentRead) {
             $this->contentRead = true;
             $imageFilePath = $this->exportOperation['cacheFilePath'];
-            return file_get_contents($imageFilePath);
+            if (is_file($imageFilePath)){
+                return file_get_contents($imageFilePath);
+            }
         }
         return false;
     }

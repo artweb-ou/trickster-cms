@@ -90,10 +90,12 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
 
         if (!isset($this->tables[$tableName])) {
             $this->tables[$tableName] = true;
-
+            $sql =  $query->toSql();
             $db->insert($db->raw("DROP TABLE IF EXISTS {$db->getTablePrefix()}{$tableName}"));
             $db->insert(
-                $db->raw("CREATE TEMPORARY TABLE {$db->getTablePrefix()}{$tableName} " . $query->toSql()),
+                $db->raw("CREATE TEMPORARY TABLE {$db->getTablePrefix()}{$tableName} 
+                (INDEX (id))                
+                " . $sql),
                 $query->getBindings()
             );
         }

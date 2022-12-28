@@ -28,8 +28,8 @@ class dbServiceContainer extends DependencyInjectionServiceContainer
             'database' => $dbConfig->get('mysqlDatabase'),
             'username' => $dbConfig->get('mysqlUser'),
             'password' => $dbConfig->get('mysqlPassword'),
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
+            'charset' => $dbConfig->get('mysqlConnectionEncoding'),
+            'collation' => 'utf8mb4_bin',
             'prefix' => $dbConfig->get('mysqlTablesPrefix'),
             'options' => [
                 PDO::ATTR_PERSISTENT => true,
