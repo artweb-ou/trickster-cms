@@ -10,7 +10,7 @@ class showFullListUsers extends structureElementAction
             if ($structureElement->final) {
                 $structureElement->setTemplate('shared.content.tpl');
                 $renderer = $this->getService('renderer');
-                $renderer->assign('contentSubTemplate', 'shared.contentlist.tpl');
+                $renderer->assign('contentSubTemplate', 'users.list.tpl');
             }
         }
     }
