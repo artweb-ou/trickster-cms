@@ -15,6 +15,15 @@ class SpamChecker
     public function checkEmail($email)
     {
         $email = trim($email);
+
+        $address = explode('@', $email)[0];
+        if (str_contains($address, '+')) {
+            return false;
+        }
+        if (substr_count($address, '.') > 2) {
+            return false;
+        }
+
         $result = true;
         $key = false;
         $domains = [];
@@ -23,13 +32,13 @@ class SpamChecker
             $key = $config->get('cleanTalkKey');
         }
 
-        if (file_exists(ROOT_PATH.'project/js/domains.json')){
-            $domains = json_decode(file_get_contents(ROOT_PATH.'project/js/domains.json'), true);
+        if (file_exists(ROOT_PATH . 'project/js/domains.json')) {
+            $domains = json_decode(file_get_contents(ROOT_PATH . 'project/js/domains.json'), true);
         }
 
         if ($domains) {
-            foreach ($domains as $domain){
-                if (str_contains($email, $domain)){
+            foreach ($domains as $domain) {
+                if (str_contains($email, $domain)) {
                     return false;
                 }
             }
