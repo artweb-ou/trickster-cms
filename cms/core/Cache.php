@@ -9,7 +9,7 @@ class Cache extends errorLogger
      */
     protected $cache;
     protected $cachePath;
-    protected $cachePrefix = 'c:';
+    protected $cachePrefix = '';
     protected $enabled = false;
     protected $writing = true;
     protected $deleting = true;
@@ -39,12 +39,9 @@ class Cache extends errorLogger
                 $this->enabled = false;
             }
 
-
             $this->reading = $reading;
             $this->writing = $writing && !((new CrawlerDetect())->isCrawler());
-//            $this->writing = $writing;
             $this->deleting = $deleting;
-
         }
     }
 

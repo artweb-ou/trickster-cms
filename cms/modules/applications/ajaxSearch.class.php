@@ -121,12 +121,12 @@ class ajaxSearchApplication extends controllerApplication
             $search->setSinglePageCombining(true);
             $result = $search->getResult();
             if ($result->count) {
-                if ($this->mode == "public") {
-                    $searchId = $this->getService('searchQueriesManager')->logInstantSearch($query, $result->count);
-                    foreach ($result->elements as $element) {
-                        $element->URL .= "qid:" . $searchId . "/";
-                    }
-                }
+//                if ($this->mode == "public") {
+//                    $searchId = $this->getService('searchQueriesManager')->logInstantSearch($query, $result->count);
+//                    foreach ($result->elements as $element) {
+//                        $element->URL .= "qid:" . $searchId . "/";
+//                    }
+//                }
 
                 $response->setResponseData('searchTotal', $result->getSearchTotal());
 

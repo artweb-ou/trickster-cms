@@ -76,7 +76,7 @@ class searchElement extends menuDependantStructureElement
         $result = $search->getResult();
         if ($result->count) {
             // log this search and append the search ID to result urls for tracking
-            $searchId = $this->getService('searchQueriesManager')->logSearch($phrase, $result->count);
+//            $searchId = $this->getService('searchQueriesManager')->logSearch($phrase, $result->count);
             $designThemesManager = $this->getService('DesignThemesManager');
             $currentTheme = $designThemesManager->getCurrentTheme();
             foreach ($result->sets as $set) {
@@ -102,9 +102,9 @@ class searchElement extends menuDependantStructureElement
                             'introduction',
                         ], $phrase);
                     }
-                    if ($searchId) {
-                        $foundElement->URL .= "qid:" . $searchId . "/";
-                    }
+//                    if ($searchId) {
+//                        $foundElement->URL .= "qid:" . $searchId . "/";
+//                    }
                 }
             }
             $this->pager = new pager($this->URL . 'action:perform/id:' . $this->id . '/phrase:' . $this->phrase . '/'
