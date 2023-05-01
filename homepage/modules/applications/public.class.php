@@ -44,7 +44,9 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
 
         $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
-
+        /**
+         * @var structureManager $structureManager
+         */
         $structureManager = $this->getService('structureManager', [
             'rootUrl' => $controller->rootURL,
             'rootMarker' => $this->configManager->get('main.rootMarkerPublic'),

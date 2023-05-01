@@ -37,6 +37,9 @@ class apiApplication extends controllerApplication
         $cache = $this->getService('Cache');
         $cache->enable(true, false, false);
 
+
+        $currentElement = false;
+
         if ($this->mode == 'admin') {
             $structureManager = $this->getService('structureManager', [
                 'rootUrl' => $controller->rootURL,
@@ -49,11 +52,13 @@ class apiApplication extends controllerApplication
                 'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
             ], true);
             $languagesManager = $this->getService('LanguagesManager');
-            if ($controller->getParameter('language')) {
+            if ($controller->requestedPath) {
+                $currentElement = $structureManager->getCurrentElement();
+            } elseif ($controller->getParameter('language')) {
                 $languagesManager->setCurrentLanguageCode($controller->getParameter('language'));
+                $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
+                $structureManager->getElementByPath([$languagesManager->getCurrentLanguageCode()]);
             }
-            $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
-            $structureManager->getElementByPath([$languagesManager->getCurrentLanguageCode()]);
         }
 
         $preset = 'api';
@@ -63,21 +68,34 @@ class apiApplication extends controllerApplication
 
         $response = new ajaxResponse();
         $response->setPreset($preset);
-        $status = 'success';
-        /** @var ApiQueriesManager $apiQueriesManager * */
-        $apiQueriesManager = $this->getService('ApiQueriesManager');
-        $uri = $controller->getParametersString();
-        if ($apiQuery = $apiQueriesManager->getQueryFromString($uri)) {
-            if ($result = $apiQuery->getQueryResult()) {
-                foreach ($apiQuery->getResultTypes() as $type) {
-                    $response->setResponseElements($type, $result[$type]);
-                }
-            }
-            $this->renderer->assign("totalAmount", $result['totalAmount']);
-            $this->renderer->assign("start", $result['start']);
-            $this->renderer->assign("limit", $result['limit']);
+
+        $status = 'fail';
+
+        if ($currentElement) {
+            $status = 'success';
+
+            $response->setResponseElements($currentElement->structureType, [$currentElement]);
+
+            $this->renderer->assign("totalAmount", 1);
+            $this->renderer->assign("start", 0);
+            $this->renderer->assign("limit", 1);
         } else {
-            $status = 'fail';
+            /** @var ApiQueriesManager $apiQueriesManager * */
+            $apiQueriesManager = $this->getService('ApiQueriesManager');
+            $uri = $controller->getParametersString();
+
+            if ($apiQuery = $apiQueriesManager->getQueryFromString($uri)) {
+                $status = 'success';
+
+                if ($result = $apiQuery->getQueryResult()) {
+                    foreach ($apiQuery->getResultTypes() as $type) {
+                        $response->setResponseElements($type, $result[$type]);
+                    }
+                }
+                $this->renderer->assign("totalAmount", $result['totalAmount']);
+                $this->renderer->assign("start", $result['start']);
+                $this->renderer->assign("limit", $result['limit']);
+            }
         }
 
         $this->renderer->assign('responseData', $response->responseData);
