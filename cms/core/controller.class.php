@@ -99,7 +99,7 @@ class controller
         ini_set("log_errors_max_len", 0);
         ini_set("pcre.backtrack_limit", 10000000);
         ini_set("memory_limit", "2048M");
-        ini_set("max_execution_time", "30");
+        ini_set("max_execution_time", "3000");
 
         //log all errors, but never display them
         set_error_handler([$this, 'catchError']);

@@ -1,8 +1,9 @@
 <?php
 
-class searchElement extends menuDependantStructureElement
+class searchElement extends menuDependantStructureElement implements MetadataProviderInterface
 {
     use SearchTypesProviderTrait;
+
     public $dataResourceName = 'module_search';
     public $defaultActionName = 'show';
     protected $allowedTypes = [];
@@ -185,6 +186,19 @@ class searchElement extends menuDependantStructureElement
     {
         return $this->pager;
     }
+
+    public function getMetaTitle()
+    {
+        return $this->phrase ? $this->title . ' (' . $this->phrase . ')' : $this->title;
+    }
+
+    public function getCanonicalUrl()
+    {
+        return $this->URL . 'action:perform/id:' . $this->id . '/phrase:' . $this->phrase . '/';
+    }
+
+    public function getMetaDenyIndex()
+    {
+        return true;
+    }
 }
-
-

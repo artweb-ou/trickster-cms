@@ -13,6 +13,7 @@ class SpamCheckerServiceContainer extends DependencyInjectionServiceContainer
         if ($configManager = $this->registry->getService('ConfigManager')) {
             $spamChecker->setConfigManager($configManager);
         }
+        $this->injectService($spamChecker, 'db');
 
         return $spamChecker;
     }

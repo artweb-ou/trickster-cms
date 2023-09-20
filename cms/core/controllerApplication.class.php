@@ -36,7 +36,8 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
         $registry = new DependencyInjectionServicesRegistry($paths);
         $this->setRegistry($registry);
         //global registry is used for non-updated singleton classes.
-        DependencyInjectionContextTrait::setGlobalRegistry($registry);
+        $GLOBALS['dependencyInjectionContextGlobalRegistry'] = $registry;
+
         $this->setService('controllerApplication', $this);
         //temporary workaround for renderer object. Remove after "renderers" architecture change
         if ($factory = renderer::getFactory()) {

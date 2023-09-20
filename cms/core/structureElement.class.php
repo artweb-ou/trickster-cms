@@ -13,6 +13,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
 {
     use DependencyInjectionContextTrait;
     use TabsTrait;
+
     /**
      * @var persistableObject
      */
@@ -640,7 +641,8 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         $expectedFields = [],
         $validators = [],
         $filteredLanguageId = false
-    ) {
+    )
+    {
         if (!$expectedFields) {
             $expectedFields = array_keys($externalData);
         }
@@ -1226,7 +1228,8 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         $linkType = 'structure',
         $allowedTypes = null,
         $restrictLinkTypes = false
-    ) {
+    )
+    {
         $structureManager = $this->getService('structureManager');
         //is it possible that we should always use blacklist when loading children?
         $childrenList = $structureManager->getElementsChildren($this->id, $roles, $linkType, $allowedTypes,
@@ -1302,10 +1305,6 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
 
     public function getUrl($action = null)
     {
-        //todo: refactor and uncomment. add controller-specific default action check
-        //        if (!$action && ($this->actionName != $this->defaultActionName)) {
-        //            $action = $this->actionName;
-        //        }
         if ($action) {
             return $this->URL . 'id:' . $this->id . '/action:' . $action . '/';
         }

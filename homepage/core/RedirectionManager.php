@@ -94,9 +94,10 @@ class RedirectionManager implements DependencyInjectionContextInterface
     {
         if ($redirectUrl = $this->getRedirectionUrl($errorUrl)) {
             $this->redirect($redirectUrl, '301');
-        } elseif ($redirectUrl = $this->getBestGuessRedirectionUrl($errorUrl)) {
-            $this->redirect($redirectUrl, '301');
         }
+//        elseif ($redirectUrl = $this->getBestGuessRedirectionUrl($errorUrl)) {
+//            $this->redirect($redirectUrl, '301');
+//        }
         return false;
     }
 
