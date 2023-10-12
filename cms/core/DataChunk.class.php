@@ -1,6 +1,6 @@
 <?php
 
-abstract class DataChunk extends errorLogger implements DependencyInjectionContextInterface, Serializable
+abstract class DataChunk extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
     protected $displayValue; //value for rendering template
@@ -107,7 +107,7 @@ abstract class DataChunk extends errorLogger implements DependencyInjectionConte
 
     abstract public function convertFormToStorage();
 
-    public function serialize()
+    public function __serialize()
     {
         $fields = [
             'displayValue',
@@ -124,7 +124,7 @@ abstract class DataChunk extends errorLogger implements DependencyInjectionConte
         return serialize($data);
     }
 
-    public function unserialize($string)
+    public function __unserialize($string)
     {
         if ($data = unserialize($string)) {
             foreach ($data as $key => $value) {

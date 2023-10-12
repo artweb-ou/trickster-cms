@@ -11,7 +11,7 @@ class textDataChunk extends DataChunk implements ElementStorageValueHolderInterf
 
     public function convertStorageToDisplay()
     {
-        $this->displayValue = trim($this->storageValue);
+        $this->displayValue = $this->storageValue ? trim($this->storageValue) : $this->storageValue;
     }
 
     public function convertStorageToForm()

@@ -6,12 +6,12 @@ class textareaDataChunk extends DataChunk implements ElementStorageValueHolderIn
 
     public function convertStorageToDisplay()
     {
-        $this->displayValue = str_replace("\r\n", "", nl2br($this->storageValue));
+        $this->displayValue = $this->storageValue ? str_replace("\r\n", "", nl2br($this->storageValue)) : $this->storageValue;
     }
 
     public function convertStorageToForm()
     {
-        $this->formValue = htmlspecialchars($this->storageValue, ENT_QUOTES);
+        $this->formValue = $this->storageValue ? htmlspecialchars($this->storageValue, ENT_QUOTES) : $this->storageValue;
     }
 
     public function convertFormToStorage()

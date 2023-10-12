@@ -555,7 +555,9 @@ class controller
     {
         $currentErrorLevel = error_reporting();
         if ($currentErrorLevel & $level) {
-            errorLog::getInstance()->logMessage($file . ":" . $line, $message, $level);
+            if (!str_contains($file, 'vendor')){
+                errorLog::getInstance()->logMessage($file . ":" . $line, $message, $level);
+            }
         }
         // Don't execute PHP internal error handler
         return true;

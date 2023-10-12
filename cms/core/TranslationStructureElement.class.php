@@ -23,8 +23,10 @@ abstract class TranslationStructureElement extends structureElement
     {
         $translationData = [];
         foreach ($this->getModuleDataObjects() as $languageId => $moduleData) {
-            if ($chunk = $this->getDataChunk('value' . ucfirst($moduleData->valueType), $languageId)) {
-                $translationData[$this->structureName][$languageId] = $chunk->getDisplayValue();
+            if ($moduleData->valueType){
+                if ($chunk = $this->getDataChunk('value' . ucfirst($moduleData->valueType), $languageId)) {
+                    $translationData[$this->structureName][$languageId] = $chunk->getDisplayValue();
+                }
             }
         }
         return $translationData;

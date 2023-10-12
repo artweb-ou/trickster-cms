@@ -31,7 +31,7 @@ class urlDataChunk extends DataChunk implements ElementStorageValueHolderInterfa
 
     protected function checkProtocol($value)
     {
-        $value = trim($value);
+        $value = $value ? trim($value) : '';
         if ($value != '') {
             if (stripos($value, '//') === false && stripos($value, 'http://') === false && stripos($value, 'https://') === false && substr($value, 0, 1) != '/'
             ) {

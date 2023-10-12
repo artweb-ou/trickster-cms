@@ -9,7 +9,7 @@
  * @property string $dateModified
  * @property string $marker
  */
-abstract class structureElement implements DependencyInjectionContextInterface, Serializable
+abstract class structureElement implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
     use TabsTrait;
@@ -1436,7 +1436,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
     }
 
 
-    public function serialize()
+    public function __serialize()
     {
         $this->getModuleDataObjects();
         $fields = [
@@ -1454,7 +1454,7 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
         return serialize($data);
     }
 
-    public function unserialize($string)
+    public function __unserialize($string)
     {
         if ($data = unserialize($string)) {
             foreach ($data as $key => $value) {
