@@ -9,6 +9,7 @@
 trait ResourceUniterTrait
 {
     protected $contentRead = false;
+    protected $fileName;
     protected $cacheFileName;
     protected $cacheFilePath;
     protected $cacheFileLastModTime = false;
