@@ -31,9 +31,9 @@ class SpamChecker
 
         $domainRecord = $this->db->table('domains')->where('name', $domain)->first();
         if ($domainRecord) {
-            return $domainRecord->allowed;
+            return $domainRecord['allowed'];
         }
-
+	
         $api_key = $this->configManager->getConfig('emails')->get('verifyEmailKey');
         $verifymail = "https://verifymail.io/api/$email?key=$api_key";
         $json = file_get_contents($verifymail);
