@@ -10,7 +10,7 @@
         {if $element->popup}
             <script>
                 window.subMenusInfo = window.subMenusInfo || {ldelim}{rdelim};
-                window.subMenusInfo['{$element->id}'] = {$element->getMenusInfo()|json_encode};
+                window.subMenusInfo['{$element->id}'] = {json_encode($element->getMenusInfo())};
             </script>
         {/if}
         <nav class='submenu_items_block'>

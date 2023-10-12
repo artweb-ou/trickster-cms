@@ -8,8 +8,8 @@
 	window.javascriptUrl = '{$theme->getJavascriptUrl()}';
 	window.currentElementTitle = '{$currentElement->getTitle()}';
 	window.currentElementId = '{$currentElement->id}';
-	window.newVisitor = {$newVisitor|json_encode};
-	window.settings = {$settings|json_encode};
+	window.newVisitor = {json_encode($newVisitor)};
+	window.settings = {json_encode($settings)};
 	window.currentLanguageCode = '{$currentLanguage->iso6393}';
 	{if !empty($selectedCurrencyItem)}
 	window.selectedCurrencyItem =

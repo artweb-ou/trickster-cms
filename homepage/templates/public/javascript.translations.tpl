@@ -1,7 +1,7 @@
 <script>
 
 
-	window.translations = {$js_translations|json_encode};
+	window.translations = {json_encode($js_translations)};
 
 
 </script>
