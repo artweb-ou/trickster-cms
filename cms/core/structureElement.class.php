@@ -782,7 +782,9 @@ abstract class structureElement implements DependencyInjectionContextInterface, 
                 }
             }
         } else {
-            $this->$propertyName = $value;
+            if (property_exists($this, $propertyName)){
+                $this->$propertyName = $value;
+            }
         }
     }
 

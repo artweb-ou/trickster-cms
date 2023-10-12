@@ -15,7 +15,7 @@
     "moroz1999/ckeditor-mediaembed": "1.*",
     "moroz1999/ckeditor-html5-video": "1.*",
     "moroz1999/cache": "1.*",
-    "smarty/smarty": "3.x",
+    "smarty/smarty": "4.x",
     "pelago/emogrifier": "^5.0",
     "tedivm/jshrink": "~1.0",
     "ext-dom": "*",
