@@ -4,7 +4,7 @@
   "license": "proprietary",
   "require": {
     "illuminate/database": "5.2.*",
-    "phpmailer/phpmailer": "~5.2",
+    "phpmailer/phpmailer": "^6.8",
     "moroz1999/lessphp": "^0.6",
     "moroz1999/image-process": "^2.0",
     "jaybizzle/crawler-detect": "1.2.*",
