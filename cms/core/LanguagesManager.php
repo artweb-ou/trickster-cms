@@ -96,6 +96,16 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
         return false;
     }
 
+    public function getLanguageId($code, $groupName = null)
+    {
+        $groupName = $groupName ?: $this->getService('ConfigManager')
+            ->get('main.rootMarkerPublic');
+        if ($language = $this->getLanguageByCode($code, $groupName)) {
+            return $language->id;
+        }
+        return false;
+    }
+
     public function getLanguagesList($groupName = null)
     {
         $groupName = $groupName ?: $this->getService('ConfigManager')
@@ -390,4 +400,3 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
         return $structureManager->getElementById($this->getCurrentLanguageId($groupName));
     }
 }
-

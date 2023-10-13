@@ -34,7 +34,7 @@ trait MetadataProviderTrait
         return $this->title;
     }
 
-    public final function getMetaDescription()
+    public function getMetaDescription()
     {
         if ($this->metaDescription) {
             return $this->metaDescription;
@@ -46,7 +46,7 @@ trait MetadataProviderTrait
         return htmlspecialchars(mb_substr($metaDescription, 0, 325), ENT_QUOTES, 'UTF-8');
     }
 
-    public final function getMetaKeywords()
+    public function getMetaKeywords()
     {
         $metaKeywords = $this->getTextContent();
         $metaKeywords = strip_tags(html_entity_decode($metaKeywords, ENT_QUOTES, 'UTF-8'));
