@@ -121,15 +121,13 @@ abstract class DataChunk extends errorLogger implements DependencyInjectionConte
             $data[$field] = $this->$field;
         }
 
-        return serialize($data);
+        return $data;
     }
 
-    public function __unserialize($string)
+    public function __unserialize($data)
     {
-        if ($data = unserialize($string)) {
-            foreach ($data as $key => $value) {
-                $this->$key = $value;
-            }
+        foreach ($data as $key => $value) {
+            $this->$key = $value;
         }
     }
 }

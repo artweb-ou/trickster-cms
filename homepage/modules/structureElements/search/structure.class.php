@@ -10,7 +10,7 @@ class searchElement extends menuDependantStructureElement implements MetadataPro
     public $role = 'container';
     const DEFAULT_PAGE_SIZE = 50;
     protected $searchCutLength = 200;
-    public $results;
+    public $result;
     protected $pager;
 
     protected function setModuleStructure(&$moduleStructure)
