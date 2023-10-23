@@ -1360,15 +1360,6 @@ abstract class structureElement implements DependencyInjectionContextInterface
         return $this->structureName;
     }
 
-    /**
-     * @deprecated - use getTitle instead
-     *
-     * todo: remove after 01.2021
-     */
-    public function getHumanReadableName()
-    {
-        return $this->getTitle();
-    }
 
     public function getParentLanguagesGroupName()
     {

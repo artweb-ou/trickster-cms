@@ -53,7 +53,6 @@
 					</td>
 					<td class='name_column'>
 						<a href="{$contentItem->URL}">
-							<span class='icon icon_{$contentItem->structureType}'></span>{$contentItem->getHumanReadableName()}
 							<span class='icon icon_{$contentItem->structureType}'></span>{$contentItem->getTitle()}
 						</a>
 					</td>
