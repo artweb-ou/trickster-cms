@@ -7,7 +7,7 @@
 			<h1 class="form_inner_title copydialog_title">{translations name="copy.selectdestination"}:</h1>
 			{if $element->pasteAllowed}<div class="copydialog_destination">{translations name="copy.selecteddestination"}: <span class="copydialog_destination_title">{$element->destinationElement->getTitle()}</span></div>{/if}
 			<div class="copydialog_controls">
-				<button type="button" class="button {if !$element->pasteAllowed}button_disabled{else}success_button{/if}" {if !$element->pasteAllowed}disabled="disabled"{/if} onclick="document.location.href='{$element->URL}action:pasteElements/id:{$element->id}/navigateId:{$element->destinationElement->id}/view:{$contentType}/'">
+				<button type="button" class="button {if !$element->pasteAllowed}button_disabled{else}success_button{/if}" {if !$element->pasteAllowed}disabled="disabled"{/if} onclick="document.location.href='{$element->URL}action:pasteElements/id:{$element->id}/navigateId:{if $element->destinationElement}{$element->destinationElement->id}{/if}/view:{$contentType}/'">
 				{translations name="copy.approvecopy"}
 				</button>
 			</div>

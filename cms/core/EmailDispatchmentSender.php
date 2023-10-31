@@ -1,5 +1,8 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class EmailDispatchmentSender extends errorLogger
 {
     public function sendEmail(
