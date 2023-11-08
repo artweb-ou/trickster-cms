@@ -51,6 +51,8 @@ abstract class structureElement implements DependencyInjectionContextInterface
     protected $currentParentElement;
     protected $replaceMissingLanguageData = true;
 
+    public $privilegesForm;
+
     public function __construct()
     {
         $this->languagesParentElementMarker = $this->languagesParentElementMarker

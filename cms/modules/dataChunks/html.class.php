@@ -41,10 +41,6 @@ class htmlDataChunk extends DataChunk implements ElementStorageValueHolderInterf
             }
         }
 
-        $value = str_ireplace("&nbsp;", "&#160;", $value);
-        $value = str_ireplace("\n", "", $value);
-        $value = str_ireplace("\r", "", $value);
-
         return $value;
     }
 }

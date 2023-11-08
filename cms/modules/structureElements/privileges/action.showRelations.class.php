@@ -2,6 +2,12 @@
 
 class showRelationsPrivileges extends structureElementAction
 {
+    /**
+     * @param $structureManager
+     * @param $controller
+     * @param privilegesElement $structureElement
+     * @return void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         $currentElement = $structureManager->getCurrentElement();
@@ -26,14 +32,14 @@ class showRelationsPrivileges extends structureElementAction
             $privilegesRelations = $privilegeRelationsCollection->load($searchFields);
 
             $compiledRelations = [];
-            foreach ($privilegesRelations as &$relation) {
+            foreach ($privilegesRelations as $relation) {
                 $compiledRelations[$relation->module][$relation->action] = $relation->getData();
             }
 
             $privilegesManager = $this->getService('privilegesManager');
             $structureElement->privileges = $privilegesManager->getModuleActionsList();
 
-            foreach ($structureElement->privileges as $key => &$privilege) {
+            foreach ($structureElement->privileges as $privilege) {
                 if (isset($compiledRelations[$privilege->module]) && isset($compiledRelations[$privilege->module][$privilege->action])
                 ) {
                     if ($compiledRelations[$privilege->module][$privilege->action]['type'] == '1') {

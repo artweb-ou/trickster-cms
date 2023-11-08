@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @property string $title
+ * @property int $userId
+ * @property int $userGroupId
+ * @property string $json
+ */
 class privilegesElement extends structureElement
 {
     public $languagesParentElementMarker = 'adminLanguages';
@@ -7,6 +13,9 @@ class privilegesElement extends structureElement
     protected $allowedTypes = ['privilege'];
     public $defaultActionName = 'show';
     public $role = 'container';
+    public $usersList;
+    public $userGroupsList;
+    public $privileges;
 
     protected function setModuleStructure(&$moduleStructure)
     {

@@ -83,10 +83,6 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $visitorRecorded = $visitorsManager->isVisitationRecorded();
         $this->renderer->assign('newVisitor', !$visitorRecorded);
         if (!$pageNotFound) {
-//            if ($controller->getParameter('qid')) {
-//                $this->getService('searchQueriesManager')->markLogAsClicked($controller->getParameter('qid'));
-//            }
-
             if ($currentElement = $structureManager->getCurrentElement()) {
                 /**
                  * @var $redirectionManager RedirectionManager

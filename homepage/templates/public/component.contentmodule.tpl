@@ -1,4 +1,3 @@
-{stripdomspaces}
 {if !empty($contentOnly)}{if isset($moduleContent)}
 	<section id="{$element->structureName}" class="contentmodule_content{if isset($moduleContentClass)} {$moduleContentClass}{/if}" {if isset($moduleAttributes)}{$moduleAttributes}{/if}>{$moduleContent}</section>
 {/if}{else}
@@ -18,4 +17,3 @@
 		{/if}
 	</section>
 {/if}
-{/stripdomspaces}
