@@ -77,7 +77,6 @@ class searchElement extends menuDependantStructureElement implements MetadataPro
         $result = $search->getResult();
         if ($result->count) {
             // log this search and append the search ID to result urls for tracking
-//            $searchId = $this->getService('searchQueriesManager')->logSearch($phrase, $result->count);
             $designThemesManager = $this->getService('DesignThemesManager');
             $currentTheme = $designThemesManager->getCurrentTheme();
             foreach ($result->sets as $set) {
@@ -103,9 +102,6 @@ class searchElement extends menuDependantStructureElement implements MetadataPro
                             'introduction',
                         ], $phrase);
                     }
-//                    if ($searchId) {
-//                        $foundElement->URL .= "qid:" . $searchId . "/";
-//                    }
                 }
             }
             $this->pager = new pager($this->URL . 'action:perform/id:' . $this->id . '/phrase:' . $this->phrase . '/'
@@ -128,6 +124,10 @@ class searchElement extends menuDependantStructureElement implements MetadataPro
 
     protected function formatSearchResultElement(&$element, $fields, $phrase)
     {
+        if ($element instanceof SearchContentHolder) {
+            $element->setSearchTerm($phrase);
+            return;
+        }
         $element->searchContent = $element->content;
         $element->searchTitle = $element->title;
 
