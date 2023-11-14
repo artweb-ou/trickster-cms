@@ -123,7 +123,9 @@ class CmsHttpResponse
 
     public function setLastModified($value)
     {
-        $this->httpResponse['lastModified'] = $value;
+        if ($value) {
+            $this->httpResponse['lastModified'] = $value;
+        }
     }
 
     public function setCharset($charset)

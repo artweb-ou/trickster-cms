@@ -25,7 +25,7 @@ class imageProcessRendererPlugin extends rendererPlugin
     public function __destruct()
     {
         if (class_exists("cachePurge")) {
-            new cachePurge($this->cachePath, 300, 2592000, 200);
+            new cachePurge($this->cachePath, 60 * 60 * 12, 365 * 60 * 60 * 24, 200);
         }
     }
 

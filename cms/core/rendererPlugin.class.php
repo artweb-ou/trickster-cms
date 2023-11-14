@@ -3,6 +3,7 @@
 abstract class rendererPlugin extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
+
     protected $preferredEncodings = [];
     protected $renderingEngine;
     /**
@@ -49,7 +50,7 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
 
     protected function getLastModified()
     {
-        return null;
+        return $this->lastModified;
     }
 
     protected function getForcedEncoding()
@@ -59,6 +60,7 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
 
     final public function display()
     {
+        $lastModified = $this->getLastModified();
         $etag = $this->getEtag();
         $this->httpResponse->setCacheControl($this->cacheControl);
 
@@ -67,7 +69,7 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
             $this->encoding = $this->selectHTTPParameter($this->preferredEncodings, $this->requestHeadersManager->getAcceptedEncodings());
         }
 
-        if (!$this->checkEtag($etag)) {
+        if (($this->matchesEtag($etag) !== true) && ($this->isModifiedSince($lastModified) !== false)) {
             $this->captureDebugText();
             $this->renderContent();
 
@@ -97,7 +99,7 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
                 $this->httpResponse->setFileName($fileName);
             }
 
-            $this->httpResponse->setLastModified($this->lastModified);
+            $this->httpResponse->setLastModified($lastModified);
             $this->httpResponse->setMaxAge($this->maxAge);
             $this->httpResponse->setExpires($this->expires);
             $this->httpResponse->setEtag($etag);
@@ -118,6 +120,7 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
             }
         } else {
             $this->httpResponse->setStatusCode('304');
+            $this->httpResponse->setLastModified($lastModified);
             $this->httpResponse->setMaxAge($this->maxAge);
             $this->httpResponse->setExpires($this->expires);
             $this->httpResponse->setEtag($etag);
@@ -126,14 +129,22 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
         }
     }
 
-    final protected function checkEtag($currentEtag)
+    final protected function matchesEtag($currentEtag)
     {
         $requestedEtag = $this->requestHeadersManager->getIfNoneMatch();
-        if ($requestedEtag == '"' . $currentEtag . '"') {
-            return true;
-        } else {
-            return false;
+        if (!$requestedEtag) {
+            return null;
         }
+        return $requestedEtag === '"' . $currentEtag . '"';
+    }
+
+    final protected function isModifiedSince($lastModified)
+    {
+        $requestedModified = $this->requestHeadersManager->getIfModifiedSince();
+        if (!$requestedModified) {
+            return null;
+        }
+        return $lastModified > $requestedModified;
     }
 
     final protected function captureDebugText()
