@@ -2,8 +2,6 @@
 
 class showDispatchmentLog extends structureElementAction
 {
-    protected $actionsLogData;
-
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->requested) {

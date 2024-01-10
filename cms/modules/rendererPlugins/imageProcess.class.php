@@ -64,6 +64,15 @@ class imageProcessRendererPlugin extends rendererPlugin
         return $exportHash;
     }
 
+    protected function getLastModified()
+    {
+        $imageFilePath = $this->exportOperation['cacheFilePath'];
+        if (is_file($imageFilePath)) {
+            $this->lastModified = filemtime($imageFilePath);
+        }
+        return $this->lastModified;
+    }
+
     protected function getContentLength()
     {
         $imageFilePath = $this->exportOperation['cacheFilePath'];
@@ -112,7 +121,7 @@ class imageProcessRendererPlugin extends rendererPlugin
         if (!$this->contentRead) {
             $this->contentRead = true;
             $imageFilePath = $this->exportOperation['cacheFilePath'];
-            if (is_file($imageFilePath)){
+            if (is_file($imageFilePath)) {
                 return file_get_contents($imageFilePath);
             }
         }

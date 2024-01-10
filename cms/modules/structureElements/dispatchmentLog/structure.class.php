@@ -7,6 +7,7 @@ class dispatchmentLogElement extends structureElement
     public $defaultActionName = 'show';
     public $role = 'container';
     public $pager;
+    public $actionsLogData;
 
     protected function setModuleStructure(&$moduleStructure)
     {

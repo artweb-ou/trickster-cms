@@ -46,7 +46,7 @@
 	</div>
 
 	<div class="content_list_block">
-		{if count($logData)}
+		{if $logData && count($logData)}
 			<table class='dispatchmentlog table_component'>
 				<thead>
 				<tr>
