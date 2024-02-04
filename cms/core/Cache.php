@@ -32,9 +32,7 @@ class Cache extends errorLogger
                 $this->cachePrefix = $prefix . ':';
             }
             $this->prepareCache($this->configManager->get('cache.driver'));
-            if (!$this->cache) {
-                $this->prepareCache('OpcacheFile');
-            }
+
             if (!$this->cache) {
                 $this->enabled = false;
             }

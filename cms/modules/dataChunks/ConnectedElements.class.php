@@ -42,17 +42,25 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
     {
         if ($this->ids === null) {
             $this->ids = [];
-            /**
-             * @var linksManager $linksManager
-             */
-            if ($linksManager = $this->getService('linksManager')) {
-                if ($this->ids = $linksManager->getConnectedIdList(
-                    $this->structureElement->id,
-                    $this->linkType,
-                    $this->role
-                )) {
-                    return $this->ids;
+            $cache = $this->getService('Cache');
+            $keyName = $this->structureElement->id . ':ce' . $this->linkType . $this->role;
+            $value = $cache->get($keyName);
+            if ($value === false) {
+                /**
+                 * @var linksManager $linksManager
+                 */
+                if ($linksManager = $this->getService('linksManager')) {
+                    if ($this->ids = $linksManager->getConnectedIdList(
+                        $this->structureElement->id,
+                        $this->linkType,
+                        $this->role
+                    )) {
+                        $cache->set($keyName, $this->ids, 3600 * 24);
+                        return $this->ids;
+                    }
                 }
+            } else {
+                $this->ids = $value;
             }
         }
         return $this->ids;

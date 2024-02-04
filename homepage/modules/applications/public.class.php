@@ -210,6 +210,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                     $breadcrumbsManager = $this->getService('breadcrumbsManager', ['config' => $this->configManager->getConfig('breadcrumbs')]);
                     $this->renderer->assign('breadcrumbsManager', $breadcrumbsManager);
                     $this->renderer->assign('currentElement', $currentElement);
+                    $this->renderer->assign('structureManager', $structureManager);
                     $this->renderer->setCacheControl('no-cache');
                     $this->renderer->template = $this->currentTheme->template('index.tpl');
                     $this->renderer->display();
