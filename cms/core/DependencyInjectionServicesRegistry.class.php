@@ -32,7 +32,7 @@ class DependencyInjectionServicesRegistry implements DependencyInjectionServices
         $service = false;
         $className = $type . 'ServiceContainer';
         if (!class_exists($className, false)) {
-            foreach ($this->paths as &$path) {
+            foreach ($this->paths as $path) {
                 $filePath = $path . $className . '.php';
                 $filePathLegacy = $path . lcfirst($className) . '.php';
                 if (is_file($filePath)) {
@@ -107,7 +107,7 @@ abstract class DependencyInjectionServiceContainer implements DependencyInjectio
      * @param $name
      * @return mixed
      */
-    protected function getOption($name)
+    protected function getOption($name): mixed
     {
         if (isset($this->options[$name])) {
             return $this->options[$name];
