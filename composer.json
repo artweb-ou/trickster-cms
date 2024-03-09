@@ -19,6 +19,7 @@
     "pelago/emogrifier": "^7.0",
     "tedivm/jshrink": "~1.0",
     "ext-dom": "*",
+    "ext-redis": "*",
     "ext-pdo": "*",
     "ext-json": "*"
   }

@@ -83,7 +83,7 @@ class Cache extends errorLogger
                     }
                     break;
             }
-        } catch (\fluxbb\cache\Exception $exception) {
+        } catch (Exception $exception) {
             $this->logError($exception->getMessage());
         }
     }

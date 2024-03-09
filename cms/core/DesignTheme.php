@@ -646,10 +646,10 @@ abstract class DesignTheme extends errorLogger
 
     public function getFavicon()
     {
-        if (file_exists(ROOT_PATH . "favicon.ico")) {
+        if (file_exists(PUBLIC_PATH . "favicon.ico")) {
             return controller::getInstance()->baseURL . "favicon.ico";
         } else {
-            if (!file_exists(ROOT_PATH . "project/images/favicon.png")) {
+            if (!file_exists(PUBLIC_PATH . "images/favicon.png")) {
                 $pallets = [
                     [
                         'bg' => [229, 31, 0],
@@ -682,7 +682,7 @@ abstract class DesignTheme extends errorLogger
                     $letter = 'A';
                 };
 
-                $newImageFile = fopen(ROOT_PATH . "project/images/favicon.png", "w");
+                $newImageFile = fopen(PUBLIC_PATH . "images/favicon.png", "w");
                 $newImage = imagecreatetruecolor(16, 16);
                 $background = imagecolorallocate($newImage, $pallet['bg'][0], $pallet['bg'][1], $pallet['bg'][2]);
                 $color = imagecolorallocate($newImage, $pallet['color'][0], $pallet['color'][1], $pallet['color'][2]);

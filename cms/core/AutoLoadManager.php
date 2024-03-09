@@ -12,6 +12,7 @@ class AutoLoadManager
         if ($controller = controller::getInstance()) {
             $pathsManager = $controller->getPathsManager();
             $corePath = $pathsManager->getRelativePath('core');
+            $className = str_ireplace('\\', DIRECTORY_SEPARATOR, $className);
             if ($filePath = $pathsManager->getIncludeFilePath($corePath . $className . '.php')) {
                 include_once($filePath);
             } elseif ($filePath = $pathsManager->getIncludeFilePath($corePath . $className . '.class.php')) {

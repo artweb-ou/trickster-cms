@@ -11,7 +11,7 @@ class ApiQueriesManager extends errorLogger implements DependencyInjectionContex
                 $apiQuery = $this->getQuery();
                 $apiQuery->setFiltrationParameters($info['queryParameters']);
                 $apiQuery->setExportType($info['exportType']);
-                $apiQuery->setLimit($info['limitQuantity']);
+                $apiQuery->setLimit($info['limitQuantity'] ?? 1000);
                 $apiQuery->setOrder($info['limitOrder']);
                 $apiQuery->setStart($info['limitStart']);
                 $apiQuery->setResultTypes($info['resultTypes']);

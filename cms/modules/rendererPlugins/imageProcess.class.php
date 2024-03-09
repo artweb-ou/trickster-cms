@@ -17,6 +17,8 @@ class imageProcessRendererPlugin extends rendererPlugin
         $this->renderingEngine = new \ImageProcess\ImageProcess($this->cachePath);
         $defaultCachePermissions = $configManager->get('paths.defaultCachePermissions');
         $this->renderingEngine->setDefaultCachePermissions($defaultCachePermissions);
+//        $this->renderingEngine->setImagesCaching(false);
+//        $this->renderingEngine->setGammaCorrectionEnabled(false);
         $this->maxAge = 365 * 60 * 60 * 24;
         $this->httpResponse->setCacheControl('public');
         $this->preferredEncodings = ['identity'];

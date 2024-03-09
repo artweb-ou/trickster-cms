@@ -6,6 +6,8 @@
 abstract class controllerApplication extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
+    use RequestsLogger;
+
     /**
      * @var string - used in URL building by default
      */
@@ -46,6 +48,8 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
         $this->setService('controller', $this->controller);
         $this->setService('ConfigManager', $this->controller->getConfigManager());
         $this->setService('PathsManager', $pathsManager);
+
+        $this->logRequest();
     }
 
     /**
@@ -131,6 +135,11 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
      * @return mixed
      */
     abstract public function execute($controller);
+
+    public function executeEnd()
+    {
+        $this->logRequestDuration();
+    }
 
     public function getDesignThemesManager()
     {

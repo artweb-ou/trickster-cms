@@ -10,7 +10,7 @@ class importNewsMailsAddresses extends structureElementAction
 
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        ini_set("max_execution_time", 60 * 60 * 30);
+        ini_set("max_execution_time", 60);
         if ($this->validated) {
             $this->newsMailSubscription = $this->getService('NewsMailSubscription');
 

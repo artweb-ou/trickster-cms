@@ -98,8 +98,8 @@ class controller
         $this->checkPlugins();
         ini_set("log_errors_max_len", 0);
         ini_set("pcre.backtrack_limit", 10000000);
-        ini_set("memory_limit", "2048M");
-        ini_set("max_execution_time", "3000");
+        ini_set("memory_limit", "1024M");
+        ini_set("max_execution_time", 1000);
 
         //log all errors, but never display them
         set_error_handler([$this, 'catchError']);
@@ -244,23 +244,32 @@ class controller
         return $this->application;
     }
 
-    public function dispatch()
+    public function dispatch(): mixed
     {
+        $return = null;
+        $returnForbidden = false;
         try {
             if ($application = $this->getApplication()) {
-                if ($this->application instanceof ApplicationCacheInterface && $this->application->canServeCache()) {
-                    return $this->application->serveCache();
+                if ($application instanceof ApplicationCacheInterface && $application->canServeCache()) {
+                    $return = $this->$application();
                 } else {
-                    return $this->application->execute($this);
+                    $return = $application->execute($this);
+                    $application->executeEnd();
                 }
             } else {
-                header('HTTP/1.0 403 Forbidden');
-                exit;
+                $returnForbidden = true;
             }
         } catch (Exception $exception) {
             errorLog::getInstance()->logMessage('controller', $exception->getMessage() . "\n" . $exception->getTraceAsString());
         }
+
+        if ($returnForbidden) {
+            header('HTTP/1.0 403 Forbidden');
+            exit;
+        }
+        return $return;
     }
+
 
     public function getDebugMode()
     {
@@ -555,7 +564,7 @@ class controller
     {
         $currentErrorLevel = error_reporting();
         if ($currentErrorLevel & $level) {
-            if (!str_contains($file, 'vendor')){
+            if (!str_contains($file, 'vendor')) {
                 errorLog::getInstance()->logMessage($file . ":" . $line, $message, $level);
             }
         }
@@ -619,8 +628,7 @@ class controller
                     unset($this->formData[$key]);
                 }
             }
-        }
-        else if (isset($this->formData[$oldId])) {
+        } else if (isset($this->formData[$oldId])) {
             $this->formData[$newId] = $this->formData[$oldId];
             unset($this->formData[$oldId]);
         }

@@ -37,7 +37,6 @@ class apiApplication extends controllerApplication
         $cache = $this->getService('Cache');
         $cache->enable(true, false, false);
 
-
         $currentElement = false;
 
         if ($this->mode == 'admin') {

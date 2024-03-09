@@ -4,6 +4,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
 {
     use JsTranslationsTrait;
     use DbLoggableApplication;
+
     protected $applicationName = 'public';
     /**
      * @var DesignTheme
@@ -349,14 +350,10 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
     {
         $controller = controller::getInstance();
         $jsScripts = [];
-        if ($controller->getDebugMode()) {
-            foreach ($this->currentTheme->getJavascriptResources() as $resource) {
-                $jsScripts[] = $resource['fileUrl'] . $resource['fileName'];
-            };
-        } else {
-            $resourcesUniterHelper = $this->getService('ResourcesUniterHelper');
-            $jsScripts[] = $controller->baseURL . 'javascript/set:' . $this->currentTheme->getCode() . '/file:' . $resourcesUniterHelper->getResourceCacheFileName('js') . '.js';
-        }
+
+        $resourcesUniterHelper = $this->getService('ResourcesUniterHelper');
+        $jsScripts[] = $controller->baseURL . 'javascript/set:' . $this->currentTheme->getCode() . '/file:' . $resourcesUniterHelper->getResourceCacheFileName('js') . '.js';
+
         if ($currentElement instanceof clientScriptsProviderInterface
         ) {
             $jsScripts = array_merge($jsScripts, $currentElement->getClientScripts());

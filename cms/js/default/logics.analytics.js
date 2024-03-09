@@ -1,5 +1,6 @@
 window.analyticsLogics = new function() {
     var init = function() {
+        return;
         if (!window.newVisitor) {
             return;
         }

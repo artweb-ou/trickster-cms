@@ -12,7 +12,7 @@ class ckeditorDesignTheme extends DesignTheme
         $this->imagesPath = ROOT_PATH . 'trickster/cms/' . $this->imagesFolder;
         $this->imagesPaths = [
             $this->imagesPath,
-            ROOT_PATH . 'project/' . $this->imagesFolder . 'public/',
+            ROOT_PATH . 'project/' . $this->imagesFolder ,
         ];
     }
 
