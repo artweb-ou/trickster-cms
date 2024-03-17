@@ -43,11 +43,7 @@ class controller
     protected $pathsManager;
     public $redirectDeprecatedParameters = false;
 
-    /**
-     * @param null $configurationFile
-     * @return controller
-     */
-    public static function getInstance($configurationFile = null)
+    public static function getInstance(?string $configurationFile = null): controller
     {
         if (is_null(self::$instance)) {
             //sometimes during controller::_construct instance is asked already twice, so we have to make it instantly not null
@@ -99,23 +95,24 @@ class controller
         ini_set("log_errors_max_len", 0);
         ini_set("pcre.backtrack_limit", 10000000);
         ini_set("memory_limit", "1024M");
-        ini_set("max_execution_time", 1000);
 
         //log all errors, but never display them
         set_error_handler([$this, 'catchError']);
         register_shutdown_function([$this, 'exitHandler']);
         if ($reporting = $mainConfig->get('errorReporting')) {
-            if (is_string($reporting)) {
-                ini_set("error_reporting", eval('return ' . $reporting . ';'));
-            } elseif (is_numeric($reporting)) {
-                ini_set("error_reporting", $reporting);
-            }
+            ini_set("error_reporting", $reporting);
         }
         ini_set("display_errors", 0);
 
         mb_internal_encoding("UTF-8");
         date_default_timezone_set($mainConfig->get('timeZone'));
         $this->parseRequestParameters();
+
+        if ($this->getDebugMode()) {
+            ini_set("max_execution_time", 10 * 60);
+        } else {
+            ini_set("max_execution_time", 10);
+        }
     }
 
     protected function checkPlugins()
@@ -276,7 +273,12 @@ class controller
         if ($this->debugMode === null) {
             if ($this->forceDebug) {
                 $this->debugMode = true;
-            } elseif (strstr($this->domainName, 'localhost') || strstr($this->domainName, '.local') || strstr($this->domainName, '.loc') || !strstr($this->domainName, '.')) {
+            } elseif (
+                strstr($this->domainName, 'localhost') ||
+                strstr($this->domainName, '.local') ||
+                strstr($this->domainName, '.loc') ||
+                !str_contains($this->domainName, '.')
+            ) {
                 $this->debugMode = true;
             } else {
                 $this->debugMode = false;
@@ -564,7 +566,7 @@ class controller
     {
         $currentErrorLevel = error_reporting();
         if ($currentErrorLevel & $level) {
-            if (!str_contains($file, 'vendor')) {
+            if (!str_contains($file, 'illuminate')) {
                 errorLog::getInstance()->logMessage($file . ":" . $line, $message, $level);
             }
         }

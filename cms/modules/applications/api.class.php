@@ -46,6 +46,11 @@ class apiApplication extends controllerApplication
                 'configActions' => true,
             ], true);
         } else {
+
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Methods: GET, POST");
+            header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+
             $structureManager = $this->getService('structureManager', [
                 'rootUrl' => $controller->rootURL,
                 'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
