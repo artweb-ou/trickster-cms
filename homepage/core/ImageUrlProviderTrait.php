@@ -18,11 +18,11 @@ trait ImageUrlProviderTrait
         return $this->originalName;
     }
 
-    public function getImageUrl($preset = 'adminImage', $mobile = false)
+    public function getImageUrl(string $preset = 'adminImage', bool $mobile = false): ?string
     {
         $controller = $this->getService('controller');
         if ($mobile && ($imageId = $this->getImageId($mobile))) {
-            $url = $controller->baseURL . 'image/type:' . $preset . '/id:' . $this->getImageId(true) . '/filename:' . $this->getImageName(true);
+            $url = $controller->baseURL . 'image/type:' . $preset . '/id:' . $imageId . '/filename:' . $this->getImageName(true);
         } else {
             $url = $controller->baseURL . 'image/type:' . $preset . '/id:' . $this->getImageId() . '/filename:' . $this->getImageName();
         }
