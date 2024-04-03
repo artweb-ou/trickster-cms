@@ -36,7 +36,7 @@ trait GalleryInfoProviderTrait
 
         $galleryData['images'] = [];
         $controller = controller::getInstance();
-        foreach ($this->getImagesList() as &$imageElement) {
+        foreach ($this->getImagesList() as $imageElement) {
             $imageInfo = [
                 'title' => $imageElement->title,
                 'description' => $imageElement->description,

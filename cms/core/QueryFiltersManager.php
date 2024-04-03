@@ -67,16 +67,13 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
      */
     public function getFilterQueries($parameters, $resultTypes, $optimized = true, $wrapTemporaryTables = true)
     {
-        $queries = null;
-        if ($parameters) {
-            $queries = $this->compileResultsIndex($resultTypes);
-            if ($groupResultQuery = $this->getFilterQuery($parameters, $resultTypes, $optimized)) {
-                foreach ($queries as $type => $value) {
-                    if ($wrapTemporaryTables) {
-                        $queries[$type] = $this->wrapTemporaryTable($groupResultQuery[$type], $parameters, $type);
-                    } else {
-                        $queries[$type] = $groupResultQuery[$type];
-                    }
+        $queries = $this->compileResultsIndex($resultTypes);
+        if ($groupResultQuery = $this->getFilterQuery($parameters, $resultTypes, $optimized)) {
+            foreach ($queries as $type => $value) {
+                if ($wrapTemporaryTables) {
+                    $queries[$type] = $this->wrapTemporaryTable($groupResultQuery[$type], $parameters, $type);
+                } else {
+                    $queries[$type] = $groupResultQuery[$type];
                 }
             }
         }
@@ -90,7 +87,7 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
 
         if (!isset($this->tables[$tableName])) {
             $this->tables[$tableName] = true;
-            $sql =  $query->toSql();
+            $sql = $query->toSql();
             $db->insert($db->raw("DROP TABLE IF EXISTS {$db->getTablePrefix()}{$tableName}"));
             $db->insert(
                 $db->raw("CREATE TEMPORARY TABLE {$db->getTablePrefix()}{$tableName} 
@@ -225,7 +222,7 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
     protected function compileResultsIndex($resultTypes)
     {
         $finalResultsList = [];
-        foreach ($resultTypes as &$type) {
+        foreach ($resultTypes as $type) {
             $finalResultsList[$type] = [];
         }
         return $finalResultsList;

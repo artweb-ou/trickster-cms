@@ -242,12 +242,8 @@ class cssUniterRendererPlugin extends rendererPlugin
         if ($subfolder != "false") {
             $svgFile = $subfolder . "/" . $svgFile;
         }
-        if ($svgFileURL = $designThemesManager->getCurrentTheme()->getImageUrl($svgFile . '.svg', false, false)) {
-            $baseURL = controller::getInstance()->baseURL;
+        if ($filePath = $designThemesManager->getCurrentTheme()->getImagePath($svgFile . '.svg',)) {
 
-            $filePath = stripos($svgFileURL, $baseURL) !== false
-                ? str_ireplace($baseURL, ROOT_PATH, $svgFileURL)
-                : ROOT_PATH . $svgFileURL;
             if (!is_file($filePath)) {
                 $this->logError('CSS image missing:' . $filePath);
             }
