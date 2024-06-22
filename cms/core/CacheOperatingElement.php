@@ -7,7 +7,7 @@ trait CacheOperatingElement
 	 */
 	protected $cache;
 
-	public function getCache()
+	public function getCache(): Cache
 	{
 		if ($this->cache === null) {
 			$this->cache = $this->getService('Cache');

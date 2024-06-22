@@ -1648,14 +1648,15 @@ class structureManager implements DependencyInjectionContextInterface
             }
             $this->cache->delete($id . ':k');
         }
-        if ($element = $this->getElementById($id)){
+        if ($element = $this->getElementById($id)) {
             $this->cache->clearKeysByType($id, $element->structureType);
         }
     }
 
     public function createElementCache($elementId)
     {
-        if ($this->elementsList[$elementId])
+        if ($this->elementsList[$elementId]) {
             $this->setElementCacheKey($elementId, 'e', $this->elementsList[$elementId], $this->cacheLifeTime);
+        }
     }
 }

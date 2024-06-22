@@ -56,6 +56,11 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
                         $this->role
                     )) {
                         $cache->set($keyName, $this->ids, 3600 * 24);
+                        $cacheIds = [...$this->ids, $this->structureElement->id];
+                        foreach ($cacheIds as $id){
+                            $this->registerCacheKey($cache, $id, $keyName);
+                        }
+
                         return $this->ids;
                     }
                 }
@@ -64,6 +69,15 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
             }
         }
         return $this->ids;
+    }
+
+    protected function registerCacheKey(Cache $cache, int $id, string $key)
+    {
+        if (($keys = $cache->get($id . ':k')) === false) {
+            $keys = [];
+        }
+        $keys[$key] = 1;
+        $cache->set($id . ':k', $keys, 3600 * 24 * 7);
     }
 
     public function convertFormToStorage()

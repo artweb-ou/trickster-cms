@@ -13,11 +13,12 @@ trait DependencyInjectionContextTrait
     /**
      * Returns the service from attached registry
      *
-     * @param string $type
+     * @template T
+     * @param class-string<T> $type
      * @param array $options
      * @param bool $forceNew
      * @param bool $updateRegistry
-     * @return bool|mixed
+     * @return null|T
      */
     public function getService($type, $options = null, $forceNew = false, $updateRegistry = true)
     {
@@ -26,22 +27,24 @@ trait DependencyInjectionContextTrait
                 return $service;
             }
         }
-        return false;
+        return null;
     }
 
     /**
      * Define whether we use normal registry or a failsafe global solution for deprecated classes
      *
-     * @return bool|DependencyInjectionServicesRegistry
+     * @return null|DependencyInjectionServicesRegistry
      */
     protected function getRegistry()
     {
         if ($this->registry) {
             return $this->registry;
-        } elseif ($GLOBALS['dependencyInjectionContextGlobalRegistry']) {
+        }
+
+        if ($GLOBALS['dependencyInjectionContextGlobalRegistry']) {
             return $GLOBALS['dependencyInjectionContextGlobalRegistry'];
         }
-        return false;
+        return null;
     }
 
     /**
