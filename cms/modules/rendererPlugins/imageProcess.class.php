@@ -24,13 +24,6 @@ class imageProcessRendererPlugin extends rendererPlugin
         $this->preferredEncodings = ['identity'];
     }
 
-    public function __destruct()
-    {
-        if (class_exists("cachePurge")) {
-            new cachePurge($this->cachePath, 60 * 60 * 12, 365 * 60 * 60 * 24, 200);
-        }
-    }
-
     public function fetch()
     {
     }
@@ -54,7 +47,7 @@ class imageProcessRendererPlugin extends rendererPlugin
                 $value[4] = null;
             }
             $result = $this->renderingEngine->$attributeName($value[0], $value[1], $value[2], $value[3], $value[4]);
-            if ($attributeName == 'registerExport') {
+            if ($attributeName === 'registerExport') {
                 $this->exportOperation = $result;
             }
         }
@@ -62,8 +55,7 @@ class imageProcessRendererPlugin extends rendererPlugin
 
     protected function getEtag()
     {
-        $exportHash = $this->exportOperation['parametersHash'];
-        return $exportHash;
+        return $this->exportOperation['parametersHash'];
     }
 
     protected function getLastModified()
@@ -89,17 +81,17 @@ class imageProcessRendererPlugin extends rendererPlugin
         $contentTypes = $this->requestHeadersManager->getAcceptedTypes();
         $imageType = $this->exportOperation['fileType'];
         $preferredOrder = false;
-        if ($imageType == 'webp') {
+        if ($imageType === 'webp') {
             $preferredOrder = ['image/webp'];
-        } elseif ($imageType == 'png') {
+        } elseif ($imageType === 'png') {
             $preferredOrder = ['image/png'];
-        } elseif ($imageType == 'gif') {
+        } elseif ($imageType === 'gif') {
             $preferredOrder = ['image/gif'];
-        } elseif ($imageType == 'jpg' || $imageType == 'jpeg') {
+        } elseif ($imageType === 'jpg' || $imageType === 'jpeg') {
             $preferredOrder = ['image/jpeg'];
-        } elseif ($imageType == 'bmp') {
+        } elseif ($imageType === 'bmp') {
             $preferredOrder = ['image/x-bmp'];
-        } elseif ($imageType == 'svg') {
+        } elseif ($imageType === 'svg') {
             $preferredOrder = ['image/svg+xml'];
         }
 

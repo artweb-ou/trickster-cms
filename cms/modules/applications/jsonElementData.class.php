@@ -41,14 +41,20 @@ class jsonElementDataApplication extends controllerApplication
         $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
         $status = 'fail';
         $preset = $controller->getParameter('preset');
+        $baseElement = null;
         if ($id = $controller->getParameter('elementId')) {
-            if ($baseElement = $structureManager->getElementById($id)) {
-                if ($baseElement instanceof JsonDataProvider) {
-                    $status = 'success';
-                    $response->setResponseData('elementData', $baseElement->getElementData($preset));
-                }
+            $baseElement = $structureManager->getElementById($id);
+        } else {
+            $baseElement = $structureManager->getCurrentElement();
+        }
+
+        if ($baseElement){
+            if ($baseElement instanceof JsonDataProvider) {
+                $response->setResponseData('elementData', $baseElement->getElementData($preset));
+                $status = 'success';
             }
         }
+
         $this->renderer->assign('responseStatus', $status);
         $this->renderer->assign('responseData', $response->responseData);
 
@@ -57,7 +63,7 @@ class jsonElementDataApplication extends controllerApplication
             header('Access-Control-Allow-Credentials: true');
             header('Access-Control-Max-Age: 86400');    // cache for 1 day
         }
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
             if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
                 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
             }
