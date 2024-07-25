@@ -10,10 +10,9 @@ class SpamCheckerServiceContainer extends DependencyInjectionServiceContainer
     public function makeInjections($instance)
     {
         $spamChecker = $instance;
-        if ($configManager = $this->registry->getService('ConfigManager')) {
-            $spamChecker->setConfigManager($configManager);
-        }
         $this->injectService($spamChecker, 'db');
+        $this->injectService($spamChecker, 'VerifyMailAdapter');
+        $this->injectService($spamChecker, 'VerifaliaAdapter');
 
         return $spamChecker;
     }
