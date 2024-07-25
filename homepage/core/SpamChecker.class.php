@@ -57,7 +57,9 @@ class SpamChecker
             $result = $service->checkEmail($email);
             $allowed = $result === false ? false : $allowed;
         }
-        $this->db->table('domains')->insert(['name' => $domain, 'allowed' => $allowed ? 1 : 0]);
+        if ($allowed !== null) {
+            $this->db->table('domains')->insert(['name' => $domain, 'allowed' => $allowed ? 1 : 0]);
+        }
 
         return $allowed;
     }
