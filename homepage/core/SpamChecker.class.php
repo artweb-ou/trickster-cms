@@ -61,6 +61,6 @@ class SpamChecker
             $this->db->table('domains')->insert(['name' => $domain, 'allowed' => $allowed ? 1 : 0]);
         }
 
-        return $allowed;
+        return $allowed ?? true;
     }
 }
