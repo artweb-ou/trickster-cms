@@ -6,7 +6,7 @@ class userElement extends structureElement implements JsonDataProvider
     public $dataResourceName = 'module_user';
     public $defaultActionName = 'show';
     public $role = 'content';
-
+    public array $userGroupsList = [];
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['userName'] = 'text';

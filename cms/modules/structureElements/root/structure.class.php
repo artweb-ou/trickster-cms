@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @property array $elements
+ */
 class rootElement extends structureElement
 {
     public $languagesParentElementMarker = 'adminLanguages';
@@ -16,6 +19,10 @@ class rootElement extends structureElement
     ];
     public $defaultActionName = 'show';
     public $role = 'container';
+    public $navigationRoot;
+    public $navigationTree;
+    public $destinationElement;
+    public $pasteAllowed;
 
     protected function getTabsList()
     {

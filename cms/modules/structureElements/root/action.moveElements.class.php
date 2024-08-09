@@ -2,6 +2,12 @@
 
 class moveElementsRoot extends structureElementAction
 {
+    /**
+     * @param $structureManager
+     * @param $controller
+     * @param rootElement $structureElement
+     * @return void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         $user = $this->getService('user');

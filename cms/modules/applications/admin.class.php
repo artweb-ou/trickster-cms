@@ -159,14 +159,10 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
     {
         $controller = controller::getInstance();
         $jsScripts = [];
-        if ($controller->getDebugMode()) {
-            foreach ($this->currentTheme->getJavascriptResources() as $resource) {
-                $jsScripts[] = $resource['fileUrl'] . $resource['fileName'];
-            };
-        } else {
+
             $resourcesUniterHelper = $this->getService('ResourcesUniterHelper');
             $jsScripts[] = $controller->baseURL . 'javascript/set:' . $this->currentTheme->getCode() . '/file:' . $resourcesUniterHelper->getResourceCacheFileName('js') . '.js';
-        }
+
         if ($currentElement instanceof clientScriptsProviderInterface
         ) {
             $jsScripts = array_merge($jsScripts, $currentElement->getClientScripts());

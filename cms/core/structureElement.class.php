@@ -52,6 +52,8 @@ abstract class structureElement implements DependencyInjectionContextInterface
     protected $replaceMissingLanguageData = true;
 
     public $privilegesForm;
+    public $navigated;
+    public $positionsForm;
 
     public function __construct()
     {

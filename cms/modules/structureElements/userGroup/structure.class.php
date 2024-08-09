@@ -5,7 +5,7 @@ class userGroupElement extends structureElement
     public $dataResourceName = 'module_user_group';
     public $defaultActionName = 'showForm';
     public $role = 'content';
-
+    public $linkExists = false;
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['groupName'] = 'text';

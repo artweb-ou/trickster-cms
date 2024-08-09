@@ -2,6 +2,12 @@
 
 class showFormUser extends structureElementAction
 {
+    /**
+     * @param $structureManager
+     * @param $controller
+     * @param userElement $structureElement
+     * @return void
+     */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->final) {
