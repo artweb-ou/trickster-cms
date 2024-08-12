@@ -5,7 +5,8 @@ class passwordReminderElement extends structureElement
     public $dataResourceName = 'module_passwordreminder';
     public $defaultActionName = 'show';
     public $role = 'content';
-
+    public $resultMessage;
+    public $errorMessage;
     protected function setModuleStructure(&$moduleStructure)
     {
         $moduleStructure['title'] = 'text';

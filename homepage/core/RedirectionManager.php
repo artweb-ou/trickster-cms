@@ -94,10 +94,9 @@ class RedirectionManager implements DependencyInjectionContextInterface
     {
         if ($redirectUrl = $this->getRedirectionUrl($errorUrl)) {
             $this->redirect($redirectUrl, '301');
+        } elseif ($redirectUrl = $this->getBestGuessRedirectionUrl($errorUrl)) {
+            $this->redirect($redirectUrl, '301');
         }
-//        elseif ($redirectUrl = $this->getBestGuessRedirectionUrl($errorUrl)) {
-//            $this->redirect($redirectUrl, '301');
-//        }
         return false;
     }
 
@@ -174,11 +173,16 @@ class RedirectionManager implements DependencyInjectionContextInterface
 
     protected function getBestGuessRedirectionUrl($errorUrl)
     {
+        $configManager = $this->getService('ConfigManager');
+        $types = $configManager->get('main.bestGuesssTypes');
+        if (!$types) {
+            return false;
+        }
         if ($urlInfo = parse_url($errorUrl)) {
             if (!empty($urlInfo['path'])) {
                 if ($urlParts = explode('/', $urlInfo['path'])) {
-                    foreach ($urlParts as $key => &$part) {
-                        if (trim($part) == '') {
+                    foreach ($urlParts as $key => $part) {
+                        if (trim($part) === '') {
                             unset($urlParts[$key]);
                         }
                     }
@@ -187,7 +191,8 @@ class RedirectionManager implements DependencyInjectionContextInterface
                         $structureManager = $this->getService('structureManager');
                         if ($rows = $db->table('structure_elements')
                             ->select('id')
-                            ->where('structureName', 'like', '%' . last($urlParts) . '%')
+                            ->where('structureName', '=', trim(last($urlParts)))
+                            ->whereIn('structureType', $types)
                             ->limit(1)
                             ->get()
                         ) {
