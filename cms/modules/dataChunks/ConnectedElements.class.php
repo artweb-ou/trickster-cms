@@ -71,7 +71,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
         return $this->ids;
     }
 
-    protected function registerCacheKey(Cache $cache, int $id, string $key)
+    protected function registerCacheKey(Cache $cache, string|int $id, string $key): void
     {
         if (($keys = $cache->get($id . ':k')) === false) {
             $keys = [];

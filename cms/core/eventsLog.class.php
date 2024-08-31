@@ -3,6 +3,7 @@
 class eventsLog extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
+
     const EVENT_TABLE = 'event';
     const EVENTTYPE_TABLE = 'eventtype';
     const EVENT_STATS_DAYS_TABLE = 'events_stats_day';
@@ -52,25 +53,26 @@ class eventsLog extends errorLogger implements DependencyInjectionContextInterfa
         $orderBy = null,
         $orderDestination = 'asc',
         $limit = null,
-        $dateGroup = false
-    ) {
-        if ($orderBy == 'time') {
+        $dateGroup = false,
+    ): array
+    {
+        if ($orderBy === 'time') {
             $orderBy = 'day';
         }
 
-        $counts = false;
+        $counts = [];
         $collection = persistableCollection::getInstance(self::EVENT_STATS_DAYS_TABLE);
 
         $typeIds = [];
-        foreach ($types as &$type) {
+        foreach ($types as $type) {
             if ($typeId = $this->getTypeId($type)) {
                 $typeIds[] = $typeId;
             }
         }
 
-        if ($dateGroup == 'day') {
+        if ($dateGroup === 'day') {
             $columns = ['sum(amount) AS count, DATE_FORMAT(day,"%d.%m.%Y") AS formattedDay'];
-        } elseif ($dateGroup == 'userId') {
+        } elseif ($dateGroup === 'userId') {
             $columns = ['sum(amount) AS count, target'];
         } else {
             $columns = ['sum(amount) AS count'];
@@ -109,21 +111,21 @@ class eventsLog extends errorLogger implements DependencyInjectionContextInterfa
             $orderFields = [];
         }
 
-        if ($dateGroup == 'day') {
+        if ($dateGroup === 'day') {
             $group = ['day'];
-        } elseif ($dateGroup == 'userId') {
+        } elseif ($dateGroup === 'userId') {
             $group = ['target'];
         } else {
             $group = [];
         }
 
         if ($result = $collection->conditionalLoad($columns, $conditions, $orderFields, $limit, $group, true)) {
-            if ($dateGroup == 'day') {
+            if ($dateGroup === 'day') {
                 foreach ($result as &$row) {
                     $counts[$row['formattedDay']] = $row['count'];
                 }
-            } elseif ($dateGroup == 'userId') {
-                foreach ($result as &$row) {
+            } elseif ($dateGroup === 'userId') {
+                foreach ($result as $row) {
                     $counts[$row['target']] = $row['count'];
                 }
             } else {
@@ -140,7 +142,7 @@ class eventsLog extends errorLogger implements DependencyInjectionContextInterfa
     {
         if ($userId === null) {
             $user = $this->getService('user');
-            if ($user->userName != 'anonymous') {
+            if ($user->userName !== 'anonymous') {
                 $userId = $user->id;
             } else {
                 $userId = 0;
@@ -213,8 +215,9 @@ class eventsLog extends errorLogger implements DependencyInjectionContextInterfa
     public function queryElementEventOccurrences(
         $eventType,
         $visitorId,
-        $limit = 0
-    ) {
+        $limit = 0,
+    )
+    {
         $query = $this->createEventQuery()
             ->select($this->statsDb->raw('elementId, count(1) as occurrences'))
             ->where('typeId', $this->getEventTypeId($eventType))
@@ -246,7 +249,6 @@ class eventsLog extends errorLogger implements DependencyInjectionContextInterfa
         return (int)$this->statsDb->table(self::EVENTTYPE_TABLE)
             ->insertGetId(['type' => $type]);
     }
-
 
 
     public function deleteEvents($type, $time = false)

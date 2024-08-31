@@ -1,5 +1,7 @@
 <?php
 
+use App\Structure\ActionFactory;
+
 /**
  * @property int $id
  * @property string $structureType
@@ -186,56 +188,33 @@ abstract class structureElement implements DependencyInjectionContextInterface
                 $actionName = $this->actionName;
             }
             /**
+             * @var ActionFactory $actionFactory
+             */
+            $actionFactory = $this->getService('ActionFactory');
+
+            $actionObject = $actionFactory->makeActionObject($this->structureType, $actionName);
+            $actionObject->structureElement = $this;
+            if ($actionObject instanceof DependencyInjectionContextInterface) {
+                $this->instantiateContext($actionObject);
+            }
+
+            /**
              * we need to recheck privileges here if custom action has been called.
              *
-             * @var privilegesManager $privilegesManager
+             * @var structureManager $structureManager
              */
-            $privilegesManager = $this->getService('privilegesManager');
-            if (!$privilegesManager->checkPrivilegesForAction(
+            $structureManager = $this->getService('structureManager');
+            if (!$structureManager->checkPrivileges(
                 $this->id,
-                $actionName,
+                $actionObject->actionName,
                 $this->structureType
             )) {
                 return false;
             }
 
-            $elementType = $this->structureType;
-            $actionObjectName = $actionName . ucfirst($elementType);
+            $this->actionPerformed = true;
+            $actionObject->startAction();
 
-            if (!class_exists($actionObjectName, false)) {
-                $fileName = "action." . $actionName . '.class.php';
-                $pathsManager = $this->getService('PathsManager');
-                $elementsPath = $pathsManager->getRelativePath('structureElements');
-                $sharedPath = $pathsManager->getRelativePath('sharedActions');
-                if ($elementFilePath = $pathsManager->getIncludeFilePath($elementsPath . $elementType . '/' . $fileName)
-                ) {
-                    include_once($elementFilePath);
-                } elseif ($sharedFilePath = $pathsManager->getIncludeFilePath($sharedPath . $fileName)) {
-                    include_once($sharedFilePath);
-                    $actionObjectName = $actionName . 'Shared';
-                } else {
-                    $actionObjectName = null;
-                    $this->logError('Structure element action class file ' . $elementType . '/' . $actionName . ' doesnt exist');
-                }
-            }
-
-            if (class_exists($actionObjectName, false)) {
-                /**
-                 * @var structureElementAction $actionObject
-                 */
-                $actionObject = new $actionObjectName();
-
-                if ($actionObject instanceof DependencyInjectionContextInterface) {
-                    $this->instantiateContext($actionObject);
-                }
-
-                $this->actionPerformed = true;
-                $actionObject->structureElement = $this;
-                $actionObject->actionName = $actionName;
-                $actionObject->startAction();
-            } else {
-                $this->logError('Structure element action class "' . $actionObjectName . '" is missing');
-            }
             return true;
         }
         return false;

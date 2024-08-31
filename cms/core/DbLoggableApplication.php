@@ -14,7 +14,7 @@ trait DbLoggableApplication
      */
     protected $transportObject;
 
-    protected function startDbLogging()
+    protected function startDbLogging(): void
     {
         if ($controller = controller::getInstance()) {
             if ($controller->getDebugMode()) {
@@ -35,7 +35,7 @@ trait DbLoggableApplication
         }
     }
 
-    protected function saveDbLog()
+    protected function saveDbLog(): void
     {
         if ($this->logFilePath) {
             $overall = 0;
@@ -63,5 +63,9 @@ trait DbLoggableApplication
             $text .= 'Overall SQL time:' . $overall;
             file_put_contents($this->logFilePath, $text);
         }
+    }
+    public function __destruct()
+    {
+        $this->saveDbLog();
     }
 }

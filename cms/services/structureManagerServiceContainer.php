@@ -23,7 +23,7 @@ class structureManagerServiceContainer extends DependencyInjectionServiceContain
         } elseif ($controller = $this->registry->getService('controller')) {
             $structureManager->setRequestedPath($controller->requestedPath);
         }
-
+        $this->injectService($structureManager, 'ActionFactory');
         if ($linksManager = $this->getOption('linksManager')) {
             $structureManager->setLinksManager($linksManager);
         } else {

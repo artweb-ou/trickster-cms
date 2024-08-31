@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Connection;
+use App\Structure\ActionFactory;
 
 class structureManager implements DependencyInjectionContextInterface
 {
@@ -38,6 +39,8 @@ class structureManager implements DependencyInjectionContextInterface
      * @var LanguagesManager
      */
     protected $languagesManager;
+
+    protected ActionFactory $actionFactory;
     protected $defaultRoles = [];
 
     protected $requestedPath = [];
@@ -68,6 +71,11 @@ class structureManager implements DependencyInjectionContextInterface
     public function setPrivilegesManager(privilegesManager $privilegesManager)
     {
         $this->privilegesManager = $privilegesManager;
+    }
+
+    public function setActionFactory(ActionFactory $actionFactory): void
+    {
+        $this->actionFactory = $actionFactory;
     }
 
     /**
@@ -110,7 +118,7 @@ class structureManager implements DependencyInjectionContextInterface
         $linkType = 'structure',
         $restrictLinkTypes = false,
         &$flatTree = [],
-        &$usedIds = []
+        &$usedIds = [],
     )
     {
         $treeLevel = $this->getElementsChildren($elementId, $roles, $linkType, null, $restrictLinkTypes);
@@ -794,7 +802,7 @@ class structureManager implements DependencyInjectionContextInterface
         $allowedRoles = null,
         $linkTypes = 'structure',
         $allowedTypes = null,
-        $restrictLinkTypes = false
+        $restrictLinkTypes = false,
     )
     {
         $returnList = [];
@@ -873,16 +881,28 @@ class structureManager implements DependencyInjectionContextInterface
      */
     public function performAction($element)
     {
-        if (!$this->privilegeChecking || $this->privilegesManager->checkPrivilegesForAction(
-                $element->id,
-                $element->actionName,
-                $element->structureType
-            )
-        ) {
+        if ($this->checkPrivileges($element->id, $element->actionName, $element->structureType)) {
             $element->executeAction();
         } else {
             $this->logError('Insufficient privileges: element ID:' . $element->id . ' action:' . $element->actionName);
         }
+    }
+
+    public function checkPrivileges($id, $actionName, $structureType): bool
+    {
+        $actionObject = $this->actionFactory->makeActionObject($structureType, $actionName);
+        if (!$actionObject){
+            return false;
+        }
+        if (!$this->privilegeChecking || $this->privilegesManager->checkPrivilegesForAction(
+                $id,
+                $actionObject->getPrivilegeName(),
+                $structureType
+            )
+        ) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -896,7 +916,7 @@ class structureManager implements DependencyInjectionContextInterface
         $idList = [],
         $parentElementId = 0,
         $allowedElements = [],
-        $allowedRoles = []
+        $allowedRoles = [],
     )
     {
         if (!$parentElementId) {
@@ -1057,12 +1077,7 @@ class structureManager implements DependencyInjectionContextInterface
                     $newElement->setCurrentParentElementId($parentElementId);
                 }
                 $newElement->actionName = $this->defineElementAction($id, $type, $newElement->defaultActionName);
-                if (!$this->privilegeChecking || $this->privilegesManager->checkPrivilegesForAction(
-                        $id,
-                        $newElement->actionName,
-                        $type
-                    )
-                ) {
+                if ($this->checkPrivileges($id, $newElement->actionName, $type)) {
                     $result = $newElement;
                 }
             }
@@ -1289,13 +1304,7 @@ class structureManager implements DependencyInjectionContextInterface
                     $element->setCurrentParentElementId($parentElementId);
                 }
                 $element->actionName = $this->defineElementAction($id, $type, $element->defaultActionName);
-                if (!$this->privilegeChecking ||
-                    $this->privilegesManager->checkPrivilegesForAction(
-                        $id,
-                        $element->actionName,
-                        $type
-                    )
-                ) {
+                if ($this->checkPrivileges($id, $element->actionName, $type)) {
                     $this->generateStructureInfo($element, $parentElementId);
                     $this->elementsList[$element->id] = $element;
 
@@ -1363,7 +1372,7 @@ class structureManager implements DependencyInjectionContextInterface
         $id,
         $withinParentId = null,
         &$points = 0,
-        $chainElements = []
+        $chainElements = [],
     )
     {
         //if we are searching parent within itself then we will get nothing. we should not restrict parent within itself
@@ -1464,54 +1473,50 @@ class structureManager implements DependencyInjectionContextInterface
         return $elementsList;
     }
 
-    /**
-     * @param structureElement $element
-     * @return string
-     */
-    public function checkStructureName($element)
+    public function checkStructureName($element): string
     {
         $elementId = $element->id;
-        $currentName = trim($element->structureName);
-        if (!$currentName) {
-            $currentName = $element->structureType . $element->id;
-        }
+        $currentName = trim($element->structureName) ?: $element->structureType . $elementId;
         $allowedTypes = $this->getPathSearchAllowedLinks();
         /**
-         * @var Connection $db
+         * @var \Illuminate\Database\Connection $db
          */
         $db = $this->getService('db');
-        $parentIds = false;
-        if ($records = $db->table('structure_links')
+
+        $db->statement('DROP TEMPORARY TABLE IF EXISTS temp_structure_links');
+
+        $parentIdsQuery = $db->table('structure_links')
             ->select('parentStructureId')
             ->where('childStructureId', '=', $elementId)
-            ->whereIn('type', $allowedTypes)->get()) {
-            $parentIds = array_column($records, 'parentStructureId');
-        }
-        $newName = $currentName;
-        if ($parentIds) {
-            $query = $db->table('structure_elements')
-                ->select('structureName')
-                ->where('structureName', 'like', $currentName . '%')
-                ->whereIn(
-                    'id',
-                    function ($subQuery) use ($elementId, $allowedTypes, $parentIds) {
-                        $subQuery->from('structure_links')
-                            ->select('childStructureId')
-                            ->where('childStructureId', '!=', $elementId)
-                            ->whereIn('type', $allowedTypes)
-                            ->whereIn('parentStructureId', $parentIds);
-                    }
-                );
+            ->whereIn('type', $allowedTypes);
 
-            if ($rows = $query->get()) {
-                $usedNames = array_column($rows, 'structureName');
-                $currentNumber = 1;
-                while (in_array(mb_strtolower($newName), $usedNames)) {
-                    $newName = $currentName . $currentNumber;
-                    $currentNumber++;
-                }
-            }
+        $db->statement('CREATE TEMPORARY TABLE temp_structure_links AS ' . $parentIdsQuery->toSql(), $parentIdsQuery->getBindings());
+
+        $subQuery = $db->table('structure_links')
+            ->select('childStructureId')
+            ->where('childStructureId', '!=', $elementId)
+            ->whereIn('type', $allowedTypes)
+            ->whereIn('parentStructureId', function ($query) use ($db) {
+                $query->select('parentStructureId')->from($db->raw('temp_structure_links'));
+            });
+
+        $usedNames = $db->table('structure_elements')
+            ->select('structureName')
+            ->where('structureName', 'like', $currentName . '%')
+            ->whereIn('id', $subQuery)
+            ->pluck('structureName');
+
+        $usedNames = array_map('mb_strtolower', $usedNames);
+
+        $newName = $currentName;
+        $currentNumber = 1;
+        while (in_array(mb_strtolower($newName), $usedNames, true)) {
+            $newName = $currentName . $currentNumber;
+            $currentNumber++;
         }
+
+        $db->statement('DROP TEMPORARY TABLE IF EXISTS temp_structure_links');
+
         return $newName;
     }
 

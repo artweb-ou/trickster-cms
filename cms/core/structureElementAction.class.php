@@ -3,6 +3,7 @@
 abstract class structureElementAction extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
+
     protected $loggable = false;
     public $actionName = false;
     protected $validated = true;
@@ -16,6 +17,11 @@ abstract class structureElementAction extends errorLogger implements DependencyI
 
     public function __construct()
     {
+    }
+
+    public function getPrivilegeName()
+    {
+        return $this->actionName;
     }
 
     public function processFormData()
