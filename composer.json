@@ -21,6 +21,7 @@
     "ext-dom": "*",
     "ext-redis": "*",
     "ext-pdo": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "php-di/php-di": "^7.0"
   }
 }

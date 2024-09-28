@@ -1,14 +1,14 @@
 <?php
 
+use DI\Container;
+
 /**
  * Trait DependencyInjectionContextTrait
  */
 trait DependencyInjectionContextTrait
 {
-    /**
-     * @var DependencyInjectionServicesRegistry
-     */
-    private $registry;
+    private DependencyInjectionServicesRegistryInterface $registry;
+    private Container $container;
 
     /**
      * Returns the service from attached registry
@@ -27,23 +27,22 @@ trait DependencyInjectionContextTrait
                 return $service;
             }
         }
+        if (isset($this->container)){
+            return $this->container->get($type);
+        }
         return null;
     }
 
     /**
      * Define whether we use normal registry or a failsafe global solution for deprecated classes
      *
-     * @return null|DependencyInjectionServicesRegistry
      */
-    protected function getRegistry()
+    protected function getRegistry(): ?DependencyInjectionServicesRegistry
     {
         if ($this->registry) {
             return $this->registry;
         }
 
-        if ($GLOBALS['dependencyInjectionContextGlobalRegistry']) {
-            return $GLOBALS['dependencyInjectionContextGlobalRegistry'];
-        }
         return null;
     }
 
@@ -51,10 +50,8 @@ trait DependencyInjectionContextTrait
      * Sets the externally created service
      *
      * @param string $type
-     * @param $object
-     * @return bool
      */
-    protected function setService($type, $object)
+    protected function setService($type, $object): bool
     {
         if ($this->registry) {
             $this->registry->setService($type, $object);
@@ -66,31 +63,23 @@ trait DependencyInjectionContextTrait
     /**
      * Set external registry which will be inherited by all other created classes
      *
-     * @param DependencyInjectionServicesRegistryInterface $registry
      */
-    public function setRegistry(DependencyInjectionServicesRegistryInterface $registry)
+    public function setRegistry(DependencyInjectionServicesRegistryInterface $registry): void
     {
         $this->registry = $registry;
     }
 
-    /**
-     * Global registry should not be used with new classes. It's a fallback for old singleton classes, which are
-     * not instantiated properly by some temporary reason.
-     *
-     * @param DependencyInjectionServicesRegistryInterface $registry
-     */
-    public static function setGlobalRegistry(DependencyInjectionServicesRegistryInterface $registry)
+    public function setContainer(Container $registry): void
     {
-        $GLOBALS['dependencyInjectionContextGlobalRegistry'] = $registry;
+        $this->container = $registry;
     }
 
     /**
      * If we create a service, which implements DI context passing interface, then we should pass current
      * registry to this service, so service could use it in it's functionality
      *
-     * @param DependencyInjectionContextInterface $object
      */
-    protected function instantiateContext(DependencyInjectionContextInterface $object)
+    protected function instantiateContext(DependencyInjectionContextInterface $object): void
     {
         if ($registry = $this->getRegistry()) {
             $object->setRegistry($registry);

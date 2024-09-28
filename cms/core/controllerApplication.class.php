@@ -1,5 +1,7 @@
 <?php
 
+use DI\Container;
+
 /**
  * Controller application is standardized script, which purpose is to receive external parameters (whether from GET/POST or other objects), operate some business logic according to them and optionally provide some rendered answer
  */
@@ -16,10 +18,7 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
      * @var string - the name of renderer plugin used by application
      */
     public $rendererName;
-    /**
-     * @var rendererPlugin
-     */
-    public $renderer;
+    public rendererPlugin $renderer;
     /**
      * @var controller
      */
@@ -35,10 +34,15 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
         foreach ($paths as &$path) {
             $path .= $servicesFolder;
         }
+        unset($path);
+
+
         $registry = new DependencyInjectionServicesRegistry($paths);
         $this->setRegistry($registry);
-        //global registry is used for non-updated singleton classes.
-        $GLOBALS['dependencyInjectionContextGlobalRegistry'] = $registry;
+
+        $definitions = include('di-definitions.php');
+        $container = new Container($definitions);
+        $this->setContainer($container);
 
         $this->setService('controllerApplication', $this);
         //temporary workaround for renderer object. Remove after "renderers" architecture change
