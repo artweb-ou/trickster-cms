@@ -1,6 +1,8 @@
 <?php
 define("QUERY_PARAMETERS_SEPARATOR", ':');
 
+use DI\Container;
+
 class controller
 {
     /**
@@ -42,6 +44,8 @@ class controller
      */
     protected $pathsManager;
     public $redirectDeprecatedParameters = false;
+    private DependencyInjectionServicesRegistry $registry;
+    private Container $container;
 
     public static function getInstance(?string $configurationFile = null): controller
     {
@@ -634,5 +638,32 @@ class controller
             $this->formData[$newId] = $this->formData[$oldId];
             unset($this->formData[$oldId]);
         }
+    }
+
+    public function getRegistry(): DependencyInjectionServicesRegistry
+    {
+        if (!isset($this->registry)){
+            $pathsManager = $this->getPathsManager();
+            $paths = $pathsManager->getIncludePaths();
+            $servicesFolder = $pathsManager->getRelativePath('services');
+            foreach ($paths as &$path) {
+                $path .= $servicesFolder;
+            }
+            unset($path);
+
+            $registry = new DependencyInjectionServicesRegistry($paths);
+            $this->registry = $registry;
+        }
+        return $this->registry;
+    }
+
+    public function getContainer(): Container
+    {
+        if (!isset($this->container)){
+            $definitions = include('di-definitions.php');
+            $container = new Container($definitions);
+            $this->container = $container;
+        }
+        return $this->container;
     }
 }

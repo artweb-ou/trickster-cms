@@ -57,10 +57,9 @@ abstract class structureElement implements DependencyInjectionContextInterface
     public $navigated;
     public $positionsForm;
 
-    public function __construct()
+    public function __construct($rootMarkerPublic)
     {
-        $this->languagesParentElementMarker = $this->languagesParentElementMarker
-            ?: $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        $this->languagesParentElementMarker = $this->languagesParentElementMarker?: $rootMarkerPublic;
         $this->childrenLoadStatus = [
             'content' => [],
             'container' => [],

@@ -67,7 +67,7 @@ class searchElement extends menuDependantStructureElement implements MetadataPro
         $pageSize = self::DEFAULT_PAGE_SIZE;
         $pageNumber = (int)controller::getInstance()->getParameter('page');
         $offset = max(0, $pageNumber - 1) * $pageSize;
-        $search = new Search();
+        $search = new Search($this->getRegistry(), $this->getContainer());
         $search->setInput($phrase);
         $search->setLimit($pageSize);
         $search->setOffset($offset);

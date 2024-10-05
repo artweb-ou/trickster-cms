@@ -27,23 +27,20 @@ trait DependencyInjectionContextTrait
                 return $service;
             }
         }
-        if (isset($this->container)){
+        if (isset($this->container)) {
             return $this->container->get($type);
         }
         return null;
     }
 
-    /**
-     * Define whether we use normal registry or a failsafe global solution for deprecated classes
-     *
-     */
     protected function getRegistry(): ?DependencyInjectionServicesRegistry
     {
-        if ($this->registry) {
-            return $this->registry;
-        }
+        return $this->registry;
+    }
 
-        return null;
+    protected function getContainer(): ?Container
+    {
+        return $this->container;
     }
 
     /**
@@ -84,6 +81,7 @@ trait DependencyInjectionContextTrait
         if ($registry = $this->getRegistry()) {
             $object->setRegistry($registry);
         }
+        $object->setContainer($this->container);
     }
 }
 

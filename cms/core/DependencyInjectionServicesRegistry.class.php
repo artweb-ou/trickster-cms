@@ -1,5 +1,7 @@
 <?php
 
+use DI\Container;
+
 class DependencyInjectionServicesRegistry implements DependencyInjectionServicesRegistryInterface
 {
     protected $services = [];
@@ -52,6 +54,9 @@ class DependencyInjectionServicesRegistry implements DependencyInjectionServices
                     $serviceContainer->setOptions($options);
                 }
                 $serviceContainer->setRegistry($this);
+
+                $container = controller::getInstance()->getContainer();
+
                 if ($service = $serviceContainer->makeInstance()) {
                     if ($updateRegistry) {
                         $this->services[$type] = $service;
@@ -63,6 +68,7 @@ class DependencyInjectionServicesRegistry implements DependencyInjectionServices
                     //use it in it's functionality
                     if ($service instanceof DependencyInjectionContextInterface) {
                         $service->setRegistry($this);
+                        $service->setContainer($container);
                     }
                 }
             }
@@ -90,8 +96,7 @@ interface DependencyInjectionServiceContainerInterface
 abstract class DependencyInjectionServiceContainer implements DependencyInjectionServiceContainerInterface
 {
     protected $options;
-    /** @var DependencyInjectionServicesRegistryInterface */
-    protected $registry;
+    protected DependencyInjectionServicesRegistryInterface $registry;
 
     public function setOptions($options)
     {

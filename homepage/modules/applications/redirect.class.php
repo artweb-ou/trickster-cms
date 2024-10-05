@@ -13,9 +13,17 @@ class redirectApplication extends controllerApplication
 
     public function execute($controller)
     {
+        $structureManager = $this->getService(
+            'structureManager',
+            [
+                'rootUrl' => $controller->rootURL,
+                'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
+            ],
+            true
+        );
         if ($type = $controller->getParameter('type')) {
             $redirectionManager = $this->getService('RedirectionManager');
-            if ($type == 'language') {
+            if ($type === 'language') {
                 if (!($application = $controller->getParameter('application'))) {
                     $application = 'public';
                 }
@@ -23,7 +31,7 @@ class redirectApplication extends controllerApplication
                 $languageCode = $controller->getParameter('code');
 
                 $redirectionManager->switchLanguage($languageCode, $sourceElementId, $application);
-            } elseif ($type == 'element') {
+            } elseif ($type === 'element') {
                 $sourceElementId = $controller->getParameter('id');
                 $languageCode = $controller->getParameter('code');
                 $redirectionManager->redirectToElement($sourceElementId, $languageCode);

@@ -5,7 +5,7 @@ class settingsManager implements DependencyInjectionContextInterface
     use DependencyInjectionContextTrait;
     protected $settingsList;
     private static $instance;
-    private $cachePath;
+    private string $cachePath;
     private $fileName = 'settings.php';
 
     /**
@@ -23,7 +23,6 @@ class settingsManager implements DependencyInjectionContextInterface
     public function __construct()
     {
         self::$instance = $this;
-        $this->cachePath = $this->getService('PathsManager')->getPath('settingsCache');;
     }
 
     public function getSettingsList()
@@ -45,12 +44,18 @@ class settingsManager implements DependencyInjectionContextInterface
         }
         return false;
     }
-
+    private function getCachePath()
+    {
+        if (!isset($this->cachePath)){
+            $this->cachePath = $this->getService('PathsManager')->getPath('settingsCache');;
+        }
+        return $this->cachePath;
+    }
     protected function loadSettingsList()
     {
         $settingsList = [];
 
-        $filePath = $this->cachePath . $this->fileName;
+        $filePath = $this->getCachePath() . $this->fileName;
         if (file_exists($filePath)) {
             include $filePath;
         } else {
@@ -87,12 +92,12 @@ class settingsManager implements DependencyInjectionContextInterface
                 }
                 $this->settingsList = $allData;
             }
-            $this->getService('PathsManager')->ensureDirectory($this->cachePath);
+            $this->getService('PathsManager')->ensureDirectory($this->getCachePath());
 
             /**
              * Create cache files with settings data
              */
-            $filePath = $this->cachePath . $this->fileName;
+            $filePath = $this->getCachePath() . $this->fileName;
             $text = $this->generateSettingsText($allData);
             file_put_contents($filePath, $text);
         } catch (Exception $exception) {

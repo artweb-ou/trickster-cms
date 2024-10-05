@@ -1,8 +1,11 @@
 <?php
 
+use DI\Container;
+
 class Search implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
+
     protected $types = [];
     protected $filters = [];
     protected $offset = 0;
@@ -12,6 +15,15 @@ class Search implements DependencyInjectionContextInterface
     protected $singlePageCombining = false;
     protected $input = '';
     protected $languageId;
+
+    public function __construct(
+        DependencyInjectionServicesRegistryInterface $registry,
+        Container                                    $container,
+    )
+    {
+        $this->setRegistry($registry);
+        $this->setContainer($container);
+    }
 
     /**
      * @param mixed $languageId

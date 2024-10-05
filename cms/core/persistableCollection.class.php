@@ -7,6 +7,7 @@
 class persistableCollection extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
+
     /**
      * @var transportObject
      */
@@ -23,7 +24,8 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
     public static function getInstance($resourceName)
     {
         if (!isset(self::$instancesList[$resourceName])) {
-            self::$instancesList[$resourceName] = new persistableCollection($resourceName);
+            $controller = controller::getInstance();
+            self::$instancesList[$resourceName] = new persistableCollection($resourceName, $controller->getRegistry(), $controller->getContainer());
         }
 
         return self::$instancesList[$resourceName];
@@ -98,8 +100,10 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         return $this->columnNames;
     }
 
-    private function __construct($resourceName)
+    private function __construct($resourceName, $registry, $container)
     {
+        $this->registry = $registry;
+        $this->container = $container;
         $this->resourceName = $resourceName;
         if (!class_exists('pdoTransport')) {
             $pathsManager = $this->getService('PathsManager');
@@ -292,8 +296,9 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $orderFields = [],
         $limitFields = [],
         $groupFields = [],
-        $literal = false
-    ) {
+        $literal = false,
+    )
+    {
         $this->transportObject->setResourceName($this->resourceName);
         $this->transportObject->setReturnColumns(null, $literal);
         $this->transportObject->setConditions($conditions);
@@ -322,8 +327,9 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $orderFields = [],
         $limitFields = [],
         $groupFields = [],
-        $literal = false
-    ) {
+        $literal = false,
+    )
+    {
         $this->transportObject->setResourceName($this->resourceName);
         $this->transportObject->setReturnColumns($returnColumns, $literal);
         $this->transportObject->setConditions($conditions);
@@ -340,8 +346,9 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $orderFields = [],
         $limitFields = [],
         $groupFields = [],
-        $literal = false
-    ) {
+        $literal = false,
+    )
+    {
         $this->transportObject->setResourceName($this->resourceName);
         $this->transportObject->setReturnColumns($returnColumns, $literal);
         $this->transportObject->setOrConditions($conditions);

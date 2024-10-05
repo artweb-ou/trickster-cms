@@ -29,20 +29,9 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
         $this->controller = $controller;
         $this->applicationName = $applicationName;
         $pathsManager = $controller->getPathsManager();
-        $paths = $pathsManager->getIncludePaths();
-        $servicesFolder = $pathsManager->getRelativePath('services');
-        foreach ($paths as &$path) {
-            $path .= $servicesFolder;
-        }
-        unset($path);
 
-
-        $registry = new DependencyInjectionServicesRegistry($paths);
-        $this->setRegistry($registry);
-
-        $definitions = include('di-definitions.php');
-        $container = new Container($definitions);
-        $this->setContainer($container);
+        $this->setRegistry($controller->getRegistry());
+        $this->setContainer($controller->getContainer());
 
         $this->setService('controllerApplication', $this);
         //temporary workaround for renderer object. Remove after "renderers" architecture change

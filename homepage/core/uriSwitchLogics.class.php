@@ -22,13 +22,28 @@ class uriSwitchLogics implements DependencyInjectionContextInterface
      */
     protected $linksManager;
 
+    public function setController(?controller $controller): void
+    {
+        $this->controller = $controller;
+    }
+
+    public function setLanguagesManager(?LanguagesManager $languagesManager): void
+    {
+        $this->languagesManager = $languagesManager;
+    }
+
+    public function setStructureManager(?structureManager $structureManager): void
+    {
+        $this->structureManager = $structureManager;
+    }
+
+    public function setLinksManager(?linksManager $linksManager): void
+    {
+        $this->linksManager = $linksManager;
+    }
+
     public function __construct()
     {
-        $this->controller = $this->getService('controller');
-        $this->languagesManager = $this->getService('LanguagesManager');
-        $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
-        $this->structureManager = $this->getService('structureManager', ['rootMarker' => $marker], true);
-        $this->linksManager = $this->getService('linksManager');
     }
 
     public function getMobileUrlBase()
@@ -45,7 +60,7 @@ class uriSwitchLogics implements DependencyInjectionContextInterface
             $targetLanguageId = $this->languagesManager->getCurrentLanguageId();
 
             $baseUrl = $this->controller->baseURL;
-            if ($this->application && $this->application != 'public') {
+            if ($this->application && $this->application !== 'public') {
                 $baseUrl .= $this->application . '/';
             }
             $this->structureManager->setRootUrl($baseUrl);

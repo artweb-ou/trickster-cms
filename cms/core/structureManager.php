@@ -907,7 +907,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param int $parentElementId
      * @param array $allowedElements
      * @param array $allowedRoles
-     * @return array|bool
+     * @return array
      */
     protected function loadElementsToParent(
         $idList = [],
@@ -1012,7 +1012,7 @@ class structureManager implements DependencyInjectionContextInterface
         $newElement = null;
         $className = $type . 'Element';
         if (class_exists($className, true)) {
-            $newElement = new $className();
+            $newElement = new $className($this->getService('ConfigManager')->get('main.rootMarkerPublic'));
             if ($newElement instanceof DependencyInjectionContextInterface) {
                 $this->instantiateContext($newElement);
             }
@@ -1246,9 +1246,8 @@ class structureManager implements DependencyInjectionContextInterface
      * @param int $id
      * @param int|null $parentId
      * @param bool $directlyToParent
-     * @return null|structureElement
      */
-    public function getElementById($id, $parentId = null, $directlyToParent = false)
+    public function getElementById($id, $parentId = null, $directlyToParent = false): ?structureElement
     {
         if ($id) {
             if (isset($this->elementsList[$id])) {
