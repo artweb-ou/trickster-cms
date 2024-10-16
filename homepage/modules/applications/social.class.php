@@ -119,7 +119,7 @@ class socialApplication extends controllerApplication
                     $this->socialDataManager->addSocialUser($apiType, $this->socialId, $userId);
                 }
             } else {
-                errorLog::getInstance()
+                ErrorLog::getInstance()
                     ->logMessage('', 'Social login failed, insufficient social data');
             }
         }
@@ -162,7 +162,7 @@ class socialApplication extends controllerApplication
             $this->pluginApi->useAccessToken($this->accessToken);
             $this->socialId = $this->pluginApi->getSessionUserId();
             if (!$this->socialId) {
-                errorLog::getInstance()
+                ErrorLog::getInstance()
                     ->logMessage("", "Attempt to login with zero facebook user id \r\n"
                         . "\r\n\$_REQUEST = " . var_export($_REQUEST, true) . ';'
                         . "\r\n\$_COOKIE = " . var_export($_COOKIE, true) . ';');

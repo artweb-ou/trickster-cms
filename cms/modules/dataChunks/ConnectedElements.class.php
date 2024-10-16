@@ -7,6 +7,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
     protected $ids;
     protected $role = 'parent';
     protected $linkType;
+    protected ?string $order = null;
 
     public function setFormValue($value)
     {
@@ -57,7 +58,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
                     )) {
                         $cache->set($keyName, $this->ids, 3600 * 24);
                         $cacheIds = [...$this->ids, $this->structureElement->id];
-                        foreach ($cacheIds as $id){
+                        foreach ($cacheIds as $id) {
                             $this->registerCacheKey($cache, $id, $keyName);
                         }
 
@@ -113,10 +114,18 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
              * @var structureManager $structureManager
              */
             $structureManager = $this->getService('structureManager');
+            $orders = [];
+            $order = $this->order ?? null;
             foreach ($ids as $id) {
                 if ($element = $structureManager->getElementById($id)) {
                     $elements[] = $element;
+                    if ($order) {
+                        $orders[] = $element->$order;
+                    }
                 }
+            }
+            if ($orders !== []) {
+                array_multisort($orders, SORT_ASC, $elements);
             }
         }
         return $elements;

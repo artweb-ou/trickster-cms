@@ -111,7 +111,7 @@ class emailsApplication extends controllerApplication
             $this->logNewsMailEvents('newsMail_linkClicked', $destination);
             $controller->redirect($destination);
         } elseif ($action == 'viewImage') {
-            errorLog::getInstance()
+            ErrorLog::getInstance()
                 ->logMessage('public templates', 'Deprecated method used, please use $dispatchmentType->getTrackedBlankImage() to load an empty image instead of getTrackedImageUrl on logo image');
             $this->logNewsMailEvents('newsMail_emailOpened');
             $imagefullurl = $_SERVER['REQUEST_URI'];

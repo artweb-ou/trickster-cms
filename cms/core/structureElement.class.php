@@ -518,7 +518,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     protected function logError($errorText)
     {
         $locationName = 'Structure element: ' . get_class($this) . ' ' . $this->id;
-        $errorLogObject = errorLog::getInstance();
+        $errorLogObject = ErrorLog::getInstance();
         $errorLogObject->logMessage($locationName, $errorText);
     }
 

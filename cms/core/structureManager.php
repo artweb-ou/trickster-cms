@@ -705,7 +705,7 @@ class structureManager implements DependencyInjectionContextInterface
      */
     public function logError($text)
     {
-        $errorLog = errorLog::getInstance();
+        $errorLog = ErrorLog::getInstance();
         $errorLog->logMessage('structureManager', $text);
     }
 

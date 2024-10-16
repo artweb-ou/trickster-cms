@@ -261,7 +261,7 @@ class controller
                 $returnForbidden = true;
             }
         } catch (Exception $exception) {
-            errorLog::getInstance()->logMessage('controller', $exception->getMessage() . "\n" . $exception->getTraceAsString());
+            ErrorLog::getInstance()->logMessage('controller', $exception->getMessage() . "\n" . $exception->getTraceAsString());
         }
 
         if ($returnForbidden) {
@@ -571,7 +571,7 @@ class controller
         $currentErrorLevel = error_reporting();
         if ($currentErrorLevel & $level) {
             if (!str_contains($file, 'illuminate')) {
-                errorLog::getInstance()->logMessage($file . ":" . $line, $message, $level);
+                ErrorLog::getInstance()->logMessage($file . ":" . $line, $message, $level);
             }
         }
         // Don't execute PHP internal error handler

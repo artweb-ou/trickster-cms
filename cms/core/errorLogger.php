@@ -2,12 +2,15 @@
 
 class errorLogger
 {
-    protected function logError($message, $level = null, $throwException = true)
+    /**
+     * @throws JsonException
+     */
+    protected function logError($message, $level = null): void
     {
-        errorLog::getInstance()->logMessage($this->getErrorLogLocation(), $message, $level, $throwException);
+        ErrorLog::getInstance()->logMessage($this->getErrorLogLocation(), $message, $level);
     }
 
-    protected function getErrorLogLocation()
+    protected function getErrorLogLocation(): string
     {
         return get_class($this);
     }

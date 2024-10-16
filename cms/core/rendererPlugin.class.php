@@ -21,7 +21,6 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
     protected $contentDisposition;
     protected $contentType;
     protected $expires;
-    protected $debugText = '';
     protected $contentText;
     protected $encoding;
     protected $bytesToSend = false;
@@ -70,7 +69,8 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
         }
 
         if (($this->matchesEtag($etag) !== true) && ($this->isModifiedSince($lastModified) !== false)) {
-            $this->captureDebugText();
+            //clear contents
+            ob_clean();
             $this->renderContent();
 
             $this->compress($this->encoding);
@@ -145,22 +145,6 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
             return null;
         }
         return $lastModified > $requestedModified;
-    }
-
-    final protected function captureDebugText()
-    {
-        $errorLog = errorLog::getInstance();
-        $errorLogMessages = $errorLog->getAllMessages();
-
-        $errorText = '';
-        foreach ($errorLogMessages as &$message) {
-            $errorText .= '<br/><b>' . $message['locationName'] . ':</b> ' . $message['errorText'];
-        }
-
-        $this->debugText = ob_get_contents() . $errorText;
-        if (strlen($this->debugText) > 0) {
-            $this->debugText = '<div class="debug_block">' . $this->debugText . "</div>";
-        }
     }
 
     final public function fileNotFound()
