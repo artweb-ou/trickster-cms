@@ -67,7 +67,7 @@ abstract class DataChunk extends errorLogger implements DependencyInjectionConte
         return $dataChunkValidated;
     }
 
-    protected function getErrorLogLocation()
+    protected function getErrorLogLocation(): string
     {
         return $this->fieldName;
     }

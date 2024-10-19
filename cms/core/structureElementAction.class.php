@@ -100,7 +100,7 @@ abstract class structureElementAction extends errorLogger implements DependencyI
         $record->persist();
     }
 
-    protected function getErrorLogLocation()
+    protected function getErrorLogLocation(): string
     {
         return $this->structureElement->title . " " . $this->structureElement->structureType . " " . $this->structureElement->id;
     }
