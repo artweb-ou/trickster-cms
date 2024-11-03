@@ -59,7 +59,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
 
     public function __construct($rootMarkerPublic)
     {
-        $this->languagesParentElementMarker = $this->languagesParentElementMarker?: $rootMarkerPublic;
+        $this->languagesParentElementMarker = $this->languagesParentElementMarker ?: $rootMarkerPublic;
         $this->childrenLoadStatus = [
             'content' => [],
             'container' => [],
@@ -103,19 +103,15 @@ abstract class structureElement implements DependencyInjectionContextInterface
     public function getChildrenLoadedStatus($types, $role)
     {
         if (is_array($types)) {
-            foreach ($types as &$type) {
+            foreach ($types as $type) {
                 if (!isset($this->childrenLoadStatus[$role][$type])) {
                     return false;
                 }
             }
             return true;
-        } else {
-            if (isset($this->childrenLoadStatus[$role][$types])) {
-                return $this->childrenLoadStatus[$role][$types];
-            } else {
-                return false;
-            }
         }
+
+        return $this->childrenLoadStatus[$role][$types] ?? false;
     }
 
     /**
@@ -129,7 +125,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     public function setChildrenLoadedStatus($types, $role, $value)
     {
         if (is_array($types)) {
-            foreach ($types as &$type) {
+            foreach ($types as $type) {
                 $this->childrenLoadStatus[$role][$type] = $value;
             }
         } else {
@@ -245,7 +241,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
             }
         }
         if ($linksObjects = $linksManager->getElementsLinks($this->id, false)) {
-            foreach ($linksObjects as &$linkObject) {
+            foreach ($linksObjects as $linkObject) {
                 $linkObject->delete();
                 if ($linkObject->childStructureId == $this->id) {
                     $structureManager->clearElementCache($linkObject->parentStructureId);
@@ -253,14 +249,14 @@ abstract class structureElement implements DependencyInjectionContextInterface
             }
         }
         foreach ($this->getAllDataChunks() as $chunks) {
-            foreach ($chunks as &$dataChunk) {
+            foreach ($chunks as $dataChunk) {
                 if ($dataChunk instanceof ExtraDataHolderDataChunkInterface) {
                     $dataChunk->deleteExtraData();
                 }
             }
         }
         if ($moduleDataObjects = $this->getModuleDataObjects()) {
-            foreach ($moduleDataObjects as &$dataObject) {
+            foreach ($moduleDataObjects as $dataObject) {
                 $dataObject->delete();
             }
         }
@@ -305,7 +301,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     protected function persistModuleData()
     {
         if ($moduleDataObjects = $this->getModuleDataObjects()) {
-            foreach ($moduleDataObjects as &$moduleDataObject) {
+            foreach ($moduleDataObjects as $moduleDataObject) {
                 if (!$moduleDataObject->loaded) {
                     //this object is newly created and misses some values.
 
@@ -392,10 +388,8 @@ abstract class structureElement implements DependencyInjectionContextInterface
 
     /**
      * Automatically persists element and returns numeric id of structure manager
-     *
-     * @return int $id
      */
-    public function getId()
+    public function getId(): int
     {
         if (!$this->hasActualStructureInfo()) {
             $this->persistStructureData();
@@ -413,7 +407,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
         $formErrors = [];
 
         foreach ($this->getAllDataChunks() as $languageId => $languageChunks) {
-            foreach ($languageChunks as $fieldName => &$chunk) {
+            foreach ($languageChunks as $fieldName => $chunk) {
                 if (isset($this->multiLanguageFields[$fieldName])) {
                     $formData[$fieldName][$languageId] = $chunk->getFormValue();
                     $formNames[$fieldName][$languageId] = $this->getFormNamesBase() . '[' . $languageId . '][' . $fieldName . ']';
@@ -449,7 +443,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     public function createEmptyModuleObjects()
     {
         if ($languages = $this->getLanguagesList()) {
-            foreach ($languages as &$languageId) {
+            foreach ($languages as $languageId) {
                 $this->moduleDataObjects[$languageId] = $this->createEmptyModuleObject($languageId);
             }
         }
@@ -579,7 +573,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
                 $this->moduleDataObjects[$languageId] = $this->createEmptyModuleObject($languageId);
 
                 if ($this->replaceMissingLanguageData && $moduleObjects = $this->getModuleDataObjects()) {
-                    foreach ($moduleObjects as &$moduleDataObject) {
+                    foreach ($moduleObjects as $moduleDataObject) {
                         if ($moduleDataObject->loaded) {
                             $this->moduleDataObjects[$languageId]->setData($moduleDataObject->getData());
                             $this->moduleDataObjects[$languageId]->languageId = $languageId;
@@ -604,7 +598,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
         if ($this->getMultiLanguageFields()) {
             $languagesManager = $this->getService('LanguagesManager');
             if ($languages = $languagesManager->getLanguagesIdList($this->languagesParentElementMarker)) {
-                foreach ($languages as &$languageId) {
+                foreach ($languages as $languageId) {
                     if ($moduleDataObject = $this->getModuleDataObject($languageId)) {
                         $moduleDataObjects[$languageId] = $moduleDataObject;
                     }
@@ -622,7 +616,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
         $externalData,
         $expectedFields = [],
         $validators = [],
-        $filteredLanguageId = false
+        $filteredLanguageId = false,
     )
     {
         if (!$expectedFields) {
@@ -633,9 +627,9 @@ abstract class structureElement implements DependencyInjectionContextInterface
         $languages = $languagesManager->getLanguagesIdList($this->languagesParentElementMarker);
         $validated = true;
 
-        foreach ($languages as &$languageId) {
+        foreach ($languages as $languageId) {
             if ($filteredLanguageId === false || $filteredLanguageId == $languageId) {
-                foreach ($expectedFields as &$dataChunkName) {
+                foreach ($expectedFields as $dataChunkName) {
                     if ($this->isFieldMultiLanguage($dataChunkName)) {
                         if ($dataChunk = $this->getDataChunk($dataChunkName, $languageId)) {
                             if (!isset($externalData[$languageId][$dataChunkName])) {
@@ -656,7 +650,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
             }
         }
 
-        foreach ($expectedFields as &$dataChunkName) {
+        foreach ($expectedFields as $dataChunkName) {
             if (!$this->isFieldMultiLanguage($dataChunkName)) {
                 if ($dataChunk = $this->getDataChunk($dataChunkName)) {
                     if (!isset($externalData[$dataChunkName])) {
@@ -676,9 +670,9 @@ abstract class structureElement implements DependencyInjectionContextInterface
         }
 
         if ($validated) {
-            foreach ($expectedFields as &$dataChunkName) {
+            foreach ($expectedFields as $dataChunkName) {
                 if ($this->isFieldMultiLanguage($dataChunkName)) {
-                    foreach ($languages as &$languageId) {
+                    foreach ($languages as $languageId) {
                         if ($filteredLanguageId === false || $filteredLanguageId == $languageId) {
                             if ($dataChunk = $this->getDataChunk($dataChunkName, $languageId)) {
                                 $dataChunk->convertFormToStorage();
@@ -698,7 +692,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
                         if ($dataChunk instanceof ElementStorageValueHolderInterface) {
                             if (isset($this->moduleFields[$dataChunkName])) {
                                 if ($moduleDataObjects = $this->getModuleDataObjects()) {
-                                    foreach ($moduleDataObjects as &$moduleDataObject) {
+                                    foreach ($moduleDataObjects as $moduleDataObject) {
                                         $moduleDataObject->$dataChunkName = $dataChunk->getElementStorageValue();
                                     }
                                 }
@@ -759,12 +753,12 @@ abstract class structureElement implements DependencyInjectionContextInterface
 
             //direct setting affects all languages
             if ($dataObjects = $this->getDataObjectsForProperty($propertyName)) {
-                foreach ($dataObjects as &$dataObject) {
+                foreach ($dataObjects as $dataObject) {
                     $dataObject->$propertyName = $storageValue;
                 }
             }
         } else {
-            if (property_exists($this, $propertyName)){
+            if (property_exists($this, $propertyName)) {
                 $this->$propertyName = $value;
             }
         }
@@ -773,7 +767,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     public function addModuleFields($moduleFields)
     {
         if (count($moduleFields)) {
-            foreach ($moduleFields as $fieldName => &$fieldInfo) {
+            foreach ($moduleFields as $fieldName => $fieldInfo) {
                 $this->moduleFields[$fieldName] = $fieldInfo;
             }
         }
@@ -794,7 +788,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     {
         $moduleData = [];
         if ($moduleDataObjects = $this->getModuleDataObjects()) {
-            foreach ($moduleDataObjects as &$moduleDataObject) {
+            foreach ($moduleDataObjects as $moduleDataObject) {
                 $languageId = $moduleDataObject->languageId;
                 $moduleData[$languageId] = [];
                 foreach ($this->moduleFields as $fieldName => $type) {
@@ -824,7 +818,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     public function importExportedData($structureData, $moduleData)
     {
         $changed = false;
-        foreach ($structureData as $fieldName => &$value) {
+        foreach ($structureData as $fieldName => $value) {
             if ($this->structureDataObject->$fieldName != $value) {
                 $this->structureDataObject->$fieldName = $value;
                 $changed = true;
@@ -846,10 +840,10 @@ abstract class structureElement implements DependencyInjectionContextInterface
             $languageIds[$languagesItem->iso6393] = $languagesItem->id;
         }
 
-        foreach ($moduleData as $languageCode => &$data) {
+        foreach ($moduleData as $languageCode => $data) {
             $languageId = $languageCode ? $languageIds[$languageCode] : null;
             if ($moduleDataObject = $this->getModuleDataObject($languageId)) {
-                foreach ($data as $fieldName => &$value) {
+                foreach ($data as $fieldName => $value) {
                     if ($value != '') {
                         if ($moduleDataObject->$fieldName != $value) {
                             $moduleDataObject->$fieldName = $value;
@@ -980,9 +974,8 @@ abstract class structureElement implements DependencyInjectionContextInterface
      *
      * @param string $propertyName
      * @param null|int $languageId
-     * @return bool|DataChunk
      */
-    public function getDataChunk($propertyName, $languageId = null)
+    public function getDataChunk($propertyName, $languageId = null): ?DataChunk
     {
         if (isset($this->singleLanguageChunks[$propertyName])) {
             return $this->singleLanguageChunks[$propertyName];
@@ -1002,24 +995,22 @@ abstract class structureElement implements DependencyInjectionContextInterface
                 $this->singleLanguageChunks[$propertyName] = $chunkObject;
                 return $chunkObject;
             }
-        } elseif (isset($this->moduleFields[$propertyName]) && ($moduleDataObject = $this->getModuleDataObject($languageId))
+        } elseif (isset($this->moduleFields[$propertyName]) && ($moduleDataObject = $this->getModuleDataObject($languageId)) && $chunkObject = $this->manufactureChunkObject($this->moduleFields[$propertyName], $propertyName)
         ) {
-            if ($chunkObject = $this->manufactureChunkObject($this->moduleFields[$propertyName], $propertyName)) {
-                if ($chunkObject instanceof ElementStorageValueHolderInterface) {
-                    //some data chunks do not exist in database directly.
-                    $chunkObject->setElementStorageValue($moduleDataObject->$propertyName);
-                }
-                if ($this->isFieldMultiLanguage($propertyName)) {
-                    $this->multiLanguageChunks[$languageId][$propertyName] = $chunkObject;
-                } else {
-                    $this->singleLanguageChunks[$propertyName] = $chunkObject;
-                }
-
-                return $chunkObject;
+            if ($chunkObject instanceof ElementStorageValueHolderInterface) {
+                //some data chunks do not exist in database directly.
+                $chunkObject->setElementStorageValue($moduleDataObject->$propertyName);
             }
+            if ($this->isFieldMultiLanguage($propertyName)) {
+                $this->multiLanguageChunks[$languageId][$propertyName] = $chunkObject;
+            } else {
+                $this->singleLanguageChunks[$propertyName] = $chunkObject;
+            }
+
+            return $chunkObject;
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -1081,7 +1072,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
 
             $dataObjects = $this->getDataObjectsForProperty($propertyName);
 
-            foreach ($dataObjects as &$dataObject) {
+            foreach ($dataObjects as $dataObject) {
                 if ($dataObject->languageId == $languageId) {
                     $dataObject->$propertyName = $storageValue;
                 }
@@ -1211,7 +1202,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
         $roles = null,
         $linkType = 'structure',
         $allowedTypes = null,
-        $restrictLinkTypes = false
+        $restrictLinkTypes = false,
     )
     {
         $structureManager = $this->getService('structureManager');
@@ -1278,7 +1269,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     {
         $subMenus = [];
         $children = $this->getChildrenList('container', $linkType);
-        foreach ($children as &$child) {
+        foreach ($children as $child) {
             if ($child->hidden) {
                 continue;
             }
@@ -1313,8 +1304,8 @@ abstract class structureElement implements DependencyInjectionContextInterface
     public function copyExtraData($oldId)
     {
         $allChunks = $this->getAllDataChunks();
-        foreach ($allChunks as $languageId => &$chunks) {
-            foreach ($chunks as &$dataChunk) {
+        foreach ($allChunks as $languageId => $chunks) {
+            foreach ($chunks as $dataChunk) {
                 if ($dataChunk instanceof ElementStorageValueHolderInterface) {
                     $oldValue = $dataChunk->getElementStorageValue();
                     if ($dataChunk instanceof ExtraDataHolderDataChunkInterface) {
@@ -1367,7 +1358,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
                 $this->currentParentElement = $structureManager->getElementById($this->currentParentElementId);
             } elseif ($parentElements = $structureManager->getElementsParents($this->id)) {
                 $this->currentParentElement = false;
-                foreach ($parentElements as &$parent) {
+                foreach ($parentElements as $parent) {
                     if (!$this->currentParentElement) {
                         $this->currentParentElement = $parent;
                     }
@@ -1386,10 +1377,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
         return $this->getService('structureManager')->getElementsFirstParent($this->id);
     }
 
-    /**
-     * @return bool|structureElement
-     */
-    public function getRequestedParentElement()
+    public function getRequestedParentElement(): ?structureElement
     {
         if ($parents = $this->getService('structureManager')->getElementsParents($this->id)) {
             foreach ($parents as $parent) {
@@ -1398,7 +1386,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
                 }
             }
         }
-        return false;
+        return null;
     }
 
     public function getPrivileges()

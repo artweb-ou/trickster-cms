@@ -70,7 +70,9 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
 
         if (($this->matchesEtag($etag) !== true) && ($this->isModifiedSince($lastModified) !== false)) {
             //clear contents
-            ob_clean();
+            if (ob_get_level() > 0){
+                ob_clean();
+            }
             $this->renderContent();
 
             $this->compress($this->encoding);
@@ -264,7 +266,7 @@ abstract class rendererPlugin extends errorLogger implements DependencyInjection
         // Wherever this construct is used, null elements are allowed, but do
         // not contribute to the count of elements present. That is,
         // "(element), , (element) " is permitted, but counts as only two elements.
-        $range_spec_list = preg_split('/,/', $range_set, null, PREG_SPLIT_NO_EMPTY);
+        $range_spec_list = preg_split('/,/', $range_set, 0, PREG_SPLIT_NO_EMPTY);
 
         foreach ($range_spec_list as $range_spec) {
             $range_spec = trim($range_spec);

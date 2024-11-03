@@ -6,17 +6,18 @@ class structureManager implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
 
+    /**
+     * @var array<structureElement|null>
+     */
     protected $elementsList = [];
     protected $elementsParents = [];
 
     protected $elementsDataCollection;
-    protected $loadedFiles = [];
 
     protected $cachedMarkers = [];
 
     public $rootElementId;
     protected $rootElementMarker;
-    protected $newElement;
     protected $currentElement;
     public $newElementParameters;
     protected $newElementLinkType = 'structure';
@@ -44,7 +45,6 @@ class structureManager implements DependencyInjectionContextInterface
 
     protected $requestedPath = [];
     protected $requestedPathString = '';
-    public $allowedRoles = [];
     public $customActions = [];
     public $defaultActions = [];
     protected $pathSearchAllowedLinks;
@@ -57,17 +57,17 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @param LanguagesManager $languagesManager
      */
-    public function setLanguagesManager($languagesManager)
+    public function setLanguagesManager($languagesManager): void
     {
         $this->languagesManager = $languagesManager;
     }
 
-    public function setLinksManager(linksManager $linksManager)
+    public function setLinksManager(linksManager $linksManager): void
     {
         $this->linksManager = $linksManager;
     }
 
-    public function setPrivilegesManager(privilegesManager $privilegesManager)
+    public function setPrivilegesManager(privilegesManager $privilegesManager): void
     {
         $this->privilegesManager = $privilegesManager;
     }
@@ -80,7 +80,7 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @param Cache $cache
      */
-    public function setCache($cache)
+    public function setCache($cache): void
     {
         $this->cache = $cache;
     }
@@ -118,7 +118,7 @@ class structureManager implements DependencyInjectionContextInterface
         $restrictLinkTypes = false,
         &$flatTree = [],
         &$usedIds = [],
-    )
+    ): array
     {
         $treeLevel = $this->getElementsChildren($elementId, $roles, $linkType, null, $restrictLinkTypes);
         foreach ($treeLevel as $element) {
@@ -138,7 +138,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param structureElement[] $elementsChain
      * @return structureElement[]
      */
-    public function getElementsChain($structurePath = [], $parentElementId = null, &$elementsChain = [])
+    public function getElementsChain($structurePath = [], $parentElementId = null, &$elementsChain = []): array
     {
         if ($structurePath) {
             if ($parentElementId === null) {
@@ -201,9 +201,9 @@ class structureManager implements DependencyInjectionContextInterface
      * @param int|int[] $limit
      * @return structureElement[]
      */
-    public function getElementsByType($structureType, $parentElementId = null, $orderFields = [], $limit = [])
+    public function getElementsByType($structureType, $parentElementId = null, $orderFields = [], $limit = []): array
     {
-        if (is_null($parentElementId)) {
+        if ($parentElementId === null) {
             $parentElementId = $this->getRootElementId();
         }
         $result = [];
@@ -232,11 +232,11 @@ class structureManager implements DependencyInjectionContextInterface
      * @param string $type
      * @return structureElement[]
      */
-    public function getLoadedElementsByType($type)
+    public function getLoadedElementsByType($type): array
     {
         $elements = [];
         foreach ($this->elementsList as $element) {
-            if ($element && $element->structureType == $type) {
+            if ($element && $element->structureType === $type) {
                 $elements[] = $element;
             }
         }
@@ -251,7 +251,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param bool $restrictLinkTypes
      * @return structureElement[]
      */
-    public function getElementsParents($elementId, $linkType = null, $restrictLinkTypes = true)
+    public function getElementsParents($elementId, $linkType = null, $restrictLinkTypes = true): array
     {
         if (!$linkType) {
             $linkType = '';
@@ -297,9 +297,8 @@ class structureManager implements DependencyInjectionContextInterface
      *
      * @param int $elementId
      * @param null $linkType
-     * @return bool|structureElement
      */
-    public function getElementsRequestedParent($elementId, $linkType = null)
+    public function getElementsRequestedParent($elementId, $linkType = null): ?structureElement
     {
         if ($parentsList = $this->getElementsParents($elementId, $linkType)) {
             foreach ($parentsList as $parentElement) {
@@ -308,7 +307,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
             }
         }
-        return false;
+        return null;
     }
 
     /**
@@ -316,10 +315,9 @@ class structureManager implements DependencyInjectionContextInterface
      *
      * @param string[] $controllerRequestedPath
      *
-     * @return bool|structureElement
      * @deprecated
      */
-    public function buildRequestedPath($controllerRequestedPath = [])
+    public function buildRequestedPath($controllerRequestedPath = []): ?structureElement
     {
         $this->logError('deprecated method buildRequestedPath used, use setRequestedPath instead');
         $this->setRequestedPath($controllerRequestedPath);
@@ -331,14 +329,14 @@ class structureManager implements DependencyInjectionContextInterface
             return $this->elementsList[$elementId];
         }
 
-//load element from the storage
+        //load element from the storage
         if ($element = $this->loadRootElement($elementId)) {
             return $element;
         }
-        return false;
+        return null;
     }
 
-    public function setRequestedPath($requestedPath)
+    public function setRequestedPath($requestedPath): void
     {
         $this->requestedPath = $requestedPath;
         if ($requestedPath) {
@@ -352,9 +350,8 @@ class structureManager implements DependencyInjectionContextInterface
      * Current element is an element which should be displayed for the current requested URL
      *
      * @param string[] $currentElementPath
-     * @return bool|structureElement
      */
-    public function getCurrentElement($currentElementPath = null)
+    public function getCurrentElement($currentElementPath = null): ?structureElement
     {
         if ($this->currentElement === null) {
             if ($currentElementPath === null) {
@@ -396,7 +393,7 @@ class structureManager implements DependencyInjectionContextInterface
         return $this->currentElement;
     }
 
-    public function setCurrentElement($currentElement)
+    public function setCurrentElement($currentElement): void
     {
         $this->currentElement = $currentElement;
         $currentElement->final = true;
@@ -407,14 +404,13 @@ class structureManager implements DependencyInjectionContextInterface
      * Loads root element from storage
      *
      * @param int $elementId
-     * @return bool|structureElement
      */
-    protected function loadRootElement($elementId = null)
+    protected function loadRootElement($elementId = null): ?structureElement
     {
         if ($elementId === null) {
             $elementId = $this->getRootElementId();
         }
-        $element = false;
+        $element = null;
 
         //load element from the storage
         if ($elementsList = $this->loadElementsToParent([$elementId])) {
@@ -427,12 +423,11 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * Preload and return root element
      *
-     * @return bool|structureElement
      */
-    public function getRootElement()
+    public function getRootElement(): ?structureElement
     {
         if (isset($this->elementsList[$this->getRootElementId()])) {
-            $element = $this->elementsList[$this->getRootElementId()];
+            $element = $this->elementsList[$this->getRootElementId()] ?? null;
         } else {
             $element = $this->loadRootElement();
         }
@@ -522,7 +517,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param int $elementId
      * @param string $linkType
      */
-    public function moveElement($sourceParentId, $targetId, $elementId, $linkType = null)
+    public function moveElement($sourceParentId, $targetId, $elementId, $linkType = null): void
     {
         $elementLinks = $this->linksManager->getElementsLinks($elementId, '', 'child');
         foreach ($elementLinks as &$link) {
@@ -549,10 +544,10 @@ class structureManager implements DependencyInjectionContextInterface
      * @param null $parentLinkType - all copied top-elements will use this to link with new parents
      * @return array $copiesInformation
      */
-    public function copyElements($idList, $targetId, $linkTypes = null)
+    public function copyElements($idList, $targetId, $linkTypes = null): array
     {
         //by default copy only elements via "structure" links
-        if (is_null($linkTypes)) {
+        if ($linkTypes === null) {
             $linkTypes = ['structure'];
         }
 
@@ -607,11 +602,10 @@ class structureManager implements DependencyInjectionContextInterface
      * @param $currentLinkType - link type of newly created element to connect with previous iteration parent
      * @param string[] $linkTypes - link types of copied connected elements
      * @param int[] $copiesInformation - index of old element relations to newly created element ID relations, filled automatically
-     * @return bool|structureElement
      */
-    protected function copyElement($sourceId, $targetId, $currentLinkType, $linkTypes, &$copiesInformation = [])
+    protected function copyElement($sourceId, $targetId, $currentLinkType, $linkTypes, &$copiesInformation = []): ?structureElement
     {
-        $newElement = false;
+        $newElement = null;
         if ($sourceElement = $this->getElementById($sourceId)) {
             $sourceStructureData = $sourceElement->getStructureData();
             //copy of product shouldn't contain creation/modification dates of original
@@ -667,9 +661,9 @@ class structureManager implements DependencyInjectionContextInterface
         return $newElement;
     }
 
-    public function moveElements($idList, $targetId, $linkTypes = null)
+    public function moveElements($idList, $targetId, $linkTypes = null): true
     {
-        if (is_null($linkTypes)) {
+        if ($linkTypes === null) {
             $linkTypes = ['structure'];
         }
         foreach ($idList as $elementId) {
@@ -690,7 +684,7 @@ class structureManager implements DependencyInjectionContextInterface
      *
      * @param string $linkType
      */
-    public function setNewElementLinkType($linkType = null)
+    public function setNewElementLinkType($linkType = null): void
     {
         if (!$linkType) {
             $linkType = 'structure';
@@ -703,7 +697,7 @@ class structureManager implements DependencyInjectionContextInterface
      *
      * @param string $text
      */
-    public function logError($text)
+    public function logError($text): void
     {
         $errorLog = ErrorLog::getInstance();
         $errorLog->logMessage('structureManager', $text);
@@ -711,14 +705,13 @@ class structureManager implements DependencyInjectionContextInterface
 
     /**
      * Creates an empty structure element with empty data
-     *
-     * @param string $type
-     * @param string $action
-     * @param int $parentElementId
-     * @param bool $setCurrent
-     * @return bool|structureElement
      */
-    public function createElement($type, $action, $parentElementId = null, $setCurrent = false, $linkType = null)
+    public function createElement(
+        string $type,
+        string $action,
+        ?int $parentElementId = null,
+        bool $setCurrent = false,
+        ?string $linkType = null): ?structureElement
     {
         if ($parentElementId === null) {
             $parentElementId = $this->getRootElementId();
@@ -740,15 +733,10 @@ class structureManager implements DependencyInjectionContextInterface
 
             //create temporary link object which will be automatically saved afterwards
             if ($parentElementId != 0) {
-                if ($linkType !== null) {
-                    $newElementLinkType = $linkType;
-                } else {
-                    $newElementLinkType = $this->newElementLinkType;
-                }
+                $newElementLinkType = $linkType ?? $this->newElementLinkType;
 
                 $this->linksManager->createLinkObject($parentElementId, $id, $newElementLinkType);
             }
-
             if ($newElement = $this->manufactureElement($dataObject, $parentElementId)) {
                 $newElement->createEmptyModuleObjects();
                 if ($setCurrent) {
@@ -759,18 +747,15 @@ class structureManager implements DependencyInjectionContextInterface
             return $newElement;
         }
 
-        return false;
+        return null;
     }
 
-    /**
-     * @return array
-     */
-    protected function getRequestedRoles($allowedRoles)
+    protected function getRequestedRoles($allowedRoles): array
     {
-        if (is_null($allowedRoles)) {
+        if ($allowedRoles === null) {
             $requestedRoles = $this->defaultRoles;
         } else {
-            if ($allowedRoles == 'content' || $allowedRoles == 'container') {
+            if ($allowedRoles === 'content' || $allowedRoles === 'container') {
                 $requestedRoles = [
                     $allowedRoles,
                     'hybrid',
@@ -798,7 +783,7 @@ class structureManager implements DependencyInjectionContextInterface
         $linkTypes = 'structure',
         $allowedTypes = null,
         $restrictLinkTypes = false,
-    )
+    ): array
     {
         $returnList = [];
         if ($parentElement = $this->getElementById($parentElementId)) {
@@ -873,10 +858,7 @@ class structureManager implements DependencyInjectionContextInterface
         return $returnList;
     }
 
-    /**
-     * @param structureElement $element
-     */
-    public function performAction($element)
+    public function performAction(structureElement $element): void
     {
         if ($this->checkPrivileges($element->id, $element->actionName, $element->structureType)) {
             $element->executeAction();
@@ -907,14 +889,13 @@ class structureManager implements DependencyInjectionContextInterface
      * @param int $parentElementId
      * @param array $allowedElements
      * @param array $allowedRoles
-     * @return array
      */
     protected function loadElementsToParent(
         $idList = [],
         $parentElementId = 0,
         $allowedElements = [],
         $allowedRoles = [],
-    )
+    ): array
     {
         if (!$parentElementId) {
             $parentElementId = $this->getRootElementId();
@@ -954,7 +935,7 @@ class structureManager implements DependencyInjectionContextInterface
                 if ($loadedElement = $this->manufactureElement($dataObject, $parentElementId)) {
                     $this->createElementCache($elementId);
 
-                    $loadedElements[$elementId] = $this->elementsList[$elementId];
+                    $loadedElements[$elementId] = $this->elementsList[$elementId] ?? null;
 
                     $loadedModuleTables[$loadedElement->dataResourceName]['language'] = $loadedElement->getCurrentLanguage();
                     $loadedModuleTables[$loadedElement->dataResourceName]['id'][] = $loadedElement->id;
@@ -1070,10 +1051,7 @@ class structureManager implements DependencyInjectionContextInterface
         return $result;
     }
 
-    /**
-     * @return null
-     */
-    protected function defineElementAction($id, $type, $defaultAction)
+    protected function defineElementAction($id, $type, $defaultAction): ?string
     {
         $actionName = null;
         if (isset($this->customActions[$id])) {
@@ -1089,7 +1067,7 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @param $element
      */
-    public function regenerateStructureInfo($element)
+    public function regenerateStructureInfo($element): void
     {
         if ($element->id != $this->getRootElementId()) {
             if ($parentElements = $this->getElementsParents($element->id)) {
@@ -1115,7 +1093,7 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @param structureElement $element
      */
-    protected function generateStructureInfo($element, $parentElementId = false)
+    protected function generateStructureInfo($element, $parentElementId = false): void
     {
         if ($parentElementId && isset($this->elementsList[$parentElementId])) {
             if (!$element->hasActualStructureInfo() && $element->structureName == '') {
@@ -1157,7 +1135,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param string $originalId - temporary ID in string form (like 'type:element/action:actionName')
      * @param int $newId - new ID from a database
      */
-    public function reRegisterElement($originalId, $newId)
+    public function reRegisterElement($originalId, $newId): void
     {
         if (isset($this->elementsParents[$originalId])) {
             $this->elementsParents[$newId] = $this->elementsParents[$originalId];
@@ -1171,8 +1149,10 @@ class structureManager implements DependencyInjectionContextInterface
         $this->privilegesManager->reRegisterElement($originalId, $newId);
         $this->linksManager->reRegisterElement($originalId, $newId);
         if ($parentElements = $this->getElementsParents($newId)) {
-            foreach ($parentElements as &$parentElement) {
-                $parentElement->childrenList[] = $this->elementsList[$newId];
+            foreach ($parentElements as $parentElement) {
+                if (isset($this->elementsList[$newId])){
+                    $parentElement->childrenList[] = $this->elementsList[$newId];
+                }
             }
         }
     }
@@ -1181,21 +1161,16 @@ class structureManager implements DependencyInjectionContextInterface
      * Searches and returns first structure element with assigned marker
      *
      * @param string $marker - element's marker to search for
-     * @param int|null $parentElementId - restriction by parent id
-     * @return structureElement|bool
+     * @param ?int|null $parentElementId - restriction by parent id
      */
-    public function getElementByMarker($marker, $parentElementId = null)
+    public function getElementByMarker(string $marker, ?int $parentElementId = null): ?structureElement
     {
-        if ($parentElementId === null) {
-            $cacheParentElementId = $this->getRootElementId();
-        } else {
-            $cacheParentElementId = $parentElementId;
-        }
+        $cacheParentElementId = $parentElementId ?? $this->getRootElementId();
 
-        if (!isset($this->cachedMarkers[$cacheParentElementId][$marker])) {
+        if (!array_key_exists($marker, $this->cachedMarkers[$cacheParentElementId] ?? [])) {
             $searchFields = ['marker' => $marker];
             $dataCollection = $this->elementsDataCollection->load($searchFields);
-            foreach ($dataCollection as &$dataElement) {
+            foreach ($dataCollection as $dataElement) {
                 if (!$parentElementId || $this->checkElementInParent($dataElement->id, $parentElementId)) {
                     $this->cachedMarkers[$cacheParentElementId][$marker] = $this->getElementById(
                         $dataElement->id,
@@ -1205,10 +1180,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
             }
         }
-        if (isset($this->cachedMarkers[$cacheParentElementId]) && isset($this->cachedMarkers[$cacheParentElementId][$marker])) {
-            return $this->cachedMarkers[$cacheParentElementId][$marker];
-        }
-        return false;
+        return $this->cachedMarkers[$cacheParentElementId][$marker] ?? null;
     }
 
     public function checkElementInParent($id, $parentId)
@@ -1223,7 +1195,7 @@ class structureManager implements DependencyInjectionContextInterface
                 'child',
                 false
             )) {
-                foreach ($dataCollection as &$dataObject) {
+                foreach ($dataCollection as $dataObject) {
                     if ($dataObject->parentStructureId == $parentId) {
                         $parentFound = true;
                         break;
@@ -1231,7 +1203,7 @@ class structureManager implements DependencyInjectionContextInterface
                 }
 
                 if (!$parentFound) {
-                    foreach ($dataCollection as &$dataObject) {
+                    foreach ($dataCollection as $dataObject) {
                         if ($parentFound = $this->checkElementInParent($dataObject->parentStructureId, $parentId)) {
                             break;
                         }
@@ -1247,7 +1219,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param int|null $parentId
      * @param bool $directlyToParent
      */
-    public function getElementById($id, $parentId = null, $directlyToParent = false): ?structureElement
+    public function getElementById($id, $parentId = null, bool $directlyToParent = false): ?structureElement
     {
         if ($id) {
             if (isset($this->elementsList[$id])) {
@@ -1265,7 +1237,7 @@ class structureManager implements DependencyInjectionContextInterface
         return null;
     }
 
-    protected function loadFromCache($id, $parentElementId)
+    protected function loadFromCache($id, $parentElementId): ?structureElement
     {
         /**
          * @var structureElement $element
@@ -1293,13 +1265,13 @@ class structureManager implements DependencyInjectionContextInterface
                 }
             }
         }
-        return false;
+        return null;
     }
 
     /**
      * @param int|null $parentId
      */
-    protected function loadFromShortestPath($id, $parentId = null)
+    protected function loadFromShortestPath($id, $parentId = null): void
     {
         if ($id == $this->getRootElementId()) {
             $this->loadRootElement($id);
@@ -1345,14 +1317,13 @@ class structureManager implements DependencyInjectionContextInterface
      * @param null $withinParentId - if some parent id should strictly be in the chain, then it can be restricted with this parameter
      * @param int $points - current chain points: the smaller value == the shorter
      * @param array $chainElements - chain elements holder
-     * @return array|bool
      */
     protected function findShortestParentsChain(
         $id,
         $withinParentId = null,
         &$points = 0,
         $chainElements = [],
-    )
+    ): bool|array
     {
         //if we are searching parent within itself then we will get nothing. we should not restrict parent within itself
         if ($withinParentId == $id) {
@@ -1427,7 +1398,7 @@ class structureManager implements DependencyInjectionContextInterface
      * @param bool $directlyToParent
      * @return structureElement[]
      */
-    public function getElementsByIdList($idList, $parentElementId = false, $directlyToParent = false)
+    public function getElementsByIdList($idList, $parentElementId = false, $directlyToParent = false): array
     {
         $elementsList = [];
         if ($idList) {
@@ -1503,11 +1474,10 @@ class structureManager implements DependencyInjectionContextInterface
      * Doesn't check the user privileges or manufacture the object itself, only queries the number in database
      *
      * @param string $marker
-     * @return int|bool
      */
-    public function getElementIdByMarker($marker)
+    public function getElementIdByMarker($marker): ?int
     {
-        $elementId = false;
+        $elementId = null;
         $collection = persistableCollection::getInstance('structure_elements');
 
         $columns = ['id'];
@@ -1530,7 +1500,7 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @return mixed
      */
-    public function getPathSearchAllowedLinks()
+    public function getPathSearchAllowedLinks(): mixed
     {
         return $this->pathSearchAllowedLinks;
     }
@@ -1538,17 +1508,17 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @param mixed $pathSearchAllowedLinks
      */
-    public function setPathSearchAllowedLinks($pathSearchAllowedLinks)
+    public function setPathSearchAllowedLinks($pathSearchAllowedLinks): void
     {
         $this->pathSearchAllowedLinks = $pathSearchAllowedLinks;
     }
 
-    public function setRootUrl($rootUrl)
+    public function setRootUrl($rootUrl): void
     {
         $this->rootURL = $rootUrl;
     }
 
-    public function setRootElementId($rootElementId)
+    public function setRootElementId($rootElementId): void
     {
         $this->rootElementId = $rootElementId;
         $this->rootElementMarker = null;
@@ -1567,7 +1537,7 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @return mixed
      */
-    public function getRootElementMarker()
+    public function getRootElementMarker(): mixed
     {
         return $this->rootElementMarker;
     }
@@ -1575,13 +1545,13 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @param mixed $rootElementMarker
      */
-    public function setRootElementMarker($rootElementMarker)
+    public function setRootElementMarker($rootElementMarker): void
     {
         $this->rootElementMarker = $rootElementMarker;
         $this->rootElementId = null;
     }
 
-    public function setPrivilegeChecking($enabled)
+    public function setPrivilegeChecking($enabled): void
     {
         $this->privilegeChecking = $enabled;
     }
@@ -1596,23 +1566,23 @@ class structureManager implements DependencyInjectionContextInterface
         return $this->deniedCopyLinkTypes;
     }
 
-    public function setDeniedCopyLinkTypes($deniedCopyLinkTypes)
+    public function setDeniedCopyLinkTypes($deniedCopyLinkTypes): void
     {
         $this->deniedCopyLinkTypes = (array)$deniedCopyLinkTypes;
     }
 
-    public function setElementPathRestrictionId($id)
+    public function setElementPathRestrictionId($id): void
     {
         $this->elementPathRestrictionId = $id;
     }
 
-    protected function setElementCacheKey($id, $key, $value, $lifeTime)
+    protected function setElementCacheKey($id, $key, $value, $lifeTime): void
     {
         $this->cache->set($id . ':' . $key, $value, $lifeTime);
         $this->registerElementCacheKey($id, $id . ':' . $key);
     }
 
-    protected function registerElementCacheKey($id, $key)
+    protected function registerElementCacheKey($id, $key): void
     {
         if (!($keys = $this->cache->get($id . ':k'))) {
             $keys = [];
@@ -1621,7 +1591,7 @@ class structureManager implements DependencyInjectionContextInterface
         $this->cache->set($id . ':k', $keys, 3600 * 24 * 7);
     }
 
-    public function clearElementCache($id)
+    public function clearElementCache($id): void
     {
         if ($keys = $this->cache->get($id . ':k', true)) {
             foreach ($keys as $key => $val) {
@@ -1634,7 +1604,7 @@ class structureManager implements DependencyInjectionContextInterface
         }
     }
 
-    public function createElementCache($elementId)
+    public function createElementCache($elementId): void
     {
         if ($this->elementsList[$elementId]) {
             $this->setElementCacheKey($elementId, 'e', $this->elementsList[$elementId], $this->cacheLifeTime);

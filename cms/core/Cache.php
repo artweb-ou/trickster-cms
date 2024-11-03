@@ -88,13 +88,13 @@ class Cache extends errorLogger
         }
     }
 
-    public function get($key, $forceReading = false)
+    public function get($key, $forceReading = false): mixed
     {
         if ($this->enabled && ($this->reading || $forceReading)) {
             try {
                 $value = $this->cache->get($this->cachePrefix . $key);
                 if ($value == \fluxbb\cache\Cache::NOT_FOUND) {
-                    return false;
+                    return null;
                 } else {
                     return $value;
                 }
@@ -102,18 +102,17 @@ class Cache extends errorLogger
                 $this->logError($exception->getMessage());
             }
         }
-        return false;
+        return null;
     }
 
-    public function set($key, $value, $ttl = 0)
+    public function set($key, $value, $ttl = 0): void
     {
         if ($this->enabled && $this->writing) {
             try {
-                return $this->cache->set($this->cachePrefix . $key, $value, $ttl);
+                $this->cache->set($this->cachePrefix . $key, $value, $ttl);
             } catch (\fluxbb\cache\Exception $exception) {
             }
         }
-        return false;
     }
 
     public function clear()
@@ -124,7 +123,7 @@ class Cache extends errorLogger
             } catch (\fluxbb\cache\Exception $exception) {
             }
         }
-        return false;
+        return null;
     }
 
     public function delete($key)
@@ -135,7 +134,7 @@ class Cache extends errorLogger
             } catch (\fluxbb\cache\Exception $exception) {
             }
         }
-        return false;
+        return null;
     }
 
     public function __destruct()

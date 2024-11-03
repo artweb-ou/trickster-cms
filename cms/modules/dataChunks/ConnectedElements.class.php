@@ -27,7 +27,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
     {
         $this->formValue = null;
         $this->displayValue = null;
-        $this->storageValue = (array)$value;
+        $this->storageValue = array_map(static fn(structureElement $item): int => $item->getId(), $value);
     }
 
     protected function loadStorageValue()
@@ -46,7 +46,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
             $cache = $this->getService('Cache');
             $keyName = $this->structureElement->id . ':ce' . $this->linkType . $this->role;
             $value = $cache->get($keyName);
-            if ($value === false) {
+            if ($value === null) {
                 /**
                  * @var linksManager $linksManager
                  */
@@ -74,7 +74,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
 
     protected function registerCacheKey(Cache $cache, string|int $id, string $key): void
     {
-        if (($keys = $cache->get($id . ':k')) === false) {
+        if (($keys = $cache->get($id . ':k')) === null) {
             $keys = [];
         }
         $keys[$key] = 1;

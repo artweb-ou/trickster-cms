@@ -44,7 +44,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
              */
             $cache = $this->getService('Cache');
             if ($cache->isEnabled()) {
-                if (($this->primaryFields = $cache->get($keyName)) === false) {
+                if (($this->primaryFields = $cache->get($keyName)) === null) {
                     $this->primaryFields = $this->transportObject->loadPrimaryFields();
                     $cache->set($keyName, $this->primaryFields);
                 }
@@ -80,7 +80,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
              */
             $cache = $this->getService('Cache');
             if ($cache->isEnabled()) {
-                if (($this->columnNames = $cache->get($keyName)) === false) {
+                if (($this->columnNames = $cache->get($keyName)) === null) {
                     $this->columnNames = $this->transportObject->loadColumnNames();
                     $cache->set($keyName, $this->columnNames);
                 }

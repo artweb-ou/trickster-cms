@@ -94,7 +94,7 @@ class fileReaderRendererPlugin extends rendererPlugin
             $this->startPoint = $this->startPoint + $this->chunkSize;
             $this->bytesToSend = $this->bytesToSend - $this->chunkSize;
 
-            return file_get_contents($this->filePath, null, null, $currentPoint, $this->chunkSize);
+            return file_get_contents($this->filePath, false, null, $currentPoint, $this->chunkSize);
         }
         return false;
     }

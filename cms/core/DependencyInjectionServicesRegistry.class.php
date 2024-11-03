@@ -5,13 +5,12 @@ use DI\Container;
 class DependencyInjectionServicesRegistry implements DependencyInjectionServicesRegistryInterface
 {
     protected $services = [];
-    protected $paths = [];
 
-    public function __construct($paths = null)
+    public function __construct(
+        private Container $container,
+        protected array   $paths = [],
+    )
     {
-        if ($paths !== null) {
-            $this->paths = $paths;
-        }
     }
 
     public function setService($type, $object)
@@ -72,6 +71,9 @@ class DependencyInjectionServicesRegistry implements DependencyInjectionServices
                     }
                 }
             }
+        }
+        if (!$service){
+            $service = $this->container->get($type) ?? false;
         }
         return $service;
     }

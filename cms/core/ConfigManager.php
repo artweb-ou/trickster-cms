@@ -8,13 +8,11 @@ class ConfigManager
     protected $projectPath = '';
 
     /**
-     * @param $name
      * @param bool $forceProjectPath
-     * @return Config|boolean
      */
-    public function getConfig($name, $forceProjectPath = false)
+    public function getConfig($name, $forceProjectPath = false): ?Config
     {
-        if (!isset($this->configs[$name])) {
+        if (!array_key_exists($name, $this->configs)) {
             if ($forceProjectPath) {
                 if ($path = $this->projectPath) {
                     $configPath = $path . $name . '.php';
@@ -65,7 +63,7 @@ class ConfigManager
         return $this->getConfig($parts[0])->getMerged($parts[1]);
     }
 
-    public function addSource($path, $primary = false)
+    public function addSource($path, $primary = false): void
     {
         if ($primary) {
             $this->projectPath = $path;
@@ -74,31 +72,31 @@ class ConfigManager
         $this->paths = array_unique($this->paths);
     }
 
-    public function saveConfigByName($name)
+    public function saveConfigByName($name): void
     {
         if (isset($this->configs[$name])) {
             $this->saveConfig($this->configs[$name]);
         }
     }
 
-    public function refreshConfig(Config $config)
+    public function refreshConfig(Config $config): void
     {
         $data = $this->read($config->getPath());
         $config->setData($data);
     }
 
-    public function saveConfig(Config $config)
+    public function saveConfig(Config $config): void
     {
         $this->write($config->getData(), $config->getPath());
     }
 
-    public function getConfigFromPath($path, $dataRequired = false)
+    public function getConfigFromPath($path, $dataRequired = false): ?Config
     {
         $data = $this->read($path);
         if (!$dataRequired || !empty($data)) {
             return new Config($this, $data, $path);
         }
-        return false;
+        return null;
     }
 
     public function read($path)
@@ -113,7 +111,7 @@ class ConfigManager
         return $result;
     }
 
-    public function write(array $configData, $path)
+    public function write(array $configData, $path): void
     {
         $directory = dirname($path);
         if (!is_dir($directory)) {

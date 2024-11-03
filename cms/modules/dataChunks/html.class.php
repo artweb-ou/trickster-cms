@@ -30,6 +30,7 @@ class htmlDataChunk extends DataChunk implements ElementStorageValueHolderInterf
 
     protected function processValue($value)
     {
+        $value = $value ?? '';
         if (stripos($value, 'img') === false) {
             $emptyTest = strip_tags($value);
             $emptyTest = html_entity_decode($emptyTest, ENT_QUOTES, 'UTF-8');

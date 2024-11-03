@@ -36,8 +36,7 @@ class controller
     protected $formData = [];
     protected $forceDebug = false;
     protected $debugMode = null;
-    /** @var controller */
-    private static $instance;
+    private static controller $instance;
     protected $enabledPlugins = [];
     /**
      * @var PathsManager
@@ -49,10 +48,10 @@ class controller
 
     public static function getInstance(?string $configurationFile = null): controller
     {
-        if (is_null(self::$instance)) {
+        if (!isset(self::$instance)) {
             //sometimes during controller::_construct instance is asked already twice, so we have to make it instantly not null
-            self::$instance = false;
-            self::$instance = new controller($configurationFile);
+            $controller = new controller($configurationFile);
+            self::$instance = $controller;
         }
         return self::$instance;
     }
@@ -62,7 +61,7 @@ class controller
         ob_start();
         $corePath = dirname(__FILE__) . '/';
         include_once($corePath . "PathsManager.class.php");
-        include_once($corePath . "ConfigManager.class.php");
+        include_once($corePath . "ConfigManager.php");
         include_once($corePath . "Config.class.php");
         include_once($corePath . "AutoLoadManager.php");
         $this->configManager = new ConfigManager();
@@ -143,9 +142,7 @@ class controller
 
     protected function parseRequestParameters()
     {
-        if (!empty($_SERVER['HTTP_HOST'])) {
-            $this->domainName = $_SERVER['HTTP_HOST'];
-        }
+        $this->domainName = $_SERVER['HTTP_HOST'] ?? '';
         if ($this->isSsl()) {
             $this->protocol = 'https://';
         } else {
@@ -194,7 +191,10 @@ class controller
             $this->parseFormData();
             $this->detectFileName();
 
-            $className = $this->applicationName . 'Application';
+            $className = '\ZxArt\Controllers\\' . ucfirst($this->applicationName);
+            if (!class_exists($className)) {
+                $className = $this->applicationName . 'Application';
+            }
             $this->application = new $className($this, $this->applicationName);
             $this->requestParameters = $this->findRequestParameters($this->requestedPath);
             $result = $this->application->initialize();
@@ -278,9 +278,9 @@ class controller
             if ($this->forceDebug) {
                 $this->debugMode = true;
             } elseif (
-                strstr($this->domainName, 'localhost') ||
-                strstr($this->domainName, '.local') ||
-                strstr($this->domainName, '.loc') ||
+                str_contains($this->domainName, 'localhost') ||
+                str_contains($this->domainName, '.local') ||
+                str_contains($this->domainName, '.loc') ||
                 !str_contains($this->domainName, '.')
             ) {
                 $this->debugMode = true;
@@ -321,7 +321,11 @@ class controller
         if ($this->requestURI) {
             $applicationName = reset($this->requestURI);
             $fileDirectory = $this->pathsManager->getRelativePath('applications');
-            if ($fileName = $this->pathsManager->getIncludeFilePath($fileDirectory . $applicationName . '.class.php')) {
+            $fileName = $this->pathsManager->getIncludeFilePath($fileDirectory . ucfirst($applicationName) . '.php');
+            if (!$fileName) {
+                $fileName = $this->pathsManager->getIncludeFilePath($fileDirectory . $applicationName . '.class.php');
+            }
+            if ($fileName) {
                 $this->applicationName = $applicationName;
                 array_shift($this->requestURI);
             }
@@ -345,7 +349,7 @@ class controller
         }
         //search for parameters divided with standard separator (colon?)
         foreach ($requestURI as $key => &$requestURIPart) {
-            if (strpos($requestURIPart, QUERY_PARAMETERS_SEPARATOR) !== false) {
+            if (str_contains($requestURIPart, QUERY_PARAMETERS_SEPARATOR)) {
                 $strings = explode(QUERY_PARAMETERS_SEPARATOR, $requestURIPart);
                 if (!isset($foundParameters[$strings[0]])) {
                     $foundParameters[$strings[0]] = $strings[1];
@@ -363,10 +367,10 @@ class controller
 
         //strip current subdirectory from request string if working not from the root directory on server
         if ($this->directoryName != '') {
-            if (strpos($requestURI, $this->directoryName) === 0) {
+            if (str_starts_with($requestURI, $this->directoryName)) {
                 $requestString = substr($requestString, strlen($this->directoryName));
             } else {
-                if (strpos($requestURI, '/' . $this->directoryName) === 0) {
+                if (str_starts_with($requestURI, '/' . $this->directoryName)) {
                     $requestString = substr($requestString, strlen('/' . $this->directoryName));
                 }
             }
@@ -397,12 +401,12 @@ class controller
         }
 
         if ($this->domainURL != '') {
-            if (strpos($newURL, $this->domainURL) === 0) {
+            if (str_starts_with($newURL, $this->domainURL)) {
                 $newURL = substr($newURL, strlen($this->domainURL));
             }
         }
         if ($this->directoryName != '') {
-            if (strpos($newURL, $this->directoryName) === 0) {
+            if (str_starts_with($newURL, $this->directoryName)) {
                 $newURL = substr($newURL, strlen($this->directoryName));
             }
         }
@@ -634,7 +638,7 @@ class controller
                     unset($this->formData[$key]);
                 }
             }
-        } else if (isset($this->formData[$oldId])) {
+        } elseif (isset($this->formData[$oldId])) {
             $this->formData[$newId] = $this->formData[$oldId];
             unset($this->formData[$oldId]);
         }
@@ -642,7 +646,7 @@ class controller
 
     public function getRegistry(): DependencyInjectionServicesRegistry
     {
-        if (!isset($this->registry)){
+        if (!isset($this->registry)) {
             $pathsManager = $this->getPathsManager();
             $paths = $pathsManager->getIncludePaths();
             $servicesFolder = $pathsManager->getRelativePath('services');
@@ -651,7 +655,7 @@ class controller
             }
             unset($path);
 
-            $registry = new DependencyInjectionServicesRegistry($paths);
+            $registry = new DependencyInjectionServicesRegistry($this->getContainer(), $paths);
             $this->registry = $registry;
         }
         return $this->registry;
@@ -659,9 +663,18 @@ class controller
 
     public function getContainer(): Container
     {
-        if (!isset($this->container)){
-            $definitions = include('di-definitions.php');
-            $container = new Container($definitions);
+        if (!isset($this->container)) {
+            $pathsManager = $this->getPathsManager();
+            $paths = $pathsManager->getIncludePaths();
+            $coreFolder = $pathsManager->getRelativePath('core');
+            $definitions = [];
+            foreach ($paths as $path) {
+                $definitionsPath = $path . $coreFolder . 'di-definitions.php';
+                if (is_file($definitionsPath)) {
+                    $definitions[] = include($definitionsPath);
+                }
+            }
+            $container = new Container(array_merge(...$definitions));
             $this->container = $container;
         }
         return $this->container;

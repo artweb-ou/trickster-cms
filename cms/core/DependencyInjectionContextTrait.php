@@ -15,7 +15,7 @@ trait DependencyInjectionContextTrait
      *
      * @template T
      * @param class-string<T> $type
-     * @param array $options
+     * @param array|null $options
      * @param bool $forceNew
      * @param bool $updateRegistry
      * @return null|T
@@ -33,7 +33,7 @@ trait DependencyInjectionContextTrait
         return null;
     }
 
-    protected function getRegistry(): ?DependencyInjectionServicesRegistry
+    protected function getRegistry(): ?DependencyInjectionServicesRegistryInterface
     {
         return $this->registry;
     }

@@ -8,9 +8,9 @@ abstract class DataResponseConverter
      */
     abstract function convert($data);
 
-    protected function htmlToPlainText($src)
+    protected function htmlToPlainText(?string $src): string
     {
-        $result = $src;
+        $result = $src ?? '';
         $result = html_entity_decode($result, ENT_QUOTES);
         $result = preg_replace('/[\x0A]*/', '', $result);
         $result = preg_replace('#[\n\r\t]#', "", $result);
@@ -20,7 +20,6 @@ abstract class DataResponseConverter
         $result = strip_tags($result);
         $result = preg_replace('#^ +#m', "", $result); //left trim whitespaces on each line
         $result = preg_replace('#([\n]){2,}#', "\n\n", $result); //limit newlines to 2 max
-        $result = trim($result);
-        return $result;
+        return trim($result);
     }
 }

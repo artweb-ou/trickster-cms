@@ -6,7 +6,7 @@ class imageApplication extends controllerApplication
     protected $width;
     protected $height;
     protected $id;
-    protected $fileName;
+    protected $fileName = '';
     protected $layoutType;
     protected $angle;
     protected $multiplier;
@@ -28,7 +28,7 @@ class imageApplication extends controllerApplication
         }
         $result = false;
         if (is_file($originalFilePath)) {
-            if (substr(strtolower($this->fileName), -4) === '.svg') {
+            if (str_ends_with(strtolower($this->fileName), '.svg')) {
                 $result = true;
                 $this->renderer->assign('registerImage', [
                     'source',
@@ -44,12 +44,12 @@ class imageApplication extends controllerApplication
                     $originalFilePath,
                 ]);
                 if (!empty($imagePreset['images'])) {
-                    foreach ($imagePreset['images'] as &$imageInfo) {
+                    foreach ($imagePreset['images'] as $imageInfo) {
                         $this->renderer->assign('registerImage', $imageInfo);
                     }
                 }
                 if (!empty($imagePreset['filters'])) {
-                    foreach ($imagePreset['filters'] as &$filter) {
+                    foreach ($imagePreset['filters'] as $filter) {
                         if (isset($filter[1])) {
                             $filter[1] = $this->applyMultiplier($filter[1]);
                         }

@@ -329,7 +329,9 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
                 if ($this->sessionStorageEnabled) {
                     $this->serverSessionManager->set('currentLanguage' . $groupName, $code);
                 }
-                setcookie('cl_' . $groupName, $code, time() + 30 * 24 * 60 * 60, '/');
+                if (!headers_sent()) {
+                    setcookie('cl_' . $groupName, $code, time() + 30 * 24 * 60 * 60, '/');
+                }
             }
         }
     }
@@ -398,5 +400,15 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
     {
         $structureManager = $this->getService('structureManager');
         return $structureManager->getElementById($this->getCurrentLanguageId($groupName));
+    }
+
+    public function getLanguagesIdsMap(?string $groupName = null)
+    {
+        $result = [];
+        $groupName = $groupName ?: $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        foreach ($this->getLanguagesList($groupName) as $language) {
+            $result[$language->iso6393] = $language->id;
+        }
+        return $result;
     }
 }

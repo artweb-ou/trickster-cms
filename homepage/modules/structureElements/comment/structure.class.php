@@ -43,10 +43,7 @@ class commentElement extends structureElement implements MetadataProviderInterfa
         $moduleStructure['approved'] = 'checkbox';
     }
 
-    /**
-     * @return structureElement|null
-     */
-    public function getTarget()
+    public function getTarget(): ?structureElement
     {
         $result = null;
         if ($targetId = $this->getTargetId()) {
@@ -98,7 +95,7 @@ class commentElement extends structureElement implements MetadataProviderInterfa
         $votesManager = $this->getService('votesManager');
         $user = $this->getService('user');
         if ($votesList = $votesManager->getElementVotesList($this->id)) {
-            foreach ($votesList as &$vote) {
+            foreach ($votesList as $vote) {
                 if ($vote['userId'] !== $user->id) {
                     if ($vote['value'] > 0) {
                         $votesValue++;
@@ -151,7 +148,7 @@ class commentElement extends structureElement implements MetadataProviderInterfa
     public function getInitialTarget()
     {
         $targetElement = $this->getTarget();
-        if ($targetElement->structureType == 'comment') {
+        if ($targetElement && $targetElement->structureType === 'comment') {
             /**
              * @var commentElement $targetElement
              */

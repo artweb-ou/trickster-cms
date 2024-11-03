@@ -73,7 +73,7 @@ class ElementsListCache
     {
         if ($this->elements === null) {
             $this->idList = $this->cache->get($this->cacheId . ':' . $this->cacheKey);
-            if ($this->idList !== false) {
+            if ($this->idList !== null) {
                 $this->elements = [];
                 foreach ($this->idList as $id) {
                     if ($element = $this->structureManager->getElementById($id)) {
