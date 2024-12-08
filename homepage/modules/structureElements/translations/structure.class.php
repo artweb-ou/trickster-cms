@@ -12,7 +12,7 @@ class translationsElement extends TranslationsStructureElement
 
     protected function initialize()
     {
-        $this->translationsLanguagesGroup = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        $this->translationsLanguagesGroup = 'public_root';
     }
 
     protected function setModuleStructure(&$moduleStructure)
