@@ -123,7 +123,7 @@ class controller
         if ($enabledPluginsInfo = $this->configManager->get('main.enabledPlugins')) {
             $this->enabledPlugins = array_keys($enabledPluginsInfo);
             foreach ($enabledPluginsInfo as $pluginName => $pluginPath) {
-                if ($pluginName == 'project') {
+                if ($pluginName === 'project') {
                     $this->addIncludePath(ROOT_PATH . $pluginPath);
                 } else {
                     $this->addIncludePath(ROOT_PATH . $this->pathsManager->getRelativePath('trickster') . $pluginPath);
@@ -172,13 +172,13 @@ class controller
     protected function isSsl()
     {
         if (isset($_SERVER['HTTPS'])) {
-            if ('on' == strtolower($_SERVER['HTTPS'])) {
+            if (strtolower($_SERVER['HTTPS']) === 'on') {
                 return true;
             }
-            if ('1' == $_SERVER['HTTPS']) {
+            if ($_SERVER['HTTPS'] == '1') {
                 return true;
             }
-        } elseif (isset($_SERVER['SERVER_PORT']) && ('443' == $_SERVER['SERVER_PORT'])) {
+        } elseif (isset($_SERVER['SERVER_PORT']) && ($_SERVER['SERVER_PORT'] == '443')) {
             return true;
         }
         return false;
@@ -445,7 +445,7 @@ class controller
                     foreach ($elementData as $propertyName => $propertyValue) {
                         if (is_array($propertyValue)) {
                             $languageId = $propertyName;
-                            foreach ($propertyValue as $fieldName => &$fieldValue) {
+                            foreach ($propertyValue as $fieldName => $fieldValue) {
                                 $formData[$elementId][$languageId][$fieldName][$fileProperty] = $fieldValue;
                             }
                         } else {
