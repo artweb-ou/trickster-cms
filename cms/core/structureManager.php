@@ -709,7 +709,7 @@ class structureManager implements DependencyInjectionContextInterface
     public function createElement(
         string $type,
         string $action,
-        ?int $parentElementId = null,
+        int|string|null $parentElementId = null,
         bool $setCurrent = false,
         ?string $linkType = null): ?structureElement
     {
