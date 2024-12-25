@@ -17,11 +17,9 @@ trait CacheOperatingElement
 
 	/**
 	 * @param string $key
-	 * @param $cacheLifeTime
-	 * @return ElementsListCache
-	 */
-	protected function getElementsListCache($key, $cacheLifeTime)
-	{
+     */
+	protected function getElementsListCache($key, $cacheLifeTime): ElementsListCache
+    {
 		$list = new ElementsListCache();
 		$list->setCacheId($this->id);
 		$list->setCacheKey($key);
@@ -36,14 +34,14 @@ trait CacheOperatingElement
 		return $this->getCache()->get($this->id . ':' . $key);
 	}
 
-	protected function setCacheKey($key, $value, $lifeTime)
-	{
+	protected function setCacheKey($key, $value, $lifeTime): void
+    {
 		$this->registerCacheKey($this->id . ':' . $key);
 		$this->getCache()->set($this->id . ':' . $key, $value, $lifeTime);
 	}
 
-	protected function registerCacheKey($key)
-	{
+	protected function registerCacheKey($key): void
+    {
 		if (($keys = $this->getCache()->get($this->id . ':k')) === null) {
 			$keys = [];
 		}
@@ -51,8 +49,8 @@ trait CacheOperatingElement
 		$this->getCache()->set($this->id . ':k', $keys, 3600 * 24 * 7);
 	}
 
-	protected function deleteCache($key)
-	{
+	protected function deleteCache($key): null
+    {
 		return $this->getCache()->delete($this->id . ':' . $key);
 	}
 }

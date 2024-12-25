@@ -31,11 +31,11 @@ trait FilesElementTrait
      * @param string $propertyName
      * @return fileElement[]
      */
-    public function getFilesList($propertyName = 'connectedFile')
+    public function getFilesList($propertyName = 'connectedFile'): array
     {
         if (!isset($this->filesList[$propertyName])) {
             $cache = $this->getElementsListCache($propertyName, 1200);
-            if (($this->filesList[$propertyName] = $cache->load()) === false) {
+            if (($this->filesList[$propertyName] = $cache->load()) === null) {
                 $this->filesList[$propertyName] = [];
                 /**
                  * @var structureManager $structureManager
@@ -51,7 +51,7 @@ trait FilesElementTrait
 
         }
 
-        return $this->filesList[$propertyName];
+        return $this->filesList[$propertyName] ?? [];
     }
 
     /**

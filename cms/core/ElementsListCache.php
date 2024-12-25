@@ -27,12 +27,13 @@ class ElementsListCache
     /**
      * @var structureElement[]
      */
-    private $elements;
+    private ?array $elements;
+    private bool $isLoaded = false;
 
     /**
      * @param Cache $cache
      */
-    public function setCache($cache)
+    public function setCache($cache): void
     {
         $this->cache = $cache;
     }
@@ -40,7 +41,7 @@ class ElementsListCache
     /**
      * @param mixed $cacheKey
      */
-    public function setCacheKey($cacheKey)
+    public function setCacheKey($cacheKey): void
     {
         $this->cacheKey = $cacheKey;
     }
@@ -48,7 +49,7 @@ class ElementsListCache
     /**
      * @param int $cacheLifeTime
      */
-    public function setCacheLifeTime($cacheLifeTime)
+    public function setCacheLifeTime($cacheLifeTime): void
     {
         $this->cacheLifeTime = $cacheLifeTime;
     }
@@ -56,7 +57,7 @@ class ElementsListCache
     /**
      * @param int $cacheId
      */
-    public function setCacheId($cacheId)
+    public function setCacheId($cacheId): void
     {
         $this->cacheId = $cacheId;
     }
@@ -64,15 +65,16 @@ class ElementsListCache
     /**
      * @param structureManager $structureManager
      */
-    public function setStructureManager($structureManager)
+    public function setStructureManager($structureManager): void
     {
         $this->structureManager = $structureManager;
     }
 
-    public function load()
+    public function load(): ?array
     {
-        if ($this->elements === null) {
+        if (!$this->isLoaded) {
             $this->idList = $this->cache->get($this->cacheId . ':' . $this->cacheKey);
+            $this->isLoaded = true;
             if ($this->idList !== null) {
                 $this->elements = [];
                 foreach ($this->idList as $id) {
@@ -81,14 +83,14 @@ class ElementsListCache
                     }
                 }
             } else {
-                $this->elements = false;
+                $this->elements = null;
             }
         }
 
         return $this->elements;
     }
 
-    public function save($elements)
+    public function save($elements): void
     {
         $this->elements = $elements;
         $this->idList = [];
@@ -103,12 +105,12 @@ class ElementsListCache
         $this->cache->set($this->cacheId . ':' . $this->cacheKey, $this->idList, $this->cacheLifeTime);
     }
 
-    public function loaded()
+    public function loaded(): bool
     {
         return !empty($this->elements);
     }
 
-    protected function registerElementCacheKey($id, $key)
+    protected function registerElementCacheKey($id, $key): void
     {
         if (!($keys = $this->cache->get($id . ':k'))) {
             $keys = [];

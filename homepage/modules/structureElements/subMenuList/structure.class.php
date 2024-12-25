@@ -53,7 +53,7 @@ class subMenuListElement extends menuStructureElement implements ConfigurableLay
                 $key = 'il:0';
             }
             $cache = $this->getElementsListCache($key, 36000);
-            if (($this->subMenuList = $cache->load()) === false) {
+            if (($this->subMenuList = $cache->load()) === null) {
 
                 $this->subMenuList = [];
                 $directSubMenuList = [];

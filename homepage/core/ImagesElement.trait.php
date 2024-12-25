@@ -19,7 +19,7 @@ trait ImagesElementTrait
         $structureManager = $this->getService('structureManager');
         if ($this->imagesList === null) {
             $cache = $this->getElementsListCache('imgs', 3600);
-            if (($this->imagesList = $cache->load()) === false) {
+            if (($this->imagesList = $cache->load()) === null) {
                 $this->imagesList = [];
                 if ($childElements = $structureManager->getElementsChildren($this->id, null, $this->getImagesLinkType())) {
                     foreach ($childElements as $childElement) {
