@@ -711,7 +711,8 @@ class structureManager implements DependencyInjectionContextInterface
         string $action,
         int|string|null $parentElementId = null,
         bool $setCurrent = false,
-        ?string $linkType = null): ?structureElement
+        ?string $linkType = null
+    ): ?structureElement
     {
         if ($parentElementId === null) {
             $parentElementId = $this->getRootElementId();

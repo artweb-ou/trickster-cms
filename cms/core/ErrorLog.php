@@ -13,7 +13,7 @@ final class ErrorLog
 
     private function __construct()
     {
-        $this->defaultEnvironmentUrl = 'http://localhost';
+        $this->defaultEnvironmentUrl = '';
 
         $todayDate = (new \DateTime())->format('Y-m-d');
         $pathsManager = controller::getInstance()->getPathsManager();

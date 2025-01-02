@@ -2,6 +2,7 @@
 
 interface BreadcrumbsInfoProvider
 {
-    public function getBreadcrumbsTitle();
-    public function getBreadcrumbsUrl();
+    public function isBreadCrumb(): bool;
+    public function getBreadcrumbsTitle(): string;
+    public function getBreadcrumbsUrl(): string;
 }

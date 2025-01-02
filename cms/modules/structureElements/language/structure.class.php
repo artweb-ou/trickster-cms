@@ -11,6 +11,7 @@
 class languageElement extends structureElement implements MetadataProviderInterface, BreadcrumbsInfoProvider
 {
     use MetadataProviderTrait;
+
     public $dataResourceName = 'module_language';
     public $defaultActionName = 'show';
     public $role = 'container';
@@ -485,7 +486,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         return $result;
     }
 
-    public function getBreadcrumbsTitle()
+    public function getBreadcrumbsTitle(): string
     {
         if ($this->getService('controllerApplication')->getApplicationName() !== 'admin') {
             $firstPageElement = $this->getFirstPageElement();
@@ -496,7 +497,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         return $this->getTitle();
     }
 
-    public function getBreadcrumbsUrl()
+    public function getBreadcrumbsUrl(): string
     {
         if ($this->getService('controllerApplication')->getApplicationName() !== 'admin') {
             $firstPageElement = $this->getFirstPageElement();
@@ -505,5 +506,10 @@ class languageElement extends structureElement implements MetadataProviderInterf
             }
         }
         return $this->getUrl();
+    }
+
+    public function isBreadCrumb(): bool
+    {
+        return true;
     }
 }

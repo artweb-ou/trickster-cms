@@ -3,19 +3,19 @@
 use Illuminate\Database\Connection;
 
 return [
-    \controller::class => static function () {
+    controller::class => static function () {
         return controller::getInstance();
     },
-    \ConfigManager::class => static function (controller $controller) {
+    ConfigManager::class => static function (controller $controller) {
         return $controller->getConfigManager();
     },
-    \PathsManager::class => static function (controller $controller) {
+    PathsManager::class => static function (controller $controller) {
         return $controller->getApplication()->getService('PathsManager');
     },
-    \LanguagesManager::class => static function (controller $controller) {
+    LanguagesManager::class => static function (controller $controller) {
         return $controller->getApplication()->getService('LanguagesManager');
     },
-    \structureManager::class => static function (controller $controller) {
+    structureManager::class => static function (controller $controller) {
         return $controller->getApplication()->getService('structureManager');
     },
     Connection::class => static function (controller $controller) {

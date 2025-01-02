@@ -27,7 +27,7 @@
 			'galleryResizeType' => 'aspected',
 			'galleryHeight' => 0.5625,
 			'thumbnailsSelectorEnabled' => true
-		], 'gallery', $deviceType)};
+		], 'gallery', 'desktop')};
 
 	</script>
 

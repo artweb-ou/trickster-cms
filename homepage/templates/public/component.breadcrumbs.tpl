@@ -9,6 +9,6 @@
                    href="{$locationElement.URL}">{$locationElement.title}</a>{if !$locationElement@last} {$delimiter} {/if}
             {/foreach}
         </div>
+        <script type="application/ld+json">{$breadcrumbsManager->getLdJson()}</script>
     {/if}
-    <script type="application/ld+json">{$breadcrumbsManager->getLdJson()}</script>
 {/if}

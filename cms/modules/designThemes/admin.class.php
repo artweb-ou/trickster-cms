@@ -37,6 +37,7 @@ class adminDesignTheme extends DesignTheme
             'logics.tableComponent.js',
             'logics.imagePreview.js',
             'logics.jsColor.js',
+            'logics.calendarSelector.js',
             'component.tableComponent.js',
             'component.addNewElement.js',
             'component.ajaxItemSearch.js',
@@ -56,6 +57,7 @@ class adminDesignTheme extends DesignTheme
             'component.animation.js',
             'component.imagePreview.js',
             'component.FormControlsButton.js',
+            'component.calendarSelector.js',
             'triangles.js',
         ];
     }
