@@ -30,26 +30,25 @@ class imageProcessRendererPlugin extends rendererPlugin
 
     public function assign($attributeName, $value)
     {
-        if (method_exists($this->renderingEngine, $attributeName)) {
-            if (!isset($value[0])) {
-                $value[0] = null;
-            }
-            if (!isset($value[1])) {
-                $value[1] = null;
-            }
-            if (!isset($value[2])) {
-                $value[2] = null;
-            }
-            if (!isset($value[3])) {
-                $value[3] = null;
-            }
-            if (!isset($value[4])) {
-                $value[4] = null;
-            }
-            $result = $this->renderingEngine->$attributeName($value[0], $value[1], $value[2], $value[3], $value[4]);
-            if ($attributeName === 'registerExport') {
-                $this->exportOperation = $result;
-            }
+        if ($attributeName === 'registerImage') {
+            $this->renderingEngine->registerImage($value[0], $value[1]);
+        } elseif ($attributeName === 'registerExport') {
+            $result = $this->renderingEngine->registerExport(
+                $value[0],
+                $value[1],
+                $value[2] !== '' ? $value[2] : null,
+                $value[3] ?? null,
+                $value[4] ?? false
+            );
+            $this->exportOperation = $result;
+        } elseif ($attributeName === 'registerFilter') {
+            $this->renderingEngine->registerFilter(
+                $value[0],
+                $value[1] ?? null,
+                $value[2] ?? null,
+                $value[3] ?? null,
+                $value[4] ?? null,
+            );
         }
     }
 

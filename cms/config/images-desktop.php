@@ -3,7 +3,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=170, height=170',
+                ['width' => 170, 'height' => 170],
             ],
         ],
         'format' => [
@@ -15,7 +15,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=1920, height=1920',
+                ['width' => 1920, 'height' => 1920],
             ],
         ],
         'format' => [
@@ -26,8 +26,7 @@
         ],
     ],
     'customBackground' => [
-        'filters' => [
-        ],
+        'filters' => [],
         'format' => [
             null,
             'jpg',
@@ -39,7 +38,7 @@
         'filters' => [
             [
                 'strictResize',
-                'width=28, height=16',
+                ['width' => 28, 'height' => 16],
             ],
         ],
         'format' => [
@@ -51,7 +50,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=512, height=512',
+                ['width' => 512, 'height' => 512],
             ],
         ],
         'format' => [
@@ -63,7 +62,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=48,height=48',
+                ['width' => 48, 'height' => 48],
             ],
         ],
         'format' => [
@@ -75,7 +74,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=48,height=48',
+                ['width' => 48, 'height' => 48],
             ],
         ],
         'format' => [

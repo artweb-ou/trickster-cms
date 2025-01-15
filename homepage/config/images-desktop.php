@@ -3,11 +3,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=180',
+                ['width' => 180],
             ],
             [
                 'crop',
-                'width=180, height=180,color=#ffffff, soft=1',
+                ['width' => 180, 'height' => 180, 'color' => '#ffffff', 'soft' => 1],
             ],
         ],
         'format' => [
@@ -21,7 +21,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=400',
+                ['width' => 400],
             ],
         ],
         'format' => [
@@ -35,11 +35,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=300, height=300',
+                ['width' => 300, 'height' => 300],
             ],
             [
                 'crop',
-                'width=300, height=300,color=#ffffff',
+                ['width' => 300, 'height' => 300, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -53,7 +53,7 @@
         'filters' => [
             [
                 'fit',
-                'width=1415, height=325',
+                ['width' => 1415, 'height' => 325],
             ],
         ],
         'format' => [
@@ -67,7 +67,7 @@
         'filters' => [
             [
                 'fit',
-                'width=1415, height=325',
+                ['width' => 1415, 'height' => 325],
             ],
         ],
         'format' => [
@@ -81,7 +81,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=1920, height=1080',
+                ['width' => 1920, 'height' => 1080],
             ],
         ],
         'format' => [
@@ -95,7 +95,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=768, height=768',
+                ['width' => 768, 'height' => 768],
             ],
         ],
         'format' => [
@@ -109,11 +109,11 @@
         'filters' => [
             [
                 'fit',
-                'width=430, height=320',
+                ['width' => 430, 'height' => 320],
             ],
             [
                 'crop',
-                'width=430, height=320, color=#ffffff',
+                ['width' => 430, 'height' => 320, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -127,7 +127,7 @@
         'filters' => [
             [
                 'reduce',
-                'height=600',
+                ['height' => 600],
             ],
         ],
         'format' => [
@@ -141,11 +141,11 @@
         'filters' => [
             [
                 'fit',
-                'width=310, height=240',
+                ['width' => 310, 'height' => 240],
             ],
             [
                 'crop',
-                'width=310, height=240, color=#ffffff',
+                ['width' => 310, 'height' => 240, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -159,11 +159,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=1000',
+                ['width' => 1000],
             ],
             [
                 'crop',
-                'color=#ffffff',
+                ['color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -177,11 +177,11 @@
         'filters' => [
             [
                 'fit',
-                'width=250, height=190',
+                ['width' => 250, 'height' => 190],
             ],
             [
                 'crop',
-                'width=250, height=190, color=#ffffff',
+                ['width' => 250, 'height' => 190, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -195,7 +195,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=1920, height=1080',
+                ['width' => 1920, 'height' => 1080],
             ],
         ],
         'format' => [
@@ -209,7 +209,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=1920, height=1080',
+                ['width' => 1920, 'height' => 1080],
             ],
         ],
         'format' => [
@@ -223,11 +223,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=310, height=310',
+                ['width' => 310, 'height' => 310],
             ],
             [
                 'crop',
-                'width=310, height=310,color=#ffffff',
+                ['width' => 310, 'height' => 310, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -237,15 +237,16 @@
             80,
         ],
     ],
+
     'linklistItemThumbnail' => [
         'filters' => [
             [
                 'fit',
-                'width=353,height=310',
+                ['width' => 353, 'height' => 310],
             ],
             [
                 'crop',
-                'width=353,height=310,color=#ffffff',
+                ['width' => 353, 'height' => 310, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -259,11 +260,11 @@
         'filters' => [
             [
                 'fill',
-                'width=600,height=720',
+                ['width' => 600, 'height' => 720],
             ],
             [
                 'crop',
-                'width=600,height=720',
+                ['width' => 600, 'height' => 720],
             ],
         ],
         'format' => [
@@ -277,7 +278,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=128,height=128',
+                ['width' => 128, 'height' => 128],
             ],
         ],
         'format' => [
@@ -289,11 +290,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=250',
+                ['width' => 250],
             ],
             [
                 'crop',
-                'width=250,height=110,color=#ffffff',
+                ['width' => 250, 'height' => 110, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -307,7 +308,7 @@
         'filters' => [
             [
                 'reduce',
-                'height=310',
+                ['height' => 310],
             ],
         ],
         'format' => [
@@ -321,11 +322,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=310, height=310',
+                ['width' => 310, 'height' => 310],
             ],
             [
                 'crop',
-                'width=310, height=310,color=#ffffff',
+                ['width' => 310, 'height' => 310, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -339,7 +340,7 @@
         'filters' => [
             [
                 'reduce',
-                'height=252, width=379',
+                ['width' => 379, 'height' => 252],
             ],
         ],
         'format' => [
@@ -351,11 +352,11 @@
         'filters' => [
             [
                 'fit',
-                'width=256, height=227',
+                ['width' => 256, 'height' => 227],
             ],
             [
                 'crop',
-                'width=256, height=227, color=#ffffff',
+                ['width' => 256, 'height' => 227, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -369,7 +370,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=400',
+                ['width' => 400],
             ],
         ],
         'format' => [
@@ -381,11 +382,11 @@
         'filters' => [
             [
                 'fit',
-                'width=211, height=149',
+                ['width' => 211, 'height' => 149],
             ],
             [
                 'crop',
-                'width=211, height=149',
+                ['width' => 211, 'height' => 149],
             ],
         ],
         'format' => [
@@ -397,7 +398,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=100, height=100',
+                ['width' => 100, 'height' => 100],
             ],
         ],
         'format' => [
@@ -409,11 +410,11 @@
         'filters' => [
             [
                 'fit',
-                'width=610, height=671',
+                ['width' => 610, 'height' => 671],
             ],
             [
                 'crop',
-                'width=610, height=671',
+                ['width' => 610, 'height' => 671],
             ],
         ],
         'format' => [
@@ -427,11 +428,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=310, height=310',
+                ['width' => 310, 'height' => 310],
             ],
             [
                 'crop',
-                'width=310, height=310,color=#ffffff',
+                ['width' => 310, 'height' => 310, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -445,11 +446,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=411, height=431',
+                ['width' => 411, 'height' => 431],
             ],
             [
                 'crop',
-                'width=411, height=431',
+                ['width' => 411, 'height' => 431],
             ],
         ],
         'format' => [
@@ -463,25 +464,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=400, height=400',
+                ['width' => 400, 'height' => 400],
             ],
             [
                 'crop',
-                'width=400, height=400, color=#ffffff',
-            ],
-        ],
-        'format' => [
-            null,
-            'jpg',
-            '',
-            80,
-        ],
-    ],
-    'productionShort' => [
-        'filters' => [
-            [
-                'reduce',
-                'width=320, height=320',
+                ['width' => 400, 'height' => 400, 'color' => '#ffffff'],
             ],
         ],
         'format' => [
@@ -495,7 +482,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=320, height=320',
+                ['width' => 320, 'height' => 320],
             ],
         ],
         'format' => [
@@ -507,7 +494,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=400, height=400',
+                ['width' => 400, 'height' => 400],
             ],
         ],
         'format' => [
@@ -519,7 +506,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=500, height=500',
+                ['width' => 500, 'height' => 500],
             ],
         ],
         'format' => [
@@ -531,11 +518,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=144, height=141',
+                ['width' => 144, 'height' => 141],
             ],
             [
                 'crop',
-                'width=144, height=141',
+                ['width' => 144, 'height' => 141],
             ],
         ],
         'format' => [
@@ -547,7 +534,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=400, height=300',
+                ['width' => 400, 'height' => 300],
             ],
         ],
         'format' => [
@@ -559,7 +546,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=1200',
+                ['width' => 1200],
             ],
         ],
         'format' => [
@@ -571,7 +558,7 @@
         'filters' => [
             [
                 'reduce',
-                'width=200, height=300',
+                ['width' => 200, 'height' => 300],
             ],
         ],
         'format' => [
@@ -585,11 +572,11 @@
         'filters' => [
             [
                 'reduce',
-                'width=64, height=64',
+                ['width' => 64, 'height' => 64],
             ],
             [
                 'crop',
-                'width=64, height=64',
+                ['width' => 64, 'height' => 64],
             ],
         ],
         'format' => [
@@ -597,12 +584,11 @@
             null,
         ],
     ],
-
     'subArticleShortImage' => [
         'filters' => [
             [
                 'reduce',
-                'width=1200',
+                ['width' => 1200],
             ],
         ],
         'format' => [
