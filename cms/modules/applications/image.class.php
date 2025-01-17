@@ -72,8 +72,14 @@ class imageApplication extends controllerApplication
                     $this->renderer->assign('registerExport', null);
                 }
                 $this->renderer->setContentDisposition('inline');
-                $this->renderer->display();
-                $result = true;
+                try {
+                    $this->renderer->display();
+                    $result = true;
+                }
+                catch (Exception $e) {
+                    $this->renderer->fileNotFound();
+                }
+
             }
         }
 

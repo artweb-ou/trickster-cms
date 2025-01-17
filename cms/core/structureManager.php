@@ -707,11 +707,11 @@ class structureManager implements DependencyInjectionContextInterface
      * Creates an empty structure element with empty data
      */
     public function createElement(
-        string $type,
-        string $action,
+        string          $type,
+        string          $action,
         int|string|null $parentElementId = null,
-        bool $setCurrent = false,
-        ?string $linkType = null
+        bool            $setCurrent = false,
+        ?string         $linkType = null,
     ): ?structureElement
     {
         if ($parentElementId === null) {
@@ -1151,7 +1151,7 @@ class structureManager implements DependencyInjectionContextInterface
         $this->linksManager->reRegisterElement($originalId, $newId);
         if ($parentElements = $this->getElementsParents($newId)) {
             foreach ($parentElements as $parentElement) {
-                if (isset($this->elementsList[$newId])){
+                if (isset($this->elementsList[$newId])) {
                     $parentElement->childrenList[] = $this->elementsList[$newId];
                 }
             }
@@ -1309,6 +1309,32 @@ class structureManager implements DependencyInjectionContextInterface
                 }
             }
         }
+    }
+
+    public function findPath(int $elementId, int $parentId): ?array
+    {
+        $shortestChain = $this->findShortestParentsChain($elementId, $parentId);
+        if (!$shortestChain) {
+            return null;
+        }
+        $shortestChain = array_reverse($shortestChain);
+        array_shift($shortestChain);
+
+        $db = $this->getService('db');
+        $records = $db->table('structure_elements')
+            ->select(['id', 'structureName'])
+            ->whereIn('id', $shortestChain)
+            ->get();
+        $map = [];
+        foreach ($records as $record) {
+            $map[$record['id']] = $record['structureName'];
+        }
+
+        $path = [];
+        foreach ($shortestChain as $item) {
+            $path[] = $map[$item] ?? null;
+        }
+        return $path;
     }
 
     /**
@@ -1611,4 +1637,11 @@ class structureManager implements DependencyInjectionContextInterface
             $this->setElementCacheKey($elementId, 'e', $this->elementsList[$elementId], $this->cacheLifeTime);
         }
     }
+
+    public function getRequestedPath(): array
+    {
+        return $this->requestedPath;
+    }
+
+
 }

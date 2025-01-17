@@ -15,15 +15,9 @@ lang="{$currentLanguage->iso6391}"
 	<link rel="stylesheet" type="text/css" href="{$controller->baseURL}css/set:{$theme->getCode()}/{if !empty($CSSFileName)}file:{$CSSFileName}.css{/if}" />
 	{if !empty($jsScripts)}{foreach $jsScripts as $script}<script defer type="text/javascript" src="{$script}"></script>{/foreach}{/if}
 	<link rel="alternate" type="application/rss+xml" href="{$controller->baseURL}rss/{$currentLanguage->iso6393}/" title="RSS" />
-	{foreach $languagesList as $language}
-		{if !$language->requested}
-			<link rel="alternate" hreflang="{$language->iso6391}" href="{$controller->baseURL}redirect/type:language/element:{$currentElement->id}/code:{$language->iso6393}/" />
-		{/if}
-	{/foreach}
+	{include file=$theme->template("index.head.language_links.tpl")}
 	{if $currentElement instanceof LdJsonProviderInterface}{$currentElement->getLdJsonScriptHtml()}{/if}
-	{if $currentLanguage->hidden}
-		<meta name="robots" content="noindex">
-	{/if}
+	{if $currentLanguage->hidden}<meta name="robots" content="noindex">{/if}
 </head>
 <body data-page="{if $currentElement->structureType}{$currentElement->structureType|lower}{/if}" class="{if $currentLanguage->patternBackground} language_pattern_background{/if}{if $firstPageElement->requested}homepage{/if}" {if $currentLanguage->backgroundImage} style="background-image:url('{$controller->baseURL}image/type:background/id:{$currentLanguage->backgroundImage}/filename:{$currentLanguage->backgroundImageOriginalName}');{if $currentLanguage->patternBackground}background-repeat: repeat; background-size: auto{/if}"{/if}>
 

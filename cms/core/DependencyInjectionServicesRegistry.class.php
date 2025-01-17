@@ -54,8 +54,6 @@ class DependencyInjectionServicesRegistry implements DependencyInjectionServices
                 }
                 $serviceContainer->setRegistry($this);
 
-                $container = controller::getInstance()->getContainer();
-
                 if ($service = $serviceContainer->makeInstance()) {
                     if ($updateRegistry) {
                         $this->services[$type] = $service;
@@ -67,7 +65,7 @@ class DependencyInjectionServicesRegistry implements DependencyInjectionServices
                     //use it in it's functionality
                     if ($service instanceof DependencyInjectionContextInterface) {
                         $service->setRegistry($this);
-                        $service->setContainer($container);
+                        $service->setContainer($this->container);
                     }
                 }
             }

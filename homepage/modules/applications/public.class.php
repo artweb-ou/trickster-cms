@@ -79,7 +79,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $this->renderer->assign('socialDataManager', $socialDataManager);
 
         $pageNotFound = $controller->requestedFile;
-
+        $languagesManager = $this->getService('LanguagesManager');
         $visitorsManager = $this->getService(VisitorsManager::class);
         $visitorRecorded = $visitorsManager->isVisitationRecorded();
         $this->renderer->assign('newVisitor', !$visitorRecorded);
@@ -95,8 +95,8 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                 $redirectionManager->checkDomainRedirection();
 
                 //check if we need to redirect user to display firstpage
-                if ($currentElement->structureType == 'root' || $currentElement->structureType == 'language') {
-                    if ($currentLanguageId = $this->getService('LanguagesManager')->getCurrentLanguageId()) {
+                if ($currentElement->structureType === 'root' || $currentElement->structureType === 'language') {
+                    if ($currentLanguageId = $languagesManager->getCurrentLanguageId()) {
                         /**
                          * @var $currentLanguageElement languageElement
                          */
@@ -106,7 +106,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                             } elseif ($contentElements = $currentLanguageElement->getChildrenList('content')) {
                                 $firstMenu = reset($contentElements);
                                 $controller->restart($firstMenu->URL);
-                            } elseif ($currentElement->structureType == 'root') {
+                            } elseif ($currentElement->structureType === 'root') {
                                 // site doesn't work if root is current
                                 $controller->restart($currentLanguageElement->URL);
                             }
@@ -153,6 +153,10 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                     $this->renderer->assign('twitterData', $currentElement->getTwitterData());
                 }
 
+                $languageLinksService = $this->getService(LanguageLinksService::class);
+                $languageLinks = $languageLinksService->getLanguageLinks($currentElement);
+
+                $this->renderer->assign('languageLinks', $languageLinks);
                 $this->renderer->assign('jsScripts', $this->getJsScripts($currentElement));
                 $this->renderer->assign('application', $this);
                 $this->renderer->assign('currentMetaDescription', $currentMetaDescription);
@@ -162,7 +166,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                 $this->renderer->assign('currentCanonicalUrl', $currentCanonicalUrl);
                 $this->renderer->assign('currentElement', $currentElement);
                 $this->renderer->assign('structureManager', $structureManager);
-                $this->renderer->assign('LanguagesManager', $this->getService('LanguagesManager'));
+                $this->renderer->assign('LanguagesManager', $languagesManager);
                 $requestHeadersManager = $this->getService('requestHeadersManager');
                 $this->renderer->assign('userAgent', $requestHeadersManager->getUserAgent());
                 $this->renderer->setCacheControl('no-cache');

@@ -26,11 +26,11 @@ class DesignThemesManagerServiceContainer extends DependencyInjectionServiceCont
             }
         }
         if (!($currentThemeCode = $this->getOption('currentThemeCode'))) {
-            if ($controllerApplication = $this->registry->getService('controllerApplication')) {
-                if ($controllerApplication instanceof ThemeCodeProviderInterface) {
-                    $currentThemeCode = $controllerApplication->getThemeCode();
+                if ($controllerApplication = $this->registry->getService('controllerApplication')) {
+                    if ($controllerApplication instanceof ThemeCodeProviderInterface) {
+                        $currentThemeCode = $controllerApplication->getThemeCode();
+                    }
                 }
-            }
             if (!$currentThemeCode) {
                 $currentThemeCode = $configManager->get('main.publicTheme');
             }

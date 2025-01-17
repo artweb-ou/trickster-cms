@@ -36,7 +36,7 @@ class imageProcessRendererPlugin extends rendererPlugin
             $result = $this->renderingEngine->registerExport(
                 $value[0],
                 $value[1],
-                $value[2] !== '' ? $value[2] : null,
+                ($value[2] ?? null) !== '' ? $value[2] : null,
                 $value[3] ?? null,
                 $value[4] ?? false
             );

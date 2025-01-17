@@ -647,13 +647,13 @@ class controller
     public function getRegistry(): DependencyInjectionServicesRegistry
     {
         if (!isset($this->registry)) {
-            $pathsManager = $this->getPathsManager();
-            $paths = $pathsManager->getIncludePaths();
-            $servicesFolder = $pathsManager->getRelativePath('services');
-            foreach ($paths as &$path) {
-                $path .= $servicesFolder;
-            }
-            unset($path);
+        $pathsManager = $this->getPathsManager();
+        $paths = $pathsManager->getIncludePaths();
+        $servicesFolder = $pathsManager->getRelativePath('services');
+        foreach ($paths as &$path) {
+            $path .= $servicesFolder;
+        }
+        unset($path);
 
             $registry = new DependencyInjectionServicesRegistry($this->getContainer(), $paths);
             $this->registry = $registry;
@@ -675,7 +675,7 @@ class controller
                 }
             }
             $container = new Container(array_merge(...$definitions));
-            $this->container = $container;
+                $this->container = $container;
         }
         return $this->container;
     }
