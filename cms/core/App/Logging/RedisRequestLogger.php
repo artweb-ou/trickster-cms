@@ -28,11 +28,11 @@ class RedisRequestLogger
     /**
      * Logs initial request information with automatic expiration.
      *
-     * @param LogRequestDTO $dto DTO with request information.
-     * @return LogRecordDTO DTO with log record information including requestId and startTime.
+     * @param LogRequestDto $dto DTO with request information.
+     * @return LogRecordDto DTO with log record information including requestId and startTime.
      * @throws RedisException
      */
-    public function logRequest(LogRequestDTO $dto): LogRecordDTO
+    public function logRequest(LogRequestDto $dto): LogRecordDto
     {
         $requestId = uniqid('reqlog:', true);
 
@@ -42,30 +42,43 @@ class RedisRequestLogger
             'start_time' => $dto->startTime,
             'user_agent' => $dto->userAgent,
             'duration' => 0,
+            'completed' => false,
         ];
 
         $this->redis->hMSet($requestId, $data);
         $this->redis->expire($requestId, $this->ttl);
 
-        return new LogRecordDTO($requestId, $dto->ip, $dto->url, $dto->userAgent, $dto->startTime, 0);
+        return new LogRecordDto(
+            $requestId,
+            $dto->ip,
+            $dto->url,
+            $dto->userAgent,
+            $dto->startTime,
+            0,
+            false
+        );
     }
 
     /**
      * Updates the duration of the request execution.
      *
-     * @param LogRecordUpdateDTO $updateDTO DTO with log record update information including requestId, startTime, and endTime.
+     * @param LogRecordUpdateDto $logRecordUpdateDto DTO with log record update information including requestId, startTime, and endTime.
      * @throws RedisException
      */
-    public function updateDuration(LogRecordUpdateDTO $updateDTO): void
+    public function updateDuration(LogRecordUpdateDto $logRecordUpdateDto): void
     {
-        $duration = $updateDTO->endTime - $updateDTO->startTime;
-        $this->redis->hSet($updateDTO->requestId, 'duration', $duration);
+        $duration = $logRecordUpdateDto->endTime - $logRecordUpdateDto->startTime;
+        if (!$this->redis->exists($logRecordUpdateDto->requestId)) {
+            return;
+        }
+        $this->redis->hSet($logRecordUpdateDto->requestId, 'duration', $duration);
+        $this->redis->hSet($logRecordUpdateDto->requestId, 'completed', $logRecordUpdateDto->completed);
     }
 
     /**
      * Retrieves all log records from Redis, sorted by startTime in descending order, and returns them as a set of DTOs.
      *
-     * @return array An array of LogRecordDTO objects.
+     * @return LogRecordDto[] An array of LogRecordDTO objects.
      * @throws RedisException
      */
     public function getAllLogs(): array
@@ -76,19 +89,25 @@ class RedisRequestLogger
         foreach ($keys as $key) {
             $logData = $this->redis->hGetAll($key);
             if ($logData) {
-                $logs[] = new LogRecordDTO(
+
+                if ($logData['duration'] <= 0) {
+                    $logData['duration'] = (new \DateTime())->getTimestamp() - ($logData['start_time'] ?? 0);
+                }
+
+                $logs[] = new LogRecordDto(
                     $key,
                     $logData['ip'] ?? '',
                     $logData['url'] ?? '',
                     $logData['user_agent'] ?? '',
-                    (float)$logData['start_time'] ?? 0,
-                    (float)$logData['duration'] ?? 0
+                    (float)($logData['start_time'] ?? 0),
+                    (float)($logData['duration'] ?? 0),
+                    (bool)($logData['completed'] ?? false),
                 );
             }
         }
 
         // Sort logs by startTime in descending order
-        usort($logs, function ($log1, $log2) {
+        usort($logs, static function ($log1, $log2) {
             return $log2->startTime - $log1->startTime;
         });
 

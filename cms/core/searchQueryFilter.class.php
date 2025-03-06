@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Database\Query\Builder;
+use ZxArt\Search\ExtraSearchFiltersInterface;
+
 /**
  *  This class describes the general functionality of all typical filters used in Search.
  *  Each filter basically makes the only one procedure:
@@ -28,8 +31,8 @@ abstract class searchQueryFilter extends QueryFilter
      * so they should have method a common implementation of this method
      *
      * @param mixed $argument
-     * @param \Illuminate\Database\Query\Builder $query
-     * @return \Illuminate\Database\Query\Builder
+     * @param Builder $query
+     * @return Builder
      */
     public function getFilteredIdList($argument, $query)
     {
@@ -41,7 +44,7 @@ abstract class searchQueryFilter extends QueryFilter
         $table = $this->getTable();
         $query->where(function ($finalQuery) use ($argument, $query, $titleFields, $contentFields, $table) {
             /**
-             * @var \Illuminate\Database\Query\Builder $finalQuery
+             * @var Builder $finalQuery
              */
             // find matches from title
             if ($titleFields) {
@@ -67,6 +70,9 @@ abstract class searchQueryFilter extends QueryFilter
                 }
             }
         });
+        if ($this instanceof ExtraSearchFiltersInterface){
+            $query = $this->assignExtraFilters($query);
+        }
         return $query;
     }
 

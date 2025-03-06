@@ -24,13 +24,15 @@ class redirectApplication extends controllerApplication
         if ($type = $controller->getParameter('type')) {
             $redirectionManager = $this->getService('RedirectionManager');
             if ($type === 'language') {
-                if (!($application = $controller->getParameter('application'))) {
-                    $application = 'public';
-                }
-                $sourceElementId = $controller->getParameter('element');
-                $languageCode = $controller->getParameter('code');
-
-                $redirectionManager->switchLanguage($languageCode, $sourceElementId, $application);
+//                if (!($application = $controller->getParameter('application'))) {
+//                    $application = 'public';
+//                }
+//                $sourceElementId = $controller->getParameter('element');
+//                $languageCode = $controller->getParameter('code');
+//
+//                $redirectionManager->switchLanguage($languageCode, $sourceElementId, $application);
+                header("HTTP/1.0 410 Gone");
+                exit;
             } elseif ($type === 'element') {
                 $sourceElementId = $controller->getParameter('id');
                 $languageCode = $controller->getParameter('code');

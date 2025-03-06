@@ -2,7 +2,12 @@
 {stripdomspaces}
 	<div class='languages_block'>
 		{foreach $languagesList as $language}
-			<a class='language_item{if $language->requested} language_active{/if}' href='{$languageLinks[$language->iso6393]}' title="{$language->title}">
+			{if !empty($languageLinks[$language->iso6391])}
+				{$url = $languageLinks[$language->iso6391]}
+			{else}
+				{$url = $language->getFirstPageElement()->getUrl()}
+			{/if}
+			<a class='language_item{if $language->requested} language_active{/if}' href='{$url}' title="{$language->title}">
 				{$language->title}
 			</a>
 		{/foreach}

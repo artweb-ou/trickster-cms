@@ -1,6 +1,7 @@
 <?php
 
-use App\Logging\FormattedLogRecordDTO;
+use App\Logging\FormattedLogRecordDto;
+use App\Logging\LogRecordDto;
 use App\Logging\RedisRequestLogger;
 
 class requestsApplication extends controllerApplication
@@ -20,11 +21,11 @@ class requestsApplication extends controllerApplication
 
     public function execute($controller)
     {
-        /** @var RedisRequestLogger $RedisRequestLogger */
-        $RedisRequestLogger = $this->getService('RedisRequestLogger');
+        /** @var RedisRequestLogger $redisRequestLogger */
+        $redisRequestLogger = $this->getService('RedisRequestLogger');
 
         try {
-            $requests = $RedisRequestLogger->getAllLogs();
+            $requests = $redisRequestLogger->getAllLogs();
 
             $topLongestRequests = $this->getTopLongestRequests($requests);
 
@@ -41,7 +42,9 @@ class requestsApplication extends controllerApplication
                 if (!isset($ipDuration[$ip])) {
                     $ipDuration[$ip] = 0.0;
                 }
-                $ipDuration[$ip] += round($request->duration);
+                if ($request->completed) {
+                    $ipDuration[$ip] += round($request->duration);
+                }
             }
 
             arsort($ipCount);
@@ -71,31 +74,43 @@ class requestsApplication extends controllerApplication
 
     private function getTopLongestRequests(array $requests): array
     {
-        usort($requests, function ($request1, $request2) {
+        $completedRequests = array_filter($requests, static function ($request) {
+            return $request->completed === true;
+        });
+
+        usort($completedRequests, static function ($request1, $request2) {
             return $request2->duration - $request1->duration;
         });
 
-        return array_slice($requests, 0, 20);
+        return array_slice($completedRequests, 0, 20);
     }
-    private function makeFormatted($requests){
+
+    /**
+     * @param LogRecordDto[] $requests
+     * @return FormattedLogRecordDto[]
+     */
+    private function makeFormatted(array $requests): array
+    {
         $formatted = [];
         foreach ($requests as $request) {
             $dateTime = (new DateTime())->setTimestamp((int)($request->startTime));
-            $formattedStartTime = $dateTime->format('d.m.Y H:i:s');
 
+            $formattedStartTime = $dateTime->format('d.m.Y H:i:s');
             $formattedDuration = number_format($request->duration, 2, '.', '');
 
-            $formatted[] = new FormattedLogRecordDTO(
+            $formatted[] = new FormattedLogRecordDto(
                 $request->requestId,
                 $request->ip,
                 $request->url,
                 $request->userAgent,
                 $formattedStartTime,
-                $formattedDuration
+                $formattedDuration,
+                $request->completed ?? false,
             );
         }
         return $formatted;
     }
+
     public function getUrlName()
     {
         return '';

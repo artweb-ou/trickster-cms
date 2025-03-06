@@ -4,10 +4,42 @@
     <meta charset="UTF-8">
     <title>Requests debug</title>
     <style>
+        .requests-table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
         .requests-table td {
             padding: 5px 8px;
-            white-space: nowrap;
             font-size: 14px;
+        }
+
+        .requests-table-start {
+            width: 10%;
+        }
+
+        .requests-table-duration {
+            width: 3%;
+        }
+
+        .requests-table-completed {
+            width: 3%;
+        }
+
+        .requests-table-ip {
+            width: 5%;
+        }
+
+        .requests-table-url {
+            width: 30%;
+        }
+
+        .requests-table-url a {
+            word-break: break-all;
+        }
+
+        .requests-table-ua {
+            width: 30%;
         }
     </style>
 </head>
@@ -29,11 +61,12 @@
 <table class="requests-table">
     <thead>
     <tr>
-        <th>Start Time</th>
-        <th>Duration</th>
-        <th>IP</th>
-        <th>URL</th>
-        <th>User Agent</th>
+        <th class="requests-table-start">Start Time</th>
+        <th class="requests-table-duration">Duration</th>
+        <th class="requests-table-completed">Done</th>
+        <th class="requests-table-ip">IP</th>
+        <th class="requests-table-url">URL</th>
+        <th class="requests-table-ua">User Agent</th>
     </tr>
     </thead>
     <tbody>
@@ -41,9 +74,11 @@
         <tr>
             <td>{$request->formattedStartTime}</td>
             <td>{$request->formattedDuration}</td>
-            <td><a href="https://ipinfo.io/{$request->ip}" target="_blank">{$request->ip}</a></td>
-            <td><a href="{$request->url}" target="_blank">{$request->url}</a></td>
-            <td>{$request->userAgent}</td>
+            <td class="requests-table-completed">{$request->completed}</td>
+            <td class="requests-table-ip"><a href="https://ipinfo.io/{$request->ip}" target="_blank">{$request->ip}</a>
+            </td>
+            <td class="requests-table-url"><a href="{$request->url}" target="_blank">{$request->url}</a></td>
+            <td class="requests-table-ua">{$request->userAgent}</td>
         </tr>
     {/foreach}
     </tbody>
@@ -52,11 +87,12 @@
 <table class="requests-table">
     <thead>
     <tr>
-        <th>Start Time</th>
-        <th>Duration</th>
-        <th>IP</th>
-        <th>URL</th>
-        <th>User Agent</th>
+        <th class="requests-table-start">Start Time</th>
+        <th class="requests-table-duration">Duration</th>
+        <th class="requests-table-completed">Done</th>
+        <th class="requests-table-ip">IP</th>
+        <th class="requests-table-url">URL</th>
+        <th class="requests-table-ua">User Agent</th>
     </tr>
     </thead>
     <tbody>
@@ -64,9 +100,11 @@
         <tr>
             <td>{$request->formattedStartTime}</td>
             <td>{$request->formattedDuration}</td>
-            <td><a href="https://ipinfo.io/{$request->ip}" target="_blank">{$request->ip}</a></td>
-            <td><a href="{$request->url}" target="_blank">{$request->url}</a></td>
-            <td>{$request->userAgent}</td>
+            <td class="requests-table-completed">{$request->completed}</td>
+            <td class="requests-table-ip"><a href="https://ipinfo.io/{$request->ip}" target="_blank">{$request->ip}</a>
+            </td>
+            <td class="requests-table-url"><a href="{$request->url}" target="_blank">{$request->url}</a></td>
+            <td class="requests-table-ua">{$request->userAgent}</td>
         </tr>
     {/foreach}
     </tbody>

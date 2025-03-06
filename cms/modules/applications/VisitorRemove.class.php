@@ -7,7 +7,7 @@ class VisitorRemoveApplication extends controllerApplication
 
     public function initialize()
     {
-        set_time_limit(60 * 60);
+        set_time_limit(1 * 60);
         $this->createRenderer();
     }
 

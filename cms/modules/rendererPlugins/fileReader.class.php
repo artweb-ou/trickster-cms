@@ -107,7 +107,6 @@ class fileReaderRendererPlugin extends rendererPlugin
     {
         if ($filename) {
             $mime_types = [
-
                 'txt' => 'text/plain',
                 'htm' => 'text/html',
                 'html' => 'text/html',

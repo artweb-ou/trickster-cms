@@ -19,7 +19,7 @@
 									{if $language = $dispatchmentType->getCurrentLanguageElement()}
 										{$logo = $language->getLogoImageUrl()}
 									{/if}
-									<img class="logo_image" src="{$logo}" alt="" />
+									<img class="logo_image" src="{$logo}" alt="Logo" />
 								</a>
 								{if $trackerUrl = $dispatchmentType->getTrackedBlankImage()}
 									<img src="{$trackerUrl}" alt="" />

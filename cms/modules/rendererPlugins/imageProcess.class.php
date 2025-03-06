@@ -1,5 +1,10 @@
 <?php
 
+use ImageProcess\ImageProcess;
+
+/**
+ * @property ImageProcess $renderingEngine
+ */
 class imageProcessRendererPlugin extends rendererPlugin
 {
     protected $exportOperation = null;
@@ -14,7 +19,7 @@ class imageProcessRendererPlugin extends rendererPlugin
 
         $pathsManager = $this->getService('PathsManager');
         $this->cachePath = $pathsManager->getPath('imagesCache');
-        $this->renderingEngine = new \ImageProcess\ImageProcess($this->cachePath);
+        $this->renderingEngine = new ImageProcess($this->cachePath);
         $defaultCachePermissions = $configManager->get('paths.defaultCachePermissions');
         $this->renderingEngine->setDefaultCachePermissions($defaultCachePermissions);
 //        $this->renderingEngine->setImagesCaching(false);
@@ -33,10 +38,11 @@ class imageProcessRendererPlugin extends rendererPlugin
         if ($attributeName === 'registerImage') {
             $this->renderingEngine->registerImage($value[0], $value[1]);
         } elseif ($attributeName === 'registerExport') {
+            $filePath = $value[2] ?? '';
             $result = $this->renderingEngine->registerExport(
                 $value[0],
                 $value[1],
-                ($value[2] ?? null) !== '' ? $value[2] : null,
+                $filePath !== '' ? $filePath : null,
                 $value[3] ?? null,
                 $value[4] ?? false
             );
