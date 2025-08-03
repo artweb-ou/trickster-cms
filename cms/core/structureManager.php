@@ -620,8 +620,6 @@ class structureManager implements DependencyInjectionContextInterface
 
             $moduleResourceName = $sourceElement->getDataResourceName();
 
-            //todo: are $moduleDataObjects required here? possibly yes, investigate
-            $moduleDataObjects = [];
             foreach ($sourceModuleData as $languageId => &$languageData) {
                 $collection = persistableCollection::getInstance($moduleResourceName);
                 $moduleDataObject = $collection->getEmptyObject();
@@ -629,8 +627,6 @@ class structureManager implements DependencyInjectionContextInterface
                 $moduleDataObject->id = $structureDataObject->id;
                 $moduleDataObject->languageId = $languageId;
                 $moduleDataObject->persist();
-
-                $moduleDataObjects[$languageId] = $moduleDataObject;
             }
             $this->linksManager->createLinkObject($targetId, $structureDataObject->id, $currentLinkType);
 
@@ -641,7 +637,7 @@ class structureManager implements DependencyInjectionContextInterface
                 $newElement->persistElementData();
 
                 $copiesInformation[$sourceId] = $newElement->id;
-                foreach ($linkTypes as &$linkType) {
+                foreach ($linkTypes as $linkType) {
                     if ($childrenList = $this->getElementsChildren($sourceElement->id, null, $linkType)) {
                         foreach ($childrenList as $childElement) {
                             $this->copyElement(

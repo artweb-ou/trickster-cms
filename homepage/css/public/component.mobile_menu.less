@@ -2,122 +2,87 @@
 @mobilemenu_text_color: @trick_text_color_01;
 
 .mobilemenu {
-    position: fixed;
-    top: 0;
-    right: 100%;
-    width: 100%;
-    height: 100%;
-    z-index: 200;
-    padding-right: 2.5rem;
-    box-sizing: border-box;
+	position: fixed;
+	top: 0;
+	right: 100%;
+	width: 100%;
+	height: 100%;
+	z-index: 200;
+	padding-right: 2.5rem;
+	box-sizing: border-box;
 }
 
 .mobilemenu_visible {
-    display: block;
+	display: block;
 }
 
 .mobilemenu_main {
-    position: relative;
-    height: 100%;
-    overflow: auto;
-    background: @mobilemenu_background;
-    border-left: 1px solid fade(@black, 40);
-    color: @mobilemenu_text_color;
-    max-width: 32em;
-    margin-right: auto;
-    box-shadow: 0 0 0.5rem fade(@trick_shadow_02, 25);
+	position: relative;
+	height: 100%;
+	overflow: auto;
+	background: @mobilemenu_background;
+	border-left: 1px solid fade(@black, 40);
+	color: @mobilemenu_text_color;
+	max-width: 32em;
+	margin-right: auto;
+	box-shadow: 0 0 0.5rem fade(@trick_shadow_02, 25);
 
-    padding: 1.5rem;
+	padding: 1.5rem;
 }
 
 .mobilemenu_closeicon {
-    position: absolute;
-    right: 1.5rem;
-    top: 1.5rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    .svg-bg(mobileheader_close, @mobilemenu_text_color, @mobilemenu_text_color);
-    .bg_params(no-repeat, 1.2rem, 1.2rem, 50%, 50%); // @repeat,@width,@height,@posX,@posY
+	position: absolute;
+	right: 1.5rem;
+	top: 1.5rem;
+	width: 1.5rem;
+	height: 1.5rem;
+	.svg-bg(mobileheader_close, @mobilemenu_text_color, @mobilemenu_text_color);
+	.bg_params(no-repeat, 1.2rem, 1.2rem, 50%, 50%); // @repeat,@width,@height,@posX,@posY
 }
 
-.languages_selection {
-    display: block;
-    width: 100%;
-    padding-right: 4em;
+.mobilemenu {
+	.languages_block {
+		display: flex;
+		width: 100%;
+		padding-right: 4em;
+		box-sizing: border-box;
+	}
+
+	.language_item {
+		display: block;
+		font-size: 1rem;
+		line-height: 1rem;
+		height: auto;
+		padding: 0.25rem .5rem;
+		text-transform: uppercase;
+		position: relative;
+		font-weight: 600;
+	}
 }
-
-.languages_items {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    align-content: center;
-
-    .languages_item_container {
-        display: inline-flex;
-        align-content: center;
-        align-items: center;
-
-        &:nth-of-type(n+2) {
-            padding-left: 0.5rem;
-        }
-
-        .languages_item_link {
-            display: block;
-            color: inherit;
-
-            .languages_item {
-                display: block;
-                font-size: 1rem;
-                line-height: 1rem;
-                height: auto;
-                padding: 0.25rem .5rem;
-                text-transform: uppercase;
-                position: relative;
-                font-weight: 600;
-            }
-
-            &.active {
-                .languages_item {
-                    &:after {
-                        border-bottom: 1px solid currentColor;
-                        content: '';
-                        display: block;
-                        position: absolute;
-                        left: .5rem;
-                        right: .5rem;
-                        bottom: .25rem;
-                    }
-                }
-            }
-
-        }
-    }
-}
-
 
 .mobilemenu_module {
-    margin-bottom: 3em;
-    margin-top: 2em;
+	margin-bottom: 3em;
+	margin-top: 2em;
 }
 
 .mobilemenu_module_title {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    padding: .9em 0 1em .8em;
-    border-bottom: @mobileheader_line_width;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	padding: .9em 0 1em .8em;
+	border-bottom: @mobileheader_line_width;
 }
 
 .mobilemenu_module_content {
-    color: @trick_text_color_08;
-    padding: .9em 0 1em .8em;
+	color: @trick_text_color_08;
+	padding: .9em 0 1em .8em;
 }
 
 .mobilemenu_module_submenulist .mobilemenu_module_content {
-    padding: 0;
+	padding: 0;
 }
 
 @media (min-width: @screen_breakpoint_md_max) {
-    .mobile_common_menu_button {
-        display: none;
-    }
+	.mobile_common_menu_button {
+		display: none;
+	}
 }

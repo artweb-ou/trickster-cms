@@ -26,15 +26,16 @@ final class LanguageLinksService
                 $links[$language->iso6391] = $element->getUrl();
                 continue;
             }
-            if (!$element->hasActualStructureInfo()){
+            if (!$element->hasActualStructureInfo()) {
                 continue;
             }
             $path = $this->structureManager->findPath($element->id, (int)$language->id);
             if ($path === null) {
-                //$links[$language->iso6391] = "{$this->controller->baseURL}redirect/type:language/element:{$element->id}/code:{$language->iso6393}/";
                 continue;
             }
-            $links[$language->iso6391] = $this->controller->baseURL . implode('/', $path) . '/';
+            $urlName = $this->controller->getApplication()->getUrlName();
+            $languageUrl = $urlName !== '' ? $urlName . '/' : '';
+            $links[$language->iso6391] = $this->controller->baseURL . $languageUrl . implode('/', $path) . '/';
         }
 
         return $links;

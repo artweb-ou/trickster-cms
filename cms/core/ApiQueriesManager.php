@@ -47,7 +47,7 @@ class ApiQueriesManager extends errorLogger implements DependencyInjectionContex
         $limitQuantity = null;
         $exportType = null;
         $limitOrder = null;
-        $queryParameters = null;
+        $queryParameters = [];
 
         if (isset($parameters['types'])) {
             $typesStrings = explode(',', $parameters['types']);

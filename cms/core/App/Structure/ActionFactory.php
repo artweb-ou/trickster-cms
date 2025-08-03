@@ -17,7 +17,7 @@ class ActionFactory extends errorLogger implements DependencyInjectionContextInt
     {
         $actionObjectName = $actionName . ucfirst($elementType);
 
-        if (!class_exists($actionObjectName, false)) {
+        if (!$actionObjectName || !class_exists($actionObjectName, false)) {
             $fileName = "action." . $actionName . '.class.php';
             $pathsManager = $this->getService('PathsManager');
             $elementsPath = $pathsManager->getRelativePath('structureElements');
@@ -34,7 +34,7 @@ class ActionFactory extends errorLogger implements DependencyInjectionContextInt
             }
         }
 
-        if (class_exists($actionObjectName, false)) {
+        if ($actionObjectName !== null && class_exists($actionObjectName, false)) {
             /**
              * @var structureElementAction $actionObject
              */

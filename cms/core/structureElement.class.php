@@ -1086,9 +1086,9 @@ abstract class structureElement implements DependencyInjectionContextInterface
     {
         if ($dataChunk = $this->getDataChunk($propertyName, $languageId)) {
             return $dataChunk->getStorageValue();
-        } else {
-            return false;
         }
+
+        return null;
     }
 
     public function getLanguageValue($propertyName, $languageId = 0)

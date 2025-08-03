@@ -91,7 +91,6 @@ class sendFeedback extends structureElementAction
                             $phone = $value;
                         } elseif ($formField->autocomplete == 'email') {
                             $emailToCheck = $value;
-                            $fromEmail = $value;
                         }
                     }
                 }

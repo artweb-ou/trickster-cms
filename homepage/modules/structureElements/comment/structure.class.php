@@ -21,6 +21,7 @@ class commentElement extends structureElement implements MetadataProviderInterfa
     use CommentsTrait;
     use SearchTypesProviderTrait;
     use JsonDataProviderElement;
+
     public $dataResourceName = 'module_comment';
     protected $allowedTypes = ['comment'];
     public $defaultActionName = 'show';
@@ -176,5 +177,25 @@ class commentElement extends structureElement implements MetadataProviderInterfa
             return $userElement;
         }
         return null;
+    }
+
+    function linkifyHtml(string $html): string
+    {
+        return preg_replace_callback(
+            '~\bhttps?://[^\s<\)\]]+~i',
+            function (array $m): string {
+                $url = rtrim($m[0], '.,;:!)"]');
+                $host = parse_url($url, PHP_URL_HOST) ?: '';
+                $attrs = str_contains($host, 'zxart') ? '' : ' target="_blank" rel="noopener"';
+                return '<a href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '"' . $attrs . '>' .
+                    htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '</a>';
+            },
+            $html
+        );
+    }
+
+    public function getDecoratedContent(): string
+    {
+        return $this->linkifyHtml($this->content);
     }
 }
