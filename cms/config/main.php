@@ -2,7 +2,7 @@
     'enabledPlugins' => [],
     'licenceKey' => '',
     'updatesUrl' => 'http://updates.artweb.ee/api/',
-    'errorReporting' => E_ALL | E_STRICT,
+    'errorReporting' => E_ALL,
     'publicSessionLifeTime' => 3600,
     'adminSessionLifeTime' => 86400,
     'defaultSessionLifeTime' => 1440,
