@@ -54,6 +54,11 @@ class smartyRendererPlugin extends rendererPlugin
             $this,
             'filterTemplateSpaces',
         ]);
+        $this->renderingEngine->registerPlugin('modifier', 'is_null', 'is_null');
+        $this->renderingEngine->registerPlugin('modifier', 'urldecode', 'urldecode');
+        $this->renderingEngine->registerPlugin('modifier', 'strtolower', 'strtolower');
+        $this->renderingEngine->registerPlugin('modifier', 'method_exists', 'method_exists');
+        $this->renderingEngine->registerPlugin('modifier', 'is_numeric', 'is_numeric');
         $path = $pathsManager->getPath('trickster');
         $this->setTemplatesFolder($path . 'cms/templates/');
         $this->setCompileFolder($pathsManager->getPath('templatesCache'));

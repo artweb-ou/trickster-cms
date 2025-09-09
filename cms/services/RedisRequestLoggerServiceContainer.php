@@ -7,7 +7,7 @@ class RedisRequestLoggerServiceContainer extends DependencyInjectionServiceConta
     public function makeInstance(): RedisRequestLogger
     {
         $redis = $this->registry->getService('Redis');
-        return new RedisRequestLogger($redis, 60 * 35);
+        return new RedisRequestLogger($redis, 60 * 10);
     }
 
     public function makeInjections($instance)
