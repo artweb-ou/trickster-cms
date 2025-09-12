@@ -2,6 +2,7 @@
 define("QUERY_PARAMETERS_SEPARATOR", ':');
 
 use DI\Container;
+use DI\ContainerBuilder;
 
 class controller
 {
@@ -647,13 +648,13 @@ class controller
     public function getRegistry(): DependencyInjectionServicesRegistry
     {
         if (!isset($this->registry)) {
-        $pathsManager = $this->getPathsManager();
-        $paths = $pathsManager->getIncludePaths();
-        $servicesFolder = $pathsManager->getRelativePath('services');
-        foreach ($paths as &$path) {
-            $path .= $servicesFolder;
-        }
-        unset($path);
+            $pathsManager = $this->getPathsManager();
+            $paths = $pathsManager->getIncludePaths();
+            $servicesFolder = $pathsManager->getRelativePath('services');
+            foreach ($paths as &$path) {
+                $path .= $servicesFolder;
+            }
+            unset($path);
 
             $registry = new DependencyInjectionServicesRegistry($this->getContainer(), $paths);
             $this->registry = $registry;
@@ -674,8 +675,18 @@ class controller
                     $definitions[] = include($definitionsPath);
                 }
             }
-            $container = new Container(array_merge(...$definitions));
-                $this->container = $container;
+            $definitions = array_merge(...$definitions);
+            $containerBuilder = new ContainerBuilder();
+            $compilationPath = $this->getDebugMode() ? null : $pathsManager->getPath('diCache');
+            if ($compilationPath && !is_dir($compilationPath)) {
+                mkdir($compilationPath, $this->configManager->get('paths.defaultCachePermissions'), true);
+            }
+            if ($compilationPath && is_dir($compilationPath)) {
+                $containerBuilder->enableCompilation($compilationPath);
+            }
+            $containerBuilder->addDefinitions($definitions);
+            $container = $containerBuilder->build();
+            $this->container = $container;
         }
         return $this->container;
     }

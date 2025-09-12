@@ -37,4 +37,5 @@
     'csvImportImages' => 'importimages/',
     'templates' => 'trickster/cms/templates/',
     'tabs' => 'modules/tabs/',
+    'diCache' => 'temporary/di/',
 ];
