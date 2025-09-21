@@ -2,9 +2,6 @@
 
 class errorLogger
 {
-    /**
-     * @throws JsonException
-     */
     protected function logError($message, $level = null): void
     {
         ErrorLog::getInstance()->logMessage($this->getErrorLogLocation(), $message, $level);

@@ -93,7 +93,7 @@ class Cache extends errorLogger
         if ($this->enabled && ($this->reading || $forceReading)) {
             try {
                 $value = $this->cache->get($this->cachePrefix . $key);
-                if ($value == \fluxbb\cache\Cache::NOT_FOUND) {
+                if ($value === \fluxbb\cache\Cache::NOT_FOUND) {
                     return null;
                 } else {
                     return $value;
