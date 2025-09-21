@@ -33,6 +33,7 @@ class dbServiceContainer extends DependencyInjectionServiceContainer
             'prefix' => $dbConfig->get('mysqlTablesPrefix'),
             'options' => [
                 PDO::ATTR_PERSISTENT => true,
+                PDO::ATTR_TIMEOUT => 1
             ],
         ]);
         $capsule->setFetchMode(PDO::FETCH_ASSOC);

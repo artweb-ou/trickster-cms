@@ -98,7 +98,7 @@ class controller
         $this->checkPlugins();
         ini_set("log_errors_max_len", 0);
         ini_set("pcre.backtrack_limit", 10000000);
-        ini_set("memory_limit", "1024M");
+        ini_set("memory_limit", "512M");
 
         //log all errors, but never display them
         set_error_handler([$this, 'catchError']);
