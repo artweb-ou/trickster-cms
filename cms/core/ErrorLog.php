@@ -15,7 +15,7 @@ final class ErrorLog
     {
         $this->defaultEnvironmentUrl = '';
 
-        $todayDate = (new \DateTime())->format('Y-m-d');
+        $todayDate = (new DateTime())->format('Y-m-d');
         $pathsManager = controller::getInstance()->getPathsManager();
         $logFilePath = $pathsManager->getPath('logs') . $todayDate . '.log';
         $this->logger = new Logger('error_log');
@@ -36,16 +36,13 @@ final class ErrorLog
         return self::$instance;
     }
 
-    /**
-     * @throws JsonException
-     */
     public function logMessage(string $locationName, string $errorText, ?int $level = null): void
     {
         $logLevel = LogLevel::fromErrorLevel($level ?? E_ERROR);
 
         $logEntry = sprintf(
             "[%s] [%s] %s: %s | IP: %s | Referer: %s | URL: %s",
-            (new \DateTime())->format(\DateTime::ATOM),
+            new DateTime()->format(DateTimeInterface::ATOM),
             strtoupper($logLevel->value),
             $locationName,
             $errorText,

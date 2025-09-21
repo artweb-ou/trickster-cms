@@ -17,13 +17,6 @@ trait ResourceUniterTrait
     protected $userAgentEngineType;
     protected $isGZipped = false;
 
-    public function __destruct()
-    {
-        // purge once every 4 weeks, files older than 4 weeks
-        $lifetime = 4 * 7 * 24 * 60 * 60;
-        new cachePurge($this->cachePath, $lifetime, $lifetime);
-    }
-
     protected function getCacheFilePath()
     {
         if (!$this->cacheFilePath) {

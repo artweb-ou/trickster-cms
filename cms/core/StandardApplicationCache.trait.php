@@ -57,6 +57,5 @@ trait StandardApplicationCacheTrait
             $renderer->setCachePath($this->getCachePath());
             $renderer->display();
         }
-        new cachePurge($this->getCachePath(), 60 * 60, $this->getCacheExpirationTime());
     }
 }

@@ -137,13 +137,6 @@ class Cache extends errorLogger
         return null;
     }
 
-    public function __destruct()
-    {
-        if ($this->cachePath) {
-            new cachePurge($this->cachePath, 60, 24 * 60 * 60 * 7);
-        }
-    }
-
     public function clearKeysByType($id, $structureType)
     {
         if ($this->enabled && $this->deleting) {

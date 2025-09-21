@@ -1,5 +1,7 @@
 <?php
 
+use ImageProcess\SourceFileException;
+
 class imageApplication extends controllerApplication
 {
     protected $applicationName = 'image';
@@ -75,11 +77,10 @@ class imageApplication extends controllerApplication
                 try {
                     $this->renderer->display();
                     $result = true;
-                }
-                catch (Exception $e) {
+                } catch (SourceFileException $e) {
+                    $this->logError($controller->fullURL . ' ' . $e->getMessage());
                     $this->renderer->fileNotFound();
                 }
-
             }
         }
 
