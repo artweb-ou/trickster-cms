@@ -6,17 +6,23 @@ class imageDataChunk extends DataChunk implements ElementStorageValueHolderInter
     public $temporaryName;
     public $originalName;
     public $fileReceived = false;
+    /**
+     * @var mixed|string
+     */
+    private ?string $mime = null;
+    private ?int $height = null;
+    private ?int $width = null;
 
     public function setFormValue($value)
     {
         if (is_array($value)) {
-            if ($value['tmp_name'] != '' && file_exists($value['tmp_name'])) {
+            if ($value['tmp_name'] !== '' && file_exists($value['tmp_name'])) {
                 $this->formValue = $value;
             }
-            if ($value['tmp_name'] != '') {
+            if ($value['tmp_name'] !== '') {
                 $this->temporaryName = basename($value['tmp_name']);
             }
-            if ($value['name'] != '') {
+            if ($value['name'] !== '') {
                 $this->originalName = $value['name'];
             }
         }
