@@ -18,7 +18,7 @@ trait DependencyInjectionContextTrait
      * @param array|null $options
      * @param bool $forceNew
      * @param bool $updateRegistry
-     * @return null|T
+     * @return T
      */
     public function getService($type, $options = null, $forceNew = false, $updateRegistry = true)
     {
@@ -30,7 +30,7 @@ trait DependencyInjectionContextTrait
         if (isset($this->container)) {
             return $this->container->get($type);
         }
-        return null;
+        throw new RuntimeException('Service ' . $type . ' not found');
     }
 
     protected function getRegistry(): ?DependencyInjectionServicesRegistryInterface
