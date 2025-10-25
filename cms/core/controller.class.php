@@ -9,16 +9,16 @@ class controller
     /**
      * @var controllerApplication
      */
-    protected $application;
-    protected $urlApplicationName;
-    protected $applicationName;
-    protected $defaultAplicationName = 'public';
+    private $application;
+    private $urlApplicationName;
+    private $applicationName;
+    private $defaultApplicationName = 'public';
 
-    protected $requestParameters = [];
+    private $requestParameters = [];
     public $requestURI = [];
     public $requestedPath = [];
     public $requestedFile = false;
-    protected $protocol;
+    private $protocol;
     public $domainName;
     public $directoryName;
     public $scriptName;
@@ -34,15 +34,15 @@ class controller
      */
     public $configManager;
 
-    protected $formData = [];
-    protected $forceDebug = false;
-    protected $debugMode = null;
+    private $formData = [];
+    private $forceDebug = false;
+    private $debugMode = null;
     private static controller $instance;
-    protected $enabledPlugins = [];
+    private $enabledPlugins = [];
     /**
      * @var PathsManager
      */
-    protected $pathsManager;
+    private $pathsManager;
     public $redirectDeprecatedParameters = false;
     private DependencyInjectionServicesRegistry $registry;
     private Container $container;
@@ -57,7 +57,7 @@ class controller
         return self::$instance;
     }
 
-    protected function __construct($projectConfigPath)
+    private function __construct($projectConfigPath)
     {
         ob_start();
         $corePath = dirname(__FILE__) . '/';
@@ -119,7 +119,7 @@ class controller
         }
     }
 
-    protected function checkPlugins()
+    private function checkPlugins()
     {
         if ($enabledPluginsInfo = $this->configManager->get('main.enabledPlugins')) {
             $this->enabledPlugins = array_keys($enabledPluginsInfo);
@@ -141,7 +141,7 @@ class controller
         return $this->enabledPlugins;
     }
 
-    protected function parseRequestParameters()
+    private function parseRequestParameters()
     {
         $this->domainName = $_SERVER['HTTP_HOST'] ?? '';
         if ($this->isSsl()) {
@@ -160,8 +160,6 @@ class controller
         if (!empty($_SERVER["REQUEST_URI"])) {
             $this->requestURI = $this->parseRequestURI($_SERVER["REQUEST_URI"]);
         }
-
-        $this->detectApplication();
     }
 
     public function setProtocol($protocol)
@@ -170,7 +168,7 @@ class controller
         $this->domainURL = $this->protocol . $this->domainName;
     }
 
-    protected function isSsl()
+    private function isSsl()
     {
         if (isset($_SERVER['HTTPS'])) {
             if (strtolower($_SERVER['HTTPS']) === 'on') {
@@ -192,11 +190,13 @@ class controller
             $this->parseFormData();
             $this->detectFileName();
 
-            $className = '\ZxArt\Controllers\\' . ucfirst($this->applicationName);
+            $applicationName = $this->getApplicationName();
+
+            $className = '\ZxArt\Controllers\\' . ucfirst($applicationName);
             if (!class_exists($className)) {
                 $className = $this->applicationName . 'Application';
             }
-            $this->application = new $className($this, $this->applicationName);
+            $this->application = new $className($this, $applicationName);
             $this->requestParameters = $this->findRequestParameters($this->requestedPath);
             $result = $this->application->initialize();
             if ($result === false) {
@@ -307,7 +307,7 @@ class controller
         return $imploded;
     }
 
-    protected function detectFileName()
+    private function detectFileName()
     {
         if ($this->requestedPath) {
             $lastElement = end($this->requestedPath);
@@ -317,10 +317,17 @@ class controller
         }
     }
 
-    protected function detectApplication()
+    private function detectApplication()
     {
         if ($this->requestURI) {
             $applicationName = reset($this->requestURI);
+
+            $className = '\ZxArt\Controllers\\' . ucfirst($applicationName);
+            if (class_exists($className)) {
+                $this->applicationName = $applicationName;
+                return;
+            }
+
             $fileDirectory = $this->pathsManager->getRelativePath('applications');
             $fileName = $this->pathsManager->getIncludeFilePath($fileDirectory . ucfirst($applicationName) . '.php');
             if (!$fileName) {
@@ -332,11 +339,11 @@ class controller
             }
         }
         if (!$this->applicationName) {
-            $this->applicationName = $this->defaultAplicationName;
+            $this->applicationName = $this->defaultApplicationName;
         }
     }
 
-    protected function findRequestParameters(&$requestURI)
+    private function findRequestParameters(&$requestURI)
     {
         //fill found parameters with $_GET and $_POST values.
         //$_REQUEST is not needed, because it contains cookies
@@ -362,7 +369,7 @@ class controller
         return $foundParameters;
     }
 
-    protected function parseRequestURI($requestURI)
+    private function parseRequestURI($requestURI)
     {
         $requestString = urldecode($requestURI);
 
@@ -437,7 +444,7 @@ class controller
         exit();
     }
 
-    protected function parseFormData()
+    private function parseFormData()
     {
         $formData = [];
         if (isset($_FILES['formData'])) {
