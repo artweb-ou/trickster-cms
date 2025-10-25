@@ -96,7 +96,7 @@ class ElementsListCache
         $this->idList = [];
         foreach ($this->elements as $element) {
             if ($element instanceof structureElement) {
-                $id = $element->getId();
+                $id = $element->getPersistedId();
                 $this->registerElementCacheKey($id, $this->cacheId . ':' . $this->cacheKey);
                 $this->idList[] = $id;
             }

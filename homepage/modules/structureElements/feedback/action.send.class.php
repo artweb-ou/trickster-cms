@@ -149,9 +149,9 @@ class sendFeedback extends structureElementAction
                         if (is_array($fileInfo)) {
                             foreach ($fileInfo as $file) {
                                 $temporaryFile = $cachePath . basename($file['tmp_name']);
-                                $fileElement = $structureManager->createElement('file', 'show', $answerElement->getId(),
+                                $fileElement = $structureManager->createElement('file', 'show', $answerElement->getPersistedId(),
                                     false, 'feedbackAnswerFile');
-                                $fileElement->file = $fileElement->getId();
+                                $fileElement->file = $fileElement->getPersistedId();
                                 $fileElement->fileName = $file['originalName'];
                                 $fileElement->title = $file['originalName'];
                                 $fileElement->persistElementData();

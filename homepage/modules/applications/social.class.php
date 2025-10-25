@@ -194,7 +194,7 @@ class socialApplication extends controllerApplication
         $usersElementId = $structureManager->getElementIdByMarker("users");
         $element = $structureManager->createElement('user', 'show', $usersElementId);
         if ($element) {
-            $element->getId();
+            $element->getPersistedId();
             $data = [
                 'userName' => $socialData->email,
                 'email' => $socialData->email,

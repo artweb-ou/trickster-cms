@@ -27,7 +27,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
     {
         $this->formValue = null;
         $this->displayValue = null;
-        $this->storageValue = array_map(static fn(structureElement $item): int => $item->getId(), $value);
+        $this->storageValue = array_map(static fn(structureElement $item): int => $item->getPersistedId(), $value);
     }
 
     protected function loadStorageValue()
@@ -142,13 +142,13 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
          */
         if ($linksManager = $this->getService('linksManager')) {
             if ($this->structureElement) {
-                $linksIndex = $linksManager->getElementsLinksIndex($this->structureElement->getId(), $this->linkType, $this->role);
+                $linksIndex = $linksManager->getElementsLinksIndex($this->structureElement->getPersistedId(), $this->linkType, $this->role);
                 foreach ($this->storageValue as $connectedId) {
                     if (!isset($linksIndex[$connectedId])) {
                         if ($this->role === 'child') {
-                            $linksManager->linkElements($connectedId, $this->structureElement->getId(), $this->linkType);
+                            $linksManager->linkElements($connectedId, $this->structureElement->getPersistedId(), $this->linkType);
                         } else {
-                            $linksManager->linkElements($this->structureElement->getId(), $connectedId, $this->linkType);
+                            $linksManager->linkElements($this->structureElement->getPersistedId(), $connectedId, $this->linkType);
                         }
                     }
                     unset($linksIndex[$connectedId]);
@@ -166,7 +166,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
          * @var linksManager $linksManager
          */
         if ($linksManager = $this->getService('linksManager')) {
-            $linksIndex = $linksManager->getElementsLinksIndex($this->structureElement->getId(), $this->linkType, $this->role);
+            $linksIndex = $linksManager->getElementsLinksIndex($this->structureElement->getPersistedId(), $this->linkType, $this->role);
             foreach ($linksIndex as $key => &$link) {
                 $link->delete();
             }

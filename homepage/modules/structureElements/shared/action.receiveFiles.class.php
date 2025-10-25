@@ -47,7 +47,7 @@ class receiveFilesShared extends structureElementAction
 
                             $info = pathinfo($originalFileName);
                             $fileElement->title = str_replace('_', ' ', ucfirst(ucfirst($info['filename'])));
-                            $fileElement->file = $fileElement->getId();
+                            $fileElement->file = $fileElement->getPersistedId();
                             $fileElement->fileName = $originalFileName;
 
                             $fileElement->persistElementData();

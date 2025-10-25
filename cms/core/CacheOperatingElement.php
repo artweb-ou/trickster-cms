@@ -21,7 +21,7 @@ trait CacheOperatingElement
 	protected function getElementsListCache($key, $cacheLifeTime): ElementsListCache
     {
 		$list = new ElementsListCache();
-		$list->setCacheId($this->id);
+		$list->setCacheId($this->getId());
 		$list->setCacheKey($key);
 		$list->setCacheLifeTime($cacheLifeTime);
 		$list->setCache($this->getCache());

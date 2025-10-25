@@ -102,9 +102,9 @@ trait FilesElementTrait
         return $pathsManager->getPath('uploads');
     }
 
-    public function getFilesParentElementId()
+    public function getFilesParentElementId(): int
     {
-        return $this->id;
+        return $this->getId();
     }
 
     public function getFileUploadSuccessUrl()

@@ -17,7 +17,7 @@ class receiveFolder extends structureElementAction
                 $structureElement->structureName = $structureElement->title;
             }
             if (!is_null($structureElement->getDataChunk("image")->originalName)) {
-                $structureElement->image = $structureElement->getId();
+                $structureElement->image = $structureElement->getPersistedId();
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
             }
             $structureElement->persistElementData();

@@ -1,17 +1,17 @@
 <?php
 
-class naturalNumberDataChunk extends DataChunk implements ElementStorageValueHolderInterface
+class idDataChunk extends DataChunk implements ElementStorageValueHolderInterface
 {
     use ElementStorageValueDataChunkTrait;
 
     public function convertStorageToDisplay()
     {
-        $this->displayValue = $this->storageValue;
+        $this->displayValue = (int)$this->storageValue;
     }
 
     public function convertStorageToForm()
     {
-        $this->formValue = $this->storageValue;
+        $this->formValue = (int)$this->storageValue;
     }
 
     public function convertFormToStorage()

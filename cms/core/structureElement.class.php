@@ -3,7 +3,7 @@
 use App\Structure\ActionFactory;
 
 /**
- * @property int $id
+ * @property @deprecated string $id
  * @property string $structureType
  * @property string $structureRole
  * @property string $structureName
@@ -389,12 +389,17 @@ abstract class structureElement implements DependencyInjectionContextInterface
     /**
      * Automatically persists element and returns numeric id of structure manager
      */
-    public function getId(): int
+    public function getPersistedId(): int
     {
         if (!$this->hasActualStructureInfo()) {
             $this->persistStructureData();
         }
-        return $this->id;
+        return (int)$this->id;
+    }
+
+    public function getId(): int
+    {
+        return (int)$this->id;
     }
 
     /**

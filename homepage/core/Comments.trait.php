@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @this structureElement
+ */
 trait CommentsTrait
 {
     protected $commentsList;
@@ -21,7 +24,7 @@ trait CommentsTrait
              * @var structureManager $structureManager
              */
             $structureManager = $this->getService('structureManager');
-            $commentsList = $structureManager->getElementsChildren($this->id, 'content', "commentTarget");
+            $commentsList = $structureManager->getElementsChildren($this->getId(), 'content', "commentTarget");
             foreach ($commentsList as $commentElement) {
                 if (!$approvalRequired || $commentElement->approved) {
                     $this->commentsList[] = $commentElement;

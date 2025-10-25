@@ -109,7 +109,7 @@ class commentElement extends structureElement implements MetadataProviderInterfa
         $this->votes = $votesValue;
         $this->getService('db')
             ->table($this->dataResourceName)
-            ->where('id', '=', $this->getId())
+            ->where('id', '=', $this->getPersistedId())
             ->update(['votes' => $this->votes]);
     }
 
