@@ -186,11 +186,11 @@ class controller
     public function getApplication()
     {
         if ($this->application === null) {
+            $applicationName = $this->getApplicationName();
+
             $this->requestedPath = $this->requestURI;
             $this->parseFormData();
             $this->detectFileName();
-
-            $applicationName = $this->getApplicationName();
 
             $className = '\ZxArt\Controllers\\' . ucfirst($applicationName);
             if (!class_exists($className)) {

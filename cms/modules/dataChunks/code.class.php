@@ -16,7 +16,7 @@ class codeDataChunk extends DataChunk implements ElementStorageValueHolderInterf
 
     public function convertFormToStorage()
     {
-        $this->formValue = preg_replace('/&(?!amp;|quot;|nbsp;|gt;|lt;|laquo;|raquo;|copy;|reg;|bul;|rsquo;)/', '&amp;', $this->formValue);
+        $this->formValue = preg_replace('/&(?!amp;|quot;|nbsp;|gt;|lt;|laquo;|raquo;|copy;|reg;|bul;|rsquo;)/', '&amp;', $this->formValue ?? '');
         $this->setStorageValue($this->formValue);
     }
 
