@@ -31,13 +31,18 @@ class htmlDataChunk extends DataChunk implements ElementStorageValueHolderInterf
     protected function processValue($value)
     {
         $value = $value ?? '';
+
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+        $value = $purifier->purify($value);
+
         if (stripos($value, 'img') === false) {
             $emptyTest = strip_tags($value);
             $emptyTest = html_entity_decode($emptyTest, ENT_QUOTES, 'UTF-8');
             $emptyTest = trim($emptyTest, chr(0xC2) . chr(0xA0));
             $emptyTest = preg_replace("#\s#is", "", $emptyTest);
 
-            if ($emptyTest == '') {
+            if ($emptyTest === '') {
                 $value = '';
             }
         }

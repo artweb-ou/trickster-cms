@@ -3,7 +3,7 @@
 use App\Structure\ActionFactory;
 
 /**
- * @property @deprecated string $id
+ * @property string|int $id
  * @property string $structureType
  * @property string $structureRole
  * @property string $structureName
