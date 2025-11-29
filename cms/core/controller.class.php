@@ -37,7 +37,7 @@ class controller
     private $formData = [];
     private $forceDebug = false;
     private $debugMode = null;
-    private static controller $instance;
+    private static self $instance;
     private $enabledPlugins = [];
     /**
      * @var PathsManager
@@ -47,11 +47,11 @@ class controller
     private DependencyInjectionServicesRegistry $registry;
     private Container $container;
 
-    public static function getInstance(?string $configurationFile = null): controller
+    public static function getInstance(?string $configurationFile = null): self
     {
         if (!isset(self::$instance)) {
             //sometimes during controller::_construct instance is asked already twice, so we have to make it instantly not null
-            $controller = new controller($configurationFile);
+            $controller = new self($configurationFile);
             self::$instance = $controller;
         }
         return self::$instance;
