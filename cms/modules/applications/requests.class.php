@@ -21,8 +21,7 @@ class requestsApplication extends controllerApplication
 
     public function execute($controller)
     {
-        /** @var RedisRequestLogger $redisRequestLogger */
-        $redisRequestLogger = $this->getService('RedisRequestLogger');
+        $redisRequestLogger = $this->getService(RedisRequestLogger::class);
 
         try {
             $requests = $redisRequestLogger->getAllLogs();

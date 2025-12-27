@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 
 use App\Logging\RedisRequestLogger;
 use Illuminate\Database\Connection;
 use function DI\factory;
-use function DI\get;
 
 return [
     controller::class => static function () {
@@ -33,6 +33,18 @@ return [
             $redis,
             600
         )
+    ),
+    Redis::class => factory(
+        function (
+            ConfigManager $configManager,
+        ) {
+            $instance = new Redis();
+            if ($redisConfig = $configManager->getConfig('redis')) {
+                $instance->connect($redisConfig->get('host'), $redisConfig->get('port'), $redisConfig->get('connectionTimeout'));
+                $instance->auth($redisConfig->get('pass'));
+            }
+            return $instance;
+        }
     ),
 
 ];

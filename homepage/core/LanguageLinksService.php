@@ -2,13 +2,14 @@
 declare(strict_types=1);
 
 
-final class LanguageLinksService
+final readonly class LanguageLinksService
 {
     public function __construct(
         private controller       $controller,
         private ConfigManager    $configManager,
         private LanguagesManager $languagesManager,
         private structureManager $structureManager,
+        private linksManager     $linksManager,
     )
     {
 
@@ -31,6 +32,10 @@ final class LanguageLinksService
             }
             $path = $this->structureManager->findPath($element->id, (int)$language->id);
             if ($path === null) {
+                $url = $this->findConnectedUrl($element->id, $language->id);
+                if ($url !== null) {
+                    $links[$language->iso6391] = $url;
+                }
                 continue;
             }
             $urlName = $this->controller->getApplication()->getUrlName();
@@ -40,4 +45,17 @@ final class LanguageLinksService
 
         return $links;
     }
+
+    private function findConnectedUrl($id, $languageId): string|null
+    {
+        if ($connectedIds = $this->linksManager->getConnectedIdList($id, 'foreignRelative', 'parent')) {
+            foreach ($connectedIds as $connectedId) {
+                if ($element = $this->structureManager->getElementById($connectedId, $languageId)) {
+                    return $element->getUrl();
+                }
+            }
+        }
+        return null;
+    }
+
 }
