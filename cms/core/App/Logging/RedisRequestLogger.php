@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Logging;
 
@@ -8,10 +9,8 @@ use RedisException;
 /**
  * Class for logging request information to Redis with automatic expiration and retrieval.
  */
-class RedisRequestLogger
+readonly class RedisRequestLogger
 {
-    private Redis $redis;
-    private int $ttl;
 
     /**
      * RequestLogger constructor.
@@ -19,21 +18,25 @@ class RedisRequestLogger
      * @param Redis $redis Instance of Redis client.
      * @param int $ttl Time to live for log records in seconds.
      */
-    public function __construct(Redis $redis, int $ttl)
+    public function __construct(
+        private bool  $enabled,
+        private Redis $redis,
+        private int   $ttl
+    )
     {
-        $this->redis = $redis;
-        $this->ttl = $ttl;
     }
 
     /**
      * Logs initial request information with automatic expiration.
      *
      * @param LogRequestDto $dto DTO with request information.
-     * @return LogRecordDto DTO with log record information including requestId and startTime.
-     * @throws RedisException
+     * @return LogRecordDto|null DTO with log record information including requestId and startTime.
      */
-    public function logRequest(LogRequestDto $dto): LogRecordDto
+    public function logRequest(LogRequestDto $dto): ?LogRecordDto
     {
+        if (!$this->enabled) {
+            return null;
+        }
         $requestId = uniqid('reqlog:', true);
 
         $data = [
@@ -47,6 +50,7 @@ class RedisRequestLogger
 
         $this->redis->hMSet($requestId, $data);
         $this->redis->expire($requestId, $this->ttl);
+
 
         return new LogRecordDto(
             $requestId,
@@ -68,7 +72,7 @@ class RedisRequestLogger
     public function updateDuration(LogRecordUpdateDto $logRecordUpdateDto): void
     {
         $duration = $logRecordUpdateDto->endTime - $logRecordUpdateDto->startTime;
-        if (!$this->redis->exists($logRecordUpdateDto->requestId)) {
+        if (!$this->enabled) {
             return;
         }
         $this->redis->hSet($logRecordUpdateDto->requestId, 'duration', $duration);
@@ -85,7 +89,9 @@ class RedisRequestLogger
     {
         $keys = $this->redis->keys('reqlog:*');
         $logs = [];
-
+        if (!$this->enabled) {
+            return $logs;
+        }
         foreach ($keys as $key) {
             $logData = $this->redis->hGetAll($key);
             if ($logData) {

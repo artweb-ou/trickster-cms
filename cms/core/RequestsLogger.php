@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use App\Logging\LogRecordDto;
 use App\Logging\LogRecordUpdateDto;
@@ -46,6 +47,6 @@ trait RequestsLogger
 
     private function getRequestLogger(): RedisRequestLogger
     {
-        return $this->getService('RedisRequestLogger');
+        return $this->getService(RedisRequestLogger::class);
     }
 }
