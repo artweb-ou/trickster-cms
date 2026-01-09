@@ -18,7 +18,6 @@
         'phone' => true,
         'tablet' => true,
     ],
-    'rssTheme' => 'projectRss',
     'dpdEnabled' => false,
     'timeZone' => 'Europe/Tallinn',
     'newProductLimit' => 7776000,

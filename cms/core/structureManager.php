@@ -195,7 +195,7 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * Searches for all elements of requested type restricted with the defined parent element if required
      *
-     * @param string $structureType
+     * @param string|string[] $structureType
      * @param int $parentElementId
      * @param string[] $orderFields
      * @param int|int[] $limit
