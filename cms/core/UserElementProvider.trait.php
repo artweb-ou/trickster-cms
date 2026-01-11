@@ -22,14 +22,5 @@ trait UserElementProviderTrait
         return $this->userElement;
     }
 
-    /**
-     * @return userElement
-     * @deprecated
-     */
-    public function getUser()
-    {
-        return $this->getUserElement();
-    }
-
     abstract public function getUserId();
 }
