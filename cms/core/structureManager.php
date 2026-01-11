@@ -735,6 +735,7 @@ class structureManager implements DependencyInjectionContextInterface
                 $this->linksManager->createLinkObject($parentElementId, $id, $newElementLinkType);
             }
             if ($newElement = $this->manufactureElement($dataObject, $parentElementId)) {
+                $newElement->newlyCreated = true;
                 $newElement->createEmptyModuleObjects();
                 if ($setCurrent) {
                     $this->setCurrentElement($newElement);
