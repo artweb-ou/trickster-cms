@@ -4,7 +4,7 @@ interface MetadataProviderInterface
 {
     public function getMetaTitle();
 
-    public function getMetaDescription();
+    public function getMetaDescription(): string;
 
     public function getMetaKeywords();
 

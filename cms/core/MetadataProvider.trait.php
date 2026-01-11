@@ -34,7 +34,7 @@ trait MetadataProviderTrait
         return $this->title;
     }
 
-    public function getMetaDescription()
+    public function getMetaDescription(): string
     {
         if ($this->metaDescription) {
             return $this->metaDescription;
