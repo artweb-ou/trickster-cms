@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 
 interface ImageUrlProviderInterface
 {
-    public function getImageId($mobile = false);
+    public function getImageId();
 
-    public function getImageName($mobile = false);
+    public function getImageName();
 
-    public function getImageUrl(string $preset = 'adminImage', bool $mobile = false): ?string;
+    public function getImageUrl(string $preset = 'adminImage'): ?string;
 }

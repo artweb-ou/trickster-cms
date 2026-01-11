@@ -36,7 +36,7 @@ class fileElement extends structureElement implements StructureElementUploadedFi
         return false;
     }
 
-    public function getImageId($mobile = false)
+    public function getImageId()
     {
         if ($this->image) {
             return $this->image;
@@ -44,7 +44,7 @@ class fileElement extends structureElement implements StructureElementUploadedFi
         return $this->file;
     }
 
-    public function getImageName($mobile = false)
+    public function getImageName()
     {
         if ($this->imageFileName) {
             return $this->imageFileName;

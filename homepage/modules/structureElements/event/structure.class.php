@@ -190,7 +190,7 @@ class eventElement extends structureElement implements MetadataProviderInterface
         return 'structure';
     }
 
-    public function getImageId($mobile = false)
+    public function getImageId()
     {
         if ($this->image2) {
             return $this->image2;
