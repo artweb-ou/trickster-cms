@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 trait StandardApplicationCacheTrait
 {
     protected $cacheFileName;
@@ -16,7 +18,7 @@ trait StandardApplicationCacheTrait
 
     protected function getCachePath()
     {
-        return $this->getService('PathsManager')->getPath('appCache') . $this->getApplicationName() . '/';
+        return $this->getService(PathsManager::class)->getPath('appCache') . $this->getApplicationName() . '/';
     }
 
     public function cacheExists()

@@ -57,7 +57,7 @@ class exportApplication extends controllerApplication
         $this->structureManager->buildRequestedPath();
 
         if ($id = $controller->getParameter('id')) {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->pathsManager;
             $this->exportDir = $pathsManager->getPath('temporary') . 'exports/' . time() . '/';
             $dirMade = $pathsManager->ensureDirectory($this->exportDir);
             if (!$dirMade) {
@@ -223,7 +223,7 @@ XML;
                 } else {
                     $originalName = $name . 'OriginalName';
                 }
-                $pathsManager = $this->getService('PathsManager');
+                $pathsManager = $this->pathsManager;
                 $uploadsPath = $pathsManager->getPath('uploads');
                 $deploymentImagesPath = $this->exportDir . 'images/';
                 $pathsManager->ensureDirectory($deploymentImagesPath);
@@ -302,7 +302,9 @@ XML;
         if (!$this->floorsNeedingEditing) {
             return;
         }
-        $script = "<?php\n";
+        $script = "<?php
+
+use App\Paths\PathsManager;\n";
         $script .= '$floorMarkers = ' . var_export($this->floorsNeedingEditing, true) . ";\n";
         $script .= <<<'PHP'
 $structureManager = $this->getService('structureManager');
@@ -347,7 +349,9 @@ PHP;
         if (!$this->modifications) {
             return;
         }
-        $script = "<?php\n";
+        $script = "<?php
+
+use App\Paths\PathsManager;\n";
         $script .= '$modifications = ' . var_export($this->modifications, true) . ";\n";
         $script .= <<<'PHP'
 $structureManager = $this->getService('structureManager');
@@ -484,4 +488,5 @@ PHP;
         $d->close();
     }
 }
+
 

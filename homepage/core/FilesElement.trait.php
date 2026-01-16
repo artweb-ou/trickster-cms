@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 /**
  * Class FilesElementTrait
  *
@@ -98,7 +100,7 @@ trait FilesElementTrait
         /**
          * @var PathsManager $pathsManager
          */
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         return $pathsManager->getPath('uploads');
     }
 

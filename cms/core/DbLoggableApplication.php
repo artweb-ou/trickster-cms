@@ -1,5 +1,6 @@
 <?php
 
+use App\Paths\PathsManager;
 use Illuminate\Database\Connection;
 
 trait DbLoggableApplication
@@ -18,7 +19,7 @@ trait DbLoggableApplication
     {
         if ($controller = controller::getInstance()) {
             if ($controller->getDebugMode()) {
-                $pathsManager = $this->getService('PathsManager');
+                $pathsManager = $this->getService(PathsManager::class);
 
                 $this->connection = $this->getService('db');
                 $this->logFilePath = $pathsManager->getPath('logs') . 'db_' . time() . '.log';

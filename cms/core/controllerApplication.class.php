@@ -1,6 +1,6 @@
 <?php
 
-use DI\Container;
+use App\Paths\PathsManager;
 
 /**
  * Controller application is standardized script, which purpose is to receive external parameters (whether from GET/POST or other objects), operate some business logic according to them and optionally provide some rendered answer
@@ -10,6 +10,7 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
     use DependencyInjectionContextTrait;
     use RequestsLogger;
 
+    protected PathsManager $pathsManager;
     /**
      * @var string - used in URL building by default
      */
@@ -28,7 +29,6 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
     {
         $this->controller = $controller;
         $this->applicationName = $applicationName;
-        $pathsManager = $controller->getPathsManager();
 
         $this->setRegistry($controller->getRegistry());
         $this->setContainer($controller->getContainer());
@@ -40,9 +40,14 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
         }
         $this->setService('controller', $this->controller);
         $this->setService('ConfigManager', $this->controller->getConfigManager());
-        $this->setService('PathsManager', $pathsManager);
 
         $this->logRequest();
+    }
+
+    public function setPathsManager(PathsManager $pathsManager): void
+    {
+        $this->pathsManager = $pathsManager;
+        $this->setService(PathsManager::class, $pathsManager);
     }
 
     /**
@@ -56,7 +61,8 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
         /**
          * @var $sessionManager ServerSessionManager
          */
-        $sessionManager = $this->getService('ServerSessionManager', ['sessionName' => $sessionName]);
+        $sessionManager = $this->getService(ServerSessionManager::class);
+        $sessionManager->setSessionName($sessionName);
         $sessionManager->setEnabled(true);
         if ($lifeTime) {
             $sessionManager->setSessionLifeTime($lifeTime);

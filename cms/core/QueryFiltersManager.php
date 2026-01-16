@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class QueryFiltersManager extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -16,7 +18,7 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
         $className = $filterName . 'QueryFilter';
         if (!class_exists($className, false)) {
             $fileName = $filterName . '.class.php';
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $fileDirectory = $pathsManager->getRelativePath('queryFilters');
             if ($filePath = $pathsManager->getIncludeFilePath($fileDirectory . $fileName)) {
                 include_once($filePath);
@@ -41,7 +43,7 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
         $className = $type . 'QueryFilterConverter';
         if (!class_exists($className, false)) {
             $fileName = $type . 'QueryFilterConverter.class.php';
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $fileDirectory = $pathsManager->getRelativePath('queryFilterConverters');
             if ($filePath = $pathsManager->getIncludeFilePath($fileDirectory . $fileName)) {
                 include_once($filePath);
@@ -228,3 +230,4 @@ class QueryFiltersManager extends errorLogger implements DependencyInjectionCont
         return $finalResultsList;
     }
 }
+

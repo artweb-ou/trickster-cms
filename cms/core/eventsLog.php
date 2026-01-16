@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\MySqlConnection;
+
 class eventsLog extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -7,41 +9,13 @@ class eventsLog extends errorLogger implements DependencyInjectionContextInterfa
     const EVENT_TABLE = 'event';
     const EVENTTYPE_TABLE = 'eventtype';
     const EVENT_STATS_DAYS_TABLE = 'events_stats_day';
-    /**
-     * @var \Illuminate\Database\MySqlConnection
-     */
-    protected $db;
-    /**
-     * @var \Illuminate\Database\MySqlConnection
-     */
-    protected $statsDb;
-    /**
-     * @var VisitorsManager
-     */
-    protected $visitorsManager;
 
-    /**
-     * @param \Illuminate\Database\MySqlConnection $statsDb
-     */
-    public function setStatsDb($statsDb)
+    public function __construct(
+        protected MySqlConnection $db,
+        protected MySqlConnection $statsDb,
+        protected VisitorsManager                      $visitorsManager,
+    )
     {
-        $this->statsDb = $statsDb;
-    }
-
-    /**
-     * @param \Illuminate\Database\MySqlConnection $db
-     */
-    public function setDb($db)
-    {
-        $this->db = $db;
-    }
-
-    /**
-     * @param VisitorsManager $visitorsManager
-     */
-    public function setVisitorsManager($visitorsManager)
-    {
-        $this->visitorsManager = $visitorsManager;
     }
 
     public function countEvents(

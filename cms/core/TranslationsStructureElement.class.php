@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 abstract class TranslationsStructureElement extends structureElement
 {
     protected $translationsLanguagesGroup;
@@ -21,7 +23,7 @@ abstract class TranslationsStructureElement extends structureElement
                 $translationsCodesComparer->addFilePath($path, "javascript");
             }
         }
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         $corePath = $pathsManager->getRelativePath('core');
         $modulesPath = $pathsManager->getRelativePath('modules');
         foreach ($pathsManager->getIncludePaths() as $path) {

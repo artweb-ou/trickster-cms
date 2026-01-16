@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class applicationCacheRendererPlugin extends rendererPlugin
 {
     protected $contentRead = false;
@@ -11,7 +13,7 @@ class applicationCacheRendererPlugin extends rendererPlugin
 
     public function init()
     {
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         $this->cachePath = $pathsManager->getPath('appCache');
 
         $this->requestHeadersManager = $this->getService('requestHeadersManager');

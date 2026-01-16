@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 /**
  * Class DeploymentManager
  *
@@ -316,7 +318,9 @@ class DeploymentConfig
             'deployments' => $this->deployments,
             'enabled' => $this->enabled,
         ];
-        file_put_contents($this->file, '<?php return ' . var_export($data, true) . ';');
+        file_put_contents($this->file, '<?php
+
+use App\Paths\PathsManager; return ' . var_export($data, true) . ';');
         if (function_exists('opcache_invalidate')) {
             opcache_invalidate($this->file);
         }
@@ -1944,7 +1948,7 @@ class ClearLiveUserSessionsDeploymentProcedure extends DeploymentProcedure
 
     public function run()
     {
-        $path = $this->getService('PathsManager')->getPath('sessionsCache');
+        $path = $this->getService(PathsManager::class)->getPath('sessionsCache');
         if (is_dir($path) === false) {
             return;
         }
@@ -2016,7 +2020,7 @@ trait ImageWriterTrait
     private function writeImage($imageName, $imageOriginalName)
     {
         $zipArchive = new ZipArchive();
-        $uploadsPath = $this->getService('PathsManager')->getPath('uploads');
+        $uploadsPath = $this->getService(PathsManager::class)->getPath('uploads');
         if ($zipArchive->open($this->deployment->getArchivePath())) {
             for ($i = 0; $i < $zipArchive->numFiles; $i++) {
                 $zipEntry = $zipArchive->getNameIndex($i);

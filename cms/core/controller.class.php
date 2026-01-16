@@ -1,6 +1,7 @@
 <?php
 define("QUERY_PARAMETERS_SEPARATOR", ':');
 
+use App\Paths\PathsManager;
 use DI\Container;
 use DI\ContainerBuilder;
 
@@ -60,8 +61,8 @@ class controller
     private function __construct($projectConfigPath)
     {
         ob_start();
-        $corePath = dirname(__FILE__) . '/';
-        include_once($corePath . "PathsManager.class.php");
+        $corePath = __DIR__ . '/';
+        include_once($corePath . "/App/Paths/PathsManager.php");
         include_once($corePath . "ConfigManager.php");
         include_once($corePath . "Config.class.php");
         include_once($corePath . "AutoLoadManager.php");
@@ -197,6 +198,7 @@ class controller
                 $className = $this->applicationName . 'Application';
             }
             $this->application = new $className($this, $applicationName);
+            $this->application->setPathsManager($this->pathsManager);
             $this->requestParameters = $this->findRequestParameters($this->requestedPath);
             $result = $this->application->initialize();
             if ($result === false) {

@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class cssUniterRendererPlugin extends rendererPlugin
 {
     use ResourceUniterTrait;
@@ -15,7 +17,7 @@ class cssUniterRendererPlugin extends rendererPlugin
 
     public function init()
     {
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         $this->cachePath = $pathsManager->getPath('cssCache');
         $this->requestHeadersManager = $this->getService('requestHeadersManager');
         $this->httpResponse = CmsHttpResponse::getInstance();

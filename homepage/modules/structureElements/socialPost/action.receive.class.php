@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class receiveSocialPost extends structureElementAction
 {
     protected $loggable = true;
@@ -14,7 +16,7 @@ class receiveSocialPost extends structureElementAction
                 $structureElement->originalName = $structureElement->getDataChunk("image")->originalName;
             } else {
                 if ($structureElement->replacementImage) {
-                    $pathsManager = $this->getService('PathsManager');
+                    $pathsManager = $this->getService(PathsManager::class);
                     $path = $pathsManager->getPath('uploads');
                     $oldFile = $path . $structureElement->replacementImage;
                     $newFile = $path . $structureElement->id;
@@ -51,4 +53,5 @@ class receiveSocialPost extends structureElementAction
     {
     }
 }
+
 

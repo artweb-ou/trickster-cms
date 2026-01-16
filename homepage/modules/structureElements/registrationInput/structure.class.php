@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class registrationInputElement extends formFieldStructureElement
 {
     use AutocompleteOptionsTrait;
@@ -50,7 +52,7 @@ class registrationInputElement extends formFieldStructureElement
         $required = $this->required || $this->autocomplete == 'userName' || $this->autocomplete == 'email';
         $valid = !$required || $this->value !== '';
         if ($valid && $this->autocomplete == 'email') {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $fileDirectory = $pathsManager->getRelativePath('validators');
             if ($fileName = $pathsManager->getIncludeFilePath($fileDirectory . 'email.class.php')) {
                 include_once($fileName);

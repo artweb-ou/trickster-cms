@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class settingsManager implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -47,7 +49,7 @@ class settingsManager implements DependencyInjectionContextInterface
     private function getCachePath()
     {
         if (!isset($this->cachePath)){
-            $this->cachePath = $this->getService('PathsManager')->getPath('settingsCache');;
+            $this->cachePath = $this->getService(PathsManager::class)->getPath('settingsCache');;
         }
         return $this->cachePath;
     }
@@ -92,7 +94,7 @@ class settingsManager implements DependencyInjectionContextInterface
                 }
                 $this->settingsList = $allData;
             }
-            $this->getService('PathsManager')->ensureDirectory($this->getCachePath());
+            $this->getService(PathsManager::class)->ensureDirectory($this->getCachePath());
 
             /**
              * Create cache files with settings data
@@ -107,7 +109,9 @@ class settingsManager implements DependencyInjectionContextInterface
 
     protected function generateSettingsText($languageData)
     {
-        $text = '<?php $settingsList = array(';
+        $text = '<?php
+
+use App\Paths\PathsManager; $settingsList = array(';
         foreach ($languageData as $name => &$value) {
             $text .= '"' . $name . '"=>"' . $value . '",';
         }
@@ -116,5 +120,6 @@ class settingsManager implements DependencyInjectionContextInterface
         return $text;
     }
 }
+
 
 

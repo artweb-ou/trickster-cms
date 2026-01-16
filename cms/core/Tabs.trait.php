@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 trait TabsTrait
 {
     /**
@@ -111,7 +113,7 @@ trait TabsTrait
         /**
          * @var PathsManager $pathsManager
          */
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         $path = $pathsManager->getRelativePath('tabs');
         if ($filePath = $pathsManager->getIncludeFilePath($path . $tabName . '.class.php')) {
             $className = $tabName . 'Tab';

@@ -18,7 +18,7 @@ class fileApplication extends controllerApplication
     public function execute($controller)
     {
         $this->processRequestParameters();
-        $filePath = $this->getService('PathsManager')->getPath('uploads') . $this->id;
+        $filePath = $this->pathsManager->getPath('uploads') . $this->id;
         if (strpos($this->id, '/') === false && strpos($this->id, '\\') === false && is_file($filePath)) {
             if ($this->mode == 'view') {
                 $this->renderer->setContentDisposition('inline');
@@ -51,4 +51,5 @@ class fileApplication extends controllerApplication
         }
     }
 }
+
 

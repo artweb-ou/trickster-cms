@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class exportShared extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
@@ -21,7 +23,7 @@ class exportShared extends structureElementAction
             $languageCodes[$languagesItem->id] = $languagesItem->iso6393;
         }
         $renderer->assign('languagesList', $languageCodes);
-        $path = $this->getService('PathsManager')->getPath('trickster');
+        $path = $this->getService(PathsManager::class)->getPath('trickster');
         $renderer->setTemplatesFolder($path . 'cms/templates/xml');
         $renderer->setTemplate('xml.export.tpl');
         $renderer->setCacheControl('no-cache');
@@ -31,4 +33,5 @@ class exportShared extends structureElementAction
         exit;
     }
 }
+
 

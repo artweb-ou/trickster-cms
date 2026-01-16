@@ -31,7 +31,7 @@ class crontabApplication extends controllerApplication
 
         $projectPath = $controller->getProjectPath();
         $basketScriptsPath = $projectPath . 'js/shoppingBasketData/';
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->pathsManager;
         $pathsManager->ensureDirectory($basketScriptsPath);
         $configManager = $this->getService('ConfigManager');
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Paths\PathsManager;
 use App\Structure\ActionFactory;
 
 /**
@@ -1439,7 +1440,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
 
         $isFound = false;
         $fileName = "form.$this->structureType" . ucfirst($type) . ".php";
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         $elementPath = $pathsManager->getRelativePath('structureElements') . $this->structureType . '/' . $fileName;
         $sharedPath = $pathsManager->getRelativePath('sharedActions') . 'form.shared' . ucfirst($type) . '.php';
         if (!$isFound && $fileName = $pathsManager->getIncludeFilePath($elementPath)) {

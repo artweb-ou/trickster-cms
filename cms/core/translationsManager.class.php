@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class translationsManager extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -43,7 +45,7 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
     protected function getCachePath()
     {
         if ($this->cachePath === null) {
-            $this->cachePath = $this->getService('PathsManager')->getPath('translationsCache');
+            $this->cachePath = $this->getService(PathsManager::class)->getPath('translationsCache');
         }
         return $this->cachePath;
     }
@@ -137,7 +139,7 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
             }
         }
         $structureManager->setPrivilegeChecking(true);
-        $this->getService('PathsManager')->ensureDirectory($this->getCachePath());
+        $this->getService(PathsManager::class)->ensureDirectory($this->getCachePath());
         foreach ($allData as $languageId => &$languageData) {
             $filePath = $this->getCachePath() . $sectionName . '_' . $languageId . '.php';
             $text = $this->generateTranslationsText($languageData);
@@ -147,7 +149,9 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
 
     protected function generateTranslationsText($languageData)
     {
-        $text = '<?php $translationsList =  ';
+        $text = '<?php
+
+use App\Paths\PathsManager; $translationsList =  ';
         $text .= var_export($languageData, true);
         $text .= '?>';
 

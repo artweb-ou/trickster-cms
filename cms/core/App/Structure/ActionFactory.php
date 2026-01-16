@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Structure;
 
+use App\Paths\PathsManager;
 use DependencyInjectionContextInterface;
 use DependencyInjectionContextTrait;
 use errorLogger;
@@ -19,7 +20,7 @@ class ActionFactory extends errorLogger implements DependencyInjectionContextInt
 
         if (!$actionObjectName || !class_exists($actionObjectName, false)) {
             $fileName = "action." . $actionName . '.class.php';
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $elementsPath = $pathsManager->getRelativePath('structureElements');
             $sharedPath = $pathsManager->getRelativePath('sharedActions');
             if ($elementFilePath = $pathsManager->getIncludeFilePath($elementsPath . $elementType . '/' . $fileName)

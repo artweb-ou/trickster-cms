@@ -65,7 +65,7 @@ class requestsApplication extends controllerApplication
 
         $this->renderer->setCacheControl('no-cache');
 
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->pathsManager;
         $this->renderer->template = $pathsManager->getIncludeFilePath('templates/requests/list.tpl');;
 
         $this->renderer->display();
@@ -120,4 +120,5 @@ class requestsApplication extends controllerApplication
         return $this->themeCode;
     }
 }
+
 

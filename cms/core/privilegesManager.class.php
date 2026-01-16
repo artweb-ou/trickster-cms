@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class privilegesManager implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -201,7 +203,7 @@ class privilegesManager implements DependencyInjectionContextInterface
     {
         if ($this->moduleActionsList == false) {
             $controller = $this->getService('controller');
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $fileDirectory = $pathsManager->getRelativePath('structureElements');
             foreach ($controller->getIncludePaths() as $path) {
                 $this->scanDirectory($path . $fileDirectory);
@@ -260,4 +262,5 @@ class moduleActionPrivilege
         $this->action = $action;
     }
 }
+
 

@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class imageDataChunk extends DataChunk implements ElementStorageValueHolderInterface, ExtraDataHolderDataChunkInterface
 {
     use ElementStorageValueDataChunkTrait;
@@ -41,7 +43,7 @@ class imageDataChunk extends DataChunk implements ElementStorageValueHolderInter
     public function convertFormToStorage()
     {
         if ($this->formValue && !$this->fileReceived) {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $cachePath = $pathsManager->getPath('uploadsCache');
             $pathsManager->ensureDirectory($cachePath);
             if (is_uploaded_file($this->formValue['tmp_name'])) {
@@ -60,7 +62,7 @@ class imageDataChunk extends DataChunk implements ElementStorageValueHolderInter
     public function persistExtraData()
     {
         if (!is_null($this->temporaryName)) {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $cachePath = $pathsManager->getPath('uploadsCache');
             $pathsManager->ensureDirectory($cachePath);
             $uploadsPath = $pathsManager->getPath('uploads');
@@ -74,7 +76,7 @@ class imageDataChunk extends DataChunk implements ElementStorageValueHolderInter
 
     public function deleteExtraData()
     {
-        $file = $this->getService('PathsManager')->getPath('uploads') . $this->displayValue;
+        $file = $this->getService(PathsManager::class)->getPath('uploads') . $this->displayValue;
         if (is_file($file)) {
             unlink($file);
         }
@@ -85,7 +87,7 @@ class imageDataChunk extends DataChunk implements ElementStorageValueHolderInter
         $copyPerformed = false;
         if ($oldValue) {
             $newValue = str_ireplace($oldId, $newId, $oldValue);
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $uploadsPath = $pathsManager->getPath('uploads');
             $oldFile = $uploadsPath . $oldValue;
             $newFile = $uploadsPath . $newValue;
@@ -105,5 +107,6 @@ class imageDataChunk extends DataChunk implements ElementStorageValueHolderInter
         $this->convertStorageToDisplay();
     }
 }
+
 
 

@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class filesDataChunk extends DataChunk implements ElementStorageValueHolderInterface
 {
     use ElementStorageValueDataChunkTrait;
@@ -20,7 +22,7 @@ class filesDataChunk extends DataChunk implements ElementStorageValueHolderInter
     public function convertFormToStorage()
     {
         if (!is_null($this->formValue) && !$this->fileReceived) {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $cachePath = $pathsManager->getPath('uploadsCache');
             $pathsManager->ensureDirectory($cachePath);
             foreach ($this->formValue as &$fileInfo) {

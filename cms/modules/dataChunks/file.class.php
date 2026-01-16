@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class fileDataChunk extends DataChunk implements ElementHolderInterface, ElementStorageValueHolderInterface, ExtraDataHolderDataChunkInterface
 {
     use ElementStorageValueDataChunkTrait;
@@ -41,7 +43,7 @@ class fileDataChunk extends DataChunk implements ElementHolderInterface, Element
     public function convertFormToStorage()
     {
         if (!is_null($this->formValue) && !$this->fileReceived) {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $cachePath = $pathsManager->getPath('uploadsCache');
             $pathsManager->ensureDirectory($cachePath);
             if (isset($this->formValue['tmp_name'])) {
@@ -61,7 +63,7 @@ class fileDataChunk extends DataChunk implements ElementHolderInterface, Element
     public function persistExtraData()
     {
         if (!is_null($this->temporaryName)) {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $cachePath = $pathsManager->getPath('uploadsCache');
             $uploadsPath = $this->getUploadedFilesPath();
             $pathsManager->ensureDirectory($uploadsPath);
@@ -104,7 +106,7 @@ class fileDataChunk extends DataChunk implements ElementHolderInterface, Element
     public function getUploadedFilePath()
     {
         $result = false;
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         $cachePath = $pathsManager->getPath('uploadsCache');
         $pathsManager->ensureDirectory($cachePath);
         if (is_file($cachePath . $this->temporaryName)) {
@@ -140,7 +142,7 @@ class fileDataChunk extends DataChunk implements ElementHolderInterface, Element
     {
         $result = false;
         if ($this->fileReceived) {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $result = $pathsManager->getPath('uploadsCache') . $this->temporaryName;
         }
         return $result;
@@ -151,7 +153,8 @@ class fileDataChunk extends DataChunk implements ElementHolderInterface, Element
         if ($this->structureElement instanceof StructureElementUploadedFilesPathInterface) {
             return $this->structureElement->getUploadedFilesPath();
         }
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         return $pathsManager->getPath('uploads');
     }
 }
+

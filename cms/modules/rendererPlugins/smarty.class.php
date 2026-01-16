@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 /**
  * Class smartyRendererPlugin
  *
@@ -22,7 +24,7 @@ class smartyRendererPlugin extends rendererPlugin
 
     public function init()
     {
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
 
         $this->requestHeadersManager = $this->getService('requestHeadersManager');
         $this->httpResponse = CmsHttpResponse::getInstance();

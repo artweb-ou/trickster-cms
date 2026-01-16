@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class renderer implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -41,7 +43,7 @@ class renderer implements DependencyInjectionContextInterface
     protected function createPlugin($pluginName, $applicationName, $debugMode)
     {
         $plugin = false;
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         $fileDirectory = $pathsManager->getRelativePath('rendererPlugins');
         $fileName = $pluginName . '.class.php';
         if ($filePath = $pathsManager->getIncludeFilePath($fileDirectory . $fileName)) {
@@ -61,4 +63,5 @@ class renderer implements DependencyInjectionContextInterface
     {
     }
 }
+
 

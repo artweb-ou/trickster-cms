@@ -6,23 +6,10 @@ class ServerSessionManager
 {
     protected $sessionId;
     protected $sessionName;
-    protected $sessionLifeTime;
+    protected $sessionLifeTime = 1440;
     protected $sessionsPath;
     protected $started = false;
     protected $enabled = false;
-
-    /**
-     * @var PathsManager
-     */
-    protected $pathsManager;
-
-    /**
-     * @param PathsManager $pathsManager
-     */
-    public function setPathsManager(PathsManager $pathsManager)
-    {
-        $this->pathsManager = $pathsManager;
-    }
 
     /**
      * @return string
@@ -53,7 +40,9 @@ class ServerSessionManager
         return $this->sessionId;
     }
 
-    public function __construct()
+    public function __construct(
+        protected \App\Paths\PathsManager $pathsManager
+    )
     {
         $this->sessionName = '';
     }

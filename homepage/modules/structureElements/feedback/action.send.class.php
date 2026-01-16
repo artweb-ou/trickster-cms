@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class sendFeedback extends structureElementAction
 {
     use AjaxFormTrait;
@@ -141,7 +143,7 @@ class sendFeedback extends structureElementAction
                         }
                     }
 
-                    $pathsManager = $this->getService('PathsManager');
+                    $pathsManager = $this->getService(PathsManager::class);
                     $uploadsPath = $pathsManager->getPath('uploads');
                     $cachePath = $pathsManager->getPath('uploadsCache');
                     $files = [];

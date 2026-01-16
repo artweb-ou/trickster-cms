@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class exportTranslationsExport extends structureElementAction
 {
     public function setExpectedFields(&$expectedFields)
@@ -57,7 +59,7 @@ class exportTranslationsExport extends structureElementAction
 
         $renderer->assign('languagesList', $languageCodes);
 
-        $path = $this->getService('PathsManager')->getPath('trickster');
+        $path = $this->getService(PathsManager::class)->getPath('trickster');
         $renderer->setTemplatesFolder($path . 'cms/templates/xml');
         $renderer->setTemplate('xml.translations.tpl');
 
@@ -68,4 +70,5 @@ class exportTranslationsExport extends structureElementAction
         exit;
     }
 }
+
 

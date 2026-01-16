@@ -2,7 +2,9 @@
 declare(strict_types=1);
 
 use App\Logging\RedisRequestLogger;
+use App\Paths\PathsManager;
 use Illuminate\Database\Connection;
+use function DI\autowire;
 use function DI\factory;
 
 return [
@@ -13,7 +15,7 @@ return [
         return $controller->getConfigManager();
     },
     PathsManager::class => static function (controller $controller) {
-        return $controller->getApplication()->getService('PathsManager');
+        return $controller->getApplication()->getService(PathsManager::class);
     },
     LanguagesManager::class => static function (controller $controller) {
         return $controller->getApplication()->getService('LanguagesManager');
@@ -24,6 +26,14 @@ return [
     Connection::class => static function (controller $controller) {
         return $controller->getApplication()->getService('db');
     },
+    eventsLog::class => autowire()
+        ->constructorParameter('statsDb', DI\get('statsDb'))
+        ->constructorParameter('db', DI\get(Connection::class)),
+
+    'statsDb' => static function (controller $controller) {
+        return $controller->getApplication()->getService('statsDb');
+    },
+
     RedisRequestLogger::class => factory(
         fn(
             ConfigManager $cm,

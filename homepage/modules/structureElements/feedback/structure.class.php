@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class feedbackElement extends dynamicGroupFieldsStructureElement
 {
     use ConfigurableLayoutsProviderTrait;
@@ -108,7 +110,7 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
             return $result;
         }
         $exportId = uniqid();
-        $dir = $this->getService('PathsManager')->getPath('temporary');
+        $dir = $this->getService(PathsManager::class)->getPath('temporary');
         if (!is_dir($dir)) {
             mkdir($dir);
         }
@@ -152,7 +154,7 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
         $zip->open($zipPath, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
 
         $zippedStuff = [$excelFile];
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         foreach ($this->getAnswers() as $answer) {
             $answerValues = $answer->getGenericValues();
             $answerValuesNew = [];
@@ -337,4 +339,5 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
     }
 
 }
+
 

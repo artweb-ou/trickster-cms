@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class receiveSimpleSetting extends structureElementAction
 {
     protected $loggable = true;
@@ -23,7 +25,7 @@ class receiveSimpleSetting extends structureElementAction
                     } elseif (strpos($structureElement->value, '#') === false) {
                         $structureElement->value = '#' . $structureElement->value;
                     }
-                    $cachePath = $this->getService('PathsManager')
+                    $cachePath = $this->getService(PathsManager::class)
                         ->getPath('cssCache');
                     if ($handler = opendir($cachePath)) {
                         while (($fileName = readdir($handler)) !== false) {

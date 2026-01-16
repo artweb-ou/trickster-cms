@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 /**
  * Class receiveFilesShared
  *
@@ -21,7 +23,7 @@ class receiveFilesShared extends structureElementAction
         foreach ($propertyNames as $propertyName) {
             if ($filesInfo = $structureElement->$propertyName) {
                 $isPrivilegesSettingRequired = $structureElement->isPrivilegesSettingRequired();
-                $pathsManager = $this->getService('PathsManager');
+                $pathsManager = $this->getService(PathsManager::class);
                 $uploadsPath = $pathsManager->getPath('uploads');
                 $cachePath = $pathsManager->getPath('uploadsCache');
                 $privilegesManager = $this->getService('privilegesManager');
@@ -72,4 +74,5 @@ class receiveFilesShared extends structureElementAction
         $expectedFields = $this->structureElement->getFileSelectorPropertyNames();
     }
 }
+
 

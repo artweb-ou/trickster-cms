@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class ResourcesUniterHelperServiceContainer extends DependencyInjectionServiceContainer
 {
     public function makeInstance()
@@ -33,7 +35,7 @@ class ResourcesUniterHelperServiceContainer extends DependencyInjectionServiceCo
         } elseif ($userAgentVersion = $requestHeadersManager->getUserAgentVersion()) {
             $resourcesUniterHelper->setUserAgentVersion($userAgentVersion);
         }
-        $pathsManager = $this->registry->getService('PathsManager');
+        $pathsManager = $this->registry->getService(PathsManager::class);
         if ($option = $this->getOption('cssCachePath')) {
             $resourcesUniterHelper->setCssCachePath($option);
         } else {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Paths\PathsManager;
 use ImageProcess\ImageProcess;
 
 /**
@@ -17,7 +18,7 @@ class imageProcessRendererPlugin extends rendererPlugin
         $this->requestHeadersManager = $this->getService('requestHeadersManager');
         $this->httpResponse = CmsHttpResponse::getInstance();
 
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         $this->cachePath = $pathsManager->getPath('imagesCache');
         $this->renderingEngine = new ImageProcess($this->cachePath);
         $defaultCachePermissions = $configManager->get('paths.defaultCachePermissions');

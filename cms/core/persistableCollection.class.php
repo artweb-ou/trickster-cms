@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 /**
  * Class persistableCollection
  *
@@ -106,7 +108,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         $this->container = $container;
         $this->resourceName = $resourceName;
         if (!class_exists('pdoTransport')) {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $path = $pathsManager->getIncludeFilePath('modules/transportObjects/pdoTransport.class.php');
             include_once($path);
         }
@@ -426,4 +428,5 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         return $result;
     }
 }
+
 

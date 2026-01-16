@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class javascriptUniterRendererPlugin extends rendererPlugin
 {
     use ResourceUniterTrait;
@@ -10,7 +12,7 @@ class javascriptUniterRendererPlugin extends rendererPlugin
 
     public function init()
     {
-        $pathsManager = $this->getService('PathsManager');
+        $pathsManager = $this->getService(PathsManager::class);
         $this->cachePath = $pathsManager->getPath('javascriptCache');
         $this->requestHeadersManager = $this->getService('requestHeadersManager');
         $this->httpResponse = CmsHttpResponse::getInstance();

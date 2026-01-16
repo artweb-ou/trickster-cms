@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 abstract class DataChunk extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -37,7 +39,7 @@ abstract class DataChunk extends errorLogger implements DependencyInjectionConte
         $result = false;
         $className = $validatorName . 'Validator';
         if (!class_exists($className, false)) {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->getService(PathsManager::class);
             $fileDirectory = $pathsManager->getRelativePath('validators');
             if ($fileName = $pathsManager->getIncludeFilePath($fileDirectory . $validatorName . '.class.php')) {
                 include_once($fileName);
@@ -170,4 +172,5 @@ interface ExtraDataHolderDataChunkInterface
 
     public function copyExtraData($oldValue, $oldId, $newId);
 }
+
 

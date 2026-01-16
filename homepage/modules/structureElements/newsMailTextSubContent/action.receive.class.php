@@ -1,5 +1,7 @@
 <?php
 
+use App\Paths\PathsManager;
+
 class receiveNewsMailTextSubContent extends structureElementAction
 {
     protected $loggable = true;
@@ -12,7 +14,7 @@ class receiveNewsMailTextSubContent extends structureElementAction
                 $structureElement->image = $structureElement->id;
                 $structureElement->originalName = $structureElement->getDataChunk('image')->originalName;
             } elseif ($structureElement->replacementImage) {
-                $uploadsPath = $this->getService('PathsManager')->getPath('uploads');
+                $uploadsPath = $this->getService(PathsManager::class)->getPath('uploads');
                 $oldFile = $uploadsPath . $structureElement->replacementImage;
                 $newFile = $uploadsPath . $structureElement->id;
                 if (file_exists($oldFile) && is_file($oldFile)) {

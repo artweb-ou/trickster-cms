@@ -91,10 +91,11 @@ class captchaApplication extends controllerApplication
         $controller = controller::getInstance();
         $filePath = $controller->getProjectPath() . 'images/' . $this->backgroundImage;
         if (!is_file($filePath)) {
-            $pathsManager = $this->getService('PathsManager');
+            $pathsManager = $this->pathsManager;
             $filePath = $pathsManager->getIncludeFilePath('images/public/' . $this->backgroundImage);
         }
         return $filePath;
     }
 }
+
 

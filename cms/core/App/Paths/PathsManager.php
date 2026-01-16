@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Paths;
+use Config;
+
 class PathsManager
 {
     protected $rootPath;

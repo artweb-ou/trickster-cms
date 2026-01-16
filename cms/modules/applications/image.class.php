@@ -24,9 +24,9 @@ class imageApplication extends controllerApplication
         $this->processRequestParameters();
         $imagePreset = $this->getService('ConfigManager')->get("images-desktop.{$this->layoutType}");
         if (isset($imagePreset['path'])) {
-            $originalFilePath = $this->getService('PathsManager')->getPath($imagePreset['path']) . $this->id;
+            $originalFilePath = $this->pathsManager->getPath($imagePreset['path']) . $this->id;
         } else {
-            $originalFilePath = $this->getService('PathsManager')->getPath('uploads') . $this->id;
+            $originalFilePath = $this->pathsManager->getPath('uploads') . $this->id;
         }
         $result = false;
         if (is_file($originalFilePath)) {
@@ -140,3 +140,4 @@ class imageApplication extends controllerApplication
         return $filterValue;
     }
 }
+
