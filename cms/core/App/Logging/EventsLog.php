@@ -1,8 +1,18 @@
 <?php
 
-use Illuminate\Database\MySqlConnection;
+namespace App\Logging;
 
-class eventsLog extends errorLogger implements DependencyInjectionContextInterface
+use DependencyInjectionContextInterface;
+use DependencyInjectionContextTrait;
+use errorLogger;
+use Event;
+use Illuminate\Database\MySqlConnection;
+use persistableCollection;
+use ServerSessionManager;
+use user;
+use VisitorsManager;
+
+class EventsLog extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
 
@@ -13,7 +23,9 @@ class eventsLog extends errorLogger implements DependencyInjectionContextInterfa
     public function __construct(
         protected MySqlConnection $db,
         protected MySqlConnection $statsDb,
-        protected VisitorsManager                      $visitorsManager,
+        protected VisitorsManager $visitorsManager,
+        protected ServerSessionManager $serverSessionManager,
+        protected User $user
     )
     {
     }
@@ -115,7 +127,7 @@ class eventsLog extends errorLogger implements DependencyInjectionContextInterfa
     public function logEvent($elementId, $type, $userId = null, $targetId = false, $uri = false)
     {
         if ($userId === null) {
-            $user = $this->getService('user');
+            $user = $this->user;
             if ($user->userName !== 'anonymous') {
                 $userId = $user->id;
             } else {
@@ -128,7 +140,7 @@ class eventsLog extends errorLogger implements DependencyInjectionContextInterfa
         $object->type = $type;
         $object->userIp = $_SERVER['REMOTE_ADDR'];
         $object->userId = $userId;
-        $object->session = $this->getService('ServerSessionManager')->getSessionId();
+        $object->session = $this->serverSessionManager->getSessionId();
         $object->time = time();
         $object->elementId = $elementId;
         $object->targetId = $targetId;

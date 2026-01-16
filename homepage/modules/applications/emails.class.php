@@ -1,5 +1,7 @@
 <?php
 
+use App\Logging\EventsLog;
+
 class emailsApplication extends controllerApplication
 {
     public $rendererName = 'smarty';
@@ -140,7 +142,7 @@ class emailsApplication extends controllerApplication
 
     protected function logNewsMailEvents($type, $url = null)
     {
-        $eventLogger = $this->getService('eventsLog');
+        $eventLogger = $this->getService(EventsLog::class);
         $controller = controller::getInstance();
         $dispatchmentId = $controller->getParameter('id');
         $newsMailsAddress = '';

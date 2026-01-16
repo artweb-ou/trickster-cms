@@ -1,5 +1,7 @@
 <?php
 
+use App\Logging\EventsLog;
+
 trait EventLoggingElementTrait
 {
     public function logViewEvent()
@@ -14,7 +16,7 @@ trait EventLoggingElementTrait
         if (!$visitor) {
             return;
         }
-        $eventsLog = $this->getService('eventsLog');
+        $eventsLog = $this->getService(EventsLog::class);
         $event = $eventsLog->generateEvent($type, $this->id, $parameters);
         $eventsLog->saveEvent($event);
     }

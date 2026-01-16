@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Logging\EventsLog;
 use App\Logging\RedisRequestLogger;
 use App\Paths\PathsManager;
 use Illuminate\Database\Connection;
@@ -26,7 +27,13 @@ return [
     Connection::class => static function (controller $controller) {
         return $controller->getApplication()->getService('db');
     },
-    eventsLog::class => autowire()
+    ServerSessionManager::class => static function (controller $controller) {
+        return $controller->getApplication()->getService('ServerSessionManager');
+    },
+    User::class => static function (controller $controller) {
+        return $controller->getApplication()->getService('User');
+    },
+    EventsLog::class => autowire()
         ->constructorParameter('statsDb', DI\get('statsDb'))
         ->constructorParameter('db', DI\get(Connection::class)),
 

@@ -104,7 +104,7 @@ class Visitor
     public function setMostViewedCategories()
     {
         $structureManager = $this->getService('structureManager');
-        $eventsLog = $this->getService('eventsLog');
+        $eventsLog = $this->getService(EventsLog::class);
         $top = [];
         $viewsByElement = $eventsLog->queryElementEventOccurrences('category_view', $this->id);
         foreach ($viewsByElement as $id => $views) {
@@ -134,7 +134,7 @@ class Visitor
     public function setMostViewedProducts()
     {
         $structureManager = $this->getService('structureManager');
-        $eventsLog = $this->getService('eventsLog');
+        $eventsLog = $this->getService(EventsLog::class);
         $top = [];
         $viewsByElement = $eventsLog->queryElementEventOccurrences('product_view', $this->id);
         foreach ($viewsByElement as $id => $views) {
@@ -381,7 +381,7 @@ class Visitor
     protected function setAddedProductsToShoppingBasket()
     {
         $this->addedProducts = [];
-        $eventLogger = $this->getService('eventsLog');
+        $eventLogger = $this->getService(EventsLog::class);
         $eventType = 'shoppingbasket_addition';
         $db = $this->getService('db');
         $eventId = $eventLogger->getEventTypeId($eventType);
@@ -415,7 +415,7 @@ class Visitor
     protected function setFeedbackAnswers()
     {
         $this->feedbacks = [];
-        $eventLogger = $this->getService('eventsLog');
+        $eventLogger = $this->getService(EventsLog::class);
         $eventType = 'feedback';
         $db = $this->getService('db');
         $eventId = $eventLogger->getEventTypeId($eventType);
@@ -448,7 +448,7 @@ class Visitor
     protected function setEmailsClickEvent()
     {
         $this->emailClicks = [];
-        $eventLogger = $this->getService('eventsLog');
+        $eventLogger = $this->getService(EventsLog::class);
         $eventType = 'emailClick';
         $db = $this->getService('db');
         $eventId = $eventLogger->getEventTypeId($eventType);

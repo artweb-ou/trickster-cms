@@ -1,5 +1,6 @@
 <?php
 
+use App\Logging\EventsLog;
 use App\Paths\PathsManager;
 
 class sendFeedback extends structureElementAction
@@ -130,7 +131,7 @@ class sendFeedback extends structureElementAction
                         $event->setType('feedback');
                         $event->setVisitorId($visitor->id);
                         $event->setElementId($answerElement->id);
-                        $eventLogger = $this->getService('eventsLog');
+                        $eventLogger = $this->getService(EventsLog::class);
                         $eventLogger->saveEvent($event);
                     }
                     foreach ($answerFieldValues as $fieldId => $fieldValue) {

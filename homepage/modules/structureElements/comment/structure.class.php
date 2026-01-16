@@ -1,5 +1,7 @@
 <?php
 
+use App\Logging\EventsLog;
+
 /**
  * Class commentElement
  *
@@ -87,7 +89,7 @@ class commentElement extends structureElement implements MetadataProviderInterfa
 
     public function logCreation()
     {
-        $this->getService('eventsLog')->logEvent($this->id, 'comment');
+        $this->getService(EventsLog::class)->logEvent($this->id, 'comment');
     }
 
     public function recalculateVotes()

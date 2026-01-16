@@ -11,7 +11,7 @@ class eventsApplication extends controllerApplication {
     public function execute($controller)
     {
         $visitorManager = $this->getService('VisitorsManager');
-        $eventLogger = $this->getService('eventsLog');
+        $eventLogger = $this->getService(EventsLog::class);
         $currentVisitor = $visitorManager->getCurrentVisitor();
         $action = $controller->getParameter('action');
         if($action == 'emailClick') {

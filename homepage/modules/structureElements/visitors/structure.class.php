@@ -1,5 +1,7 @@
 <?php
 
+use App\Logging\EventsLog;
+
 class visitorsElement extends structureElement
 {
     public $languagesParentElementMarker = 'adminLanguages';
@@ -76,7 +78,7 @@ class visitorsElement extends structureElement
         $db = $this->getService('db');
         $db->enableQueryLog();
         $visitorsManager = $this->getService(VisitorsManager::class);
-        $eventsLog = $this->getService(eventsLog::class);
+        $eventsLog = $this->getService(EventsLog::class);
         $query = $visitorsManager->createVisitorQuery();
         $query->leftJoin($db->raw('(SELECT `visitorId`,  SUM(`amount`) ordersSum,  `orderId`,  `orderStatus` FROM
             `engine_visitor_order` LEFT JOIN engine_module_order ON orderId = engine_module_order.id WHERE 

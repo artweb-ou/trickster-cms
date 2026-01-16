@@ -10,40 +10,17 @@ class VisitorsManager extends errorLogger
     const TRACKING_CODE_COOKIE = 'tc';
     const VISIT_RECORDED_COOKIE = 'vr';
     protected $trackingCode = '';
-    /**
-     * @var Connection
-     */
-    protected $statsDb;
-
     protected $currentVisitorLoaded = false;
     protected $currentVisitor;
     protected $visitationRecorded;
-    /**
-     * @var eventsLog
-     */
-    protected $eventsLog;
 
-    public function __construct()
+    public function __construct(
+        protected Connection $statsDb,
+    )
     {
         if (!empty($_COOKIE[self::TRACKING_CODE_COOKIE])) {
             $this->trackingCode = $_COOKIE[self::TRACKING_CODE_COOKIE];
         }
-    }
-
-    /**
-     * @param mixed $statsDb
-     */
-    public function setStatsDb($statsDb)
-    {
-        $this->statsDb = $statsDb;
-    }
-
-    /**
-     * @param mixed $eventsLog
-     */
-    public function setEventsLog($eventsLog)
-    {
-        $this->eventsLog = $eventsLog;
     }
 
     /**
@@ -294,9 +271,6 @@ class VisitorsManager extends errorLogger
         $this->createOrderQuery()
             ->where('visitorId', $from->id)
             ->update(['visitorId' => $to->id]);
-
-        //move all events from older visitor to newer one
-        $this->eventsLog->updateVisitor($from->id, $to->id);
     }
 
     public function createVisitorQuery()
