@@ -27,7 +27,7 @@ class textDataChunk extends DataChunk implements ElementStorageValueHolderInterf
 
     public function setExternalValue($value)
     {
-        $this->storageValue = htmlspecialchars(html_entity_decode($value, ENT_QUOTES), ENT_QUOTES);
+        $this->storageValue = htmlspecialchars(html_entity_decode($value ?? '', ENT_QUOTES), ENT_QUOTES);
         $this->formValue = null;
         $this->convertStorageToDisplay();
     }
