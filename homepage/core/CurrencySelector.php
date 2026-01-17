@@ -196,7 +196,7 @@ class CurrencySelector implements DependencyInjectionContextInterface
         /**
          * @var ServerSessionManager $serverSessionManager
          */
-        $serverSessionManager = $this->getService('ServerSessionManager');
+        $serverSessionManager = $this->getService(ServerSessionManager::class);
 
         if ($controller->getParameter('currency')) {
             if ($currenciesInformationIndex = $this->getCurrenciesInformationIndex()) {

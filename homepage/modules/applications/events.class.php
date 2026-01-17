@@ -1,5 +1,7 @@
 <?php
 
+use App\Logging\EventsLog;
+
 class eventsApplication extends controllerApplication {
     protected $eventId;
     public function initialize()

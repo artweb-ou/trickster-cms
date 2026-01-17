@@ -1,5 +1,7 @@
 <?php
 
+use App\Logging\EventsLog;
+
 class Visitor
 {
     use DependencyInjectionContextTrait;

@@ -39,7 +39,7 @@ trait AjaxFormTrait
             /**
              * @var ServerSessionManager $serverSessionManager
              */
-            $serverSessionManager = $this->getService('ServerSessionManager');
+            $serverSessionManager = $this->getService(ServerSessionManager::class);
             $serverSessionManager->set('showSuccessMessage' . $structureElement->id, true);
         }
         $renderer = $this->getService('renderer');

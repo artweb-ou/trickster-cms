@@ -16,7 +16,7 @@ class showRegistration extends structureElementAction
         /**
          * @var ServerSessionManager $serverSessionManager
          */
-        $serverSessionManager = $this->getService('ServerSessionManager');
+        $serverSessionManager = $this->getService(ServerSessionManager::class);
         if ($registeredHere && ($controller->getParameter('success') || ($serverSessionManager->get('showSuccessMessage' . $structureElement->id)))) {
             $serverSessionManager->delete('showSuccessMessage' . $structureElement->id);
             $translationsManager = $this->getService('translationsManager');

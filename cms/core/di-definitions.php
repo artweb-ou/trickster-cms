@@ -27,9 +27,6 @@ return [
     Connection::class => static function (controller $controller) {
         return $controller->getApplication()->getService('db');
     },
-    ServerSessionManager::class => static function (controller $controller) {
-        return $controller->getApplication()->getService('ServerSessionManager');
-    },
     User::class => static function (controller $controller) {
         return $controller->getApplication()->getService('User');
     },
@@ -57,8 +54,11 @@ return [
         ) {
             $instance = new Redis();
             if ($redisConfig = $configManager->getConfig('redis')) {
-                $instance->connect($redisConfig->get('host'), $redisConfig->get('port'), $redisConfig->get('connectionTimeout'));
-                $instance->auth($redisConfig->get('pass'));
+                $enabled = $redisConfig->get('enabled') ?? false;
+                if ($enabled) {
+                    $instance->connect($redisConfig->get('host'), $redisConfig->get('port'), $redisConfig->get('connectionTimeout'));
+                    $instance->auth($redisConfig->get('pass'));
+                }
             }
             return $instance;
         }

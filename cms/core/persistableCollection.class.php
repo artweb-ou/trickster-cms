@@ -54,7 +54,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
                 /**
                  * @var ServerSessionManager $serverSessionManager
                  */
-                $serverSessionManager = $this->getService('ServerSessionManager');
+                $serverSessionManager = $this->getService(ServerSessionManager::class);
 
                 if (!$this->primaryFields = $serverSessionManager->get($keyName)) {
                     $this->primaryFields = $this->transportObject->loadPrimaryFields();
@@ -90,7 +90,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
                 /**
                  * @var ServerSessionManager $serverSessionManager
                  */
-                $serverSessionManager = $this->getService('ServerSessionManager');
+                $serverSessionManager = $this->getService(ServerSessionManager::class);
 
                 if (!$this->columnNames = $serverSessionManager->get($keyName)) {
                     $this->columnNames = $this->transportObject->loadColumnNames();
