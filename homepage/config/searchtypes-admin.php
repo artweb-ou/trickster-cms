@@ -32,7 +32,4 @@
     'socialPost' => [
         'news',
     ],
-    'comment' => [
-        'user',
-    ],
 ];

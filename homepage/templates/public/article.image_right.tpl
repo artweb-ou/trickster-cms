@@ -32,7 +32,6 @@
             </div>
         {/if}
     {/if}
-    {include $theme->template('component.comments.tpl')}
 {/capture}
 {assign moduleClass "article_block article_layout_{$element->getCurrentLayout()}"}
 {assign moduleTitleClass "article_heading"}

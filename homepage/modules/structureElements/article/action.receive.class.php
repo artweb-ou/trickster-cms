@@ -34,7 +34,6 @@ class receiveArticle extends structureElementAction
             'hideTitle',
             'content',
             'displayMenus',
-            'allowComments',
             'image',
         ];
     }

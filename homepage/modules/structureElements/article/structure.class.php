@@ -2,7 +2,6 @@
 
 class articleElement extends menuDependantStructureElement
 {
-    use CommentsTrait;
     use ConfigurableLayoutsProviderTrait;
     public $dataResourceName = 'module_article';
     protected $allowedTypes = ['subArticle'];
@@ -18,16 +17,6 @@ class articleElement extends menuDependantStructureElement
         $moduleStructure['image'] = 'image';
         $moduleStructure['layout'] = 'text';
         $moduleStructure['subLayout'] = 'text';
-        $moduleStructure['allowComments'] = 'checkbox';
-    }
-
-    public function getCommentFormActionURL()
-    {
-        $structureManager = $this->getService('structureManager');
-        if ($parent = $structureManager->getElementsFirstParent($this->id)) {
-            return $parent->getFormActionURL();
-        }
-        return false;
     }
 
     public function getSubArticles()

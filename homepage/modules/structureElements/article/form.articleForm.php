@@ -17,9 +17,6 @@ class ArticleFormStructure extends ElementForm
             'preset' => 'adminImage',
             'filename' => 'image',
         ],
-        'allowComments' => [
-            'type' => 'input.checkbox',
-        ],
         'displayMenus' => [
             'type' => 'select.universal_options_multiple',
             'method' => 'getDisplayMenusInfo',

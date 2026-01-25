@@ -22,7 +22,6 @@
 			<option value='post24Automate' {if $formData.autocomplete=='post24Automate'}selected='selected'{/if}>{translations name="{$structureType}.autocomplete_post24automate"}</option>
 			<option value='smartPostRegion' {if $formData.autocomplete=='smartPostRegion'}selected='selected'{/if}>{translations name="{$structureType}.autocomplete_smartpost_region"}</option>
 			<option value='smartPostAutomate' {if $formData.autocomplete=='smartPostAutomate'}selected='selected'{/if}>{translations name="{$structureType}.autocomplete_smartpost_automate"}</option>
-			<option value='comment' {if $formData.autocomplete=='comment'}selected='selected'{/if}>{translations name="{$structureType}.autocomplete_comment"}</option>
 			<option value='product'{if $formData.autocomplete=='product'} selected='selected'{/if}>{translations name="{$structureType}.autocomplete_product"}</option>
 		</select>
 	</div>

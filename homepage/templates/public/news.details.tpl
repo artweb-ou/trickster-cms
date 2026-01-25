@@ -25,9 +25,6 @@
 			{$element->introduction}
 		{/if}
 	</div>
-
-	{include file=$theme->template('component.comments.tpl')}
-
 {/capture}
 
 {assign moduleTitleClass "news_details_title"}

@@ -1,12 +1,11 @@
 <?php
 
-class newsElement extends structureElement implements MetadataProviderInterface, CommentsHolderInterface, ImageUrlProviderInterface
+class newsElement extends structureElement implements MetadataProviderInterface, ImageUrlProviderInterface
 {
     use ImageUrlProviderTrait;
     use MetadataProviderTrait {
         getTextContent as getTextContentTrait;
     }
-    use CommentsTrait;
 
     public $dataResourceName = 'module_news';
     protected $allowedTypes = [];

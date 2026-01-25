@@ -47,7 +47,6 @@ abstract class socialPluginElement extends structureElement
             'sharing',
             'like',
             'post',
-            'comment',
             'widget',
         ];
     }

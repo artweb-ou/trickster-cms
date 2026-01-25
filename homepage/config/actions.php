@@ -51,7 +51,6 @@
     'formFileInput' => 'showForm',
     'tabsWidget' => 'showForm',
     'registrationInput' => 'showForm',
-    'comment' => 'showForm',
     'newsMailSubContentCategories' => 'showFullList',
     'newsMailSubContentCategory' => 'showForm',
     'newsMailTextSubContent' => 'showForm',

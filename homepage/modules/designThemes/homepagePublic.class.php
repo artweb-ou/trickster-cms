@@ -14,7 +14,6 @@ class homepagePublicDesignTheme extends DesignTheme
         $this->javascriptUrl = $controller->baseURL . $pathsManager->getRelativePath('trickster') . 'homepage/js/public/';
         $this->javascriptPath = $tricksterPath . 'homepage/js/public/';
         $this->javascriptFiles = [
-            'logics.commentForm.js',
             'logics.galleries.js',
             'logics.contentToggler.js',
             'logics.maps.js',
@@ -66,8 +65,6 @@ class homepagePublicDesignTheme extends DesignTheme
             'component.tabs.js',
             'component.toolTip.js',
             'component.ajaxForm.js',
-            'component.commentForm.js',
-            'component.comment.js',
             'component.map.js',
             'component.passwordReminderForm.js',
             'component.lazyImage.js',

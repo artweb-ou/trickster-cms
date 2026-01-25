@@ -22,7 +22,6 @@ trait AutocompleteOptionsTrait
             'post24Automate',
             'smartPostRegion',
             'smartPostAutomate',
-            'comment',
             'product',
             'vatNumber',
         ];

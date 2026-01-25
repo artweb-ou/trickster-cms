@@ -34,7 +34,6 @@
             {/if}
         {/if}
     {/if}
-    {include $theme->template('component.comments.tpl')}
 {/capture}
 {assign moduleClass "article_block article_layout_{$element->getCurrentLayout()}{if !empty($layout)} article_sublayout_{$layout}{/if}"}
 {assign moduleTitleClass "article_heading"}
