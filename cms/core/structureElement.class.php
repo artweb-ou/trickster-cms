@@ -1477,4 +1477,14 @@ abstract class structureElement implements DependencyInjectionContextInterface
     {
         return $this->actionName;
     }
+
+    public function getCreatedTimestamp(): int
+    {
+        return (int)$this->structureDataObject->dateCreated;
+    }
+
+    public function getModifiedTimestamp(): int
+    {
+        return (int)$this->structureDataObject->dateModified;
+    }
 }
