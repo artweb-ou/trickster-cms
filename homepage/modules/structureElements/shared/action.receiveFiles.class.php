@@ -1,6 +1,7 @@
 <?php
 
 use App\Paths\PathsManager;
+use App\Users\CurrentUser;
 
 /**
  * Class receiveFilesShared
@@ -27,7 +28,7 @@ class receiveFilesShared extends structureElementAction
                 $uploadsPath = $pathsManager->getPath('uploads');
                 $cachePath = $pathsManager->getPath('uploadsCache');
                 $privilegesManager = $this->getService('privilegesManager');
-                $user = $this->getService(user::class);
+                $user = $this->getService(CurrentUser::class);
 
                 foreach ($filesInfo as &$fileInfo) {
                     $temporaryFile = $cachePath . basename($fileInfo['tmp_name']);

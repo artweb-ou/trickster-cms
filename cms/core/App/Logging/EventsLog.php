@@ -2,6 +2,7 @@
 
 namespace App\Logging;
 
+use App\Users\CurrentUser;
 use DependencyInjectionContextInterface;
 use DependencyInjectionContextTrait;
 use errorLogger;
@@ -9,7 +10,6 @@ use Event;
 use Illuminate\Database\MySqlConnection;
 use persistableCollection;
 use ServerSessionManager;
-use user;
 use VisitorsManager;
 
 class EventsLog extends errorLogger implements DependencyInjectionContextInterface
@@ -25,7 +25,7 @@ class EventsLog extends errorLogger implements DependencyInjectionContextInterfa
         protected MySqlConnection $statsDb,
         protected VisitorsManager $visitorsManager,
         protected ServerSessionManager $serverSessionManager,
-        protected User $user
+        protected CurrentUser $user
     )
     {
     }

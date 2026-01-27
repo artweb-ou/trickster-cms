@@ -1,6 +1,7 @@
 <?php
 
 use App\Logging\EventsLog;
+use App\Users\CurrentUser;
 
 class emailsApplication extends controllerApplication
 {
@@ -15,7 +16,7 @@ class emailsApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $user = $this->getService(user::class);
+        $user = $this->getService(CurrentUser::class);
         if ($userId = $user->checkUser('crontab', null, true)) {
             $user->switchUser($userId);
 

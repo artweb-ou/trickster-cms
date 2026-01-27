@@ -1,10 +1,12 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class logoutLogin extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $user = $this->getService(user::class);
+        $user = $this->getService(CurrentUser::class);
         $user->logout();
         $controller->redirect($this->getRedirectDestination($structureManager, $controller));
     }

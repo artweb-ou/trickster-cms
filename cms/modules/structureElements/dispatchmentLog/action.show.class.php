@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class showDispatchmentLog extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
@@ -21,7 +23,7 @@ class showDispatchmentLog extends structureElementAction
     protected function getFilters($formData)
     {
         $filter = [];
-        $user = $this->getService(user::class);
+        $user = $this->getService(CurrentUser::class);
 
         if (isset($formData["periodStart"])) {
             $filter["periodStart"] = $this->getTimeStamp($formData["periodStart"]);

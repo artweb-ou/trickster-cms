@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class searchQueriesManager implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -57,7 +59,7 @@ class searchQueriesManager implements DependencyInjectionContextInterface
      */
     public function logInstantSearch($phrase, $resultsCount)
     {
-        $user = $this->getService(user::class);
+        $user = $this->getService(CurrentUser::class);
         $lastSearchPhrase = $user->getStorageAttribute("lastSearchPhrase");
         if ($lastSearchPhrase && stripos($phrase, $lastSearchPhrase) !== false) {
             $searchId = $user->getStorageAttribute("lastSearchId");

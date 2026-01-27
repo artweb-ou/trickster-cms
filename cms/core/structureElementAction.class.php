@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 abstract class structureElementAction extends errorLogger implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
@@ -87,7 +89,7 @@ abstract class structureElementAction extends errorLogger implements DependencyI
     {
         $collection = persistableCollection::getInstance('actions_log');
         $record = $collection->getEmptyObject();
-        $user = $this->getService(user::class);
+        $user = $this->getService(CurrentUser::class);
 
         $record->elementId = $this->structureElement->id;
         $record->elementType = $this->structureElement->structureType;

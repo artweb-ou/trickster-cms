@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class pollElement extends structureElement
 {
     public $dataResourceName = 'module_poll';
@@ -44,7 +46,7 @@ class pollElement extends structureElement
 
     public function currentIpHasVoted()
     {
-        $IP = $this->getService(user::class)->IP;
+        $IP = $this->getService(CurrentUser::class)->IP;
         return $this->ipHasVoted($IP);
     }
 

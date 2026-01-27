@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class showSearchLog extends structureElementAction
 {
     protected $actionsLogData;
@@ -30,7 +32,7 @@ class showSearchLog extends structureElementAction
     protected function getFilters($formData, &$filterNames)
     {
         $filterData = [];
-        $user = $this->getService(user::class);
+        $user = $this->getService(CurrentUser::class);
 
         foreach ($filterNames as &$filterName) {
             if (isset($formData[$filterName])) {

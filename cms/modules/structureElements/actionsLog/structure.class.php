@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class actionsLogElement extends structureElement
 {
     public $languagesParentElementMarker = 'adminLanguages';
@@ -37,7 +39,7 @@ class actionsLogElement extends structureElement
     protected function getFilters($formData, &$filterNames)
     {
         $filterData = [];
-        $user = $this->getService(user::class);
+        $user = $this->getService(CurrentUser::class);
 
         foreach ($filterNames as &$filterName) {
             if (isset($formData[$filterName])) {

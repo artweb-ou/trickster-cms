@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class publicApplication extends controllerApplication implements ThemeCodeProviderInterface
 {
     use JsTranslationsTrait;
@@ -64,7 +66,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
          * @var $settingsManager settingsManager
          */
         $settingsManager = $this->getService('settingsManager');
-        $user = $this->getService(user::class);
+        $user = $this->getService(CurrentUser::class);
         $this->renderer->assign('settings', $settingsManager->getSettingsList());
         $this->renderer->assign('currentUser', $user);
         $this->renderer->assign('theme', $currentTheme);

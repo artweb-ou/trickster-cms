@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class adminApplication extends controllerApplication implements ThemeCodeProviderInterface
 {
     protected $applicationName = 'admin';
@@ -83,7 +85,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $breadcrumbsManager = $this->getService('breadcrumbsManager');
         $currentLocation = $breadcrumbsManager->getBreadcrumbs(false, false, false);
 
-        $user = $this->getService(user::class);
+        $user = $this->getService(CurrentUser::class);
         if ($userElement = $structureManager->getElementById($user->id)) {
             $this->renderer->assign('userElement', $userElement);
         }

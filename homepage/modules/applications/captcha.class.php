@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class captchaApplication extends controllerApplication
 {
     protected $applicationName = 'captcha';
@@ -21,7 +23,7 @@ class captchaApplication extends controllerApplication
     public function execute($controller)
     {
         $text = $this->makeString();
-        $this->getService(user::class)->setStorageAttribute('last_captcha', $text);
+        $this->getService(CurrentUser::class)->setStorageAttribute('last_captcha', $text);
 
         $backgroundImage = imagecreatefrompng($this->getBackgroundImageFile());
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Paths\PathsManager;
+use App\Users\CurrentUser;
 
 class registrationInputElement extends formFieldStructureElement
 {
@@ -78,7 +79,7 @@ class registrationInputElement extends formFieldStructureElement
 
         $autocomplete = $this->autocomplete;
         if ($autocomplete) {
-            $user = $this->getService(user::class);
+            $user = $this->getService(CurrentUser::class);
             switch ($autocomplete) {
                 case 'company':
                 case 'userName':

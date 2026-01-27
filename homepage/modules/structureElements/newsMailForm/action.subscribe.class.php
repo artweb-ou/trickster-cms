@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class subscribeNewsMailForm extends structureElementAction
 {
     /**
@@ -19,7 +21,7 @@ class subscribeNewsMailForm extends structureElementAction
                  */
                 if ($newsMailSubscription = $this->getService('NewsMailSubscription')) {
                     if ($newsMailSubscription->subscribeEmailToNewsMailGroup($structureElement->email)) {
-                        $user = $this->getService(user::class);
+                        $user = $this->getService(CurrentUser::class);
                         $user->setStorageAttribute('subscribed', true);
 
                         $result = true;

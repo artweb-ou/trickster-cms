@@ -1,5 +1,7 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class showLanguage extends structureElementAction
 {
     /**
@@ -13,7 +15,7 @@ class showLanguage extends structureElementAction
         $languagesManager = $this->getService('LanguagesManager');
         $currentLanguageId = $languagesManager->getCurrentLanguageId();
         if (($structureElement->requested || $structureElement->id == $currentLanguageId) && ($controller->getApplication() instanceof publicApplication)) {
-            $user = $this->getService(user::class);
+            $user = $this->getService(CurrentUser::class);
 
             $renderer = $this->getService('renderer');
             $renderer->assign('currentLanguage', $structureElement);

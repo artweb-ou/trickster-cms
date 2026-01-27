@@ -1,6 +1,15 @@
 <?php
 
-class user
+namespace App\Users;
+
+use controller;
+use ErrorLog;
+use Illuminate\Database\Connection;
+use persistableCollection;
+use privilegesManager;
+use ServerSessionManager;
+
+class CurrentUser
 {
     public $id;
     public $IP;
@@ -28,9 +37,9 @@ class user
     protected $userDataObject;
 
     public function __construct(
-        private \Illuminate\Database\Connection $db,
-        private privilegesManager               $privilegesManager,
-        private ServerSessionManager            $serverSessionManager
+        private Connection           $db,
+        private privilegesManager    $privilegesManager,
+        private ServerSessionManager $serverSessionManager
     )
     {
         $this->initialize();

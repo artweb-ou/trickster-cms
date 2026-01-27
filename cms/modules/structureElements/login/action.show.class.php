@@ -1,11 +1,13 @@
 <?php
 
+use App\Users\CurrentUser;
+
 class showLogin extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         $structureElement->hidden = true;
-        $user = $this->getService(user::class);
+        $user = $this->getService(CurrentUser::class);
         $renderer = $this->getService('renderer');
 
         if ($user->userName == 'anonymous') {
