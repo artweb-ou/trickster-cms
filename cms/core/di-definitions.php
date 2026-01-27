@@ -4,7 +4,6 @@ declare(strict_types=1);
 use App\Logging\EventsLog;
 use App\Logging\RedisRequestLogger;
 use App\Paths\PathsManager;
-use App\Users\CurrentUser;
 use Illuminate\Database\Connection;
 use function DI\autowire;
 use function DI\factory;
@@ -28,8 +27,6 @@ return [
     Connection::class => static function (controller $controller) {
         return $controller->getApplication()->getService('db');
     },
-    CurrentUser::class => autowire()
-        ->constructorParameter('db', DI\get(Connection::class)),
     EventsLog::class => autowire()
         ->constructorParameter('statsDb', DI\get('statsDb'))
         ->constructorParameter('db', DI\get(Connection::class)),

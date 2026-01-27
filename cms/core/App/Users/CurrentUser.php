@@ -4,7 +4,6 @@ namespace App\Users;
 
 use controller;
 use ErrorLog;
-use Illuminate\Database\Connection;
 use persistableCollection;
 use privilegesManager;
 use ServerSessionManager;
@@ -37,7 +36,6 @@ class CurrentUser
     protected $userDataObject;
 
     public function __construct(
-        private Connection           $db,
         private privilegesManager    $privilegesManager,
         private ServerSessionManager $serverSessionManager
     )
