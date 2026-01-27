@@ -27,9 +27,8 @@ return [
     Connection::class => static function (controller $controller) {
         return $controller->getApplication()->getService('db');
     },
-    user::class => static function (controller $controller) {
-        return $controller->getApplication()->getService('user');
-    },
+    user::class => autowire()
+        ->constructorParameter('db', DI\get(Connection::class)),
     EventsLog::class => autowire()
         ->constructorParameter('statsDb', DI\get('statsDb'))
         ->constructorParameter('db', DI\get(Connection::class)),

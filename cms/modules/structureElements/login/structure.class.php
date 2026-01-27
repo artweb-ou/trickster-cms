@@ -125,7 +125,7 @@ class loginElement extends menuDependantStructureElement
 
     public function displayForm()
     {
-        $user = $this->getService('user');
+        $user = $this->getService(user::class);
         if ($user->userName == 'anonymous') {
             return true;
         }

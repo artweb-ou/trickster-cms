@@ -57,7 +57,7 @@ class searchQueriesManager implements DependencyInjectionContextInterface
      */
     public function logInstantSearch($phrase, $resultsCount)
     {
-        $user = $this->getService('user');
+        $user = $this->getService(user::class);
         $lastSearchPhrase = $user->getStorageAttribute("lastSearchPhrase");
         if ($lastSearchPhrase && stripos($phrase, $lastSearchPhrase) !== false) {
             $searchId = $user->getStorageAttribute("lastSearchId");

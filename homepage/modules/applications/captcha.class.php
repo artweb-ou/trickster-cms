@@ -21,7 +21,7 @@ class captchaApplication extends controllerApplication
     public function execute($controller)
     {
         $text = $this->makeString();
-        $this->getService('user')->setStorageAttribute('last_captcha', $text);
+        $this->getService(user::class)->setStorageAttribute('last_captcha', $text);
 
         $backgroundImage = imagecreatefrompng($this->getBackgroundImageFile());
 

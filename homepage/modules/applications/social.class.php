@@ -48,7 +48,7 @@ class socialApplication extends controllerApplication
             $this->renderer->fileNotFound();
         } else {
             // no plugin in the URL or session - user is probing or doesn't allow storing session cookie
-            $user = $this->getService('user');
+            $user = $this->getService(user::class);
             $user->setStorageAttribute('socialActionSuccess', false);
             $user->setStorageAttribute('socialActionMessage', $this->translate('user.social_auth_failure'));
             $this->redirect($controller->baseURL);
@@ -57,7 +57,7 @@ class socialApplication extends controllerApplication
 
     protected function action_disconnect()
     {
-        $user = $this->getService('user');
+        $user = $this->getService(user::class);
         $currentUserId = $user->userName !== 'anonymous' ? (int)$user->readUserId() : 0;
         if ($currentUserId > 0) {
             $this->socialDataManager->removeSocialUser($currentUserId, $this->pluginElement->getName());
@@ -74,7 +74,7 @@ class socialApplication extends controllerApplication
         $socialActionMessage = '';
         $apiType = $this->pluginElement->getName();
         $userId = $this->socialDataManager->getCmsUserId($apiType, $this->socialId);
-        $user = $this->getService('user');
+        $user = $this->getService(user::class);
         if ($userId === 0) {
             $currentUserId = $user->userName !== 'anonymous' ? (int)$user->readUserId() : 0;
             if ($currentUserId > 0) {
@@ -104,7 +104,7 @@ class socialApplication extends controllerApplication
         $socialActionSuccess = false;
         $apiType = $this->pluginElement->getName();
         $userId = $this->socialDataManager->getCmsUserId($apiType, $this->socialId);
-        $user = $this->getService('user');
+        $user = $this->getService(user::class);
         if (!$userId) {
             $socialData = $this->pluginApi->getAuthorizedUserData();
             if ($socialData && $socialData->email) {
@@ -148,7 +148,7 @@ class socialApplication extends controllerApplication
             $this->pluginApi->authenticate($_GET['code']);
             $token = $this->pluginApi->getAuthorizationToken();
             $this->storeAccessTokenInSession($token);
-            $user = $this->getService('user');
+            $user = $this->getService(user::class);
             $authCallBackUrl = $user->getStorageAttribute('authCallBackUrl');
             $this->redirect($authCallBackUrl);
         }
@@ -166,7 +166,7 @@ class socialApplication extends controllerApplication
                     ->logMessage("", "Attempt to login with zero facebook user id \r\n"
                         . "\r\n\$_REQUEST = " . var_export($_REQUEST, true) . ';'
                         . "\r\n\$_COOKIE = " . var_export($_COOKIE, true) . ';');
-                $user = $this->getService('user');
+                $user = $this->getService(user::class);
                 $user->setStorageAttribute('lastSocialAction', $this->action);
                 $user->setStorageAttribute('socialActionSuccess', false);
                 $user->setStorageAttribute('socialActionMessage', $this->translate('user.social_auth_failure'));
@@ -179,7 +179,7 @@ class socialApplication extends controllerApplication
                 $uri = substr($uri, 1);
             }
             $returnUrl = $controller->baseURL . $uri;
-            $user = $this->getService('user');
+            $user = $this->getService(user::class);
             $user->setStorageAttribute('lastSocialPlugin', $this->pluginElement->id);
             $user->setStorageAttribute('authCallBackUrl', $returnUrl);
             $this->redirect($controller->baseURL . 'social/action:auth/');
@@ -225,7 +225,7 @@ class socialApplication extends controllerApplication
         $controller = $this->getService('controller');
         $this->action = $controller->getParameter('action');
         if ($this->action == 'auth') {
-            $user = $this->getService('user');
+            $user = $this->getService(user::class);
             $this->pluginId = $user->getStorageAttribute('lastSocialPlugin');
         } else {
             $this->pluginId = $controller->getParameter('plugin');
@@ -249,13 +249,13 @@ class socialApplication extends controllerApplication
     protected function storeAccessTokenInSession($token)
     {
         $tokenKey = get_class($this->pluginApi) . '_access_token';
-        $this->getService('user')->setStorageAttribute($tokenKey, $token);
+        $this->getService(user::class)->setStorageAttribute($tokenKey, $token);
     }
 
     protected function getAccessTokenFromSession()
     {
         $tokenKey = get_class($this->pluginApi) . '_access_token';
-        return $this->getService('user')->getStorageAttribute($tokenKey);
+        return $this->getService(user::class)->getStorageAttribute($tokenKey);
     }
 }
 

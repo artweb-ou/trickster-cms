@@ -19,7 +19,7 @@ class VisitorRemoveApplication extends controllerApplication
         $cache = $this->getService('Cache');
         $cache->enable(false, false, true);
 
-        $user = $this->getService('user');
+        $user = $this->getService(user::class);
         if ($userId = $user->checkUser('crontab', null, true)) {
             $user->switchUser($userId);
             $structureManager = $this->getService('structureManager', [

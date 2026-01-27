@@ -78,7 +78,7 @@ class registrationInputElement extends formFieldStructureElement
 
         $autocomplete = $this->autocomplete;
         if ($autocomplete) {
-            $user = $this->getService('user');
+            $user = $this->getService(user::class);
             switch ($autocomplete) {
                 case 'company':
                 case 'userName':

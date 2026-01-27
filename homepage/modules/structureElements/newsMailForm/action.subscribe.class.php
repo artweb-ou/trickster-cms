@@ -19,7 +19,7 @@ class subscribeNewsMailForm extends structureElementAction
                  */
                 if ($newsMailSubscription = $this->getService('NewsMailSubscription')) {
                     if ($newsMailSubscription->subscribeEmailToNewsMailGroup($structureElement->email)) {
-                        $user = $this->getService('user');
+                        $user = $this->getService(user::class);
                         $user->setStorageAttribute('subscribed', true);
 
                         $result = true;

@@ -115,7 +115,7 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
 
     public function getUser()
     {
-        return $this->getService('user');
+        return $this->getService(user::class);
     }
 
     /**

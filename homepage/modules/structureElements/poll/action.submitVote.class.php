@@ -28,7 +28,7 @@ class submitVotePoll extends structureElementAction
         // send results to DB, redirect the user
         if ($this->validated) {
             $collection = persistableCollection::getInstance("polls_votes");
-            $IP = $this->getService('user')->IP;
+            $IP = $this->getService(user::class)->IP;
 
             foreach ($structureElement->answers as $questionId => $answersList) {
                 foreach ($answersList as &$answerId) {

@@ -19,74 +19,40 @@ class user
     public $website;
     public $userType;
     public $subscribe;
+    public $showemail;
+    public $authorId;
+    public $supporter;
+    public $vip;
+    public $volunteer;
     protected $groupsIdList;
     protected $userDataObject;
-    /** @var \Illuminate\Database\Connection */
-    protected $db;
-    /**
-     * @var privilegesManager
-     */
-    protected $privilegesManager;
 
-    /**
-     * @param privilegesManager $privilegesManager
-     */
-    public function setPrivilegesManager($privilegesManager)
+    public function __construct(
+        private \Illuminate\Database\Connection $db,
+        private privilegesManager               $privilegesManager,
+        private ServerSessionManager            $serverSessionManager
+    )
     {
-        $this->privilegesManager = $privilegesManager;
+        $this->initialize();
     }
 
-    /**
-     * @param ServerSessionManager $serverSessionManager
-     */
-    public function setServerSessionManager($serverSessionManager)
-    {
-        $this->serverSessionManager = $serverSessionManager;
-    }
-
-    public function setDb($db)
-    {
-        $this->db = $db;
-    }
-
-    /**
-     * @var ServerSessionManager
-     */
-    protected $serverSessionManager;
     protected $userResourceName = "module_user";
-    protected $privilegeResourceName = "module_privilege";
     protected $relationsResourceName = "privilege_relations";
-    /** @var user */
-    protected static $instance;
 
-    /**
-     * @return user
-     * @deprecated
-     */
-    public static function getInstance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new user();
-        }
-        return self::$instance;
-    }
-
-    public function __construct()
-    {
-        self::$instance = $this;
-    }
-
-    public function initialize()
+    public function initialize(): void
     {
         $this->readStorage();
         $userId = $this->readUserId();
 
         $usersCollection = persistableCollection::getInstance($this->userResourceName);
 
-        if ($this->userDataObject = $usersCollection->getPersistableObject([
-            'id' => $userId,
-            'languageId' => '0',
-        ])
+        if ($this->userDataObject = $usersCollection->getPersistableObject(
+            [
+                'id' => $userId,
+                'languageId' => '0',
+                'banned' => 0
+            ]
+        )
         ) {
             if ($this->userDataObject->load()) {
                 $this->id = $this->userDataObject->id;
@@ -94,7 +60,6 @@ class user
                 $this->company = $this->userDataObject->company;
                 $this->firstName = $this->userDataObject->firstName;
                 $this->lastName = $this->userDataObject->lastName;
-                $this->address = $this->userDataObject->address;
                 $this->city = $this->userDataObject->city;
                 $this->postIndex = $this->userDataObject->postIndex;
                 $this->country = $this->userDataObject->country;
@@ -104,16 +69,21 @@ class user
                 $this->userType = $this->userDataObject->userType;
                 $this->address = $this->userDataObject->address;
                 $this->subscribe = $this->userDataObject->subscribe;
+                $this->showemail = $this->userDataObject->showemail;
+                $this->supporter = $this->userDataObject->supporter;
+                $this->vip = $this->userDataObject->vip;
+                $this->volunteer = $this->userDataObject->volunteer;
                 $this->IP = $_SERVER['REMOTE_ADDR'];
+                $this->authorId = $this->userDataObject->authorId;
 
                 $this->loadPrivileges();
             }
         }
     }
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
-        if ($this->userName === 'anonymous') {
+        if (!$this->isAuthorized()) {
             return false;
         }
         $groups = array_flip($this->getGroupMarkers());
@@ -135,7 +105,7 @@ class user
         return $result;
     }
 
-    private function loadPrivileges()
+    private function loadPrivileges(): void
     {
         if (!$this->checkStoredPrivileges()) {
             $relationsDataCollection = persistableCollection::getInstance($this->relationsResourceName);
@@ -143,11 +113,11 @@ class user
             $userRelations = $relationsDataCollection->load($searchFields);
 
             if ($idList = $this->getGroupsIdList()) {
-                foreach ($idList as &$userGroupId) {
+                foreach ($idList as $userGroupId) {
                     $searchFields = ['userId' => $userGroupId];
                     $groupRelations = $relationsDataCollection->load($searchFields);
 
-                    foreach ($groupRelations as &$relationObject) {
+                    foreach ($groupRelations as $relationObject) {
                         $elementId = $relationObject->elementId;
                         $type = $relationObject->type;
                         $actionName = $relationObject->action;
@@ -169,7 +139,7 @@ class user
                 }
             }
 
-            foreach ($userRelations as &$relationObject) {
+            foreach ($userRelations as $relationObject) {
                 $elementId = $relationObject->elementId;
                 $type = $relationObject->type;
                 $actionName = $relationObject->action;
@@ -188,13 +158,13 @@ class user
                     $this->privileges[$elementId][$elementType][$actionName] = $type;
                 }
             }
-            if ($this->userName !== 'anonymous') {
+            if ($this->isAuthorized()) {
                 $this->storePrivileges();
             }
         }
     }
 
-    private function checkStoredPrivileges()
+    private function checkStoredPrivileges(): bool
     {
         if (!empty($this->storage['userPrivileges'])) {
             $this->privileges = $this->storage['userPrivileges'];
@@ -203,12 +173,12 @@ class user
         return false;
     }
 
-    private function storePrivileges()
+    private function storePrivileges(): void
     {
         $this->storage['userPrivileges'] = $this->privileges;
     }
 
-    public function refreshPrivileges()
+    public function refreshPrivileges(): void
     {
         $this->deleteStorageAttribute('userPrivileges');
         $this->loadPrivileges();
@@ -219,36 +189,36 @@ class user
         $this->writeStorage();
     }
 
-    protected function readStorage()
+    protected function readStorage(): void
     {
         if ($storage = $this->serverSessionManager->get('storage')) {
             $this->storage = $storage;
         }
     }
 
-    protected function writeStorage()
+    protected function writeStorage(): void
     {
-        if ($this->storage){
+        if ($this->storage) {
             $this->serverSessionManager->set('storage', $this->storage);
         } else {
             $this->serverSessionManager->delete('storage', $this->storage);
         }
     }
 
-    public function logout()
+    public function logout(): void
     {
         $anonymousId = $this->checkUser('anonymous', null, true);
         $this->switchUser($anonymousId);
     }
 
-    public function rememberUser($userName, $userId)
+    public function rememberUser($userName, $userId): void
     {
         $controller = controller::getInstance();
         $salt = $controller->domainURL;
         $sessionName = $this->serverSessionManager->getSessionName();
 
         $userCollection = persistableCollection::getInstance($this->userResourceName);
-        $elements = $userCollection->load(['userName' => $userName, 'id' => $userId]);
+        $elements = $userCollection->load(['userName' => $userName, 'id' => $userId, 'banned' => 0]);
 
         if (count($elements) == 1) {
             $userDataObject = reset($elements);
@@ -260,32 +230,47 @@ class user
         }
     }
 
-    public function forgetUser()
+    public function forgetUser(): void
     {
         setcookie('loginremember_' . $this->serverSessionManager->getSessionName(), '', 0, '/');
     }
 
-    public function checkUser($userName, $password, $ignorePassword = false)
+    /**
+     * @psalm-param 'anonymous' $userName
+     */
+    public function checkUser(string $userName, $password, bool $ignorePassword = false)
     {
-        $userID = false;
+        $userId = false;
 
         $userCollection = persistableCollection::getInstance($this->userResourceName);
         $searchFields = [
             'userName' => $userName,
+            'banned' => 0
         ];
         $users = $userCollection->load($searchFields);
 
-        if (count($users) == 1) {
+        if (!$users) {
+            $searchFields = [
+                'email' => $userName,
+                'banned' => 0
+            ];
+            $users = $userCollection->load($searchFields);
+        }
+
+        if ($users) {
             $user = $users[0];
             $storedPassword = $user->password;
-            if (password_verify($password, $storedPassword) || $ignorePassword) {
+            if (($password !== null && password_verify($password, $storedPassword)) || $ignorePassword) {
                 $userDataObject = reset($users);
-                $userID = $userDataObject->id;
+                if ($userDataObject->verified) {
+                    $userId = $userDataObject->id;
+                }
             } // TODO: delete this md5 password check in 2020
             elseif ($storedPassword == md5($password)) {
                 $userDataObject = reset($users);
-                $userID = $userDataObject->id;
-
+                if ($userDataObject->verified) {
+                    $userId = $userDataObject->id;
+                }
                 // renew the hash from md5 to the new password_hash
                 $user->password = password_hash($password, PASSWORD_DEFAULT);
                 $user->persist();
@@ -294,15 +279,18 @@ class user
             $errorLog = ErrorLog::getInstance();
             $errorLog->logMessage(__CLASS__, 'Non-unique user "' . $userName . '" in database');
         }
-        return $userID;
+        return $userId;
     }
 
-    public function checkExistance($userName)
+    public function checkExistance($userName, $email): bool
     {
-        return !!$this->queryUserData(['userName' => $userName]);
+        return ($this->queryUserData(['userName' => $userName])) || ($this->queryUserData(['email' => $email]));
     }
 
-    public function queryUserData($conditions)
+    /**
+     * @psalm-param array{userName?: mixed, email?: mixed} $conditions
+     */
+    public function queryUserData(array $conditions)
     {
         $userCollection = persistableCollection::getInstance($this->userResourceName);
         $records = $userCollection->load($conditions) ?: [];
@@ -312,7 +300,7 @@ class user
         return null;
     }
 
-    public function switchUser($userId, $resetLivePrivileges = true)
+    public function switchUser($userId, $resetLivePrivileges = true): void
     {
         unset($this->storage['userPrivileges']);
         unset($this->storage['userGroupsIdList']);
@@ -326,9 +314,7 @@ class user
         $this->groupsIdList = null;
 
         $this->writeStorage();
-        self::$instance = null;
         $this->__destruct();
-        $this->__construct();
         $this->initialize();
 
         //todo: remove workaround and update privileges manager
@@ -337,7 +323,7 @@ class user
         }
     }
 
-    public function clearStorage()
+    public function clearStorage(): void
     {
         $this->storage = [];
     }
@@ -356,14 +342,17 @@ class user
                 if ($cookieContents && count($cookieContents) == 2) {
                     $userName = $cookieContents['0'];
                     $userCollection = persistableCollection::getInstance($this->userResourceName);
-                    $elements = $userCollection->load(['userName' => $userName]);
+                    $elements = $userCollection->load(['userName' => $userName, 'banned' => 0]);
 
                     if (count($elements) == 1) {
                         $userDataObject = reset($elements);
                         $loadedUserID = $userDataObject->id;
                         $passwordHash = $userDataObject->password;
                         $salt = $controller->domainURL;
-                        $cookieHash = hash('sha256', $loadedUserID . $userName . $sessionName . strrev($salt) . $passwordHash);
+                        $cookieHash = hash(
+                            'sha256',
+                            $loadedUserID . $userName . $sessionName . strrev($salt) . $passwordHash
+                        );
                         if ($cookieContents[1] == $cookieHash) {
                             $userId = $loadedUserID;
                         }
@@ -399,11 +388,11 @@ class user
                     ],
                 ];
                 if ($rows = $linksCollection->conditionalLoad('parentStructureId', $searchFields)) {
-                    foreach ($rows as &$row) {
+                    foreach ($rows as $row) {
                         $this->groupsIdList[] = $row['parentStructureId'];
                     }
                 }
-                if ($this->userName !== 'anonymous') {
+                if ($this->isAuthorized()) {
                     $this->setStorageAttribute('userGroupsIdList', $this->groupsIdList);
                 }
             }
@@ -412,19 +401,22 @@ class user
         return $this->groupsIdList;
     }
 
-    public function deleteStorageAttribute($name)
+    public function deleteStorageAttribute(string $name): void
     {
         if (isset($this->storage[$name])) {
             unset($this->storage[$name]);
         }
     }
 
-    public function setStorageAttribute($name, $value)
+    public function setStorageAttribute(string $name, mixed $value): void
     {
         $this->storage[$name] = $value;
     }
 
-    public function getStorageAttribute($name)
+    /**
+     * @psalm-param 'border'|'hidden'|'mode' $name
+     */
+    public function getStorageAttribute(string $name)
     {
         $value = false;
         if (isset($this->storage[$name])) {
@@ -447,5 +439,15 @@ class user
             $name = $this->email;
         }
         return $name;
+    }
+
+    public function isAuthorized(): bool
+    {
+        return $this->userName !== 'anonymous';
+    }
+
+    public function hasAds(): bool
+    {
+        return !$this->vip && !$this->volunteer && !$this->supporter;
     }
 }

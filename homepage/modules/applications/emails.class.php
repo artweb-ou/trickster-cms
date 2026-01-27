@@ -15,7 +15,7 @@ class emailsApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $user = $this->getService('user');
+        $user = $this->getService(user::class);
         if ($userId = $user->checkUser('crontab', null, true)) {
             $user->switchUser($userId);
 

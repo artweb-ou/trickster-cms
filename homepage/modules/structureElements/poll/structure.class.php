@@ -44,7 +44,7 @@ class pollElement extends structureElement
 
     public function currentIpHasVoted()
     {
-        $IP = $this->getService('user')->IP;
+        $IP = $this->getService(user::class)->IP;
         return $this->ipHasVoted($IP);
     }
 

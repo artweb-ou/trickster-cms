@@ -142,7 +142,7 @@ class privilegesManager implements DependencyInjectionContextInterface
 
     public function getUserPrivileges()
     {
-        $user = $this->getService('user');
+        $user = $this->getService(user::class);
         if (!$this->userPrivileges) {
             $this->userPrivileges = $user->privileges;
         }

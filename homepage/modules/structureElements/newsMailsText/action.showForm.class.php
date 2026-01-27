@@ -5,7 +5,7 @@ class showFormNewsMailsText extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->requested) {
-            $user = $this->getService('user');
+            $user = $this->getService(user::class);
             if ($structureElement->from == '') {
                 $structureElement->from = $user->firstName . ' ' . $user->lastName;
             }

@@ -87,7 +87,7 @@ abstract class structureElementAction extends errorLogger implements DependencyI
     {
         $collection = persistableCollection::getInstance('actions_log');
         $record = $collection->getEmptyObject();
-        $user = $this->getService('user');
+        $user = $this->getService(user::class);
 
         $record->elementId = $this->structureElement->id;
         $record->elementType = $this->structureElement->structureType;

@@ -37,7 +37,7 @@ class actionsLogElement extends structureElement
     protected function getFilters($formData, &$filterNames)
     {
         $filterData = [];
-        $user = $this->getService('user');
+        $user = $this->getService(user::class);
 
         foreach ($filterNames as &$filterName) {
             if (isset($formData[$filterName])) {
