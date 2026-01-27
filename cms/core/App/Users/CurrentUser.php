@@ -90,30 +90,6 @@ class CurrentUser
         }
     }
 
-    public function isAdmin(): bool
-    {
-        if (!$this->isAuthorized()) {
-            return false;
-        }
-        $groups = array_flip($this->getGroupMarkers());
-        return isset($groups['userGroup-documentsManager']) || isset($groups['userGroup-developer']);
-    }
-
-    public function getGroupMarkers()
-    {
-        static $result;
-        if ($result === null) {
-            $result = [];
-            $groupsIds = $this->getGroupsIdList();
-            if ($groupsIds) {
-                $result = $this->db->table('structure_elements')
-                    ->whereIn('id', $groupsIds)
-                    ->pluck('marker');
-            }
-        }
-        return $result;
-    }
-
     private function loadPrivileges(): void
     {
         if (!$this->checkStoredPrivileges()) {
