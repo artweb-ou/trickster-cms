@@ -246,35 +246,39 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * Returns the list of element's parent elements according to provided link type
      *
-     * @param int $elementId
-     * @param string $linkType
-     * @param bool $restrictLinkTypes
      * @return structureElement[]
      */
-    public function getElementsParents($elementId, $linkType = null, $restrictLinkTypes = true): array
+    public function getElementsParents(int $elementId, ?string $linkType = null, bool $restrictLinkTypes = true): array
     {
         if (!$linkType) {
             $linkType = '';
         }
-        if (!isset($this->elementsParents[$elementId][$linkType])) {
-            $this->elementsParents[$elementId][$linkType] = [];
-            if ($restrictLinkTypes && !$linkType) {
-                $elementsLinks = $this->linksManager->getElementsLinks(
-                    $elementId,
-                    $this->getPathSearchAllowedLinks(),
-                    'child'
-                );
-            } else {
-                $elementsLinks = $this->linksManager->getElementsLinks($elementId, $linkType, 'child');
-            }
+        if (isset($this->elementsParents[$elementId][$linkType])) {
+            return $this->elementsParents[$elementId][$linkType];
+        }
+        if ($restrictLinkTypes && !$linkType) {
+            $elementsLinks = $this->linksManager->getElementsLinks(
+                $elementId,
+                $this->getPathSearchAllowedLinks(),
+                'child'
+            );
+        } else {
+            $elementsLinks = $this->linksManager->getElementsLinks(
+                $elementId,
+                $linkType,
+                'child'
+            );
+        }
 
-            foreach ($elementsLinks as $link) {
-                if ($element = $this->getElementById($link->parentStructureId)) {
-                    $this->elementsParents[$elementId][$linkType][] = $element;
+        foreach ($elementsLinks as $link) {
+            if ($element = $this->getElementById($link->parentStructureId)) {
+                if (!isset($this->elementsParents[$elementId][$linkType])) {
+                    $this->elementsParents[$elementId][$linkType] = [];
                 }
+                $this->elementsParents[$elementId][$linkType][] = $element;
             }
         }
-        return $this->elementsParents[$elementId][$linkType];
+        return $this->elementsParents[$elementId][$linkType] ?? [];
     }
 
     /**
@@ -701,6 +705,13 @@ class structureManager implements DependencyInjectionContextInterface
 
     /**
      * Creates an empty structure element with empty data
+     *
+     * @param string $type Element type (structureType)
+     * @param string $action Initial action to perform
+     * @param int|string|null $parentElementId Parent element ID or marker
+     * @param bool $setCurrent Whether to set this element as current in structure manager
+     * @param string|null $linkType Link type to use for connection. If null, default new element link type (usually 'structure') is used.
+     * @return structureElement|null
      */
     public function createElement(
         string          $type,
@@ -1215,7 +1226,6 @@ class structureManager implements DependencyInjectionContextInterface
     /**
      * @param int $id
      * @param int|null $parentId
-     * @param bool $directlyToParent
      */
     public function getElementById($id, $parentId = null, bool $directlyToParent = false): ?structureElement
     {

@@ -29,7 +29,7 @@ class linksManager extends errorLogger
         $this->elementsConnectedId['parent'] = [];
         $this->elementsConnectedId['child'] = [];
     }
-    
+
     /**
      * loads all non-loaded links for the query parameters, cache the results, compile and return results from cache
      *
@@ -54,9 +54,8 @@ class linksManager extends errorLogger
             $types = [$types];
         }
         if ($forceUpdate || $this->linksLoadRequired($elementId, $types, $elementRoles)) {
-            if (($elementsLinks = $this->loadLinks($elementId, $types, $elementRoles)) !== false) {
-                $this->cacheLinks($elementsLinks, $elementId, $types, $elementRoles);
-            }
+            $elementsLinks = $this->loadLinks($elementId, $types, $elementRoles);
+            $this->cacheLinks($elementsLinks, $elementId, $types, $elementRoles);
         }
         return $this->compileElementLinksList($elementId, $types, $elementRoles);
     }
@@ -150,7 +149,7 @@ class linksManager extends errorLogger
             }
             foreach ($elementsLinks as &$link) {
                 //place appropriate links to appropriate directions/roles
-                if ($elementRole == 'child' && $link->childStructureId == $elementId || $elementRole == 'parent' && $link->parentStructureId == $elementId) {
+                if ($elementRole === 'child' && $link->childStructureId == $elementId || $elementRole == 'parent' && $link->parentStructureId == $elementId) {
                     $this->elementsLinks[$elementRole][$elementId][$link->type][] = $link;
                 }
             }
@@ -162,9 +161,9 @@ class linksManager extends errorLogger
         $result = [];
         foreach ($elementRoles as $elementRole) {
             $searchFields = [];
-            if ($elementRole == 'parent') {
+            if ($elementRole === 'parent') {
                 $searchFields[] = ['parentStructureId', '=', $elementId];
-            } elseif ($elementRole == 'child') {
+            } elseif ($elementRole === 'child') {
                 $searchFields[] = ['childStructureId', '=', $elementId];
             }
             if ($types) {
@@ -467,6 +466,11 @@ class linksManager extends errorLogger
                 unset($this->elementsLinks['parent'][$originalId]);
             }
         }
+    }
+
+    public function resetElementsCacheById(int $id): void
+    {
+        unset($this->elementsLinks['child'][$id], $this->elementsLinks['parent'][$id]);
     }
 
     public function getLink($parentElementId, $elementId, $type = 'structure')

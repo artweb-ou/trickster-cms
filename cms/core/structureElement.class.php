@@ -289,7 +289,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
         $this->structureDataObject->persist();
 
         //update id in data chunk object with new generated value from a database
-        $this->id = $this->structureDataObject->id;
+        $this->id = (int)$this->structureDataObject->id;
 
         if ($oldId != $this->id) {
             $structureManager = $this->getService('structureManager');
@@ -333,7 +333,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
         $this->persistStructureData();
 
         //now check structure name
-        if (($newName = $structureManager->checkStructureName($this)) != $this->structureName) {
+        if (($newName = $structureManager->checkStructureName($this)) !== $this->structureName) {
             $this->structureName = $newName;
             $this->structureDataObject->persist();
         }
@@ -372,6 +372,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
             $linkObject->persist();
             $structureManager->clearElementCache($linkObject->parentStructureId);
         }
+        $linksManager->resetElementsCacheById($this->id);
     }
 
     /**
