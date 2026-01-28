@@ -12,6 +12,9 @@ return [
     controller::class => static function () {
         return controller::getInstance();
     },
+    privilegesManager::class => static function () {
+        return privilegesManager::getInstance();
+    },
     ConfigManager::class => static function (controller $controller) {
         return $controller->getConfigManager();
     },
