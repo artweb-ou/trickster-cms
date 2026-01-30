@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-lang="{$currentLanguage->iso6391}" class="bright-mode"
+lang="{$currentLanguage->iso6391}" class="light-mode"
 >
 <head>
 	{include file=$theme->template("index.head.meta.tpl")}
