@@ -248,7 +248,7 @@ class structureManager implements DependencyInjectionContextInterface
      *
      * @return structureElement[]
      */
-    public function getElementsParents(int $elementId, ?string $linkType = null, bool $restrictLinkTypes = true): array
+    public function getElementsParents(int|string $elementId, ?string $linkType = null, bool $restrictLinkTypes = true): array
     {
         if (!$linkType) {
             $linkType = '';
