@@ -1,6 +1,7 @@
 <?php
 
 use App\Users\CurrentUser;
+use ZxArt\UserPreferences\CurrentThemeProvider;
 
 class publicApplication extends controllerApplication implements ThemeCodeProviderInterface
 {
@@ -85,6 +86,10 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $visitorsManager = $this->getService(VisitorsManager::class);
         $visitorRecorded = $visitorsManager->isVisitationRecorded();
         $this->renderer->assign('newVisitor', !$visitorRecorded);
+
+        $themeProvider = $this->getService(CurrentThemeProvider::class);
+        $this->renderer->assign('currentThemeClass', $themeProvider->getThemeClass());
+
         if (!$pageNotFound) {
             if ($currentElement = $structureManager->getCurrentElement()) {
                 /**
