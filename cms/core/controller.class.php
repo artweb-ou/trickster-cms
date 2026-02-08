@@ -200,42 +200,40 @@ class controller
             $this->application = new $className($this, $applicationName);
             $this->application->setPathsManager($this->pathsManager);
             $this->requestParameters = $this->findRequestParameters($this->requestedPath);
-            $result = $this->application->initialize();
-            if ($result === false) {
-                $this->application = false;
+            $this->urlApplicationName = $this->application->getUrlName();
+
+            // urls should be defined before calling initialize
+            if ($this->directoryName != '' && $this->directoryName != '/') {
+                $this->baseURL = $this->domainURL . '/' . $this->directoryName . '/';
             } else {
-                $this->urlApplicationName = $this->application->getUrlName();
+                $this->baseURL = $this->domainURL . '/';
             }
 
-            if ($this->application) {
-                if ($this->directoryName != '' && $this->directoryName != '/') {
-                    $this->baseURL = $this->domainURL . '/' . $this->directoryName . '/';
-                } else {
-                    $this->baseURL = $this->domainURL . '/';
-                }
-
-                if ($this->urlApplicationName) {
-                    $this->rootURL = $this->baseURL . $this->urlApplicationName . '/';
-                } else {
-                    $this->rootURL = $this->baseURL;
-                }
-                if ($this->requestedPath) {
-                    $this->pathURL = $this->rootURL . implode('/', $this->requestedPath) . '/';
-                } else {
-                    $this->pathURL = $this->rootURL;
-                }
-                if ($this->requestURI) {
-                    $this->fullURL = $this->rootURL . implode('/', $this->requestURI) . '/';
-                } else {
-                    $this->fullURL = $this->rootURL;
-                }
-
-                if ($imploded = $this->getParametersString(true)) {
-                    $this->fullParametersURL = $this->fullURL . $imploded;
-                } else {
-                    $this->fullParametersURL = $this->fullURL;
-                }
+            if ($this->urlApplicationName) {
+                $this->rootURL = $this->baseURL . $this->urlApplicationName . '/';
+            } else {
+                $this->rootURL = $this->baseURL;
             }
+            if ($this->requestedPath) {
+                $this->pathURL = $this->rootURL . implode('/', $this->requestedPath) . '/';
+            } else {
+                $this->pathURL = $this->rootURL;
+            }
+            if ($this->requestURI) {
+                $this->fullURL = $this->rootURL . implode('/', $this->requestURI) . '/';
+            } else {
+                $this->fullURL = $this->rootURL;
+            }
+
+            if ($imploded = $this->getParametersString(true)) {
+                $this->fullParametersURL = $this->fullURL . $imploded;
+            } else {
+                $this->fullParametersURL = $this->fullURL;
+            }
+
+            $this->application->initialize();
+
+
             if ($this->redirectDeprecatedParameters) {
                 if (empty($this->requestParameters['filename'])) {
                     $cssFileName = $this->requestedFile;

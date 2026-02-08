@@ -24,7 +24,6 @@ class apiApplication extends controllerApplication
             $this->startSession($this->mode, $configManager->get('main.adminSessionLifeTime'));
         }
         $this->createRenderer();
-        return true;
     }
 
     public function execute($controller)
