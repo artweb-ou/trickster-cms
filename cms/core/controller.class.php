@@ -193,22 +193,26 @@ class controller
             $this->parseFormData();
             $this->detectFileName();
 
-            $className = '\ZxArt\Controllers\\' . ucfirst($applicationName);
-            if (!class_exists($className)) {
-                $className = $this->applicationName . 'Application';
-            }
-            $this->application = new $className($this, $applicationName);
-            $this->application->setPathsManager($this->pathsManager);
-            $this->requestParameters = $this->findRequestParameters($this->requestedPath);
-            $this->urlApplicationName = $this->application->getUrlName();
-
-            // urls should be defined before calling initialize
+            // baseURL must be available before make() so DI factories can use it
             if ($this->directoryName != '' && $this->directoryName != '/') {
                 $this->baseURL = $this->domainURL . '/' . $this->directoryName . '/';
             } else {
                 $this->baseURL = $this->domainURL . '/';
             }
 
+            $className = '\ZxArt\Controllers\\' . ucfirst($applicationName);
+            if (!class_exists($className)) {
+                $className = $this->applicationName . 'Application';
+            }
+            $this->application = $this->getContainer()->make($className, [
+                'controller' => $this,
+                'applicationName' => $applicationName,
+            ]);
+            $this->application->setPathsManager($this->pathsManager);
+            $this->requestParameters = $this->findRequestParameters($this->requestedPath);
+            $this->urlApplicationName = $this->application->getUrlName();
+
+            // rootURL depends on urlApplicationName which requires the application instance
             if ($this->urlApplicationName) {
                 $this->rootURL = $this->baseURL . $this->urlApplicationName . '/';
             } else {

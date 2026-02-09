@@ -50,8 +50,7 @@ class pdoTransport extends errorLogger implements transportObject
 
     protected function dbConnect()
     {
-        $app = controller::getInstance()->getApplication();
-        $this->pdo = $app->getService('db')->getPdo();
+        $this->pdo = controller::getInstance()->getRegistry()->getService('db')->getPdo();
     }
 
     protected function setDatabase($database)

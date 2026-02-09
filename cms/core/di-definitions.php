@@ -19,23 +19,23 @@ return [
         return $controller->getConfigManager();
     },
     PathsManager::class => static function (controller $controller) {
-        return $controller->getApplication()->getService(PathsManager::class);
+        return $controller->getPathsManager();
     },
     LanguagesManager::class => static function (controller $controller) {
-        return $controller->getApplication()->getService('LanguagesManager');
+        return $controller->getRegistry()->getService('LanguagesManager');
     },
     structureManager::class => static function (controller $controller) {
-        return $controller->getApplication()->getService('structureManager');
+        return $controller->getRegistry()->getService('structureManager');
     },
     Connection::class => static function (controller $controller) {
-        return $controller->getApplication()->getService('db');
+        return $controller->getRegistry()->getService('db');
     },
     EventsLog::class => autowire()
         ->constructorParameter('statsDb', DI\get('statsDb'))
         ->constructorParameter('db', DI\get(Connection::class)),
 
     'statsDb' => static function (controller $controller) {
-        return $controller->getApplication()->getService('statsDb');
+        return $controller->getRegistry()->getService('statsDb');
     },
 
     RedisRequestLogger::class => factory(
