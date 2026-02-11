@@ -1234,6 +1234,12 @@ class structureManager implements DependencyInjectionContextInterface
                 return $this->elementsList[$id];
             }
             if ($directlyToParent) {
+                if (!$parentId) {
+                    $rootId = $this->getRootElementId();
+                    if ($rootId && !isset($this->elementsList[$rootId])) {
+                        $this->loadRootElement($rootId);
+                    }
+                }
                 $this->loadElementsToParent([$id], $parentId);
             } else {
                 $this->loadFromShortestPath($id, $parentId);

@@ -8,6 +8,11 @@ use persistableCollection;
 use privilegesManager;
 use ServerSessionManager;
 
+/**
+ * Do not use this class as a PHP-DI dependency. It reads session storage during construction
+ * and must be initialized only after the controller starts the session. Use CurrentUserService
+ * as the injectable dependency.
+ */
 class CurrentUser
 {
     public $id;
