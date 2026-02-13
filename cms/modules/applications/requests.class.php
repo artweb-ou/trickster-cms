@@ -54,12 +54,12 @@ class requestsApplication extends controllerApplication
 
             $this->renderer->assign('topIpCount', $topIpCount);
             $this->renderer->assign('topIpDuration', $topIpDuration);
-            $this->renderer->assign('topLongestRequests', $this->makeFormatted($topLongestRequests));
+            $this->renderer->assign('topLongestRequests', $this->makeFormatted($topLongestRequests ?? []));
 
         } catch (Exception) {
 
         }
-        $this->renderer->assign('requests', $this->makeFormatted($requests));
+        $this->renderer->assign('requests', $this->makeFormatted($requests ?? []));
         $this->renderer->setContentDisposition('inline');
         $this->renderer->setContentType('text/html');
 
