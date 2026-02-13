@@ -22,7 +22,7 @@
 	overflow: auto;
 	background: @mobilemenu_background;
 	border-left: 1px solid fade(@black, 40);
-	color: @mobilemenu_text_color;
+	color: var(--text-color);
 	max-width: 32em;
 	margin-right: auto;
 	box-shadow: 0 0 0.5rem fade(@trick_shadow_02, 25);
@@ -38,6 +38,10 @@
 	height: 1.5rem;
 	.svg-bg(mobileheader_close, @mobilemenu_text_color, @mobilemenu_text_color);
 	.bg_params(no-repeat, 1.2rem, 1.2rem, 50%, 50%); // @repeat,@width,@height,@posX,@posY
+}
+
+.light-mode .mobilemenu_closeicon {
+	.svg-bg(mobileheader_close, @trick_text_color_02, @trick_text_color_02);
 }
 
 .mobilemenu {

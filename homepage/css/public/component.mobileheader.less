@@ -2,6 +2,15 @@
 @mobileheader_line_width: 2px;
 @mobileheader_height: 3.5em;
 
+.svg-mask-icon(@svgFile, @color, @size) {
+    @svgContent: encodeSvgContent(@svgFile, white, white, false);
+    mask-image: url("@{svgContent}");
+    mask-repeat: no-repeat;
+    mask-position: 50% 50%;
+    mask-size: @size auto;
+    background-color: @color;
+}
+
 .mobileheader {
     position: sticky;
     top: 0;
@@ -133,18 +142,33 @@
 }
 
 .mobileheader_control_menu {
-    .svg-bg(mobileheader_menu, @mobileheader_text_color, @mobileheader_text_color);
-    .bg_params(no-repeat, 20px, auto, 50%, 50%); // @repeat,@width,@height,@posX,@posY
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        .svg-mask-icon(mobileheader_menu, var(--text-color), 20px);
+    }
 }
 
 .mobileheader_control_search {
-    .svg-bg(@trick_search_01, @mobileheader_text_color, false);
-    .bg_params(no-repeat, 24px, auto, 50%, 50%); // @repeat,@width,@height,@posX,@posY
-    //.svg-bg(mobileheader_search, @mobileheader_text_color, @mobileheader_text_color);
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        .svg-mask-icon(mobileheader_search, var(--text-color), 24px);
+    }
 }
 
 .mobileheader_control_user {
-    .svg-bg(mobileheader_user, @mobileheader_text_color, @mobileheader_text_color);
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        .svg-mask-icon(mobileheader_user, var(--text-color), 22px);
+    }
 }
 
 .mobileheader_control_cart {
