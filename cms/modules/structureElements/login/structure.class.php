@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class loginElement extends menuDependantStructureElement
 {
@@ -127,10 +127,14 @@ class loginElement extends menuDependantStructureElement
 
     public function displayForm()
     {
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
         if ($user->userName == 'anonymous') {
             return true;
         }
         return false;
     }
 }
+
+
+

@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 use ZxArt\UserPreferences\CurrentThemeProvider;
 
 class publicApplication extends controllerApplication implements ThemeCodeProviderInterface
@@ -67,7 +67,8 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
          * @var $settingsManager settingsManager
          */
         $settingsManager = $this->getService('settingsManager');
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
         $this->renderer->assign('settings', $settingsManager->getSettingsList());
         $this->renderer->assign('currentUser', $user);
         $this->renderer->assign('theme', $currentTheme);
@@ -372,3 +373,6 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         return $jsScripts;
     }
 }
+
+
+

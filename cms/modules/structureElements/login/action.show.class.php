@@ -1,13 +1,14 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class showLogin extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         $structureElement->hidden = true;
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
         $renderer = $this->getService('renderer');
 
         if ($user->userName == 'anonymous') {
@@ -27,3 +28,6 @@ class showLogin extends structureElementAction
         $renderer->assign('loginForm', $structureElement);
     }
 }
+
+
+

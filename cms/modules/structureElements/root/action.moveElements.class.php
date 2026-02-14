@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class moveElementsRoot extends structureElementAction
 {
@@ -12,7 +12,8 @@ class moveElementsRoot extends structureElementAction
      */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
         $structureElement->executeAction('showFullList');
         $navigationRoot = $structureManager->getElementByMarker($this->getService('ConfigManager')
             ->get('main.rootMarkerAdmin'));
@@ -101,4 +102,7 @@ class moveElementsRoot extends structureElementAction
         return $result;
     }
 }
+
+
+
 

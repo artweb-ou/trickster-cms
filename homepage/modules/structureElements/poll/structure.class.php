@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class pollElement extends structureElement
 {
@@ -46,7 +46,8 @@ class pollElement extends structureElement
 
     public function currentIpHasVoted()
     {
-        $IP = $this->getService(CurrentUser::class)->IP;
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $IP = $currentUserService->getCurrentUser()->IP;
         return $this->ipHasVoted($IP);
     }
 
@@ -140,4 +141,7 @@ class pollElement extends structureElement
         return $this->voteCount;
     }
 }
+
+
+
 

@@ -1,12 +1,16 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class captchaValidator extends validator
 {
     public function execute($formValue)
     {
-        return $formValue && strtolower($formValue) == $this->getService(CurrentUser::class)->getStorageAttribute('last_captcha');
+        $currentUserService = $this->getService(CurrentUserService::class);
+        return $formValue && strtolower($formValue) == $currentUserService->getCurrentUser()->getStorageAttribute('last_captcha');
     }
 }
+
+
+
 

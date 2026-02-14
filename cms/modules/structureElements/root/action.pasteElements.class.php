@@ -1,12 +1,13 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class pasteElementsRoot extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
         $structureElement->executeAction('showFullList');
         if ($contentType = $controller->getParameter('view')) {
             $renderer = $this->getService('renderer');
@@ -70,4 +71,7 @@ class pasteElementsRoot extends structureElementAction
         }
     }
 }
+
+
+
 

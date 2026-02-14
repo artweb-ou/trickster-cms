@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 abstract class structureElementAction extends errorLogger implements DependencyInjectionContextInterface
 {
@@ -89,7 +89,8 @@ abstract class structureElementAction extends errorLogger implements DependencyI
     {
         $collection = persistableCollection::getInstance('actions_log');
         $record = $collection->getEmptyObject();
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
 
         $record->elementId = $this->structureElement->id;
         $record->elementType = $this->structureElement->structureType;
@@ -107,3 +108,6 @@ abstract class structureElementAction extends errorLogger implements DependencyI
         return $this->structureElement->title . " " . $this->structureElement->structureType . " " . $this->structureElement->id;
     }
 }
+
+
+

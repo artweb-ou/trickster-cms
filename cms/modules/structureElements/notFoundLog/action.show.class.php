@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class showNotFoundLog extends structureElementAction
 {
@@ -31,7 +31,8 @@ class showNotFoundLog extends structureElementAction
     protected function getFilters($formData, &$filterNames)
     {
         $filterData = [];
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
 
         foreach ($filterNames as &$filterName) {
             if (isset($formData[$filterName])) {
@@ -56,5 +57,8 @@ class showNotFoundLog extends structureElementAction
         ];
     }
 }
+
+
+
 
 

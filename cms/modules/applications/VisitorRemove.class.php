@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class VisitorRemoveApplication extends controllerApplication
 {
@@ -21,7 +21,8 @@ class VisitorRemoveApplication extends controllerApplication
         $cache = $this->getService('Cache');
         $cache->enable(false, false, true);
 
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
         if ($userId = $user->checkUser('crontab', null, true)) {
             $user->switchUser($userId);
             $structureManager = $this->getService('structureManager', [
@@ -95,3 +96,6 @@ class VisitorRemoveApplication extends controllerApplication
         return $visitors;
     }
 }
+
+
+

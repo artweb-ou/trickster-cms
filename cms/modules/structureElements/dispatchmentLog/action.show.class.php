@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class showDispatchmentLog extends structureElementAction
 {
@@ -23,7 +23,8 @@ class showDispatchmentLog extends structureElementAction
     protected function getFilters($formData)
     {
         $filter = [];
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
 
         if (isset($formData["periodStart"])) {
             $filter["periodStart"] = $this->getTimeStamp($formData["periodStart"]);
@@ -82,3 +83,6 @@ class showDispatchmentLog extends structureElementAction
         ];
     }
 }
+
+
+

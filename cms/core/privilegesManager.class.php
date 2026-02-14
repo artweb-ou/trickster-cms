@@ -1,7 +1,7 @@
 <?php
 
 use App\Paths\PathsManager;
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class privilegesManager implements DependencyInjectionContextInterface
 {
@@ -143,7 +143,8 @@ class privilegesManager implements DependencyInjectionContextInterface
 
     public function getUserPrivileges()
     {
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
         if (!$this->userPrivileges) {
             $this->userPrivileges = $user->privileges;
         }
@@ -263,5 +264,8 @@ class moduleActionPrivilege
         $this->action = $action;
     }
 }
+
+
+
 
 

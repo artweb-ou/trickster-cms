@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class showRegistration extends structureElementAction
 {
@@ -12,7 +12,8 @@ class showRegistration extends structureElementAction
      */
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
         $registeredHere = $user->userName != 'anonymous' && $structureElement->type == 'registration';
 
         /**
@@ -75,3 +76,6 @@ class showRegistration extends structureElementAction
         }
     }
 }
+
+
+

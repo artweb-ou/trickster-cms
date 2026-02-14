@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class userElement extends structureElement implements JsonDataProvider
 {
@@ -135,7 +135,8 @@ class userElement extends structureElement implements JsonDataProvider
                             if ($newAddress->importExternalData($newData)) {
                                 $newAddress->persistElementData();
 
-                                $user = $this->getService(CurrentUser::class);
+                                $currentUserService = $this->getService(CurrentUserService::class);
+                                $user = $currentUserService->getCurrentUser();
                                 $subscribed = true;
                                 $user->setStorageAttribute('subscribed', $subscribed);
 
@@ -197,3 +198,6 @@ class userElement extends structureElement implements JsonDataProvider
         parent::deleteElementData();
     }
 }
+
+
+

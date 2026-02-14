@@ -1,6 +1,6 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class subscribeNewsMailForm extends structureElementAction
 {
@@ -21,7 +21,8 @@ class subscribeNewsMailForm extends structureElementAction
                  */
                 if ($newsMailSubscription = $this->getService('NewsMailSubscription')) {
                     if ($newsMailSubscription->subscribeEmailToNewsMailGroup($structureElement->email)) {
-                        $user = $this->getService(CurrentUser::class);
+                        $currentUserService = $this->getService(CurrentUserService::class);
+                        $user = $currentUserService->getCurrentUser();
                         $user->setStorageAttribute('subscribed', true);
 
                         $result = true;
@@ -54,3 +55,6 @@ class subscribeNewsMailForm extends structureElementAction
         $expectedFields = ['email'];
     }
 }
+
+
+

@@ -1,7 +1,7 @@
 <?php
 
 use App\Paths\PathsManager;
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class registrationInputElement extends formFieldStructureElement
 {
@@ -79,7 +79,8 @@ class registrationInputElement extends formFieldStructureElement
 
         $autocomplete = $this->autocomplete;
         if ($autocomplete) {
-            $user = $this->getService(CurrentUser::class);
+            $currentUserService = $this->getService(CurrentUserService::class);
+            $user = $currentUserService->getCurrentUser();
             switch ($autocomplete) {
                 case 'company':
                 case 'userName':
@@ -128,3 +129,6 @@ class registrationInputElement extends formFieldStructureElement
         return $linksManager->getConnectedIdList($this->id, self::FIELD_LINK_TYPE, 'child');
     }
 }
+
+
+

@@ -1,13 +1,14 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 class showFormNewsMailsText extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->requested) {
-            $user = $this->getService(CurrentUser::class);
+            $currentUserService = $this->getService(CurrentUserService::class);
+            $user = $currentUserService->getCurrentUser();
             if ($structureElement->from == '') {
                 $structureElement->from = $user->firstName . ' ' . $user->lastName;
             }
@@ -31,3 +32,6 @@ class showFormNewsMailsText extends structureElementAction
         }
     }
 }
+
+
+

@@ -1,13 +1,14 @@
 <?php
 
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 abstract class formFieldStructureElement extends structureElement
 {
     public function getAutoCompleteValue()
     {
         $value = null;
-        $user = $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        $user = $currentUserService->getCurrentUser();
         if ($this->autocomplete == 'service') {
             $structureManager = $this->getService('structureManager');
             $controller = $this->getService('controller');
@@ -49,4 +50,7 @@ abstract class formFieldStructureElement extends structureElement
         return $this->dataChunk;
     }
 }
+
+
+
 

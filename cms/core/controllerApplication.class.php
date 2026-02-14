@@ -1,7 +1,7 @@
 <?php
 
 use App\Paths\PathsManager;
-use App\Users\CurrentUser;
+use App\Users\CurrentUserService;
 
 /**
  * Controller application is standardized script, which purpose is to receive external parameters (whether from GET/POST or other objects), operate some business logic according to them and optionally provide some rendered answer
@@ -116,7 +116,8 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
 
     public function getUser()
     {
-        return $this->getService(CurrentUser::class);
+        $currentUserService = $this->getService(CurrentUserService::class);
+        return $currentUserService->getCurrentUser();
     }
 
     /**
@@ -151,3 +152,5 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
         return $this->getService('LanguagesManager');
     }
 }
+
+
