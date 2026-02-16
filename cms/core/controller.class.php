@@ -689,11 +689,12 @@ class controller
             $definitions = array_merge(...$definitions);
             $containerBuilder = new ContainerBuilder();
             $compilationPath = $this->getDebugMode() ? null : $pathsManager->getPath('diCache');
+            $compilationPath = $pathsManager->getPath('diCache');
             if ($compilationPath && !is_dir($compilationPath)) {
                 mkdir($compilationPath, $this->configManager->get('paths.defaultCachePermissions'), true);
             }
             if ($compilationPath && is_dir($compilationPath)) {
-//                $containerBuilder->enableCompilation($compilationPath);
+                $containerBuilder->enableCompilation($compilationPath);
             }
             $containerBuilder->addDefinitions($definitions);
             $container = $containerBuilder->build();

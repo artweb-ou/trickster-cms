@@ -26,10 +26,9 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
      */
     protected $controller;
 
-    public function __construct(controller $controller, $applicationName)
+    public function __construct(controller $controller)
     {
         $this->controller = $controller;
-        $this->applicationName = $applicationName;
 
         $this->setRegistry($controller->getRegistry());
         $this->setContainer($controller->getContainer());
