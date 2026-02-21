@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\Logging\EventsLog;
 use App\Logging\RedisRequestLogger;
 use App\Paths\PathsManager;
+use App\Structure\ActionFactory;
 use Illuminate\Database\Connection;
 use function DI\autowire;
 use function DI\factory;
@@ -24,9 +25,42 @@ return [
     LanguagesManager::class => static function (controller $controller) {
         return $controller->getRegistry()->getService('LanguagesManager');
     },
-    structureManager::class => static function (controller $controller) {
-        return $controller->getRegistry()->getService('structureManager');
+    ActionFactory::class => static function (controller $controller) {
+        return $controller->getRegistry()->getService('ActionFactory');
     },
+    'publicStructureManager' => factory(static function (
+        ActionFactory $actionFactory
+    ) {
+        $controller = controller::getInstance();
+        $configManager = $controller->getConfigManager();
+        $languagesManager = $controller->getRegistry()->getService('LanguagesManager');
+        $registry = $controller->getRegistry();
+        $sm = new structureManager();
+
+        $sm->setRegistry($registry);
+        $sm->setContainer($controller->getContainer());
+        $sm->setActionFactory($actionFactory);
+        $sm->setLinksManager($controller->getRegistry()->getService('linksManager'));
+        $sm->setPrivilegesManager($controller->getRegistry()->getService('privilegesManager'));
+        $sm->setLanguagesManager($languagesManager);
+        $sm->setRootUrl($controller->baseURL);
+        $sm->setRootElementMarker($configManager->get('main.rootMarkerPublic'));
+        $sm->setRequestedPath($controller->requestedPath);
+        $sm->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.publicAllowed'));
+        $sm->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
+        $sm->setCache($controller->getRegistry()->getService('Cache'));
+
+        $deniedCopyLinkTypes = [];
+        if ($config = $configManager->getConfig('deniedCopyLinkTypes')) {
+            $data = $config->getLinkedData();
+            $deniedCopyLinkTypes = array_keys(array_filter($data));
+        }
+        if ($deniedCopyLinkTypes) {
+            $sm->setDeniedCopyLinkTypes($deniedCopyLinkTypes);
+        }
+        $registry->setService('structureManager', $sm);
+        return $sm;
+    }),
     Connection::class => static function (controller $controller) {
         return $controller->getRegistry()->getService('db');
     },

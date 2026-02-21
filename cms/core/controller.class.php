@@ -200,14 +200,11 @@ class controller
                 $this->baseURL = $this->domainURL . '/';
             }
 
-            $className = '\ZxArt\Controllers\\' . ucfirst($applicationName);
+            $className = 'ZxArt\Controllers\\' . ucfirst($applicationName);
             if (!class_exists($className)) {
                 $className = $this->applicationName . 'Application';
             }
-            $this->application = $this->getContainer()->make($className, [
-                'controller' => $this,
-                'applicationName' => $applicationName,
-            ]);
+            $this->application = $this->getContainer()->get($className);
             $this->application->setPathsManager($this->pathsManager);
             $this->requestParameters = $this->findRequestParameters($this->requestedPath);
             $this->urlApplicationName = $this->application->getUrlName();
@@ -694,7 +691,7 @@ class controller
                 mkdir($compilationPath, $this->configManager->get('paths.defaultCachePermissions'), true);
             }
             if ($compilationPath && is_dir($compilationPath)) {
-                $containerBuilder->enableCompilation($compilationPath);
+//                $containerBuilder->enableCompilation($compilationPath);
             }
             $containerBuilder->addDefinitions($definitions);
             $container = $containerBuilder->build();

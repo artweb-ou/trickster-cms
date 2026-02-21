@@ -47,7 +47,7 @@ class structureManager implements DependencyInjectionContextInterface
     protected $requestedPathString = '';
     public $customActions = [];
     public $defaultActions = [];
-    protected $pathSearchAllowedLinks;
+    protected array $pathSearchAllowedLinks;
     public $rootURL = "";
     protected $privilegeChecking = true;
     protected $deniedCopyLinkTypes = [];
@@ -215,7 +215,7 @@ class structureManager implements DependencyInjectionContextInterface
             $limit
         )
         ) {
-            foreach ($foundObjects as &$dataObject) {
+            foreach ($foundObjects as $dataObject) {
                 if ($this->checkElementInParent($dataObject->id, $parentElementId)) {
                     if ($newElement = $this->getElementById($dataObject->id, $parentElementId)) {
                         $result[] = $newElement;
@@ -1545,10 +1545,7 @@ class structureManager implements DependencyInjectionContextInterface
         return $this->pathSearchAllowedLinks;
     }
 
-    /**
-     * @param mixed $pathSearchAllowedLinks
-     */
-    public function setPathSearchAllowedLinks($pathSearchAllowedLinks): void
+    public function setPathSearchAllowedLinks(array $pathSearchAllowedLinks): void
     {
         $this->pathSearchAllowedLinks = $pathSearchAllowedLinks;
     }
