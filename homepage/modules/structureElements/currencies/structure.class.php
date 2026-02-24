@@ -38,7 +38,7 @@ class currenciesElement extends structureElement
 
             $currenciesData[] = $currenciesDataItem;
         }
-        $config = $this->getService('ConfigManager')->getConfig('currencies', true);
+        $config = $this->getService(ConfigManager::class)->getConfig('currencies', true);
         $config->set('list', $currenciesData);
         $config->save();
     }

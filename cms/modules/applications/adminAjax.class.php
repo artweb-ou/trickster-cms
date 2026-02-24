@@ -7,7 +7,7 @@ class adminAjaxApplication extends controllerApplication
 
     public function initialize()
     {
-        $this->startSession('admin', $this->getService('ConfigManager')->get('main.adminSessionLifeTime'));
+        $this->startSession('admin', $this->getService(ConfigManager::class)->get('main.adminSessionLifeTime'));
         $this->createRenderer();
     }
 
@@ -16,7 +16,7 @@ class adminAjaxApplication extends controllerApplication
         /**
          * @var Cache $cache
          */
-        $cache = $this->getService('Cache');
+        $cache = $this->getService(Cache::class);
         $cache->enable(false, false, true);
         
         $currentElement = false;
@@ -24,14 +24,11 @@ class adminAjaxApplication extends controllerApplication
         $this->renderer->assign('responseData', []);
 
         if ($controller->getParameter('id')) {
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl' => $controller->rootURL,
-                'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerAdmin'),
-                'configActions' => true,
-            ], true);
+            $structureManager = $this->getService(structureManager::class);
+            $this->setService('structureManager', $structureManager);
             $this->processRequestParameters();
 
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             if ($controller->requestedPath) {
                 $structureManager->setRequestedPath($controller->requestedPath);
             } else {

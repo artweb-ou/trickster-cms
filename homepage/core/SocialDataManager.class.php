@@ -54,7 +54,7 @@ class SocialDataManager extends errorLogger
             $socialPluginsElement = null;
             $socialPluginsElementId = $structureManager->getElementIdByMarker('socialPlugins');
             if ($socialPluginsElementId) {
-                $linksManager = $this->getService('linksManager');
+                $linksManager = $this->getService(linksManager::class);
                 if ($socialPluginsIds = $linksManager->getConnectedIdList($socialPluginsElementId, 'structure', 'parent')) {
                     $this->socialPlugins = $structureManager->getElementsByIdList($socialPluginsIds, null, true);
                 }

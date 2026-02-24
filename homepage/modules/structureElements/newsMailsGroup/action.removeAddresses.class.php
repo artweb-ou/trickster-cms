@@ -6,7 +6,7 @@ class removeAddressesNewsMailsGroup extends structureElementAction
 
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         if ($this->validated) {
             $elements = $structureElement->elements;
             foreach ($elements as $elementId => &$value) {

@@ -30,7 +30,7 @@ trait DbLoggableApplication
                     $path = $pathsManager->getIncludeFilePath('modules/transportObjects/pdoTransport.class.php');
                     include_once($path);
                 }
-                $this->transportObject = pdoTransport::getInstance($this->getService('ConfigManager')->getConfig('transport'));
+                $this->transportObject = pdoTransport::getInstance($this->getService(ConfigManager::class)->getConfig('transport'));
                 $this->transportObject->setDebug(true);
             }
         }

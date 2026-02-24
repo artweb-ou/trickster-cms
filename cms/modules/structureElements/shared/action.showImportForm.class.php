@@ -33,7 +33,7 @@ class showImportFormShared extends structureElementAction
                 $records = $collection->conditionalLoad(['importOrigin', 'importId'], $conditions);
             }
             $structureElement->setTemplate('shared.content.tpl');
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             //            $renderer->assign('contentSubTemplate', 'shared.importform.tpl');
             $renderer->assign('contentSubTemplate', 'component.form.tpl');
             $renderer->assign('form', $structureElement->getForm('import'));

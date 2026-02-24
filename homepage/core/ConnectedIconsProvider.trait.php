@@ -50,7 +50,7 @@ trait ConnectedIconsProviderTrait
             /**
              * @var linksManager $linksManager
              */
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $this->connectedIconsIds = $linksManager->getConnectedIdList($this->id, $this->structureType . "Icon", "parent");
         }
         return $this->connectedIconsIds;
@@ -61,7 +61,7 @@ trait ConnectedIconsProviderTrait
         /**
          * @var linksManager $linksManager
          */
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
 
         // check icon links
         if ($connectedIconsIds = $this->getConnectedIconsIds()) {

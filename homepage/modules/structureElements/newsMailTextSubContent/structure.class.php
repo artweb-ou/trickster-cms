@@ -27,7 +27,7 @@ class newsMailTextSubContentElement extends structureElement
 
     public function getConnectedCategory()
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $connectedCategoriesIds = $linksManager->getConnectedIdList($this->id, self::LINK_TYPE_CATEGORY, 'child');
         if ($connectedCategoriesIds) {
             $structureManager = $this->getService('structureManager');

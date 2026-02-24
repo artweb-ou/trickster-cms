@@ -9,7 +9,7 @@ abstract class TranslationsStructureElement extends structureElement
 
     protected function makeComparer()
     {
-        $designThemesManager = $this->getService('DesignThemesManager');
+        $designThemesManager = $this->getService(DesignThemesManager::class);
         $translationsCodesComparer = new TranslationsCodesComparer();
         foreach ($this->getThemeCodes() as $themeCode) {
             $theme = $designThemesManager->getTheme($themeCode);
@@ -89,7 +89,7 @@ abstract class TranslationsStructureElement extends structureElement
         if (is_null($this->incompleteTranslations)) {
             $this->incompleteTranslations = [];
             $translationsGroups = $this->getChildrenList();
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
 
             $languages = $languagesManager->getLanguagesList($this->translationsLanguagesGroup);
             $languagesIndex = [];

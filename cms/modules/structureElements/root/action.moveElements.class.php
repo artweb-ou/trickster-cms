@@ -15,11 +15,11 @@ class moveElementsRoot extends structureElementAction
         $currentUserService = $this->getService(CurrentUserService::class);
         $user = $currentUserService->getCurrentUser();
         $structureElement->executeAction('showFullList');
-        $navigationRoot = $structureManager->getElementByMarker($this->getService('ConfigManager')
+        $navigationRoot = $structureManager->getElementByMarker($this->getService(ConfigManager::class)
             ->get('main.rootMarkerAdmin'));
         $navigateId = $controller->getParameter('navigateId');
         if ($contentType = $controller->getParameter('view')) {
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $renderer->assign('contentType', $contentType);
             $structureManager->setNewElementLinkType($contentType);
         }

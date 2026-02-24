@@ -90,7 +90,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
             }
             if (!$this->currentMainMenu) {
                 $structureManager = $this->getService('structureManager');
-                $controller = $this->getService('controller');
+                $controller = $this->getService(controller::class);
                 if ($chain = $structureManager->getElementsChain($controller->requestedPath)) {
                     $this->currentMainMenu = last($chain);
                 }
@@ -311,7 +311,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         $result = [];
         $linkType = 'displayinmenu';
 
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $structureManager = $this->getService('structureManager');
         $rootId = $structureManager->getRootElementId();
         $shownInMenuIdList = [];
@@ -341,7 +341,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
         } else {
             //todo: review this code and remove $urlString
             $structureManager = $this->getService('structureManager');
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $contentType = $controller->getParameter('view') ? $controller->getParameter('view') : 'structure';
 
             $idList = $linksManager->getConnectedIdList($this->id, $contentType, 'parent');
@@ -414,7 +414,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
             /**
              * @var ConfigManager $configManager
              */
-            $configManager = $this->getService('ConfigManager');
+            $configManager = $this->getService(ConfigManager::class);
             if ($contentType == 'headerContent') {
                 $allowedTypes = $configManager->getMerged('language-allowedTypes.header');
             } elseif ($contentType == 'bottomMenu') {
@@ -427,7 +427,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
                 $allowedTypes = $configManager->getMerged('language-allowedTypes.content');
             }
 
-            $privilegesManager = $this->getService('privilegesManager');
+            $privilegesManager = $this->getService(privilegesManager::class);
             $privileges = $privilegesManager->getElementPrivileges($this->id);
 
             foreach ($allowedTypes as &$type) {
@@ -475,8 +475,8 @@ class languageElement extends structureElement implements MetadataProviderInterf
             /**
              * @var DesignThemesManager $designThemesManager
              */
-            $designThemesManager = $this->getService('DesignThemesManager');
-            $configManager = $this->getService('ConfigManager');
+            $designThemesManager = $this->getService(DesignThemesManager::class);
+            $configManager = $this->getService(ConfigManager::class);
 
             if ($theme = $designThemesManager->getTheme($configManager->get('main.publicTheme'))) {
                 $result = $theme->getImageUrl('logo.png', false, false);
@@ -488,7 +488,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
 
     public function getBreadcrumbsTitle(): string
     {
-        if ($this->getService('controllerApplication')->getApplicationName() !== 'admin') {
+        if (controller::getInstance()->getApplicationName() !== 'admin') {
             $firstPageElement = $this->getFirstPageElement();
             if ($firstPageElement) {
                 return $firstPageElement->getTitle();
@@ -499,7 +499,7 @@ class languageElement extends structureElement implements MetadataProviderInterf
 
     public function getBreadcrumbsUrl(): string
     {
-        if ($this->getService('controllerApplication')->getApplicationName() !== 'admin') {
+        if (controller::getInstance()->getApplicationName() !== 'admin') {
             $firstPageElement = $this->getFirstPageElement();
             if ($firstPageElement) {
                 return $firstPageElement->getUrl();

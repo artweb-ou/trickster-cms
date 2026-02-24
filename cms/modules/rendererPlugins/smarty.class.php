@@ -26,14 +26,14 @@ class smartyRendererPlugin extends rendererPlugin
     {
         $pathsManager = $this->getService(PathsManager::class);
 
-        $this->requestHeadersManager = $this->getService('requestHeadersManager');
+        $this->requestHeadersManager = $this->getService(requestHeadersManager::class);
         $this->httpResponse = CmsHttpResponse::getInstance();
 
         $this->httpResponse->setCharset('UTF-8');
 
         $this->renderingEngine = new Smarty();
         $this->renderingEngine->error_reporting = E_ALL;
-        $this->translationsManager = $this->getService('translationsManager');
+        $this->translationsManager = $this->getService(translationsManager::class);
 
         $this->renderingEngine->registerPlugin('function', 'translations', [
             $this,
@@ -217,7 +217,7 @@ class smartyRendererPlugin extends rendererPlugin
     public function setCompileFolder($folder)
     {
         if (!file_exists($folder)) {
-            $cachePermissions = $this->getService('ConfigManager')->get('paths.defaultCachePermissions');
+            $cachePermissions = $this->getService(ConfigManager::class)->get('paths.defaultCachePermissions');
             mkdir($folder, $cachePermissions, true);
         }
         $this->renderingEngine->setCompileDir($folder);

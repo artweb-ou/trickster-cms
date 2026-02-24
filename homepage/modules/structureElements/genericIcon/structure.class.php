@@ -68,8 +68,8 @@ class genericIconElement extends structureElement implements ImageUrlProviderInt
 
     public function getSettingsVariablles($variable)
     {
-        $settingsManager = $this->getService('settingsManager');
-        $configManager = $this->getService('ConfigManager');
+        $settingsManager = $this->getService(settingsManager::class);
+        $configManager = $this->getService(ConfigManager::class);
         $variableValue = $settingsManager->getSetting($variable) ?: $configManager->get($variable);
 
         return $variableValue;

@@ -45,7 +45,7 @@ class visitorsElement extends structureElement
 
     public function getContentListDirection()
     {
-        return $this->getService('controller')
+        return $this->getService(controller::class)
             ->getParameter('dir') === 'asc' ? 'asc' : 'desc';
     }
 
@@ -57,13 +57,13 @@ class visitorsElement extends structureElement
 
     public function getContentListOrder()
     {
-        return $this->getService('controller')
+        return $this->getService(controller::class)
             ->getParameter('order') ?: self::DEFAULT_ORDER_COLUMN;
     }
 
     public function getOrderLinkHref($parameter)
     {
-        $params = $this->getService('controller')->getParameters();
+        $params = $this->getService(controller::class)->getParameters();
         unset($params['page']);
         unset($params['dir']);
         $params['order'] = $parameter;
@@ -200,7 +200,7 @@ class visitorsElement extends structureElement
             'product',
             'minOrderSum',
         ]));
-        $params = (array)$this->getService('controller')->getParameters();
+        $params = (array)$this->getService(controller::class)->getParameters();
         array_walk($params, function (&$value, $key) {
             $value = trim($value);
         });

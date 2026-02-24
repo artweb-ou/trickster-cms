@@ -37,7 +37,7 @@ class showFormUser extends structureElementAction
             }
 
             $structureElement->setTemplate('shared.content.tpl');
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $renderer->assign('contentSubTemplate', 'component.form.tpl');
             $renderer->assign('form', $structureElement->getForm('form'));
         }

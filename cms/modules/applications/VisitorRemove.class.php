@@ -18,17 +18,15 @@ class VisitorRemoveApplication extends controllerApplication
         /**
          * @var Cache $cache
          */
-        $cache = $this->getService('Cache');
+        $cache = $this->getService(Cache::class);
         $cache->enable(false, false, true);
 
         $currentUserService = $this->getService(CurrentUserService::class);
         $user = $currentUserService->getCurrentUser();
         if ($userId = $user->checkUser('crontab', null, true)) {
             $user->switchUser($userId);
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl'    => $controller->rootURL,
-                'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerAdmin'),
-            ], true);
+            $structureManager = $this->getService(structureManager::class);
+            $this->setService('structureManager', $structureManager);
 
             $timestamp = strtotime(date("d-m-Y", strtotime("-3 months")));
             $visitors = $this->getVisitorsOlderThan($timestamp);

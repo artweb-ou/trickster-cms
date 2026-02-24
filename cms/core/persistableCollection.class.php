@@ -27,7 +27,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
     {
         if (!isset(self::$instancesList[$resourceName])) {
             $controller = controller::getInstance();
-            self::$instancesList[$resourceName] = new persistableCollection($resourceName, $controller->getRegistry(), $controller->getContainer());
+            self::$instancesList[$resourceName] = new persistableCollection($resourceName, $controller->getContainer());
         }
 
         return self::$instancesList[$resourceName];
@@ -44,7 +44,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
             /**
              * @var Cache $cache
              */
-            $cache = $this->getService('Cache');
+            $cache = $this->getService(Cache::class);
             if ($cache->isEnabled()) {
                 if (($this->primaryFields = $cache->get($keyName)) === null) {
                     $this->primaryFields = $this->transportObject->loadPrimaryFields();
@@ -80,7 +80,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
             /**
              * @var Cache $cache
              */
-            $cache = $this->getService('Cache');
+            $cache = $this->getService(Cache::class);
             if ($cache->isEnabled()) {
                 if (($this->columnNames = $cache->get($keyName)) === null) {
                     $this->columnNames = $this->transportObject->loadColumnNames();
@@ -102,9 +102,8 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
         return $this->columnNames;
     }
 
-    private function __construct($resourceName, $registry, $container)
+    private function __construct($resourceName, $container)
     {
-        $this->registry = $registry;
         $this->container = $container;
         $this->resourceName = $resourceName;
         if (!class_exists('pdoTransport')) {
@@ -112,7 +111,7 @@ class persistableCollection extends errorLogger implements DependencyInjectionCo
             $path = $pathsManager->getIncludeFilePath('modules/transportObjects/pdoTransport.class.php');
             include_once($path);
         }
-        $this->transportObject = pdoTransport::getInstance($this->getService('ConfigManager')->getConfig('transport'));
+        $this->transportObject = pdoTransport::getInstance($this->getService(ConfigManager::class)->getConfig('transport'));
         $this->transportObject->setResourceName($this->resourceName);
     }
 

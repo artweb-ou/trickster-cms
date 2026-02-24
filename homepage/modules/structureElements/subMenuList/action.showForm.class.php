@@ -5,7 +5,7 @@ class showFormSubMenuList extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->requested) {
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $linksIndex = $linksManager->getElementsLinksIndex($structureElement->id, 'submenulist', 'parent');
 
             if ($languageElement = $structureManager->getElementsFirstParent($structureElement->id)) {
@@ -25,7 +25,7 @@ class showFormSubMenuList extends structureElementAction
                     $structureElement->levelsList = range(1, 6);
                     $structureElement->maxLevelsList = range(1, 6);
                     $structureElement->setTemplate('shared.content.tpl');
-                    $renderer = $this->getService('renderer');
+                    $renderer = $this->getService(renderer::class);
                     $renderer->assign('contentSubTemplate', 'component.form.tpl');
                     $renderer->assign('form', $structureElement->getForm('form'));
                 }

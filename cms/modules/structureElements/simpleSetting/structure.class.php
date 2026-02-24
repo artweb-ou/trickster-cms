@@ -14,7 +14,7 @@ class simpleSettingElement extends structureElement
 
     public function getSettingData()
     {
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
         $settingData = [];
         $languages = $languagesManager->getLanguagesIdList();
         foreach ($languages as &$languageId) {
@@ -31,7 +31,7 @@ class simpleSettingElement extends structureElement
     public function deleteElementData()
     {
         parent::deleteElementData();
-        $settingsManager = $this->getService('settingsManager');
+        $settingsManager = $this->getService(settingsManager::class);
         $settingsManager->generateSettingsFile();
     }
 }

@@ -7,7 +7,7 @@ class showStatisticsNewsMailsText extends structureElementAction
         if ($structureElement->requested) {
             if ($structureElement->hasActualStructureInfo()) {
 
-                $emailDispatcher = $this->getService('EmailDispatcher');
+                $emailDispatcher = $this->getService(EmailDispatcher::class);
                 $historyIndex = $emailDispatcher->getReferencedDispatchmentHistory($structureElement->id);
                 $totalDispatchments = count($historyIndex);
                 $dispatchmentsInfo = array(
@@ -107,7 +107,7 @@ class showStatisticsNewsMailsText extends structureElementAction
             }
             if ($structureElement->final) {
                 $structureElement->setTemplate('shared.content.tpl');
-                $renderer = $this->getService('renderer');
+                $renderer = $this->getService(renderer::class);
                 $renderer->assign('contentSubTemplate', 'newsMailsText.statistics.tpl');
             }
         }

@@ -19,7 +19,7 @@ class subscribeNewsMailForm extends structureElementAction
                 /**
                  * @var NewsMailSubscription $newsMailSubscription
                  */
-                if ($newsMailSubscription = $this->getService('NewsMailSubscription')) {
+                if ($newsMailSubscription = $this->getService(NewsMailSubscription::class)) {
                     if ($newsMailSubscription->subscribeEmailToNewsMailGroup($structureElement->email)) {
                         $currentUserService = $this->getService(CurrentUserService::class);
                         $user = $currentUserService->getCurrentUser();
@@ -38,7 +38,7 @@ class subscribeNewsMailForm extends structureElementAction
             $structureElement->setSubscriptionStatus('fail');
         }
 
-        $renderer = $this->getService('renderer');
+        $renderer = $this->getService(renderer::class);
         if ($renderer instanceof rendererPluginAppendInterface) {
             $renderer->assignResponseData($structureElement->structureType, $structureElement->getElementData());
         }

@@ -45,7 +45,6 @@ class controller
      */
     private $pathsManager;
     public $redirectDeprecatedParameters = false;
-    private DependencyInjectionServicesRegistry $registry;
     private Container $container;
 
     public static function getInstance(?string $configurationFile = null): self
@@ -651,23 +650,6 @@ class controller
             $this->formData[$newId] = $this->formData[$oldId];
             unset($this->formData[$oldId]);
         }
-    }
-
-    public function getRegistry(): DependencyInjectionServicesRegistry
-    {
-        if (!isset($this->registry)) {
-            $pathsManager = $this->getPathsManager();
-            $paths = $pathsManager->getIncludePaths();
-            $servicesFolder = $pathsManager->getRelativePath('services');
-            foreach ($paths as &$path) {
-                $path .= $servicesFolder;
-            }
-            unset($path);
-
-            $registry = new DependencyInjectionServicesRegistry($this->getContainer(), $paths);
-            $this->registry = $registry;
-        }
-        return $this->registry;
     }
 
     public function getContainer(): Container

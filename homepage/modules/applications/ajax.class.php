@@ -7,7 +7,7 @@ class ajaxApplication extends controllerApplication
 
     public function initialize()
     {
-        $this->startSession('public', $this->getService('ConfigManager')->get('main.publicSessionLifeTime'));
+        $this->startSession('public', $this->getService(ConfigManager::class)->get('main.publicSessionLifeTime'));
         $this->createRenderer();
     }
 
@@ -29,7 +29,7 @@ class ajaxApplication extends controllerApplication
             /**
              * @var Cache $cache
              */
-            $cache = $this->getService('Cache');
+            $cache = $this->getService(Cache::class);
             $cache->enable();
 
             $currentElement = false;
@@ -37,14 +37,12 @@ class ajaxApplication extends controllerApplication
 
             if ($controller->getParameter('id')) {
                 //todo: replace with $controller->rootURL and test.
-                $structureManager = $this->getService('structureManager', [
-                    'rootUrl' => $controller->baseURL,
-                    'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
-                ], true);
+                $structureManager = $this->getService('publicStructureManager');
+                $this->setService('structureManager', $structureManager);
 
                 $this->processRequestParameters();
 
-                $languagesManager = $this->getService('LanguagesManager');
+                $languagesManager = $this->getService(LanguagesManager::class);
                 $elementId = $controller->getParameter('id');
 
                 if (is_numeric($elementId)) {

@@ -29,7 +29,7 @@ class searchElement extends menuDependantStructureElement implements MetadataPro
     public function getTypes()
     {
         $this->logError('deprecated method used: searchElement::getTypes');
-        $configManager = $this->getService('ConfigManager');
+        $configManager = $this->getService(ConfigManager::class);
 
         $types = $this->getSearchTypes();
         if ($deprecatedTypes = $configManager->get('main.allowedPublicSearchTypes')) {
@@ -63,11 +63,11 @@ class searchElement extends menuDependantStructureElement implements MetadataPro
 
     public function performSearch($phrase)
     {
-        $configManager = $this->getService('ConfigManager');
+        $configManager = $this->getService(ConfigManager::class);
         $pageSize = self::DEFAULT_PAGE_SIZE;
         $pageNumber = (int)controller::getInstance()->getParameter('page');
         $offset = max(0, $pageNumber - 1) * $pageSize;
-        $search = new Search($this->getRegistry(), $this->getContainer());
+        $search = new Search($this->getContainer());
         $search->setInput($phrase);
         $search->setLimit($pageSize);
         $search->setOffset($offset);
@@ -77,7 +77,7 @@ class searchElement extends menuDependantStructureElement implements MetadataPro
         $result = $search->getResult();
         if ($result->count) {
             // log this search and append the search ID to result urls for tracking
-            $designThemesManager = $this->getService('DesignThemesManager');
+            $designThemesManager = $this->getService(DesignThemesManager::class);
             $currentTheme = $designThemesManager->getCurrentTheme();
             foreach ($result->sets as $set) {
                 if ($currentTheme->templateExists('search.set.' . $set->type . '.tpl')) {

@@ -59,11 +59,11 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
                 $marker = 'adminLanguages';
             } else {
                 if (!isset($rootMarkerPublic)) {
-                    $rootMarkerPublic = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+                    $rootMarkerPublic = $this->getService(ConfigManager::class)->get('main.rootMarkerPublic');
                 }
                 $marker = $rootMarkerPublic;
             }
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             $languageId = $languagesManager->getCurrentLanguageId($marker);
         }
         if (!isset($this->translationsList[$sectionName]) || !isset($this->translationsList[$sectionName][$languageId]) || is_null(
@@ -111,16 +111,14 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
     public function generateTranslationsFile($sectionName)
     {
         $allData = [];
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
         foreach ($languagesManager->getLanguagesIdList() as $languageId) {
             // we need to ensure that all languages are used.
             // otherwise no cache file would be created for empty language and this method is called many hundreds of times.
             $allData[$languageId] = [];
         }
 
-        $structureManager = $this->getService('structureManager', [
-            'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerAdmin'),
-        ], true, false);
+        $structureManager = $this->getService(structureManager::class);
         $structureManager->setPrivilegeChecking(false);
         if ($sectionElement = $structureManager->getElementByMarker($sectionName)) {
             if ($translationsGroups = $structureManager->getElementsChildren($sectionElement->id)) {

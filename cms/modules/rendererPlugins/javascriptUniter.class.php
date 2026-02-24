@@ -14,7 +14,7 @@ class javascriptUniterRendererPlugin extends rendererPlugin
     {
         $pathsManager = $this->getService(PathsManager::class);
         $this->cachePath = $pathsManager->getPath('javascriptCache');
-        $this->requestHeadersManager = $this->getService('requestHeadersManager');
+        $this->requestHeadersManager = $this->getService(requestHeadersManager::class);
         $this->httpResponse = CmsHttpResponse::getInstance();
 
         $this->maxAge = 365 * 60 * 60 * 24;
@@ -93,7 +93,7 @@ class javascriptUniterRendererPlugin extends rendererPlugin
             }
         }
 
-        $cachePermissions = $this->getService('ConfigManager')->get('paths.defaultCachePermissions');
+        $cachePermissions = $this->getService(ConfigManager::class)->get('paths.defaultCachePermissions');
         file_put_contents($this->getCacheFilePath(), $allFilesContent);
         chmod($this->getCacheFilePath(), $cachePermissions);
 

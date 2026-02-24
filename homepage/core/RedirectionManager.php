@@ -6,18 +6,18 @@ class RedirectionManager implements DependencyInjectionContextInterface
 
     public function redirectToElement($elementId, $languageCode = '')
     {
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
         $languageId = null;
         if ($languageCode) {
             if ($language = $languagesManager->getLanguageByCode($languageCode)) {
                 $languageId = $language->id;
             }
         }
-        $configManager = $this->getService('ConfigManager');
-        $structureManager = $this->getService('structureManager', [
-            'rootMarker' => $configManager->get('main.rootMarkerPublic'),
-            'requestedPath' => [$languageCode],
-        ], true);
+        $configManager = $this->getService(ConfigManager::class);
+        $structureManager = $this->getService('publicStructureManager');
+        if ($languageCode) {
+            $structureManager->setRequestedPath([$languageCode]);
+        }
 
         //if language was provided, then try to get the element through requested language
         if ($languageId) {
@@ -45,7 +45,7 @@ class RedirectionManager implements DependencyInjectionContextInterface
         /**
          * @var uriSwitchLogics $uriSwitchLogics
          */
-        $uriSwitchLogics = $this->getService('uriSwitchLogics');
+        $uriSwitchLogics = $this->getService(uriSwitchLogics::class);
         $uriSwitchLogics->setLanguageCode($newLanguageCode);
         $uriSwitchLogics->setApplication($application);
         $httpStatus = '302';
@@ -55,7 +55,7 @@ class RedirectionManager implements DependencyInjectionContextInterface
 
     public function redirectToPublic($uri, $newLanguage = null)
     {
-        $uriSwitchLogics = $this->getService('uriSwitchLogics');
+        $uriSwitchLogics = $this->getService(uriSwitchLogics::class);
         $uriSwitchLogics->setCurrentUri($uri);
 
         if (!is_null($newLanguage)) {
@@ -68,7 +68,7 @@ class RedirectionManager implements DependencyInjectionContextInterface
 
     public function redirectToDesktop($uri = null)
     {
-        $uriSwitchLogics = $this->getService('uriSwitchLogics');
+        $uriSwitchLogics = $this->getService(uriSwitchLogics::class);
         $uriSwitchLogics->setCurrentMobileUri($uri);
 
         $result = $uriSwitchLogics->getDesktopUri();
@@ -124,9 +124,7 @@ class RedirectionManager implements DependencyInjectionContextInterface
 
         if ($relevantRecord) {
             if ($relevantRecord["destinationElementId"]) {
-                $structureManager = $this->getService('structureManager', [
-                    'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
-                ], true);
+                $structureManager = $this->getService('publicStructureManager');
 
                 if ($redirectElement = $structureManager->getElementById($relevantRecord["destinationElementId"])) {
                     $redirectUrl = $redirectElement->URL;
@@ -145,10 +143,10 @@ class RedirectionManager implements DependencyInjectionContextInterface
 
     public function checkProtocolRedirection()
     {
-        $configProtocol = $this->getService('ConfigManager')->get('main.protocol');
+        $configProtocol = $this->getService(ConfigManager::class)->get('main.protocol');
 
         if ($configProtocol) {
-            $controller = $this->getService('controller');
+            $controller = $this->getService(controller::class);
             $currentProtocol = $controller->getProtocol();
             if ($currentProtocol != $configProtocol) {
                 $this->redirect($controller->fullURL, 301);
@@ -160,8 +158,8 @@ class RedirectionManager implements DependencyInjectionContextInterface
 
     public function checkDomainRedirection()
     {
-        if ($domainRedirections = $this->getService('ConfigManager')->get('domains.redirections')) {
-            $controller = $this->getService('controller');
+        if ($domainRedirections = $this->getService(ConfigManager::class)->get('domains.redirections')) {
+            $controller = $this->getService(controller::class);
             foreach ($domainRedirections as $domain => $url) {
                 if (stripos($controller->domainName, $domain) !== false) {
                     $this->redirect($url, 301);
@@ -173,7 +171,7 @@ class RedirectionManager implements DependencyInjectionContextInterface
 
     protected function getBestGuessRedirectionUrl($errorUrl)
     {
-        $configManager = $this->getService('ConfigManager');
+        $configManager = $this->getService(ConfigManager::class);
         $types = $configManager->get('main.bestGuesssTypes');
         if (!$types) {
             return false;

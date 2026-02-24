@@ -66,7 +66,7 @@ Jaga %s's
         $final_translation = '';
         $translation_array = explode(',', $string_comma);
         if (count($translation_array)==2) {
-            $translationsManager = $this->getService('translationsManager');
+            $translationsManager = $this->getService(translationsManager::class);
             if ($translation_string_format = $translationsManager->getTranslationByName($translation_array[0])) {
                 $final_translation = sprintf($translation_string_format, $translation_array[1]);
             }
@@ -79,7 +79,7 @@ Jaga %s's
         if (is_null($this->newsList)) {
             $this->newsList = [];
 
-            if ($connectedIds = $this->getService('linksManager')->getConnectedIdList($this->id)) {
+            if ($connectedIds = $this->getService(linksManager::class)->getConnectedIdList($this->id)) {
                 $collection = persistableCollection::getInstance('module_news');
                 $elementsCount = count((array)$collection->conditionalLoad('distinct(id)', [
                     [
@@ -130,7 +130,7 @@ Jaga %s's
     {
         if (is_null($this->archiveNewsList)) {
             $this->archiveNewsList = [];
-            if ($connectedIds = $this->getService('linksManager')->getConnectedIdList($this->id)) {
+            if ($connectedIds = $this->getService(linksManager::class)->getConnectedIdList($this->id)) {
                 $elementsCount = count(array_unique($connectedIds));
                 if ($elementsCount) {
                     $collection = persistableCollection::getInstance('module_news');
@@ -195,7 +195,7 @@ Jaga %s's
         if ($this->contentList === null) {
             $this->contentList = [];
 
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             if ($connectedNewsIds = $linksManager->getConnectedIdList($this->id, 'structure', 'parent')) {
                 $elementsCount = count($connectedNewsIds);
                 $elementsOnPage = 30;
@@ -219,7 +219,7 @@ Jaga %s's
                             $this->contentList[] = $newsElement;
                         }
                     }
-                    $this->getService('renderer')->assign('pager', $pager);
+                    $this->getService(renderer::class)->assign('pager', $pager);
                 }
             }
         }

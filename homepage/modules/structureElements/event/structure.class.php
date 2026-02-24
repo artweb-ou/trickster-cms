@@ -169,7 +169,7 @@ class eventElement extends structureElement implements MetadataProviderInterface
         /**
          * @var linksManager $linksManager
          */
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
 
         $connectedIdIndex = $linksManager->getConnectedIdIndex($this->id, 'eventsListEvent', 'child');
         $allEventsLists = $structureManager->getElementsByType('eventsList');

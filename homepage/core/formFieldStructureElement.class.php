@@ -11,7 +11,7 @@ abstract class formFieldStructureElement extends structureElement
         $user = $currentUserService->getCurrentUser();
         if ($this->autocomplete == 'service') {
             $structureManager = $this->getService('structureManager');
-            $controller = $this->getService('controller');
+            $controller = $this->getService(controller::class);
             if ($controller->getParameter('service')) {
                 $serviceId = $controller->getParameter('service');
                 if ($service = $structureManager->getElementById($serviceId)) {

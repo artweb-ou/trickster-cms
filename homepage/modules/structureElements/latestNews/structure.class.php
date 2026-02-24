@@ -39,7 +39,7 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
     public function getNewsListIds()
     {
         $result = [];
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $connectedNewsListsIds = $linksManager->getConnectedIdList($this->id
             , 'latestNewsNewsList', 'parent');
         if ($connectedNewsListsIds) {
@@ -62,10 +62,10 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
         if ($result === null) {
             $result = [];
             $structureManager = $this->getService('structureManager');
-            $currentLanguageId = $this->getService('LanguagesManager')->getCurrentLanguageId();
+            $currentLanguageId = $this->getService(LanguagesManager::class)->getCurrentLanguageId();
             $newsListsInLanguage = $structureManager->getElementsByType('newsList', $currentLanguageId);
             if ($newsListsInLanguage) {
-                $linksManager = $this->getService('linksManager');
+                $linksManager = $this->getService(linksManager::class);
                 foreach ($newsListsInLanguage as &$newsListElement) {
                     $connectedIds = $linksManager->getConnectedIdList($newsListElement->id);
                     if ($connectedIds) {
@@ -163,7 +163,7 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
     {
         $result = [];
         $structureManager = $this->getService('structureManager');
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         if ($connectedIds = $linksManager->getConnectedIdList($this->id, 'selectedNews', 'parent')) {
             if ($this->orderType == 'rand') {
                 shuffle($connectedIds);
@@ -187,7 +187,7 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
     {
         $connectedNews = [];
         $structureManager = $this->getService('structureManager');
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $idList = $linksManager->getConnectedIdList($this->id, 'selectedNews', 'parent');
 
         foreach ($idList as &$newsId) {
@@ -206,7 +206,7 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
     {
         if (is_null($this->limitingNewsLists)) {
             $this->limitingNewsLists = [];
-            if ($connectedNewsListsIds = $this->getService('linksManager')
+            if ($connectedNewsListsIds = $this->getService(linksManager::class)
                 ->getConnectedIdList($this->id, 'latestNewsNewsList', 'parent')
             ) {
                 $structureManager = $this->getService('structureManager');
@@ -231,7 +231,7 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
     }
 
     public function getConnectedButtonMenu() {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $buttonConnectedMenuId = $linksManager->getConnectedIdList($this->id, "buttonConnectedMenu", "parent");
         $menus = $this->getDisplayMenusInfo();
         foreach ($menus as &$menu) {
@@ -243,7 +243,7 @@ class latestNewsElement extends menuDependantStructureElement implements Configu
     }
 
     public function getButtonConnectedMenuUrl() {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $connectedProductsIds = $linksManager->getConnectedIdList($this->id, "buttonConnectedMenu", "parent");
         if(!empty($connectedProductsIds)) {
             $structureManager = $this->getService('structureManager');

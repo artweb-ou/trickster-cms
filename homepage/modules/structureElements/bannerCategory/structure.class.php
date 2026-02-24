@@ -19,7 +19,7 @@ class bannerCategoryElement extends menuDependantStructureElement
     {
         if (is_null($this->banners)) {
             $this->banners = [];
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             if ($bannersIds = $linksManager->getConnectedIdList($this->id, "bannerCategoryBanner", "parent")) {
                 $structureManager = $this->getService('structureManager');
                 foreach ($bannersIds as &$bannerId) {
@@ -36,7 +36,7 @@ class bannerCategoryElement extends menuDependantStructureElement
     {
         if (is_null($this->bannersToDisplay)) {
             $this->bannersToDisplay = [];
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
 
             if ($connectedBannersIds = $linksManager->getConnectedIdList($this->id, "bannerCategoryBanner", "parent")) {
                 $bannersCollection = persistableCollection::getInstance('module_banner');

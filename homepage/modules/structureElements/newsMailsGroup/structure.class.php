@@ -28,7 +28,7 @@ class newsMailsGroupElement extends structureElement
         if (is_null($this->emailAddresses)) {
             $this->emailAddresses = [];
             $structureManager = $this->getService('structureManager');
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $linksIds = $linksManager->getConnectedIdList($this->id, 'newsmailGroup', 'parent');
 
             if ($elementsCount = count($linksIds)) {
@@ -68,7 +68,7 @@ class newsMailsGroupElement extends structureElement
         /**
          * @var translationsManager $translationsManager
          */
-        $translationsManager = $this->getService('translationsManager');
+        $translationsManager = $this->getService(translationsManager::class);
         return [
             [
                 'action' => 'removeAddresses',

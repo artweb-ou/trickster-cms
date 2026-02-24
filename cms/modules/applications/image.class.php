@@ -22,7 +22,7 @@ class imageApplication extends controllerApplication
     public function execute($controller)
     {
         $this->processRequestParameters();
-        $imagePreset = $this->getService('ConfigManager')->get("images-desktop.{$this->layoutType}");
+        $imagePreset = $this->getService(ConfigManager::class)->get("images-desktop.{$this->layoutType}");
         if (isset($imagePreset['path'])) {
             $originalFilePath = $this->pathsManager->getPath($imagePreset['path']) . $this->id;
         } else {
@@ -63,7 +63,7 @@ class imageApplication extends controllerApplication
                     /**
                      * @var requestHeadersManager $requestHeadersManager
                      */
-                    $requestHeadersManager = $this->getService('requestHeadersManager');
+                    $requestHeadersManager = $this->getService(requestHeadersManager::class);
                     if ($contentTypes = $requestHeadersManager->getAcceptedTypes()) {
                         if (isset($contentTypes['image/webp']) && $requestHeadersManager->getBrowserType() !== 'Safari') {
                             $imagePreset['format'][1] = 'webp';

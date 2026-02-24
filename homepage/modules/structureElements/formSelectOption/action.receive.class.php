@@ -13,7 +13,7 @@ class receiveFormSelectOption extends structureElementAction
             $structureElement->persistElementData();
 
             //connect fields to be hidden
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $hiddenFildsIds = $linksManager->getConnectedIdIndex($structureElement->id, 'hiddenFields', 'child');
             foreach ($structureElement->hidden_fields as $fieldId) {
                 if (!isset($hiddenFildsIds[$fieldId])) {

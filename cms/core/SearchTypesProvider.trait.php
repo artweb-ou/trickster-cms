@@ -12,7 +12,7 @@ trait SearchTypesProviderTrait
     public function getSearchTypes($set = 'public')
     {
         if ($this->searchTypes === null) {
-            $this->searchTypes = $this->getService('ConfigManager')
+            $this->searchTypes = $this->getService(ConfigManager::class)
                 ->getMerged('searchtypes-' . $set . '.' . $this->structureType);
         }
         return $this->searchTypes;

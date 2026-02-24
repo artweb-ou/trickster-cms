@@ -10,7 +10,7 @@ class showFormLinkListItem extends structureElementAction
         }
         if ($structureElement->final) {
             $structureElement->setTemplate('shared.content.tpl');
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $parentElement = $structureManager->getElementsFirstParent($structureElement->id);
 
             $renderer->assign('parentLayout', $parentElement ? $parentElement->layout : '');

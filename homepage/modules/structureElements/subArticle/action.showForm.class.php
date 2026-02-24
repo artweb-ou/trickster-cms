@@ -6,7 +6,7 @@ class showFormSubArticle extends structureElementAction
     {
         if ($structureElement->final) {
             $structureElement->setTemplate('shared.content.tpl');
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $renderer->assign('contentSubTemplate', 'component.form.tpl');
             $form = $structureElement->getForm('form');
             $form->setStructure($structureElement->getFormStructure());

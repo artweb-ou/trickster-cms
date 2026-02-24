@@ -12,12 +12,12 @@ class exportShared extends structureElementAction
             $data = $element->getExportData();
             $exportData[] = $data;
         }
-        $renderer = $this->getService('renderer');
+        $renderer = $this->getService(renderer::class);
         $renderer->assign('exportData', $exportData);
 
         // language id to code
         $languageCodes = [];
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
         $languagesList = $languagesManager->getLanguagesList();
         foreach ($languagesList as $languagesItem) {
             $languageCodes[$languagesItem->id] = $languagesItem->iso6393;

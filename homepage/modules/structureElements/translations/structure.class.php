@@ -28,7 +28,7 @@ class translationsElement extends TranslationsStructureElement
 
     protected function getThemeCodes()
     {
-        $configManager = $this->getService('ConfigManager');
+        $configManager = $this->getService(ConfigManager::class);
         $publicThemeName = $configManager->get('main.publicTheme');
         return ['projectEmail', 'projectPdf', 'projectRss', $publicThemeName];
     }

@@ -58,7 +58,7 @@ class bannerElement extends structureElement implements ImageUrlProviderInterfac
     public function getConnectedCategoriesIds()
     {
         if (is_null($this->connectedCategoriesIds)) {
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $this->connectedCategoriesIds = $linksManager->getConnectedIdList($this->id, "bannerCategoryBanner", "child");
         }
         return $this->connectedCategoriesIds;

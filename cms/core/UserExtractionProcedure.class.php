@@ -51,7 +51,7 @@ class UserExtractionProcedure extends ExtractionProcedure
         $users = $structureManager->getElementsChildren($usersElement->id);
 
         foreach ($users as $user) {
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $connectedIdList = $linksManager->getConnectedIdList($user->id, 'userRelation');
             $userName = $user->userName;
 

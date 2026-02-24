@@ -76,7 +76,7 @@ abstract class socialPluginElement extends structureElement
 
     public function getSocialActionUrl($action, $returnUrl = '')
     {
-        $controller = $this->getService('controller');
+        $controller = $this->getService(controller::class);
         $returnUrl = $returnUrl ?: $controller->fullParametersURL;
         return $controller->baseURL . "social/action:$action/plugin:" . $this->id
             . '/?return=' . rawurlencode($returnUrl);

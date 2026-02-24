@@ -11,7 +11,7 @@ class submitRegistration extends structureElementAction
     {
         $currentUserService = $this->getService(CurrentUserService::class);
         $user = $currentUserService->getCurrentUser();
-        $translationsManager = $this->getService('translationsManager');
+        $translationsManager = $this->getService(translationsManager::class);
 
         if ($structureElement->type == 'userdata' && $user->userName == 'anonymous') {
             exit();
@@ -66,7 +66,7 @@ class submitRegistration extends structureElementAction
             }
         }
         if ($this->validated && $this->validateAjaxRequest()) {
-            $spamChecker = $this->getService('SpamChecker');
+            $spamChecker = $this->getService(SpamChecker::class);
             if ($emailToCheck && !$spamChecker->checkEmail($emailToCheck)) {
                 $structureElement->errorMessage = $translationsManager->getTranslationByName('userdata.bad_email');
             } else {
@@ -116,7 +116,7 @@ class submitRegistration extends structureElementAction
                             }
 
                             if ($newUser) {
-                                $linksManager = $this->getService('linksManager');
+                                $linksManager = $this->getService(linksManager::class);
                                 $connectedUserGroupsIds = $structureElement->getConnectedUserGroupsIds();
                                 foreach ($connectedUserGroupsIds as &$connectedUserGroupId) {
                                     $linksManager->linkElements($connectedUserGroupId, $userElement->id, 'userRelation');
@@ -124,7 +124,7 @@ class submitRegistration extends structureElementAction
                                 $socialId = $user->getStorageAttribute('socialId');
                                 $socialType = $user->getStorageAttribute('socialType');
                                 if ($socialId && $socialType) {
-                                    $this->getService('SocialDataManager')
+                                    $this->getService(SocialDataManager::class)
                                         ->addSocialUser($socialType, $socialId, $userElement->id);
                                 }
                             }

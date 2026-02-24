@@ -1002,7 +1002,7 @@ class structureManager implements DependencyInjectionContextInterface
         $newElement = null;
         $className = $type . 'Element';
         if (class_exists($className, true)) {
-            $newElement = new $className($this->getService('ConfigManager')->get('main.rootMarkerPublic'));
+            $newElement = new $className($this->getService(ConfigManager::class)->get('main.rootMarkerPublic'));
             if ($newElement instanceof DependencyInjectionContextInterface) {
                 $this->instantiateContext($newElement);
             }

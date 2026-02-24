@@ -32,9 +32,9 @@ class deploymentsElement extends structureElement
         if ($this->updatesDeployments === null) {
             $this->updatesDeployments = [];
             try {
-                $deploymentManager = $this->getService('DeploymentManager');
-                $configManager = $this->getService('ConfigManager');
-                $updatesApi = $this->getService('UpdatesApi');
+                $deploymentManager = $this->getService(DeploymentManager::class);
+                $configManager = $this->getService(ConfigManager::class);
+                $updatesApi = $this->getService(UpdatesApi::class);
                 $installedDeployments = $configManager->get('deployment.deployments');
                 $installedPlugins = [];
                 foreach ($installedDeployments as $deployment) {
@@ -60,10 +60,10 @@ class deploymentsElement extends structureElement
         if (!$updates) {
             return true;
         }
-        $deploymentManager = $this->getService('DeploymentManager');
+        $deploymentManager = $this->getService(DeploymentManager::class);
         $deploymentManager->clearPendingDeployments();
         try {
-            $updatesApi = $this->getService('UpdatesApi');
+            $updatesApi = $this->getService(UpdatesApi::class);
             foreach ($updates as $update) {
                 $path = $updatesApi->downloadDeployment($update->id);
                 $deploymentManager->addPendingDeployment($update->type, $update->version, $path);

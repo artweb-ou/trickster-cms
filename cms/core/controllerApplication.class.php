@@ -30,16 +30,12 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
     {
         $this->controller = $controller;
 
-        $this->setRegistry($controller->getRegistry());
         $this->setContainer($controller->getContainer());
 
-        $this->setService('controllerApplication', $this);
         //temporary workaround for renderer object. Remove after "renderers" architecture change
         if ($factory = renderer::getFactory()) {
             $this->instantiateContext($factory);
         }
-        $this->setService('controller', $this->controller);
-        $this->setService('ConfigManager', $this->controller->getConfigManager());
 
         $this->logRequest();
     }
@@ -47,7 +43,6 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
     public function setPathsManager(PathsManager $pathsManager): void
     {
         $this->pathsManager = $pathsManager;
-        $this->setService(PathsManager::class, $pathsManager);
     }
 
     /**
@@ -82,7 +77,7 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
      */
     protected function createRenderer()
     {
-        if ($this->renderer = $this->getService('renderer', ['name' => $this->rendererName], true)) {
+        if ($this->renderer = renderer::createInstance($this->rendererName)) {
             $controller = controller::getInstance();
             $this->renderer->debugMode = $controller->getDebugMode();
         }
@@ -143,12 +138,12 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
 
     public function getDesignThemesManager()
     {
-        return $this->getService('DesignThemesManager');
+        return $this->getService(DesignThemesManager::class);
     }
 
     public function getLanguagesManager()
     {
-        return $this->getService('LanguagesManager');
+        return $this->getService(LanguagesManager::class);
     }
 }
 

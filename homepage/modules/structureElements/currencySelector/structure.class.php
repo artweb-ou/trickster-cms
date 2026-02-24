@@ -15,7 +15,7 @@ class currencySelectorElement extends menuDependantStructureElement
     public function getCurrenciesList()
     {
         if (is_null($this->currenciesList)) {
-            $currencySelector = $this->getService('CurrencySelector');
+            $currencySelector = $this->getService(CurrencySelector::class);
             $this->currenciesList = $currencySelector->getCurrenciesList();
         }
 

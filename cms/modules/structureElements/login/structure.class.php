@@ -25,7 +25,7 @@ class loginElement extends menuDependantStructureElement
     {
         if (is_null($this->registrationForm)) {
             $structureManager = $this->getService('structureManager');
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             if ($elements = $structureManager->getElementsByType('registration', $languagesManager->getCurrentLanguageId())
             ) {
                 foreach ($elements as $element) {
@@ -52,7 +52,7 @@ class loginElement extends menuDependantStructureElement
     {
         if (is_null($this->userDataForm)) {
             $structureManager = $this->getService('structureManager');
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             if ($elements = $structureManager->getElementsByType('registration', $languagesManager->getCurrentLanguageId())
             ) {
                 foreach ($elements as $element) {
@@ -82,7 +82,7 @@ class loginElement extends menuDependantStructureElement
     {
         if (is_null($this->passwordReminderForm)) {
             $structureManager = $this->getService('structureManager');
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             if ($elements = $structureManager->getElementsByType('passwordReminder', $languagesManager->getCurrentLanguageId())
             ) {
                 foreach ($elements as $element) {
@@ -107,7 +107,7 @@ class loginElement extends menuDependantStructureElement
     {
         $result = [];
         $controller = controller::getInstance();
-        $socialDataManager = $this->getService('SocialDataManager');
+        $socialDataManager = $this->getService(SocialDataManager::class);
         $socialPlugins = $socialDataManager->getSocialPlugins();
         foreach ($socialPlugins as $element) {
             $iconUrl = '';

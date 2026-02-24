@@ -24,7 +24,7 @@ class logViewerElement extends structureElement
     {
         $result = [];
         $times = [];
-        $logPath = $this->getService('ConfigManager')->get('paths.logs');
+        $logPath = $this->getService(ConfigManager::class)->get('paths.logs');
         if (is_dir($logPath)) {
             foreach (new DirectoryIterator($logPath) as $fileInfo) {
                 if (!$fileInfo->isFile()) {
@@ -61,7 +61,7 @@ class logViewerElement extends structureElement
         $result = false;
         $logFileArgument = $this->getSelectedLogFileName();
         if ($logFileArgument && strpos($logFileArgument, '/') === false && strpos($logFileArgument, '\\') === false) {
-            $logPath = $this->getService('ConfigManager')->get('paths.logs');
+            $logPath = $this->getService(ConfigManager::class)->get('paths.logs');
             $result = $logPath . $logFileArgument;
         }
         return $result;
@@ -78,7 +78,7 @@ class logViewerElement extends structureElement
 
     public function getSelectedLogFileName()
     {
-        return $this->getService('controller')->getParameter('log');
+        return $this->getService(controller::class)->getParameter('log');
     }
 
     public function getLatestTopErrors($amount = 5)

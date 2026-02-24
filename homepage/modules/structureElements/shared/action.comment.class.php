@@ -26,7 +26,7 @@
 //                    'content'    => $structureElement->comment_content,
 //                    'dateTime'   => date('d.m.Y H:i', time()),
 //                    'ipAddress'  => $this->getService(user::class)->IP,
-//                    'languageId' => $this->getService('LanguagesManager')->getCurrentLanguageId(),
+//                    'languageId' => $this->getService(LanguagesManager::class)->getCurrentLanguageId(),
 //                    'targetType' => $structureElement->structureType,
 //                );
 //                $newCommentElement->importExternalData($data, $fields, array());

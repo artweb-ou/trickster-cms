@@ -27,7 +27,7 @@ class receiveBanner extends structureElementAction
             $structureElement->persistElementData();
 
             // check category links
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             if ($connectedCategoryIds = $structureElement->getConnectedCategoriesIds()) {
                 foreach ($connectedCategoryIds as &$connectedCategoryId) {
                     if (!in_array($connectedCategoryId, $structureElement->bannerCategoryIds)) {

@@ -47,7 +47,7 @@ trait ConnectedEventsProviderTrait
     public function getConnectedEventsListsIds()
     {
         if ($this->connectedEventsListsIds === null) {
-            $this->connectedEventsListsIds = $this->getService('linksManager')
+            $this->connectedEventsListsIds = $this->getService(linksManager::class)
                 ->getConnectedIdList($this->id, $this->getLinkType(true), 'parent');
         }
         return $this->connectedEventsListsIds;
@@ -56,7 +56,7 @@ trait ConnectedEventsProviderTrait
     public function getConnectedEventsIds()
     {
         if ($this->connectedEventsIds === null) {
-            $this->connectedEventsIds = $this->getService('linksManager')
+            $this->connectedEventsIds = $this->getService(linksManager::class)
                 ->getConnectedIdList($this->id, $this->getLinkType(), "parent");
         }
         return $this->connectedEventsIds;
@@ -65,7 +65,7 @@ trait ConnectedEventsProviderTrait
     public function connectFormEvents()
     {
         // connect events
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         if ($connectedIds = $this->getConnectedEventsIds()) {
             foreach ($connectedIds as &$connectedId) {
                 if (!in_array($connectedId, $this->receivedEventsIds)) {
@@ -80,7 +80,7 @@ trait ConnectedEventsProviderTrait
 
     public function connectFormEventsLists()
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         if ($connectedIds = $this->getConnectedEventsListsIds()) {
             foreach ($connectedIds as &$connectedId) {
                 if (!in_array($connectedId, $this->receivedEventsListsIds)) {

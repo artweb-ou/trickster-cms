@@ -12,7 +12,7 @@ class eventsApplication extends controllerApplication {
     }
     public function execute($controller)
     {
-        $visitorManager = $this->getService('VisitorsManager');
+        $visitorManager = $this->getService(VisitorsManager::class);
         $eventLogger = $this->getService(EventsLog::class);
         $currentVisitor = $visitorManager->getCurrentVisitor();
         $action = $controller->getParameter('action');

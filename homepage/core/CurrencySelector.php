@@ -139,7 +139,7 @@ class CurrencySelector implements DependencyInjectionContextInterface
     protected function getCurrenciesInformationList()
     {
         if ($this->currenciesInformationList === null) {
-            $configManager = $this->getService('ConfigManager');
+            $configManager = $this->getService(ConfigManager::class);
             $this->currenciesInformationList = (array)$configManager->get('currencies.list');
         }
         return $this->currenciesInformationList;
@@ -160,7 +160,7 @@ class CurrencySelector implements DependencyInjectionContextInterface
 
     protected function getCurrentURL()
     {
-        $controller = $this->getService('controller');
+        $controller = $this->getService(controller::class);
         return $controller->pathURL;
     }
 
@@ -192,7 +192,7 @@ class CurrencySelector implements DependencyInjectionContextInterface
 
     protected function detectSelectedCurrency()
     {
-        $controller = $this->getService('controller');
+        $controller = $this->getService(controller::class);
         /**
          * @var ServerSessionManager $serverSessionManager
          */

@@ -17,13 +17,13 @@ class crontabApplication extends controllerApplication
         /**
          * @var Cache $cache
          */
-        $cache = $this->getService('Cache');
+        $cache = $this->getService(Cache::class);
         $cache->enable(false, false, false);
 
-        $renderer = $this->getService('renderer');
+        $renderer = $this->getService(renderer::class);
         $renderer->endOutputBuffering();
 
-        $emailDispatcher = $this->getService('EmailDispatcher');
+        $emailDispatcher = $this->getService(EmailDispatcher::class);
         $emailDispatcher->setOneDispatchmentDelay(2);
         $emailDispatcher->setTimeLimit(290);
         $emailDispatcher->dispatchAwaitingList();
@@ -33,7 +33,7 @@ class crontabApplication extends controllerApplication
         $basketScriptsPath = $projectPath . 'js/shoppingBasketData/';
         $pathsManager = $this->pathsManager;
         $pathsManager->ensureDirectory($basketScriptsPath);
-        $configManager = $this->getService('ConfigManager');
+        $configManager = $this->getService(ConfigManager::class);
 
         if ($configManager->get('main.smartPostEnabled') && class_exists('smartPostImportManager')) {
             $smartPostImportManager = new smartPostImportManager();

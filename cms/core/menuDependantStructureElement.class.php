@@ -48,10 +48,10 @@ abstract class menuDependantStructureElement extends structureElement implements
     {
         $menusInfo = [];
         $structureManager = $this->getService('structureManager');
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $linksIndex = $linksManager->getElementsLinksIndex($this->id, $linkType, 'child');
 
-        if ($publicRoot = $structureManager->getElementByMarker($this->getService('ConfigManager')
+        if ($publicRoot = $structureManager->getElementByMarker($this->getService(ConfigManager::class)
             ->get('main.rootMarkerPublic'))
         ) {
             if ($languagesList = $structureManager->getElementsChildren($publicRoot->id)) {
@@ -93,7 +93,7 @@ abstract class menuDependantStructureElement extends structureElement implements
 
     public function persistDisplayMenusLinks()
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $linksIndex = $linksManager->getElementsLinksIndex($this->id, 'displayinmenu', 'child');
         foreach ($this->displayMenus as $menuId) {
             if (!isset($linksIndex[$menuId])) {

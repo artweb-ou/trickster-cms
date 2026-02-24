@@ -24,7 +24,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
 
     public function initialize()
     {
-        $this->configManager = $this->getService('ConfigManager');
+        $this->configManager = $this->getService(ConfigManager::class);
         $this->themeCode = $this->configManager->get('main.publicTheme');
         $this->startSession('public', $this->configManager->get('main.publicSessionLifeTime'));
         $this->createRenderer();
@@ -43,22 +43,21 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         /**
          * @var Cache $cache
          */
-        $cache = $this->getService('Cache');
+        $cache = $this->getService(Cache::class);
         $cache->enable();
 
-        $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
+        $designThemesManager = $this->getService(DesignThemesManager::class);
+        $designThemesManager->setCurrentThemeCode($this->getThemeCode());
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
         /**
          * @var structureManager $structureManager
          */
-        $structureManager = $this->getService('structureManager', [
-            'rootUrl' => $controller->rootURL,
-            'rootMarker' => $this->configManager->get('main.rootMarkerPublic'),
-        ], true);
+        $structureManager = $this->getService('publicStructureManager');
+        $this->setService('structureManager', $structureManager);
         $this->processRequestParameters();
         $this->renderer->assign('js_translations', $this->loadJsTranslations());
 
-        $resourcesUniterHelper = $this->getService('ResourcesUniterHelper', ['currentThemeCode' => $currentTheme->getCode()], true);
+        $resourcesUniterHelper = $this->getService(ResourcesUniterHelper::class);
         $this->renderer->assign('CSSFileName', $resourcesUniterHelper->getResourceCacheFileName('css'));
 
         $this->renderer->assign('controller', $controller);
@@ -66,7 +65,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         /**
          * @var $settingsManager settingsManager
          */
-        $settingsManager = $this->getService('settingsManager');
+        $settingsManager = $this->getService(settingsManager::class);
         $currentUserService = $this->getService(CurrentUserService::class);
         $user = $currentUserService->getCurrentUser();
         $this->renderer->assign('settings', $settingsManager->getSettingsList());
@@ -79,11 +78,11 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $this->renderer->assign('applicationName', $this->applicationName);
         $this->renderer->assign('deviceType', 'desktop');
 
-        $socialDataManager = $this->getService('SocialDataManager');
+        $socialDataManager = $this->getService(SocialDataManager::class);
         $this->renderer->assign('socialDataManager', $socialDataManager);
 
         $pageNotFound = $controller->requestedFile;
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
         $visitorsManager = $this->getService(VisitorsManager::class);
         $visitorRecorded = $visitorsManager->isVisitationRecorded();
         $this->renderer->assign('newVisitor', !$visitorRecorded);
@@ -96,7 +95,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                 /**
                  * @var $redirectionManager RedirectionManager
                  */
-                $redirectionManager = $this->getService('RedirectionManager');
+                $redirectionManager = $this->getService(RedirectionManager::class);
                 if ($this->protocolRedirection) {
                     $redirectionManager->checkProtocolRedirection();
                 }
@@ -122,11 +121,11 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                     }
                 }
 
-                $privileges = $this->getService('privilegesManager')->getElementPrivileges($currentElement->id);
+                $privileges = $this->getService(privilegesManager::class)->getElementPrivileges($currentElement->id);
                 $this->renderer->assign('privileges', $privileges);
                 $this->renderer->assign('currentElementPrivileges', $privileges[$currentElement->structureType]);
 
-                $breadcrumbsManager = $this->getService('breadcrumbsManager', ['config' => $this->configManager->getConfig('breadcrumbs')]);
+                $breadcrumbsManager = $this->getService(breadcrumbsManager::class);
                 $this->renderer->assign('breadcrumbsManager', $breadcrumbsManager);
 
                 if ($currentElement instanceof MetadataProviderInterface) {
@@ -147,7 +146,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                     $currentNoIndexing = false;
                 }
 
-                if ($siteName = $this->getService('translationsManager')
+                if ($siteName = $this->getService(translationsManager::class)
                     ->getTranslationByName('site.name', null, false)) {
                     $currentMetaTitle .= ' - ' . $siteName;
                 }
@@ -175,7 +174,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
                 $this->renderer->assign('currentElement', $currentElement);
                 $this->renderer->assign('structureManager', $structureManager);
                 $this->renderer->assign('LanguagesManager', $languagesManager);
-                $requestHeadersManager = $this->getService('requestHeadersManager');
+                $requestHeadersManager = $this->getService(requestHeadersManager::class);
                 $this->renderer->assign('userAgent', $requestHeadersManager->getUserAgent());
                 $this->renderer->setCacheControl('no-cache');
                 $this->renderer->template = $currentTheme->template('index.tpl');
@@ -195,11 +194,11 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         /**
          * @var RedirectionManager $redirectionManager
          */
-        $redirectionManager = $this->getService('RedirectionManager');
+        $redirectionManager = $this->getService(RedirectionManager::class);
         /**
          * @var requestHeadersManager $requestHeadersManager
          */
-        $requestHeadersManager = $this->getService('requestHeadersManager');
+        $requestHeadersManager = $this->getService(requestHeadersManager::class);
         $controller = controller::getInstance();
         $errorUrl = $requestHeadersManager->getUri();
         if ($word = $this->checkBotWords($errorUrl)) {
@@ -211,16 +210,13 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
             $this->log404Error($errorUrl);
             $this->deleteOld404();
             $this->renderer->fileNotFound();
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl' => $controller->rootURL,
-                'rootMarker' => $this->configManager->get('main.rootMarkerPublic'),
-            ], true);
+            $structureManager = $this->getService('publicStructureManager');
 
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             $languageId = $languagesManager->getCurrentLanguageId();
             if ($languageElement = $structureManager->getElementById($languageId)) {
                 if ($currentElement = $this->getErrorPageElement()) {
-                    $breadcrumbsManager = $this->getService('breadcrumbsManager', ['config' => $this->configManager->getConfig('breadcrumbs')]);
+                    $breadcrumbsManager = $this->getService(breadcrumbsManager::class);
                     $this->renderer->assign('breadcrumbsManager', $breadcrumbsManager);
                     $this->renderer->assign('currentElement', $currentElement);
                     $this->renderer->assign('structureManager', $structureManager);
@@ -261,7 +257,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
 
     protected function log404Error($errorUrl)
     {
-        $requestHeadersManager = $this->getService('requestHeadersManager');
+        $requestHeadersManager = $this->getService(requestHeadersManager::class);
         $referer = $requestHeadersManager->getReferer();
         $db = $this->getService('db');
         // seek and update existing record
@@ -298,7 +294,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $db = $this->getService('db');
         if ($errorPageElementId = $db->table('module_errorpage')->select('id')->limit(1)->value('id')) {
             $structureManager = $this->getService('structureManager');
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             $currentLanguageElementId = $languagesManager->getCurrentLanguageId();
             $errorPageElement = $structureManager->getElementById($errorPageElementId, $currentLanguageElementId, true);
         }
@@ -363,7 +359,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $controller = controller::getInstance();
         $jsScripts = [];
 
-        $resourcesUniterHelper = $this->getService('ResourcesUniterHelper');
+        $resourcesUniterHelper = $this->getService(ResourcesUniterHelper::class);
         $jsScripts[] = $controller->baseURL . 'javascript/set:' . $this->currentTheme->getCode() . '/file:' . $resourcesUniterHelper->getResourceCacheFileName('js') . '.js';
 
         if ($currentElement instanceof clientScriptsProviderInterface

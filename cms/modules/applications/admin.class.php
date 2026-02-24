@@ -14,7 +14,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
 
     public function initialize()
     {
-        $this->startSession('admin', $this->getService('ConfigManager')->get('main.adminSessionLifeTime'));
+        $this->startSession('admin', $this->getService(ConfigManager::class)->get('main.adminSessionLifeTime'));
         $this->createRenderer();
     }
 
@@ -27,22 +27,23 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         /**
          * @var Cache $cache
          */
-        $cache = $this->getService('Cache');
+        $cache = $this->getService(Cache::class);
         $cache->enable(false, false, true);
 
         /**
          * @var $redirectionManager RedirectionManager
          */
-        $redirectionManager = $this->getService('RedirectionManager');
+        $redirectionManager = $this->getService(RedirectionManager::class);
         $redirectionManager->checkProtocolRedirection();
         $redirectionManager->checkDomainRedirection();
         /**
          * @var DesignThemesManager $designThemesManager
          */
-        $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->getThemeCode()]);
+        $designThemesManager = $this->getService(DesignThemesManager::class);
+        $designThemesManager->setCurrentThemeCode($this->getThemeCode());
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
 
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
         if ($langCode = $controller->getParameter('lang')) {
             $languagesManager->setCurrentLanguageCode($langCode, 'adminLanguages');
             //change the public language as well, so all public-languages dependent data in admin would be displayed in a same language where possible
@@ -55,12 +56,9 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
             $this->renderer->assign('languagesList', $languagesList);
         }
 
-        $structureManager = $this->getService('structureManager', [
-            'rootUrl' => $controller->rootURL,
-            'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerAdmin'),
-            'configActions' => true,
-        ], true);
-        $privilegesManager = $this->getService('privilegesManager');
+        $structureManager = $this->getService(structureManager::class);
+        $this->setService('structureManager', $structureManager);
+        $privilegesManager = $this->getService(privilegesManager::class);
         $this->processRequestParameters();
 
         $rootElement = $structureManager->getRootElement();
@@ -82,7 +80,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $translationsList = array_merge($translationsList, $translationsManager->getTranslationsList('adminTranslations'));
         $this->renderer->assign('translationsList', $translationsList);
 
-        $breadcrumbsManager = $this->getService('breadcrumbsManager');
+        $breadcrumbsManager = $this->getService(breadcrumbsManager::class);
         $currentLocation = $breadcrumbsManager->getBreadcrumbs(false, false, false);
 
         $currentUserService = $this->getService(CurrentUserService::class);
@@ -100,12 +98,12 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $this->renderer->assign('rootElement', $rootElement);
         $this->renderer->assign('controller', $controller);
         $this->renderer->assign('user', $user);
-        $this->renderer->assign('settings', $this->getService('settingsManager')->getSettingsList());
+        $this->renderer->assign('settings', $this->getService(settingsManager::class)->getSettingsList());
 
-        $allowedSearchTypes = $this->getService('ConfigManager')->getMerged('searchtypes-admin.search');
+        $allowedSearchTypes = $this->getService(ConfigManager::class)->getMerged('searchtypes-admin.search');
         $this->renderer->assign('allowedSearchTypes', implode(',', $allowedSearchTypes));
 
-        $resourcesUniterHelper = $this->getService('ResourcesUniterHelper', ['currentThemeCode' => $currentTheme->getCode()]);
+        $resourcesUniterHelper = $this->getService(ResourcesUniterHelper::class);
         $this->renderer->assign('JSFileName', $this->getJsScripts($resourcesUniterHelper));
         $this->renderer->assign('CSSFileName', $resourcesUniterHelper->getResourceCacheFileName('css'));
 
@@ -163,7 +161,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $controller = controller::getInstance();
         $jsScripts = [];
 
-            $resourcesUniterHelper = $this->getService('ResourcesUniterHelper');
+            $resourcesUniterHelper = $this->getService(ResourcesUniterHelper::class);
             $jsScripts[] = $controller->baseURL . 'javascript/set:' . $this->currentTheme->getCode() . '/file:' . $resourcesUniterHelper->getResourceCacheFileName('js') . '.js';
 
         if ($currentElement instanceof clientScriptsProviderInterface

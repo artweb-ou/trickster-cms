@@ -12,12 +12,12 @@ class exportAdminTranslations extends structureElementAction
             $data = $element->getExportData();
             $exportData[] = $data;
         }
-        $renderer = $this->getService('renderer');
+        $renderer = $this->getService(renderer::class);
         $renderer->assign('exportData', $exportData);
 
         // language id to code
         $languageCodes = [0];
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
         $languagesList = $languagesManager->getLanguagesList('adminLanguages');
         foreach ($languagesList as $languagesItem) {
             $languageCodes[$languagesItem->id] = $languagesItem->iso6393;

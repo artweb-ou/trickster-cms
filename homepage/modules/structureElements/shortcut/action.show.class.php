@@ -5,7 +5,7 @@ class showShortcut extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         $structureElement->setViewName('common');
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $childrenIdList = false;
         if ($idList = $linksManager->getConnectedIdList($structureElement->id, 'shortcut', 'parent')) {
             $targetId = reset($idList);

@@ -22,7 +22,7 @@ class socialSettingsManager implements DependencyInjectionContextInterface
     public function getSocialMediaUrls()
     {
         if ($this->socialMediaUrls === null) {
-            $settingsManager = $this->getService('settingsManager');
+            $settingsManager = $this->getService(settingsManager::class);
             $settings = $settingsManager->getSettingsList();
             $this->socialMediaUrls = [
                 'facebook' => "",

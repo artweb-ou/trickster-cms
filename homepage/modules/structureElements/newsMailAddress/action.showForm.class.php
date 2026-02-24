@@ -6,7 +6,7 @@ class showFormNewsMailAddress extends structureElementAction
     {
         if ($structureElement->final) {
             //$structureElement->setViewName('form');
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $compiledLinks = [];
             if ($elementLinks = $linksManager->getElementsLinks($structureElement->id, 'newsmailGroup', 'child')) {
                 foreach ($elementLinks as &$link) {
@@ -29,7 +29,7 @@ class showFormNewsMailAddress extends structureElementAction
                 }
             }
             $structureElement->setTemplate('shared.content.tpl');
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $renderer->assign('contentSubTemplate', 'component.form.tpl');
             $renderer->assign('form', $structureElement->getForm('form'));
         }

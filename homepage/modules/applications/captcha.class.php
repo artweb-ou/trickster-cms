@@ -14,7 +14,7 @@ class captchaApplication extends controllerApplication
 
     public function initialize()
     {
-        $this->startSession('public', $this->getService('ConfigManager')->get('main.publicSessionLifeTime'));
+        $this->startSession('public', $this->getService(ConfigManager::class)->get('main.publicSessionLifeTime'));
         $this->createRenderer('fileReader');
 
         ini_set('memory_limit', '128M');

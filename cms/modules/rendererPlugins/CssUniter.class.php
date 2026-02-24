@@ -19,7 +19,7 @@ class cssUniterRendererPlugin extends rendererPlugin
     {
         $pathsManager = $this->getService(PathsManager::class);
         $this->cachePath = $pathsManager->getPath('cssCache');
-        $this->requestHeadersManager = $this->getService('requestHeadersManager');
+        $this->requestHeadersManager = $this->getService(requestHeadersManager::class);
         $this->httpResponse = CmsHttpResponse::getInstance();
 
         $this->maxAge = 365 * 60 * 60 * 24;
@@ -58,7 +58,7 @@ class cssUniterRendererPlugin extends rendererPlugin
                 /**
                  * @var DesignThemesManager $designThemesManager
                  */
-                $designThemesManager = $this->getService('DesignThemesManager');
+                $designThemesManager = $this->getService(DesignThemesManager::class);
                 if ($theme = $designThemesManager->getCurrentTheme()) {
                     return [$type, $delimiter, [$theme->getImageUrl(reset($values))]];
                 } else {
@@ -70,7 +70,7 @@ class cssUniterRendererPlugin extends rendererPlugin
                 /**
                  * @var DesignThemesManager $designThemesManager
                  */
-                $designThemesManager = $this->getService('DesignThemesManager');
+                $designThemesManager = $this->getService(DesignThemesManager::class);
                 if ($theme = $designThemesManager->getCurrentTheme()) {
                     return [$type, $delimiter, [$theme->getFontUrl(reset($values))]];
                 } else {
@@ -240,7 +240,7 @@ class cssUniterRendererPlugin extends rendererPlugin
          * @var DesignThemesManager $designThemesManager
          */
 
-        $designThemesManager = $this->getService('DesignThemesManager');
+        $designThemesManager = $this->getService(DesignThemesManager::class);
         if ($subfolder != "false") {
             $svgFile = $subfolder . "/" . $svgFile;
         }

@@ -65,7 +65,7 @@ class rootElement extends structureElement
 
     public function isAdminRoot()
     {
-        $adminMarker = $this->getService('ConfigManager')
+        $adminMarker = $this->getService(ConfigManager::class)
             ->get('main.rootMarkerAdmin');
         return $this->marker == $adminMarker;
     }

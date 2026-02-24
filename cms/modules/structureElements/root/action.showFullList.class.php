@@ -10,7 +10,7 @@ class showFullListRoot extends structureElementAction
 
             //init login form
             $structureElement->getChildrenList();
-            $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+            $marker = $this->getService(ConfigManager::class)->get('main.rootMarkerPublic');
             if ($publicRoot = $structureManager->getElementByMarker($marker)) {
                 $childElements = $publicRoot->getChildrenList();
                 foreach ($childElements as $element) {
@@ -29,12 +29,12 @@ class showFullListRoot extends structureElementAction
                     }
                 }
             }
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $renderer->assign('languageNames', $languageNames);
         }
 
         if ($structureElement->final) {
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $currentView = $controller->getParameter('view');
             if (!$currentView) {
                 $currentView = $adminRoot ? 'dashboard' : 'list';

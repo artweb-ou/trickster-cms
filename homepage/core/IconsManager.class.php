@@ -1,34 +1,19 @@
 <?php
 
+use Illuminate\Database\Connection;
+
 class IconsManager
 {
-    /**
-     * @var structureManager
-     */
-    protected $structureManager;
-    /**
-     * @var Illuminate\Database\Capsule\Manager()
-     */
-    protected $db;
     /**
      * @var genericIconElement[]
      */
     protected $iconElements;
 
-    /**
-     * @param Illuminate\Database\Capsule\Manager() $db
-     */
-    public function setDb($db)
+    public function __construct(
+        protected structureManager $structureManager,
+        protected Connection $db,
+    )
     {
-        $this->db = $db;
-    }
-
-    /**
-     * @param mixed $structureManager
-     */
-    public function setStructureManager($structureManager)
-    {
-        $this->structureManager = $structureManager;
     }
 
     public function getElementIcons($id)

@@ -2,9 +2,9 @@
 declare(strict_types=1);
 
 use Verifalia\EmailValidations\ValidationEntryStatus;
+use Verifalia\Security\BearerAuthenticationProvider;
 use Verifalia\VerifaliaRestClient;
 use Verifalia\VerifaliaRestClientOptions;
-use Verifalia\Security\BearerAuthenticationProvider;
 
 class VerifaliaAdapter implements SpamCheckAdapter
 {

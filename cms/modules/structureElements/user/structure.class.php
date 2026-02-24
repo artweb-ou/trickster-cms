@@ -104,7 +104,7 @@ class userElement extends structureElement implements JsonDataProvider
              */
             $structureManager = $this->getService('structureManager');
 
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
 
             $collection = persistableCollection::getInstance('module_newsmailaddress');
 
@@ -194,7 +194,7 @@ class userElement extends structureElement implements JsonDataProvider
 
     public function deleteElementData()
     {
-        $this->getService('SocialDataManager')->removeSocialUser($this->id);
+        $this->getService(SocialDataManager::class)->removeSocialUser($this->id);
         parent::deleteElementData();
     }
 }

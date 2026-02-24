@@ -46,7 +46,7 @@ class galleryImageElement extends structureElement implements ImageUrlProviderIn
 
     public function deleteElementData()
     {
-        $productOptionsImagesManager = $this->getService('ProductOptionsImagesManager');
+        $productOptionsImagesManager = $this->getService(ProductOptionsImagesManager::class);
         if ($productOptionsImagesManager) {
             $query = $productOptionsImagesManager->queryDb();
             $query->where('image', '=', $this->id);

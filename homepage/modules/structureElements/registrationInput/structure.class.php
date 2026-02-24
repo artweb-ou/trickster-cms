@@ -125,7 +125,7 @@ class registrationInputElement extends formFieldStructureElement
 
     public function getConnectedFormsIds()
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         return $linksManager->getConnectedIdList($this->id, self::FIELD_LINK_TYPE, 'child');
     }
 }

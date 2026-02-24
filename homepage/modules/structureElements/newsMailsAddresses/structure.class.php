@@ -65,7 +65,7 @@ class newsMailsAddressesElement extends structureElement
                             $sort[] = strtolower($element->email);
                         }
                         array_multisort($sort, SORT_ASC, $this->contentList);
-                        $this->getService('renderer')->assign("pager", $pager);
+                        $this->getService(renderer::class)->assign("pager", $pager);
                     }
                 }
             }

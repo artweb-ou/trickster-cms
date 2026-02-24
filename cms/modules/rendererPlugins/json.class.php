@@ -7,7 +7,7 @@ class jsonRendererPlugin extends rendererPlugin implements rendererPluginAppendI
 
     public function init()
     {
-        $this->requestHeadersManager = $this->getService('requestHeadersManager');
+        $this->requestHeadersManager = $this->getService(requestHeadersManager::class);
         $this->httpResponse = CmsHttpResponse::getInstance();
 
         $this->maxAge = 0;

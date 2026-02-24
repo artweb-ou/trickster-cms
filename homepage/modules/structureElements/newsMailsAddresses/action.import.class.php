@@ -12,7 +12,7 @@ class importNewsMailsAddresses extends structureElementAction
     {
         ini_set("max_execution_time", 60);
         if ($this->validated) {
-            $this->newsMailSubscription = $this->getService('NewsMailSubscription');
+            $this->newsMailSubscription = $this->getService(NewsMailSubscription::class);
 
             if ($structureElement->delimiter) {
                 $delimiter = trim($structureElement->delimiter);

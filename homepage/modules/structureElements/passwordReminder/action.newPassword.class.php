@@ -4,7 +4,7 @@ class newPasswordPasswordReminder extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $translationsManager = $this->getService('translationsManager');
+        $translationsManager = $this->getService(translationsManager::class);
         $db = $this->getService('db');
         $userEmail = $controller->getParameter('email');
 
@@ -33,9 +33,9 @@ class newPasswordPasswordReminder extends structureElementAction
                                 ->update(['dateModified' => time()]);
 
                             // email notification
-                            $emailDispatcher = $this->getService('EmailDispatcher');
+                            $emailDispatcher = $this->getService(EmailDispatcher::class);
                             $newDispatchment = $emailDispatcher->getEmptyDispatchment();
-                            $settings = $this->getService('settingsManager')->getSettingsList();
+                            $settings = $this->getService(settingsManager::class)->getSettingsList();
                             $newDispatchment->setFromName(isset($settings['default_sender_name']) ? $settings['default_sender_name'] : "");
                             $newDispatchment->setFromEmail(isset($settings['default_sender_email']) ? $settings['default_sender_email'] : "");
                             $newDispatchment->setSubject($translationsManager->getTranslationByName("email.passwordchanged_subject") . ' ' . $controller->rootURL);

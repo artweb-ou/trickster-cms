@@ -19,10 +19,10 @@ class submitPasswordReminder extends structureElementAction
                         '/email:' . $user['email'] .
                         '/key:' . $hash . '/';
 
-                    $translationsManager = $this->getService('translationsManager');
-                    $emailDispatcher = $this->getService('EmailDispatcher');
+                    $translationsManager = $this->getService(translationsManager::class);
+                    $emailDispatcher = $this->getService(EmailDispatcher::class);
                     $newDispatchment = $emailDispatcher->getEmptyDispatchment();
-                    $settings = $this->getService('settingsManager')->getSettingsList();
+                    $settings = $this->getService(settingsManager::class)->getSettingsList();
                     $newDispatchment->setFromName(isset($settings['default_sender_name']) ? $settings['default_sender_name'] : "");
                     $newDispatchment->setFromEmail(isset($settings['default_sender_email']) ? $settings['default_sender_email'] : "");
                     $newDispatchment->setSubject($translationsManager->getTranslationByName("email.passwordreminder_subject"));

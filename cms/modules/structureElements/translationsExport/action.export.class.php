@@ -29,7 +29,7 @@ class exportTranslationsExport extends structureElementAction
             }
         }
 
-        $renderer = $this->getService('renderer');
+        $renderer = $this->getService(renderer::class);
         $renderer->assign('exportData', $exportData);
 
         if ($isAdminTranslations) {
@@ -50,7 +50,7 @@ class exportTranslationsExport extends structureElementAction
                 }
             }
         } else {
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             $languagesList = $languagesManager->getLanguagesList();
             foreach ($languagesList as $languagesItem) {
                 $languageCodes[$languagesItem->id] = $languagesItem->iso6393;

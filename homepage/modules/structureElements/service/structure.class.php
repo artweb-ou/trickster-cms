@@ -51,7 +51,7 @@ class serviceElement extends menuStructureElement implements ConfigurableLayouts
     {
         if ($this->galleriesList === null) {
             $structureManager = $this->getService('structureManager');
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $this->galleriesList = [];
 
             $idList = $linksManager->getConnectedIdList($this->id, 'connectedGallery', 'child');

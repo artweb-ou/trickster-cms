@@ -20,7 +20,7 @@ class generateCurrencies extends structureElementAction
 
             $currenciesData[] = $currenciesDataItem;
         }
-        $config = $this->getService('ConfigManager')->getConfig('currencies');
+        $config = $this->getService(ConfigManager::class)->getConfig('currencies');
         $config->set('list', $currenciesData);
         $config->save();
     }

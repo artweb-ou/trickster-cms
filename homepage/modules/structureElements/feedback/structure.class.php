@@ -99,7 +99,7 @@ class feedbackElement extends dynamicGroupFieldsStructureElement
 
     public function getAnswerIds()
     {
-        return $this->getService('linksManager')->getConnectedIdList($this->id, 'feedbackAnswer', 'parent');
+        return $this->getService(linksManager::class)->getConnectedIdList($this->id, 'feedbackAnswer', 'parent');
     }
 
     public function getExportArchive()

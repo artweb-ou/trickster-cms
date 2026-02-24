@@ -16,7 +16,7 @@ class applicationCacheRendererPlugin extends rendererPlugin
         $pathsManager = $this->getService(PathsManager::class);
         $this->cachePath = $pathsManager->getPath('appCache');
 
-        $this->requestHeadersManager = $this->getService('requestHeadersManager');
+        $this->requestHeadersManager = $this->getService(requestHeadersManager::class);
         $this->httpResponse = CmsHttpResponse::getInstance();
 
         $this->httpResponse->setCharset('UTF-8');
@@ -114,7 +114,7 @@ class applicationCacheRendererPlugin extends rendererPlugin
         if ($encoding == 'gzip') {
             if (!file_exists($this->cachePath . $this->cacheFileName . '_gzip')) {
                 file_put_contents($this->cachePath . $this->cacheFileName . '_gzip', $this->gzip($this->contentText));
-                chmod($this->cachePath . $this->cacheFileName . '_gzip', $this->getService('ConfigManager')
+                chmod($this->cachePath . $this->cacheFileName . '_gzip', $this->getService(ConfigManager::class)
                     ->get('paths.defaultCachePermissions'));
             }
             $this->contentText = file_get_contents($this->cachePath . $this->cacheFileName . '_gzip');

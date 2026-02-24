@@ -15,7 +15,7 @@ class positionsElement extends structureElement
 
     public function getPositionElements()
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $structureManager = $this->getService('structureManager');
         $currentElement = $structureManager->getCurrentElement();
 

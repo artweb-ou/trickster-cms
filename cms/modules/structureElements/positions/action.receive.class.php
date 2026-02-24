@@ -6,7 +6,7 @@ class receivePositions extends structureElementAction
 
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         if ($currentElement = $structureManager->getCurrentElement()) {
             $structureManager->getElementsChildren($currentElement->id);
 

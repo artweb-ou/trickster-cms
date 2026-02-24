@@ -4,7 +4,7 @@ use DI\Container;
 
 interface DependencyInjectionContextInterface
 {
-    public function setRegistry(DependencyInjectionServicesRegistryInterface $registry);
+    public function setLocalServices(array $services);
 
     public function setContainer(Container $container);
 }

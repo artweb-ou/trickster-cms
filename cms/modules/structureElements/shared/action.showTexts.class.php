@@ -6,7 +6,7 @@ class showTextsShared extends structureElementAction
     {
         if ($structureElement->final) {
             $structureElement->setTemplate('shared.content.tpl');
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $renderer->assign('action', 'receiveTexts');
             if(method_exists($structureElement, 'getSubArticles')) {
                 $renderer->assign('contentList', $structureElement->getSubArticles());

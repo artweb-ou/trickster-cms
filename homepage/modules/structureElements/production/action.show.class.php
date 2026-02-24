@@ -4,7 +4,7 @@ class showProduction extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $structureElement->setViewName('short');
         if ($structureElement->requested) {
             $structureElement->setViewName('details');

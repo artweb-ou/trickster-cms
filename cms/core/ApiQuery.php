@@ -86,7 +86,7 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
         /**
          * @var QueryFiltersManager $queryFiltersManager
          */
-        $queryFiltersManager = $this->getService('QueryFiltersManager');
+        $queryFiltersManager = $this->getService(QueryFiltersManager::class);
         $this->filterQueries = $queryFiltersManager->getFilterQueries(
             $this->filtrationParameters,
             $this->resultTypes,
@@ -119,7 +119,7 @@ class ApiQuery extends errorLogger implements DependencyInjectionContextInterfac
             /**
              * @var ApiQueryResultResolver $apiQueryResultResolver
              */
-            $apiQueryResultResolver = $this->getService('ApiQueryResultResolver');
+            $apiQueryResultResolver = $this->getService(ApiQueryResultResolver::class);
             $this->queryResult = $apiQueryResultResolver->resolve(
                 $filterQueries,
                 $this->exportType,

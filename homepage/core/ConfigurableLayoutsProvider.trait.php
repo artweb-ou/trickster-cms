@@ -15,7 +15,7 @@ trait ConfigurableLayoutsProviderTrait
         /**
          * @var Config $layoutsConfig
          */
-        $layoutsConfig = $this->getService('ConfigManager')->getConfig('layouts');
+        $layoutsConfig = $this->getService(ConfigManager::class)->getConfig('layouts');
         $result = $layoutsConfig->getMerged("{$this->structureType}.layouts");
 
         return (array)$result;
@@ -26,7 +26,7 @@ trait ConfigurableLayoutsProviderTrait
         /**
          * @var Config $layoutsConfig
          */
-        $layoutsConfig = $this->getService('ConfigManager')->getConfig('layouts');
+        $layoutsConfig = $this->getService(ConfigManager::class)->getConfig('layouts');
         $result = false;
         //check deprecated layout format
         if ($layout === 'layout') {
@@ -47,7 +47,7 @@ trait ConfigurableLayoutsProviderTrait
         /**
          * @var Config $layoutsConfig
          */
-        $layoutsConfig = $this->getService('ConfigManager')->getConfig('layouts');
+        $layoutsConfig = $this->getService(ConfigManager::class)->getConfig('layouts');
         $result = $layoutsConfig->get("{$this->structureType}.$layout.default");
         if (!$result && $layout === 'layout') {
             $this->logError('deprecated layout main used:' . __CLASS__);

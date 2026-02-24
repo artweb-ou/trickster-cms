@@ -204,7 +204,7 @@ class privilegesManager implements DependencyInjectionContextInterface
     public function getModuleActionsList()
     {
         if ($this->moduleActionsList == false) {
-            $controller = $this->getService('controller');
+            $controller = $this->getService(controller::class);
             $pathsManager = $this->getService(PathsManager::class);
             $fileDirectory = $pathsManager->getRelativePath('structureElements');
             foreach ($controller->getIncludePaths() as $path) {

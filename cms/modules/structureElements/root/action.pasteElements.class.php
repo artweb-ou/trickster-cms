@@ -10,7 +10,7 @@ class pasteElementsRoot extends structureElementAction
         $user = $currentUserService->getCurrentUser();
         $structureElement->executeAction('showFullList');
         if ($contentType = $controller->getParameter('view')) {
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $renderer->assign('contentType', $contentType);
             $structureManager->setNewElementLinkType($contentType);
         }

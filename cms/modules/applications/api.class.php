@@ -33,28 +33,23 @@ class apiApplication extends controllerApplication
         /**
          * @var Cache $cache
          */
-        $cache = $this->getService('Cache');
+        $cache = $this->getService(Cache::class);
         $cache->enable(true, false, false);
 
         $currentElement = false;
 
         if ($this->mode == 'admin') {
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl' => $controller->rootURL,
-                'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerAdmin'),
-                'configActions' => true,
-            ], true);
+            $structureManager = $this->getService(structureManager::class);
+            $this->setService('structureManager', $structureManager);
         } else {
 
             header("Access-Control-Allow-Origin: *");
             header("Access-Control-Allow-Methods: GET, POST");
             header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl' => $controller->rootURL,
-                'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
-            ], true);
-            $languagesManager = $this->getService('LanguagesManager');
+            $structureManager = $this->getService('publicStructureManager');
+            $this->setService('structureManager', $structureManager);
+            $languagesManager = $this->getService(LanguagesManager::class);
             if ($controller->requestedPath) {
                 $currentElement = $structureManager->getCurrentElement();
             } elseif ($controller->getParameter('language')) {
@@ -84,7 +79,7 @@ class apiApplication extends controllerApplication
             $this->renderer->assign("limit", 1);
         } else {
             /** @var ApiQueriesManager $apiQueriesManager * */
-            $apiQueriesManager = $this->getService('ApiQueriesManager');
+            $apiQueriesManager = $this->getService(ApiQueriesManager::class);
             $uri = $controller->getParametersString();
 
             if ($apiQuery = $apiQueriesManager->getQueryFromString($uri)) {

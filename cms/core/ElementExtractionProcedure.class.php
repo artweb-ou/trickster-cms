@@ -47,9 +47,9 @@ class ElementExtractionProcedure extends ExtractionProcedure
             $this->xmlObj = new SimpleXMLElement('<?xml version="1.0"?><procedures></procedures>');
         }
 
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
 
-        $this->publicLanguages = $languagesManager->getLanguagesList($this->getService('ConfigManager')
+        $this->publicLanguages = $languagesManager->getLanguagesList($this->getService(ConfigManager::class)
             ->get('main.rootMarkerPublic'));
         $this->adminLanguages = $languagesManager->getLanguagesList('adminLanguages');
 

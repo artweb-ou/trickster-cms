@@ -25,7 +25,7 @@ class deployApplication extends controllerApplication
     {
         set_time_limit(60 * 60);
         $this->createRenderer();
-        $this->deploymentManager = $this->getService('DeploymentManager');
+        $this->deploymentManager = $this->getService(DeploymentManager::class);
         $this->structureManager = $this->getService('structureManager');
         $this->structureManager->setPrivilegeChecking(false);
         $this->controller = controller::getInstance();
@@ -37,7 +37,7 @@ class deployApplication extends controllerApplication
         foreach ($controller->requestedPath as $action) {
             break;
         }
-        $configManager = $this->getService('ConfigManager');
+        $configManager = $this->getService(ConfigManager::class);
         $config = $configManager->getConfig('deployment');
         if ($config->isEmpty() && defined('CONFIGURATION_PATH') && is_file(CONFIGURATION_PATH . 'configuration_deployment.php')) {
             $config = $configManager->getConfigFromPath(CONFIGURATION_PATH . 'configuration_deployment.php');
@@ -224,9 +224,9 @@ class deployApplication extends controllerApplication
                 $groupsIndex[$translationGroup->title] = $translationGroup;
             }
         }
-        $languagesMarker = $admin ? 'adminLanguages' : $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+        $languagesMarker = $admin ? 'adminLanguages' : $this->getService(ConfigManager::class)->get('main.rootMarkerPublic');
         $type = $admin ? 'adminTranslation' : 'translation';
-        $languagesList = $this->getService('LanguagesManager')->getLanguagesList($languagesMarker);
+        $languagesList = $this->getService(LanguagesManager::class)->getLanguagesList($languagesMarker);
         foreach ($groupNames as $groupName) {
             if (!isset($groupsIndex[$groupName])) {
                 continue;
@@ -262,9 +262,9 @@ class deployApplication extends controllerApplication
 
         $moduleData = $element->getModuleData();
         $multiLanguageFields = $element->getMultiLanguageFields();
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
         $languagesIndex = [];
-        $languagesList = $languagesManager->getLanguagesList($this->getService('ConfigManager')
+        $languagesList = $languagesManager->getLanguagesList($this->getService(ConfigManager::class)
             ->get('main.rootMarkerPublic'));
         $languagesList = array_merge($languagesList, $languagesManager->getLanguagesList('adminLanguages'));
         foreach ($languagesList as $language) {
@@ -323,7 +323,8 @@ class deployApplication extends controllerApplication
 
     protected function setupTheme()
     {
-        $designThemesManager = $this->getService('DesignThemesManager', ['currentThemeCode' => $this->applicationName]);
+        $designThemesManager = $this->getService(DesignThemesManager::class);
+        $designThemesManager->setCurrentThemeCode($this->applicationName);
         $this->theme = $designThemesManager->getCurrentTheme();
     }
 }

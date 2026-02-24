@@ -31,7 +31,7 @@ class Visitor
 
     protected function setVisitorInfo()
     {
-        $visitorManager = $this->getService('VisitorsManager');
+        $visitorManager = $this->getService(VisitorsManager::class);
         $query = $visitorManager->createVisitorQuery();
         $record = $query->where('id', $this->id)->first();
         if (!empty($record)) {
@@ -87,7 +87,7 @@ class Visitor
 
     public function setVisits()
     {
-        $visitorManager = $this->getService('VisitorsManager');
+        $visitorManager = $this->getService(VisitorsManager::class);
         $result = $visitorManager->createVisitQuery()
             ->where('visitorId', $this->id)
             ->orderBy('time', 'desc')
@@ -166,7 +166,7 @@ class Visitor
     public function setOrders()
     {
         $structureManager = $this->getService('structureManager');
-        $visitorManager = $this->getService('VisitorsManager');
+        $visitorManager = $this->getService(VisitorsManager::class);
         $result['orders'] = [];
         $result['orderProducts'] = [];
         $result['ordersTotal'] = 0;

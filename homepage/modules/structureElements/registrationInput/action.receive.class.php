@@ -21,7 +21,7 @@ class receiveRegistrationInput extends structureElementAction
 
             $structureElement->persistElementData();
 
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             if ($formsIds = $structureElement->getConnectedFormsIds()) {
                 foreach ($formsIds as $formId) {
                     if (!in_array($formId, $structureElement->registrationForms)) {

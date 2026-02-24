@@ -7,7 +7,7 @@ class showFullListAdminLanguages extends structureElementAction
         if ($structureElement->requested) {
             if ($structureElement->final) {
                 $structureElement->setTemplate('shared.content.tpl');
-                $renderer = $this->getService('renderer');
+                $renderer = $this->getService(renderer::class);
                 $renderer->assign('contentSubTemplate', 'shared.contentlist_singlepage.tpl');
             }
         }

@@ -41,7 +41,7 @@ trait GenericIconProviderTrait
     {
         if (empty($this->connectedGenericIconsId)) {
             $linkType = 'genericIcon' . ucfirst($this->structureType);
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $this->connectedGenericIconsId = $linksManager->getConnectedIdList($this->id, $linkType);
         }
         return $this->connectedGenericIconsId;

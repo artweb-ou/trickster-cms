@@ -80,7 +80,7 @@ class dispatchmentLogElement extends structureElement
             ->skip($pager->startElement)
             ->take($elementsOnPage)
             ->get()) {
-            $secret = $this->getService('ConfigManager')->get('emails.dispatchmentSecret');
+            $secret = $this->getService(ConfigManager::class)->get('emails.dispatchmentSecret');
 
             foreach ($rows as &$row) {
                 $row['startTime'] = date('d.m.Y H:i', $row['startTime']);

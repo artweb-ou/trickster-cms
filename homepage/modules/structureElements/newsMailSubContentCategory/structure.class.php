@@ -16,7 +16,7 @@ class newsMailSubContentCategoryElement extends menuDependantStructureElement
     public function getConnectedSubContentElements()
     {
         $result = [];
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $connectedCategoriesIds = $linksManager->getConnectedIdList($this->id,
             newsMailTextSubContentElement::LINK_TYPE_CATEGORY, 'parent');
         if ($connectedCategoriesIds) {

@@ -74,7 +74,7 @@ class fileElement extends structureElement implements StructureElementUploadedFi
 
     public function getDownloadUrl($mode = 'download', $appName = 'file')
     {
-        $controller = $this->getService('controller');
+        $controller = $this->getService(controller::class);
         $url = $controller->baseURL . $appName . '/id:' . $this->file . '/mode:' . $mode . '/filename:' . $this->fileName;
 
         return $url;

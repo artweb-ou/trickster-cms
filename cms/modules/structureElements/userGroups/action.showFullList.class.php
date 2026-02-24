@@ -8,7 +8,7 @@ class showFullListUserGroups extends structureElementAction
             $structureManager->getElementsChildren($structureElement->id, 'container');
 
             $structureElement->setTemplate('shared.content.tpl');
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $renderer->assign('contentSubTemplate', 'shared.contentlist_singlepage.tpl');
         }
     }

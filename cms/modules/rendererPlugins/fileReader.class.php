@@ -15,7 +15,7 @@ class fileReaderRendererPlugin extends rendererPlugin
 
     public function init()
     {
-        $this->requestHeadersManager = $this->getService('requestHeadersManager');
+        $this->requestHeadersManager = $this->getService(requestHeadersManager::class);
         $this->httpResponse = CmsHttpResponse::getInstance();
 
         $this->maxAge = 365 * 60 * 60 * 24;

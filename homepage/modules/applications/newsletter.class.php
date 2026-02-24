@@ -12,16 +12,14 @@ class newsletterApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $structureManager = $this->getService('structureManager', [
-            'rootUrl' => $controller->rootURL,
-            'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerAdmin'),
-        ], true);
+        $structureManager = $this->getService(structureManager::class);
+        $this->setService('structureManager', $structureManager);
         $structureManager->setPrivilegeChecking(false);
 
         if ($newsmailTextId = (int)($controller->getParameter('id'))) {
             if ($newsMailTextElement = $structureManager->getElementById($newsmailTextId)) {
                 if ($data = $newsMailTextElement->getDispatchmentData()) {
-                    $emailDispatcher = $this->getService('EmailDispatcher');
+                    $emailDispatcher = $this->getService(EmailDispatcher::class);
                     $newDispatchment = $emailDispatcher->getEmptyDispatchment();
                     $newDispatchment->setSubject($newsMailTextElement->title);
                     $newDispatchment->setData($data);

@@ -8,7 +8,7 @@ class bannerApplication extends controllerApplication
 
     public function initialize()
     {
-        $this->startSession('public', $this->getService('ConfigManager')->get('main.publicSessionLifeTime'));
+        $this->startSession('public', $this->getService(ConfigManager::class)->get('main.publicSessionLifeTime'));
         $this->createRenderer();
     }
 

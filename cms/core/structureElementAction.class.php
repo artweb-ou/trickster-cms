@@ -66,11 +66,11 @@ abstract class structureElementAction extends errorLogger implements DependencyI
     {
         $translations = false;
         if (!$languageId) {
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             $languageId = $languagesManager->getCurrentLanguageId();
         }
         if ($languageId) {
-            $translationManager = $this->getService('translationsManager');
+            $translationManager = $this->getService(translationsManager::class);
             $translations = $translationManager->getTranslationsList($marker, $languageId);
         }
         return $translations;

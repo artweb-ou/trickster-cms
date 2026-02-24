@@ -14,8 +14,8 @@ class imageProcessRendererPlugin extends rendererPlugin
 
     public function init()
     {
-        $configManager = $this->getService('ConfigManager');
-        $this->requestHeadersManager = $this->getService('requestHeadersManager');
+        $configManager = $this->getService(ConfigManager::class);
+        $this->requestHeadersManager = $this->getService(requestHeadersManager::class);
         $this->httpResponse = CmsHttpResponse::getInstance();
 
         $pathsManager = $this->getService(PathsManager::class);

@@ -16,12 +16,8 @@ class Search implements DependencyInjectionContextInterface
     protected $input = '';
     protected $languageId;
 
-    public function __construct(
-        DependencyInjectionServicesRegistryInterface $registry,
-        Container                                    $container,
-    )
+    public function __construct(Container $container)
     {
-        $this->setRegistry($registry);
         $this->setContainer($container);
     }
 
@@ -89,7 +85,7 @@ class Search implements DependencyInjectionContextInterface
     protected function performTypeSearch($searchResult, $exact = true, $typePostfix = '', $exclusions = [])
     {
         $structureManager = $this->getService('structureManager');
-        $apiQueriesManager = $this->getService('ApiQueriesManager');
+        $apiQueriesManager = $this->getService(ApiQueriesManager::class);
         $idsByType = [];
 
         if ($exact) {

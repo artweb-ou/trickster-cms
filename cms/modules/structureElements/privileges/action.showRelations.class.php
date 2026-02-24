@@ -36,7 +36,7 @@ class showRelationsPrivileges extends structureElementAction
                 $compiledRelations[$relation->module][$relation->action] = $relation->getData();
             }
 
-            $privilegesManager = $this->getService('privilegesManager');
+            $privilegesManager = $this->getService(privilegesManager::class);
             $structureElement->privileges = $privilegesManager->getModuleActionsList();
 
             foreach ($structureElement->privileges as $privilege) {

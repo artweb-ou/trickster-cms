@@ -14,7 +14,7 @@ trait ImageUrlProviderTrait
 
     public function getImageUrl(string $preset = 'adminImage'): ?string
     {
-        $controller = $this->getService('controller');
+        $controller = $this->getService(controller::class);
         return $controller->baseURL . 'image/type:' . $preset . '/id:' . $this->getImageId() . '/filename:' . $this->getImageName();
     }
 }

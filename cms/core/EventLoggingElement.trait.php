@@ -11,7 +11,7 @@ trait EventLoggingElementTrait
 
     public function logVisitorEvent($type, array $parameters = [])
     {
-        $visitorsManger = $this->getService('VisitorsManager');
+        $visitorsManger = $this->getService(VisitorsManager::class);
         $visitor = $visitorsManger->getCurrentVisitor();
         if (!$visitor) {
             return;

@@ -23,12 +23,14 @@ class cssApplication extends controllerApplication
             $currentThemeCode = 'default';
         }
 
-        $requestHeadersManager = $this->getService('requestHeadersManager');
+        $requestHeadersManager = $this->getService(requestHeadersManager::class);
         $userAgentEngineType = $requestHeadersManager->getUserAgentEngineType();
         /**
          * @var ResourcesUniterHelper $resourcesUniterHelper
          */
-        $resourcesUniterHelper = $this->getService('ResourcesUniterHelper', ['currentThemeCode' => $currentThemeCode], true);
+        $designThemesManager = $this->getService(DesignThemesManager::class);
+        $designThemesManager->setCurrentThemeCode($currentThemeCode);
+        $resourcesUniterHelper = $this->getService(ResourcesUniterHelper::class);
         $cacheFileName = $resourcesUniterHelper->getCacheCode();
         $cssResources = $resourcesUniterHelper->getCssResources();
 
@@ -38,11 +40,11 @@ class cssApplication extends controllerApplication
             $useDataUri = false;
         }
 
-        $configManager = $this->getService('ConfigManager');
+        $configManager = $this->getService(ConfigManager::class);
         $vars = [];
         if ($colorsConfig = $configManager->getConfig('colors')) {
             $vars = $colorsConfig->getLinkedData();
-            $settingsList = $this->getService('settingsManager')->getSettingsList();
+            $settingsList = $this->getService(settingsManager::class)->getSettingsList();
             foreach ($vars as $color => &$value) {
                 if (!empty($settingsList[$color])) {
                     $value = $settingsList[$color];

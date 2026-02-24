@@ -8,7 +8,7 @@ class sitemapApplication extends controllerApplication
 
     public function initialize()
     {
-        $configManager = $this->getService('ConfigManager');
+        $configManager = $this->getService(ConfigManager::class);
         $this->startSession('public', $configManager->get('main.publicSessionLifeTime'));
         $this->config = $configManager->getConfig('sitemap');
         $this->createRenderer();
@@ -19,10 +19,10 @@ class sitemapApplication extends controllerApplication
         /**
          * @var Cache $cache
          */
-        $cache = $this->getService('Cache');
+        $cache = $this->getService(Cache::class);
         $cache->enable(true, false, false);
 
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
 
         $mapItems = [];
         $languages = $languagesManager->getLanguagesList();
@@ -30,10 +30,8 @@ class sitemapApplication extends controllerApplication
             $languagesManager->setCurrentLanguageCode($languageInfo->iso6393);
             $languageId = $languageInfo->id;
 
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl' => $controller->baseURL,
-                'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
-            ], true);
+            $structureManager = $this->getService('publicStructureManager');
+            $this->setService('structureManager', $structureManager);
 
             $structureManager->setRequestedPath([$languageInfo->iso6393]);
             $languageElement = $structureManager->getElementById($languageId);

@@ -10,10 +10,10 @@ class sendFeedback extends structureElementAction
 
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $translationsManager = $this->getService('translationsManager');
+        $translationsManager = $this->getService(translationsManager::class);
 
         if ($this->validated && $this->validateAjaxRequest()) {
-            $settings = $this->getService('settingsManager')->getSettingsList();
+            $settings = $this->getService(settingsManager::class)->getSettingsList();
             $subject = $structureElement->title;
 
             $data = [
@@ -99,7 +99,7 @@ class sendFeedback extends structureElementAction
                 }
                 $data['groups'][] = $groupInfo;
             }
-            $visitorManager = $this->getService('VisitorsManager');
+            $visitorManager = $this->getService(VisitorsManager::class);
             if ($visitor = $visitorManager->getCurrentVisitor()) {
                 if ($firstName && $lastName) {
                     $visitor->firstName = $firstName;
@@ -115,7 +115,7 @@ class sendFeedback extends structureElementAction
                 $visitor->phone = $phone;
                 $visitorManager->updateVisitor($visitor);
             }
-            $spamChecker = $this->getService('SpamChecker');
+            $spamChecker = $this->getService(SpamChecker::class);
             if ($emailToCheck && !$spamChecker->checkEmail($emailToCheck)) {
                 $structureElement->errorMessage = $translationsManager->getTranslationByName('feedback.emailsendingfailed');
             } else {
@@ -164,7 +164,7 @@ class sendFeedback extends structureElementAction
                             }
                         }
                     }
-                    $emailDispatcher = $this->getService('EmailDispatcher');
+                    $emailDispatcher = $this->getService(EmailDispatcher::class);
                     $newDispatchment = $emailDispatcher->getEmptyDispatchment();
                     $newDispatchment->setFromName($fromName);
                     $newDispatchment->setFromEmail($fromEmail);

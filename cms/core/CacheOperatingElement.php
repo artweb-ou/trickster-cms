@@ -10,7 +10,7 @@ trait CacheOperatingElement
 	public function getCache(): Cache
 	{
 		if ($this->cache === null) {
-			$this->cache = $this->getService('Cache');
+			$this->cache = $this->getService(Cache::class);
 		}
 		return $this->cache;
 	}

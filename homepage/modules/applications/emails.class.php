@@ -10,7 +10,7 @@ class emailsApplication extends controllerApplication
 
     public function initialize()
     {
-        $this->startSession('emails', $this->getService('ConfigManager')->get('main.publicSessionLifeTime'));
+        $this->startSession('emails', $this->getService(ConfigManager::class)->get('main.publicSessionLifeTime'));
         $this->createRenderer();
     }
 
@@ -21,10 +21,8 @@ class emailsApplication extends controllerApplication
         if ($userId = $user->checkUser('crontab', null, true)) {
             $user->switchUser($userId);
 
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl' => $controller->rootURL,
-                'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerAdmin'),
-            ]);
+            $structureManager = $this->getService(structureManager::class);
+            $this->setService('structureManager', $structureManager);
 
             $this->processRequestParameters();
 
@@ -34,13 +32,13 @@ class emailsApplication extends controllerApplication
                 $requestedTheme = 'project';
             }
 
-            $designThemesManager = $this->getService('DesignThemesManager');
+            $designThemesManager = $this->getService(DesignThemesManager::class);
             $currentTheme = $designThemesManager->getTheme($requestedTheme);
             /**
              * @var settingsManager $settingsManager
              */
-            $settingsManager = $this->getService('settingsManager');
-            $settings = $settingsManager->getSettingsList($this->getService('LanguagesManager')
+            $settingsManager = $this->getService(settingsManager::class);
+            $settings = $settingsManager->getSettingsList($this->getService(LanguagesManager::class)
                 ->getCurrentLanguageId());
             $this->renderer->assign('settings', $settings);
             $this->renderer->assign('theme', $currentTheme);
@@ -71,7 +69,7 @@ class emailsApplication extends controllerApplication
                     $collection = persistableCollection::getInstance('email_dispatchments_history');
                     if ($records = $collection->load(['id' => $controller->getParameter('id')])) {
                         $record = reset($records);
-                        $emailDispatcher = $this->getService('EmailDispatcher');
+                        $emailDispatcher = $this->getService(EmailDispatcher::class);
                         if ($emailDispatcher->getDispatchment($record->dispatchmentId)) {
                             $receiver = new EmailDispatchmentReceiver($record);
                             $count = 1;
@@ -170,10 +168,7 @@ class emailsApplication extends controllerApplication
             $external = $controller->getParameter('external');
             $targetId = $newsmailId;
             if (!$external) {
-                $structureManager = $this->getService('structureManager', [
-                    'rootUrl' => $controller->rootURL,
-                    'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
-                ], true);
+                $structureManager = $this->getService('publicStructureManager');
                 $urlComponents = parse_url($url) ?: [];
                 $path = isset($urlComponents['path']) ? $urlComponents['path'] : '';
                 $pathSegments = array_filter(explode('/', $path));
@@ -225,7 +220,7 @@ class emailsApplication extends controllerApplication
         // constant deprecated since 2016.03
         $secret = defined('EMAIL_DISPATCHMENT_SECRET')
             ? EMAIL_DISPATCHMENT_SECRET
-            : $this->getService('ConfigManager')->get('emails.dispatchmentSecret');
+            : $this->getService(ConfigManager::class)->get('emails.dispatchmentSecret');
         if ($key == hash_hmac('sha256', $email, $secret)) {
             return true;
         }
@@ -238,7 +233,7 @@ class emailsApplication extends controllerApplication
         $collection = persistableCollection::getInstance('email_dispatchments_history');
         if ($records = $collection->load(['id' => $dispatchmentId])) {
             $record = reset($records);
-            $emailDispatcher = $this->getService('EmailDispatcher');
+            $emailDispatcher = $this->getService(EmailDispatcher::class);
             if ($originalDispatchment = $emailDispatcher->getDispatchment($record->dispatchmentId)) {
                 $receiver = new EmailDispatchmentReceiver($record);
                 $originalDispatchment->setReceiver($receiver);

@@ -16,7 +16,7 @@ class newsMailFormElement extends menuDependantStructureElement
     public function setSubscriptionStatus($subscriptionStatus)
     {
         $this->subscriptionStatus = $subscriptionStatus;
-        $translationsManager = $this->getService('translationsManager');
+        $translationsManager = $this->getService(translationsManager::class);
         if ($subscriptionStatus == 'success') {
             $this->message = $translationsManager->getTranslationByName('subscribe.thanksforsubscribing');
         } elseif ($subscriptionStatus == 'fail') {

@@ -9,7 +9,7 @@ class receiveSubMenuList extends structureElementAction
         if ($this->validated) {
             $structureElement->prepareActualData();
 
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $linksIndex = $linksManager->getElementsLinksIndex($structureElement->id, 'submenulist', 'parent');
             foreach ($structureElement->menus as $menuId) {
                 $linksManager->linkElements($structureElement->id, $menuId, 'submenulist', true);

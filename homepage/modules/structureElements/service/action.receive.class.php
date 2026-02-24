@@ -7,7 +7,7 @@ class receiveService extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $structureElement->prepareActualData();
 
             if ($structureElement->structureName == '') {

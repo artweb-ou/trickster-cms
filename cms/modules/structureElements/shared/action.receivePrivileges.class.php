@@ -9,7 +9,7 @@ class receivePrivilegesShared extends structureElementAction
         if ($structureElement->privilegesForm = $structureManager->createElement('privileges', 'receiveRelations', $structureElement->id)
         ) {
             $structureElement->setTemplate('shared.content.tpl');
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $renderer->assign('contentSubTemplate', 'shared.privileges.tpl');
         }
     }

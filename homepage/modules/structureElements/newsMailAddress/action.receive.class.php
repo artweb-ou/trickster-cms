@@ -7,7 +7,7 @@ class receiveNewsMailAddress extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $structureElement->prepareActualData();
             $structureElement->structureName = $structureElement->email;
             $structureElement->persistElementData();

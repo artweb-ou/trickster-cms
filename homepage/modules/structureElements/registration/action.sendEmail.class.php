@@ -5,7 +5,7 @@ class sendEmailRegistration extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated === true) {
-            $translationsManager = $this->getService('translationsManager');
+            $translationsManager = $this->getService(translationsManager::class);
 
             $formData = $structureElement->getFormData();
 
@@ -24,9 +24,9 @@ class sendEmailRegistration extends structureElementAction
                 'fields' => $fieldsInfo,
             ];
 
-            $emailDispatcher = $this->getService('EmailDispatcher');
+            $emailDispatcher = $this->getService(EmailDispatcher::class);
             $newDispatchment = $emailDispatcher->getEmptyDispatchment();
-            $settings = $this->getService('settingsManager')->getSettingsList();
+            $settings = $this->getService(settingsManager::class)->getSettingsList();
             $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
             $newDispatchment->setFromEmail($settings['default_sender_email'] ? $settings['default_sender_email'] : "");
             $subject = $structureElement->title;

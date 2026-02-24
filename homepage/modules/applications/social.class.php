@@ -25,7 +25,7 @@ class socialApplication extends controllerApplication
         $this->createRenderer();
         $this->getService('structureManager')->setPrivilegeChecking(false);
         $this->parseRequestParameters();
-        $this->socialDataManager = $this->getService('SocialDataManager');
+        $this->socialDataManager = $this->getService(SocialDataManager::class);
     }
 
     public function execute($controller)
@@ -221,7 +221,7 @@ class socialApplication extends controllerApplication
                 if (!$group) {
                     continue;
                 }
-                $linksManager = $this->getService('linksManager');
+                $linksManager = $this->getService(linksManager::class);
                 $linksManager->linkElements($group, $element->id, 'userRelation');
             }
         }
@@ -231,7 +231,7 @@ class socialApplication extends controllerApplication
 
     protected function parseRequestParameters()
     {
-        $controller = $this->getService('controller');
+        $controller = $this->getService(controller::class);
         $this->action = $controller->getParameter('action');
         if ($this->action == 'auth') {
             $currentUserService = $this->getService(CurrentUserService::class);
@@ -245,14 +245,14 @@ class socialApplication extends controllerApplication
 
     protected function redirect($target)
     {
-        $controller = $this->getService('controller');
+        $controller = $this->getService(controller::class);
         $target = $target ?: $controller->baseURL;
         $controller->redirect($target);
     }
 
     protected function translate($code)
     {
-        return $this->getService('translationsManager')
+        return $this->getService(translationsManager::class)
             ->getTranslationByName($code, 'public_translations', null, false, false);
     }
 

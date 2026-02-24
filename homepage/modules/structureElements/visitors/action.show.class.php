@@ -7,7 +7,7 @@ class showVisitors extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->final) {
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $requestedVisitor = $controller->getParameter('visitor');
             if ($requestedVisitor) {
                 $details = $structureElement->getVisitorDetails($requestedVisitor);

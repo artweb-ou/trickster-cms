@@ -50,11 +50,11 @@ class registrationElement extends menuDependantStructureElement
         $currentUserId = $user->userName !== 'anonymous' ? (int)$user->readUserId() : 0;
 
         if ($currentUserId > 0) {
-            $socialDataManager = $this->getService('SocialDataManager');
+            $socialDataManager = $this->getService(SocialDataManager::class);
             $existingConnections = $socialDataManager->getCmsUserSocialNetworks($currentUserId);
         }
         $controller = controller::getInstance();
-        $socialDataManager = $this->getService('SocialDataManager');
+        $socialDataManager = $this->getService(SocialDataManager::class);
         $socialPlugins = $socialDataManager->getSocialPlugins();
         foreach ($socialPlugins as $element) {
             $iconUrl = '';
@@ -118,12 +118,12 @@ class registrationElement extends menuDependantStructureElement
 
     public function getConnectedFieldsIds()
     {
-        return $this->getService('linksManager')->getConnectedIdList($this->id, self::FIELD_LINK_TYPE, 'parent');
+        return $this->getService(linksManager::class)->getConnectedIdList($this->id, self::FIELD_LINK_TYPE, 'parent');
     }
 
     public function getConnectedUserGroupsIds()
     {
-        return $this->getService('linksManager')->getConnectedIdList($this->id, self::USER_GROUP_LINK_TYPE, 'parent');
+        return $this->getService(linksManager::class)->getConnectedIdList($this->id, self::USER_GROUP_LINK_TYPE, 'parent');
     }
 
     public function setDynamicFieldError($fieldId)

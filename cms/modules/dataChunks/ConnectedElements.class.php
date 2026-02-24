@@ -43,14 +43,14 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
     {
         if ($this->ids === null) {
             $this->ids = [];
-            $cache = $this->getService('Cache');
+            $cache = $this->getService(Cache::class);
             $keyName = $this->structureElement->id . ':ce' . $this->linkType . $this->role;
             $value = $cache->get($keyName);
             if ($value === null) {
                 /**
                  * @var linksManager $linksManager
                  */
-                if ($linksManager = $this->getService('linksManager')) {
+                if ($linksManager = $this->getService(linksManager::class)) {
                     if ($this->ids = $linksManager->getConnectedIdList(
                         $this->structureElement->id,
                         $this->linkType,
@@ -140,7 +140,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
         /**
          * @var linksManager $linksManager
          */
-        if ($linksManager = $this->getService('linksManager')) {
+        if ($linksManager = $this->getService(linksManager::class)) {
             if ($this->structureElement) {
                 $linksIndex = $linksManager->getElementsLinksIndex($this->structureElement->getPersistedId(), $this->linkType, $this->role);
                 foreach ($this->storageValue as $connectedId) {
@@ -165,7 +165,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
         /**
          * @var linksManager $linksManager
          */
-        if ($linksManager = $this->getService('linksManager')) {
+        if ($linksManager = $this->getService(linksManager::class)) {
             $linksIndex = $linksManager->getElementsLinksIndex($this->structureElement->getPersistedId(), $this->linkType, $this->role);
             foreach ($linksIndex as $key => &$link) {
                 $link->delete();
@@ -178,7 +178,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
         /**
          * @var linksManager $linksManager
          */
-        if ($linksManager = $this->getService('linksManager')) {
+        if ($linksManager = $this->getService(linksManager::class)) {
             $ids = $linksManager->getConnectedIdList($oldId, $this->linkType, $this->role);
             foreach ($ids as $id) {
                 if ($this->role === 'child') {

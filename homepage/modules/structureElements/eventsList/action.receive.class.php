@@ -23,7 +23,7 @@ class receiveEventsList extends structureElementAction
             // connect all events if this is automatic events list
             if ($structureElement->mode == 'auto') {
                 if ($events = $structureManager->getElementsByType('event')) {
-                    $linksManager = $this->getService('linksManager');
+                    $linksManager = $this->getService(linksManager::class);
                     foreach ($events as &$event) {
                         $linksManager->linkElements($structureElement->id, $event->id, 'eventsListEvent');
                     }

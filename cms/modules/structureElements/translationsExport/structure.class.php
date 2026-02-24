@@ -25,7 +25,7 @@ class translationsExportElement extends structureElement
 
     public function getTranslations()
     {
-        $controller = $this->getService('controller');
+        $controller = $this->getService(controller::class);
         $structureManager = $this->getService('structureManager');
 
         $start = $controller->getParameter('start');

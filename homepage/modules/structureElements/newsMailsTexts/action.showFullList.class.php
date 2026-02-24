@@ -6,7 +6,7 @@ class showFullListNewsMailsTexts extends structureElementAction
     {
         if ($structureElement->final) {
             $structureElement->setTemplate('shared.content.tpl');
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $contentList = array_reverse($structureElement->getChildrenList() ?: []);
             $renderer->assign('contentList', $contentList);
             $renderer->assign('contentSubTemplate', 'shared.contentlist.tpl');

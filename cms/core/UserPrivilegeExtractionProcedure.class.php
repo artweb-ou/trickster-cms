@@ -38,7 +38,7 @@ class UserPrivilegeExtractionProcedure extends ExtractionProcedure
 
         $structureManager = $this->getService('structureManager');
 
-        $privilegesManager = $this->getService('privilegesManager');
+        $privilegesManager = $this->getService(privilegesManager::class);
         $userPrivileges = $privilegesManager->getPrivileges();
 
         $privilegesArray = [];

@@ -5,8 +5,8 @@ class showFormProduction extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($structureElement->requested) {
-            $linksManager = $this->getService('linksManager');
-            $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+            $linksManager = $this->getService(linksManager::class);
+            $marker = $this->getService(ConfigManager::class)->get('main.rootMarkerPublic');
             $publicRoot = $structureManager->getElementByMarker($marker);
             $languages = $structureManager->getElementsChildren($publicRoot->id);
             $structureElement->galleriesList = [];
@@ -35,7 +35,7 @@ class showFormProduction extends structureElementAction
 
             if ($structureElement->final) {
                 $structureElement->setTemplate('shared.content.tpl');
-                $renderer = $this->getService('renderer');
+                $renderer = $this->getService(renderer::class);
                 $renderer->assign('contentSubTemplate', 'component.form.tpl');
                 $renderer->assign('form', $structureElement->getForm('form'));
             }

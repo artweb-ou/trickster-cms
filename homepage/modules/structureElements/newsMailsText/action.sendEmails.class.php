@@ -9,7 +9,7 @@ class sendEmailsNewsMailsText extends structureElementAction
         $structureElement->setViewName('form');
         if ($structureElement->hasActualStructureInfo()) {
             $structureManager = $this->getService('structureManager');
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $selectedAddressesIds = $structureElement->selectedEmails;
             if ($structureElement->selectedGroupsIds) {
                 foreach ($structureElement->selectedGroupsIds as $groupId) {
@@ -21,9 +21,9 @@ class sendEmailsNewsMailsText extends structureElementAction
             if ($selectedAddressesIds) {
                 $addressesElement = $structureManager->getElementByMarker('newsMailsAddresses');
                 if ($addresses = $structureManager->getElementsByIdList($selectedAddressesIds, $addressesElement->id, true)) {
-                    $emailDispatcher = $this->getService('EmailDispatcher');
+                    $emailDispatcher = $this->getService(EmailDispatcher::class);
                     $newDispatchment = $emailDispatcher->getEmptyDispatchment();
-                    $settings = $this->getService('settingsManager')->getSettingsList();
+                    $settings = $this->getService(settingsManager::class)->getSettingsList();
                     $senderName = $structureElement->from ? $structureElement->from : (isset($settings['default_sender_name']) ? $settings['default_sender_name'] : "");
                     $senderEmail = $structureElement->fromEmail ? $structureElement->fromEmail : (isset($settings['default_sender_email']) ? $settings['default_sender_email'] : "");
                     $newDispatchment->setFromName($senderName);

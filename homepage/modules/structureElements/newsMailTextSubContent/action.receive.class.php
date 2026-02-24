@@ -23,7 +23,7 @@ class receiveNewsMailTextSubContent extends structureElementAction
                 $structureElement->image = $structureElement->id;
                 $structureElement->originalName = $structureElement->id;
             }
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $categoriesIdIndex = $linksManager->getConnectedIdIndex($structureElement->id, $structureElement::LINK_TYPE_CATEGORY, 'child');
             if ($structureElement->categoryInput) {
                 if (!isset($categoriesIdIndex[$structureElement->categoryInput])) {

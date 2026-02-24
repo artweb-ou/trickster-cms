@@ -14,7 +14,7 @@ class receivePollPlaceholder extends structureElementAction
 
             $structureElement->persistDisplayMenusLinks();
 
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
 
             $linksIndex = $linksManager->getElementsLinksIndex($structureElement->id, 'pollLink', 'parent');
             foreach ($linksIndex as $childId => &$link) {

@@ -14,7 +14,7 @@ class receiveSimpleSetting extends structureElementAction
         if ($this->validated) {
             $structureElement->prepareActualData();
 
-            $configManager = $this->getService('ConfigManager');
+            $configManager = $this->getService(ConfigManager::class);
             $colorsConfig = $configManager->getConfig('colors');
             if ($colorsConfig) {
                 $colors = $colorsConfig->getLinkedData();
@@ -44,7 +44,7 @@ class receiveSimpleSetting extends structureElementAction
             }
 
             $structureElement->persistElementData();
-            $settingsManager = $this->getService('settingsManager');
+            $settingsManager = $this->getService(settingsManager::class);
             $settingsManager->generateSettingsFile();
             $controller->redirect($structureElement->URL);
         }

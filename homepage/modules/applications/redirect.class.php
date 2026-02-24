@@ -7,22 +7,16 @@ class redirectApplication extends controllerApplication
 
     public function initialize()
     {
-        $this->startSession('public', $this->getService('ConfigManager')->get('main.publicSessionLifeTime'));
+        $this->startSession('public', $this->getService(ConfigManager::class)->get('main.publicSessionLifeTime'));
         $this->createRenderer();
     }
 
     public function execute($controller)
     {
-        $structureManager = $this->getService(
-            'structureManager',
-            [
-                'rootUrl' => $controller->rootURL,
-                'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
-            ],
-            true
-        );
+        $structureManager = $this->getService('publicStructureManager');
+        $this->setService('structureManager', $structureManager);
         if ($type = $controller->getParameter('type')) {
-            $redirectionManager = $this->getService('RedirectionManager');
+            $redirectionManager = $this->getService(RedirectionManager::class);
             if ($type === 'language') {
 //                if (!($application = $controller->getParameter('application'))) {
 //                    $application = 'public';

@@ -45,26 +45,20 @@ class ajaxSearchApplication extends controllerApplication
         /**
          * @var Cache $cache
          */
-        $cache = $this->getService('Cache');
+        $cache = $this->getService(Cache::class);
         $cache->enable();
 
         $response = new ajaxResponse();
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
 
         $response->setPreset('search');
 
         if ($this->mode == 'admin') {
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl' => $controller->rootURL,
-                'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerAdmin'),
-                'configActions' => true,
-            ], true);
+            $structureManager = $this->getService(structureManager::class);
+            $this->setService('structureManager', $structureManager);
         } else {
-            $structureManager = $this->getService('structureManager', [
-                'rootUrl' => $controller->rootURL,
-                'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerPublic'),
-                'configActions' => false,
-            ], true);
+            $structureManager = $this->getService('publicStructureManager');
+            $this->setService('structureManager', $structureManager);
             $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
         }
         if ($query = $controller->getParameter('query')) {
@@ -107,7 +101,7 @@ class ajaxSearchApplication extends controllerApplication
 
             $page = (int)$controller->getParameter('page');
             $offset = max(0, $page - 1) * $resultsLimit;
-            $search = new Search($this->getRegistry(), $this->getContainer());
+            $search = new Search($this->getContainer());
             if ($this->mode == 'public') {
                 $search->setLanguageId($languagesManager->getCurrentLanguageId());
             }
@@ -122,7 +116,7 @@ class ajaxSearchApplication extends controllerApplication
             $result = $search->getResult();
             if ($result->count) {
 //                if ($this->mode == "public") {
-//                    $searchId = $this->getService('searchQueriesManager')->logInstantSearch($query, $result->count);
+//                    $searchId = $this->getService(searchQueriesManager::class)->logInstantSearch($query, $result->count);
 //                    foreach ($result->elements as $element) {
 //                        $element->URL .= "qid:" . $searchId . "/";
 //                    }

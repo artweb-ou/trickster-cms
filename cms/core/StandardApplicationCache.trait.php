@@ -29,7 +29,7 @@ trait StandardApplicationCacheTrait
     public function createCache($content)
     {
         $cachePath = $this->getCachePath();
-        $permissions = $this->getService('ConfigManager')->get('paths.defaultCachePermissions');
+        $permissions = $this->getService(ConfigManager::class)->get('paths.defaultCachePermissions');
         if (!is_dir($cachePath)) {
             mkdir($cachePath, $permissions, true);
         }
@@ -53,7 +53,7 @@ trait StandardApplicationCacheTrait
     public function serveCache()
     {
         if ($this->cacheExists()) {
-            $renderer = $this->getService('renderer', ['name' => 'applicationCache'], true, false);
+            $renderer = renderer::createInstance('applicationCache');
             $renderer->cacheFileName = $this->getCacheFilename();
             $renderer->setPreferedOrder($this->getContentType());
             $renderer->setCachePath($this->getCachePath());

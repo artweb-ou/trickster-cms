@@ -22,10 +22,10 @@ class sendDataUser extends structureElementAction
                 "website" => $structureElement->website,
             ];
 
-            $translationsManager = $this->getService('translationsManager');
-            $emailDispatcher = $this->getService('EmailDispatcher');
+            $translationsManager = $this->getService(translationsManager::class);
+            $emailDispatcher = $this->getService(EmailDispatcher::class);
             $newDispatchment = $emailDispatcher->getEmptyDispatchment();
-            $settings = $this->getService('settingsManager')->getSettingsList();
+            $settings = $this->getService(settingsManager::class)->getSettingsList();
             $newDispatchment->setFromName($settings['default_sender_name'] ? $settings['default_sender_name'] : "");
             $newDispatchment->setFromEmail($settings['default_sender_email'] ? $settings['default_sender_email'] : "");
             $newDispatchment->setSubject($translationsManager->getTranslationByName("email.userdata_subject"));

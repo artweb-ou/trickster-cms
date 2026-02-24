@@ -15,7 +15,7 @@ class receiveTranslation extends structureElementAction
                 }
             }
             $structureElement->persistElementData();
-            $translationsManager = $this->getService('translationsManager');
+            $translationsManager = $this->getService(translationsManager::class);
             $translationsManager->generateTranslationsFile('public_translations');
 
             if ($parentElement = $structureManager->getElementsFirstParent($structureElement->id)) {

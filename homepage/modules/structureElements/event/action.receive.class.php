@@ -36,7 +36,7 @@ class receiveEvent extends structureElementAction
             }
 
             // Connect event to selected eventsLists
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $connectedEventsListsIds = $structureElement->connectedEventsLists;
             $connectedEventsLists = $structureElement->getConnectedEventsLists();
             foreach ($connectedEventsLists as $connectedEventList) {

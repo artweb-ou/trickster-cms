@@ -40,7 +40,7 @@ class exportApplication extends controllerApplication
     public function initialize()
     {
         set_time_limit(60 * 60);
-        $this->startSession('admin', $this->getService('ConfigManager')->get('main.adminSessionLifeTime'));
+        $this->startSession('admin', $this->getService(ConfigManager::class)->get('main.adminSessionLifeTime'));
         $this->createRenderer();
         $xml = new SimpleXMLElement('<?xml version="1.0"?><procedures></procedures>');
         $this->xml = $xml->addChild('procedures');
@@ -48,11 +48,8 @@ class exportApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $this->structureManager = $this->getService('structureManager', [
-            'rootUrl' => $controller->rootURL,
-            'rootMarker' => $this->getService('ConfigManager')->get('main.rootMarkerAdmin'),
-            'configActions' => true,
-        ], true);
+        $this->structureManager = $this->getService(structureManager::class);
+        $this->setService('structureManager', $this->structureManager);
         $this->structureManager->setPrivilegeChecking(false);
         $this->structureManager->buildRequestedPath();
 
@@ -394,9 +391,9 @@ PHP;
 
     protected function getLanguageCode($languageId)
     {
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
 
-        $publicLanguages = $languagesManager->getLanguagesList($this->getService('ConfigManager')
+        $publicLanguages = $languagesManager->getLanguagesList($this->getService(ConfigManager::class)
             ->get('main.rootMarkerPublic'));
         $adminLanguages = $languagesManager->getLanguagesList('adminLanguages');
         $languageCode = '';

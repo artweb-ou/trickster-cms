@@ -7,7 +7,7 @@ class receiveSelectedGalleries extends structureElementAction
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
         if ($this->validated) {
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
 
             //persist gallery data
             $structureElement->prepareActualData();
@@ -24,7 +24,7 @@ class receiveSelectedGalleries extends structureElementAction
                     $compiledLinks[$galleryId] = $link;
                 }
             }
-            $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+            $marker = $this->getService(ConfigManager::class)->get('main.rootMarkerPublic');
             $publicRoot = $structureManager->getElementByMarker($marker);
             $languages = $structureManager->getElementsChildren($publicRoot->id);
             $currentLanguageId = false;

@@ -22,7 +22,7 @@ class showLinkListItem extends structureElementAction
                 $structureElement->content = $fixedElement->content;
             }
             if ($structureElement->linkText == '') {
-                $translationsManager = $this->getService('translationsManager');
+                $translationsManager = $this->getService(translationsManager::class);
                 if ($translations = $translationsManager->getTranslationByName('linklist.readmore')) {
                     $structureElement->linkText = $translations;
                 }

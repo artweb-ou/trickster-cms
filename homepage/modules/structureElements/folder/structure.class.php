@@ -122,7 +122,7 @@ class folderElement extends menuDependantStructureElement implements Configurabl
             /**
              * @var ConfigManager $configManager
              */
-            $configManager = $this->getService('ConfigManager');
+            $configManager = $this->getService(ConfigManager::class);
             $this->allowedTypes = $configManager->getMerged('folder-allowedTypes.content');
         }
         return parent::getAllowedTypes($currentAction);

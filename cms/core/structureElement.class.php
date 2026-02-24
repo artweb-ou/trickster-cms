@@ -187,7 +187,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
             /**
              * @var ActionFactory $actionFactory
              */
-            $actionFactory = $this->getService('ActionFactory');
+            $actionFactory = $this->getService(ActionFactory::class);
 
             $actionObject = $actionFactory->makeActionObject($this->structureType, $actionName);
             $actionObject->structureElement = $this;
@@ -225,7 +225,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
         /**
          * @var linksManager $linksManager
          */
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         /**
          * @var structureManager $structureManager
          */
@@ -295,7 +295,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
             $structureManager = $this->getService('structureManager');
             $structureManager->reRegisterElement($oldId, $this->id);
 
-            $controller = $this->getService('controller');
+            $controller = $this->getService(controller::class);
             $controller->reRegisterElement($oldId, $this->id);
         }
     }
@@ -364,7 +364,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     public function persistStructureLinks()
     {
         $structureManager = $this->getService('structureManager');
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $linksObjects = $linksManager->getElementsLinks($this->id, null, 'child');
 
         foreach ($linksObjects as $linkObject) {
@@ -475,7 +475,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     {
         if ($this->currentLanguage === null) {
             if ($this->getMultiLanguageFields()) {
-                $this->currentLanguage = $this->getService('LanguagesManager')
+                $this->currentLanguage = $this->getService(LanguagesManager::class)
                     ->getCurrentLanguageId($this->languagesParentElementMarker);
             } else {
                 $this->currentLanguage = 0;
@@ -492,7 +492,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     public function getLanguagesList()
     {
         if ($this->getMultiLanguageFields()) {
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             $languages = $languagesManager->getLanguagesIdList($this->languagesParentElementMarker);
         } else {
             $languages = ['0'];
@@ -604,7 +604,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     {
         $moduleDataObjects = [];
         if ($this->getMultiLanguageFields()) {
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             if ($languages = $languagesManager->getLanguagesIdList($this->languagesParentElementMarker)) {
                 foreach ($languages as $languageId) {
                     if ($moduleDataObject = $this->getModuleDataObject($languageId)) {
@@ -631,7 +631,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
             $expectedFields = array_keys($externalData);
         }
 
-        $languagesManager = $this->getService('LanguagesManager');
+        $languagesManager = $this->getService(LanguagesManager::class);
         $languages = $languagesManager->getLanguagesIdList($this->languagesParentElementMarker);
         $validated = true;
 
@@ -841,8 +841,8 @@ abstract class structureElement implements DependencyInjectionContextInterface
         $groupName = (in_array($structureData['structureType'], [
             'adminTranslationsGroup',
             'adminTranslation',
-        ])) ? 'adminLanguages' : $this->getService('ConfigManager')->get('main.rootMarkerPublic');
-        $languagesManager = $this->getService('LanguagesManager');
+        ])) ? 'adminLanguages' : $this->getService(ConfigManager::class)->get('main.rootMarkerPublic');
+        $languagesManager = $this->getService(LanguagesManager::class);
         $languagesList = $languagesManager->getLanguagesList($groupName);
         foreach ($languagesList as $languagesItem) {
             $languageIds[$languagesItem->iso6393] = $languagesItem->id;
@@ -1170,7 +1170,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
         /**
          * @var $controller controller
          */
-        $controller = $this->getService('controller');
+        $controller = $this->getService(controller::class);
         if ($linkType = $controller->getParameter('linkType')) {
             return $this->URL . 'linkType:' . $linkType . '/';
         }
@@ -1256,7 +1256,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
              * @var structureManager $structureManager
              */
             $structureManager = $this->getService('structureManager');
-            $privilegesManager = $this->getService('privilegesManager');
+            $privilegesManager = $this->getService(privilegesManager::class);
             $privileges = $privilegesManager->getElementPrivileges($this->id);
 
             foreach ($this->allowedTypes as $type) {
@@ -1333,7 +1333,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
     {
         if ($this->title || $this->title === '0') {
             return $this->title;
-        } elseif ($translation = $this->getService('translationsManager')
+        } elseif ($translation = $this->getService(translationsManager::class)
             ->getTranslationByName('element.' . $this->structureType, 'adminTranslations', false)
         ) {
             return $translation . ' (' . $this->id . ')';
@@ -1399,7 +1399,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
 
     public function getPrivileges()
     {
-        $privilegesManager = $this->getService('privilegesManager');
+        $privilegesManager = $this->getService(privilegesManager::class);
         $privileges = $privilegesManager->getElementPrivileges($this->id);
         return $privileges[$this->structureType];
     }

@@ -55,7 +55,7 @@ class uriSwitchLogics implements DependencyInjectionContextInterface
     {
         $url = '';
         if ($this->languageCode) {
-            $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+            $marker = $this->getService(ConfigManager::class)->get('main.rootMarkerPublic');
             $this->languagesManager->setCurrentLanguageCode($this->languageCode, $marker);
             $targetLanguageId = $this->languagesManager->getCurrentLanguageId();
 

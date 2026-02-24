@@ -6,7 +6,7 @@ class deleteNewsMailsText extends structureElementAction
 
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $emailDispatcher = $this->getService('EmailDispatcher');
+        $emailDispatcher = $this->getService(EmailDispatcher::class);
         $emailDispatcher->cancelReferencedDispatchments($structureElement->id);
 
         $structureElement->deleteElementData($structureElement->id);

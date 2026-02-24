@@ -7,35 +7,22 @@ use DI\Container;
  */
 trait DependencyInjectionContextTrait
 {
-    private DependencyInjectionServicesRegistryInterface $registry;
+    private array $localServices = [];
     private Container $container;
 
     /**
-     * Returns the service from attached registry
+     * Returns the service: checks local services first, then falls through to PHP-DI container.
      *
      * @template T
      * @param class-string<T> $type
-     * @param array|null $options
-     * @param bool $forceNew
-     * @param bool $updateRegistry
      * @return T
      */
-    public function getService($type, $options = null, $forceNew = false, $updateRegistry = true)
+    public function getService($type)
     {
-        if ($registry = $this->getRegistry()) {
-            if ($service = $registry->getService($type, $options, $forceNew, $updateRegistry)) {
-                return $service;
-            }
+        if (isset($this->localServices[$type])) {
+            return $this->localServices[$type];
         }
-        if (isset($this->container)) {
-            return $this->container->get($type);
-        }
-        throw new RuntimeException('Service ' . $type . ' not found');
-    }
-
-    protected function getRegistry(): ?DependencyInjectionServicesRegistryInterface
-    {
-        return $this->registry;
+        return $this->container->get($type);
     }
 
     protected function getContainer(): ?Container
@@ -44,43 +31,36 @@ trait DependencyInjectionContextTrait
     }
 
     /**
-     * Sets the externally created service
-     *
-     * @param string $type
+     * Stores a service in the local services registry.
+     * Use this to override PHP-DI resolution for context-specific instances
+     * (e.g. the structureManager instance appropriate for this context).
      */
-    protected function setService($type, $object): bool
+    public function setService($type, $object): void
     {
-        if ($this->registry) {
-            $this->registry->setService($type, $object);
-            return true;
-        }
-        return false;
+        $this->localServices[$type] = $object;
     }
 
     /**
-     * Set external registry which will be inherited by all other created classes
-     *
+     * Replaces the entire local services map.
+     * Called by instantiateContext to propagate parent's services to child objects.
      */
-    public function setRegistry(DependencyInjectionServicesRegistryInterface $registry): void
+    public function setLocalServices(array $services): void
     {
-        $this->registry = $registry;
+        $this->localServices = $services;
     }
 
-    public function setContainer(Container $registry): void
+    public function setContainer(Container $container): void
     {
-        $this->container = $registry;
+        $this->container = $container;
     }
 
     /**
-     * If we create a service, which implements DI context passing interface, then we should pass current
-     * registry to this service, so service could use it in it's functionality
-     *
+     * Passes current DI context (local services + container) to a child object,
+     * so the child can resolve services from the same context.
      */
     protected function instantiateContext(DependencyInjectionContextInterface $object): void
     {
-        if ($registry = $this->getRegistry()) {
-            $object->setRegistry($registry);
-        }
+        $object->setLocalServices($this->localServices);
         $object->setContainer($this->container);
     }
 }

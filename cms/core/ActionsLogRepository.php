@@ -1,19 +1,15 @@
 <?php
 
+use Illuminate\Database\Connection;
+
 class ActionsLogRepository
 {
-    /**
-     * @var \Illuminate\Database\MySqlConnection
-     */
-    private $db;
     const table = 'actions_log';
 
-    /**
-     * @param \Illuminate\Database\MySqlConnection $db
-     */
-    public function setDb($db)
+    public function __construct(
+        private Connection $db,
+    )
     {
-        $this->db = $db;
     }
 
     public function getTopUsersByAction(string $moduleType, string $action, ?int $limit = null)

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Connection;
+
 class pdoTransport extends errorLogger implements transportObject
 {
     protected static $instance;
@@ -48,9 +50,9 @@ class pdoTransport extends errorLogger implements transportObject
         $this->dbConnect();
     }
 
-    protected function dbConnect()
+    protected function dbConnect(): void
     {
-        $this->pdo = controller::getInstance()->getRegistry()->getService('db')->getPdo();
+        $this->pdo = controller::getInstance()->getContainer()->get(Connection::class)->getPdo();
     }
 
     protected function setDatabase($database)

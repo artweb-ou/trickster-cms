@@ -99,7 +99,7 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
 
     public function getEventsListsEventsIds()
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $eventIds = [];
         foreach ($this->getConnectedEventsListsIds() as $connectedEventsListId) {
             $eventsListEventIds = $linksManager->getConnectedIdList($connectedEventsListId, 'eventsListEvent', 'parent');
@@ -182,7 +182,7 @@ class selectedEventsElement extends menuDependantStructureElement implements Con
             return $gotoButtonTitle;
         }
         else {
-            $translationsManager = $this->getService('translationsManager');
+            $translationsManager = $this->getService(translationsManager::class);
             return $translationsManager->getTranslationByName('events.look_calendar');
         }
     }

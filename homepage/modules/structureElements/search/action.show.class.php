@@ -6,7 +6,7 @@ class showSearch extends structureElementAction
     {
         $structureElement->setViewName('form');
 
-        $renderer = $this->getService('renderer');
+        $renderer = $this->getService(renderer::class);
         $renderer->assign('searchFormElement', $structureElement);
 
         $structureElement->setViewName('result');

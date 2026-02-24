@@ -17,7 +17,7 @@ class formSelectOptionElement extends structureElement
     {
         if ($this->hiddenFileds === null) {
             $this->hiddenFileds = [];
-            $linksManager = $this->getService('linksManager');
+            $linksManager = $this->getService(linksManager::class);
             $structureManager = $this->getService('structureManager');
             if ($connectedFieldsIds = $linksManager->getConnectedIdList($this->id, 'hiddenFields')) {
                 foreach ($connectedFieldsIds as $fieldId) {

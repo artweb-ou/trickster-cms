@@ -27,7 +27,7 @@ class receiveFilesShared extends structureElementAction
                 $pathsManager = $this->getService(PathsManager::class);
                 $uploadsPath = $pathsManager->getPath('uploads');
                 $cachePath = $pathsManager->getPath('uploadsCache');
-                $privilegesManager = $this->getService('privilegesManager');
+                $privilegesManager = $this->getService(privilegesManager::class);
                 $currentUserService = $this->getService(CurrentUserService::class);
                 $user = $currentUserService->getCurrentUser();
 

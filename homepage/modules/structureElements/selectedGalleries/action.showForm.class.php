@@ -4,7 +4,7 @@ class showFormSelectedGalleries extends structureElementAction
 {
     public function execute(&$structureManager, &$controller, &$structureElement)
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         if ($structureElement->requested) {
             $compiledLinks = [];
             if ($connectedGalleryLinks = $linksManager->getElementsLinks($structureElement->id, 'selectedGalleries', 'parent')
@@ -16,7 +16,7 @@ class showFormSelectedGalleries extends structureElementAction
             }
 
             $structureElement->galleriesInfo = [];
-            $marker = $this->getService('ConfigManager')->get('main.rootMarkerPublic');
+            $marker = $this->getService(ConfigManager::class)->get('main.rootMarkerPublic');
             $publicRoot = $structureManager->getElementByMarker($marker);
             $languages = $structureManager->getElementsChildren($publicRoot->id);
             $currentLanguageId = false;
@@ -41,7 +41,7 @@ class showFormSelectedGalleries extends structureElementAction
             }
             if ($structureElement->final) {
                 $structureElement->setTemplate('shared.content.tpl');
-                $renderer = $this->getService('renderer');
+                $renderer = $this->getService(renderer::class);
                 $renderer->assign('contentSubTemplate', 'component.form.tpl');
                 $renderer->assign('form', $structureElement->getForm('form'));
             }

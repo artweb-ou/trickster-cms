@@ -163,7 +163,7 @@ class newsMailsTextElement extends structureElement
 
     public function getTemplateOptions()
     {
-        if ($templates = $this->getService('ConfigManager')->get('newsmails.customTemplates')) {
+        if ($templates = $this->getService(ConfigManager::class)->get('newsmails.customTemplates')) {
             return $templates;
         }
         return [];

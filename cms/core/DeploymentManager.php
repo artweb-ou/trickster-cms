@@ -20,7 +20,7 @@ class DeploymentManager extends errorLogger implements DependencyInjectionContex
 
     public function __construct()
     {
-        $configManager = $this->getService('ConfigManager');
+        $configManager = $this->getService(ConfigManager::class);
         $this->config = $configManager->getConfig('deployment');
         if ($this->config->isEmpty() && defined('CONFIGURATION_PATH') && is_file(CONFIGURATION_PATH . 'configuration_deployment.php')) {
             // deprecated since 2016.03
@@ -230,7 +230,7 @@ class DeploymentManager extends errorLogger implements DependencyInjectionContex
 
     public function installPendingDeployments()
     {
-        $controller = $this->getService('controller');
+        $controller = $this->getService(controller::class);
         while ($pendingDeployments = $this->config->get('pending')) {
             ini_set('default_socket_timeout', 256);
             $context = null;
@@ -1014,7 +1014,7 @@ class AddElementDeploymentProcedure extends DeploymentProcedure
             }
             if ($element) {
                 $element->prepareActualData();
-                $languagesManager = $this->getService('LanguagesManager');
+                $languagesManager = $this->getService(LanguagesManager::class);
                 $languages = $languagesManager->getLanguagesMap($element->languagesParentElementMarker);
                 $fieldsInfoToImport = [];
                 foreach ($elementInfo->fieldsData as $key => $value) {
@@ -1053,10 +1053,10 @@ class AddElementDeploymentProcedure extends DeploymentProcedure
                 $element->importExternalData($fieldsInfoToImport, $elementInfo->fieldNames);
                 $element->persistElementData();
                 if ($elementInfo->type == 'language' || $elementInfo->type == 'root') {
-                    $languagesManager = $this->getService('LanguagesManager');
+                    $languagesManager = $this->getService(LanguagesManager::class);
                     $languagesManager->reset();
                 }
-                $linksManager = $this->getService('linksManager');
+                $linksManager = $this->getService(linksManager::class);
                 foreach ($elementInfo->links as $link) {
                     $path = $link['targetPath'];
                     $pathParths = array_filter(explode('/', $path), 'strlen');
@@ -1420,7 +1420,7 @@ class ModifyElementDeploymentProcedure extends DeploymentProcedure
         $targetElement = $structureManager->getElementById($targetId);
         if ($targetElement) {
             $targetElement->prepareActualData();
-            $languagesManager = $this->getService('LanguagesManager');
+            $languagesManager = $this->getService(LanguagesManager::class);
             $languages = $languagesManager->getLanguagesMap($targetElement->languagesParentElementMarker);
             $fieldsInfoToImport = [];
             foreach ($this->fieldsData as $key => $value) {
@@ -1645,7 +1645,7 @@ class AddUserPrivilegeDeploymentProcedure extends DeploymentProcedure
                 $userGroupId = $structureManager->getElementIdByMarker($this->userGroupMarker);
             }
             if ($userGroupId && $targetElementId) {
-                $privilegesManager = $this->getService('privilegesManager');
+                $privilegesManager = $this->getService(privilegesManager::class);
                 $privilegesManager->setPrivilege($userGroupId, $targetElementId, $this->moduleType, $this->action, $this->privilege);
             }
         }
@@ -1705,7 +1705,7 @@ class AddUserPrivilegesDeploymentProcedure extends DeploymentProcedure
                 $userGroupId = $structureManager->getElementIdByMarker($this->userGroupMarker);
             }
             if ($userGroupId && $targetElementId) {
-                $privilegesManager = $this->getService('privilegesManager');
+                $privilegesManager = $this->getService(privilegesManager::class);
                 foreach ($this->parsedActions as $action) {
                     $privilegesManager->setPrivilege($userGroupId, $targetElementId, $this->moduleType, $action, $this->privilege);
                 }
@@ -1785,8 +1785,8 @@ class AddTranslationDeploymentProcedure extends DeploymentProcedure
             $fieldsData = [];
             $languagesGroupName = $this->type == 'adminTranslation'
                 ? 'adminLanguages'
-                : $this->getService('ConfigManager')->get('main.rootMarkerPublic');
-            $languagesManager = $this->getService('LanguagesManager');
+                : $this->getService(ConfigManager::class)->get('main.rootMarkerPublic');
+            $languagesManager = $this->getService(LanguagesManager::class);
 
             foreach ($this->values as $languageCode => &$value) {
                 if ($languageObject = $languagesManager->checkLanguageCode($languageCode, $languagesGroupName)) {
@@ -1901,7 +1901,7 @@ class GenerateTranslationsDeploymentProcedure extends DeploymentProcedure
     public function run()
     {
         if ($this->type) {
-            $translationsManager = $this->getService('translationsManager', null, true);
+            $translationsManager = $this->getService(translationsManager::class);
             $translationsManager->generateTranslationsFile($this->type);
         }
     }
@@ -1992,7 +1992,7 @@ class LinksDeploymentProcedure extends DeploymentProcedure
 
     public function run()
     {
-        $linksManager = $this->getService('linksManager');
+        $linksManager = $this->getService(linksManager::class);
         $structureManager = $this->getService('structureManager');
         foreach ($this->links as $link) {
             if (isset($link['parentMarker'])) {

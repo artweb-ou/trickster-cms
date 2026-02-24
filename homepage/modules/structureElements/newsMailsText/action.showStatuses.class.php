@@ -10,7 +10,7 @@ class showStatusesNewsMailsText extends structureElementAction
                 $addressesElement = $structureManager->getElementByMarker('newsMailsAddresses');
                 $addresses = $addressesElement->getContentList();
 
-                $emailDispatcher = $this->getService('EmailDispatcher');
+                $emailDispatcher = $this->getService(EmailDispatcher::class);
                 $historyIndex = $emailDispatcher->getReferencedDispatchmentHistory($structureElement->id);
 
                 $sort = [];
@@ -25,7 +25,7 @@ class showStatusesNewsMailsText extends structureElementAction
 
             if ($structureElement->final) {
                 $structureElement->setTemplate('shared.content.tpl');
-                $renderer = $this->getService('renderer');
+                $renderer = $this->getService(renderer::class);
                 $renderer->assign('contentSubTemplate', 'newsMailsText.statuses.tpl');
             }
         }

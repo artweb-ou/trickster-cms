@@ -14,7 +14,7 @@ class showImagesShared extends structureElementAction
             $contentList = $structureElement->getImagesList();
 
             $structureElement->setTemplate('shared.content.tpl');
-            $renderer = $this->getService('renderer');
+            $renderer = $this->getService(renderer::class);
             $renderer->assign('contentSubTemplate', 'component.form.tpl');
             $renderer->assign('linkType', 'structure');
             $renderer->assign('contentList', $contentList);
