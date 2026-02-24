@@ -48,8 +48,7 @@ class exportApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $this->structureManager = $this->getService(structureManager::class);
-        $this->setService('structureManager', $this->structureManager);
+        $this->structureManager = $this->getService('structureManager');
         $this->structureManager->setPrivilegeChecking(false);
         $this->structureManager->buildRequestedPath();
 

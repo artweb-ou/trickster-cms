@@ -56,8 +56,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
             $this->renderer->assign('languagesList', $languagesList);
         }
 
-        $structureManager = $this->getService(structureManager::class);
-        $this->setService('structureManager', $structureManager);
+        $structureManager = $this->getService('structureManager');
         $privilegesManager = $this->getService(privilegesManager::class);
         $this->processRequestParameters();
 

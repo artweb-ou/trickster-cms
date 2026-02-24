@@ -31,7 +31,6 @@ class sitemapApplication extends controllerApplication
             $languageId = $languageInfo->id;
 
             $structureManager = $this->getService('publicStructureManager');
-            $this->setService('structureManager', $structureManager);
 
             $structureManager->setRequestedPath([$languageInfo->iso6393]);
             $languageElement = $structureManager->getElementById($languageId);

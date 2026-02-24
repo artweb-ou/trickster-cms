@@ -37,8 +37,7 @@ class ajaxApplication extends controllerApplication
 
             if ($controller->getParameter('id')) {
                 //todo: replace with $controller->rootURL and test.
-                $structureManager = $this->getService('publicStructureManager');
-                $this->setService('structureManager', $structureManager);
+                $structureManager = $this->getService('structureManager');
 
                 $this->processRequestParameters();
 

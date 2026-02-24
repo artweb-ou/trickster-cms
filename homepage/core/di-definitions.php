@@ -6,6 +6,10 @@ use Illuminate\Database\Connection;
 use function DI\autowire;
 
 return [
+    newsletterApplication::class => autowire()
+        ->method('setService', 'structureManager', DI\get('adminStructureManager')),
+    emailsApplication::class => autowire()
+        ->method('setService', 'structureManager', DI\get('adminStructureManager')),
     VerifaliaAdapter::class => autowire()
         ->method('setConfigManager', DI\get(ConfigManager::class)),
     VerifyMailAdapter::class => autowire()

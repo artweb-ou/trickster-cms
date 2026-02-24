@@ -52,7 +52,6 @@ return [
     PathsManager::class => static function (controller $controller) {
         return $controller->getPathsManager();
     },
-    'redirectionManager' => autowire(RedirectionManager::class),
     renderer::class => static fn() => renderer::getInstance(),
 
     LanguagesManager::class => factory(static function (Container $container, ServerSessionManager $ssm) {
@@ -167,14 +166,14 @@ return [
         $sm->setContainer($container);
         $sm->setActionFactory($actionFactory);
         $sm->setLinksManager($linksManager);
-        $sm->setLanguagesManager($languagesManager);
         $sm->setPrivilegesManager($privilegesManager);
+        $sm->setLanguagesManager($languagesManager);
         $sm->setRootUrl($controller->rootURL);
+        $sm->setRootElementMarker($configManager->get('main.rootMarkerPublic'));
         $sm->setRequestedPath($controller->requestedPath);
-        $sm->setRootElementMarker($configManager->get('main.rootMarkerAdmin'));
-        $sm->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.adminAllowed'));
+        $sm->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.publicAllowed'));
+        $sm->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
         $sm->setCache($cache);
-        $sm->defaultActions = $configManager->getConfig('actions')->getLinkedData();
 
         $deniedCopyLinkTypes = [];
         if ($config = $configManager->getConfig('deniedCopyLinkTypes')) {
@@ -204,7 +203,7 @@ return [
         $sm->setLinksManager($linksManager);
         $sm->setPrivilegesManager($privilegesManager);
         $sm->setLanguagesManager($languagesManager);
-        $sm->setRootUrl($controller->baseURL);
+        $sm->setRootUrl($controller->rootURL);
         $sm->setRootElementMarker($configManager->get('main.rootMarkerPublic'));
         $sm->setRequestedPath($controller->requestedPath);
         $sm->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.publicAllowed'));
@@ -222,6 +221,51 @@ return [
         $sm->setService('structureManager', $sm);
         return $sm;
     }),
+
+    'adminStructureManager' => factory(static function (
+        Container        $container,
+        ActionFactory    $actionFactory,
+        linksManager     $linksManager,
+        LanguagesManager $languagesManager,
+        privilegesManager $privilegesManager,
+        Cache            $cache,
+        ConfigManager    $configManager,
+        controller       $controller,
+    ) {
+        $sm = new structureManager();
+        $sm->setContainer($container);
+        $sm->setActionFactory($actionFactory);
+        $sm->setLinksManager($linksManager);
+        $sm->setLanguagesManager($languagesManager);
+        $sm->setPrivilegesManager($privilegesManager);
+        $sm->setRootUrl($controller->rootURL);
+        $sm->setRequestedPath($controller->requestedPath);
+        $sm->setRootElementMarker($configManager->get('main.rootMarkerAdmin'));
+        $sm->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.adminAllowed'));
+        $sm->setCache($cache);
+        $sm->defaultActions = $configManager->getConfig('actions')->getLinkedData();
+
+        $deniedCopyLinkTypes = [];
+        if ($config = $configManager->getConfig('deniedCopyLinkTypes')) {
+            $data = $config->getLinkedData();
+            $deniedCopyLinkTypes = array_keys(array_filter($data));
+        }
+        if ($deniedCopyLinkTypes) {
+            $sm->setDeniedCopyLinkTypes($deniedCopyLinkTypes);
+        }
+        $sm->setService('structureManager', $sm);
+        $container->set(structureManager::class, $sm);
+        return $sm;
+    }),
+
+    adminApplication::class => autowire()
+        ->method('setService', 'structureManager', DI\get('adminStructureManager')),
+    adminAjaxApplication::class => autowire()
+        ->method('setService', 'structureManager', DI\get('adminStructureManager')),
+    exportApplication::class => autowire()
+        ->method('setService', 'structureManager', DI\get('adminStructureManager')),
+    VisitorRemoveApplication::class => autowire()
+        ->method('setService', 'structureManager', DI\get('adminStructureManager')),
 
     EventsLog::class => autowire()
         ->constructorParameter('statsDb', DI\get('statsDb'))

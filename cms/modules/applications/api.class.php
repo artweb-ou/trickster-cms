@@ -39,7 +39,7 @@ class apiApplication extends controllerApplication
         $currentElement = false;
 
         if ($this->mode == 'admin') {
-            $structureManager = $this->getService(structureManager::class);
+            $structureManager = $this->getService('adminStructureManager');
             $this->setService('structureManager', $structureManager);
         } else {
 

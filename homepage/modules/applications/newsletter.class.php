@@ -12,8 +12,7 @@ class newsletterApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $structureManager = $this->getService(structureManager::class);
-        $this->setService('structureManager', $structureManager);
+        $structureManager = $this->getService('structureManager');
         $structureManager->setPrivilegeChecking(false);
 
         if ($newsmailTextId = (int)($controller->getParameter('id'))) {

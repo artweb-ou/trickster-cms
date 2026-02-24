@@ -54,7 +54,7 @@ class ajaxSearchApplication extends controllerApplication
         $response->setPreset('search');
 
         if ($this->mode == 'admin') {
-            $structureManager = $this->getService(structureManager::class);
+            $structureManager = $this->getService('adminStructureManager');
             $this->setService('structureManager', $structureManager);
         } else {
             $structureManager = $this->getService('publicStructureManager');

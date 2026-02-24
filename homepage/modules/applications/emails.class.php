@@ -21,9 +21,6 @@ class emailsApplication extends controllerApplication
         if ($userId = $user->checkUser('crontab', null, true)) {
             $user->switchUser($userId);
 
-            $structureManager = $this->getService(structureManager::class);
-            $this->setService('structureManager', $structureManager);
-
             $this->processRequestParameters();
 
             if ($controller->getParameter('theme')) {

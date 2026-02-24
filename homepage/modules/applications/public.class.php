@@ -49,11 +49,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $designThemesManager = $this->getService(DesignThemesManager::class);
         $designThemesManager->setCurrentThemeCode($this->getThemeCode());
         $currentTheme = $this->currentTheme = $designThemesManager->getCurrentTheme();
-        /**
-         * @var structureManager $structureManager
-         */
-        $structureManager = $this->getService('publicStructureManager');
-        $this->setService('structureManager', $structureManager);
+        $structureManager = $this->getService('structureManager');
         $this->processRequestParameters();
         $this->renderer->assign('js_translations', $this->loadJsTranslations());
 

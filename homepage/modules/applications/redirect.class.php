@@ -13,8 +13,6 @@ class redirectApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $structureManager = $this->getService('publicStructureManager');
-        $this->setService('structureManager', $structureManager);
         if ($type = $controller->getParameter('type')) {
             $redirectionManager = $this->getService(RedirectionManager::class);
             if ($type === 'language') {

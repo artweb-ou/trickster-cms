@@ -25,8 +25,7 @@ class VisitorRemoveApplication extends controllerApplication
         $user = $currentUserService->getCurrentUser();
         if ($userId = $user->checkUser('crontab', null, true)) {
             $user->switchUser($userId);
-            $structureManager = $this->getService(structureManager::class);
-            $this->setService('structureManager', $structureManager);
+            $structureManager = $this->getService('structureManager');
 
             $timestamp = strtotime(date("d-m-Y", strtotime("-3 months")));
             $visitors = $this->getVisitorsOlderThan($timestamp);

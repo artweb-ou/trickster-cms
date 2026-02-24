@@ -24,8 +24,7 @@ class adminAjaxApplication extends controllerApplication
         $this->renderer->assign('responseData', []);
 
         if ($controller->getParameter('id')) {
-            $structureManager = $this->getService(structureManager::class);
-            $this->setService('structureManager', $structureManager);
+            $structureManager = $this->getService('structureManager');
             $this->processRequestParameters();
 
             $languagesManager = $this->getService(LanguagesManager::class);
