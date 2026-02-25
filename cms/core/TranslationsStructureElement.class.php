@@ -150,7 +150,8 @@ abstract class TranslationsStructureElement extends structureElement
         $translationCode = strtolower($translationCode);
         $structureManager = $this->getService('structureManager');
         if ($groupElement = $structureManager->getElementById($groupElementId)) {
-            $resultElement = $structureManager->createElement(reset($groupElement->getAllowedTypes()), 'showForm', $groupElement->id);
+            $types = $groupElement->getAllowedTypes();
+            $resultElement = $structureManager->createElement(reset($types), 'showForm', $groupElement->id);
             $resultElement->prepareActualData();
             $resultElement->structureName = $translationCode;
             $resultElement->persistElementData();

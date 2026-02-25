@@ -35,6 +35,7 @@ class CmsHttpResponse
         $this->statusTextList['400'] = 'Bad Request';
         $this->statusTextList['403'] = 'Forbidden';
         $this->statusTextList['404'] = 'Not Found';
+        $this->statusTextList['500'] = 'Internal Server Error';
 
         $this->setStatusCode('200');
     }

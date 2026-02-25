@@ -25,7 +25,7 @@ class jsonRendererPlugin extends rendererPlugin implements RendererPluginAppendI
 
     public function assign($attributeName, $value)
     {
-        if ($attributeName == 'responseData' || $attributeName == 'responseStatus' || $attributeName == 'start' || $attributeName == 'limit' || $attributeName == 'totalAmount') {
+        if ($attributeName == 'body' || $attributeName == 'responseData' || $attributeName == 'responseStatus' || $attributeName == 'start' || $attributeName == 'limit' || $attributeName == 'totalAmount') {
             $this->attributesList[$attributeName] = $value;
         }
     }
@@ -64,7 +64,11 @@ class jsonRendererPlugin extends rendererPlugin implements RendererPluginAppendI
 
     protected function renderContent()
     {
-        $this->contentText = json_encode($this->attributesList);
+        if (array_key_exists('body', $this->attributesList)) {
+            $this->contentText = json_encode($this->attributesList['body']);
+        } else {
+            $this->contentText = json_encode($this->attributesList);
+        }
     }
 
     protected function getContentTextPart()

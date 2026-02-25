@@ -55,7 +55,7 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
         static $rootMarkerPublic;
 
         if (is_null($languageId)) {
-            if ($sectionName == 'adminTranslations') {
+            if ($sectionName === 'adminTranslations') {
                 $marker = 'adminLanguages';
             } else {
                 if (!isset($rootMarkerPublic)) {
