@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use DI\Container;
 use Illuminate\Database\Connection;
 use function DI\autowire;
 
@@ -24,6 +25,7 @@ return [
         ->method('setLinksManager', DI\get(linksManager::class))
         ->method('setSpamChecker', DI\get(SpamChecker::class)),
     uriSwitchLogics::class => autowire()
+        ->method('setContainer', DI\get(Container::class))
         ->method('setController', DI\get(controller::class))
         ->method('setLanguagesManager', DI\get(LanguagesManager::class))
         ->method('setStructureManager', DI\get(structureManager::class))

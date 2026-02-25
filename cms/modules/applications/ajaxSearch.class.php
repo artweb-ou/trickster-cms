@@ -55,10 +55,8 @@ class ajaxSearchApplication extends controllerApplication
 
         if ($this->mode == 'admin') {
             $structureManager = $this->getService('adminStructureManager');
-            $this->setService('structureManager', $structureManager);
         } else {
             $structureManager = $this->getService('publicStructureManager');
-            $this->setService('structureManager', $structureManager);
             $structureManager->setRequestedPath([$languagesManager->getCurrentLanguageCode()]);
         }
         if ($query = $controller->getParameter('query')) {

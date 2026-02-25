@@ -28,9 +28,8 @@ class cssApplication extends controllerApplication
         /**
          * @var ResourcesUniterHelper $resourcesUniterHelper
          */
-        $designThemesManager = $this->getService(DesignThemesManager::class);
-        $designThemesManager->setCurrentThemeCode($currentThemeCode);
         $resourcesUniterHelper = $this->getService(ResourcesUniterHelper::class);
+        $resourcesUniterHelper->setCurrentThemeCode($currentThemeCode);
         $cacheFileName = $resourcesUniterHelper->getCacheCode();
         $cssResources = $resourcesUniterHelper->getCssResources();
 

@@ -22,9 +22,8 @@ class javascriptApplication extends controllerApplication
             $currentThemeCode = 'default';
         }
 
-        $designThemesManager = $this->getService(DesignThemesManager::class);
-        $designThemesManager->setCurrentThemeCode($currentThemeCode);
         $resourcesUniterHelper = $this->getService(ResourcesUniterHelper::class);
+        $resourcesUniterHelper->setCurrentThemeCode($currentThemeCode);
         $cacheFileName = $resourcesUniterHelper->getCacheCode();
         $javascriptResources = $resourcesUniterHelper->getJavascriptResources($controller);
 

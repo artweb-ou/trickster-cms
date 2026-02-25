@@ -6,25 +6,12 @@ class settingsManager implements DependencyInjectionContextInterface
 {
     use DependencyInjectionContextTrait;
     protected $settingsList;
-    private static $instance;
     private string $cachePath;
     private $fileName = 'settings.php';
 
-    /**
-     * @return settingsManager
-     * @deprecated
-     */
-    public static function getInstance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new settingsManager();
-        }
-        return self::$instance;
-    }
 
     public function __construct()
     {
-        self::$instance = $this;
     }
 
     public function getSettingsList()

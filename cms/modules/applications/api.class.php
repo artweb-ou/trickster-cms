@@ -38,17 +38,12 @@ class apiApplication extends controllerApplication
 
         $currentElement = false;
 
-        if ($this->mode == 'admin') {
-            $structureManager = $this->getService('adminStructureManager');
-            $this->setService('structureManager', $structureManager);
-        } else {
-
+        if ($this->mode !== 'admin') {
             header("Access-Control-Allow-Origin: *");
             header("Access-Control-Allow-Methods: GET, POST");
             header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
             $structureManager = $this->getService('publicStructureManager');
-            $this->setService('structureManager', $structureManager);
             $languagesManager = $this->getService(LanguagesManager::class);
             if ($controller->requestedPath) {
                 $currentElement = $structureManager->getCurrentElement();
@@ -106,10 +101,10 @@ class apiApplication extends controllerApplication
 
     public function getUrlName()
     {
-        if ($this->mode == 'admin') {
+        if ($this->mode === 'admin') {
             return 'admin';
-        } else {
-            return '';
         }
+
+        return '';
     }
 }

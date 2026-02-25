@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use DI\Container;
 
@@ -7,7 +8,6 @@ use DI\Container;
  */
 trait DependencyInjectionContextTrait
 {
-    private array $localServices = [];
     private Container $container;
 
     /**
@@ -17,36 +17,18 @@ trait DependencyInjectionContextTrait
      * @param class-string<T> $type
      * @return T
      */
-    public function getService($type)
+    public function getService(string $type)
     {
-        if (isset($this->localServices[$type])) {
-            return $this->localServices[$type];
+        $service = $this->container->get($type);
+        if ($service instanceof DependencyInjectionContextInterface) {
+            $this->instantiateContext($service);
         }
-        return $this->container->get($type);
+        return $service;
     }
 
     protected function getContainer(): ?Container
     {
         return $this->container;
-    }
-
-    /**
-     * Stores a service in the local services registry.
-     * Use this to override PHP-DI resolution for context-specific instances
-     * (e.g. the structureManager instance appropriate for this context).
-     */
-    public function setService($type, $object): void
-    {
-        $this->localServices[$type] = $object;
-    }
-
-    /**
-     * Replaces the entire local services map.
-     * Called by instantiateContext to propagate parent's services to child objects.
-     */
-    public function setLocalServices(array $services): void
-    {
-        $this->localServices = $services;
     }
 
     public function setContainer(Container $container): void
@@ -60,7 +42,6 @@ trait DependencyInjectionContextTrait
      */
     protected function instantiateContext(DependencyInjectionContextInterface $object): void
     {
-        $object->setLocalServices($this->localServices);
         $object->setContainer($this->container);
     }
 }

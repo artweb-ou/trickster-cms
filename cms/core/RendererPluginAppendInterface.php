@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-interface rendererPluginAppendInterface
+interface RendererPluginAppendInterface
 {
     public function appendResponseData($type, $value);
 }

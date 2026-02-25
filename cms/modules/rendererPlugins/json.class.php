@@ -1,6 +1,6 @@
 <?php
 
-class jsonRendererPlugin extends rendererPlugin implements rendererPluginAppendInterface
+class jsonRendererPlugin extends rendererPlugin implements RendererPluginAppendInterface
 {
     protected $attributesList = [];
     protected $contentRead = false;

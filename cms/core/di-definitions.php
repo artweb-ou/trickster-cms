@@ -13,7 +13,7 @@ use function DI\factory;
 
 $loadDb = static function (ConfigManager $configManager, string $config): ?Connection {
     $dbConfig = $configManager->getConfig($config);
-    if ($dbConfig->isEmpty()) {
+    if ($dbConfig === null || $dbConfig->isEmpty()) {
         return null;
     }
     $capsule = new Capsule();
@@ -152,40 +152,7 @@ return [
         return $ua;
     }),
 
-    structureManager::class => factory(static function (
-        Container        $container,
-        ActionFactory    $actionFactory,
-        linksManager     $linksManager,
-        LanguagesManager $languagesManager,
-        privilegesManager $privilegesManager,
-        Cache            $cache,
-        ConfigManager    $configManager,
-        controller       $controller,
-    ) {
-        $sm = new structureManager();
-        $sm->setContainer($container);
-        $sm->setActionFactory($actionFactory);
-        $sm->setLinksManager($linksManager);
-        $sm->setPrivilegesManager($privilegesManager);
-        $sm->setLanguagesManager($languagesManager);
-        $sm->setRootUrl($controller->rootURL);
-        $sm->setRootElementMarker($configManager->get('main.rootMarkerPublic'));
-        $sm->setRequestedPath($controller->requestedPath);
-        $sm->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.publicAllowed'));
-        $sm->setElementPathRestrictionId($languagesManager->getCurrentLanguageId());
-        $sm->setCache($cache);
-
-        $deniedCopyLinkTypes = [];
-        if ($config = $configManager->getConfig('deniedCopyLinkTypes')) {
-            $data = $config->getLinkedData();
-            $deniedCopyLinkTypes = array_keys(array_filter($data));
-        }
-        if ($deniedCopyLinkTypes) {
-            $sm->setDeniedCopyLinkTypes($deniedCopyLinkTypes);
-        }
-        $sm->setService('structureManager', $sm);
-        return $sm;
-    }),
+    structureManager::class => DI\get('publicStructureManager'),
 
     'publicStructureManager' => factory(static function (
         Container        $container,
@@ -218,7 +185,6 @@ return [
         if ($deniedCopyLinkTypes) {
             $sm->setDeniedCopyLinkTypes($deniedCopyLinkTypes);
         }
-        $sm->setService('structureManager', $sm);
         return $sm;
     }),
 
@@ -253,7 +219,6 @@ return [
         if ($deniedCopyLinkTypes) {
             $sm->setDeniedCopyLinkTypes($deniedCopyLinkTypes);
         }
-        $sm->setService('structureManager', $sm);
         $container->set(structureManager::class, $sm);
         return $sm;
     }),
@@ -296,5 +261,9 @@ return [
             return $instance;
         }
     ),
+
+    // DependencyInjectionContextTrait users created as PHP-DI factory dependencies
+    privilegesManager::class => autowire()->method('setContainer', DI\get(Container::class)),
+    ActionFactory::class => autowire()->method('setContainer', DI\get(Container::class)),
 
 ];

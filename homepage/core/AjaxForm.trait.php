@@ -43,7 +43,7 @@ trait AjaxFormTrait
             $serverSessionManager->set('showSuccessMessage' . $structureElement->id, true);
         }
         $renderer = $this->getService(renderer::class);
-        if ($renderer instanceof rendererPluginAppendInterface) {
+        if ($renderer instanceof RendererPluginAppendInterface) {
             $renderer->assignResponseData('form' . $structureElement->id . $this->actionName, $response);
         }
     }

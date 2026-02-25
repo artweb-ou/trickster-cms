@@ -39,7 +39,7 @@ class subscribeNewsMailForm extends structureElementAction
         }
 
         $renderer = $this->getService(renderer::class);
-        if ($renderer instanceof rendererPluginAppendInterface) {
+        if ($renderer instanceof RendererPluginAppendInterface) {
             $renderer->assignResponseData($structureElement->structureType, $structureElement->getElementData());
         }
     }

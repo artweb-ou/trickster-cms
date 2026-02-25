@@ -427,6 +427,7 @@ class controller
 
         $this->parseRequestParameters();
         $this->application = null;
+        unset($this->container);
         $this->dispatch();
 
         exit();
