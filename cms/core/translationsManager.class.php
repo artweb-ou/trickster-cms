@@ -118,16 +118,16 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
             $allData[$languageId] = [];
         }
 
-        $structureManager = $this->getService(structureManager::class);
+        $structureManager = $this->getService('adminStructureManager');
         $structureManager->setPrivilegeChecking(false);
         if ($sectionElement = $structureManager->getElementByMarker($sectionName)) {
             if ($translationsGroups = $structureManager->getElementsChildren($sectionElement->id)) {
-                foreach ($translationsGroups as &$translationGroup) {
+                foreach ($translationsGroups as $translationGroup) {
                     if ($translations = $structureManager->getElementsChildren($translationGroup->id)) {
-                        foreach ($translations as &$translation) {
+                        foreach ($translations as $translation) {
                             $translationData = $translation->getTranslationData();
-                            foreach ($translationData as $translationName => &$languageData) {
-                                foreach ($languageData as $languageId => &$value) {
+                            foreach ($translationData as $translationName => $languageData) {
+                                foreach ($languageData as $languageId => $value) {
                                     $allData[$languageId][$translationGroup->title . '.' . $translationName] = $value;
                                 }
                             }
@@ -138,7 +138,7 @@ class translationsManager extends errorLogger implements DependencyInjectionCont
         }
         $structureManager->setPrivilegeChecking(true);
         $this->getService(PathsManager::class)->ensureDirectory($this->getCachePath());
-        foreach ($allData as $languageId => &$languageData) {
+        foreach ($allData as $languageId => $languageData) {
             $filePath = $this->getCachePath() . $sectionName . '_' . $languageId . '.php';
             $text = $this->generateTranslationsText($languageData);
             file_put_contents($filePath, $text);
@@ -166,16 +166,16 @@ use App\Paths\PathsManager; $translationsList =  ';
             $name = strtolower($name);
             if (!empty($translationsList[$name])) {
                 return $translationsList[$name];
-            } else {
-                if ($required) {
-                    if ($loggable && $this->logErrors) {
-                        $this->logError('Missing translation ' . $name, E_NOTICE, false);
-                    }
-                    return '#' . $name . '#';
-                } else {
-                    return "";
-                }
             }
+
+            if ($required) {
+                if ($loggable && $this->logErrors) {
+                    $this->logError('Missing translation ' . $name, E_NOTICE, false);
+                }
+                return '#' . $name . '#';
+            }
+
+            return "";
         }
         return '{translations error}';
     }
