@@ -170,7 +170,6 @@ return [
         $sm->setLinksManager($linksManager);
         $sm->setPrivilegesManager($privilegesManager);
         $sm->setLanguagesManager($languagesManager);
-        $sm->setRootUrl($controller->rootURL);
         $sm->setRootElementMarker($configManager->get('main.rootMarkerPublic'));
         $sm->setRequestedPath($controller->requestedPath);
         $sm->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.publicAllowed'));
@@ -204,7 +203,6 @@ return [
         $sm->setLinksManager($linksManager);
         $sm->setLanguagesManager($languagesManager);
         $sm->setPrivilegesManager($privilegesManager);
-        $sm->setRootUrl($controller->rootURL);
         $sm->setRequestedPath($controller->requestedPath);
         $sm->setRootElementMarker($configManager->get('main.rootMarkerAdmin'));
         $sm->setPathSearchAllowedLinks($configManager->getMerged('structurelinks.adminAllowed'));
@@ -222,15 +220,6 @@ return [
         $container->set(structureManager::class, $sm);
         return $sm;
     }),
-
-    adminApplication::class => autowire()
-        ->method('setService', 'structureManager', DI\get('adminStructureManager')),
-    adminAjaxApplication::class => autowire()
-        ->method('setService', 'structureManager', DI\get('adminStructureManager')),
-    exportApplication::class => autowire()
-        ->method('setService', 'structureManager', DI\get('adminStructureManager')),
-    VisitorRemoveApplication::class => autowire()
-        ->method('setService', 'structureManager', DI\get('adminStructureManager')),
 
     EventsLog::class => autowire()
         ->constructorParameter('statsDb', DI\get('statsDb'))

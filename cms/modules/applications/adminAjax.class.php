@@ -24,7 +24,7 @@ class adminAjaxApplication extends controllerApplication
         $this->renderer->assign('responseData', []);
 
         if ($controller->getParameter('id')) {
-            $structureManager = $this->getService('structureManager');
+            $structureManager = $this->getService('adminStructureManager');
             $this->processRequestParameters();
 
             $languagesManager = $this->getService(LanguagesManager::class);
@@ -55,7 +55,7 @@ class adminAjaxApplication extends controllerApplication
 
     public function processRequestParameters()
     {
-        $structureManager = $this->getService('structureManager');
+        $structureManager = $this->getService('adminStructureManager');
         $controller = controller::getInstance();
 
         if ($controller->getParameter('type')) {

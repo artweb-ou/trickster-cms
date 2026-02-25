@@ -56,7 +56,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
             $this->renderer->assign('languagesList', $languagesList);
         }
 
-        $structureManager = $this->getService('structureManager');
+        $structureManager = $this->getService('adminStructureManager');
         $privilegesManager = $this->getService(privilegesManager::class);
         $this->processRequestParameters();
 
@@ -116,7 +116,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
 
     public function processRequestParameters()
     {
-        $structureManager = $this->getService('structureManager');
+        $structureManager = $this->getService('adminStructureManager');
         $controller = controller::getInstance();
         if ($action = $controller->getParameter('action')) {
             if ($type = $controller->getParameter('type')) {
@@ -179,7 +179,7 @@ class adminApplication extends controllerApplication implements ThemeCodeProvide
         $controller = controller::getInstance();
         $parameters = $controller->getParameters();
 
-        $structureManager = $this->getService('structureManager');
+        $structureManager = $this->getService('adminStructureManager');
         $currentElement = ($structureManager->getCurrentElement()) ? : $structureManager->getRootElement();
 
         $fullUrl = new UrlBuilder();

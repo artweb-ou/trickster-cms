@@ -245,7 +245,7 @@ class emailsApplication extends controllerApplication
 
     protected function unsubscribeEmail($email)
     {
-        $structureManager = $this->getService('structureManager');
+        $structureManager = $this->getService('adminStructureManager');
         $collection = persistableCollection::getInstance('module_newsmailaddress');
         $columns = ['id'];
 

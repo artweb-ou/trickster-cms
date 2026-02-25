@@ -48,7 +48,6 @@ class structureManager implements DependencyInjectionContextInterface
     public $customActions = [];
     public $defaultActions = [];
     protected array $pathSearchAllowedLinks;
-    public $rootURL = "";
     protected $privilegeChecking = true;
     protected $deniedCopyLinkTypes = [];
     protected $elementPathRestrictionId;
@@ -1121,7 +1120,7 @@ class structureManager implements DependencyInjectionContextInterface
             }
         } else {
             $element->structurePath = '';
-            $element->URL = $this->rootURL;
+            $element->URL = $this->getRootURL();
         }
 
         if ($element->structurePath != "") {
@@ -1550,9 +1549,9 @@ class structureManager implements DependencyInjectionContextInterface
         $this->pathSearchAllowedLinks = $pathSearchAllowedLinks;
     }
 
-    public function setRootUrl($rootUrl): void
+    private function getRootUrl()
     {
-        $this->rootURL = $rootUrl;
+        return controller::getInstance()->rootURL;
     }
 
     public function setRootElementId($rootElementId): void

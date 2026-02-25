@@ -12,7 +12,7 @@ class newsletterApplication extends controllerApplication
 
     public function execute($controller)
     {
-        $structureManager = $this->getService('structureManager');
+        $structureManager = $this->getService('adminStructureManager');
         $structureManager->setPrivilegeChecking(false);
 
         if ($newsmailTextId = (int)($controller->getParameter('id'))) {
