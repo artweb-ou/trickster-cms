@@ -1377,11 +1377,12 @@ class structureManager implements DependencyInjectionContextInterface
         if ($cachedChain = $this->cache->get($id . ":" . $key)) {
             return $cachedChain;
         }
-        if (isset($this->shortestChains[$id][$withinParentId])) {
-            return $this->shortestChains[$id][$withinParentId];
+        $withinParentIdKey = $withinParentId ?? '';
+        if (isset($this->shortestChains[$id][$withinParentIdKey])) {
+            return $this->shortestChains[$id][$withinParentIdKey];
         }
-        $this->shortestChains[$id][$withinParentId] = false;
-        $shortestChainPointer = &$this->shortestChains[$id][$withinParentId];
+        $this->shortestChains[$id][$withinParentIdKey] = false;
+        $shortestChainPointer = &$this->shortestChains[$id][$withinParentIdKey];
         $chainElements[$id] = true;
 
         if ($parentLinks = $this->linksManager->getElementsLinks($id, $this->getPathSearchAllowedLinks(), 'child')) {
