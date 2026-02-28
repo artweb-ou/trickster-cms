@@ -246,11 +246,6 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
         $code = false;
         if (isset($_COOKIE['cl_' . $groupName])) {
             $code = $_COOKIE['cl_' . $groupName];
-        } elseif (isset($_COOKIE['currentLanguage' . $groupName])) {
-            //deprecated
-            //todo: remove in 2020
-            $code = $_COOKIE['currentLanguage' . $groupName];
-            setcookie('currentLanguage' . $groupName, '', -1, '/');
         }
         return $code;
     }
@@ -321,8 +316,8 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
 
     public function setCurrentLanguageCode($code, $groupName = null)
     {
-        $groupName = $groupName ?: $this->getService(ConfigManager::class)
-            ->get('main.rootMarkerPublic');
+        $publicGroup = $this->getService(ConfigManager::class)->get('main.rootMarkerPublic');
+        $groupName = $groupName ?: $publicGroup;
         if (!isset($this->currentLanguageInfo[$groupName]) || $this->currentLanguageInfo[$groupName]->iso6393 != $code) {
             if ($info = $this->checkLanguageCode($code, $groupName)) {
                 $this->currentLanguageInfo[$groupName] = $info;
@@ -332,7 +327,20 @@ class LanguagesManager extends errorLogger implements DependencyInjectionContext
                 if (!headers_sent()) {
                     setcookie('cl_' . $groupName, $code, time() + 30 * 24 * 60 * 60, '/');
                 }
+                if ($groupName === $publicGroup && $this->getCodeFromURI() === $code) {
+                    $this->saveLanguagePreference($code);
+                }
             }
+        }
+    }
+
+    protected function saveLanguagePreference(string $code): void
+    {
+        try {
+            $this->getService(\ZxArt\UserPreferences\UserPreferencesService::class)
+                ->setPreference(\ZxArt\UserPreferences\Domain\PreferenceCode::LANGUAGE->value, $code);
+        } catch (\Throwable $e) {
+            $this->logError($e->getMessage() . "\n" . $e->getTraceAsString());
         }
     }
 
