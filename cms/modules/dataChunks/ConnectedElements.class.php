@@ -153,7 +153,7 @@ class ConnectedElementsDataChunk extends DataChunk implements ElementHolderInter
                     }
                     unset($linksIndex[$connectedId]);
                 }
-                foreach ($linksIndex as $key => &$link) {
+                foreach ($linksIndex as $link) {
                     $link->delete();
                 }
             }
