@@ -25,7 +25,7 @@
 //                    'email'      => $structureElement->comment_email,
 //                    'content'    => $structureElement->comment_content,
 //                    'dateTime'   => date('d.m.Y H:i', time()),
-//                    'ipAddress'  => $this->getService(user::class)->IP,
+//                    'ipAddress'  => $this->getService(\App\Users\CurrentUser::class)->IP,
 //                    'languageId' => $this->getService(LanguagesManager::class)->getCurrentLanguageId(),
 //                    'targetType' => $structureElement->structureType,
 //                );

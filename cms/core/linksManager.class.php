@@ -468,7 +468,7 @@ class linksManager extends errorLogger
         }
     }
 
-    public function resetElementsCacheById(int $id): void
+    public function resetElementsCacheById(int|string $id): void
     {
         unset($this->elementsLinks['child'][$id], $this->elementsLinks['parent'][$id]);
     }
