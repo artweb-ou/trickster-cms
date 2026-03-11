@@ -2,6 +2,7 @@
 
 use App\Paths\PathsManager;
 use App\Users\CurrentUserService;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 
 /**
  * Controller application is standardized script, which purpose is to receive external parameters (whether from GET/POST or other objects), operate some business logic according to them and optionally provide some rendered answer
@@ -51,8 +52,19 @@ abstract class controllerApplication extends errorLogger implements DependencyIn
      * @param string $sessionName
      * @param $lifeTime
      */
-    protected function startSession($sessionName = 'default', $lifeTime = false)
+    protected function startSession(string $sessionName = 'default', $lifeTime = false)
     {
+        $clientIpAddress = $_SERVER['REMOTE_ADDR'];
+        $serverIpAddress = $_SERVER['SERVER_ADDR'];
+
+        $isRequestFromServer = $clientIpAddress === $serverIpAddress;
+        if (!$isRequestFromServer){
+            $isCrawler = new CrawlerDetect()->isCrawler();
+            if ($isCrawler === true) {
+                return;
+            }
+        }
+
         /**
          * @var $sessionManager ServerSessionManager
          */

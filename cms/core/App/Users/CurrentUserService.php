@@ -21,6 +21,7 @@ class CurrentUserService
     {
         if ($this->currentUser === null) {
             $this->currentUser = new CurrentUser($this->privilegesManager, $this->serverSessionManager);
+            $this->currentUser->initialize();
         }
         return $this->currentUser;
     }

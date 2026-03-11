@@ -45,7 +45,6 @@ class CurrentUser
         private ServerSessionManager $serverSessionManager
     )
     {
-        $this->initialize();
     }
 
     protected $userResourceName = "module_user";

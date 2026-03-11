@@ -1,6 +1,6 @@
 <?php
 
-use Jaybizzle\CrawlerDetect\CrawlerDetect;
+use App\Paths\PathsManager;
 
 class ServerSessionManager
 {
@@ -41,7 +41,7 @@ class ServerSessionManager
     }
 
     public function __construct(
-        protected \App\Paths\PathsManager $pathsManager
+        protected PathsManager $pathsManager
     )
     {
         $this->sessionName = '';
@@ -71,7 +71,7 @@ class ServerSessionManager
             }
 
             if ($sessionsPath = $this->getSessionsPath()) {
-                $currentSessionPath = $this->sessionsPath . $this->sessionName . '/';
+                $currentSessionPath = $sessionsPath . $this->sessionName . '/';
                 $this->pathsManager->ensureDirectory($currentSessionPath);
                 session_save_path($currentSessionPath);
             }
@@ -97,9 +97,7 @@ class ServerSessionManager
      */
     public function setEnabled($enabled)
     {
-        $crawler = (new CrawlerDetect())->isCrawler();
-
-        $this->enabled = $enabled && !$crawler;
+        $this->enabled = $enabled;
     }
 
     public function set($key, $value)
