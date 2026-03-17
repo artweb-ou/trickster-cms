@@ -113,7 +113,7 @@ abstract class structureElement implements DependencyInjectionContextInterface
             return true;
         }
 
-        return $this->childrenLoadStatus[$role][$types] ?? false;
+        return $this->childrenLoadStatus[$role][$types ?? ''] ?? false;
     }
 
     /**
