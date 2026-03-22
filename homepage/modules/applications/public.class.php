@@ -1,6 +1,7 @@
 <?php
 
 use App\Users\CurrentUserService;
+use ZxArt\NgAssetsProvider;
 use ZxArt\UserPreferences\CurrentThemeProvider;
 
 class publicApplication extends controllerApplication implements ThemeCodeProviderInterface
@@ -54,6 +55,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $this->renderer->assign('js_translations', $this->loadJsTranslations());
 
         $resourcesUniterHelper = $this->getService(ResourcesUniterHelper::class);
+        $resourcesUniterHelper->setCurrentThemeCode($this->getThemeCode());
         $this->renderer->assign('CSSFileName', $resourcesUniterHelper->getResourceCacheFileName('css'));
 
         $this->renderer->assign('controller', $controller);
@@ -67,6 +69,10 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $this->renderer->assign('settings', $settingsManager->getSettingsList());
         $this->renderer->assign('currentUser', $user);
         $this->renderer->assign('theme', $currentTheme);
+
+        $ngAssetsProvider = $this->getService(NgAssetsProvider::class);
+        $this->renderer->assign('ngScriptUrls', $ngAssetsProvider->getScriptUrls());
+        $this->renderer->assign('ngStyleUrls', $ngAssetsProvider->getStyleUrls());
 
         $themeColor = $settingsManager->getSetting('primary_color');
         $themeColor = $themeColor ?: $this->configManager->get('colors.primary_color');
@@ -356,6 +362,7 @@ class publicApplication extends controllerApplication implements ThemeCodeProvid
         $jsScripts = [];
 
         $resourcesUniterHelper = $this->getService(ResourcesUniterHelper::class);
+        $resourcesUniterHelper->setCurrentThemeCode($this->currentTheme->getCode());
         $jsScripts[] = $controller->baseURL . 'javascript/set:' . $this->currentTheme->getCode() . '/file:' . $resourcesUniterHelper->getResourceCacheFileName('js') . '.js';
 
         if ($currentElement instanceof clientScriptsProviderInterface
