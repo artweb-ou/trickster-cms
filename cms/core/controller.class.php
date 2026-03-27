@@ -199,7 +199,7 @@ class controller
                 $this->baseURL = $this->domainURL . '/';
             }
 
-            $className = 'ZxArt\Controllers\\' . ucfirst($applicationName);
+            $className = 'ZxArt\Controllers\\' . $this->toPascalCase($applicationName);
             if (!class_exists($className)) {
                 $className = $this->applicationName . 'Application';
             }
@@ -317,19 +317,24 @@ class controller
         }
     }
 
+    private function toPascalCase(string $name): string
+    {
+        return str_replace('-', '', ucwords($name, '-'));
+    }
+
     private function detectApplication()
     {
         if ($this->requestURI) {
             $applicationName = reset($this->requestURI);
 
-            $className = '\ZxArt\Controllers\\' . ucfirst($applicationName);
+            $className = '\ZxArt\Controllers\\' . $this->toPascalCase($applicationName);
             if (class_exists($className)) {
                 $this->applicationName = $applicationName;
                 return;
             }
 
             $fileDirectory = $this->pathsManager->getRelativePath('applications');
-            $fileName = $this->pathsManager->getIncludeFilePath($fileDirectory . ucfirst($applicationName) . '.php');
+            $fileName = $this->pathsManager->getIncludeFilePath($fileDirectory . $this->toPascalCase($applicationName) . '.php');
             if (!$fileName) {
                 $fileName = $this->pathsManager->getIncludeFilePath($fileDirectory . $applicationName . '.class.php');
             }
