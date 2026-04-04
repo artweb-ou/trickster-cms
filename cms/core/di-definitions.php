@@ -6,41 +6,9 @@ use App\Logging\RedisRequestLogger;
 use App\Paths\PathsManager;
 use App\Structure\ActionFactory;
 use DI\Container;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Connection;
 use function DI\autowire;
 use function DI\factory;
-
-$loadDb = static function (ConfigManager $configManager, string $config): ?Connection {
-    $dbConfig = $configManager->getConfig($config);
-    if ($dbConfig === null || $dbConfig->isEmpty()) {
-        return null;
-    }
-    $capsule = new Capsule();
-    $capsule->addConnection([
-        'driver' => 'mysql',
-        'host' => $dbConfig->get('mysqlHost'),
-        'database' => $dbConfig->get('mysqlDatabase'),
-        'username' => $dbConfig->get('mysqlUser'),
-        'password' => $dbConfig->get('mysqlPassword'),
-        'charset' => $dbConfig->get('mysqlConnectionEncoding'),
-        'collation' => 'utf8mb4_bin',
-        'prefix' => $dbConfig->get('mysqlTablesPrefix'),
-        'options' => [
-            PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_TIMEOUT => 1,
-        ],
-    ]);
-    $capsule->setFetchMode(PDO::FETCH_ASSOC);
-    if ($config === 'transport') {
-        $capsule->setAsGlobal();
-    }
-    $connection = $capsule->getConnection();
-    if ($pdo = $connection->getPdo()) {
-        $pdo->query('SET sql_mode = ""');
-    }
-    return $connection;
-};
 
 return [
     controller::class => static function () {
@@ -77,14 +45,10 @@ return [
         return $tm;
     }),
 
-    Connection::class => factory(static function (ConfigManager $configManager) use ($loadDb) {
-        return $loadDb($configManager, 'transport');
-    }),
+    Connection::class => factory([DbConnectionFactory::class, 'createTransportConnection']),
     'db' => DI\get(Connection::class),
 
-    'statsDb' => factory(static function (ConfigManager $configManager, Connection $db) use ($loadDb) {
-        return $loadDb($configManager, 'statstransport') ?? $db;
-    }),
+    'statsDb' => factory([DbConnectionFactory::class, 'createStatsConnection']),
 
     DesignThemesManager::class => factory(static function (
         ConfigManager        $configManager,
