@@ -5,6 +5,7 @@ use App\Structure\ActionFactory;
 
 /**
  * @property string|int $id
+ * @property string $title
  * @property string $structureType
  * @property string $structureRole
  * @property string $structureName

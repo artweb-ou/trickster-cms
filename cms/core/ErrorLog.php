@@ -1,8 +1,8 @@
 <?php
 
 use Monolog\Formatter\LineFormatter;
-use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 final class ErrorLog
 {
@@ -27,6 +27,9 @@ final class ErrorLog
         $this->logger->pushHandler($streamHandler);
     }
 
+    /**
+     * @deprecated Use Monolog Logger via DI instead.
+     */
     public static function getInstance(): self
     {
         if (self::$instance === null) {
