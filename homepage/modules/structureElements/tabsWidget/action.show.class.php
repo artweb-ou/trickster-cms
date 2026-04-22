@@ -2,7 +2,10 @@
 
 class showTabsWidget extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param tabsWidgetElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setViewName('show');
     }

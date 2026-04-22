@@ -2,7 +2,10 @@
 
 class showSubArticle extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param subArticleElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setViewName('simple');
         if ($structureElement->final) {

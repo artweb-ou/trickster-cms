@@ -2,7 +2,10 @@
 
 class showBanner extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param bannerElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setViewName('show');
     }

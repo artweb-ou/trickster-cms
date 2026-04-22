@@ -4,7 +4,10 @@ class removeAddressesNewsMailsGroup extends structureElementAction
 {
     protected $loggable = true;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param newsMailsGroupElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $linksManager = $this->getService(linksManager::class);
         if ($this->validated) {

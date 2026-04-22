@@ -4,7 +4,10 @@ use App\Users\CurrentUserService;
 
 class showDispatchmentLog extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param dispatchmentLogElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->requested) {
             $filters = $this->getFilters($structureElement->getFormData());

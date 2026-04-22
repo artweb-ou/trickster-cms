@@ -3,12 +3,9 @@
 class showArticle extends structureElementAction
 {
     /**
-     * @param structureManager $structureManager
-     * @param controller $controller
      * @param articleElement $structureElement
-     * @return mixed|void
      */
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setViewName($structureElement->getCurrentLayout('layout'));
         if ($structureElement->final) {

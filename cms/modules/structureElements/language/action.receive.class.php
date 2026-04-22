@@ -4,7 +4,10 @@ class receiveLanguage extends structureElementAction
 {
     protected $loggable = true;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param languageElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($this->validated) {
             $structureElement->prepareActualData();

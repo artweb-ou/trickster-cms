@@ -2,7 +2,7 @@
 
 class importShared extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($this->validated) {
             $contents = $structureElement->getDataChunk("xmlFile")->getUploadedContents();

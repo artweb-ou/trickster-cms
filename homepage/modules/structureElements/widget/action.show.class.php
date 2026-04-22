@@ -2,7 +2,10 @@
 
 class showWidget extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param widgetElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setViewName('details');
     }

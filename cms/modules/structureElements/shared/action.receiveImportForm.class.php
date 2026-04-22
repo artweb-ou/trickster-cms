@@ -4,7 +4,7 @@ class receiveImportFormShared extends structureElementAction
 {
     protected $loggable = true;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($this->validated) {
             $collection = persistableCollection::getInstance('import_origin');

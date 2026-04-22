@@ -2,7 +2,10 @@
 
 class showFormNews extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param newsElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->final) {
             if (!$structureElement->hasActualStructureInfo()) {

@@ -4,7 +4,7 @@ use App\Paths\PathsManager;
 
 class exportShared extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $exportData = [];
 

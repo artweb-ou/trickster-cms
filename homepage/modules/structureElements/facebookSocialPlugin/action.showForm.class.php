@@ -2,7 +2,10 @@
 
 class showFormFacebookSocialPlugin extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param facebookSocialPluginElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->requested) {
             if ($structureElement->final) {

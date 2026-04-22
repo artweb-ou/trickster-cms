@@ -4,7 +4,10 @@ class deleteFileProduction extends structureElementAction
 {
     protected $loggable = true;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param productionElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $language = false;
         if ($controller->getParameter('language')) {

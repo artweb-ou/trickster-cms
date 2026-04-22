@@ -2,7 +2,10 @@
 
 class showLatestNews extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param latestNewsElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->newsViewType == 'big' || $structureElement->newsViewType == 'small') {
             $structureElement->setViewName('column');

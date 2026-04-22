@@ -2,7 +2,10 @@
 
 class newPasswordPasswordReminder extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param passwordReminderElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $translationsManager = $this->getService(translationsManager::class);
         $db = $this->getService('db');

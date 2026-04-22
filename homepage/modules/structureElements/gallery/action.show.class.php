@@ -2,7 +2,10 @@
 
 class showGallery extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param galleryElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setViewName('short');
         $structureManager->getElementsChildren($structureElement->id);

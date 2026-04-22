@@ -3,12 +3,9 @@
 class showFormGenericIcon extends structureElementAction
 {
     /**
-     * @param structureManager $structureManager
-     * @param controller $controller
      * @param genericIconElement $structureElement
-     * @return mixed|void
      */
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->final) {
             $structureElement->productIconId = $controller->getParameter('productId');

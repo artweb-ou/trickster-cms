@@ -2,7 +2,10 @@
 
 class showEventsList extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param eventsListElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setViewName("show");
         if ($structureElement->final && $structureElement->structureRole !== 'container') {

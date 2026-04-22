@@ -6,7 +6,10 @@ class showSearchLog extends structureElementAction
 {
     protected $actionsLogData;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param searchLogElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->requested) {
             $filterNames = [

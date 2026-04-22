@@ -2,7 +2,10 @@
 
 class sendEmailRegistration extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param registrationElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($this->validated === true) {
             $translationsManager = $this->getService(translationsManager::class);

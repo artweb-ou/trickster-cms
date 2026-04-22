@@ -2,7 +2,10 @@
 
 class showShortcut extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param shortcutElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setViewName('common');
         $linksManager = $this->getService(linksManager::class);

@@ -2,7 +2,10 @@
 
 class showErrorPage extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param errorPageElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setTemplate('errorPage.show.tpl');
     }

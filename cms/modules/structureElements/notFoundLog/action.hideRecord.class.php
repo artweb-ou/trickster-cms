@@ -2,7 +2,10 @@
 
 class hideRecordNotFoundLog extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param notFoundLogElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $recordId = $controller->getParameter('recordId');
         $db = $this->getService('db');

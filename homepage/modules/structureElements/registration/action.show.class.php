@@ -5,12 +5,9 @@ use App\Users\CurrentUserService;
 class showRegistration extends structureElementAction
 {
     /**
-     * @param structureManager $structureManager
-     * @param controller $controller
      * @param registrationElement $structureElement
-     * @return mixed|void
      */
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $currentUserService = $this->getService(CurrentUserService::class);
         $user = $currentUserService->getCurrentUser();

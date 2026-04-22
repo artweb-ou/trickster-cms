@@ -2,7 +2,10 @@
 
 class showFullListUserGroups extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param userGroupsElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->final) {
             $structureManager->getElementsChildren($structureElement->id, 'container');

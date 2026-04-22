@@ -2,7 +2,10 @@
 
 class showFormSelectedEvents extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param selectedEventsElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->fixedId) {
             $structureElement->connectedMenu = $structureManager->getElementById($structureElement->fixedId);

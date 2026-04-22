@@ -2,7 +2,10 @@
 
 class showProduction extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param productionElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $linksManager = $this->getService(linksManager::class);
         $structureElement->setViewName('short');

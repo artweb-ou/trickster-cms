@@ -8,7 +8,10 @@ class sendFeedback extends structureElementAction
     use AjaxFormTrait;
     protected $loggable = true;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param feedbackElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $translationsManager = $this->getService(translationsManager::class);
 

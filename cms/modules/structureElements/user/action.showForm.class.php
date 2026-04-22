@@ -3,12 +3,9 @@
 class showFormUser extends structureElementAction
 {
     /**
-     * @param $structureManager
-     * @param $controller
      * @param userElement $structureElement
-     * @return void
      */
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->final) {
             $linksCollection = persistableCollection::getInstance('structure_links');

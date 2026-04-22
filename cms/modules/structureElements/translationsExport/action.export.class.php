@@ -11,7 +11,10 @@ class exportTranslationsExport extends structureElementAction
         ];
     }
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param translationsExportElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->executeAction('showFullList');
         $isAdminTranslations = $controller->getParameter('admin_translations');

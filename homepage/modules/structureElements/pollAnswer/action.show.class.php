@@ -2,7 +2,10 @@
 
 class showPollAnswer extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param pollAnswerElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setTemplate('pollAnswer.show.tpl');
     }

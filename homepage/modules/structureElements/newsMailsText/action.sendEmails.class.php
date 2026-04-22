@@ -4,7 +4,10 @@ class sendEmailsNewsMailsText extends structureElementAction
 {
     protected $loggable = true;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param newsMailsTextElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setViewName('form');
         if ($structureElement->hasActualStructureInfo()) {

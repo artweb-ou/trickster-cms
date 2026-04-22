@@ -4,7 +4,10 @@ use App\Users\CurrentUserService;
 
 class submitVotePoll extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param pollElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         // verify that all questions were answered
 

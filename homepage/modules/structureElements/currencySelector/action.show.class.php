@@ -2,7 +2,10 @@
 
 class showCurrencySelector extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param currencySelectorElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $controller = $this->getService(controller::class);
         if ($selectedCurrencyCode = $controller->getParameter('currency')) {

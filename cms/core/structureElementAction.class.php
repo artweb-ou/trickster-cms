@@ -53,7 +53,7 @@ abstract class structureElementAction extends errorLogger implements DependencyI
         $this->processFormData();
 
         $controller = controller::getInstance();
-        $structureManager = $this->getService('structureManager');
+        $structureManager = $this->getService(structureManager::class);
 
         if ($this->loggable) {
             $this->logAction();
@@ -76,14 +76,11 @@ abstract class structureElementAction extends errorLogger implements DependencyI
         return $translations;
     }
 
-    /**
-     * @abstract
-     * @param structureManager $structureManager
-     * @param controller $controller
-     * @param structureElement $structureElement
-     * @return mixed
-     */
-    abstract public function execute(&$structureManager, &$controller, &$structureElement);
+    abstract public function execute(
+        structureManager $structureManager,
+        controller $controller,
+        structureElement $structureElement,
+    ): void;
 
     protected function logAction()
     {

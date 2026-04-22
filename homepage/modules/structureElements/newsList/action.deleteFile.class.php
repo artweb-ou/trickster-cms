@@ -4,7 +4,10 @@ class deleteFileNewsList extends structureElementAction
 {
     protected $loggable = true;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param newsListElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
 //        $errorLog = errorLog::getInstance();
 //        $errorLog->logMessage(__CLASS__,'image is: '. $controller->getParameter('file'));

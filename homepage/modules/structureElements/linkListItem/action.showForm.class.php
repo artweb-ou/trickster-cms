@@ -2,7 +2,10 @@
 
 class showFormLinkListItem extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param linkListItemElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setViewName('form');
         if ($structureElement->fixedId) {

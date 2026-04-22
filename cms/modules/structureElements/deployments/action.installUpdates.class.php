@@ -2,7 +2,10 @@
 
 class installUpdatesDeployments extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param deploymentsElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->final) {
             $installed = $structureElement->installUpdates();

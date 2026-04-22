@@ -2,7 +2,10 @@
 
 class showFullListSocialNetworks extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param socialNetworksElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->final) {
             $structureElement->setTemplate('shared.content.tpl');

@@ -8,7 +8,10 @@ class importNewsMailsAddresses extends structureElementAction
      */
     protected $newsMailSubscription;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param newsMailsAddressesElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         ini_set("max_execution_time", 60);
         if ($this->validated) {

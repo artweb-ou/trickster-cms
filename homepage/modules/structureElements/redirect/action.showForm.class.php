@@ -2,7 +2,10 @@
 
 class showFormRedirect extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param redirectElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->final) {
             if ($redirectionId = intval($controller->getParameter("logId"))) {

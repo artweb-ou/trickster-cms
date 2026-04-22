@@ -4,7 +4,10 @@ class showVisitors extends structureElementAction
 {
     protected $actionsLogData;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param visitorsElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->final) {
             $renderer = $this->getService(renderer::class);

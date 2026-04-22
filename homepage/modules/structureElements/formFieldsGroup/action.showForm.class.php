@@ -2,7 +2,10 @@
 
 class showFormFormFieldsGroup extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param formFieldsGroupElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($structureElement->requested) {
             if ($structureElement->final) {

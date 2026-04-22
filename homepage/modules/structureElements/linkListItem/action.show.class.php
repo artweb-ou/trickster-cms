@@ -2,7 +2,10 @@
 
 class showLinkListItem extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param linkListItemElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($fixedElement = $structureElement->getFixedElement()) {
             if ($structureElement->title == '') {

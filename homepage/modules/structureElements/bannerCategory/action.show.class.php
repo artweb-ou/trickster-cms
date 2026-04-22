@@ -2,7 +2,10 @@
 
 class showBannerCategory extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param bannerCategoryElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $banners = $structureElement->getBannersToDisplay();
         if ($banners) {

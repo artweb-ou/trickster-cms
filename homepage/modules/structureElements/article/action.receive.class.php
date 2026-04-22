@@ -5,12 +5,9 @@ class receiveArticle extends structureElementAction
     protected $loggable = true;
 
     /**
-     * @param structureManager $structureManager
-     * @param controller $controller
      * @param articleElement $structureElement
-     * @return mixed|void
      */
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         if ($this->validated) {
             if ($structureElement->getDataChunk('image')->originalName !== null) {

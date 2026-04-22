@@ -2,7 +2,10 @@
 
 class showService extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param serviceElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
 //        $structureElement->setViewName('short');
         $structureElement->setViewName($structureElement->getCurrentLayout());

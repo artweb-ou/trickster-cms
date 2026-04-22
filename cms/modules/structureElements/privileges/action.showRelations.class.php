@@ -3,12 +3,9 @@
 class showRelationsPrivileges extends structureElementAction
 {
     /**
-     * @param $structureManager
-     * @param $controller
      * @param privilegesElement $structureElement
-     * @return void
      */
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $currentElement = $structureManager->getCurrentElement();
 

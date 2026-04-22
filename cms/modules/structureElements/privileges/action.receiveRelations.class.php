@@ -4,7 +4,10 @@ class receiveRelationsPrivileges extends structureElementAction
 {
     protected $loggable = true;
 
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param privilegesElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $currentElement = $structureManager->getCurrentElement();
 

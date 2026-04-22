@@ -2,7 +2,10 @@
 
 class showPollPlaceholder extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param pollPlaceholderElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->setTemplate('pollPlaceholder.column.tpl');
     }

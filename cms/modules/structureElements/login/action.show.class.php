@@ -4,7 +4,10 @@ use App\Users\CurrentUserService;
 
 class showLogin extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param loginElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         $structureElement->hidden = true;
         $currentUserService = $this->getService(CurrentUserService::class);

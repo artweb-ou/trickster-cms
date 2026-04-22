@@ -2,7 +2,10 @@
 
 class showNews extends structureElementAction
 {
-    public function execute(&$structureManager, &$controller, &$structureElement)
+    /**
+     * @param newsElement $structureElement
+     */
+    public function execute(structureManager $structureManager, controller $controller, structureElement $structureElement): void
     {
         // TODO: why are assigning parentMenuElement? Remove if unneeded or explain a comment
         $structureElement->parentMenuElement = $structureManager->getElementsFirstParent($structureElement->id);
