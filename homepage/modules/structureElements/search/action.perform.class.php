@@ -13,11 +13,7 @@ class performSearch extends structureElementAction
                 $structureElement->phrase = $controller->getParameter('phrase');
             }
             $structureElement->phrase = trim($structureElement->phrase);
-            $structureElement->phrase = str_replace('%s%', '/', $structureElement->phrase);;
-            $structureElement->result = $structureElement->performSearch($structureElement->phrase);
-//            if(!empty($structureElement->phrase)) {
-//                $this->getService(searchQueriesManager::class)->logSearch($structureElement->phrase, 0);
-//            }
+            $structureElement->phrase = str_replace('%s%', '/', $structureElement->phrase);
         }
         $structureElement->setViewName('result');
     }
