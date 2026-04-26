@@ -8,9 +8,6 @@ class marketingElement extends structureElement
     protected $allowedTypes = [
         'socialNetworks',
         'seo',
-        'newsMails',
-        'polls',
-        'banners',
         'campaigns',
         'comments',
         'visitors',

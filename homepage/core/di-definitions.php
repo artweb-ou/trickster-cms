@@ -15,11 +15,6 @@ return [
         ->method('setDb', DI\get(Connection::class))
         ->method('setVerifyMailAdapter', DI\get(VerifyMailAdapter::class))
         ->method('setVerifaliaAdapter', DI\get(VerifaliaAdapter::class)),
-    NewsMailSubscription::class => autowire()
-        ->method('setStructureManager', DI\get(structureManager::class))
-        ->method('setDatabase', DI\get(Connection::class))
-        ->method('setLinksManager', DI\get(linksManager::class))
-        ->method('setSpamChecker', DI\get(SpamChecker::class)),
     uriSwitchLogics::class => autowire()
         ->method('setContainer', DI\get(Container::class))
         ->method('setController', DI\get(controller::class))

@@ -554,20 +554,6 @@
             'jpg',
         ],
     ],
-    'newsMailSubContent' => [
-        'filters' => [
-            [
-                'reduce',
-                ['width' => 200, 'height' => 300],
-            ],
-        ],
-        'format' => [
-            null,
-            'jpg',
-            '',
-            80,
-        ],
-    ],
     'newsItemIcon' => [
         'filters' => [
             [

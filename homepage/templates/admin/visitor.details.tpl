@@ -35,18 +35,6 @@
 								{/if}
 							</td>
 						</tr>
-						<tr>
-							<th>
-								{translations name='visitor.newsletter_subscription'}:
-							</th>
-							<td>
-								{if $subscribe = $visitor->getSubscribes()}
-									<a href="{$subscribe->URL}">{$subscribe->getTitle()}</a>
-								{else}
-									N/A
-								{/if}
-							</td>
-						</tr>
 						</tbody>
 					</table>
 				</div>
@@ -239,113 +227,6 @@
 						</table>
 					</div>
 				</div>
-			{/if}
-
-			{if $newsMailsEvents = $visitor->getNewsMailsEvents()}
-				{if !empty($newsMailsEvents.newsMail.totals)}
-					<div class="panel_component">
-						<div class="panel_heading">{translations name="visitor.emailsTotalClicked"}</div>
-						<div class="panel_content">
-							<table class="visitordetails_table table_component">
-								<thead>
-								<tr>
-									<th>
-										{translations name='visitor.event_type'}
-									</th>
-									<th>
-										{translations name='visitor.amount'}
-									</th>
-								</tr>
-								</thead>
-								<tbody>
-								{foreach $newsMailsEvents.newsMail.totals as $key=>$amount}
-									<tr>
-										<td>{translations name = "events.$key"}</td>
-										<td>{$amount}</td>
-									</tr>
-								{/foreach}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				{/if}
-				{if !empty($newsMailsEvents.newsMail.newsMails)}
-					<div class="panel_component">
-						<div class="panel_heading">{translations name="visitor.emailsClicked"}</div>
-						<div class="panel_content">
-							<table class="table_component">
-								<thead>
-								<tr>
-									<th>
-										{translations name="visitor.emailTitle"}
-									</th>
-								</tr>
-								</thead>
-								<tbody>
-								{foreach $newsMailsEvents.newsMail.newsMails as $key => $newsMail}
-									{if !empty($newsMail.name)}
-										<tr>
-											<td>
-												<div class="spoiler_component">
-													<div class="trigger_wrap">
-														{if !empty($newsMail.show)}
-															<a class="spoiler_trigger">
-																<span>{$newsMail.name}</span>
-															</a>
-														{else}
-															<span>{$newsMail.name}</span>
-														{/if}
-													</div>
-													<div class="spoiler_content spoiler_hidden">
-														{if !empty($newsMail.show)}
-															<table class="table_component">
-																<thead>
-																<tr>
-																	<th>{translations name='visitor.event_type'}</th>
-																	<th>{translations name='visitor.amount'}</th>
-																</tr>
-																</thead>
-																<tbody>
-																{foreach $newsMail.statistics as $key=>$amount}
-																	{if $amount > 0 && $key!='show'}
-																		<tr>
-																			<td>{translations name = "events.$key"}</td>
-																			<td>{$amount}</td>
-																		</tr>
-																	{/if}
-																{/foreach}
-																</tbody>
-															</table>
-														{/if}
-														{if !empty($newsMail.links)}
-															<table class="table_component">
-																<thead>
-																<tr>
-																	<th>{translations name='visitor.links'}</th>
-																	<th>{translations name='visitor.clicked'}</th>
-																</tr>
-																</thead>
-																<tbody>
-																{foreach $newsMail.links as $key=>$amount}
-																	<tr>
-																		<td>{$key}</td>
-																		<td>{$amount}</td>
-																	</tr>
-																{/foreach}
-																</tbody>
-															</table>
-														{/if}
-													</div>
-												</div>
-											</td>
-										</tr>
-									{/if}
-								{/foreach}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				{/if}
 			{/if}
 			{if $products = $visitor->getAddedProductsToShoppingBasket()}
 				<div class="panel_component">

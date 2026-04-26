@@ -1,4 +1,1 @@
-<?php return [
-    'news.allowed' => true,
-    'news.registeredOnly' => false,
-];
+<?php return [];
